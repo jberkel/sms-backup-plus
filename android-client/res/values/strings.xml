@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, SmsSync</string>
     <string name="app_name">SMS Sync</string>
-	<string name="sync_button">Sync</string>
+	<string name="sync_button">Synchronize</string>
+	
 	<string name="status_idle">Idle.</string>
-	<string name="status_sync">Syncing (%1d/%2d)...</string>
+	<string name="status_sync">Syncing (%1$d/%2$d)...</string>
 	<string name="status_login">Logging in...</string>
 	<string name="status_reg">Registering device...</string>
 	<string name="status_done">Done.</string>
 	<string name="status_unknown_error">Unknown error.</string>
-	<string name="status_auth_failure">Authentication failure.</string>
+	<string name="status_auth_failure">Login error.</string>
 	<string name="status_calc">Calculating...</string>
+	
+	<string name="ui_status_label">SMS Sync 0.1</string>
+	<string name="ui_settings_label">Login settings</string>
+	
+	<string name="ui_login_label">Username</string>
+	<string name="ui_login_desc">Your Google account/e-mail address.</string>
+	<string name="ui_login_dialog_msg">Set your Google account password/e-mail. <p><b>Warning</b>: Changing the username will reset all your synchronization information and your password.</p></string>
+	
+	<string name="ui_password_label">Password</string>
+	<string name="ui_password_desc">Set your Google account password.</string>
+	
+	<string name="ui_dialog_missing_credentials_title">Login information</string>
+	<string name="ui_dialog_missing_credentials_msg">You need to set the login information before synchronizing.</string>
+	<string name="ui_dialog_general_error_title">Synchronization failed</string>
+	<string name="ui_dialog_sync_data_reset_title">Sync data reset</string>
+	<string name="ui_dialog_sync_data_reset_msg">Sync data has been reset. Please set your password and perform an initial synchronization. You will be able to decide whether to backup or skip messages stored on this device.</string>
+	
+	<string name="ui_dialog_first_sync_title">First synchronization</string>
+	<string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?</string>
+	
+	<string name="ui_ok">OK</string>
+	<string name="ui_sync">Backup</string>
+	<string name="ui_skip">Skip</string>
+	
+	<string name="internal_pref_status">status</string>
+	
+	<string name="err_first_sync_needs_skip_flag">Internal error: First sync without indication whether to skip messages or not.</string>
+	<string name="err_sync_requires_login_info">Cannot sync without login information.</string>
+	<string name="err_json_error">Could not encode request or decode server response.</string>
+	<string name="err_communication_error">General communication error.</string>
+	<string name="err_io_error">Networking error. Please make sure internet access is working properly.</string>
+	<string name="err_auth_error">Authentication failed. Please double-check your login information.</string>
 </resources>

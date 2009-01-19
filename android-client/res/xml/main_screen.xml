@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:key="first_preferencescreen">
+	<PreferenceCategory android:title="@string/ui_settings_label" android:order="1">
+		<EditTextPreference android:key="login_user"
+			android:title="@string/ui_login_label"
+			android:summary="@string/ui_login_desc"
+			android:singleLine="true"
+			android:dialogMessage="@string/ui_login_dialog_msg"
+			android:persistent="true"/>
+		<EditTextPreference android:key="login_password"
+			android:title="@string/ui_password_label"
+			android:summary="@string/ui_password_desc"
+			android:singleLine="true"
+			android:password="true"
+			android:persistent="true"/>
+	</PreferenceCategory>
+</PreferenceScreen>
