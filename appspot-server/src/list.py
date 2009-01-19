@@ -15,17 +15,16 @@
 # limitations under the License.
 #
 
-import logging
 from datetime import datetime
-import wsgiref.handlers
-from google.appengine.ext import db
 from google.appengine.api import users
-import simplejson as json
-import model
+from google.appengine.ext import db, webapp
+from google.appengine.ext.webapp import template
 from model import Message
-
-from google.appengine.ext import webapp
-    
+import logging
+import model
+import simplejson as json
+import wsgiref.handlers
+import os
 
 list_query_date = Message.gql("WHERE user = :1 AND date <= :2 ORDER BY date DESC LIMIT 100")
 list_query = Message.gql("WHERE user = :1 ORDER BY date DESC LIMIT 100")
@@ -46,14 +45,14 @@ class ListHandler(webapp.RequestHandler):
       list_query.bind(user)
       q = list_query
     
-    self.response.out.write('<table>')
-    self.response.out.write('<tr><td>Date</td><td>From</td><td>Message</td>')
-    for msg in q:
-      self.response.out.write('<tr><td>')
-      self.response.out.write(msg.date)
-      self.response.out.write('</td><td>')
-      self.response.out.write(msg.address)
-      self.response.out.write('</td><td>')
-      self.response.out.write(msg.body)
-    self.response.out.write('</td></tr></table>')
+    template_values = {
+      'pagetitle': 'Messages',
+      'pagelink': '/messages',
+      'user': user,
+      'messages': q,
+      }
+
+    path = os.path.join(os.path.dirname(__file__), 'templates', 'messages.html')
+    self.response.out.write(template.render(path, template_values))
+
     

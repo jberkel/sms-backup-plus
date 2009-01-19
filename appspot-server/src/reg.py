@@ -15,14 +15,13 @@
 # limitations under the License.
 #
 
-import wsgiref.handlers
-
-from google.appengine.ext import webapp
-from google.appengine.ext import db
-from google.appengine.api import users
 from datetime import datetime
+from google.appengine.api import users
+from google.appengine.ext import db, webapp
 from model import SyncClient
 import simplejson as json
+import wsgiref.handlers
+
 
 class RegHandler(webapp.RequestHandler):
 

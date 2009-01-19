@@ -15,13 +15,12 @@
 # limitations under the License.
 #
 
+from google.appengine.ext import webapp
+from list import ListHandler
+from reg import RegHandler
+from sync import SyncHandler
 import wsgiref.handlers
 
-
-from google.appengine.ext import webapp
-from sync import SyncHandler
-from reg import RegHandler
-from list import ListHandler
 
 class MainHandler(webapp.RequestHandler):
 

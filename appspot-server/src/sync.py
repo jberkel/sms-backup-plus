@@ -15,16 +15,15 @@
 # limitations under the License.
 #
 
-import logging
 from datetime import datetime
-import wsgiref.handlers
-from google.appengine.ext import db
 from google.appengine.api import users
-import simplejson as json
-import model
+from google.appengine.ext import db, webapp
 from model import Message
+import logging
+import model
+import simplejson as json
+import wsgiref.handlers
 
-from google.appengine.ext import webapp
     
 class SyncHandler(webapp.RequestHandler):
   
@@ -49,7 +48,7 @@ class SyncHandler(webapp.RequestHandler):
     # Retrieve messages from request.
     currentTime = datetime.utcnow()
     newMessages = request['messages']
-    maxId = -1
+    maxId = - 1
     # Loop over messages and store into datastore.
     for jsonMsg in newMessages:
       logging.info(jsonMsg)
@@ -75,4 +74,3 @@ class SyncHandler(webapp.RequestHandler):
     
     response['maxConfirmedId'] = str(maxId)
     self.response.out.write(response)
-

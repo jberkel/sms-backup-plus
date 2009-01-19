@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-from google.appengine.ext import db
 from google.appengine.api import users
+from google.appengine.ext import db
 
 class Message(db.Model):
   user = db.UserProperty(required=True)

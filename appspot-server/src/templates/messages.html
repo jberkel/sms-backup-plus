@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if messages %}
+	<table width="100%">
+		<tr>
+			<th>Date</th>
+			<th>From/To</th>
+			<th>Message</th>
+		</tr>
+	{% for msg in messages %}
+		<tr>
+			<td>{{ msg.date }}</td>
+			<td>{{ msg.address }}</td>
+			<td>{{ msg.body|truncatewords:10 }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% else %}
+	<p align="center"><strong>No messages.</strong>
+		Go to the <a href="/">home page</a> for instructions on how to sync.</p>
+{% endif %}
+{% endblock content %}
