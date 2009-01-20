@@ -17,10 +17,11 @@
 	
 	<string name="ui_login_label">Username</string>
 	<string name="ui_login_desc">Your Google account/e-mail address.</string>
-	<string name="ui_login_dialog_msg">Set your Google account password/e-mail. <p><b>Warning</b>: Changing the username will reset all your synchronization information and your password.</p></string>
+	<string name="ui_login_dialog_msg">WARNING: Changing the username will reset all your synchronization information and your password.</string>
 	
 	<string name="ui_password_label">Password</string>
 	<string name="ui_password_desc">Set your Google account password.</string>
+	<string name="ui_password_dialog_msg">The password is stored on this device and never sent to the SMS Sync server.</string>
 	
 	<string name="ui_dialog_missing_credentials_title">Login information</string>
 	<string name="ui_dialog_missing_credentials_msg">You need to set the login information before synchronizing.</string>
