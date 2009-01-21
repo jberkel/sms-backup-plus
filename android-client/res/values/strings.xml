@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SMS Sync</string>
-	<string name="sync_button">Synchronize</string>
+    <string name="app_name">SMS to Gmail</string>
+	<string name="sync_button">Backup</string>
 	
 	<string name="status_idle">Idle.</string>
 	<string name="status_sync">Syncing (%1$d/%2$d)...</string>
 	<string name="status_login">Logging in...</string>
-	<string name="status_reg">Registering device...</string>
 	<string name="status_done">Done.</string>
 	<string name="status_unknown_error">Unknown error.</string>
 	<string name="status_auth_failure">Login error.</string>
 	<string name="status_calc">Calculating...</string>
 	
-	<string name="ui_status_label">SMS Sync 0.1</string>
+	<string name="ui_status_label">SMS to Gmail 0.2</string>
 	<string name="ui_settings_label">Login settings</string>
 	
 	<string name="ui_login_label">Username</string>

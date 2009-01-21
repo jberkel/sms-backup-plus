@@ -176,10 +176,6 @@ public class SmsSync extends PreferenceActivity {
                                 statusLabel = getText(R.string.status_login);
                                 mProgressBar.setIndeterminate(true);
                                 break;
-                            case REG:
-                                statusLabel = getText(R.string.status_reg);
-                                mProgressBar.setIndeterminate(true);
-                                break;
                             case SYNC:
                                 statusLabel = getString(R.string.status_sync, SmsSyncService
                                         .getCurrentSyncedItems(), SmsSyncService

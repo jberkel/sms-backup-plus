@@ -15,24 +15,10 @@
 
 package tv.studer.smssync;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import tv.studer.smssync.CursorToMessage.ConversionResult;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -45,9 +31,11 @@ import android.os.IBinder;
 import android.os.Process;
 import android.util.Log;
 
-import com.google.gdata.client.GoogleAuthTokenFactory;
-import com.google.gdata.client.GoogleService.CaptchaRequiredException;
-import com.google.gdata.util.AuthenticationException;
+import com.android.email.mail.Folder;
+import com.android.email.mail.Message;
+import com.android.email.mail.MessagingException;
+import com.android.email.mail.Folder.OpenMode;
+import com.android.email.mail.store.ImapStore;
 
 public class SmsSyncService extends Service {
     // TODO(chstuder): Move to Consts.
@@ -66,17 +54,20 @@ public class SmsSyncService extends Service {
     /** Preference key containing the Google account username. */
     static final String PREF_LOGIN_USER = "login_user";
 
-    /** Preference key containin gthe Google account password. */
+    /** Preference key containing the Google account password. */
     static final String PREF_LOGIN_PASSWORD = "login_password";
 
+    /** Preference key containing a UID used for the threading reference header. */
+    static final String PREF_REFERENECE_UID = "reference_uid";
+
     /** Number of messages sent per sync request. */
-    private static final int MAX_MSG_PER_SYNC = 50;
+    private static final int MAX_MSG_PER_SYNC = 1;
 
     /** Preference key containing the "sync client" ID of this installation. */
     private static final String PREF_SYNC_CLIENT_ID = "sync_client_id";
 
     /** Flag indicating whether this service is already running. */
-    private static boolean isRunning = false;
+    private static boolean sIsRunning = false;
 
     // State information
     /** Current state. See {@link #getState()}. */
@@ -107,7 +98,7 @@ public class SmsSyncService extends Service {
     private static StateChangeListener sStateChangeListener;
 
     public enum SmsSyncState {
-        IDLE, REG, CALC, LOGIN, SYNC, AUTH_FAILED, GENERAL_ERROR, CAPTCHA_REQUIRED;
+        IDLE, CALC, LOGIN, SYNC, AUTH_FAILED, GENERAL_ERROR;
     }
 
     @Override
@@ -120,8 +111,8 @@ public class SmsSyncService extends Service {
         super.onStart(intent, startId);
         synchronized (this.getClass()) {
             // Only start a sync if there's no other sync going on at this time.
-            if (!isRunning) {
-                isRunning = true;
+            if (!sIsRunning) {
+                sIsRunning = true;
                 // Start sync in new thread.
                 new Thread() {
                     public void run() {
@@ -140,18 +131,12 @@ public class SmsSyncService extends Service {
                                     false);
                             // Do the sync.
                             sync(skipMessages);
-                        } catch (CaptchaRequiredException e) {
-                            Log.i(Consts.TAG, "", e);
-                            updateState(SmsSyncState.CAPTCHA_REQUIRED);
-                        } catch (AuthenticationException e) {
-                            Log.i(Consts.TAG, "", e);
-                            updateState(SmsSyncState.AUTH_FAILED);
                         } catch (GeneralErrorException e) {
                             Log.i(Consts.TAG, "", e);
                             sLastError = e.getMessage();
                             updateState(SmsSyncState.GENERAL_ERROR);
                         } finally {
-                            isRunning = false;
+                            sIsRunning = false;
                             stopSelf();
                         }
                     }
@@ -177,17 +162,8 @@ public class SmsSyncService extends Service {
      * messages with
      * <code>ID > {@link #getMaxSyncedId()} AND type != {@link #MESSAGE_TYPE_DRAFT}</code>
      * .</li>
-     * <li>{@link SmsSyncState#LOGIN}: An auth token is obtained using the
-     * <code>ClientLogin</code> authentication provided by Google. This is
-     * performed over HTTPS and the username and password is <em>NOT</em> sent
-     * to the android-sms server.</li>
-     * <li>{@link SmsSyncState#LOGIN}: The token obtained in step #2 is sent to
-     * the android-sms AppEngine server and traded for a cookie which can then
-     * be used for all subsequent requests.</li>
-     * <li>{@link SmsSyncState#REG}: If this instance of SMS Sync client app has
-     * never before performed a sync, a registration is performed. The obtained
-     * "sync client ID" is then used to identify this device in the future. This
-     * step is skipped if this is not the first sync.</li>
+     * <li>{@link SmsSyncState#LOGIN}: An SSL connection is opened to the Gmail IMAP
+     * server using the user provided credentials.</li>
      * <li>{@link SmsSyncState#SYNC}: The messages determined in step #1 are
      * sent to the server, possibly in chunks of a maximum of
      * {@link #MAX_MSG_PER_SYNC} per request. After each successful sync
@@ -210,19 +186,21 @@ public class SmsSyncService extends Service {
      * </p>
      * 
      * @param skipMessages whether to skip all messages on this device.
-     * @throws AuthenticationException Thrown when there was an error during
-     *             login.
      * @throws GeneralErrorException Thrown when there there was an error during
      *             sync.
      */
-    private void sync(boolean skipMessages) throws AuthenticationException, GeneralErrorException {
+    private void sync(boolean skipMessages) throws GeneralErrorException {
         Log.i(Consts.TAG, "Starting sync...");
-
-        updateState(SmsSyncState.CALC);
 
         if (!isLoginInformationSet(this)) {
             throw new GeneralErrorException(this, R.string.err_sync_requires_login_info, null);
         }
+
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+        String username = prefs.getString(PREF_LOGIN_USER, null);
+        String password = prefs.getString(PREF_LOGIN_PASSWORD, null);
+
+        updateState(SmsSyncState.CALC);
 
         if (skipMessages) {
             // Only update the max synced ID, do not really sync.
@@ -244,113 +222,50 @@ public class SmsSyncService extends Service {
             return;
         }
 
-        // Splitting the items into batches of 'MAX_MSG_PER_SYNC' messages.
-        HttpClient client = new DefaultHttpClient();
+        updateState(SmsSyncState.LOGIN);
 
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+        ImapStore imapStore;
+        Folder folder;
+        try {
+            imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
+                    URLEncoder.encode(password)));
+            Folder[] folders = imapStore.getPersonalNamespaces();
+            for (int i = 0; i < folders.length; i++) {
+                Log.i(Consts.TAG, folders[i].getName());
+            }
+            folder = imapStore.getFolder("SMS");
+            folder.open(OpenMode.READ_WRITE);
+        } catch (MessagingException e) {
+            throw new GeneralErrorException(this, R.string.err_communication_error, e);
+        }
 
-        String loginUser = prefs.getString(PREF_LOGIN_USER, null);
-        String loginPassword = prefs.getString(PREF_LOGIN_PASSWORD, null);
-        login(loginUser, loginPassword, client);
+        CursorToMessage converter = new CursorToMessage(this, username);
         while (true) {
             updateState(SmsSyncState.SYNC);
             try {
-                JSONObject request = new JSONObject();
-                addStaticProperties(request);
-                request.put("syncClientId", getSyncClientId(client));
-                JSONArray messages = CursorToJson.cursorToJsonArray(items, MAX_MSG_PER_SYNC);
-                if (messages.length() == 0) {
+                ConversionResult result = converter.cursorToMessageArray(items, MAX_MSG_PER_SYNC);
+                List<Message> messages = result.messageList;
+                if (messages.size() == 0) {
                     Log.i(Consts.TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
                     updateState(SmsSyncState.IDLE);
+                    folder.close(true);
                     break;
                 }
 
-                request.put("messages", messages);
-
-                String requestStr = request.toString();
-                HttpPost httpReq = new HttpPost(Consts.SYNC_URI);
-                StringEntity se = new StringEntity(requestStr, "UTF-8");
-                httpReq.setEntity(se);
-
-                Log.d(Consts.TAG, "Sending " + messages.length() + " messages to server.");
-                Log.v(Consts.TAG, requestStr);
-                HttpResponse response = client.execute(httpReq);
-                String responseJson = extractEntityBody(response);
-                JSONObject jsonResponse = new JSONObject(responseJson);
-                String maxConfirmedId = jsonResponse.getString("maxConfirmedId");
-                updateMaxSyncedId(maxConfirmedId);
-                sCurrentSyncedItems += messages.length();
+                Log.d(Consts.TAG, "Sending " + messages.size() + " messages to server.");
+                folder.appendMessages(messages.toArray(new Message[messages.size()]));
+                sCurrentSyncedItems += messages.size();
                 updateState(SmsSyncState.SYNC);
-            } catch (JSONException e) {
-                throw new GeneralErrorException(this, R.string.err_json_error, e);
-            } catch (UnsupportedEncodingException e) {
+                updateMaxSyncedId(result.maxId);
+                result = null;
+                messages = null;
+                // System.gc();
+            } catch (MessagingException e) {
                 throw new GeneralErrorException(this, R.string.err_communication_error, e);
-            } catch (ClientProtocolException e) {
-                throw new GeneralErrorException(this, R.string.err_communication_error, e);
-            } catch (IOException e) {
-                throw new GeneralErrorException(this, R.string.err_io_error, e);
             } finally {
                 // Close the cursor
                 items.close();
             }
-        }
-    }
-
-    private void login(String userEmail, String password, HttpClient client)
-            throws AuthenticationException, GeneralErrorException {
-        updateState(SmsSyncState.LOGIN);
-        GoogleAuthTokenFactory factory = new GoogleAuthTokenFactory("ah", "chstuder-androidsms-1",
-                null);
-        String token = null;
-        try {
-            // Retrieve token from Google
-            token = factory.getAuthToken(userEmail, password, null, null, "ah", Consts.APP_ID);
-            String loginUri = Consts.LOGIN_URI.replace("%auth%", token);
-            Log.d(Consts.TAG, loginUri);
-            HttpGet cookieRequest = new HttpGet(loginUri);
-            client.execute(cookieRequest);
-        } catch (UnsupportedEncodingException e) {
-            throw new GeneralErrorException(this, R.string.err_communication_error, e);
-        } catch (ClientProtocolException e) {
-            throw new GeneralErrorException(this, R.string.err_communication_error, e);
-        } catch (IOException e) {
-            throw new GeneralErrorException(this, R.string.err_io_error, e);
-        }
-    }
-
-    private Object getSyncClientId(HttpClient httpClient) throws GeneralErrorException {
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        String syncClientId = prefs.getString(PREF_SYNC_CLIENT_ID, null);
-        if (syncClientId == null) {
-            syncClientId = registerSyncClient(httpClient);
-            Editor editor = prefs.edit();
-            editor.putString(PREF_SYNC_CLIENT_ID, syncClientId);
-            editor.commit();
-        }
-        return syncClientId;
-    }
-
-    /**
-     * Registers a new "sync client" with the server and returns the ID.
-     */
-    private String registerSyncClient(HttpClient httpClient) throws GeneralErrorException {
-        Log.i(Consts.TAG, "Registering...");
-        updateState(SmsSyncState.REG);
-        HttpPost httpReq = new HttpPost(Consts.REG_URI);
-        try {
-            HttpResponse response = httpClient.execute(httpReq);
-            String responseStr = extractEntityBody(response);
-            JSONObject jsonResponse = new JSONObject(responseStr);
-            updateState(SmsSyncState.SYNC);
-            String syncClientId = jsonResponse.getString("syncClientId");
-            Log.i(Consts.TAG, "Registration done: " + syncClientId);
-            return syncClientId;
-        } catch (ClientProtocolException e) {
-            throw new GeneralErrorException(this, R.string.err_communication_error, e);
-        } catch (IOException e) {
-            throw new GeneralErrorException(this, R.string.err_io_error, e);
-        } catch (JSONException e) {
-            throw new GeneralErrorException(this, R.string.err_json_error, e);
         }
     }
 
@@ -390,28 +305,6 @@ public class SmsSyncService extends Service {
     }
 
     /**
-     * Extracts the HTTPResponse's entity body as a String. This reads from the
-     * {@link HttpEntity#getContent()} {@link InputStream} until EOF and returns
-     * the contents.
-     * 
-     * @param response
-     * @return
-     * @throws IllegalStateException
-     * @throws IOException
-     */
-    private String extractEntityBody(HttpResponse response) throws IllegalStateException,
-            IOException {
-        InputStream responseStream = response.getEntity().getContent();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
-        String line;
-        StringBuilder builder = new StringBuilder();
-        while ((line = reader.readLine()) != null) {
-            builder.append(line);
-        }
-        return builder.toString();
-    }
-
-    /**
      * Returns the largest ID of all messages that have successfully been synced
      * with the server.
      * 
@@ -435,10 +328,6 @@ public class SmsSyncService extends Service {
         editor.putString(PREF_MAX_SYNCED_ID, maxSyncedId);
         editor.commit();
         Log.d(Consts.TAG, "Max synced ID set to: " + maxSyncedId);
-    }
-
-    private static void addStaticProperties(JSONObject request) throws JSONException {
-        request.put("appVersion", Consts.APP_VERSION);
     }
 
     // Statistics accessible from other classes.
@@ -497,7 +386,7 @@ public class SmsSyncService extends Service {
         return prefs.getString(PREF_LOGIN_USER, null) != null
                 && prefs.getString(PREF_LOGIN_PASSWORD, null) != null;
     }
-    
+
     /**
      * Resets all sync data. This is required after changing the username.
      */

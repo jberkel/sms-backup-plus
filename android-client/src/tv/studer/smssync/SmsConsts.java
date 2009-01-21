@@ -16,20 +16,23 @@
 package tv.studer.smssync;
 
 /**
- * Class containing application wide constants.
+ * Contains SMS content provider constants. These values are copied from 
+ * com.android.provider.telephony.*
  */
-final class Consts {
-    /** TAG used for logging. */
-    static final String TAG = "SmsSync";
-
-    /** Server address. */
-    static final String SERVER = "android-sms.appspot.com";
-
-    static final String IMAP_URI = "imap+ssl+://%s:%s@imap.gmail.com:993";
+public class SmsConsts {
+    public static final String ID = "_id";
     
-    /**
-     * Key in the intent extras indicating whether all unsynced messages should
-     * be skipped or not.
-     */
-    static final String KEY_SKIP_MESSAGES = "skip_messages";
+    public static final int MESSAGE_TYPE_ALL    = 0;
+
+    public static final int MESSAGE_TYPE_INBOX  = 1;
+
+    public static final int MESSAGE_TYPE_SENT   = 2;
+
+    public static final int MESSAGE_TYPE_DRAFT  = 3;
+
+    public static final int MESSAGE_TYPE_OUTBOX = 4;
+
+    public static final int MESSAGE_TYPE_FAILED = 5; // for failed outgoing messages
+
+    public static final int MESSAGE_TYPE_QUEUED = 6; // for messages to send later
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="com/google/gdata/client/contacts/|com/google/gdata/client/finance/|com/google/gdata/client/codesearch/|com/google/gdata/client/health/|com/google/gdata/client/calendar/|com/google/gdata/client/spreadsheet/|com/google/gdata/data/spreadsheet/|com/google/gdata/data/blogger/|com/google/gdata/data/books/|com/google/gdata/data/calendar/|com/google/gdata/data/codesearch/|com/google/gdata/data/finance/|com/google/gdata/data/geo/|com/google/gdata/data/health/|com/google/gdata/data/appsforyourdomain/|com/google/gdata/data/contacts/|com/google/gdata/data/dublincore/|com/google/gdata/data/webmastertools/|com/google/gdata/client/webmastertools/" kind="src" path="src"/>
-	<classpathentry kind="lib" path="external/googleclientlogin.jar"/>
+	<classpathentry kind="lib" path="external/imapstore.jar"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

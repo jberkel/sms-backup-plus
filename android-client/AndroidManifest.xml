@@ -10,6 +10,9 @@
         </activity>
     <service android:name="SmsSyncService" android:exported="false"></service>
 </application>
-<uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_SMS"></uses-permission>
-<uses-permission android:name="android.permission.INTERNET"></uses-permission>
-</manifest> 
+
+<uses-permission android:name="android.permission.READ_SMS"/>
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.READ_CONTACTS"/>
+
+</manifest>
