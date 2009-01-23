@@ -130,6 +130,7 @@ public class SmsSyncService extends Service {
                             while (numRetries >= 0) {
                                 try {
                                     sync(skipMessages);
+                                    break;
                                 } catch (GeneralErrorException e) {
                                     Log.w(Consts.TAG, e.getMessage());
                                     Log.i(Consts.TAG, "Retrying sync in 2 seconds. (" + (numRetries - 1) +  ")");
