@@ -116,7 +116,7 @@ public class SmsSyncService extends Service {
                             // On first sync we need to know whether to skip or
                             // sync current
                             // messages.
-                            if (isFirstSync(SmsSyncService.this)
+                            if (PrefStore.isFirstSync(SmsSyncService.this)
                                     && !intent.hasExtra(Consts.KEY_SKIP_MESSAGES)) {
                                 throw new GeneralErrorException(SmsSyncService.this,
                                         R.string.err_first_sync_needs_skip_flag, null);
@@ -177,7 +177,7 @@ public class SmsSyncService extends Service {
      * <li>{@link SmsSyncState#CALC}: The list of messages requiring a sync is
      * determined. This is done by querying the SMS content provider for
      * messages with
-     * <code>ID > {@link #getMaxSyncedId()} AND type != {@link #MESSAGE_TYPE_DRAFT}</code>
+     * <code>ID > {@link #getMaxSyncedDate()} AND type != {@link #MESSAGE_TYPE_DRAFT}</code>
      * .</li>
      * <li>{@link SmsSyncState#LOGIN}: An SSL connection is opened to the Gmail IMAP
      * server using the user provided credentials.</li>
@@ -209,7 +209,7 @@ public class SmsSyncService extends Service {
     private void sync(boolean skipMessages) throws GeneralErrorException {
         Log.i(Consts.TAG, "Starting sync...");
 
-        if (!isLoginInformationSet(this)) {
+        if (!PrefStore.isLoginInformationSet(this)) {
             throw new GeneralErrorException(this, R.string.err_sync_requires_login_info, null);
         }
 
@@ -220,7 +220,7 @@ public class SmsSyncService extends Service {
 
         if (skipMessages) {
             // Only update the max synced ID, do not really sync.
-            updateMaxSyncedId(getMaxItemId());
+            updateMaxSyncedDate(getMaxItemDate());
             updateState(SmsSyncState.IDLE);
             Log.i(Consts.TAG, "All messages skipped.");
             return;
@@ -273,7 +273,7 @@ public class SmsSyncService extends Service {
                 folder.appendMessages(messages.toArray(new Message[messages.size()]));
                 sCurrentSyncedItems += messages.size();
                 updateState(SmsSyncState.SYNC);
-                updateMaxSyncedId(result.maxId);
+                updateMaxSyncedDate(result.maxDate);
                 result = null;
                 messages = null;
                 // System.gc();
@@ -289,58 +289,58 @@ public class SmsSyncService extends Service {
     /**
      * Returns a cursor of SMS messages that have not yet been synced with the
      * server. This includes all messages with
-     * <code>ID &lt; {@link #getMaxSyncedId()}</code> which are no drafs.
+     * <code>ID &lt; {@link #getMaxSyncedDate()}</code> which are no drafs.
      */
     private Cursor getItemsToSync() {
         ContentResolver r = getContentResolver();
-        String selection = "_id > ? AND " + "type <> ?";
+        String selection = String.format("%s > ? AND %s <> ?",
+                SmsConsts.DATE, SmsConsts.TYPE);
         String[] selectionArgs = new String[] {
-                getMaxSyncedId(), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
+                String.valueOf(getMaxSyncedDate()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
         };
-        return r.query(Uri.parse("content://sms"), null, selection, selectionArgs, "_id");
+        String sortOrder = SmsConsts.DATE;
+        return r.query(Uri.parse("content://sms"), null, selection, selectionArgs, sortOrder);
     }
 
     /**
-     * Returns the maximum ID of all SMS messages (except for drafts).
+     * Returns the maximum date of all SMS messages (except for drafts).
      */
-    private String getMaxItemId() {
+    private long getMaxItemDate() {
         ContentResolver r = getContentResolver();
-        String selection = "type <> ?";
+        String selection = SmsConsts.TYPE + " <> ?";
         String[] selectionArgs = new String[] {
             String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
         };
         String[] projection = new String[] {
-            "_id"
+            SmsConsts.DATE
         };
         Cursor result = r.query(Uri.parse("content://sms"), projection, selection, selectionArgs,
-                "_id DESC");
+                SmsConsts.DATE + " DESC");
         if (result.moveToFirst()) {
-            return result.getString(0);
+            return result.getLong(0);
         } else {
-            return "-1";
+            return PrefStore.DEFAULT_MAX_SYNCED_DATE;
         }
     }
 
     /**
-     * Returns the largest ID of all messages that have successfully been synced
+     * Returns the largest date of all messages that have successfully been synced
      * with the server.
-     * 
-     * @return
      */
-    private String getMaxSyncedId() {
-        return PrefStore.getMaxSyncedId(this);
+    private long getMaxSyncedDate() {
+        return PrefStore.getMaxSyncedDate(this);
     }
 
     /**
      * Persists the provided ID so it can later on be retrieved using
-     * {@link #getMaxSyncedId()}. This should be called when after each
+     * {@link #getMaxSyncedDate()}. This should be called when after each
      * successful sync request to a server.
      * 
      * @param maxSyncedId
      */
-    private void updateMaxSyncedId(String maxSyncedId) {
-        PrefStore.setMaxSyncedId(this, maxSyncedId);
-        Log.d(Consts.TAG, "Max synced ID set to: " + maxSyncedId);
+    private void updateMaxSyncedDate(long maxSyncedDate) {
+        PrefStore.setMaxSyncedDate(this, maxSyncedDate);
+        Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
     }
 
     // Statistics accessible from other classes.
@@ -378,31 +378,6 @@ public class SmsSyncService extends Service {
      */
     static int getCurrentSyncedItems() {
         return (sState == SmsSyncState.SYNC) ? sCurrentSyncedItems : 0;
-    }
-
-    /**
-     * Returns <code>true</code> iff there were no previous syncs. This method
-     * is handy if some special inputs are required for the first sync.
-     */
-    static boolean isFirstSync(Context context) {
-        return !PrefStore.isMaxSyncedIdSet(context);
-    }
-
-    // Login information related methods.
-
-    /**
-     * Returns whether all required login information is available.
-     */
-    static boolean isLoginInformationSet(Context context) {
-        return PrefStore.getLoginUsername(context) != null
-                && PrefStore.getLoginPassword(context) != null;
-    }
-
-    /**
-     * Resets all sync data. This is required after changing the username.
-     */
-    static void resetSyncData(Context ctx) {
-        PrefStore.clearSyncData(ctx);
     }
 
     /**

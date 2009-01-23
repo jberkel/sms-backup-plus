@@ -19,5 +19,9 @@
 			android:singleLine="true"
 			android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
 			android:persistent="true"/>
+		<CheckBoxPreference android:key="enable_auto_sync"
+			android:title="@string/ui_enable_auto_sync_label"
+			android:summary="@string/ui_enable_auto_sync_desc"
+			android:persistent="true"/>
 	</PreferenceCategory>
 </PreferenceScreen>

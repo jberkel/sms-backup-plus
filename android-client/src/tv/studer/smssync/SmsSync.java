@@ -19,10 +19,12 @@ import tv.studer.smssync.SmsSyncService.SmsSyncState;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -51,6 +53,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     
     private static final int DIALOG_INVALID_IMAP_FOLDER = 5;
 
+    private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 6;
+
     private StatusPreference mStatusPref;
 
     /** Called when the activity is first created. */
@@ -59,6 +63,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         // Need to set a value here so the dialog for the label is pre-filled with the default.
         if (!PrefStore.isImapFolderSet(this)) {
             PrefStore.setImapFolder(this, PrefStore.DEFAULT_IMAP_FOLDER);
+        }
+        if (!PrefStore.isEnableAutoSyncSet(this)) {
+            PrefStore.setEnableAutoSync(this, PrefStore.DEFAULT_ENABLE_AUTO_SYNC);
         }
         
         super.onCreate(savedInstanceState);
@@ -80,6 +87,12 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         pref.setOnPreferenceChangeListener(this);
         
         pref = prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER);
+        pref.setOnPreferenceChangeListener(this);
+        
+        pref = prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC);
+        pref.setOnPreferenceChangeListener(this);
+        
+        pref = prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD);
         pref.setOnPreferenceChangeListener(this);
     }
 
@@ -111,14 +124,22 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         pref.setTitle(imapFolder);
     }
 
-    private void startSync(boolean skip) {
-        if (!SmsSyncService.isLoginInformationSet(this)) {
+    private boolean initiateSync() {
+        if (!PrefStore.isLoginInformationSet(this)) {
             showDialog(DIALOG_MISSING_CREDENTIALS);
-            return;
+            return false;
+        } else if (PrefStore.isFirstSync(this)) {
+            showDialog(DIALOG_FIRST_SYNC);
+            return false;
+        } else {
+            startSync(false);
+            return true;
         }
-
+    }
+    
+    private void startSync(boolean skip) {
         Intent intent = new Intent(this, SmsSyncService.class);
-        if (SmsSyncService.isFirstSync(this)) {
+        if (PrefStore.isFirstSync(this)) {
             intent.putExtra(Consts.KEY_SKIP_MESSAGES, skip);
         }
         startService(intent);
@@ -199,14 +220,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         @Override
         public void onClick(View v) {
             if (v == mSyncButton) {
-                if (!SmsSyncService.isLoginInformationSet(SmsSync.this)) {
-                    showDialog(DIALOG_MISSING_CREDENTIALS);
-                } else if (SmsSyncService.isFirstSync(SmsSync.this)) {
-                    // The first sync is initiated by the "first sync" dialog.
-                    showDialog(DIALOG_FIRST_SYNC);
-                } else {
-                    startSync(false);
-                }
+                initiateSync();
             }
         }
 
@@ -228,7 +242,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     protected Dialog onCreateDialog(final int id) {
         String title;
         String msg;
-
+        Builder builder;
         switch (id) {
             case DIALOG_MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
@@ -246,8 +260,26 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 title = getString(R.string.ui_dialog_invalid_imap_folder_title);
                 msg = getString(R.string.ui_dialog_invalid_imap_folder_msg);
                 break;
-            case DIALOG_FIRST_SYNC:
+            case DIALOG_NEED_FIRST_MANUAL_SYNC:
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // BUTTON1 == BUTTON_POSITIVE == "Yes"
+                        if (which == DialogInterface.BUTTON1) {
+                            showDialog(DIALOG_FIRST_SYNC);
+                        }
+                    }
+                };
+
+                builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.ui_dialog_need_first_manual_sync_title);
+                builder.setMessage(R.string.ui_dialog_need_first_manual_sync_msg);
+                builder.setPositiveButton(R.string.ui_yes, dialogClickListener);
+                builder.setNegativeButton(R.string.ui_no, dialogClickListener);
+                builder.setCancelable(false);
+                return builder.create();
+            case DIALOG_FIRST_SYNC:
+                DialogInterface.OnClickListener firstSyncListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // BUTTON2 == BUTTON_NEGATIVE == "Skip"
@@ -255,11 +287,11 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                     }
                 };
 
-                Builder builder = new AlertDialog.Builder(this);
+                builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.ui_dialog_first_sync_title);
                 builder.setMessage(R.string.ui_dialog_first_sync_msg);
-                builder.setPositiveButton(R.string.ui_sync, dialogClickListener);
-                builder.setNegativeButton(R.string.ui_skip, dialogClickListener);
+                builder.setPositiveButton(R.string.ui_sync, firstSyncListener);
+                builder.setNegativeButton(R.string.ui_skip, firstSyncListener);
                 return builder.create();
             default:
                 return null;
@@ -293,7 +325,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SmsSyncService.resetSyncData(SmsSync.this);
+                        PrefStore.clearSyncData(SmsSync.this);
                         if (oldValue != null) {
                             showDialog(DIALOG_SYNC_DATA_RESET);
                         }
@@ -312,6 +344,26 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                     }
                 });
                 return false;
+            }
+        } else if (PrefStore.PREF_ENABLE_AUTO_SYNC.equals(preference.getKey())) {
+            boolean isEnabled = (Boolean) newValue;
+            ComponentName componentName = new ComponentName(this,
+                    SmsBroadcastReceiver.class);
+            PackageManager pkgMgr = getPackageManager();
+            if (isEnabled) {
+                pkgMgr.setComponentEnabledSetting(componentName,
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP);
+                initiateSync();
+            } else {
+                pkgMgr.setComponentEnabledSetting(componentName,
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
+                Alarms.cancel(this);
+            }
+        } else if (PrefStore.PREF_LOGIN_PASSWORD.equals(preference.getKey())) {
+            if (PrefStore.isFirstSync(this) && PrefStore.isLoginUsernameSet(this)) {
+                showDialog(DIALOG_NEED_FIRST_MANUAL_SYNC);
             }
         }
         return true;

@@ -47,6 +47,10 @@ public class CursorToMessage {
     };
 
     private static final String UNKNOWN_NUMBER = "unknown_number";
+    
+    private static final String UNKNOWN_EMAIL = "unknown.email";
+    
+    private static final String UNKNOWN_PERSON = "unknown.person";
 
     private static final int MAX_PEOPLE_CACHE_SIZE = 100;
 
@@ -74,16 +78,16 @@ public class CursorToMessage {
     public ConversionResult cursorToMessageArray(Cursor cursor, int maxEntries)
             throws MessagingException {
         List<Message> messageList = new ArrayList<Message>(maxEntries);
-        long maxId = -1;
+        long maxDate = PrefStore.DEFAULT_MAX_SYNCED_DATE;
 
         String[] columns = cursor.getColumnNames();
-        int indexId = cursor.getColumnIndex(SmsConsts.ID);
+        int indexDate = cursor.getColumnIndex(SmsConsts.DATE);
         while (cursor.moveToNext()) {
             HashMap<String, String> msgMap = new HashMap<String, String>(columns.length);
 
-            long id = cursor.getLong(indexId);
-            if (id > maxId) {
-                maxId = id;
+            long date = cursor.getLong(indexDate);
+            if (date > maxDate) {
+                maxDate = date;
             }
             for (int i = 0; i < columns.length; i++) {
                 msgMap.put(columns[i], cursor.getString(i));
@@ -100,7 +104,7 @@ public class CursorToMessage {
         }
 
         ConversionResult result = new ConversionResult();
-        result.maxId = String.valueOf(maxId);
+        result.maxDate = maxDate;
         result.messageList = messageList;
         return result;
     }
@@ -117,14 +121,14 @@ public class CursorToMessage {
             record = new PersonRecord();
             record._id = address;
             record.name = address;
-            record.address = new Address(address + "@unknown.person");
+            record.address = new Address(address + "@" + UNKNOWN_PERSON);
         }
 
         msg.setSubject("SMS with " + record.name);
 
-        TextBody body = new TextBody(msgMap.get("body"));
+        TextBody body = new TextBody(msgMap.get(SmsConsts.BODY));
 
-        int messageType = Integer.valueOf(msgMap.get("type"));
+        int messageType = Integer.valueOf(msgMap.get(SmsConsts.TYPE));
         if (SmsConsts.MESSAGE_TYPE_INBOX == messageType) {
             // Received message
             msg.setFrom(record.address);
@@ -136,15 +140,21 @@ public class CursorToMessage {
         }
 
         msg.setBody(body);
-        Date then = new Date(Long.valueOf(msgMap.get("date")));
+        Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
         msg.setSentDate(then);
         msg.setInternalDate(then);
-        String threadIdStr = msgMap.get("thread_id");
+        String threadIdStr = msgMap.get(SmsConsts.THREAD_ID);
         long threadId = (threadIdStr != null) ? Long.valueOf(threadIdStr) : 0;
         if (threadId > 0) {
             msg.setHeader("References", String.format(mReferenceValue, threadId));
         }
+        
+        msg.setHeader("X-smssync-original-id", msgMap.get(SmsConsts.ID));
         msg.setHeader("X-smssync-original-address", address);
+        msg.setHeader("X-smssync-original-type", msgMap.get(SmsConsts.TYPE));
+        msg.setHeader("X-smssync-original-date", msgMap.get(SmsConsts.DATE));
+        msg.setHeader("X-smssync-original-thread", msgMap.get(SmsConsts.THREAD_ID));
+        msg.setHeader("X-smssync-sync-time", new Date().toGMTString());
 
         return msg;
     }
@@ -182,16 +192,34 @@ public class CursorToMessage {
 
     private String getEmail(String number, long personId) {
         String primaryEmail = null;
+        String selection = ContactMethods.PERSON_ID + " = ?";
+        String[] selectionArgs = new String[] { String.valueOf(personId) };
         if (personId > 0) {
+            // Get all e-mail addresses for that person.
             Cursor emailCursor = mContext.getContentResolver().query(
                     ContactMethods.CONTENT_EMAIL_URI, EMAIL_PROJECTION,
-                    ContactMethods.PERSON_ID + " = " + personId, null, null);
-            if (emailCursor.moveToFirst()) {
-                int indexData = emailCursor.getColumnIndex(ContactMethods.DATA);
-                primaryEmail = emailCursor.getString(indexData);
+                    selection, selectionArgs, null);
+            int indexData = emailCursor.getColumnIndex(ContactMethods.DATA);
+            
+            // Loop over cursor and find a Gmail address for that person.
+            // If there is none, pick first e-mail address.
+            String firstEmail = null;
+            String gmailEmail = null;
+            while (emailCursor.moveToNext()) {
+                String tmpEmail = emailCursor.getString(indexData);
+                if (firstEmail == null) {
+                    firstEmail = tmpEmail;
+                }
+                if (isGmailAddress(tmpEmail)) {
+                    gmailEmail = tmpEmail;
+                    break;
+                }
             }
             emailCursor.close();
+            primaryEmail = (gmailEmail != null) ? gmailEmail : firstEmail;
         }
+        // Return found e-mail address or a dummy "unknown e-mail address"
+        // if there is none.
         if (primaryEmail == null) {
             primaryEmail = getUnknownEmail(number);
         }
@@ -200,7 +228,12 @@ public class CursorToMessage {
 
     private static String getUnknownEmail(String number) {
         String no = (number == null) ? UNKNOWN_NUMBER : number;
-        return no + "@unknown.email";
+        return no + "@" + UNKNOWN_EMAIL;
+    }
+    
+    /** Returns whether the given e-mail address is a Gmail address or not. */
+    private static boolean isGmailAddress(String email) {
+        return email.endsWith("gmail.com") || email.endsWith("googlemail.com");
     }
     
     private static String generateReferenceValue() {
@@ -214,7 +247,7 @@ public class CursorToMessage {
     }
 
     public static class ConversionResult {
-        public String maxId;
+        public long maxDate;
 
         public List<Message> messageList;
     }

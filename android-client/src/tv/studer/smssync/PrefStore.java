@@ -24,10 +24,10 @@ public class PrefStore {
     static final String SHARED_PREFS_NAME = "syncprefs";
     
     /**
-     * Preference key containing the maximum ID of messages that were
+     * Preference key containing the maximum date of messages that were
      * successfully synced.
      */
-    static final String PREF_MAX_SYNCED_ID = "max_synced_id";
+    static final String PREF_MAX_SYNCED_DATE = "max_synced_date";
 
     /** Preference key containing the Google account username. */
     static final String PREF_LOGIN_USER = "login_user";
@@ -41,20 +41,26 @@ public class PrefStore {
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
     
+    /** Preference key for storing whether to enable auto sync or not. */
+    static final String PREF_ENABLE_AUTO_SYNC = "enable_auto_sync";
+    
     /** Preference key for the timeout between an SMS is received and the scheduled sync. */
     static final String PREF_INCOMING_TIMEOUT_SECONDS = "incoming_timeout_seconds";
     
     /** Preference key for the interval between backup of outgoing SMS. */
     static final String PREF_REGULAR_TIMEOUT_SECONDS = "regular_timeout_seconds";
     
-    /** Default value for {@link PrefStore#PREF_MAX_SYNCED_ID}. */
-    static final String DEFAULT_MAX_SYNCED_ID = "-1";
+    /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
+    static final long DEFAULT_MAX_SYNCED_DATE = -1;
     
     /** Default value for {@link PrefStore#PREF_IMAP_FOLDER}. */
     static final String DEFAULT_IMAP_FOLDER = "SMS";
     
+    /** Default value for {@link PrefStore#PREF_ENABLE_AUTO_SYNC}. */
+    static final boolean DEFAULT_ENABLE_AUTO_SYNC = true;
+    
     /** Default value for {@link PrefStore#PREF_INCOMING_TIMEOUT_SECONDS}. */
-    static final int DEFAULT_INCOMING_TIMEOUT_SECONDS = 10;
+    static final int DEFAULT_INCOMING_TIMEOUT_SECONDS = 20;
     
     /** Default value for {@link PrefStore#PREF_REGULAR_TIMEOUT_SECONDS}. */
     static final int DEFAULT_REGULAR_TIMEOUT_SECONDS = 30 * 60; // 30 minutes
@@ -63,17 +69,18 @@ public class PrefStore {
         return ctx.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
     }
     
-    static String getMaxSyncedId(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_MAX_SYNCED_ID, DEFAULT_MAX_SYNCED_ID);
+    static long getMaxSyncedDate(Context ctx) {
+        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE,
+                DEFAULT_MAX_SYNCED_DATE);
     }
     
-    static boolean isMaxSyncedIdSet(Context ctx) {
-        return getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_ID);
+    static boolean isMaxSyncedDateSet(Context ctx) {
+        return getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE);
     }
     
-    static void setMaxSyncedId(Context ctx, String maxSyncedId) {
+    static void setMaxSyncedDate(Context ctx, long maxSyncedDate) {
         Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_MAX_SYNCED_ID, maxSyncedId);
+        editor.putLong(PREF_MAX_SYNCED_DATE, maxSyncedDate);
         editor.commit();
     }
     
@@ -83,6 +90,14 @@ public class PrefStore {
     
     static String getLoginPassword(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_PASSWORD, null);
+    }
+    
+    public static boolean isLoginUsernameSet(Context ctx) {
+        return getLoginUsername(ctx) != null;
+    }
+    
+    static boolean isLoginInformationSet(Context ctx) {
+        return isLoginUsernameSet(ctx) && getLoginPassword(ctx) != null;
     }
     
     static String getReferenceUid(Context ctx) {
@@ -124,6 +139,21 @@ public class PrefStore {
         editor.commit();
     }
     
+    static boolean isEnableAutoSync(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_ENABLE_AUTO_SYNC,
+                DEFAULT_ENABLE_AUTO_SYNC);
+    }
+    
+    static boolean isEnableAutoSyncSet(Context ctx) {
+        return getSharedPreferences(ctx).contains(PREF_ENABLE_AUTO_SYNC);
+    }
+    
+    static void setEnableAutoSync(Context ctx, boolean enableAutoSync) {
+        Editor editor = getSharedPreferences(ctx).edit();
+        editor.putBoolean(PREF_ENABLE_AUTO_SYNC, enableAutoSync);
+        editor.commit();
+    }
+    
     static int getIncomingTimeoutSecs(Context ctx) {
        return getSharedPreferences(ctx).getInt(PREF_INCOMING_TIMEOUT_SECONDS,
                DEFAULT_INCOMING_TIMEOUT_SECONDS);
@@ -134,11 +164,14 @@ public class PrefStore {
                 DEFAULT_REGULAR_TIMEOUT_SECONDS); 
     }
     
+    static boolean isFirstSync(Context ctx) {
+        return !isMaxSyncedDateSet(ctx);
+    }
+    
     static void clearSyncData(Context ctx) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.remove(PREF_LOGIN_PASSWORD);
-        editor.remove(PREF_MAX_SYNCED_ID);
+        editor.remove(PREF_MAX_SYNCED_DATE);
         editor.commit();
     }
-
 }
