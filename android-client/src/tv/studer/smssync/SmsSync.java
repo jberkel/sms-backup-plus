@@ -15,6 +15,8 @@
 
 package tv.studer.smssync;
 
+import java.util.Date;
+
 import tv.studer.smssync.SmsSyncService.SmsSyncState;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -31,10 +33,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -60,19 +64,11 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // Need to set a value here so the dialog for the label is pre-filled with the default.
-        if (!PrefStore.isImapFolderSet(this)) {
-            PrefStore.setImapFolder(this, PrefStore.DEFAULT_IMAP_FOLDER);
-        }
-        if (!PrefStore.isEnableAutoSyncSet(this)) {
-            PrefStore.setEnableAutoSync(this, PrefStore.DEFAULT_ENABLE_AUTO_SYNC);
-        }
-        
         super.onCreate(savedInstanceState);
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName(PrefStore.SHARED_PREFS_NAME);
         prefMgr.setSharedPreferencesMode(MODE_PRIVATE);
-
+        
         addPreferencesFromResource(R.xml.main_screen);
 
         PreferenceCategory cat = new PreferenceCategory(this);
@@ -151,10 +147,20 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
         private Button mSyncButton;
 
+        private ImageView mStatusIcon;
+        
         private TextView mStatusLabel;
 
+        private View mSyncDetails;
+        
+        private TextView mErrorDetails;
+        
+        private TextView mSyncDetailsLabel;
+        
         private ProgressBar mProgressBar;
-
+        
+        private ProgressBar mProgressBarIndet;
+        
         public StatusPreference(Context context) {
             super(context);
         }
@@ -169,49 +175,141 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        CharSequence statusLabel;
-                        mProgressBar.setIndeterminate(false);
-                        mProgressBar.setProgress(0);
+                        int STATUS_IDLE = 0;
+                        int STATUS_WORKING = 1;
+                        int STATUS_DONE = 2;
+                        int STATUS_ERROR = 3;
+                        int status = -1;
+                        
+                        CharSequence statusLabel = null;
+                        String statusDetails = null;
+                        boolean progressIndeterminate = false;
+                        int progressMax = 1;
+                        int progressVal = 0;
+                        
                         switch (newState) {
                             case AUTH_FAILED:
                                 statusLabel = getText(R.string.status_auth_failure);
+                                statusDetails = getString(R.string.status_auth_failure_details);
+                                status = STATUS_ERROR;
                                 break;
                             case CALC:
                                 statusLabel = getText(R.string.status_calc);
-                                mProgressBar.setIndeterminate(true);
+                                statusDetails = getString(R.string.status_calc_details);
+                                progressIndeterminate = true;
+                                status = STATUS_WORKING;
                                 break;
                             case IDLE:
                                 if (oldState == SmsSyncState.SYNC || oldState == SmsSyncState.CALC) {
                                     statusLabel = getText(R.string.status_done);
-                                    mProgressBar.setMax(100);
-                                    mProgressBar.setProgress(100);
+                                    int backedUpCount = SmsSyncService.getItemsToSyncCount();
+                                    if (backedUpCount > 0) {
+                                        statusDetails = getString(R.string.status_done_details,
+                                                backedUpCount);
+                                    } else {
+                                        statusDetails =
+                                            getString(R.string.status_done_details_nobackup);
+                                    }
+                                    
+                                    progressIndeterminate = false;
+                                    progressMax = 1;
+                                    progressVal = 1;
+                                    status = STATUS_DONE;
                                 } else {
                                     statusLabel = getText(R.string.status_idle);
+                                    long lastSync = PrefStore.getLastSync(SmsSync.this);
+                                    String lastSyncStr;
+                                    if (lastSync == PrefStore.DEFAULT_LAST_SYNC) {
+                                        lastSyncStr = 
+                                            getString(R.string.status_idle_details_never);
+                                    } else {
+                                        lastSyncStr = new Date(lastSync).toLocaleString();
+                                    }
+                                    statusDetails = getString(R.string.status_idle_details,
+                                            lastSyncStr);
+                                    status = STATUS_IDLE;
                                 }
                                 break;
                             case LOGIN:
                                 statusLabel = getText(R.string.status_login);
-                                mProgressBar.setIndeterminate(true);
+                                statusDetails = getString(R.string.status_login_details);
+                                progressIndeterminate = true;
+                                status = STATUS_WORKING;
                                 break;
                             case SYNC:
-                                statusLabel = getString(R.string.status_sync, SmsSyncService
-                                        .getCurrentSyncedItems(), SmsSyncService
-                                        .getItemsToSyncCount());
-                                mProgressBar.setMax(SmsSyncService.getItemsToSyncCount());
-                                mProgressBar.setProgress(SmsSyncService.getCurrentSyncedItems());
+                                statusLabel = getText(R.string.status_sync);
+                                statusDetails = getString(R.string.status_sync_details,
+                                        SmsSyncService.getCurrentSyncedItems(),
+                                        SmsSyncService.getItemsToSyncCount());
+                                progressMax = SmsSyncService.getItemsToSyncCount();
+                                progressVal = SmsSyncService.getCurrentSyncedItems();
+                                status = STATUS_WORKING;
                                 break;
                             case GENERAL_ERROR:
                                 statusLabel = getString(R.string.status_unknown_error);
-                                showDialog(DIALOG_ERROR_DESCRIPTION);
-                            default:
-                                statusLabel = "";
+                                statusDetails = getString(R.string.status_unknown_error_details,
+                                        SmsSyncService.getErrorDescription());
+                                status = STATUS_ERROR;
+                                break;
                         } // switch (newStatus) { ... }
-                        mStatusLabel.setText(statusLabel);
 
-                        if (getOnPreferenceChangeListener() != null) {
-                            getOnPreferenceChangeListener().onPreferenceChange(
-                                    StatusPreference.this, null);
+                        
+                        int color;
+                        TextView detailTextView;
+                        int syncButtonText;
+                        int icon;
+                        
+                        if (status == STATUS_IDLE) {
+                            color = R.color.status_idle;
+                            detailTextView = mSyncDetailsLabel;
+                            syncButtonText = R.string.ui_sync_button_label_idle;
+                            icon = R.drawable.ic_idle;
+                        } else if (status == STATUS_WORKING) {
+                            color = R.color.status_sync;
+                            detailTextView = mSyncDetailsLabel;
+                            syncButtonText = R.string.ui_sync_button_label_syncing;
+                            icon = R.drawable.ic_syncing;
+                        } else if (status == STATUS_DONE) {
+                            color = R.color.status_done;
+                            detailTextView = mSyncDetailsLabel;
+                            syncButtonText = R.string.ui_sync_button_label_done;
+                            icon = R.drawable.ic_done;
+                        } else if (status == STATUS_ERROR) {
+                            color = R.color.status_error;
+                            detailTextView = mErrorDetails;
+                            syncButtonText = R.string.ui_sync_button_label_error;
+                            icon = R.drawable.ic_error;
+                        } else {
+                            Log.w(Consts.TAG, "Illegal state: Unknown status.");
+                            return;
                         }
+                        
+                        if (status != STATUS_ERROR) {
+                            mSyncDetails.setVisibility(View.VISIBLE);
+                            mErrorDetails.setVisibility(View.INVISIBLE);
+                            if (progressIndeterminate) {
+                                mProgressBarIndet.setVisibility(View.VISIBLE);
+                                mProgressBar.setVisibility(View.GONE);
+                            } else {
+                                mProgressBar.setVisibility(View.VISIBLE);
+                                mProgressBarIndet.setVisibility(View.GONE);
+                                mProgressBar.setIndeterminate(progressIndeterminate);
+                                mProgressBar.setMax(progressMax);
+                                mProgressBar.setProgress(progressVal); 
+                            }
+                            
+                        } else {
+                            mErrorDetails.setVisibility(View.VISIBLE);
+                            mSyncDetails.setVisibility(View.INVISIBLE);
+                        }
+                        
+                        mStatusLabel.setText(statusLabel);
+                        mStatusLabel.setTextColor(getResources().getColor(color));
+                        mSyncButton.setText(syncButtonText);
+                        mSyncButton.setEnabled(status != STATUS_WORKING);
+                        detailTextView.setText(statusDetails);
+                        mStatusIcon.setImageResource(icon);
+                        
                     } // run() { ... }
                 }); // runOnUiThread(...)
             } // if (mView != null) { ... }
@@ -228,10 +326,16 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         public View getView(View convertView, ViewGroup parent) {
             if (mView == null) {
                 mView = getLayoutInflater().inflate(R.layout.status, parent, false);
-                mSyncButton = (Button)mView.findViewById(R.id.sync_button);
+                mSyncButton = (Button) mView.findViewById(R.id.sync_button);
                 mSyncButton.setOnClickListener(this);
-                mStatusLabel = (TextView)mView.findViewById(R.id.status);
-                mProgressBar = (ProgressBar)mView.findViewById(R.id.status_progress);
+                mStatusIcon = (ImageView) mView.findViewById(R.id.status_icon);
+                mStatusLabel = (TextView) mView.findViewById(R.id.status_label);
+                mSyncDetails = mView.findViewById(R.id.details_sync);
+                mSyncDetailsLabel = (TextView) mSyncDetails.findViewById(R.id.details_sync_label);
+                mProgressBar = (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress);
+                mProgressBarIndet =
+                    (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress_indet);
+                mErrorDetails = (TextView) mView.findViewById(R.id.details_error);
                 update();
             }
             return mView;

@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SMS to Gmail</string>
-	<string name="sync_button">Backup</string>
+    
+	<string name="ui_sync_button_label_idle">Backup now</string>
+	<string name="ui_sync_button_label_done">Backup again</string>
+	<string name="ui_sync_button_label_error">Retry backup</string>
+	<string name="ui_sync_button_label_syncing">Backing up...</string>
 	
-	<string name="status_idle">Idle.</string>
-	<string name="status_sync">Backing up... (%1$d/%2$d)</string>
-	<string name="status_login">Logging in...</string>
-	<string name="status_done">Done.</string>
-	<string name="status_unknown_error">Unknown error.</string>
-	<string name="status_auth_failure">Login error.</string>
-	<string name="status_calc">Calculating...</string>
+	<string name="status_idle">Idle</string>
+		<string name="status_idle_details">Last backup: %1$s.</string>
+		<string name="status_idle_details_never">never</string>
+	<string name="status_sync">Backing up</string>
+		<string name="status_sync_details">Backing up item %1$d/%2$d...</string>
+	<string name="status_login">Backing up</string>
+		<string name="status_login_details">Logging in...</string>
+	<string name="status_done">Done</string>
+		<string name="status_done_details">Successfully backed up %1$d items.</string>
+		<string name="status_done_details_nobackup">There were no items to backup.</string>
+	<string name="status_unknown_error">Error</string>
+		<string name="status_unknown_error_details">The following error occurred during the backup:\n%1$s</string>
+	<string name="status_auth_failure">Login error</string>
+		<string name="status_auth_failure_details">Please make sure you enabled IMAP in your Gmail account settings and check your username and password.\n%1$s</string>
+	<string name="status_calc">Backing up</string>
+		<string name="status_calc_details">Calculating...</string>
 	
 	<string name="ui_status_label">SMS to Gmail 0.2</string>
 	<string name="ui_settings_label">Settings</string>
@@ -51,6 +64,7 @@
 	
 	<string name="internal_pref_status">status</string>
 	
+	<string name="err_could_not_create_folder">Could not create label.</string>
 	<string name="err_first_sync_needs_skip_flag">Internal error: First backup without indication whether to skip messages or not.</string>
 	<string name="err_sync_requires_login_info">Cannot backup without login information.</string>
 	<string name="err_communication_error">General communication error.</string>

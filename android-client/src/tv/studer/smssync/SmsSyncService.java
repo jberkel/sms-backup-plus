@@ -148,8 +148,12 @@ public class SmsSyncService extends Service {
                             }
                         } catch (GeneralErrorException e) {
                             Log.i(Consts.TAG, "", e);
-                            sLastError = e.getMessage();
+                            sLastError = e.getLocalizedMessage();
                             updateState(SmsSyncState.GENERAL_ERROR);
+                        } catch (AuthenticationErrorException e) {
+                            Log.i(Consts.TAG, "", e);
+                            sLastError = e.getLocalizedMessage();
+                            updateState(SmsSyncState.AUTH_FAILED);
                         } finally {
                             stopSelf();
                             Alarms.scheduleRegularSync(SmsSyncService.this);
@@ -206,7 +210,8 @@ public class SmsSyncService extends Service {
      * @throws GeneralErrorException Thrown when there there was an error during
      *             sync.
      */
-    private void sync(boolean skipMessages) throws GeneralErrorException {
+    private void sync(boolean skipMessages) throws GeneralErrorException,
+            AuthenticationErrorException {
         Log.i(Consts.TAG, "Starting sync...");
 
         if (!PrefStore.isLoginInformationSet(this)) {
@@ -221,6 +226,9 @@ public class SmsSyncService extends Service {
         if (skipMessages) {
             // Only update the max synced ID, do not really sync.
             updateMaxSyncedDate(getMaxItemDate());
+            PrefStore.setLastSync(this);
+            sItemsToSync = 0;
+            sCurrentSyncedItems = 0;
             updateState(SmsSyncState.IDLE);
             Log.i(Consts.TAG, "All messages skipped.");
             return;
@@ -242,20 +250,22 @@ public class SmsSyncService extends Service {
 
         ImapStore imapStore;
         Folder folder;
+        boolean folderExists;
+        String label = PrefStore.getImapFolder(this);
         try {
             imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
                     URLEncoder.encode(password)));
-            String label = PrefStore.getImapFolder(this);
             folder = imapStore.getFolder(label);
-            if (!folder.exists()) {
+            folderExists = folder.exists();
+            if (!folderExists) {
                 Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
                 folder.create(FolderType.HOLDS_MESSAGES);
             }
             folder.open(OpenMode.READ_WRITE);
         } catch (MessagingException e) {
-            throw new GeneralErrorException(this, R.string.err_communication_error, e);
+            throw new AuthenticationErrorException(e);
         }
-
+        
         CursorToMessage converter = new CursorToMessage(this, username);
         while (true) {
             updateState(SmsSyncState.SYNC);
@@ -264,6 +274,7 @@ public class SmsSyncService extends Service {
                 List<Message> messages = result.messageList;
                 if (messages.size() == 0) {
                     Log.i(Consts.TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
+                    PrefStore.setLastSync(SmsSyncService.this);
                     updateState(SmsSyncState.IDLE);
                     folder.close(true);
                     break;
@@ -276,7 +287,6 @@ public class SmsSyncService extends Service {
                 updateMaxSyncedDate(result.maxDate);
                 result = null;
                 messages = null;
-                // System.gc();
             } catch (MessagingException e) {
                 throw new GeneralErrorException(this, R.string.err_communication_error, e);
             } finally {
@@ -364,20 +374,17 @@ public class SmsSyncService extends Service {
 
     /**
      * Returns the number of messages that require sync during the current
-     * cycle. Only valid if
-     * <code>{@link #getState()} == {@link SmsSyncState#SYNC}</code>.
+     * cycle.
      */
     static int getItemsToSyncCount() {
-        return (sState == SmsSyncState.SYNC) ? sItemsToSync : 0;
+        return sItemsToSync;
     }
 
     /**
      * Returns the number of already synced messages during the current cycle.
-     * Only valid if
-     * <code>{@link #getState()} == {@link SmsSyncState#SYNC}</code>.
      */
     static int getCurrentSyncedItems() {
-        return (sState == SmsSyncState.SYNC) ? sCurrentSyncedItems : 0;
+        return sCurrentSyncedItems;
     }
 
     /**
@@ -438,8 +445,20 @@ public class SmsSyncService extends Service {
     public static class GeneralErrorException extends Exception {
         private static final long serialVersionUID = 1L;
 
+        public GeneralErrorException(String msg, Throwable t) {
+            super(msg, t);
+        }
+        
         public GeneralErrorException(Context ctx, int msgId, Throwable t) {
             super(ctx.getString(msgId), t);
+        }
+    }
+    
+    public static class AuthenticationErrorException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        public AuthenticationErrorException(Throwable t) {
+            super(t.getLocalizedMessage(), t);
         }
     }
 

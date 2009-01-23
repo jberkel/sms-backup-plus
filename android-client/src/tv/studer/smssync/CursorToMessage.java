@@ -143,11 +143,9 @@ public class CursorToMessage {
         Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
         msg.setSentDate(then);
         msg.setInternalDate(then);
-        String threadIdStr = msgMap.get(SmsConsts.THREAD_ID);
-        long threadId = (threadIdStr != null) ? Long.valueOf(threadIdStr) : 0;
-        if (threadId > 0) {
-            msg.setHeader("References", String.format(mReferenceValue, threadId));
-        }
+        // Threading by person ID, not by thread ID. I think this value is more
+        // stable.
+        msg.setHeader("References", String.format(mReferenceValue, record._id));
         
         msg.setHeader("X-smssync-original-id", msgMap.get(SmsConsts.ID));
         msg.setHeader("X-smssync-original-address", address);

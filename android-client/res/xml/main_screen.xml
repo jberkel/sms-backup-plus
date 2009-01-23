@@ -18,10 +18,12 @@
 			android:summary="@string/ui_imap_folder_desc"
 			android:singleLine="true"
 			android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
-			android:persistent="true"/>
+			android:persistent="true"
+			android:defaultValue="SMS"/>
 		<CheckBoxPreference android:key="enable_auto_sync"
 			android:title="@string/ui_enable_auto_sync_label"
 			android:summary="@string/ui_enable_auto_sync_desc"
-			android:persistent="true"/>
+			android:persistent="true"
+			android:defaultValue="true"/>
 	</PreferenceCategory>
 </PreferenceScreen>

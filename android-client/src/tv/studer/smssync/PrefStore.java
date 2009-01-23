@@ -50,6 +50,9 @@ public class PrefStore {
     /** Preference key for the interval between backup of outgoing SMS. */
     static final String PREF_REGULAR_TIMEOUT_SECONDS = "regular_timeout_seconds";
     
+    /** Preference for storing the time of the last sync. */
+    static final String PREF_LAST_SYNC = "last_sync";
+    
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
     
@@ -64,6 +67,9 @@ public class PrefStore {
     
     /** Default value for {@link PrefStore#PREF_REGULAR_TIMEOUT_SECONDS}. */
     static final int DEFAULT_REGULAR_TIMEOUT_SECONDS = 30 * 60; // 30 minutes
+    
+    /** Default value for {@link #PREF_LAST_SYNC}. */
+    static final long DEFAULT_LAST_SYNC = -1;
     
     static SharedPreferences getSharedPreferences(Context ctx) {
         return ctx.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
@@ -164,14 +170,25 @@ public class PrefStore {
                 DEFAULT_REGULAR_TIMEOUT_SECONDS); 
     }
     
+    static long getLastSync(Context ctx) {
+        return getSharedPreferences(ctx).getLong(PREF_LAST_SYNC, DEFAULT_LAST_SYNC);
+    }
+    
+    static void setLastSync(Context ctx) {
+        Editor editor = getSharedPreferences(ctx).edit();
+        editor.putLong(PREF_LAST_SYNC, System.currentTimeMillis());
+        editor.commit();
+    }
+    
     static boolean isFirstSync(Context ctx) {
-        return !isMaxSyncedDateSet(ctx);
+        return getLastSync(ctx) == DEFAULT_LAST_SYNC;
     }
     
     static void clearSyncData(Context ctx) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.remove(PREF_LOGIN_PASSWORD);
         editor.remove(PREF_MAX_SYNCED_DATE);
+        editor.remove(PREF_LAST_SYNC);
         editor.commit();
     }
 }

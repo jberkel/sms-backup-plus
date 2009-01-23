@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<color name="status_idle">#cccccc</color>
+	<color name="status_done">#637a47</color>
+	<color name="status_sync">#cc9900</color>
+	<color name="status_error">#ac4444</color>
+</resources>
