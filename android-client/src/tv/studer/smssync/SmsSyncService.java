@@ -23,49 +23,26 @@ import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.Process;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 import com.android.email.mail.Folder;
 import com.android.email.mail.Message;
 import com.android.email.mail.MessagingException;
+import com.android.email.mail.Folder.FolderType;
 import com.android.email.mail.Folder.OpenMode;
 import com.android.email.mail.store.ImapStore;
 
 public class SmsSyncService extends Service {
-    // TODO(chstuder): Move to Consts.
-    /** Name of shared preference bundle containing settings for this service. */
-    static final String SHARED_PREFS_NAME = "syncprefs";
-
-    /** Type of messages which are drafts. They are not synced. */
-    private static final int MESSAGE_TYPE_DRAFT = 3;
-
-    /**
-     * Preference key containing the maximum ID of messages that were
-     * successfully synced.
-     */
-    private static final String PREF_MAX_SYNCED_ID = "max_synced_id";
-
-    /** Preference key containing the Google account username. */
-    static final String PREF_LOGIN_USER = "login_user";
-
-    /** Preference key containing the Google account password. */
-    static final String PREF_LOGIN_PASSWORD = "login_password";
-
-    /** Preference key containing a UID used for the threading reference header. */
-    static final String PREF_REFERENECE_UID = "reference_uid";
 
     /** Number of messages sent per sync request. */
     private static final int MAX_MSG_PER_SYNC = 1;
-
-    /** Preference key containing the "sync client" ID of this installation. */
-    private static final String PREF_SYNC_CLIENT_ID = "sync_client_id";
-
+    
     /** Flag indicating whether this service is already running. */
     private static boolean sIsRunning = false;
 
@@ -97,6 +74,8 @@ public class SmsSyncService extends Service {
      */
     private static StateChangeListener sStateChangeListener;
 
+    private static WakeLock sWakeLock;
+    
     public enum SmsSyncState {
         IDLE, CALC, LOGIN, SYNC, AUTH_FAILED, GENERAL_ERROR;
     }
@@ -105,13 +84,28 @@ public class SmsSyncService extends Service {
     public IBinder onBind(Intent arg0) {
         return null;
     }
-
+    
+    private static void acquireWakeLock(Context ctx) {
+        if (sWakeLock == null) {
+            PowerManager pMgr = (PowerManager) ctx.getSystemService(POWER_SERVICE);
+            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    "SmsSyncService.sync() wakelock.");
+        }
+        sWakeLock.acquire();
+    }
+    
+    private static void releaseWakeLock(Context ctx) {
+        sWakeLock.release();
+    }
+    
     @Override
     public void onStart(final Intent intent, int startId) {
         super.onStart(intent, startId);
+        
         synchronized (this.getClass()) {
             // Only start a sync if there's no other sync going on at this time.
             if (!sIsRunning) {
+                acquireWakeLock(this);
                 sIsRunning = true;
                 // Start sync in new thread.
                 new Thread() {
@@ -129,15 +123,37 @@ public class SmsSyncService extends Service {
                             }
                             boolean skipMessages = intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES,
                                     false);
-                            // Do the sync.
-                            sync(skipMessages);
+                            int numRetries = intent.getIntExtra(Consts.KEY_NUM_RETRIES, 0);
+                            GeneralErrorException lastException = null;
+                            
+                            // Try sync numRetries + 1 times.
+                            while (numRetries >= 0) {
+                                try {
+                                    sync(skipMessages);
+                                } catch (GeneralErrorException e) {
+                                    Log.w(Consts.TAG, e.getMessage());
+                                    Log.i(Consts.TAG, "Retrying sync in 2 seconds. (" + (numRetries - 1) +  ")");
+                                    lastException = e;
+                                    if (numRetries > 1) {
+                                        try {
+                                            Thread.sleep(2000);
+                                        } catch (InterruptedException e1) { /* ignore */ }
+                                    }
+                                }
+                                numRetries--;
+                            }
+                            if (lastException != null) {
+                                throw lastException;
+                            }
                         } catch (GeneralErrorException e) {
                             Log.i(Consts.TAG, "", e);
                             sLastError = e.getMessage();
                             updateState(SmsSyncState.GENERAL_ERROR);
                         } finally {
-                            sIsRunning = false;
                             stopSelf();
+                            Alarms.scheduleRegularSync(SmsSyncService.this);
+                            releaseWakeLock(SmsSyncService.this);
+                            sIsRunning = false;
                         }
                     }
                 }.start();
@@ -196,9 +212,8 @@ public class SmsSyncService extends Service {
             throw new GeneralErrorException(this, R.string.err_sync_requires_login_info, null);
         }
 
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        String username = prefs.getString(PREF_LOGIN_USER, null);
-        String password = prefs.getString(PREF_LOGIN_PASSWORD, null);
+        String username = PrefStore.getLoginUsername(this);
+        String password = PrefStore.getLoginPassword(this);
 
         updateState(SmsSyncState.CALC);
 
@@ -229,11 +244,12 @@ public class SmsSyncService extends Service {
         try {
             imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
                     URLEncoder.encode(password)));
-            Folder[] folders = imapStore.getPersonalNamespaces();
-            for (int i = 0; i < folders.length; i++) {
-                Log.i(Consts.TAG, folders[i].getName());
+            String label = PrefStore.getImapFolder(this);
+            folder = imapStore.getFolder(label);
+            if (!folder.exists()) {
+                Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
+                folder.create(FolderType.HOLDS_MESSAGES);
             }
-            folder = imapStore.getFolder("SMS");
             folder.open(OpenMode.READ_WRITE);
         } catch (MessagingException e) {
             throw new GeneralErrorException(this, R.string.err_communication_error, e);
@@ -278,7 +294,7 @@ public class SmsSyncService extends Service {
         ContentResolver r = getContentResolver();
         String selection = "_id > ? AND " + "type <> ?";
         String[] selectionArgs = new String[] {
-                getMaxSyncedId(), String.valueOf(MESSAGE_TYPE_DRAFT)
+                getMaxSyncedId(), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
         };
         return r.query(Uri.parse("content://sms"), null, selection, selectionArgs, "_id");
     }
@@ -290,7 +306,7 @@ public class SmsSyncService extends Service {
         ContentResolver r = getContentResolver();
         String selection = "type <> ?";
         String[] selectionArgs = new String[] {
-            String.valueOf(MESSAGE_TYPE_DRAFT)
+            String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
         };
         String[] projection = new String[] {
             "_id"
@@ -311,8 +327,7 @@ public class SmsSyncService extends Service {
      * @return
      */
     private String getMaxSyncedId() {
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        return prefs.getString(PREF_MAX_SYNCED_ID, "-1");
+        return PrefStore.getMaxSyncedId(this);
     }
 
     /**
@@ -323,10 +338,7 @@ public class SmsSyncService extends Service {
      * @param maxSyncedId
      */
     private void updateMaxSyncedId(String maxSyncedId) {
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        Editor editor = prefs.edit();
-        editor.putString(PREF_MAX_SYNCED_ID, maxSyncedId);
-        editor.commit();
+        PrefStore.setMaxSyncedId(this, maxSyncedId);
         Log.d(Consts.TAG, "Max synced ID set to: " + maxSyncedId);
     }
 
@@ -372,8 +384,7 @@ public class SmsSyncService extends Service {
      * is handy if some special inputs are required for the first sync.
      */
     static boolean isFirstSync(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        return prefs.getString(PREF_MAX_SYNCED_ID, null) == null;
+        return !PrefStore.isMaxSyncedIdSet(context);
     }
 
     // Login information related methods.
@@ -382,21 +393,15 @@ public class SmsSyncService extends Service {
      * Returns whether all required login information is available.
      */
     static boolean isLoginInformationSet(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        return prefs.getString(PREF_LOGIN_USER, null) != null
-                && prefs.getString(PREF_LOGIN_PASSWORD, null) != null;
+        return PrefStore.getLoginUsername(context) != null
+                && PrefStore.getLoginPassword(context) != null;
     }
 
     /**
      * Resets all sync data. This is required after changing the username.
      */
     static void resetSyncData(Context ctx) {
-        SharedPreferences prefs = ctx.getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        Editor editor = prefs.edit();
-        editor.remove(PREF_LOGIN_PASSWORD);
-        editor.remove(PREF_MAX_SYNCED_ID);
-        editor.remove(PREF_SYNC_CLIENT_ID);
-        editor.commit();
+        PrefStore.clearSyncData(ctx);
     }
 
     /**
@@ -434,7 +439,6 @@ public class SmsSyncService extends Service {
         SmsSyncState old = sState;
         sState = newState;
         if (sStateChangeListener != null) {
-            Log.d(Consts.TAG, "Calling stateChanged()");
             sStateChangeListener.stateChanged(old, newState);
         }
     }

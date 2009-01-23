@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Contacts.ContactMethods;
@@ -60,20 +58,15 @@ public class CursorToMessage {
     
     private String mReferenceValue;
 
-    // The following
-
     public CursorToMessage(Context ctx, String userEmail) {
         mContext = ctx;
         mPeopleCache = new HashMap<String, PersonRecord>();
         mUserAddress = new Address(userEmail);
         
-        SharedPreferences prefs = ctx.getSharedPreferences(SmsSyncService.SHARED_PREFS_NAME,
-                Context.MODE_PRIVATE);
-        mReferenceValue = prefs.getString(SmsSyncService.PREF_REFERENECE_UID, null);
+        mReferenceValue = PrefStore.getReferenceUid(ctx);
         if (mReferenceValue == null) {
             mReferenceValue = generateReferenceValue();
-            Editor editor = prefs.edit();
-            editor.putString(SmsSyncService.PREF_REFERENECE_UID, mReferenceValue);
+            PrefStore.setReferenceUid(ctx, mReferenceValue);
         }
         
     }

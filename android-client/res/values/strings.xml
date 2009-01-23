@@ -19,14 +19,20 @@
 	<string name="ui_login_dialog_msg">WARNING: Changing the username will reset all your synchronization information and your password.</string>
 	
 	<string name="ui_password_label">Password</string>
-	<string name="ui_password_desc">Set your Google account password.</string>
+	<string name="ui_password_desc">Your Google account password.</string>
 	<string name="ui_password_dialog_msg">The password is stored on this device and never sent to the SMS Sync server.</string>
+	
+	<string name="ui_imap_folder_label">Gmail label</string>
+	<string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
+	<string name="ui_imap_folder_label_dialog_msg">All backed up SMS messages will be tagged with this label in Gmail.</string>
 	
 	<string name="ui_dialog_missing_credentials_title">Login information</string>
 	<string name="ui_dialog_missing_credentials_msg">You need to set the login information before synchronizing.</string>
 	<string name="ui_dialog_general_error_title">Synchronization failed</string>
 	<string name="ui_dialog_sync_data_reset_title">Sync data reset</string>
 	<string name="ui_dialog_sync_data_reset_msg">Sync data has been reset. Please set your password and perform an initial synchronization. You will be able to decide whether to backup or skip messages stored on this device.</string>
+	<string name="ui_dialog_invalid_imap_folder_title">Invalid label name</string>
+	<string name="ui_dialog_invalid_imap_folder_msg">The label name may only contain unaccented letters (A-Z, a-z).</string>
 	
 	<string name="ui_dialog_first_sync_title">First synchronization</string>
 	<string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?</string>

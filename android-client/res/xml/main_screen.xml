@@ -13,5 +13,11 @@
 			android:password="true"
 			android:dialogMessage="@string/ui_password_dialog_msg"
 			android:persistent="true"/>
+		<EditTextPreference android:key="imap_folder"
+			android:title="@string/ui_imap_folder_label"
+			android:summary="@string/ui_imap_folder_desc"
+			android:singleLine="true"
+			android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
+			android:persistent="true"/>
 	</PreferenceCategory>
 </PreferenceScreen>

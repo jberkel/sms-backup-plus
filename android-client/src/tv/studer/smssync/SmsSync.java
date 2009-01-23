@@ -40,7 +40,7 @@ import android.widget.TextView;
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
-public class SmsSync extends PreferenceActivity {
+public class SmsSync extends PreferenceActivity implements OnPreferenceChangeListener {
     private static final int DIALOG_MISSING_CREDENTIALS = 1;
 
     private static final int DIALOG_ERROR_DESCRIPTION = 2;
@@ -48,15 +48,22 @@ public class SmsSync extends PreferenceActivity {
     private static final int DIALOG_FIRST_SYNC = 3;
     
     private static final int DIALOG_SYNC_DATA_RESET = 4;
+    
+    private static final int DIALOG_INVALID_IMAP_FOLDER = 5;
 
     private StatusPreference mStatusPref;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Need to set a value here so the dialog for the label is pre-filled with the default.
+        if (!PrefStore.isImapFolderSet(this)) {
+            PrefStore.setImapFolder(this, PrefStore.DEFAULT_IMAP_FOLDER);
+        }
+        
         super.onCreate(savedInstanceState);
         PreferenceManager prefMgr = getPreferenceManager();
-        prefMgr.setSharedPreferencesName(SmsSyncService.SHARED_PREFS_NAME);
+        prefMgr.setSharedPreferencesName(PrefStore.SHARED_PREFS_NAME);
         prefMgr.setSharedPreferencesMode(MODE_PRIVATE);
 
         addPreferencesFromResource(R.xml.main_screen);
@@ -69,33 +76,11 @@ public class SmsSync extends PreferenceActivity {
         cat.setTitle(R.string.ui_status_label);
         cat.addPreference(mStatusPref);
 
-        OnPreferenceChangeListener userNameChanged = new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                if (SmsSyncService.PREF_LOGIN_USER.equals(preference.getKey())) {
-                    preference.setTitle(newValue.toString());
-                    SharedPreferences prefs = preference.getSharedPreferences();
-                    final String oldValue = prefs.getString(SmsSyncService.PREF_LOGIN_USER, null);
-                    if (!newValue.equals(oldValue)) {
-                        // We need to post the reset of sync state such that we do not interfere
-                        // with the current transaction of the SharedPreference.
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                SmsSyncService.resetSyncData(SmsSync.this);
-                                if (oldValue != null) {
-                                    showDialog(DIALOG_SYNC_DATA_RESET);
-                                }
-                            }
-                        });
-                    }
-                }
-                return true;
-            }
-        };
-        Preference pref = getPreferenceManager().findPreference(SmsSyncService.PREF_LOGIN_USER);
-        pref.setOnPreferenceChangeListener(userNameChanged);
-
+        Preference pref = prefMgr.findPreference(PrefStore.PREF_LOGIN_USER);
+        pref.setOnPreferenceChangeListener(this);
+        
+        pref = prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER);
+        pref.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -108,11 +93,22 @@ public class SmsSync extends PreferenceActivity {
     protected void onResume() {
         super.onResume();
         SmsSyncService.setStateChangeListener(mStatusPref);
+        updateUsernameLabelFromPref();
+        updateImapFolderLabelFromPref();
+    }
+    
+    private void updateUsernameLabelFromPref() {
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
-        String username = prefs.getString(SmsSyncService.PREF_LOGIN_USER,
+        String username = prefs.getString(PrefStore.PREF_LOGIN_USER,
                 getString(R.string.ui_login_label));
-        Preference pref = getPreferenceManager().findPreference(SmsSyncService.PREF_LOGIN_USER);
+        Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_LOGIN_USER);
         pref.setTitle(username);
+    }
+    
+    private void updateImapFolderLabelFromPref() {
+        String imapFolder = PrefStore.getImapFolder(this);
+        Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_IMAP_FOLDER);
+        pref.setTitle(imapFolder);
     }
 
     private void startSync(boolean skip) {
@@ -246,6 +242,10 @@ public class SmsSync extends PreferenceActivity {
                 title = getString(R.string.ui_dialog_sync_data_reset_title);
                 msg = getString(R.string.ui_dialog_sync_data_reset_msg);
                 break;
+            case DIALOG_INVALID_IMAP_FOLDER:
+                title = getString(R.string.ui_dialog_invalid_imap_folder_title);
+                msg = getString(R.string.ui_dialog_invalid_imap_folder_msg);
+                break;
             case DIALOG_FIRST_SYNC:
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
@@ -279,6 +279,42 @@ public class SmsSync extends PreferenceActivity {
             }
         });
         return builder.create();
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (PrefStore.PREF_LOGIN_USER.equals(preference.getKey())) {
+            preference.setTitle(newValue.toString());
+            SharedPreferences prefs = preference.getSharedPreferences();
+            final String oldValue = prefs.getString(PrefStore.PREF_LOGIN_USER, null);
+            if (!newValue.equals(oldValue)) {
+                // We need to post the reset of sync state such that we do not interfere
+                // with the current transaction of the SharedPreference.
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SmsSyncService.resetSyncData(SmsSync.this);
+                        if (oldValue != null) {
+                            showDialog(DIALOG_SYNC_DATA_RESET);
+                        }
+                    }
+                });
+            }
+        } else if (PrefStore.PREF_IMAP_FOLDER.equals(preference.getKey())) {
+            String imapFolder = newValue.toString();
+            if (PrefStore.isValidImapFolder(imapFolder)) {
+                preference.setTitle(imapFolder);
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDialog(DIALOG_INVALID_IMAP_FOLDER);
+                    }
+                });
+                return false;
+            }
+        }
+        return true;
     }
 
 }
