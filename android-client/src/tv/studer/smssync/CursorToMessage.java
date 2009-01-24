@@ -38,6 +38,8 @@ import com.android.email.mail.internet.TextBody;
 
 public class CursorToMessage {
     
+    private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@smssync.studer.tv>";
+    
     private static final String[] PHONE_PROJECTION = new String[] {
             Phones.PERSON_ID, People.NAME, Phones.NUMBER
     };
@@ -145,7 +147,8 @@ public class CursorToMessage {
         msg.setInternalDate(then);
         // Threading by person ID, not by thread ID. I think this value is more
         // stable.
-        msg.setHeader("References", String.format(mReferenceValue, record._id));
+        msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue,
+                record._id));
         
         msg.setHeader("X-smssync-original-id", msgMap.get(SmsConsts.ID));
         msg.setHeader("X-smssync-original-address", address);
@@ -236,11 +239,9 @@ public class CursorToMessage {
     
     private static String generateReferenceValue() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<");
         for (int i = 0; i < 24; i++) {
             sb.append(Integer.toString((int)(Math.random() * 35), 36));
         }
-        sb.append(".%s@smssync.studer.tv>");
         return sb.toString();
     }
 
