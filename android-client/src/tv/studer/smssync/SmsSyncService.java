@@ -157,8 +157,8 @@ public class SmsSyncService extends Service {
                         } finally {
                             stopSelf();
                             Alarms.scheduleRegularSync(SmsSyncService.this);
-                            releaseWakeLock(SmsSyncService.this);
                             sIsRunning = false;
+                            releaseWakeLock(SmsSyncService.this);
                         }
                     }
                 }.start();
