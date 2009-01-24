@@ -18,11 +18,9 @@ package tv.studer.smssync;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 
 public class PrefStore {
-    /** Name of shared preference bundle containing settings for this service. */
-    static final String SHARED_PREFS_NAME = "syncprefs";
-    
     /**
      * Preference key containing the maximum date of messages that were
      * successfully synced.
@@ -72,7 +70,7 @@ public class PrefStore {
     static final long DEFAULT_LAST_SYNC = -1;
     
     static SharedPreferences getSharedPreferences(Context ctx) {
-        return ctx.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
     
     static long getMaxSyncedDate(Context ctx) {

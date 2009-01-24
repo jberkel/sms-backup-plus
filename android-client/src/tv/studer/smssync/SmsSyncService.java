@@ -223,6 +223,9 @@ public class SmsSyncService extends Service {
 
         updateState(SmsSyncState.CALC);
 
+        sItemsToSync = 0;
+        sCurrentSyncedItems = 0;
+        
         if (skipMessages) {
             // Only update the max synced ID, do not really sync.
             updateMaxSyncedDate(getMaxItemDate());
@@ -234,13 +237,11 @@ public class SmsSyncService extends Service {
             return;
         }
 
-        sItemsToSync = 0;
-        sCurrentSyncedItems = 0;
-
         Cursor items = getItemsToSync();
         sItemsToSync = items.getCount();
         Log.d(Consts.TAG, "Total messages to sync: " + sItemsToSync);
         if (sItemsToSync == 0) {
+            PrefStore.setLastSync(this);
             updateState(SmsSyncState.IDLE);
             Log.d(Consts.TAG, "Nothing to do.");
             return;

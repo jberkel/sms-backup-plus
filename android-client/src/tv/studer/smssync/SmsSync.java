@@ -66,8 +66,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PreferenceManager prefMgr = getPreferenceManager();
-        prefMgr.setSharedPreferencesName(PrefStore.SHARED_PREFS_NAME);
-        prefMgr.setSharedPreferencesMode(MODE_PRIVATE);
         
         addPreferencesFromResource(R.xml.main_screen);
 
@@ -204,11 +202,11 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                     statusLabel = getText(R.string.status_done);
                                     int backedUpCount = SmsSyncService.getItemsToSyncCount();
                                     if (backedUpCount > 0) {
-                                        statusDetails = getString(R.string.status_done_details,
+                                        statusDetails = getResources().getQuantityString(
+                                                R.plurals.status_done_details, backedUpCount,
                                                 backedUpCount);
                                     } else {
-                                        statusDetails =
-                                            getString(R.string.status_done_details_nobackup);
+                                        statusDetails = getString(R.string.status_done_details_noitems);
                                     }
                                     
                                     progressIndeterminate = false;

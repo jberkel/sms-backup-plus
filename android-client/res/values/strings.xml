@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">SMS to Gmail</string>
     
 	<string name="ui_sync_button_label_idle">Backup now</string>
 	<string name="ui_sync_button_label_done">Backup again</string>
 	<string name="ui_sync_button_label_error">Retry backup</string>
-	<string name="ui_sync_button_label_syncing">Backing up...</string>
+	<string name="ui_sync_button_label_syncing">Backing up\u2026</string>
 	
 	<string name="status_idle">Idle</string>
-		<string name="status_idle_details">Last backup: %1$s.</string>
-		<string name="status_idle_details_never">never</string>
+		<string name="status_idle_details">Last backup: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+		<string name="status_idle_details_never">Never</string>
 	<string name="status_sync">Backing up</string>
-		<string name="status_sync_details">Backing up item %1$d/%2$d...</string>
+		<string name="status_sync_details">Backed up <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
 	<string name="status_login">Backing up</string>
-		<string name="status_login_details">Logging in...</string>
+		<string name="status_login_details">Logging in\u2026</string>
 	<string name="status_done">Done</string>
-		<string name="status_done_details">Successfully backed up %1$d items.</string>
-		<string name="status_done_details_nobackup">There were no items to backup.</string>
+		<string name="status_done_details_noitems">There were no items to backup.</string>
+		<plurals name="status_done_details">
+	        <item quantity="one">Successfully backed up <xliff:g id="total_items">%1$d</xliff:g> item.</item>
+	        <item quantity="other">Successfully backed up <xliff:g id="total_items">%1$d</xliff:g> items.</item>
+	    </plurals>
 	<string name="status_unknown_error">Error</string>
-		<string name="status_unknown_error_details">The following error occurred during the backup:\n%1$s</string>
+		<string name="status_unknown_error_details">The following error occurred during the backup:\n<xliff:g id="error_description">%1$s</xliff:g></string>
 	<string name="status_auth_failure">Login error</string>
-		<string name="status_auth_failure_details">Please make sure you enabled IMAP in your Gmail account settings and check your username and password.\n%1$s</string>
+		<string name="status_auth_failure_details">Please make sure you enabled IMAP in your Gmail account settings and check your username and password.</string>
 	<string name="status_calc">Backing up</string>
-		<string name="status_calc_details">Calculating...</string>
+		<string name="status_calc_details">Calculating\u2026</string>
 	
-	<string name="ui_status_label">SMS to Gmail 0.2</string>
+	<string name="ui_status_label">SMS Backup</string>
 	<string name="ui_settings_label">Settings</string>
 	
 	<string name="ui_login_label">Username</string>
-	<string name="ui_login_desc">Your Google account/e-mail address.</string>
-	<string name="ui_login_dialog_msg">WARNING: Changing the username will reset all your synchronization information and your password.</string>
+	<string name="ui_login_desc">Your Google account username/e-mail address.</string>
+	<string name="ui_login_dialog_msg">WARNING: Changing the username will reset all your backup information and your password.</string>
 	
 	<string name="ui_password_label">Password</string>
 	<string name="ui_password_desc">Your Google account password.</string>
@@ -37,13 +40,13 @@
 	
 	<string name="ui_imap_folder_label">Gmail label</string>
 	<string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
-	<string name="ui_imap_folder_label_dialog_msg">All backed up SMS messages will be tagged with this label in Gmail.</string>
+	<string name="ui_imap_folder_label_dialog_msg">Backed up SMS messages will be tagged with this label in Gmail.</string>
 	
-	<string name="ui_enable_auto_sync_label">Auto synchronization</string>
-	<string name="ui_enable_auto_sync_desc">Whether to automatically backup in the background or not.</string>
+	<string name="ui_enable_auto_sync_label">Auto backup</string>
+	<string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
 	
 	<string name="ui_dialog_missing_credentials_title">Login information</string>
-	<string name="ui_dialog_missing_credentials_msg">You need to set the login information before synchronizing.</string>
+	<string name="ui_dialog_missing_credentials_msg">You need to set the login information before backing up.</string>
 	<string name="ui_dialog_general_error_title">Backup failed</string>
 	<string name="ui_dialog_sync_data_reset_title">Backup data reset</string>
 	<string name="ui_dialog_sync_data_reset_msg">Backup data has been reset. Please set your password and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.</string>
@@ -62,12 +65,8 @@
 	<string name="ui_sync">Backup</string>
 	<string name="ui_skip">Skip</string>
 	
-	<string name="internal_pref_status">status</string>
-	
 	<string name="err_could_not_create_folder">Could not create label.</string>
 	<string name="err_first_sync_needs_skip_flag">Internal error: First backup without indication whether to skip messages or not.</string>
 	<string name="err_sync_requires_login_info">Cannot backup without login information.</string>
 	<string name="err_communication_error">General communication error.</string>
-	<string name="err_io_error">Networking error. Please make sure internet access is working properly.</string>
-	<string name="err_auth_error">Authentication failed. Please double-check your login information.</string>
 </resources>
