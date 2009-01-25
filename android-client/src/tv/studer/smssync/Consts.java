@@ -48,4 +48,12 @@ final class Consts {
      * during sync.
      */
     static final String KEY_NUM_RETRIES = "num_retries";
+    
+    /** Website containing more information about this application. */
+    static final String URL_INFO_LINK = "http://code.google.com/p/android-sms/wiki/Info";
+
+    /** Market link to details of this application. */
+    static final String URL_MARKET_SEARCH =
+        "http://market.android.com/search?q=pname:tv.studer.smssync";
+    
 }
