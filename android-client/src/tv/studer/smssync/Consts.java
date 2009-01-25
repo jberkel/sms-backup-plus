@@ -30,14 +30,6 @@ final class Consts {
     static final int NUM_AUTO_RETRIES = 2;
     
     /**
-     * Maximum number of messages sent per sync.
-     * We have to restrict this because somehow a long-running sync causes
-     * the G1  device to get really sluggish or even crash. Works fine on the
-     * emulator, though.
-     */
-    static final int MAX_MSG_PER_SYNC = 100;
-    
-    /**
      * Key in the intent extras for indication whether all unsynced messages should
      * be skipped or not.
      */

@@ -97,6 +97,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         
         pref = prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD);
         pref.setOnPreferenceChangeListener(this);
+        
+        pref = prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC);
+        pref.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -111,6 +114,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         SmsSyncService.setStateChangeListener(mStatusPref);
         updateUsernameLabelFromPref();
         updateImapFolderLabelFromPref();
+        updateMaxItemsPerSync(null);
     }
     
     
@@ -258,7 +262,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                     int backedUpCount = SmsSyncService.getCurrentSyncedItems();
                                     progressMax = SmsSyncService.getItemsToSyncCount();
                                     progressVal = backedUpCount;
-                                    if (backedUpCount == Consts.MAX_MSG_PER_SYNC) {
+                                    if (backedUpCount ==
+                                            PrefStore.getMaxItemsPerSync(SmsSync.this)) {
                                         // Maximum msg per sync reached.
                                         statusDetails = getResources().getString(
                                                 R.string.status_done_details_max_per_sync,
@@ -456,7 +461,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.ui_dialog_first_sync_title);
                 builder.setMessage(getString(R.string.ui_dialog_first_sync_msg,
-                        Consts.MAX_MSG_PER_SYNC));
+                        PrefStore.getMaxItemsPerSync(this)));
                 builder.setPositiveButton(R.string.ui_sync, firstSyncListener);
                 builder.setNegativeButton(R.string.ui_skip, firstSyncListener);
                 return builder.create();
@@ -532,8 +537,18 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             if (PrefStore.isFirstSync(this) && PrefStore.isLoginUsernameSet(this)) {
                 showDialog(DIALOG_NEED_FIRST_MANUAL_SYNC);
             }
+        } else if (PrefStore.PREF_MAX_ITEMS_PER_SYNC.equals(preference.getKey())) {
+            updateMaxItemsPerSync((String) newValue);
         }
         return true;
+    }
+
+    private void updateMaxItemsPerSync(String newValue) {
+        Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC);
+        if (newValue == null) {
+            newValue = String.valueOf(PrefStore.getMaxItemsPerSync(this));
+        }
+        pref.setTitle(newValue);
     }
 
 }

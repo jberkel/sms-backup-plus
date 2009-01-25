@@ -238,7 +238,8 @@ public class SmsSyncService extends Service {
         }
 
         Cursor items = getItemsToSync();
-        sItemsToSync = Math.min(items.getCount(), Consts.MAX_MSG_PER_SYNC);
+        int maxItemsPerSync = PrefStore.getMaxItemsPerSync(this);
+        sItemsToSync = Math.min(items.getCount(), maxItemsPerSync);
         Log.d(Consts.TAG, "Total messages to sync: " + sItemsToSync);
         if (sItemsToSync == 0) {
             PrefStore.setLastSync(this);
@@ -277,7 +278,7 @@ public class SmsSyncService extends Service {
                 // Stop the sync if all items where uploaded or if the maximum number
                 // of messages per sync was uploaded.
                 if (messages.size() == 0
-                        || sCurrentSyncedItems >= Consts.MAX_MSG_PER_SYNC) {
+                        || sCurrentSyncedItems >= maxItemsPerSync) {
                     Log.i(Consts.TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
                     PrefStore.setLastSync(SmsSyncService.this);
                     updateState(SmsSyncState.IDLE);

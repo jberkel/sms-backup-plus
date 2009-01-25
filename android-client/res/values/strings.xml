@@ -31,18 +31,24 @@
 	
 	<string name="ui_status_label">SMS Backup</string>
 	<string name="ui_settings_label">Settings</string>
+	<string name="ui_settings_advanced_label">Advanced settings</string>
+	<string name="ui_settings_advanced_desc">Set advanced preferences.</string>
+	<string name="ui_settings_advanced_cat_label">SMS Backup <small>\u00bb Advanced settings</small></string>
 	
 	<string name="ui_login_label">Username</string>
-	<string name="ui_login_desc">Your Google account username/e-mail address.</string>
+	<string name="ui_login_desc">Your Google account/e-mail address.</string>
 	<string name="ui_login_dialog_msg">WARNING: Changing the username will reset all your backup information and your password.</string>
 	
 	<string name="ui_password_label">Password</string>
 	<string name="ui_password_desc">Your Google account password.</string>
-	<string name="ui_password_dialog_msg">The password is stored on this device and is only used to login at Gmail.</string>
+	<string name="ui_password_dialog_msg">The password is stored on this device and is only used to login at Gmail.</string>	
 	
 	<string name="ui_imap_folder_label">Gmail label</string>
 	<string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
 	<string name="ui_imap_folder_label_dialog_msg">Backed up SMS messages will be tagged with this label in Gmail.</string>
+	
+	<string name="ui_max_items_per_sync_label">Items per backup</string>
+	<string name="ui_max_items_per_sync_desc">Maximum number of items per backup.</string>
 	
 	<string name="ui_enable_auto_sync_label">Auto backup</string>
 	<string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>

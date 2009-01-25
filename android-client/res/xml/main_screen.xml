@@ -13,17 +13,30 @@
 			android:password="true"
 			android:dialogMessage="@string/ui_password_dialog_msg"
 			android:persistent="true"/>
-		<EditTextPreference android:key="imap_folder"
-			android:title="@string/ui_imap_folder_label"
-			android:summary="@string/ui_imap_folder_desc"
-			android:singleLine="true"
-			android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
-			android:persistent="true"
-			android:defaultValue="SMS"/>
 		<CheckBoxPreference android:key="enable_auto_sync"
 			android:title="@string/ui_enable_auto_sync_label"
 			android:summary="@string/ui_enable_auto_sync_desc"
 			android:persistent="true"
 			android:defaultValue="true"/>
+		<PreferenceScreen
+			android:title="@string/ui_settings_advanced_label"
+			android:summary="@string/ui_settings_advanced_desc">
+			<PreferenceCategory android:title="@string/ui_settings_advanced_cat_label">
+				<EditTextPreference android:key="imap_folder"
+					android:title="@string/ui_imap_folder_label"
+					android:summary="@string/ui_imap_folder_desc"
+					android:singleLine="true"
+					android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
+					android:persistent="true"
+					android:defaultValue="SMS"/>
+				<ListPreference android:key="max_items_per_sync"
+					android:title="@string/ui_max_items_per_sync_label"
+					android:summary="@string/ui_max_items_per_sync_desc"
+					android:entries="@array/max_items_per_sync_entries"
+					android:entryValues="@array/max_items_per_sync_entries"
+					android:defaultValue="100"
+					android:persistent="true"/>
+			</PreferenceCategory>
+		</PreferenceScreen>
 	</PreferenceCategory>
 </PreferenceScreen>

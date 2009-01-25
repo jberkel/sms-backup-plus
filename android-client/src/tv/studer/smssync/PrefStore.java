@@ -51,6 +51,9 @@ public class PrefStore {
     /** Preference for storing the time of the last sync. */
     static final String PREF_LAST_SYNC = "last_sync";
     
+    /** Preference for storing the maximum items per sync. */
+    static final String PREF_MAX_ITEMS_PER_SYNC = "max_items_per_sync";
+    
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
     
@@ -68,6 +71,10 @@ public class PrefStore {
     
     /** Default value for {@link #PREF_LAST_SYNC}. */
     static final long DEFAULT_LAST_SYNC = -1;
+
+    /** Default value for {@link #PREF_MAX_ITEMS_PER_SYNC}. */
+    static final String DEFAULT_MAX_ITEMS_PER_SYNC = "100";
+
     
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -120,6 +127,12 @@ public class PrefStore {
     
     static boolean isImapFolderSet(Context ctx) {
         return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER);
+    }
+    
+    static int getMaxItemsPerSync(Context ctx) {
+        String str = getSharedPreferences(ctx).getString(PREF_MAX_ITEMS_PER_SYNC,
+                DEFAULT_MAX_ITEMS_PER_SYNC);
+        return Integer.valueOf(str);
     }
     
     /**
