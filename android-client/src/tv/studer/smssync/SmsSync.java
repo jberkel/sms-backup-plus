@@ -202,12 +202,17 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                         || oldState == SmsSyncState.CALC) {
                                     statusLabel = getText(R.string.status_done);
                                     int backedUpCount = SmsSyncService.getCurrentSyncedItems();
-                                    if (backedUpCount > 0) {
+                                    progressMax = SmsSyncService.getItemsToSyncCount();
+                                    progressVal = backedUpCount;
+                                    if (backedUpCount == Consts.MAX_MSG_PER_SYNC) {
+                                        // Maximum msg per sync reached.
+                                        statusDetails = getResources().getString(
+                                                R.string.status_done_details_max_per_sync,
+                                                backedUpCount);
+                                    } else if (backedUpCount > 0) {
                                         statusDetails = getResources().getQuantityString(
                                                 R.plurals.status_done_details, backedUpCount,
                                                 backedUpCount);
-                                        progressMax = SmsSyncService.getItemsToSyncCount();
-                                        progressVal = backedUpCount;
                                     } else {
                                         statusDetails = getString(
                                                 R.string.status_done_details_noitems);
@@ -396,7 +401,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
                 builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.ui_dialog_first_sync_title);
-                builder.setMessage(R.string.ui_dialog_first_sync_msg);
+                builder.setMessage(getString(R.string.ui_dialog_first_sync_msg,
+                        Consts.MAX_MSG_PER_SYNC));
                 builder.setPositiveButton(R.string.ui_sync, firstSyncListener);
                 builder.setNegativeButton(R.string.ui_skip, firstSyncListener);
                 return builder.create();

@@ -43,15 +43,6 @@ public class SmsSyncService extends Service {
     /** Number of messages sent per sync request. */
     private static final int MAX_MSG_PER_REQUEST = 1;
     
-    /**
-     * Maximum number of messages sent per sync.
-     * We have to restrict this because somehow a long-running sync causes
-     * the G1  device to get really sluggish or even crash. Works fine on the
-     * emulator, though.
-     */
-    private static final int MAX_MSG_PER_SYNC = 100;
-    
-    
     /** Flag indicating whether this service is already running. */
     private static boolean sIsRunning = false;
 
@@ -247,7 +238,7 @@ public class SmsSyncService extends Service {
         }
 
         Cursor items = getItemsToSync();
-        sItemsToSync = items.getCount();
+        sItemsToSync = Math.min(items.getCount(), Consts.MAX_MSG_PER_SYNC);
         Log.d(Consts.TAG, "Total messages to sync: " + sItemsToSync);
         if (sItemsToSync == 0) {
             PrefStore.setLastSync(this);
@@ -285,7 +276,8 @@ public class SmsSyncService extends Service {
                 List<Message> messages = result.messageList;
                 // Stop the sync if all items where uploaded or if the maximum number
                 // of messages per sync was uploaded.
-                if (messages.size() == 0 || sCurrentSyncedItems >= MAX_MSG_PER_SYNC) {
+                if (messages.size() == 0
+                        || sCurrentSyncedItems >= Consts.MAX_MSG_PER_SYNC) {
                     Log.i(Consts.TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
                     PrefStore.setLastSync(SmsSyncService.this);
                     updateState(SmsSyncState.IDLE);
