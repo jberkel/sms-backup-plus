@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -34,6 +35,8 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -58,6 +61,12 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     private static final int DIALOG_INVALID_IMAP_FOLDER = 5;
 
     private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 6;
+    
+    private static final int MENU_INFO = 0;
+    
+    private static final int MENU_SHARE = 1;
+    
+    private static final int MENU_MARKET = 2;
 
     private StatusPreference mStatusPref;
 
@@ -102,6 +111,51 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         SmsSyncService.setStateChangeListener(mStatusPref);
         updateUsernameLabelFromPref();
         updateImapFolderLabelFromPref();
+    }
+    
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        
+        menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
+                android.R.drawable.ic_menu_info_details);
+        menu.add(0, MENU_SHARE, 1, R.string.menu_share).setIcon(
+                android.R.drawable.ic_menu_share);
+        menu.add(0, MENU_MARKET, 2, R.string.menu_market).setIcon(
+                R.drawable.ic_menu_update);
+        return true;
+    }
+    
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case MENU_INFO:
+                openLink(Consts.URL_INFO_LINK);
+                return true;
+            case MENU_SHARE:
+                share();
+                return true;
+            case MENU_MARKET:
+                openLink(Consts.URL_MARKET_SEARCH);
+                return true;
+        }
+        return false;
+    }
+
+    private void openLink(String link) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+        startActivity(intent);
+    }
+    
+    private void share() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_body,
+                Consts.URL_MARKET_SEARCH, Consts.URL_INFO_LINK));
+        startActivity(intent);
     }
     
     private void updateUsernameLabelFromPref() {

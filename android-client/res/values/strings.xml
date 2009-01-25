@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">SMS to Gmail</string>
+    <string name="app_name">SMS Backup</string>
+    <string name="app_description">SMS Backup to Gmail over the internet.</string>
     
 	<string name="ui_sync_button_label_idle">Backup now</string>
 	<string name="ui_sync_button_label_done">Backup again</string>
@@ -15,6 +16,7 @@
 	<string name="status_login">Backing up</string>
 		<string name="status_login_details">Logging in\u2026</string>
 	<string name="status_done">Done</string>
+		<string name="status_done_details_max_per_sync">Maximum of %1$d items per backup reached. Restart backup to continue.</string>
 		<string name="status_done_details_noitems">There were no items to backup.</string>
 		<plurals name="status_done_details">
 	        <item quantity="one">Successfully backed up <xliff:g id="total_items">%1$d</xliff:g> item.</item>
@@ -54,7 +56,7 @@
 	<string name="ui_dialog_invalid_imap_folder_msg">The label name may only contain unaccented letters (A-Z, a-z).</string>
 	
 	<string name="ui_dialog_first_sync_title">First backup</string>
-	<string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?</string>
+	<string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?\n\nNote: The backup will be split into batches of %1$d messages.</string>
 	
 	<string name="ui_dialog_need_first_manual_sync_title">First backup</string>
 	<string name="ui_dialog_need_first_manual_sync_msg">The first backup needs to be initiated manually. Would you like to perform a backup now?</string>
@@ -69,4 +71,11 @@
 	<string name="err_first_sync_needs_skip_flag">Internal error: First backup without indication whether to skip messages or not.</string>
 	<string name="err_sync_requires_login_info">Cannot backup without login information.</string>
 	<string name="err_communication_error">General communication error.</string>
+	
+	<string name="menu_info">Info</string>
+	<string name="menu_share">Share</string>
+	<string name="menu_market">Update</string>
+	
+	<string name="share_subject">SMS Backup for Android</string>
+	<string name="share_body">You can now backup all your SMS on your Android device to Gmail!\nCheck out the SMS Backup application by clicking the following link on your device:\n%1$s\nor visit:\n%2$s</string>
 </resources>
