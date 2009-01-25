@@ -41,7 +41,16 @@ import com.android.email.mail.store.ImapStore;
 public class SmsSyncService extends Service {
 
     /** Number of messages sent per sync request. */
-    private static final int MAX_MSG_PER_SYNC = 1;
+    private static final int MAX_MSG_PER_REQUEST = 1;
+    
+    /**
+     * Maximum number of messages sent per sync.
+     * We have to restrict this because somehow a long-running sync causes
+     * the G1  device to get really sluggish or even crash. Works fine on the
+     * emulator, though.
+     */
+    private static final int MAX_MSG_PER_SYNC = 100;
+    
     
     /** Flag indicating whether this service is already running. */
     private static boolean sIsRunning = false;
@@ -187,7 +196,7 @@ public class SmsSyncService extends Service {
      * server using the user provided credentials.</li>
      * <li>{@link SmsSyncState#SYNC}: The messages determined in step #1 are
      * sent to the server, possibly in chunks of a maximum of
-     * {@link #MAX_MSG_PER_SYNC} per request. After each successful sync
+     * {@link #MAX_MSG_PER_REQUEST} per request. After each successful sync
      * request, the maximum ID of synced messages is updated such that future
      * syncs will skip.</li>
      * </ol>
@@ -271,9 +280,12 @@ public class SmsSyncService extends Service {
         while (true) {
             updateState(SmsSyncState.SYNC);
             try {
-                ConversionResult result = converter.cursorToMessageArray(items, MAX_MSG_PER_SYNC);
+                ConversionResult result = converter.cursorToMessageArray(items,
+                        MAX_MSG_PER_REQUEST);
                 List<Message> messages = result.messageList;
-                if (messages.size() == 0) {
+                // Stop the sync if all items where uploaded or if the maximum number
+                // of messages per sync was uploaded.
+                if (messages.size() == 0 || sCurrentSyncedItems >= MAX_MSG_PER_SYNC) {
                     Log.i(Consts.TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
                     PrefStore.setLastSync(SmsSyncService.this);
                     updateState(SmsSyncState.IDLE);

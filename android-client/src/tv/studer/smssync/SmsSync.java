@@ -198,20 +198,25 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                 status = STATUS_WORKING;
                                 break;
                             case IDLE:
-                                if (oldState == SmsSyncState.SYNC || oldState == SmsSyncState.CALC) {
+                                if (oldState == SmsSyncState.SYNC
+                                        || oldState == SmsSyncState.CALC) {
                                     statusLabel = getText(R.string.status_done);
-                                    int backedUpCount = SmsSyncService.getItemsToSyncCount();
+                                    int backedUpCount = SmsSyncService.getCurrentSyncedItems();
                                     if (backedUpCount > 0) {
                                         statusDetails = getResources().getQuantityString(
                                                 R.plurals.status_done_details, backedUpCount,
                                                 backedUpCount);
+                                        progressMax = SmsSyncService.getItemsToSyncCount();
+                                        progressVal = backedUpCount;
                                     } else {
-                                        statusDetails = getString(R.string.status_done_details_noitems);
+                                        statusDetails = getString(
+                                                R.string.status_done_details_noitems);
+                                        progressMax = 1;
+                                        progressVal = 1;
                                     }
                                     
                                     progressIndeterminate = false;
-                                    progressMax = 1;
-                                    progressVal = 1;
+                                    
                                     status = STATUS_DONE;
                                 } else {
                                     statusLabel = getText(R.string.status_idle);
