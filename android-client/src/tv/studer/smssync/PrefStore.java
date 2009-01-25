@@ -179,7 +179,7 @@ public class PrefStore {
     }
     
     static boolean isFirstSync(Context ctx) {
-        return getLastSync(ctx) == DEFAULT_LAST_SYNC;
+        return !getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE);
     }
     
     static void clearSyncData(Context ctx) {
