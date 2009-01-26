@@ -15,6 +15,10 @@
 
 package tv.studer.smssync;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
 
 import tv.studer.smssync.SmsSyncService.SmsSyncState;
@@ -40,6 +44,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -61,6 +66,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     private static final int DIALOG_INVALID_IMAP_FOLDER = 5;
 
     private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 6;
+    
+    private static final int DIALOG_ABOUT = 7;
     
     private static final int MENU_INFO = 0;
     
@@ -137,7 +144,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case MENU_INFO:
-                openLink(Consts.URL_INFO_LINK);
+                // openLink(Consts.URL_INFO_LINK);
+                showDialog(DIALOG_ABOUT);
                 return true;
             case MENU_SHARE:
                 share();
@@ -465,6 +473,32 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 builder.setPositiveButton(R.string.ui_sync, firstSyncListener);
                 builder.setNegativeButton(R.string.ui_skip, firstSyncListener);
                 return builder.create();
+            case DIALOG_ABOUT:
+                builder = new AlertDialog.Builder(this);
+                builder.setCustomTitle(null);
+                builder.setPositiveButton(R.string.ui_ok, null);
+                
+                DialogInterface.OnClickListener aboutEmailListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(getString(R.string.about_email_uri)));
+                        intent.putExtra(Intent.EXTRA_SUBJECT,
+                                getString(R.string.about_email_subject,
+                                        getString(R.string.app_name),
+                                        getString(R.string.app_version)));
+                        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.about_email_content));
+                        startActivity(intent);
+                    }
+                };
+                builder.setNegativeButton(R.string.about_email_button, aboutEmailListener);
+                View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
+                WebView webView = (WebView) contentView.findViewById(R.id.about_content);
+                webView.loadData(getAboutText(), "text/html", "utf-8");
+                builder.setView(contentView);
+                
+                Dialog d = builder.create();
+                return d;
             default:
                 return null;
         }
@@ -483,6 +517,30 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             }
         });
         return builder.create();
+    }
+    
+    private String getAboutText() {
+        try {
+            InputStream input = getResources().getAssets().open("about.html");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            StringBuffer buf = new StringBuffer();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                buf.append(line);
+            }
+            String aboutText = buf.toString();
+            aboutText = String.format(aboutText,
+                    getString(R.string.app_name),
+                    getString(R.string.app_version),
+                    Consts.URL_INFO_LINK,
+                    Consts.URL_MARKET_SEARCH);
+            aboutText.replaceAll("percent", "%");
+            return aboutText;
+        } catch (IOException e) {
+            return "An error occured while reading about.html";
+        }
+        
+        
     }
 
     @Override
