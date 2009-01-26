@@ -90,6 +90,6 @@
 	
 	
 	<string name="share_subject">SMS Backup for Android</string>
-	<string name="share_body">You can now backup all your SMS on your Android device to Gmail!\nCheck out the SMS Backup application by clicking the following link on your device:\n%1$s\nor visit:\n%2$s</string>
+	<string name="share_body">You can now backup all SMS messages on your Android device to Gmail!\nCheck out the SMS Backup application by clicking the following link on your device:\n%1$s\nor visit:\n%2$s</string>
 	
 </resources>
