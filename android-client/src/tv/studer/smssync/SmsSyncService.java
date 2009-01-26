@@ -213,7 +213,9 @@ public class SmsSyncService extends Service {
     private void sync(boolean skipMessages) throws GeneralErrorException,
             AuthenticationErrorException {
         Log.i(Consts.TAG, "Starting sync...");
-
+if (true) {
+    throw new GeneralErrorException("Your mama.", null);
+}
         if (!PrefStore.isLoginInformationSet(this)) {
             throw new GeneralErrorException(this, R.string.err_sync_requires_login_info, null);
         }

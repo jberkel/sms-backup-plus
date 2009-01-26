@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">SMS Backup</string>
     <string name="app_description">SMS Backup to Gmail over the internet.</string>
-    <string name="app_version">1.0a5</string>
+    <string name="app_version">1.0.0</string>
     
 	<string name="ui_sync_button_label_idle">Backup now</string>
 	<string name="ui_sync_button_label_done">Backup again</string>
@@ -24,7 +24,7 @@
 	        <item quantity="other">Successfully backed up <xliff:g id="total_items">%1$d</xliff:g> items.</item>
 	    </plurals>
 	<string name="status_unknown_error">Error</string>
-		<string name="status_unknown_error_details">The following error occurred during the backup:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+		<string name="status_unknown_error_details">Error during backup:\n<xliff:g id="error_description">%1$s</xliff:g></string>
 	<string name="status_auth_failure">Login error</string>
 		<string name="status_auth_failure_details">Please make sure you enabled IMAP in your Gmail account settings and check your username and password.</string>
 	<string name="status_calc">Backing up</string>
@@ -56,7 +56,6 @@
 	
 	<string name="ui_dialog_missing_credentials_title">Login information</string>
 	<string name="ui_dialog_missing_credentials_msg">You need to set the login information before backing up.</string>
-	<string name="ui_dialog_general_error_title">Backup failed</string>
 	<string name="ui_dialog_sync_data_reset_title">Backup data reset</string>
 	<string name="ui_dialog_sync_data_reset_msg">Backup data has been reset. Please set your password and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.</string>
 	<string name="ui_dialog_invalid_imap_folder_title">Invalid label name</string>

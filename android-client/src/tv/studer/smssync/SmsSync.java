@@ -57,17 +57,15 @@ import android.widget.TextView;
 public class SmsSync extends PreferenceActivity implements OnPreferenceChangeListener {
     private static final int DIALOG_MISSING_CREDENTIALS = 1;
 
-    private static final int DIALOG_ERROR_DESCRIPTION = 2;
+    private static final int DIALOG_FIRST_SYNC = 2;
+    
+    private static final int DIALOG_SYNC_DATA_RESET = 3;
+    
+    private static final int DIALOG_INVALID_IMAP_FOLDER = 4;
 
-    private static final int DIALOG_FIRST_SYNC = 3;
+    private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 5;
     
-    private static final int DIALOG_SYNC_DATA_RESET = 4;
-    
-    private static final int DIALOG_INVALID_IMAP_FOLDER = 5;
-
-    private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 6;
-    
-    private static final int DIALOG_ABOUT = 7;
+    private static final int DIALOG_ABOUT = 6;
     
     private static final int MENU_INFO = 0;
     
@@ -426,10 +424,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             case DIALOG_MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
                 msg = getString(R.string.ui_dialog_missing_credentials_msg);
-                break;
-            case DIALOG_ERROR_DESCRIPTION:
-                title = getString(R.string.ui_dialog_general_error_title);
-                msg = SmsSyncService.getErrorDescription();
                 break;
             case DIALOG_SYNC_DATA_RESET:
                 title = getString(R.string.ui_dialog_sync_data_reset_title);
