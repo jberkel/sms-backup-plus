@@ -150,12 +150,16 @@ public class CursorToMessage {
         msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue,
                 record._id));
         
-        msg.setHeader("X-smssync-original-id", msgMap.get(SmsConsts.ID));
-        msg.setHeader("X-smssync-original-address", address);
-        msg.setHeader("X-smssync-original-type", msgMap.get(SmsConsts.TYPE));
-        msg.setHeader("X-smssync-original-date", msgMap.get(SmsConsts.DATE));
-        msg.setHeader("X-smssync-original-thread", msgMap.get(SmsConsts.THREAD_ID));
-        msg.setHeader("X-smssync-sync-time", new Date().toGMTString());
+        msg.setHeader("X-smssync-id", msgMap.get(SmsConsts.ID));
+        msg.setHeader("X-smssync-address", address);
+        msg.setHeader("X-smssync-type", msgMap.get(SmsConsts.TYPE));
+        msg.setHeader("X-smssync-date", msgMap.get(SmsConsts.DATE));
+        msg.setHeader("X-smssync-thread", msgMap.get(SmsConsts.THREAD_ID));
+        msg.setHeader("X-smssync-read", msgMap.get(SmsConsts.READ));
+        msg.setHeader("X-smssync-status", msgMap.get(SmsConsts.STATUS));
+        msg.setHeader("X-smssync-protocol", msgMap.get(SmsConsts.PROTOCOL));
+        msg.setHeader("X-smssync-service_center", msgMap.get(SmsConsts.SERVICE_CENTER));
+        msg.setHeader("X-smssync-backup_time", new Date().toGMTString());
 
         return msg;
     }
