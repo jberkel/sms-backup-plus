@@ -447,8 +447,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.ui_dialog_need_first_manual_sync_title);
                 builder.setMessage(R.string.ui_dialog_need_first_manual_sync_msg);
-                builder.setPositiveButton(R.string.ui_yes, dialogClickListener);
-                builder.setNegativeButton(R.string.ui_no, dialogClickListener);
+                builder.setPositiveButton(android.R.string.yes, dialogClickListener);
+                builder.setNegativeButton(android.R.string.no, dialogClickListener);
                 builder.setCancelable(false);
                 return builder.create();
             case DIALOG_FIRST_SYNC:
@@ -470,7 +470,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             case DIALOG_ABOUT:
                 builder = new AlertDialog.Builder(this);
                 builder.setCustomTitle(null);
-                builder.setPositiveButton(R.string.ui_ok, null);
+                builder.setPositiveButton(android.R.string.ok, null);
                 
                 DialogInterface.OnClickListener aboutEmailListener = new DialogInterface.OnClickListener() {
                     @Override
@@ -504,7 +504,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setMessage(msg);
-        builder.setPositiveButton(R.string.ui_ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dismissDialog(id);

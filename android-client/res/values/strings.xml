@@ -67,9 +67,9 @@
 	<string name="ui_dialog_need_first_manual_sync_title">First backup</string>
 	<string name="ui_dialog_need_first_manual_sync_msg">The first backup needs to be initiated manually. Would you like to perform a backup now?</string>
 	
-	<string name="ui_ok">OK</string>
-	<string name="ui_yes">Yes</string>
-	<string name="ui_no">No</string>
+	<!-- string name="ui_ok">OK</string -->
+	<!-- string name="ui_yes">Yes</string -->
+	<!-- string name="ui_no">No</string -->
 	<string name="ui_sync">Backup</string>
 	<string name="ui_skip">Skip</string>
 	
