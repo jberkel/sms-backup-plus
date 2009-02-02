@@ -2,12 +2,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">SMS Backup</string>
     <string name="app_description">SMS Backup to Gmail over the internet.</string>
-    <string name="app_version">1.0.0</string>
+    <string name="app_version">1.1.0</string>
     
 	<string name="ui_sync_button_label_idle">Backup now</string>
 	<string name="ui_sync_button_label_done">Backup again</string>
 	<string name="ui_sync_button_label_error">Retry backup</string>
-	<string name="ui_sync_button_label_syncing">Backing up\u2026</string>
+	<!-- TODO(chstuder): Rename the following string resource. -->
+	<string name="ui_sync_button_label_syncing">Stop backup</string>
+	<string name="ui_sync_button_label_canceling">Stopping\u2026</string>
 	
 	<string name="status_idle">Idle</string>
 		<string name="status_idle_details">Last backup: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -29,6 +31,8 @@
 		<string name="status_auth_failure_details">Please make sure you enabled IMAP in your Gmail account settings and check your username and password.</string>
 	<string name="status_calc">Backing up</string>
 		<string name="status_calc_details">Calculating\u2026</string>
+	<string name="status_canceled">Canceled</string>
+		<string name="status_canceled_details">%1$d/%2$d items successfully backed up.</string>
 	
 	<string name="ui_status_label">SMS Backup</string>
 	<string name="ui_settings_label">Settings</string>

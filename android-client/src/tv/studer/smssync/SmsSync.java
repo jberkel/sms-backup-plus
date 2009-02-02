@@ -324,6 +324,12 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                         SmsSyncService.getErrorDescription());
                                 status = STATUS_ERROR;
                                 break;
+                            case CANCELED:
+                                statusLabel = getString(R.string.status_canceled);
+                                statusDetails = getString(R.string.status_canceled_details,
+                                        SmsSyncService.getCurrentSyncedItems(),
+                                        SmsSyncService.getItemsToSyncCount());
+                                status = STATUS_IDLE;
                         } // switch (newStatus) { ... }
 
                         
@@ -379,7 +385,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                         mStatusLabel.setText(statusLabel);
                         mStatusLabel.setTextColor(getResources().getColor(color));
                         mSyncButton.setText(syncButtonText);
-                        mSyncButton.setEnabled(status != STATUS_WORKING);
+                        mSyncButton.setEnabled(true);
                         detailTextView.setText(statusDetails);
                         mStatusIcon.setImageResource(icon);
                         
@@ -391,7 +397,14 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         @Override
         public void onClick(View v) {
             if (v == mSyncButton) {
-                initiateSync();
+                if (!SmsSyncService.isWorking()) {
+                    initiateSync();
+                } else {
+                    SmsSyncService.cancel();
+                    // Sync button will be restored on next status update.
+                    mSyncButton.setText(R.string.ui_sync_button_label_canceling);
+                    mSyncButton.setEnabled(false);
+                }
             }
         }
 
