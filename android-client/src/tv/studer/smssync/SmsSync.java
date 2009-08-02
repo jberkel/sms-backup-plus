@@ -32,6 +32,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -80,17 +81,32 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PreferenceManager prefMgr = getPreferenceManager();
-        
+
         addPreferencesFromResource(R.xml.main_screen);
 
-        PreferenceCategory cat = new PreferenceCategory(this);
-        cat.setOrder(0);
-        getPreferenceScreen().addPreference(cat);
         mStatusPref = new StatusPreference(this);
         mStatusPref.setSelectable(false);
-        cat.setTitle(R.string.ui_status_label);
-        cat.addPreference(mStatusPref);
+        
+        int sdkLevel = 1;
+        try {
+            sdkLevel = Integer.parseInt(Build.VERSION.SDK);
+        } catch (NumberFormatException nfe) {
+            // ignore (assume sdkLevel == 1)
+        }
 
+        if (sdkLevel < 3) {
+            // Older versions don't show the title bar for PreferenceActivity
+            PreferenceCategory cat = new PreferenceCategory(this);
+            cat.setOrder(0);
+            getPreferenceScreen().addPreference(cat);
+            cat.setTitle(R.string.ui_status_label);
+            cat.addPreference(mStatusPref);
+        } else {
+            // Newer SDK version show the title bar for PreferenceActivity
+            mStatusPref.setOrder(0);
+            getPreferenceScreen().addPreference(mStatusPref);
+        }
+        
         Preference pref = prefMgr.findPreference(PrefStore.PREF_LOGIN_USER);
         pref.setOnPreferenceChangeListener(this);
         
