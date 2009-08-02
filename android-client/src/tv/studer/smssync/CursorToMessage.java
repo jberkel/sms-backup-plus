@@ -30,6 +30,7 @@ import android.provider.Contacts.Phones;
 import android.util.Log;
 
 import com.android.email.mail.Address;
+import com.android.email.mail.Flag;
 import com.android.email.mail.Message;
 import com.android.email.mail.MessagingException;
 import com.android.email.mail.Message.RecipientType;
@@ -63,6 +64,8 @@ public class CursorToMessage {
     private Map<String, PersonRecord> mPeopleCache;
     
     private String mReferenceValue;
+    
+    private boolean mMarkAsRead = false;
 
     public CursorToMessage(Context ctx, String userEmail) {
         mContext = ctx;
@@ -75,6 +78,7 @@ public class CursorToMessage {
             PrefStore.setReferenceUid(ctx, mReferenceValue);
         }
         
+        mMarkAsRead = PrefStore.getMarkAsRead(ctx);
     }
 
     public ConversionResult cursorToMessageArray(Cursor cursor, int maxEntries)
@@ -117,8 +121,12 @@ public class CursorToMessage {
         PersonRecord record = null;
         String address = msgMap.get("address");
         if (address != null) {
-            record = lookupPerson(address);
+            address = address.trim();
+            if (address.length() > 0) {
+                record = lookupPerson(address);
+            }
         }
+        
         if (record == null) {
             record = new PersonRecord();
             record._id = address;
@@ -160,7 +168,8 @@ public class CursorToMessage {
         msg.setHeader("X-smssync-protocol", msgMap.get(SmsConsts.PROTOCOL));
         msg.setHeader("X-smssync-service_center", msgMap.get(SmsConsts.SERVICE_CENTER));
         msg.setHeader("X-smssync-backup_time", new Date().toGMTString());
-
+        msg.setFlag(Flag.SEEN, mMarkAsRead);
+        
         return msg;
     }
 
