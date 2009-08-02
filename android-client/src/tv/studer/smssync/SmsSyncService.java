@@ -25,6 +25,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.WifiLock;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.Process;
@@ -82,6 +84,11 @@ public class SmsSyncService extends Service {
     private static WakeLock sWakeLock;
     
     /**
+     * A wifilock held while this service is working.
+     */
+    private static WifiLock sWifiLock;
+    
+    /**
      * Indicates that the user canceled the current backup and that this service
      * should finish working ASAP.
      */
@@ -101,12 +108,17 @@ public class SmsSyncService extends Service {
             PowerManager pMgr = (PowerManager) ctx.getSystemService(POWER_SERVICE);
             sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                     "SmsSyncService.sync() wakelock.");
+            
+            WifiManager wMgr = (WifiManager) ctx.getSystemService(WIFI_SERVICE);
+            sWifiLock = wMgr.createWifiLock("SMS Backup");
         }
         sWakeLock.acquire();
+        sWifiLock.acquire();
     }
     
     private static void releaseWakeLock(Context ctx) {
         sWakeLock.release();
+        sWifiLock.release();
     }
     
     @Override
@@ -127,8 +139,7 @@ public class SmsSyncService extends Service {
                         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                         try {
                             // On first sync we need to know whether to skip or
-                            // sync current
-                            // messages.
+                            // sync current messages.
                             if (PrefStore.isFirstSync(SmsSyncService.this)
                                     && !intent.hasExtra(Consts.KEY_SKIP_MESSAGES)) {
                                 throw new GeneralErrorException(SmsSyncService.this,
@@ -327,7 +338,7 @@ public class SmsSyncService extends Service {
     /**
      * Returns a cursor of SMS messages that have not yet been synced with the
      * server. This includes all messages with
-     * <code>ID &lt; {@link #getMaxSyncedDate()}</code> which are no drafs.
+     * <code>date &lt; {@link #getMaxSyncedDate()}</code> which are no drafs.
      */
     private Cursor getItemsToSync() {
         ContentResolver r = getContentResolver();
@@ -336,7 +347,7 @@ public class SmsSyncService extends Service {
         String[] selectionArgs = new String[] {
                 String.valueOf(getMaxSyncedDate()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
         };
-        String sortOrder = SmsConsts.DATE;
+        String sortOrder = SmsConsts.DATE + " LIMIT " + PrefStore.getMaxItemsPerSync(this);
         return r.query(Uri.parse("content://sms"), null, selection, selectionArgs, sortOrder);
     }
 
@@ -353,11 +364,20 @@ public class SmsSyncService extends Service {
             SmsConsts.DATE
         };
         Cursor result = r.query(Uri.parse("content://sms"), projection, selection, selectionArgs,
-                SmsConsts.DATE + " DESC");
-        if (result.moveToFirst()) {
-            return result.getLong(0);
-        } else {
-            return PrefStore.DEFAULT_MAX_SYNCED_DATE;
+                SmsConsts.DATE + " DESC LIMIT 1");
+
+        try
+        {
+            if (result.moveToFirst()) {
+                return result.getLong(0);
+            } else {
+                return PrefStore.DEFAULT_MAX_SYNCED_DATE;
+            }
+        }
+        catch (RuntimeException e)
+        {
+            result.close();
+            throw e;
         }
     }
 
