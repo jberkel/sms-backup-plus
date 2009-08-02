@@ -288,7 +288,7 @@ public class SmsSyncService extends Service {
         String label = PrefStore.getImapFolder(this);
         try {
             imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
-                    URLEncoder.encode(password)));
+                    URLEncoder.encode(password).replace("+", "%20")));
             folder = imapStore.getFolder(label);
             folderExists = folder.exists();
             if (!folderExists) {
