@@ -270,6 +270,11 @@ public class SmsSyncService extends Service {
         Log.d(Consts.TAG, "Total messages to backup: " + sItemsToSync);
         if (sItemsToSync == 0) {
             PrefStore.setLastSync(this);
+            if (PrefStore.isFirstSync(this)) {
+                // If this is the first backup we need to write something to PREF_MAX_SYNCED_DATE
+                // such that we know that we've performed a backup before.
+                PrefStore.setMaxSyncedDate(this, PrefStore.DEFAULT_MAX_SYNCED_DATE);
+            }
             updateState(SmsSyncState.IDLE);
             Log.d(Consts.TAG, "Nothing to do.");
             return;
