@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">SMS Backup</string>
     <string name="app_description">SMS Backup to Gmail over the internet.</string>
-    <string name="app_version">1.1.0</string>
+    <string name="app_version">1.1.1</string>
     
 	<string name="ui_sync_button_label_idle">Backup now</string>
 	<string name="ui_sync_button_label_done">Backup again</string>

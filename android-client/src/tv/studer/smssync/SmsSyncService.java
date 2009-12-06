@@ -301,8 +301,8 @@ public class SmsSyncService extends Service {
         }
         
         CursorToMessage converter = new CursorToMessage(this, username);
-        while (true) {
-            try {
+        try {
+            while (true) {
                 // Cancel sync if requested by the user.
                 if (sCanceled) {
                     Log.i(Consts.TAG, "Backup canceled by user.");
@@ -331,12 +331,11 @@ public class SmsSyncService extends Service {
                 updateMaxSyncedDate(result.maxDate);
                 result = null;
                 messages = null;
-            } catch (MessagingException e) {
-                throw new GeneralErrorException(this, R.string.err_communication_error, e);
-            } finally {
-                // Close the cursor
-                items.close();
             }
+        } catch (MessagingException e) {
+            throw new GeneralErrorException(this, R.string.err_communication_error, e);
+        } finally {
+            items.close();
         }
     }
 
