@@ -73,7 +73,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     private static final int MENU_SHARE = 1;
     
     private static final int MENU_MARKET = 2;
-
+    
+    private static final int MENU_RESTORE = 3;
+    
     private StatusPreference mStatusPref;
 
     /** Called when the activity is first created. */
@@ -149,6 +151,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 android.R.drawable.ic_menu_share);
         menu.add(0, MENU_MARKET, 2, R.string.menu_market).setIcon(
                 R.drawable.ic_menu_update);
+
+        menu.add(0, MENU_RESTORE, 3, "Restore");
+        
         return true;
     }
     
@@ -167,6 +172,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             case MENU_MARKET:
                 openLink(Consts.URL_MARKET_SEARCH);
                 return true;
+            case MENU_RESTORE:
+                restore();
+                return true;
         }
         return false;
     }
@@ -182,6 +190,44 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_body,
                 Consts.URL_MARKET_SEARCH, Consts.URL_INFO_LINK));
         startActivity(intent);
+    }
+    
+    private void restore() {
+      
+     
+      android.database.Cursor cursor = getContentResolver().query(
+        Uri.parse("content://gmail-ls/conversations/"+PrefStore.getLoginUsername(this)+"@gmail.com"),
+             new String[] { "conversation_id" },
+             "label:"+PrefStore.getImapFolder(this).toLowerCase(), null, null);          
+     
+      if (cursor != null) {        
+        android.util.Log.d("SmsSync", "found "+cursor.getCount()+" conversations");        
+        while (cursor.moveToNext()) {          
+          
+            long conversationId = cursor.getLong(cursor.getColumnIndexOrThrow("conversation_id"));
+            android.util.Log.d("SmsSync", "fetching messages for id " + conversationId);            
+            
+            android.database.Cursor messages = getContentResolver().query(
+                Uri.parse("content://gmail-ls/conversations/"+PrefStore.getLoginUsername(this)+"@gmail.com"+
+                "/"+conversationId+"/messages"),                    
+                new String[] { "fromAddress", "toAddresses", "body", "dateSentMs" }, null, null, null);
+                    
+            if (messages != null) {
+              android.util.Log.d("SmsSync", "found " + messages.getCount() + " messages");
+              
+              //[bccAddresses, body, messageId, ccAddresses, conversation, labelIds, personalLevel, toAddresses, error, fromAddress, listInfo, dateSentMs, subject, refMessageId, dateReceivedMs, joinedAttachmentInfos, _id, snippet, replyToAddresses, bodyEmbedsExternalResources]              
+              while (messages.moveToNext()) {                
+                String fromAddress = messages.getString(messages.getColumnIndexOrThrow("fromAddress"));                                
+                String toAddresses = messages.getString(messages.getColumnIndexOrThrow("toAddresses"));                                
+                
+                long dateSentMs = messages.getLong(messages.getColumnIndexOrThrow("dateSentMs"));                                
+                String body = messages.getString(messages.getColumnIndexOrThrow("body"));                
+              }              
+              messages.close();   
+            }        
+        }        
+        cursor.close();      
+      }
     }
     
     private void updateUsernameLabelFromPref() {
