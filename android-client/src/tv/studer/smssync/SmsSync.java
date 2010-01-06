@@ -193,41 +193,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     }
     
     private void restore() {
-      
-     
-      android.database.Cursor cursor = getContentResolver().query(
-        Uri.parse("content://gmail-ls/conversations/"+PrefStore.getLoginUsername(this)+"@gmail.com"),
-             new String[] { "conversation_id" },
-             "label:"+PrefStore.getImapFolder(this).toLowerCase(), null, null);          
-     
-      if (cursor != null) {        
-        android.util.Log.d("SmsSync", "found "+cursor.getCount()+" conversations");        
-        while (cursor.moveToNext()) {          
-          
-            long conversationId = cursor.getLong(cursor.getColumnIndexOrThrow("conversation_id"));
-            android.util.Log.d("SmsSync", "fetching messages for id " + conversationId);            
-            
-            android.database.Cursor messages = getContentResolver().query(
-                Uri.parse("content://gmail-ls/conversations/"+PrefStore.getLoginUsername(this)+"@gmail.com"+
-                "/"+conversationId+"/messages"),                    
-                new String[] { "fromAddress", "toAddresses", "body", "dateSentMs" }, null, null, null);
-                    
-            if (messages != null) {
-              android.util.Log.d("SmsSync", "found " + messages.getCount() + " messages");
-              
-              //[bccAddresses, body, messageId, ccAddresses, conversation, labelIds, personalLevel, toAddresses, error, fromAddress, listInfo, dateSentMs, subject, refMessageId, dateReceivedMs, joinedAttachmentInfos, _id, snippet, replyToAddresses, bodyEmbedsExternalResources]              
-              while (messages.moveToNext()) {                
-                String fromAddress = messages.getString(messages.getColumnIndexOrThrow("fromAddress"));                                
-                String toAddresses = messages.getString(messages.getColumnIndexOrThrow("toAddresses"));                                
-                
-                long dateSentMs = messages.getLong(messages.getColumnIndexOrThrow("dateSentMs"));                                
-                String body = messages.getString(messages.getColumnIndexOrThrow("body"));                
-              }              
-              messages.close();   
-            }        
-        }        
-        cursor.close();      
-      }
+      Intent intent = new Intent(this, SmsRestoreService.class);
+      startService(intent);
     }
     
     private void updateUsernameLabelFromPref() {

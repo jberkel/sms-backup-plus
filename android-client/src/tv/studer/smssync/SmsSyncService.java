@@ -35,12 +35,13 @@ import android.util.Log;
 
 import com.android.email.mail.Folder;
 import com.android.email.mail.Message;
+import com.android.email.mail.MessageRetrievalListener;
 import com.android.email.mail.MessagingException;
 import com.android.email.mail.Folder.FolderType;
 import com.android.email.mail.Folder.OpenMode;
 import com.android.email.mail.store.ImapStore;
 
-public class SmsSyncService extends Service {
+public class SmsSyncService extends ServiceBase {
 
     /** Number of messages sent per sync request. */
     private static final int MAX_MSG_PER_REQUEST = 1;
@@ -245,10 +246,7 @@ public class SmsSyncService extends Service {
             throw new GeneralErrorException(this, R.string.err_sync_requires_login_info, null);
         }
 
-        String username = PrefStore.getLoginUsername(this);
-        String password = PrefStore.getLoginPassword(this);
-
-        updateState(SmsSyncState.CALC);
+      updateState(SmsSyncState.CALC);
 
         sItemsToSync = 0;
         sCurrentSyncedItems = 0;
@@ -282,30 +280,15 @@ public class SmsSyncService extends Service {
 
         updateState(SmsSyncState.LOGIN);
 
-        ImapStore imapStore;
-        Folder folder;
-        boolean folderExists;
-        String label = PrefStore.getImapFolder(this);
-        try {
-            imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
-                    URLEncoder.encode(password).replace("+", "%20")));
-            folder = imapStore.getFolder(label);
-            folderExists = folder.exists();
-            if (!folderExists) {
-                Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
-                folder.create(FolderType.HOLDS_MESSAGES);
-            }
-            folder.open(OpenMode.READ_WRITE);
-        } catch (MessagingException e) {
-            throw new AuthenticationErrorException(e);
-        }
+        Folder folder = getBackupFolder();
         
-        CursorToMessage converter = new CursorToMessage(this, username);
+        CursorToMessage converter = new CursorToMessage(this, PrefStore.getLoginUsername(this));
         try {
             while (true) {
                 // Cancel sync if requested by the user.
                 if (sCanceled) {
                     Log.i(Consts.TAG, "Backup canceled by user.");
+                    // TODO: close IMAP ?
                     updateState(SmsSyncState.CANCELED);
                     break;
                 }
@@ -339,6 +322,9 @@ public class SmsSyncService extends Service {
         }
     }
 
+  
+    
+  
     /**
      * Returns a cursor of SMS messages that have not yet been synced with the
      * server. This includes all messages with
@@ -515,27 +501,5 @@ public class SmsSyncService extends Service {
         public void stateChanged(SmsSyncState oldState, SmsSyncState newState);
     }
 
-    /**
-     * Exception indicating an error while synchronizing.
-     */
-    public static class GeneralErrorException extends Exception {
-        private static final long serialVersionUID = 1L;
-
-        public GeneralErrorException(String msg, Throwable t) {
-            super(msg, t);
-        }
-        
-        public GeneralErrorException(Context ctx, int msgId, Throwable t) {
-            super(ctx.getString(msgId), t);
-        }
-    }
-    
-    public static class AuthenticationErrorException extends Exception {
-        private static final long serialVersionUID = 1L;
-
-        public AuthenticationErrorException(Throwable t) {
-            super(t.getLocalizedMessage(), t);
-        }
-    }
-
+ 
 }
