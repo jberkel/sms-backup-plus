@@ -14,6 +14,7 @@
     <string name="ui_restore_button_label_idle">Restore now</string>
     <string name="ui_restore_button_label_done">Restore again</string>
     <string name="ui_restore_button_label_restoring">Stop restore</string>
+    <string name="ui_restore_button_label_error">Retry restore</string>
 
 	<string name="status_idle">Idle</string>
     <string name="status_idle_details">Last backup: <xliff:g id="last_backup_date">%1$s</xliff:g></string>

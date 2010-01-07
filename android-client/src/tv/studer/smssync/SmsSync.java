@@ -440,7 +440,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                         } else if (status == STATUS_ERROR) {
                             color = R.color.status_error;
                             detailTextView = mErrorDetails;
-                            buttonText = R.string.ui_sync_button_label_error;
+                            buttonText = (mode == Mode.RESTORE) ?  R.string.ui_restore_button_label_error : R.string.ui_sync_button_label_error; 
                             icon = R.drawable.ic_error;
                         } else {
                             Log.w(Consts.TAG, "Illegal state: Unknown status.");
