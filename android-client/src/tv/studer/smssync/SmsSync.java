@@ -208,33 +208,27 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         pref.setTitle(imapFolder);
     }
 
-    private boolean initiateRestore() {
-        if (PrefStore.isLoginInformationSet(this)) {
+    private void initiateRestore() {
+        if (checkLoginInformation()) {
             mode = Mode.RESTORE;
             startRestore();
-            return true;
-        } else {
-            showDialog(DIALOG_MISSING_CREDENTIALS);
-            return false;
         }
     }
 
-    private boolean initiateSync() {
-        if (checkConfig()) {
-            mode = Mode.BACKUP;
-            startSync(false);
-            return true;
-        } else {
-            return false;
+    private void initiateSync() {
+        if (checkLoginInformation()) {
+            if (PrefStore.isFirstSync(this)) {
+                showDialog(DIALOG_FIRST_SYNC);
+            } else {
+                mode = Mode.BACKUP;
+                startSync(false);
+            }
         }
     }
 
-    private boolean checkConfig() {
+    private boolean checkLoginInformation() {
         if (!PrefStore.isLoginInformationSet(this)) {
             showDialog(DIALOG_MISSING_CREDENTIALS);
-            return false;
-        } else if (PrefStore.isFirstSync(this)) {
-            showDialog(DIALOG_FIRST_SYNC);
             return false;
         } else {
             return true;
