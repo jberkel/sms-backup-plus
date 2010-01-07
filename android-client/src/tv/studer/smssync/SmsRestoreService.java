@@ -71,7 +71,10 @@ public class SmsRestoreService extends ServiceBase {
                     if (sCanceled) {
                         Log.i(TAG, "Restore canceled by user.");
                         updateState(CANCELED);
+
+
                         updateAllThreads();
+
                         return ids.size();
                     }
                     importMessage(msgs[i]);
@@ -114,6 +117,25 @@ public class SmsRestoreService extends ServiceBase {
         }
 
         protected void onPostExecute(Integer result) {
+        }
+
+        private void updateAllThreads() {
+            // thread dates + states might be wrong, we need to force a full update
+            // unfortunately there's no direct way to do that in the SDK, but passing a negative conversation
+            // id to delete will to the trick
+
+            if (ids.isEmpty())
+                return;
+            
+            // execute in background, might take some time
+            new Thread() {
+                @Override
+                public void run() {
+                    Log.d(TAG, "updating threads");
+                    getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
+                    Log.d(TAG, "finished");
+                }
+            }.start();
         }
 
         private void importMessage(Message message) {
@@ -173,21 +195,6 @@ public class SmsRestoreService extends ServiceBase {
         return exists;
     }
 
-    private void updateAllThreads() {
-        // thread dates + states might be wrong, we need to force a full update
-        // unfortunately there's no direct way to do that in the SDK, but passing a negative conversation
-        // id to delete will to the trick
-
-        // execute in background, might take some time
-        new Thread() {
-            @Override
-            public void run() {
-                Log.d(TAG, "updating threads");
-                getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
-                Log.d(TAG, "finished");
-            }
-        }.start();
-    }
 
     private ContentValues messageToContentValues(Message message)
             throws java.io.IOException, MessagingException {
