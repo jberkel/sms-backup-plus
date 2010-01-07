@@ -15,6 +15,8 @@
 
 package tv.studer.smssync;
 
+import tv.studer.smssync.ServiceBase.SmsSyncState;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +51,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -278,7 +282,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         }
 
         @Override
-        public void stateChanged(final ServiceBase.SmsSyncState oldState, final ServiceBase.SmsSyncState newState) {
+        public void stateChanged(final SmsSyncState oldState, final SmsSyncState newState) {
             if (mView != null) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -308,8 +312,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                 status = STATUS_WORKING;
                                 break;
                             case IDLE:
-                                if (oldState == ServiceBase.SmsSyncState.SYNC
-                                        || oldState == ServiceBase.SmsSyncState.CALC) {
+                                if (oldState == SmsSyncState.SYNC
+                                        || oldState == SmsSyncState.CALC) {
                                     statusLabel = getText(R.string.status_done);
                                     int backedUpCount = SmsSyncService.getCurrentSyncedItems();
                                     progressMax = SmsSyncService.getItemsToSyncCount();
@@ -334,7 +338,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                     progressIndeterminate = false;
 
                                     status = STATUS_DONE;
-                                } else if (oldState == ServiceBase.SmsSyncState.RESTORE) {
+                                } else if (oldState == SmsSyncState.RESTORE) {
                                     statusDetails = getResources().getQuantityString(
                                                 R.plurals.status_restore_done_details,
                                                 SmsRestoreService.getCurrentRestoredItems(),
