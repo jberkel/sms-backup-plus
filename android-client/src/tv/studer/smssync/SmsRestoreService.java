@@ -72,9 +72,7 @@ public class SmsRestoreService extends ServiceBase {
                         Log.i(TAG, "Restore canceled by user.");
                         updateState(CANCELED);
 
-
                         updateAllThreads();
-
                         return ids.size();
                     }
                     importMessage(msgs[i]);
@@ -84,11 +82,11 @@ public class SmsRestoreService extends ServiceBase {
 
                     if (System.currentTimeMillis() - lastPublished > 1000) {
                         // don't publish too often or we get ANRs
-                        publishProgress(i, msgs.length);
+                        publishProgress(i);
                         lastPublished = System.currentTimeMillis();
                     }
                 }
-                publishProgress(msgs.length, msgs.length);
+                publishProgress(msgs.length);
 
                 updateAllThreads();
 
