@@ -1,34 +1,35 @@
 
 package tv.studer.smssync;
 
-import java.net.URLEncoder;
-import java.util.List;
-
-import tv.studer.smssync.CursorToMessage.ConversionResult;
 import android.app.Service;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.net.wifi.WifiManager.WifiLock;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.os.Process;
-import android.os.PowerManager.WakeLock;
 import android.util.Log;
-
 import com.android.email.mail.Folder;
-import com.android.email.mail.Message;
-import com.android.email.mail.MessageRetrievalListener;
-import com.android.email.mail.MessagingException;
 import com.android.email.mail.Folder.FolderType;
 import com.android.email.mail.Folder.OpenMode;
+import com.android.email.mail.Message;
+import com.android.email.mail.MessagingException;
 import com.android.email.mail.store.ImapStore;
 
+import java.net.URLEncoder;
+
 public abstract class ServiceBase extends Service {
-  
+
+    public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
+    /**
+     * A wakelock held while this service is working.
+     */
+    protected PowerManager.WakeLock sWakeLock;
+    /**
+     * A wifilock held while this service is working.
+     */
+    protected WifiManager.WifiLock sWifiLock;
+
     public static String getHeader(Message msg, String header) {
       try {
         String[] hdrs = msg.getHeader(header);
@@ -73,8 +74,26 @@ public abstract class ServiceBase extends Service {
       } catch (MessagingException e) {
         throw new AuthenticationErrorException(e);
       }
-    }    
- 
+    }
+
+    protected void acquireWakeLock() {
+        if (sWakeLock == null) {
+            PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
+            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    "SmsSyncService.sync() wakelock.");
+
+            WifiManager wMgr = (WifiManager) getSystemService(WIFI_SERVICE);
+            sWifiLock = wMgr.createWifiLock("SMS Backup");
+        }
+        sWakeLock.acquire();
+        sWifiLock.acquire();
+    }
+
+    protected  void releaseWakeLock() {
+        sWakeLock.release();
+        sWifiLock.release();
+    }
+
     /**
       * Exception indicating an error while synchronizing.
       */

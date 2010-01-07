@@ -60,4 +60,9 @@
          targets are used.
     -->
     <setup />
+
+    <target  name="clean" description="clean">
+      <delete dir="${out-folder}"/>
+      <delete dir="gen"/>
+    </target>
 </project>

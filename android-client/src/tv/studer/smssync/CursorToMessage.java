@@ -67,6 +67,19 @@ public class CursorToMessage {
     
     private boolean mMarkAsRead = false;
 
+    public static interface Headers {
+        String ID = "X-smssync-id";
+        String ADDRESS = "X-smssync-address";
+        String TYPE  = "X-smssync-type";
+        String DATE =  "X-smssync-date";
+        String THREAD_ID = "X-smssync-thread";
+        String READ = "X-smssync-read";
+        String STATUS = "X-smssync-status";
+        String PROTOCOL = "X-smssync-protocol";
+        String SERVICE_CENTER = "X-smssync-service_center";
+        String BACKUP_TIME = "X-smssync-backup_time";
+    }
+
     public CursorToMessage(Context ctx, String userEmail) {
         mContext = ctx;
         mPeopleCache = new HashMap<String, PersonRecord>();
@@ -119,7 +132,7 @@ public class CursorToMessage {
         Message msg = new MimeMessage();
 
         PersonRecord record = null;
-        String address = msgMap.get("address");
+        String address = msgMap.get(SmsConsts.ADDRESS);
         if (address != null) {
             address = address.trim();
             if (address.length() > 0) {
@@ -158,16 +171,16 @@ public class CursorToMessage {
         msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue,
                 record._id));
         
-        msg.setHeader("X-smssync-id", msgMap.get(SmsConsts.ID));
-        msg.setHeader("X-smssync-address", address);
-        msg.setHeader("X-smssync-type", msgMap.get(SmsConsts.TYPE));
-        msg.setHeader("X-smssync-date", msgMap.get(SmsConsts.DATE));
-        msg.setHeader("X-smssync-thread", msgMap.get(SmsConsts.THREAD_ID));
-        msg.setHeader("X-smssync-read", msgMap.get(SmsConsts.READ));
-        msg.setHeader("X-smssync-status", msgMap.get(SmsConsts.STATUS));
-        msg.setHeader("X-smssync-protocol", msgMap.get(SmsConsts.PROTOCOL));
-        msg.setHeader("X-smssync-service_center", msgMap.get(SmsConsts.SERVICE_CENTER));
-        msg.setHeader("X-smssync-backup_time", new Date().toGMTString());
+        msg.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
+        msg.setHeader(Headers.ADDRESS, address);
+        msg.setHeader(Headers.TYPE, msgMap.get(SmsConsts.TYPE));
+        msg.setHeader(Headers.DATE, msgMap.get(SmsConsts.DATE));
+        msg.setHeader(Headers.THREAD_ID, msgMap.get(SmsConsts.THREAD_ID));
+        msg.setHeader(Headers.READ, msgMap.get(SmsConsts.READ));
+        msg.setHeader(Headers.STATUS, msgMap.get(SmsConsts.STATUS));
+        msg.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
+        msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
+        msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
         msg.setFlag(Flag.SEEN, mMarkAsRead);
         
         return msg;

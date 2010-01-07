@@ -15,31 +15,22 @@
 
 package tv.studer.smssync;
 
-import java.net.URLEncoder;
-import java.util.List;
-
-import tv.studer.smssync.CursorToMessage.ConversionResult;
-import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
-import android.os.IBinder;
 import android.os.PowerManager;
-import android.os.Process;
 import android.os.PowerManager.WakeLock;
+import android.os.Process;
 import android.util.Log;
-
 import com.android.email.mail.Folder;
 import com.android.email.mail.Message;
-import com.android.email.mail.MessageRetrievalListener;
 import com.android.email.mail.MessagingException;
-import com.android.email.mail.Folder.FolderType;
-import com.android.email.mail.Folder.OpenMode;
-import com.android.email.mail.store.ImapStore;
+import tv.studer.smssync.CursorToMessage.ConversionResult;
+
+import java.util.List;
 
 public class SmsSyncService extends ServiceBase {
 
@@ -80,16 +71,6 @@ public class SmsSyncService extends ServiceBase {
     private static StateChangeListener sStateChangeListener;
 
     /**
-     * A wakelock held while this service is working.
-     */
-    private static WakeLock sWakeLock;
-    
-    /**
-     * A wifilock held while this service is working.
-     */
-    private static WifiLock sWifiLock;
-    
-    /**
      * Indicates that the user canceled the current backup and that this service
      * should finish working ASAP.
      */
@@ -100,29 +81,6 @@ public class SmsSyncService extends ServiceBase {
     }
 
     @Override
-    public IBinder onBind(Intent arg0) {
-        return null;
-    }
-    
-    private static void acquireWakeLock(Context ctx) {
-        if (sWakeLock == null) {
-            PowerManager pMgr = (PowerManager) ctx.getSystemService(POWER_SERVICE);
-            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                    "SmsSyncService.sync() wakelock.");
-            
-            WifiManager wMgr = (WifiManager) ctx.getSystemService(WIFI_SERVICE);
-            sWifiLock = wMgr.createWifiLock("SMS Backup");
-        }
-        sWakeLock.acquire();
-        sWifiLock.acquire();
-    }
-    
-    private static void releaseWakeLock(Context ctx) {
-        sWakeLock.release();
-        sWifiLock.release();
-    }
-    
-    @Override
     //TODO(chstuder): Clean this flow up a bit and split it into multiple
     // methods. Make clean distinction between onStart(...) and backup(...).
     public void onStart(final Intent intent, int startId) {
@@ -131,7 +89,7 @@ public class SmsSyncService extends ServiceBase {
         synchronized (this.getClass()) {
             // Only start a sync if there's no other sync going on at this time.
             if (!sIsRunning) {
-                acquireWakeLock(this);
+                acquireWakeLock();
                 sIsRunning = true;
                 // Start sync in new thread.
                 new Thread() {
@@ -183,7 +141,7 @@ public class SmsSyncService extends ServiceBase {
                             stopSelf();
                             Alarms.scheduleRegularSync(SmsSyncService.this);
                             sIsRunning = false;
-                            releaseWakeLock(SmsSyncService.this);
+                            releaseWakeLock();
                         }
                     }
                 }.start();
@@ -338,7 +296,7 @@ public class SmsSyncService extends ServiceBase {
                 String.valueOf(getMaxSyncedDate()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
         };
         String sortOrder = SmsConsts.DATE + " LIMIT " + PrefStore.getMaxItemsPerSync(this);
-        return r.query(Uri.parse("content://sms"), null, selection, selectionArgs, sortOrder);
+        return r.query(SMS_PROVIDER, null, selection, selectionArgs, sortOrder);
     }
 
     /**
@@ -353,7 +311,7 @@ public class SmsSyncService extends ServiceBase {
         String[] projection = new String[] {
             SmsConsts.DATE
         };
-        Cursor result = r.query(Uri.parse("content://sms"), projection, selection, selectionArgs,
+        Cursor result = r.query(SMS_PROVIDER, projection, selection, selectionArgs,
                 SmsConsts.DATE + " DESC LIMIT 1");
 
         try
@@ -454,7 +412,7 @@ public class SmsSyncService extends ServiceBase {
      * state of the service changes. Note that at most one listener can be
      * registered and you need to call {@link #unsetStateChangeListener()} in
      * between calls to this method.
-     * 
+     *
      * @see #getState()
      * @see #unsetStateChangeListener()
      */
@@ -469,7 +427,7 @@ public class SmsSyncService extends ServiceBase {
 
     /**
      * Unregisters the currently registered {@link StateChangeListener}.
-     * 
+     *
      * @see #setStateChangeListener(StateChangeListener)
      */
     static void unsetStateChangeListener() {
@@ -491,7 +449,7 @@ public class SmsSyncService extends ServiceBase {
     /**
      * A state change listener interface that provides a callback that is called
      * whenever the state of the {@link SmsSyncService} changes.
-     * 
+     *
      * @see SmsSyncService#setStateChangeListener(StateChangeListener)
      */
     public interface StateChangeListener {

@@ -29,6 +29,8 @@ public class SmsConsts {
 
     public static final String THREAD_ID = "thread_id";
 
+    public static final String ADDRESS = "address";
+
     public static final String TYPE = "type";
 
     public static final String READ = "read";

@@ -11,6 +11,8 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    >
+
+
 	    <ImageView
 	    	android:id="@+id/status_icon"
 	    	android:layout_width="wrap_content"
@@ -30,6 +32,7 @@
 		    android:layout_marginLeft="6dip"
 		    android:layout_alignBaseline="@id/status_icon"
 		    />
+
 		<Button
 			android:id="@+id/sync_button"
 			android:layout_width="wrap_content"
@@ -39,8 +42,21 @@
 			android:layout_alignParentTop="true"
 			android:textStyle="bold"
 			android:layout_alignBaseline="@id/status_label"
-			android:width="125sp"
+			android:width="100sp"
 			/>
+
+         <Button
+			android:id="@+id/restore_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/ui_restore_button_label_idle"
+		    android:layout_toLeftOf="@id/sync_button"
+			android:layout_alignParentTop="true"
+			android:textStyle="bold"
+			android:layout_alignBaseline="@id/status_label"
+			android:width="100sp"
+			/>
+        
 		<!-- FrameLayout
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
@@ -77,6 +93,9 @@
 					android:layout_width="fill_parent"
 					/>
 			</LinearLayout>
+
+
+        
 			<TextView
 				android:id="@+id/details_error"
 				android:layout_width="fill_parent"
