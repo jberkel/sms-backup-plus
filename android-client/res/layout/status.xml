@@ -26,7 +26,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_toRightOf="@id/status_icon"
 		    android:layout_alignParentTop="true"
-		    android:textSize="20sp"
+		    android:textSize="18sp"
 		    android:textStyle="bold"
 		    android:textColor="@color/status_done"
 		    android:layout_marginLeft="6dip"
@@ -42,7 +42,7 @@
 			android:layout_alignParentTop="true"
 			android:textStyle="bold"
 			android:layout_alignBaseline="@id/status_label"
-			android:width="80sp"
+			android:width="90sp"
 			/>
 
          <Button
@@ -54,7 +54,7 @@
 			android:layout_alignParentTop="true"
 			android:textStyle="bold"
 			android:layout_alignBaseline="@id/status_label"
-			android:width="80sp"
+			android:width="90sp"
 			/>
         
 		<!-- FrameLayout
