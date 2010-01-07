@@ -14,16 +14,36 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static tv.studer.smssync.CursorToMessage.Headers.*;
+import static tv.studer.smssync.ServiceBase.SmsSyncState.*;
 
 public class SmsRestoreService extends ServiceBase {
 
     public static final String TAG = "SmsRestoreService";
+    private static int currentRestoredItems;
+    private static int itemsToRestoreCount;
+
+    private static boolean sIsRunning = false;
+    private static SmsSyncState sState;
+    private static boolean sCanceled = false;
 
     public static void cancel() {
+        sCanceled = true;
     }
 
     public static boolean isWorking() {
-        return false;
+        return sIsRunning;
+    }
+
+    public static boolean isCancelling() {
+        return sCanceled;
+    }
+
+    public static int getCurrentRestoredItems() {
+        return currentRestoredItems;
+    }
+
+    public static int getItemsToRestoreCount() {
+        return itemsToRestoreCount;
     }
 
     private class RestoreTask extends AsyncTask<Integer, Integer, Integer> {
@@ -36,28 +56,61 @@ public class SmsRestoreService extends ServiceBase {
 
             try {
                 acquireWakeLock();
-                Message[] msgs = getBackupFolder().getMessages(null);
+                sIsRunning = true;
 
+                updateState(LOGIN);
+                Folder folder = getBackupFolder();
+
+                updateState(CALC);
+                Message[] msgs = folder.getMessages(null);
+
+                itemsToRestoreCount = msgs.length;
+
+                long lastPublished = System.currentTimeMillis();
                 for (int i = 0; i < msgs.length; i++) {
-                    publishProgress(i, msgs.length);
+                    if (sCanceled) {
+                        Log.i(TAG, "Restore canceled by user.");
+                        updateState(CANCELED);
+                        updateAllThreads();
+                        return ids.size();
+                    }
+                    importMessage(msgs[i]);
 
-                    if (max == -1 || i < max) {
-                        importMessage(msgs[i]);
+                    // help GC
+                    msgs[i] = null;
+
+                    if (System.currentTimeMillis() - lastPublished > 1000) {
+                        // don't publish too often or we get ANRs
+                        publishProgress(i, msgs.length);
+                        lastPublished = System.currentTimeMillis();
                     }
                 }
+                publishProgress(msgs.length, msgs.length);
+
                 updateAllThreads();
 
-                Log.d(TAG, "finished (" + ids.size() + "/" + uids.size()+")");
+                updateState(IDLE);
+
+                Log.d(TAG, "finished (" + ids.size() + "/" + uids.size() + ")");
                 return ids.size();
-            } catch (Throwable e) {
+            } catch (AuthenticationErrorException authError) {
+                Log.e(TAG, "error", authError);
+                updateState(AUTH_FAILED);
+                return -1;
+            } catch (MessagingException e) {
                 Log.e(TAG, "error", e);
+                updateState(GENERAL_ERROR);
                 return -1;
             } finally {
                 releaseWakeLock();
+                sCanceled = false;
+                sIsRunning = false;
             }
         }
 
         protected void onProgressUpdate(Integer... progress) {
+            currentRestoredItems = progress[0];
+            updateState(RESTORE);
         }
 
         protected void onPostExecute(Integer result) {
@@ -78,7 +131,6 @@ public class SmsRestoreService extends ServiceBase {
                     Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
                     ids.add(uri.getLastPathSegment());
                     Log.d(TAG, "inserted " + uri);
-
                 } else {
                     Log.d(TAG, "sms already exists, ignoring");
                 }
@@ -99,7 +151,12 @@ public class SmsRestoreService extends ServiceBase {
     @Override
     public void onStart(final Intent intent, int startId) {
         super.onStart(intent, startId);
-        new RestoreTask().execute(10);
+
+        synchronized (this.getClass()) {
+            if (!sIsRunning) {
+                new RestoreTask().execute(-1);
+            }
+        }
     }
 
     private boolean smsExists(ContentValues values) {
@@ -120,7 +177,16 @@ public class SmsRestoreService extends ServiceBase {
         // thread dates + states might be wrong, we need to force a full update
         // unfortunately there's no direct way to do that in the SDK, but passing a negative conversation
         // id to delete will to the trick
-        getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
+
+        // execute in background, might take some time
+        new Thread() {
+            @Override
+            public void run() {
+                Log.d(TAG, "updating threads");
+                getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
+                Log.d(TAG, "finished");
+            }
+        }.start();
     }
 
     private ContentValues messageToContentValues(Message message)
@@ -139,5 +205,11 @@ public class SmsRestoreService extends ServiceBase {
         values.put(SmsConsts.STATUS, getHeader(message, STATUS));
 
         return values;
+    }
+
+    private static void updateState(SmsSyncState newState) {
+        SmsSyncState old = sState;
+        sState = newState;
+        smsSync.getStatusPreference().stateChanged(old, newState);
     }
 }

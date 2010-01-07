@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import tv.studer.smssync.SmsSyncService.SmsSyncState;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
@@ -59,24 +58,28 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     private static final int DIALOG_MISSING_CREDENTIALS = 1;
 
     private static final int DIALOG_FIRST_SYNC = 2;
-    
+
     private static final int DIALOG_SYNC_DATA_RESET = 3;
-    
+
     private static final int DIALOG_INVALID_IMAP_FOLDER = 4;
 
     private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 5;
-    
+
     private static final int DIALOG_ABOUT = 6;
-    
+
     private static final int MENU_INFO = 0;
-    
+
     private static final int MENU_SHARE = 1;
-    
+
     private static final int MENU_MARKET = 2;
 
     private StatusPreference mStatusPref;
 
     private static final String TAG = "SmsSync";
+
+    enum Mode { BACKUP, RESTORE, NONE }
+
+    private Mode mode = Mode.NONE;
 
     /** Called when the activity is first created. */
     @Override
@@ -88,7 +91,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
         mStatusPref = new StatusPreference(this);
         mStatusPref.setSelectable(false);
-        
+
         int sdkLevel = 1;
         try {
             sdkLevel = Integer.parseInt(Build.VERSION.SDK);
@@ -108,21 +111,23 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             mStatusPref.setOrder(0);
             getPreferenceScreen().addPreference(mStatusPref);
         }
-        
+
         Preference pref = prefMgr.findPreference(PrefStore.PREF_LOGIN_USER);
         pref.setOnPreferenceChangeListener(this);
-        
+
         pref = prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER);
         pref.setOnPreferenceChangeListener(this);
-        
+
         pref = prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC);
         pref.setOnPreferenceChangeListener(this);
-        
+
         pref = prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD);
         pref.setOnPreferenceChangeListener(this);
-        
+
         pref = prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC);
         pref.setOnPreferenceChangeListener(this);
+
+        ServiceBase.smsSync = this;
     }
 
     @Override
@@ -139,12 +144,12 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         updateImapFolderLabelFromPref();
         updateMaxItemsPerSync(null);
     }
-    
-    
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        
+
         menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
                 android.R.drawable.ic_menu_info_details);
         menu.add(0, MENU_SHARE, 1, R.string.menu_share).setIcon(
@@ -154,7 +159,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
         return true;
     }
-    
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -178,7 +183,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
         startActivity(intent);
     }
-    
+
     private void share() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:"));
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
@@ -188,7 +193,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     }
 
 
-    
+
     private void updateUsernameLabelFromPref() {
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
         String username = prefs.getString(PrefStore.PREF_LOGIN_USER,
@@ -196,7 +201,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_LOGIN_USER);
         pref.setTitle(username);
     }
-    
+
     private void updateImapFolderLabelFromPref() {
         String imapFolder = PrefStore.getImapFolder(this);
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_IMAP_FOLDER);
@@ -204,16 +209,19 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     }
 
     private boolean initiateRestore() {
-        if (checkConfig()) {
+        if (PrefStore.isLoginInformationSet(this)) {
+            mode = Mode.RESTORE;
             startRestore();
             return true;
         } else {
+            showDialog(DIALOG_MISSING_CREDENTIALS);
             return false;
         }
     }
 
     private boolean initiateSync() {
         if (checkConfig()) {
+            mode = Mode.BACKUP;
             startSync(false);
             return true;
         } else {
@@ -232,7 +240,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             return true;
         }
     }
-    
+
     private void startSync(boolean skip) {
         Intent intent = new Intent(this, SmsSyncService.class);
         if (PrefStore.isFirstSync(this)) {
@@ -246,7 +254,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         startService(intent);
     }
 
-    private class StatusPreference extends Preference implements
+    class StatusPreference extends Preference implements
             SmsSyncService.StateChangeListener, OnClickListener {
         private View mView;
 
@@ -254,19 +262,19 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         private Button mRestoreButton;
 
         private ImageView mStatusIcon;
-        
+
         private TextView mStatusLabel;
 
         private View mSyncDetails;
-        
+
         private TextView mErrorDetails;
-        
+
         private TextView mSyncDetailsLabel;
-        
+
         private ProgressBar mProgressBar;
-        
+
         private ProgressBar mProgressBarIndet;
-        
+
         public StatusPreference(Context context) {
             super(context);
         }
@@ -276,7 +284,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         }
 
         @Override
-        public void stateChanged(final SmsSyncState oldState, final SmsSyncState newState) {
+        public void stateChanged(final ServiceBase.SmsSyncState oldState, final ServiceBase.SmsSyncState newState) {
             if (mView != null) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -286,13 +294,13 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                         int STATUS_DONE = 2;
                         int STATUS_ERROR = 3;
                         int status = -1;
-                        
+
                         CharSequence statusLabel = null;
                         String statusDetails = null;
                         boolean progressIndeterminate = false;
                         int progressMax = 1;
                         int progressVal = 0;
-                        
+
                         switch (newState) {
                             case AUTH_FAILED:
                                 statusLabel = getText(R.string.status_auth_failure);
@@ -300,14 +308,14 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                 status = STATUS_ERROR;
                                 break;
                             case CALC:
-                                statusLabel = getText(R.string.status_calc);
+                                statusLabel = getStatusLabelText();
                                 statusDetails = getString(R.string.status_calc_details);
                                 progressIndeterminate = true;
                                 status = STATUS_WORKING;
                                 break;
                             case IDLE:
-                                if (oldState == SmsSyncState.SYNC
-                                        || oldState == SmsSyncState.CALC) {
+                                if (oldState == ServiceBase.SmsSyncState.SYNC
+                                        || oldState == ServiceBase.SmsSyncState.CALC) {
                                     statusLabel = getText(R.string.status_done);
                                     int backedUpCount = SmsSyncService.getCurrentSyncedItems();
                                     progressMax = SmsSyncService.getItemsToSyncCount();
@@ -316,28 +324,36 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                             PrefStore.getMaxItemsPerSync(SmsSync.this)) {
                                         // Maximum msg per sync reached.
                                         statusDetails = getResources().getString(
-                                                R.string.status_done_details_max_per_sync,
+                                                R.string.status_backup_done_details_max_per_sync,
                                                 backedUpCount);
                                     } else if (backedUpCount > 0) {
                                         statusDetails = getResources().getQuantityString(
-                                                R.plurals.status_done_details, backedUpCount,
+                                                R.plurals.status_backup_done_details, backedUpCount,
                                                 backedUpCount);
                                     } else {
                                         statusDetails = getString(
-                                                R.string.status_done_details_noitems);
+                                                R.string.status_backup_done_details_noitems);
                                         progressMax = 1;
                                         progressVal = 1;
                                     }
+
+                                    progressIndeterminate = false;
+
+                                    status = STATUS_DONE;
+                                } else if (oldState == ServiceBase.SmsSyncState.RESTORE) {
+                                    statusDetails = getResources().getQuantityString(
+                                                R.plurals.status_restore_done_details,
+                                                SmsRestoreService.getCurrentRestoredItems(),
+                                                SmsRestoreService.getCurrentRestoredItems());
                                     
                                     progressIndeterminate = false;
-                                    
                                     status = STATUS_DONE;
                                 } else {
                                     statusLabel = getText(R.string.status_idle);
                                     long lastSync = PrefStore.getLastSync(SmsSync.this);
                                     String lastSyncStr;
                                     if (lastSync == PrefStore.DEFAULT_LAST_SYNC) {
-                                        lastSyncStr = 
+                                        lastSyncStr =
                                             getString(R.string.status_idle_details_never);
                                     } else {
                                         lastSyncStr = new Date(lastSync).toLocaleString();
@@ -348,20 +364,37 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                 }
                                 break;
                             case LOGIN:
-                                statusLabel = getText(R.string.status_login);
+                                statusLabel = getStatusLabelText();
                                 statusDetails = getString(R.string.status_login_details);
                                 progressIndeterminate = true;
                                 status = STATUS_WORKING;
                                 break;
                             case SYNC:
-                                statusLabel = getText(R.string.status_sync);
-                                statusDetails = getString(R.string.status_sync_details,
+                                mRestoreButton.setEnabled(false);
+
+                                statusLabel = getText(R.string.status_backup);
+                                statusDetails = getString(R.string.status_backup_details,
                                         SmsSyncService.getCurrentSyncedItems(),
                                         SmsSyncService.getItemsToSyncCount());
                                 progressMax = SmsSyncService.getItemsToSyncCount();
                                 progressVal = SmsSyncService.getCurrentSyncedItems();
                                 status = STATUS_WORKING;
                                 break;
+                            case RESTORE:
+                                mSyncButton.setEnabled(false);
+
+                                statusLabel = getText(R.string.status_restore);
+
+                                statusDetails = getString(R.string.status_restore_details,
+                                          SmsRestoreService.getCurrentRestoredItems(),
+                                          SmsRestoreService.getItemsToRestoreCount());
+
+                                progressMax = SmsRestoreService.getItemsToRestoreCount();
+                                progressVal = SmsRestoreService.getCurrentRestoredItems();
+                                status = STATUS_WORKING;
+
+                                break;
+
                             case GENERAL_ERROR:
                                 statusLabel = getString(R.string.status_unknown_error);
                                 statusDetails = getString(R.string.status_unknown_error_details,
@@ -370,43 +403,52 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                 break;
                             case CANCELED:
                                 statusLabel = getString(R.string.status_canceled);
-                                statusDetails = getString(R.string.status_canceled_details,
-                                        SmsSyncService.getCurrentSyncedItems(),
-                                        SmsSyncService.getItemsToSyncCount());
+
+                                switch(mode) {
+                                    case BACKUP:
+                                        statusDetails = getString(R.string.status_canceled_details,
+                                            SmsSyncService.getCurrentSyncedItems(),
+                                            SmsSyncService.getItemsToSyncCount());
+                                        break;
+                                    case RESTORE:
+                                         statusDetails = getString(R.string.status_restore_canceled_details,
+                                            SmsRestoreService.getCurrentRestoredItems(),
+                                            SmsRestoreService.getItemsToRestoreCount());
+                                        break;
+                                }
                                 status = STATUS_IDLE;
                         } // switch (newStatus) { ... }
 
-                        
                         int color;
                         TextView detailTextView;
-                        int syncButtonText;
+                        int buttonText;
                         int icon;
-                        
+
                         if (status == STATUS_IDLE) {
                             color = R.color.status_idle;
                             detailTextView = mSyncDetailsLabel;
-                            syncButtonText = R.string.ui_sync_button_label_idle;
+                            buttonText = (mode == Mode.RESTORE) ? R.string.ui_restore_button_label_idle : R.string.ui_sync_button_label_idle;
                             icon = R.drawable.ic_idle;
                         } else if (status == STATUS_WORKING) {
                             color = R.color.status_sync;
                             detailTextView = mSyncDetailsLabel;
-                            syncButtonText = R.string.ui_sync_button_label_syncing;
+                            buttonText = (mode == Mode.RESTORE) ? R.string.ui_restore_button_label_restoring : R.string.ui_sync_button_label_syncing;
                             icon = R.drawable.ic_syncing;
                         } else if (status == STATUS_DONE) {
                             color = R.color.status_done;
                             detailTextView = mSyncDetailsLabel;
-                            syncButtonText = R.string.ui_sync_button_label_done;
+                            buttonText = (mode == Mode.RESTORE) ?  R.string.ui_restore_button_label_done : R.string.ui_sync_button_label_done;
                             icon = R.drawable.ic_done;
                         } else if (status == STATUS_ERROR) {
                             color = R.color.status_error;
                             detailTextView = mErrorDetails;
-                            syncButtonText = R.string.ui_sync_button_label_error;
+                            buttonText = R.string.ui_sync_button_label_error;
                             icon = R.drawable.ic_error;
                         } else {
                             Log.w(Consts.TAG, "Illegal state: Unknown status.");
                             return;
                         }
-                        
+
                         if (status != STATUS_ERROR) {
                             mSyncDetails.setVisibility(View.VISIBLE);
                             mErrorDetails.setVisibility(View.INVISIBLE);
@@ -418,21 +460,31 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                 mProgressBarIndet.setVisibility(View.GONE);
                                 mProgressBar.setIndeterminate(progressIndeterminate);
                                 mProgressBar.setMax(progressMax);
-                                mProgressBar.setProgress(progressVal); 
+                                mProgressBar.setProgress(progressVal);
                             }
-                            
+
                         } else {
                             mErrorDetails.setVisibility(View.VISIBLE);
                             mSyncDetails.setVisibility(View.INVISIBLE);
                         }
-                        
+
                         mStatusLabel.setText(statusLabel);
                         mStatusLabel.setTextColor(getResources().getColor(color));
-                        mSyncButton.setText(syncButtonText);
-                        mSyncButton.setEnabled(true);
+
+                        if (mode == Mode.RESTORE) {
+                          mRestoreButton.setText(buttonText);
+                        } else {
+                          mSyncButton.setText(buttonText);
+                        }
+                        
+                        if (status != STATUS_WORKING) {
+                            mode = Mode.NONE;
+                            mSyncButton.setEnabled(true);
+                            mRestoreButton.setEnabled(true);
+                        }
+                        
                         detailTextView.setText(statusDetails);
                         mStatusIcon.setImageResource(icon);
-                        
                     } // run() { ... }
                 }); // runOnUiThread(...)
             } // if (mView != null) { ... }
@@ -443,22 +495,23 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             if (v == mSyncButton) {
                 Log.d(TAG, "sync");
 
-                if (!SmsSyncService.isWorking()) {
+                if (!SmsSyncService.isWorking() && !SmsSyncService.isCancelling()) {
                     initiateSync();
                 } else {
-                    SmsSyncService.cancel();
                     // Sync button will be restored on next status update.
                     mSyncButton.setText(R.string.ui_sync_button_label_canceling);
                     mSyncButton.setEnabled(false);
+                    SmsSyncService.cancel();
+
                 }
             } else if (v == mRestoreButton) {
                 Log.d(TAG, "restore");
-                if (!SmsRestoreService.isWorking()) {
+                if (!SmsRestoreService.isWorking() && !SmsRestoreService.isCancelling()) {
                     initiateRestore();
                 } else {
-                    SmsRestoreService.cancel();
                     mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
                     mRestoreButton.setEnabled(false);
+                    SmsRestoreService.cancel();
                 }
             }
         }
@@ -472,7 +525,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
                 mRestoreButton = (Button) mView.findViewById(R.id.restore_button);
                 mRestoreButton.setOnClickListener(this);
-                
+
                 mStatusIcon = (ImageView) mView.findViewById(R.id.status_icon);
                 mStatusLabel = (TextView) mView.findViewById(R.id.status_label);
                 mSyncDetails = mView.findViewById(R.id.details_sync);
@@ -484,6 +537,15 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 update();
             }
             return mView;
+        }
+
+        public CharSequence getStatusLabelText() {
+             switch (mode) {
+                 case BACKUP: return getText(R.string.status_backup);
+                 case RESTORE:return getText(R.string.status_restore);
+                 case NONE: return getText(R.string.status_idle);
+                 default: throw new IllegalStateException();
+             }
         }
     }
 
@@ -543,7 +605,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 builder = new AlertDialog.Builder(this);
                 builder.setCustomTitle(null);
                 builder.setPositiveButton(android.R.string.ok, null);
-                
+
                 DialogInterface.OnClickListener aboutEmailListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -562,7 +624,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
                 webView.loadData(getAboutText(), "text/html", "utf-8");
                 builder.setView(contentView);
-                
+
                 Dialog d = builder.create();
                 return d;
             default:
@@ -584,7 +646,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         });
         return builder.create();
     }
-    
+
     private String getAboutText() {
         try {
             InputStream input = getResources().getAssets().open("about.html");
@@ -605,8 +667,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         } catch (IOException e) {
             return "An error occured while reading about.html";
         }
-        
-        
+
+
     }
 
     @Override
@@ -673,6 +735,11 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             newValue = String.valueOf(PrefStore.getMaxItemsPerSync(this));
         }
         pref.setTitle(newValue);
+    }
+
+
+    StatusPreference getStatusPreference() {
+        return mStatusPref;
     }
 
 }

@@ -16,13 +16,8 @@
 package tv.studer.smssync;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.wifi.WifiManager;
-import android.net.wifi.WifiManager.WifiLock;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.os.Process;
 import android.util.Log;
 import com.android.email.mail.Folder;
@@ -76,9 +71,6 @@ public class SmsSyncService extends ServiceBase {
      */
     private static boolean sCanceled;
     
-    public enum SmsSyncState {
-        IDLE, CALC, LOGIN, SYNC, AUTH_FAILED, GENERAL_ERROR, CANCELED;
-    }
 
     @Override
     //TODO(chstuder): Clean this flow up a bit and split it into multiple
@@ -141,6 +133,7 @@ public class SmsSyncService extends ServiceBase {
                             stopSelf();
                             Alarms.scheduleRegularSync(SmsSyncService.this);
                             sIsRunning = false;
+                            sCanceled = false;
                             releaseWakeLock();
                         }
                     }
@@ -237,7 +230,6 @@ public class SmsSyncService extends ServiceBase {
         }
 
         updateState(SmsSyncState.LOGIN);
-
         Folder folder = getBackupFolder();
         
         CursorToMessage converter = new CursorToMessage(this, PrefStore.getLoginUsername(this));
@@ -247,6 +239,7 @@ public class SmsSyncService extends ServiceBase {
                 if (sCanceled) {
                     Log.i(Consts.TAG, "Backup canceled by user.");
                     // TODO: close IMAP ?
+                    sCanceled = false;
                     updateState(SmsSyncState.CANCELED);
                     break;
                 }
@@ -374,7 +367,10 @@ public class SmsSyncService extends ServiceBase {
     static boolean isWorking() {
         return sIsRunning;
     }
-    
+
+     public static boolean isCancelling() {
+        return sCanceled;
+    }
     /**
      * Returns the current state of the service. Also see
      * {@link #setStateChangeListener(StateChangeListener)} to get notified when
@@ -446,18 +442,6 @@ public class SmsSyncService extends ServiceBase {
         }
     }
 
-    /**
-     * A state change listener interface that provides a callback that is called
-     * whenever the state of the {@link SmsSyncService} changes.
-     *
-     * @see SmsSyncService#setStateChangeListener(StateChangeListener)
-     */
-    public interface StateChangeListener {
-        /**
-         * Called whenever the sync state of the service changed.
-         */
-        public void stateChanged(SmsSyncState oldState, SmsSyncState newState);
-    }
 
  
 }

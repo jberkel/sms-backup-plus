@@ -1,4 +1,3 @@
-
 package tv.studer.smssync;
 
 import android.app.Service;
@@ -20,7 +19,30 @@ import java.net.URLEncoder;
 
 public abstract class ServiceBase extends Service {
 
+    // the activity
+    public static SmsSync smsSync;
+
+    enum SmsSyncState {
+        IDLE, CALC, LOGIN, SYNC, RESTORE, AUTH_FAILED, GENERAL_ERROR, CANCELED;
+    }
+
+    /**
+     * A state change listener interface that provides a callback that is called
+     * whenever the state of the {@link SmsSyncService} changes.
+     *
+     * @see SmsSyncService#setStateChangeListener(StateChangeListener)
+     */
+    public interface StateChangeListener {
+
+        /**
+         * Called whenever the sync state of the service changed.
+         */
+        public void stateChanged(SmsSyncState oldState, SmsSyncState newState);
+    }
+
+
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
+
     /**
      * A wakelock held while this service is working.
      */
@@ -31,49 +53,49 @@ public abstract class ServiceBase extends Service {
     protected WifiManager.WifiLock sWifiLock;
 
     public static String getHeader(Message msg, String header) {
-      try {
-        String[] hdrs = msg.getHeader(header);
-        if (hdrs != null && hdrs.length > 0) {
-          return hdrs[0];        
-        } 
-      } catch (MessagingException e) {        
-      }
-      return null;
+        try {
+            String[] hdrs = msg.getHeader(header);
+            if (hdrs != null && hdrs.length > 0) {
+                return hdrs[0];
+            }
+        } catch (MessagingException e) {
+        }
+        return null;
     }
 
     @Override
     public IBinder onBind(Intent arg0) {
-       return null;
+        return null;
     }
-    
-    protected Folder getBackupFolder() 
-      throws AuthenticationErrorException {
-      
-      String username = PrefStore.getLoginUsername(this);
-      String password = PrefStore.getLoginPassword(this);      
-      String label = PrefStore.getImapFolder(this);
 
-      if (username == null) 
-        throw new IllegalArgumentException("username is null");
-      if (password == null) 
-        throw new IllegalArgumentException("password is null");
-      if (label == null) 
-        throw new IllegalArgumentException("label is null");        
-        
-      try {
-        ImapStore imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
-                URLEncoder.encode(password).replace("+", "%20")));
-        Folder folder = imapStore.getFolder(label);
-       
-        if (!folder.exists()) {
-            Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
-            folder.create(FolderType.HOLDS_MESSAGES);
+    protected Folder getBackupFolder()
+            throws AuthenticationErrorException {
+
+        String username = PrefStore.getLoginUsername(this);
+        String password = PrefStore.getLoginPassword(this);
+        String label = PrefStore.getImapFolder(this);
+
+        if (username == null)
+            throw new IllegalArgumentException("username is null");
+        if (password == null)
+            throw new IllegalArgumentException("password is null");
+        if (label == null)
+            throw new IllegalArgumentException("label is null");
+
+        try {
+            ImapStore imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
+                    URLEncoder.encode(password).replace("+", "%20")));
+            Folder folder = imapStore.getFolder(label);
+
+            if (!folder.exists()) {
+                Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
+                folder.create(FolderType.HOLDS_MESSAGES);
+            }
+            folder.open(OpenMode.READ_WRITE);
+            return folder;
+        } catch (MessagingException e) {
+            throw new AuthenticationErrorException(e);
         }
-        folder.open(OpenMode.READ_WRITE);
-        return folder;
-      } catch (MessagingException e) {
-        throw new AuthenticationErrorException(e);
-      }
     }
 
     protected void acquireWakeLock() {
@@ -89,32 +111,32 @@ public abstract class ServiceBase extends Service {
         sWifiLock.acquire();
     }
 
-    protected  void releaseWakeLock() {
+    protected void releaseWakeLock() {
         sWakeLock.release();
         sWifiLock.release();
     }
 
     /**
-      * Exception indicating an error while synchronizing.
-      */
-     public static class GeneralErrorException extends Exception {
-         private static final long serialVersionUID = 1L;
+     * Exception indicating an error while synchronizing.
+     */
+    public static class GeneralErrorException extends Exception {
+        private static final long serialVersionUID = 1L;
 
-         public GeneralErrorException(String msg, Throwable t) {
-             super(msg, t);
-         }
+        public GeneralErrorException(String msg, Throwable t) {
+            super(msg, t);
+        }
 
-         public GeneralErrorException(Context ctx, int msgId, Throwable t) {
-             super(ctx.getString(msgId), t);
-         }
-     }
+        public GeneralErrorException(Context ctx, int msgId, Throwable t) {
+            super(ctx.getString(msgId), t);
+        }
+    }
 
-     public static class AuthenticationErrorException extends Exception {
-         private static final long serialVersionUID = 1L;
+    public static class AuthenticationErrorException extends Exception {
+        private static final long serialVersionUID = 1L;
 
-         public AuthenticationErrorException(Throwable t) {
-             super(t.getLocalizedMessage(), t);
-         }
-     }
-  
+        public AuthenticationErrorException(Throwable t) {
+            super(t.getLocalizedMessage(), t);
+        }
+    }
+
 }
