@@ -18,6 +18,17 @@
 	    	android:layout_alignParentLeft="true"
 	    	android:src="@drawable/ic_done"
 	    	/>
+	    <Button
+			android:id="@+id/sync_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/ui_sync_button_label_idle"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentTop="true"
+			android:textStyle="bold"
+			android:layout_alignBaseline="@id/status_icon"
+			android:width="125sp"
+			/>
 		<TextView
 		    android:id="@+id/status_label"
 		    android:layout_width="fill_parent"
@@ -29,18 +40,7 @@
 		    android:textColor="@color/status_done"
 		    android:layout_marginLeft="6dip"
 		    android:layout_alignBaseline="@id/status_icon"
-		    />
-		<Button
-			android:id="@+id/sync_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/ui_sync_button_label_idle"
-			android:layout_alignParentRight="true"
-			android:layout_alignParentTop="true"
-			android:textStyle="bold"
-			android:layout_alignBaseline="@id/status_label"
-			android:width="125sp"
-			/>
+		    android:layout_toLeftOf="@id/sync_button"/>
 		<!-- FrameLayout
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
