@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">SMS Backup</string>
+    <string name="app_description">Backup degli SMS su Gmail attraverso internet.</string>
+    
+	<string name="ui_sync_button_label_idle">Salva adesso</string>
+	<string name="ui_sync_button_label_done">Salva di nuovo</string>
+	<string name="ui_sync_button_label_error">Riprova a salvare</string>
+	<!-- TODO(chstuder): Rename the following string resource. -->
+	<string name="ui_sync_button_label_syncing">Arresta il salvataggio</string>
+	<string name="ui_sync_button_label_canceling">Arresto in corso\u2026</string>
+	
+	<string name="status_idle">In attesa</string>
+		<string name="status_idle_details">Ultimo salvataggio: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+		<string name="status_idle_details_never">Mai</string>
+	<string name="status_sync">Salvo</string>
+		<string name="status_sync_details">Salvataggio di <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+	<string name="status_login">Salvo</string>
+		<string name="status_login_details">Autenticazione in corso\u2026</string>
+	<string name="status_done">Fatto</string>
+		<string name="status_done_details_max_per_sync">Raggiunto il limite massimo di %1$d elementi per salvataggio. Riavviare il salvataggio per continuare.</string>
+		<string name="status_done_details_noitems">Non c\'erano elementi da salvare.</string>
+		<plurals name="status_done_details">
+	        <item quantity="one">Salvato corretamente <xliff:g id="total_items">%1$d</xliff:g> elemento.</item>
+	        <item quantity="other">Salvati correttamente <xliff:g id="total_items">%1$d</xliff:g> elementi.</item>
+	    </plurals>
+	<string name="status_unknown_error">Errore</string>
+		<string name="status_unknown_error_details">Errore durante il salvataggio:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+	<string name="status_auth_failure">Errore di autenticazione</string>
+		<string name="status_auth_failure_details">Assicurarsi che l\'IMAP sia attivo nelle impostazioni del tuo account Gmal e controlla l\'username e la password.</string>
+	<string name="status_calc">Salvataggio</string>
+		<string name="status_calc_details">Calcolo in corso\u2026</string>
+	<string name="status_canceled">Annullato</string>
+		<string name="status_canceled_details">%1$d/%2$d elementi correttamente salvati.</string>
+	
+	<string name="ui_status_label">SMS Backup</string>
+	<string name="ui_settings_label">Impostazioni</string>
+	<string name="ui_settings_advanced_label">Impostazioni avanzate</string>
+	<string name="ui_settings_advanced_desc">Cambia le impostazioni avanzate.</string>
+	<string name="ui_settings_advanced_cat_label">SMS Backup <small>\u00bb Impostazioni avanzate</small></string>
+	
+	<string name="ui_login_label">Username</string>
+	<string name="ui_login_desc">Il tuo account Google/indirizzo e-mail.</string>
+	<string name="ui_login_dialog_msg">ATTENZIONE: Cambiando l\'username azzererai tutte le informazioni di salvataggio e la tua password.</string>
+	
+	<string name="ui_password_label">Password</string>
+	<string name="ui_password_desc">La password del tuo account Google.</string>
+	<string name="ui_password_dialog_msg">La password è memorizzata su questo dispositivo ed è utilizzata solo per autenticarsi su Gmail.</string>	
+	
+	<string name="ui_imap_folder_label">Etichetta Gmail</string>
+	<string name="ui_imap_folder_desc">L\'etichetta Gmail assegnata agli SMS.</string>
+	<string name="ui_imap_folder_label_dialog_msg">I messaggi SMS salvati saranno etichettati con questa etichetta in Gmail.</string>
+	
+	<string name="ui_max_items_per_sync_label">Elementi per salvataggio</string>
+	<string name="ui_max_items_per_sync_desc">Il numero massimo di elementi trasferiti per ogni salvataggio.</string>
+	
+	<string name="ui_mark_as_read_label">Marca come letto</string>
+	<string name="ui_mark_as_read_desc">Determina se marcare come letti, o meno, i messaggi in Gmail.</string>
+	<string name="ui_enable_auto_sync_label">Salvataggio automatico</string>
+	<string name="ui_enable_auto_sync_desc">Determina se salvare automaticamente, o meno, gli SMS.</string>
+	
+	<string name="ui_dialog_missing_credentials_title">Credenziali di autenticazione</string>
+	<string name="ui_dialog_missing_credentials_msg">Devi inserire le credenziali di autenticazione prima di poter effettuare un salvataggio.</string>
+	<string name="ui_dialog_sync_data_reset_title">Azzeramente delle informazioni di salvataggio</string>
+	<string name="ui_dialog_sync_data_reset_msg">Le informazioni di salvataggio sono state azzerate. 
+    Imposta la tua password ed effettua un salvataggio manuale. Potrai decidere se effettuare il salvataggio, o meno, dei messaggio attualmente memorizzati su
+    questo dispositivo.</string>
+	<string name="ui_dialog_invalid_imap_folder_title">Etichetta invalida</string>
+	<string name="ui_dialog_invalid_imap_folder_msg">Il nome dell\'etichetta può contenere solo lettere non accentate (A-Z, a-z).</string>
+	
+	<string name="ui_dialog_first_sync_title">Primo salvataggio</string>
+	<string name="ui_dialog_first_sync_msg">Salvare, o meno, tutti i messaggi attualmente memorizzati su questo dispositivo?\n\n
+    Nota: Il salvataggio sarà ripartito in lotti da %1$d messaggi.</string>
+	
+	<string name="ui_dialog_need_first_manual_sync_title">Primo salvataggio</string>
+	<string name="ui_dialog_need_first_manual_sync_msg">Il primo salvataggio deve essere avviato manualmente. Vuoi effettuare il salvataggio adesso?</string>
+	
+	<!-- string name="ui_ok">OK</string -->
+	<!-- string name="ui_yes">Yes</string -->
+	<!-- string name="ui_no">No</string -->
+	<string name="ui_sync">Salva</string>
+	<string name="ui_skip">Salta</string>
+	
+	<string name="err_could_not_create_folder">Non posso creare l\'etichetta.</string>
+	<string name="err_first_sync_needs_skip_flag">Errore interno: primo salvataggio senza alcuna indicazione se salvare o meno i messaggi presenti.</string>
+	<string name="err_sync_requires_login_info">Non posso salvare senza le credenziali di autenticazione.</string>
+	<string name="err_communication_error">Errore generale di comunicazione.</string>
+	
+	<string name="menu_info">Informazioni</string>
+	<string name="menu_share">Condividi</string>
+	<string name="menu_market">Aggiorna</string>
+	
+	<string name="about_email_button">Email all\'autore</string>
+	<string name="about_email_subject">%1$s %2$s</string>
+	<string name="about_email_content">Hi Christoph,\n</string>
+	
+	<string name="share_subject">SMS Backup for Android</string>
+	<string name="share_body">You can now backup all SMS messages on your Android device to Gmail!\nCheck out the SMS Backup application by clicking the following link on your device:\n%1$s\nor visit:\n%2$s</string>
+
+</resources>
