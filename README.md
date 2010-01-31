@@ -1,6 +1,7 @@
 ## Android-SMS
 
-This is a mirror/fork of the svn repository at http://code.google.com/p/android-sms.
+This is a mirror/fork of the svn repository at
+[http://code.google.com/p/android-sms](http://code.google.com/p/android-sms).
   
 ### Restoring
 
