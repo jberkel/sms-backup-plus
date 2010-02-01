@@ -147,12 +147,17 @@ public class SmsRestoreService extends ServiceBase {
                 message.getFolder().fetch(new Message[]{message}, fp, null);
                 ContentValues values = messageToContentValues(message);
 
-                if (!smsExists(values)) {
+                Integer type = values.getAsInteger(SmsConsts.TYPE);                
+                if (type == null)
+                    return;
+                
+                // only restore inbox messages and sent messages - otherwise sms might get sent on restore
+                if ((type == SmsConsts.MESSAGE_TYPE_INBOX || type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
                     Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
                     ids.add(uri.getLastPathSegment());
                     Log.d(TAG, "inserted " + uri);
                 } else {
-                    Log.d(TAG, "sms already exists, ignoring");
+                    Log.d(TAG, "ignoring sms");
                 }
 
             } catch (java.io.IOException e) {
