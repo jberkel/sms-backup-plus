@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">SMS Backup</string>
+    <string name="app_description">SMS-Backup via Internet nach Gmail.</string>
+    
+	<string name="ui_sync_button_label_idle">Backup</string>
+	<string name="ui_sync_button_label_done">Erneutes Backup</string>
+	<string name="ui_sync_button_label_error">Erneuter Versuch</string>
+	<!-- TODO(chstuder): Rename the following string resource. -->
+	<string name="ui_sync_button_label_syncing">Stoppen</string>
+	<string name="ui_sync_button_label_canceling">Stoppen\u2026</string>
+	
+	<string name="status_idle">Idle</string>
+		<string name="status_idle_details">Letztes Backup: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+		<string name="status_idle_details_never">Nie</string>
+	<string name="status_sync">Backup läuft</string>
+		<string name="status_sync_details"><xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> SMS gesichert\u2026</string>
+	<string name="status_login">Backup läuft</string>
+		<string name="status_login_details">Einloggen\u2026</string>
+	<string name="status_done">Erledigt</string>
+		<string name="status_done_details_max_per_sync">Maximum von %1$d SMS pro Backup erreicht. Starten Sie das Backup erneut, um fortzufahren.</string>
+		<string name="status_done_details_noitems">Keine Nachrichten zu sichern.</string>
+		<plurals name="status_done_details">
+	        <item quantity="one"><xliff:g id="total_items">%1$d</xliff:g> SMS erfolgreicht gesichert.</item>
+	        <item quantity="other"><xliff:g id="total_items">%1$d</xliff:g> SMS erfolgreich gesichert.</item>
+	    </plurals>
+	<string name="status_unknown_error">Fehler</string>
+		<string name="status_unknown_error_details">Fehler während Backup:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+	<string name="status_auth_failure">Login-Fehler</string>
+		<string name="status_auth_failure_details">Bitte vergewissern Sie sich, dass IMAP in Gmail aktiviert ist und überprüfen Sie Benutzernamen und Passwort.</string>
+	<string name="status_calc">Sicherung</string>
+		<string name="status_calc_details">Berechnen\u2026</string>
+	<string name="status_canceled">Abgebrochen</string>
+		<string name="status_canceled_details">%1$d/%2$d SMS erfolgreich gesichert.</string>
+	
+	<string name="ui_status_label">SMS Backup</string>
+	<string name="ui_settings_label">Einstellungen</string>
+	<string name="ui_settings_advanced_label">Erweiterte Einstellungen</string>
+	<string name="ui_settings_advanced_desc">Erweiterte Einstellungen vornehmen.</string>
+	<string name="ui_settings_advanced_cat_label">SMS Backup <small>\u00bb Erweiterte Einstellungen</small></string>
+	
+	<string name="ui_login_label">Benutzername</string>
+	<string name="ui_login_desc">Ihr Google-Konto/Ihre Gmail-Adresse.</string>
+	<string name="ui_login_dialog_msg">ACHTUNG: Ändern des Benutzernamens setzt Backup-Status und Passwort zurück.</string>
+	
+	<string name="ui_password_label">Passwort</string>
+	<string name="ui_password_desc">Ihr Gmail-Passwort.</string>
+	<string name="ui_password_dialog_msg">Das Passwort wird auf diesem Gerät gespeichert und wird nur zur Anmeldung bei Gmail verwendet.</string>	
+	
+	<string name="ui_imap_folder_label">Gmail-Label</string>
+	<string name="ui_imap_folder_desc">Gmail-Label, welches den SMS zugewiesen wird.</string>
+	<string name="ui_imap_folder_label_dialog_msg">Gesicherte SMS werden diesem Google-Mail-Label zugewiesen.</string>
+	
+	<string name="ui_max_items_per_sync_label">SMS pro Backup</string>
+	<string name="ui_max_items_per_sync_desc">Maximale Anzahl SMS pro Backup.</string>
+	
+	<string name="ui_mark_as_read_label">Als gelesen markieren</string>
+	<string name="ui_mark_as_read_desc">Ob SMS in Gmail als gelesen markiert werden oder nicht.</string>
+	<string name="ui_enable_auto_sync_label">Auto-Backup</string>
+	<string name="ui_enable_auto_sync_desc">Ob neue SMS automatisch gesichert werden sollen oder nicht.</string>
+	
+	<string name="ui_dialog_missing_credentials_title">Login-Information</string>
+	<string name="ui_dialog_missing_credentials_msg">Sie müssen Benutzernamen und Passwort setzen.</string>
+	<string name="ui_dialog_sync_data_reset_title">Backup-Status gelöscht</string>
+	<string name="ui_dialog_sync_data_reset_msg">Der Backup-Status wurde gelöscht. Bitte setzen Sie Benutzernamen und Passwort neu und lösen Sie ein manuelles Backup aus.</string>
+	<string name="ui_dialog_invalid_imap_folder_title">Ungültiger Labelname</string>
+	<string name="ui_dialog_invalid_imap_folder_msg">Der Labelname darf keine Sonderzeichen enthalten. Gültige Zeichen: A-Z, a-z.</string>
+	
+	<string name="ui_dialog_first_sync_title">Erstes Backup</string>
+	<string name="ui_dialog_first_sync_msg">Sollen SMS, die sich bereits auf dem Gerät befinden, gesichert werden?\n\nHinweis: Das Backup wird in Gruppen von maximal %1$d SMS aufgeteilt.</string>
+	
+	<string name="ui_dialog_need_first_manual_sync_title">Erstes Backup</string>
+	<string name="ui_dialog_need_first_manual_sync_msg">Das erste Backup muss manuell ausgelöst werden. Wollen Sie jetzt ein Backup auslösen?</string>
+	
+	<string name="ui_sync">Sichern</string>
+	<string name="ui_skip">Überspringen</string>
+	
+	<string name="err_could_not_create_folder">Konnte Label nicht erstellen.</string>
+	<string name="err_first_sync_needs_skip_flag">Interner Fehler: Erstes Backup ohne Angabe, ob SMS überspringen werden sollen.</string>
+	<string name="err_sync_requires_login_info">Kann nicht sichern ohne Login-Information.</string>
+	<string name="err_communication_error">Allgemeiner Kommunikationsfehler.</string>
+	
+	<string name="menu_info">Über</string>
+	<string name="menu_share">Empfehlen</string>
+	<string name="menu_market">Update</string>
+	
+	<string name="about_email_button">E-Mail an Autor</string>
+	<string name="about_email_subject">%1$s %2$s</string>
+	<string name="about_email_content">Hallo Christoph,\n</string>
+	<string name="about_email_uri">mailto:chstuder@gmail.com</string>
+	
+	
+	<string name="share_subject">SMS Backup für Android</string>
+	<string name="share_body">Sie können jetzt all Ihre SMS-Nachrichten von Ihrem Android-Gerät nach Gmail sichern!\nErfahren Sie mehr über SMS Backup, indem Sie auf Ihrem Gerät diesem Link folgen:\n%1$s\noder besuchen Sie:\n%2$s</string>
+	
+
+
+</resources>
