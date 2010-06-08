@@ -2,7 +2,13 @@
 
 This is a mirror/fork of the svn repository at
 [http://code.google.com/p/android-sms](http://code.google.com/p/android-sms).
-  
+
+## Building
+
+    $ cd android-client
+    $ echo "sdk.dir=/path/to/android-sdk" > local.properties
+    $ ant debug
+
 ### Restoring
 
 The restore_backups branch contains code to restore SMS from gmail back to the
