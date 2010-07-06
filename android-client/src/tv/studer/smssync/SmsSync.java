@@ -116,20 +116,11 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             getPreferenceScreen().addPreference(mStatusPref);
         }
 
-        Preference pref = prefMgr.findPreference(PrefStore.PREF_LOGIN_USER);
-        pref.setOnPreferenceChangeListener(this);
-
-        pref = prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER);
-        pref.setOnPreferenceChangeListener(this);
-
-        pref = prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC);
-        pref.setOnPreferenceChangeListener(this);
-
-        pref = prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD);
-        pref.setOnPreferenceChangeListener(this);
-
-        pref = prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC);
-        pref.setOnPreferenceChangeListener(this);
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(this);
+        prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER).setOnPreferenceChangeListener(this);
+        prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC).setOnPreferenceChangeListener(this);
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setOnPreferenceChangeListener(this);
+        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC).setOnPreferenceChangeListener(this);
 
         ServiceBase.smsSync = this;
     }
