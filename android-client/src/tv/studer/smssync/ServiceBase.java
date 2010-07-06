@@ -70,21 +70,13 @@ public abstract class ServiceBase extends Service {
 
     protected Folder getBackupFolder()
             throws AuthenticationErrorException {
-
-        String username = PrefStore.getLoginUsername(this);
-        String password = PrefStore.getLoginPassword(this);
-        String label = PrefStore.getImapFolder(this);
-
-        if (username == null)
-            throw new IllegalArgumentException("username is null");
-        if (password == null)
-            throw new IllegalArgumentException("password is null");
-        if (label == null)
-            throw new IllegalArgumentException("label is null");
-
         try {
-            ImapStore imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
-                    URLEncoder.encode(password).replace("+", "%20")));
+            ImapStore imapStore =  getImapStore();
+
+            String label = PrefStore.getImapFolder(this);
+            if (label == null)
+                throw new IllegalArgumentException("label is null");
+
             Folder folder = imapStore.getFolder(label);
 
             if (!folder.exists()) {
@@ -96,6 +88,22 @@ public abstract class ServiceBase extends Service {
         } catch (MessagingException e) {
             throw new AuthenticationErrorException(e);
         }
+    }
+
+    protected ImapStore getImapStore()
+        throws MessagingException {
+        String username = PrefStore.getLoginUsername(this);
+        String password = PrefStore.getLoginPassword(this);
+
+        if (username == null)
+            throw new IllegalArgumentException("username is null");
+        if (password == null)
+            throw new IllegalArgumentException("password is null");
+
+        String imapUri = "imap+ssl+://%s:%s@imap.gmail.com:993";
+
+        return new ImapStore(String.format(imapUri, URLEncoder.encode(username),
+                URLEncoder.encode(password).replace("+", "%20")));
     }
 
     protected void acquireWakeLock() {

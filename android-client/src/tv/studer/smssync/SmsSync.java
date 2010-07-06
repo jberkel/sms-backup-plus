@@ -287,6 +287,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        // TODO jberkel this should be an enum
+
                         int STATUS_IDLE = 0;
                         int STATUS_WORKING = 1;
                         int STATUS_DONE = 2;
@@ -301,6 +304,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
                         switch (newState) {
                             case AUTH_FAILED:
+                                // TODO jberkel possibility to do dynamic string lookups?
+
                                 statusLabel = getText(R.string.status_auth_failure);
                                 statusDetails = getString(R.string.status_auth_failure_details);
                                 status = STATUS_ERROR;
@@ -315,6 +320,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                 if (oldState == SmsSyncState.SYNC
                                         || oldState == SmsSyncState.CALC) {
                                     statusLabel = getText(R.string.status_done);
+
+                                    // TODO jberkel: pass context object through?
+
                                     int backedUpCount = SmsSyncService.getCurrentSyncedItems();
                                     progressMax = SmsSyncService.getItemsToSyncCount();
                                     progressVal = backedUpCount;
@@ -421,6 +429,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                         TextView detailTextView;
                         int buttonText;
                         int icon;
+
+                        // map status => (icon, label)
 
                         if (status == STATUS_IDLE) {
                             color = R.color.status_idle;
