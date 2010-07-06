@@ -343,7 +343,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                                 R.plurals.status_restore_done_details,
                                                 SmsRestoreService.getCurrentRestoredItems(),
                                                 SmsRestoreService.getCurrentRestoredItems());
-                                    
+
                                     progressIndeterminate = false;
                                     status = STATUS_DONE;
                                 } else {
@@ -440,7 +440,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                         } else if (status == STATUS_ERROR) {
                             color = R.color.status_error;
                             detailTextView = mErrorDetails;
-                            buttonText = (mode == Mode.RESTORE) ?  R.string.ui_restore_button_label_error : R.string.ui_sync_button_label_error; 
+                            buttonText = (mode == Mode.RESTORE) ?  R.string.ui_restore_button_label_error : R.string.ui_sync_button_label_error;
                             icon = R.drawable.ic_error;
                         } else {
                             Log.w(Consts.TAG, "Illegal state: Unknown status.");
@@ -474,13 +474,13 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                         } else {
                           mSyncButton.setText(buttonText);
                         }
-                        
+
                         if (status != STATUS_WORKING) {
                             mode = Mode.NONE;
                             mSyncButton.setEnabled(true);
                             mRestoreButton.setEnabled(true);
                         }
-                        
+
                         detailTextView.setText(statusDetails);
                         mStatusIcon.setImageResource(icon);
                     } // run() { ... }

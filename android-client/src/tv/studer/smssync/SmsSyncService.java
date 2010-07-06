@@ -31,7 +31,7 @@ public class SmsSyncService extends ServiceBase {
 
     /** Number of messages sent per sync request. */
     private static final int MAX_MSG_PER_REQUEST = 1;
-    
+
     /** Flag indicating whether this service is already running. */
     // Should this be split into sIsRunning and sIsWorking? One for the
     // service, the other for the actual backing up?
@@ -70,14 +70,14 @@ public class SmsSyncService extends ServiceBase {
      * should finish working ASAP.
      */
     private static boolean sCanceled;
-    
+
 
     @Override
     //TODO(chstuder): Clean this flow up a bit and split it into multiple
     // methods. Make clean distinction between onStart(...) and backup(...).
     public void onStart(final Intent intent, int startId) {
         super.onStart(intent, startId);
-        
+
         synchronized (this.getClass()) {
             // Only start a sync if there's no other sync going on at this time.
             if (!sIsRunning) {
@@ -100,7 +100,7 @@ public class SmsSyncService extends ServiceBase {
                                     false);
                             int numRetries = intent.getIntExtra(Consts.KEY_NUM_RETRIES, 0);
                             GeneralErrorException lastException = null;
-                            
+
                             // Try sync numRetries + 1 times.
                             while (numRetries >= 0) {
                                 try {
@@ -169,13 +169,13 @@ public class SmsSyncService extends ServiceBase {
      * <li>{@link SmsSyncState#CANCELED}: If {@link #cancel()} was called during
      * backup, the backup will stop at the next possible occasion.</li>
      * </ol>
-     * 
+     *
      * <h2>Preconditions</h2>
      * <p>
      * This method requires the login information to be set. If either username
      * or password are unset, a {@link GeneralErrorException} is thrown.
      * </p>
-     * 
+     *
      * <h2>Sync or skip?</h2>
      * <p>
      * <code>skipMessages</code>: If this parameter is <code>true</code>, all
@@ -183,7 +183,7 @@ public class SmsSyncService extends ServiceBase {
      * Future backups will ignore these messages and only messages arrived
      * afterwards will be sent to the server.
      * </p>
-     * 
+     *
      * @param skipMessages whether to skip all messages on this device.
      * @throws GeneralErrorException Thrown when there there was an error during
      *             sync.
@@ -201,7 +201,7 @@ public class SmsSyncService extends ServiceBase {
 
         sItemsToSync = 0;
         sCurrentSyncedItems = 0;
-        
+
         if (skipMessages) {
             // Only update the max synced ID, do not really sync.
             updateMaxSyncedDate(getMaxItemDate());
@@ -231,7 +231,7 @@ public class SmsSyncService extends ServiceBase {
 
         updateState(SmsSyncState.LOGIN);
         Folder folder = getBackupFolder();
-        
+
         CursorToMessage converter = new CursorToMessage(this, PrefStore.getLoginUsername(this));
         try {
             while (true) {
@@ -273,9 +273,9 @@ public class SmsSyncService extends ServiceBase {
         }
     }
 
-  
-    
-  
+
+
+
     /**
      * Returns a cursor of SMS messages that have not yet been synced with the
      * server. This includes all messages with
@@ -334,7 +334,7 @@ public class SmsSyncService extends ServiceBase {
      * Persists the provided ID so it can later on be retrieved using
      * {@link #getMaxSyncedDate()}. This should be called when after each
      * successful sync request to a server.
-     * 
+     *
      * @param maxSyncedId
      */
     private void updateMaxSyncedDate(long maxSyncedDate) {
@@ -343,13 +343,13 @@ public class SmsSyncService extends ServiceBase {
     }
 
     // Actions available from other classes.
-    
+
     /**
      * Cancels the current ongoing backup.
-     * 
+     *
      * TODO(chstuder): Clean up this interface a bit. It's strange the backup is
      * started by an intent but canceling is done through a static method.
-     * 
+     *
      * But all other alternatives seem strange too. An intent just to cancel a backup?
      */
     static void cancel() {
@@ -357,12 +357,12 @@ public class SmsSyncService extends ServiceBase {
             SmsSyncService.sCanceled = true;
         }
     }
-    
+
     // Statistics accessible from other classes.
 
     /**
      * Returns whether there is currently a backup going on or not.
-     * 
+     *
      */
     static boolean isWorking() {
         return sIsRunning;
@@ -443,5 +443,5 @@ public class SmsSyncService extends ServiceBase {
     }
 
 
- 
+
 }

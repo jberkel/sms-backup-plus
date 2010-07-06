@@ -124,7 +124,7 @@ public class SmsRestoreService extends ServiceBase {
 
             if (ids.isEmpty())
                 return;
-            
+
             // execute in background, might take some time
             new Thread() {
                 @Override
@@ -147,10 +147,10 @@ public class SmsRestoreService extends ServiceBase {
                 message.getFolder().fetch(new Message[]{message}, fp, null);
                 ContentValues values = messageToContentValues(message);
 
-                Integer type = values.getAsInteger(SmsConsts.TYPE);                
+                Integer type = values.getAsInteger(SmsConsts.TYPE);
                 if (type == null)
                     return;
-                
+
                 // only restore inbox messages and sent messages - otherwise sms might get sent on restore
                 if ((type == SmsConsts.MESSAGE_TYPE_INBOX || type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
                     Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
@@ -185,7 +185,7 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     private boolean smsExists(ContentValues values) {
-        // just assume equality on date+address+type 
+        // just assume equality on date+address+type
         Cursor c = getContentResolver().query(SMS_PROVIDER,
                 new String[]{"_id"},
                 "date = ? AND address = ? AND type = ?",

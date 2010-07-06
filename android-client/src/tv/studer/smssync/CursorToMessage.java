@@ -38,9 +38,9 @@ import com.android.email.mail.internet.MimeMessage;
 import com.android.email.mail.internet.TextBody;
 
 public class CursorToMessage {
-    
+
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@smssync.studer.tv>";
-    
+
     private static final String[] PHONE_PROJECTION = new String[] {
             Phones.PERSON_ID, People.NAME, Phones.NUMBER
     };
@@ -50,9 +50,9 @@ public class CursorToMessage {
     };
 
     private static final String UNKNOWN_NUMBER = "unknown_number";
-    
+
     private static final String UNKNOWN_EMAIL = "unknown.email";
-    
+
     private static final String UNKNOWN_PERSON = "unknown.person";
 
     private static final int MAX_PEOPLE_CACHE_SIZE = 100;
@@ -62,9 +62,9 @@ public class CursorToMessage {
     private Address mUserAddress;
 
     private Map<String, PersonRecord> mPeopleCache;
-    
+
     private String mReferenceValue;
-    
+
     private boolean mMarkAsRead = false;
 
     public static interface Headers {
@@ -84,13 +84,13 @@ public class CursorToMessage {
         mContext = ctx;
         mPeopleCache = new HashMap<String, PersonRecord>();
         mUserAddress = new Address(userEmail);
-        
+
         mReferenceValue = PrefStore.getReferenceUid(ctx);
         if (mReferenceValue == null) {
             mReferenceValue = generateReferenceValue();
             PrefStore.setReferenceUid(ctx, mReferenceValue);
         }
-        
+
         mMarkAsRead = PrefStore.getMarkAsRead(ctx);
     }
 
@@ -139,7 +139,7 @@ public class CursorToMessage {
                 record = lookupPerson(address);
             }
         }
-        
+
         if (record == null) {
             record = new PersonRecord();
             record._id = address;
@@ -170,7 +170,7 @@ public class CursorToMessage {
         // stable.
         msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue,
                 record._id));
-        
+
         msg.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
         msg.setHeader(Headers.ADDRESS, address);
         msg.setHeader(Headers.TYPE, msgMap.get(SmsConsts.TYPE));
@@ -182,7 +182,7 @@ public class CursorToMessage {
         msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
         msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
         msg.setFlag(Flag.SEEN, mMarkAsRead);
-        
+
         return msg;
     }
 
@@ -227,7 +227,7 @@ public class CursorToMessage {
                     ContactMethods.CONTENT_EMAIL_URI, EMAIL_PROJECTION,
                     selection, selectionArgs, null);
             int indexData = emailCursor.getColumnIndex(ContactMethods.DATA);
-            
+
             // Loop over cursor and find a Gmail address for that person.
             // If there is none, pick first e-mail address.
             String firstEmail = null;
@@ -257,12 +257,12 @@ public class CursorToMessage {
         String no = (number == null) ? UNKNOWN_NUMBER : number;
         return no + "@" + UNKNOWN_EMAIL;
     }
-    
+
     /** Returns whether the given e-mail address is a Gmail address or not. */
     private static boolean isGmailAddress(String email) {
         return email.endsWith("gmail.com") || email.endsWith("googlemail.com");
     }
-    
+
     private static String generateReferenceValue() {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < 24; i++) {

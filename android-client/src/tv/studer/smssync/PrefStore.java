@@ -35,43 +35,43 @@ public class PrefStore {
 
     /** Preference key containing a UID used for the threading reference header. */
     static final String PREF_REFERENECE_UID = "reference_uid";
-    
+
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
-    
+
     /** Preference key for storing whether to enable auto sync or not. */
     static final String PREF_ENABLE_AUTO_SYNC = "enable_auto_sync";
-    
+
     /** Preference key for the timeout between an SMS is received and the scheduled sync. */
     static final String PREF_INCOMING_TIMEOUT_SECONDS = "incoming_timeout_seconds";
-    
+
     /** Preference key for the interval between backup of outgoing SMS. */
     static final String PREF_REGULAR_TIMEOUT_SECONDS = "regular_timeout_seconds";
-    
+
     /** Preference for storing the time of the last sync. */
     static final String PREF_LAST_SYNC = "last_sync";
-    
+
     /** Preference for storing the maximum items per sync. */
     static final String PREF_MAX_ITEMS_PER_SYNC = "max_items_per_sync";
-    
+
     /** Preference for storing whether backed up messages should be marked as read on Gmail. */
     static final String PREF_MARK_AS_READ = "mark_as_read";
-    
+
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
-    
+
     /** Default value for {@link PrefStore#PREF_IMAP_FOLDER}. */
     static final String DEFAULT_IMAP_FOLDER = "SMS";
-    
+
     /** Default value for {@link PrefStore#PREF_ENABLE_AUTO_SYNC}. */
     static final boolean DEFAULT_ENABLE_AUTO_SYNC = true;
-    
+
     /** Default value for {@link PrefStore#PREF_INCOMING_TIMEOUT_SECONDS}. */
     static final int DEFAULT_INCOMING_TIMEOUT_SECONDS = 20;
-    
+
     /** Default value for {@link PrefStore#PREF_REGULAR_TIMEOUT_SECONDS}. */
     static final int DEFAULT_REGULAR_TIMEOUT_SECONDS = 30 * 60; // 30 minutes
-    
+
     /** Default value for {@link #PREF_LAST_SYNC}. */
     static final long DEFAULT_LAST_SYNC = -1;
 
@@ -80,66 +80,66 @@ public class PrefStore {
 
     /** Default value for {@link #PREF_MARK_AS_READ}. */
     static final boolean DEFAULT_MARK_AS_READ = false;
-    
+
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
-    
+
     static long getMaxSyncedDate(Context ctx) {
         return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE,
                 DEFAULT_MAX_SYNCED_DATE);
     }
-    
+
     static boolean isMaxSyncedDateSet(Context ctx) {
         return getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE);
     }
-    
+
     static void setMaxSyncedDate(Context ctx, long maxSyncedDate) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.putLong(PREF_MAX_SYNCED_DATE, maxSyncedDate);
         editor.commit();
     }
-    
+
     static String getLoginUsername(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null);
     }
-    
+
     static String getLoginPassword(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_PASSWORD, null);
     }
-    
+
     public static boolean isLoginUsernameSet(Context ctx) {
         return getLoginUsername(ctx) != null;
     }
-    
+
     static boolean isLoginInformationSet(Context ctx) {
         return isLoginUsernameSet(ctx) && getLoginPassword(ctx) != null;
     }
-    
+
     static String getReferenceUid(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_REFERENECE_UID, null);
     }
-    
+
     static void setReferenceUid(Context ctx, String referenceUid) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.putString(PREF_REFERENECE_UID, referenceUid);
         editor.commit();
     }
-    
+
     static String getImapFolder(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER, DEFAULT_IMAP_FOLDER);
     }
-    
+
     static boolean isImapFolderSet(Context ctx) {
         return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER);
     }
-    
+
     static int getMaxItemsPerSync(Context ctx) {
         String str = getSharedPreferences(ctx).getString(PREF_MAX_ITEMS_PER_SYNC,
                 DEFAULT_MAX_ITEMS_PER_SYNC);
         return Integer.valueOf(str);
     }
-    
+
     /**
      * Returns whether an IMAP folder is valid. This is the case if the name
      * only contains unaccented latin letters <code>[a-zA-Z]</code>.
@@ -154,62 +154,62 @@ public class PrefStore {
         }
         return true;
     }
-    
+
     static void setImapFolder(Context ctx, String imapFolder) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.putString(PREF_IMAP_FOLDER, imapFolder);
         editor.commit();
     }
-    
+
     static boolean isEnableAutoSync(Context ctx) {
         return getSharedPreferences(ctx).getBoolean(PREF_ENABLE_AUTO_SYNC,
                 DEFAULT_ENABLE_AUTO_SYNC);
     }
-    
+
     static boolean isEnableAutoSyncSet(Context ctx) {
         return getSharedPreferences(ctx).contains(PREF_ENABLE_AUTO_SYNC);
     }
-    
+
     static void setEnableAutoSync(Context ctx, boolean enableAutoSync) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.putBoolean(PREF_ENABLE_AUTO_SYNC, enableAutoSync);
         editor.commit();
     }
-    
+
     static int getIncomingTimeoutSecs(Context ctx) {
        return getSharedPreferences(ctx).getInt(PREF_INCOMING_TIMEOUT_SECONDS,
                DEFAULT_INCOMING_TIMEOUT_SECONDS);
     }
-    
+
     static int getRegularTimeoutSecs(Context ctx) {
         return getSharedPreferences(ctx).getInt(PREF_REGULAR_TIMEOUT_SECONDS,
-                DEFAULT_REGULAR_TIMEOUT_SECONDS); 
+                DEFAULT_REGULAR_TIMEOUT_SECONDS);
     }
-    
+
     static long getLastSync(Context ctx) {
         return getSharedPreferences(ctx).getLong(PREF_LAST_SYNC, DEFAULT_LAST_SYNC);
     }
-    
+
     static void setLastSync(Context ctx) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.putLong(PREF_LAST_SYNC, System.currentTimeMillis());
         editor.commit();
     }
-    
+
     static boolean getMarkAsRead(Context ctx) {
         return getSharedPreferences(ctx).getBoolean(PREF_MARK_AS_READ, DEFAULT_MARK_AS_READ);
     }
-    
+
     static void setMarkAsRead(Context ctx, boolean markAsRead) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.putBoolean(PREF_MARK_AS_READ, markAsRead);
         editor.commit();
     }
-    
+
     static boolean isFirstSync(Context ctx) {
         return !getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE);
     }
-    
+
     static void clearSyncData(Context ctx) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.remove(PREF_LOGIN_PASSWORD);

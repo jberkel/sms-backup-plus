@@ -34,14 +34,14 @@ public class SmsConsts {
     public static final String TYPE = "type";
 
     public static final String READ = "read";
-    
+
     public static final String STATUS = "status";
-    
+
     public static final String SERVICE_CENTER = "service_center";
 
     public static final String PROTOCOL = "protocol";
-    
-    
+
+
     public static final int MESSAGE_TYPE_ALL = 0;
 
     public static final int MESSAGE_TYPE_INBOX = 1;
