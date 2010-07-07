@@ -84,7 +84,7 @@ public class PrefStore {
     /** Default value for {@link #PREF_MARK_AS_READ}. */
     static final boolean DEFAULT_MARK_AS_READ = false;
 
-    static final boolean DEFAULT_MARK_AS_READ_ON_RESTORE = false;
+    static final boolean DEFAULT_MARK_AS_READ_ON_RESTORE = true;
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
