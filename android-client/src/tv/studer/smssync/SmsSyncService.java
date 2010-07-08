@@ -95,7 +95,7 @@ public class SmsSyncService extends Service {
     private static boolean sCanceled;
     
     public enum SmsSyncState {
-        IDLE, CALC, LOGIN, SYNC, AUTH_FAILED, GENERAL_ERROR, CANCELED;
+        IDLE, CALC, LOGIN, SYNC, AUTH_FAILED, GENERAL_ERROR, CANCELED, FOLDER_ERROR;
     }
 
     @Override
@@ -178,6 +178,10 @@ public class SmsSyncService extends Service {
                             Log.i(Consts.TAG, "", e);
                             sLastError = e.getLocalizedMessage();
                             updateState(SmsSyncState.AUTH_FAILED);
+                        } catch (FolderErrorException e) {
+                            Log.i(Consts.TAG, "", e);
+                            sLastError = e.getLocalizedMessage();
+                            updateState(SmsSyncState.FOLDER_ERROR);
                         } finally {
                             stopSelf();
                             Alarms.scheduleRegularSync(SmsSyncService.this);
@@ -235,9 +239,10 @@ public class SmsSyncService extends Service {
      * @param skipMessages whether to skip all messages on this device.
      * @throws GeneralErrorException Thrown when there there was an error during
      *             sync.
+     * @throws FolderErrorException Thrown when there was an error accessing or creating the folder
      */
     private void backup(boolean skipMessages) throws GeneralErrorException,
-            AuthenticationErrorException {
+            AuthenticationErrorException, FolderErrorException {
         Log.i(Consts.TAG, "Starting backup...");
         sCanceled = false;
 
@@ -287,8 +292,12 @@ public class SmsSyncService extends Service {
         boolean folderExists;
         String label = PrefStore.getImapFolder(this);
         try {
-            imapStore = new ImapStore(String.format(Consts.IMAP_URI, URLEncoder.encode(username),
-                    URLEncoder.encode(password).replace("+", "%20")));
+            imapStore = new ImapStore(String.format(Consts.IMAP_URI, PrefStore.getServerProtocol(this), URLEncoder.encode(username),
+                    URLEncoder.encode(password).replace("+", "%20"), PrefStore.getServerAddress(this)));
+        } catch (MessagingException e) {
+            throw new AuthenticationErrorException(e);
+        }
+        try {
             folder = imapStore.getFolder(label);
             folderExists = folder.exists();
             if (!folderExists) {
@@ -297,7 +306,7 @@ public class SmsSyncService extends Service {
             }
             folder.open(OpenMode.READ_WRITE);
         } catch (MessagingException e) {
-            throw new AuthenticationErrorException(e);
+            throw new FolderErrorException(e);
         }
         
         CursorToMessage converter = new CursorToMessage(this, username);
@@ -538,4 +547,11 @@ public class SmsSyncService extends Service {
         }
     }
 
+    public static class FolderErrorException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        public FolderErrorException(Throwable t) {
+            super(t.getLocalizedMessage(), t);
+        }
+    }
 }

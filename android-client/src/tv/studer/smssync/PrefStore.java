@@ -36,6 +36,13 @@ public class PrefStore {
     /** Preference key containing a UID used for the threading reference header. */
     static final String PREF_REFERENECE_UID = "reference_uid";
     
+    /** Preference key containing the server address */
+    static final String PREF_SERVER_ADDRESS = "server_address";
+
+    /** Preference key containing the server protocol */
+    static final String PREF_SERVER_PROTOCOL = "server_protocol";
+
+    
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
     
@@ -80,6 +87,14 @@ public class PrefStore {
 
     /** Default value for {@link #PREF_MARK_AS_READ}. */
     static final boolean DEFAULT_MARK_AS_READ = false;
+    
+    /** Default value for {@link #PREF_SERVER_ADDRESS}. */
+    static final String DEFAULT_SERVER_ADDRESS = "imap.gmail.com:993";
+ 
+    /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
+    static final String DEFAULT_SERVER_PROTOCOL = "ssl";
+    
+    
     
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -148,9 +163,9 @@ public class PrefStore {
         for (int i = 0; i < imapFolder.length(); i++) {
             char currChar = imapFolder.charAt(i);
             if (!((currChar >= 'a' && currChar <= 'z')
-                    || (currChar >= 'A' && currChar <= 'Z'))) {
-                return false;
-            }
+                || (currChar >= 'A' && currChar <= 'Z')
+                || currChar == '.' ))
+                return false;    
         }
         return true;
     }
@@ -218,4 +233,17 @@ public class PrefStore {
         editor.commit();
     }
 
+    static String getServerAddress(Context ctx) {
+        return getSharedPreferences(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
+    }
+ 
+    static void setServerAddress(Context ctx, String serverAddress) {
+         Editor editor = getSharedPreferences(ctx).edit();
+         editor.putString(PREF_SERVER_ADDRESS, serverAddress);
+         editor.commit();
+     }    
+ 
+    static String getServerProtocol(Context ctx) {
+        return getSharedPreferences(ctx).getString(PREF_SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
+    }
 }

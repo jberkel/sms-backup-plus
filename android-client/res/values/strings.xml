@@ -33,12 +33,18 @@
 		<string name="status_calc_details">Calculating\u2026</string>
 	<string name="status_canceled">Canceled</string>
 		<string name="status_canceled_details">%1$d/%2$d items successfully backed up.</string>
+	<string name="status_folder_error">Label error</string>
+		<string name="status_folder_error_details">Could not access or create the label/folder.</string>
 	
 	<string name="ui_status_label">SMS Backup</string>
 	<string name="ui_settings_label">Settings</string>
 	<string name="ui_settings_advanced_label">Advanced settings</string>
 	<string name="ui_settings_advanced_desc">Set advanced preferences.</string>
 	<string name="ui_settings_advanced_cat_label">SMS Backup <small>\u00bb Advanced settings</small></string>
+
+	<string name="ui_settings_advanced_server_label">Server settings</string>
+	<string name="ui_settings_advanced_server_desc">Do not change unless you know what you are doing!</string>
+	<string name="ui_settings_advanced_server_cat_label">SMS Backup <small>\u00bb Advanced \u00bb Server settings</small></string>
 	
 	<string name="ui_login_label">Username</string>
 	<string name="ui_login_desc">Your Google account/e-mail address.</string>
@@ -47,6 +53,13 @@
 	<string name="ui_password_label">Password</string>
 	<string name="ui_password_desc">Your Google account password.</string>
 	<string name="ui_password_dialog_msg">The password is stored on this device and is only used to login at Gmail.</string>	
+
+	<string name="ui_server_label">Server address</string>
+	<string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
+	<string name="ui_server_dialog_msg">WARNING: Changing the server address will reset all your backup information and your password. Default for gmail is \"imap.gmail.com:993\"</string>
+
+	<string name="ui_protocol_label">Security</string>
+	<string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL (Required)\"."</string>
 	
 	<string name="ui_imap_folder_label">Gmail label</string>
 	<string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>

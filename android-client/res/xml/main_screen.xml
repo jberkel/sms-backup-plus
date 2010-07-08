@@ -41,6 +41,26 @@
 					android:entryValues="@array/max_items_per_sync_entries"
 					android:defaultValue="100"
 					android:persistent="true"/>
+				<PreferenceScreen
+					android:title="@string/ui_settings_advanced_server_label"
+					android:summary="@string/ui_settings_advanced_server_desc">
+					<PreferenceCategory android:title="@string/ui_settings_advanced_server_cat_label">
+						<EditTextPreference android:key="server_address"
+							android:title="@string/ui_server_label"
+							android:summary="@string/ui_server_desc"
+							android:singleLine="true"
+							android:dialogMessage="@string/ui_server_dialog_msg"
+							android:defaultValue="imap.gmail.com:993"
+							android:persistent="true"/>
+						<ListPreference android:key="server_protocol"
+							android:title="@string/ui_protocol_label"
+							android:summary="@string/ui_protocol_desc"
+							android:entries="@array/server_protocol_entries"
+							android:entryValues="@array/server_protocol_entryValues"
+							android:defaultValue="+ssl+"
+							android:persistent="true"/>
+					</PreferenceCategory>
+				</PreferenceScreen>
 			</PreferenceCategory>
 		</PreferenceScreen>
 	</PreferenceCategory>

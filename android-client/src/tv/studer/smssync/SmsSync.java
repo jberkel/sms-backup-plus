@@ -121,6 +121,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         
         pref = prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC);
         pref.setOnPreferenceChangeListener(this);
+        
+        pref = prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS);
+        pref.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -269,6 +272,11 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                             case AUTH_FAILED:
                                 statusLabel = getText(R.string.status_auth_failure);
                                 statusDetails = getString(R.string.status_auth_failure_details);
+                                status = STATUS_ERROR;
+                                break;
+                            case FOLDER_ERROR:
+                                statusLabel = getText(R.string.status_folder_error);
+                                statusDetails = getString(R.string.status_folder_error_details);
                                 status = STATUS_ERROR;
                                 break;
                             case CALC:
@@ -585,6 +593,23 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                     }
                 });
             }
+        } else if (PrefStore.PREF_SERVER_ADDRESS.equals(preference.getKey())) {
+                preference.setTitle(newValue.toString());
+                SharedPreferences prefs = preference.getSharedPreferences();
+                final String oldValue = prefs.getString(PrefStore.PREF_SERVER_ADDRESS, null);
+                if (!newValue.equals(oldValue)) {
+                    // We need to post the reset of sync state such that we do not interfere
+                    // with the current transaction of the SharedPreference.
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            PrefStore.clearSyncData(SmsSync.this);
+                            if (oldValue != null) {
+                                showDialog(DIALOG_SYNC_DATA_RESET);
+                            }
+                        }
+                    });
+                }
         } else if (PrefStore.PREF_IMAP_FOLDER.equals(preference.getKey())) {
             String imapFolder = newValue.toString();
             if (PrefStore.isValidImapFolder(imapFolder)) {
