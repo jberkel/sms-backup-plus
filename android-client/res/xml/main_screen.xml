@@ -48,6 +48,15 @@
 					android:entryValues="@array/max_items_per_sync_entries"
 					android:defaultValue="100"
 					android:persistent="true"/>
+
+				<ListPreference android:key="max_items_per_restore"
+					android:title="@string/ui_max_items_per_restore_label"
+					android:summary="@string/ui_max_items_per_restore_desc"
+					android:entries="@array/max_items_per_restore_entries"
+					android:entryValues="@array/max_items_per_restore_entries"
+					android:defaultValue="200"
+					android:persistent="true"/>
+
 			</PreferenceCategory>
 		</PreferenceScreen>
 	</PreferenceCategory>

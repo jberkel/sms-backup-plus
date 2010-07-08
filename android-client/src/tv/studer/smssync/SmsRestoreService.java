@@ -61,12 +61,21 @@ public class SmsRestoreService extends ServiceBase {
                 ImapStore.BackupFolder folder = getBackupFolder();
 
                 updateState(CALC);
+
                 Message[] msgs = folder.getMessages(null);
 
-                itemsToRestoreCount = msgs.length;
+                // java.util.Arrays.sort(msgs, new java.util.Comparator<Message>() {
+                //     public int compare(Message m1, Message m2) {
+                //         int i1 = Integer.valueOf(m1.getUid());
+                //         int i2 = Integer.valueOf(m2.getUid());
+                //
+                //         return i2 - i1;
+                //     }
+                // });
+                itemsToRestoreCount = max == -1 ? msgs.length : max;
 
                 long lastPublished = System.currentTimeMillis();
-                for (int i = 0; i < msgs.length; i++) {
+                for (int i = 0; i < itemsToRestoreCount; i++) {
                     if (sCanceled) {
                         Log.i(TAG, "Restore canceled by user.");
                         updateState(CANCELED);
@@ -85,7 +94,7 @@ public class SmsRestoreService extends ServiceBase {
                         lastPublished = System.currentTimeMillis();
                     }
                 }
-                publishProgress(msgs.length);
+                publishProgress(itemsToRestoreCount);
 
                 updateAllThreads();
 
@@ -178,7 +187,7 @@ public class SmsRestoreService extends ServiceBase {
 
         synchronized (this.getClass()) {
             if (!sIsRunning) {
-                new RestoreTask().execute(-1);
+                new RestoreTask().execute(PrefStore.getMaxItemsPerRestore(this));
             }
         }
     }

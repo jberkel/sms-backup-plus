@@ -54,6 +54,9 @@ public class PrefStore {
     /** Preference for storing the maximum items per sync. */
     static final String PREF_MAX_ITEMS_PER_SYNC = "max_items_per_sync";
 
+    /** Preference for storing the maximum items per restore. */
+    static final String PREF_MAX_ITEMS_PER_RESTORE = "max_items_per_restore";
+
     /** Preference for storing whether backed up messages should be marked as read on Gmail. */
     static final String PREF_MARK_AS_READ = "mark_as_read";
 
@@ -80,6 +83,8 @@ public class PrefStore {
 
     /** Default value for {@link #PREF_MAX_ITEMS_PER_SYNC}. */
     static final String DEFAULT_MAX_ITEMS_PER_SYNC = "100";
+
+    static final String DEFAULT_MAX_ITEMS_PER_RESTORE = "unlimited";
 
     /** Default value for {@link #PREF_MARK_AS_READ}. */
     static final boolean DEFAULT_MARK_AS_READ = false;
@@ -144,6 +149,18 @@ public class PrefStore {
                 DEFAULT_MAX_ITEMS_PER_SYNC);
         return Integer.valueOf(str);
     }
+
+    static int getMaxItemsPerRestore(Context ctx) {
+        String str = getSharedPreferences(ctx).getString(PREF_MAX_ITEMS_PER_RESTORE,
+                DEFAULT_MAX_ITEMS_PER_RESTORE);
+
+        try {
+            return Integer.valueOf(str);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
 
     /**
      * Returns whether an IMAP folder is valid. This is the case if the name
