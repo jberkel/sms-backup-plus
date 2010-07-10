@@ -3,7 +3,7 @@
 This is a mirror/fork of the svn repository at
 [http://code.google.com/p/android-sms](http://code.google.com/p/android-sms).
 
-## Building
+### Building
 
     $ cd android-client
     $ echo "sdk.dir=/path/to/android-sdk" > local.properties
