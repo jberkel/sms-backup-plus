@@ -8,12 +8,15 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
-import com.android.email.mail.Folder;
-import com.android.email.mail.Folder.FolderType;
-import com.android.email.mail.Folder.OpenMode;
-import com.android.email.mail.Message;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.store.ImapStore;
+import com.fsck.k9.K9;
+import com.fsck.k9.Account;
+import com.fsck.k9.Preferences;
+import com.fsck.k9.mail.Folder;
+import com.fsck.k9.mail.Folder.FolderType;
+import com.fsck.k9.mail.Folder.OpenMode;
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.store.ImapStore;
 
 import java.net.URLEncoder;
 
@@ -101,9 +104,17 @@ public abstract class ServiceBase extends Service {
             throw new IllegalArgumentException("password is null");
 
         String imapUri = "imap+ssl+://%s:%s@imap.gmail.com:993";
+        final String uri = String.format(imapUri, URLEncoder.encode(username),
+            URLEncoder.encode(password).replace("+", "%20"));
 
-        return new ImapStore(String.format(imapUri, URLEncoder.encode(username),
-                URLEncoder.encode(password).replace("+", "%20")));
+        K9.app = this;
+
+        Account acc = new Account(Preferences.getPreferences(this), null) {
+            @Override
+            public String getStoreUri() { return uri; }
+        };
+
+        return new ImapStore(acc);
     }
 
     protected void acquireWakeLock() {

@@ -29,13 +29,13 @@ import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
 import android.util.Log;
 
-import com.android.email.mail.Address;
-import com.android.email.mail.Flag;
-import com.android.email.mail.Message;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.Message.RecipientType;
-import com.android.email.mail.internet.MimeMessage;
-import com.android.email.mail.internet.TextBody;
+import com.fsck.k9.mail.Address;
+import com.fsck.k9.mail.Flag;
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.Message.RecipientType;
+import com.fsck.k9.mail.internet.MimeMessage;
+import com.fsck.k9.mail.internet.TextBody;
 
 public class CursorToMessage {
 

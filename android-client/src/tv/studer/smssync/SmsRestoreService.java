@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.android.email.mail.*;
-import com.android.email.mail.internet.BinaryTempFileBody;
+import com.fsck.k9.mail.*;
+import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import org.apache.commons.io.IOUtils;
 
 import java.util.HashSet;

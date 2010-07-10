@@ -20,9 +20,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Process;
 import android.util.Log;
-import com.android.email.mail.Folder;
-import com.android.email.mail.Message;
-import com.android.email.mail.MessagingException;
+import com.fsck.k9.mail.Folder;
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
 import tv.studer.smssync.CursorToMessage.ConversionResult;
 
 import java.util.List;
@@ -254,7 +254,7 @@ public class SmsSyncService extends ServiceBase {
                     Log.i(Consts.TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
                     PrefStore.setLastSync(SmsSyncService.this);
                     updateState(SmsSyncState.IDLE);
-                    folder.close(true);
+                    folder.close();
                     break;
                 }
 
