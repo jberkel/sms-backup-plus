@@ -355,7 +355,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                         lastSyncStr =
                                             getString(R.string.status_idle_details_never);
                                     } else {
-                                        lastSyncStr = new Date(lastSync).toLocaleString();
+                                        lastSyncStr = PrefStore.getMaxSyncedDate(SmsSync.this) != -1 ?
+                                                      new Date(PrefStore.getMaxSyncedDate(SmsSync.this)).toLocaleString() :
+                                                      new Date(lastSync).toLocaleString();
                                     }
                                     statusDetails = getString(R.string.status_idle_details,
                                             lastSyncStr);

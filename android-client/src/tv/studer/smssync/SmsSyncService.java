@@ -26,6 +26,7 @@ import com.fsck.k9.mail.MessagingException;
 import tv.studer.smssync.CursorToMessage.ConversionResult;
 
 import java.util.List;
+import java.util.Date;
 
 public class SmsSyncService extends ServiceBase {
 
@@ -339,7 +340,7 @@ public class SmsSyncService extends ServiceBase {
      */
     private void updateMaxSyncedDate(long maxSyncedDate) {
         PrefStore.setMaxSyncedDate(this, maxSyncedDate);
-        Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
+        Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate + " (" + new Date(maxSyncedDate) + ")");
     }
 
     // Actions available from other classes.
