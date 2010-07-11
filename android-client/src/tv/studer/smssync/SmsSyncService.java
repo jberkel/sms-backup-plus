@@ -78,9 +78,9 @@ public class SmsSyncService extends ServiceBase {
     public void onStart(final Intent intent, int startId) {
         super.onStart(intent, startId);
 
-        synchronized (this.getClass()) {
-            // Only start a sync if there's no other sync going on at this time.
-            if (!sIsRunning) {
+        synchronized(ServiceBase.class) {
+            // Only start a sync if there's no other sync / restore going on at this time.
+            if (!sIsRunning && !SmsRestoreService.isWorking()) {
                 acquireWakeLock();
                 sIsRunning = true;
                 // Start sync in new thread.

@@ -42,7 +42,7 @@ public class Alarms {
     }
 
     private static void scheduleSync(Context ctx, int inSeconds) {
-        if (!PrefStore.isEnableAutoSync(ctx)) {
+        if (!PrefStore.isEnableAutoSync(ctx) || SmsRestoreService.isWorking()) {
             Log.d(Consts.TAG, "Not scheduling sync because auto sync is disabled.");
             return;
         }

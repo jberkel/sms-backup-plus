@@ -177,7 +177,7 @@ public class SmsRestoreService extends ServiceBase {
     public void onStart(final Intent intent, int startId) {
         super.onStart(intent, startId);
 
-        synchronized (this.getClass()) {
+        synchronized (ServiceBase.class) {
             if (!sIsRunning) {
                 new RestoreTask().execute(-1);
             }
