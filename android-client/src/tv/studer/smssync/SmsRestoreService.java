@@ -46,7 +46,7 @@ public class SmsRestoreService extends ServiceBase {
         return itemsToRestoreCount;
     }
 
-    private class RestoreTask extends AsyncTask<Integer, Integer, Integer> {
+    class RestoreTask extends AsyncTask<Integer, Integer, Integer> {
         private Set<String> ids = new HashSet<String>();
         private Set<String> uids = new HashSet<String>();
         private int max;

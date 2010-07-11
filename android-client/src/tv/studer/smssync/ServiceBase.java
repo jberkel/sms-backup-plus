@@ -108,6 +108,7 @@ public abstract class ServiceBase extends Service {
             URLEncoder.encode(password).replace("+", "%20"));
 
         K9.app = this;
+        K9.DEBUG = true;
 
         Account acc = new Account(Preferences.getPreferences(this), null) {
             @Override
