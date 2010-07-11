@@ -62,16 +62,13 @@ public class SmsRestoreService extends ServiceBase {
 
                 updateState(CALC);
 
-                Message[] msgs = folder.getMessages(null);
+                Message[] msgs;
+                if (max > 0) {
+                    msgs = folder.getMessagesSince(null, max);
+                } else {
+                    msgs = folder.getMessages(null);
+                }
 
-                // java.util.Arrays.sort(msgs, new java.util.Comparator<Message>() {
-                //     public int compare(Message m1, Message m2) {
-                //         int i1 = Integer.valueOf(m1.getUid());
-                //         int i2 = Integer.valueOf(m2.getUid());
-                //
-                //         return i2 - i1;
-                //     }
-                // });
                 itemsToRestoreCount = max == -1 ? msgs.length : max;
 
                 long lastPublished = System.currentTimeMillis();

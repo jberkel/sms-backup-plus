@@ -139,6 +139,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         updateUsernameLabelFromPref();
         updateImapFolderLabelFromPref();
         updateMaxItemsPerSync(null);
+        updateMaxItemsPerRestore(null);
     }
 
 
@@ -742,7 +743,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     private void updateMaxItemsPerRestore(String newValue) {
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE);
         if (newValue == null) {
-            newValue = String.valueOf(PrefStore.getMaxItemsPerRestore(this));
+            int max = PrefStore.getMaxItemsPerRestore(this);
+            newValue = max == -1 ? PrefStore.DEFAULT_MAX_ITEMS_PER_RESTORE : String.valueOf(max);
         }
         pref.setTitle(newValue);
     }

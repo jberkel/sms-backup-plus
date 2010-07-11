@@ -84,7 +84,7 @@ public class PrefStore {
     /** Default value for {@link #PREF_MAX_ITEMS_PER_SYNC}. */
     static final String DEFAULT_MAX_ITEMS_PER_SYNC = "100";
 
-    static final String DEFAULT_MAX_ITEMS_PER_RESTORE = "unlimited";
+    static final String DEFAULT_MAX_ITEMS_PER_RESTORE = "All";
 
     /** Default value for {@link #PREF_MARK_AS_READ}. */
     static final boolean DEFAULT_MARK_AS_READ = false;
