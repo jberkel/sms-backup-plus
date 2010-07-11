@@ -9,10 +9,9 @@ import android.util.Log;
 import com.fsck.k9.mail.*;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import org.apache.commons.io.IOUtils;
-
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import static tv.studer.smssync.CursorToMessage.Headers.*;
 import static tv.studer.smssync.ServiceBase.SmsSyncState.*;
 
@@ -59,7 +58,7 @@ public class SmsRestoreService extends ServiceBase {
                 sIsRunning = true;
 
                 updateState(LOGIN);
-                Folder folder = getBackupFolder();
+                ImapStore.BackupFolder folder = getBackupFolder();
 
                 updateState(CALC);
                 Message[] msgs = folder.getMessages(null);
