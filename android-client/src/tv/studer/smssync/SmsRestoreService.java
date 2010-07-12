@@ -155,6 +155,12 @@ public class SmsRestoreService extends ServiceBase {
                 if ((type == SmsConsts.MESSAGE_TYPE_INBOX || type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
                     Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
                     ids.add(uri.getLastPathSegment());
+
+                    long timestamp = values.getAsLong(SmsConsts.DATE);
+
+                    if (getMaxSyncedDate() < timestamp) {
+                        updateMaxSyncedDate(timestamp);
+                    }
                     Log.d(TAG, "inserted " + uri);
                 } else {
                     Log.d(TAG, "ignoring sms");

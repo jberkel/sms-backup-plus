@@ -2,6 +2,8 @@ package tv.studer.smssync;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -122,6 +124,56 @@ public abstract class ServiceBase extends Service {
     protected void releaseWakeLock() {
         sWakeLock.release();
         sWifiLock.release();
+    }
+
+    /**
+     * Returns the maximum date of all SMS messages (except for drafts).
+     */
+    protected long getMaxItemDate() {
+        ContentResolver r = getContentResolver();
+        String selection = SmsConsts.TYPE + " <> ?";
+        String[] selectionArgs = new String[] {
+            String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
+        };
+        String[] projection = new String[] {
+            SmsConsts.DATE
+        };
+        Cursor result = r.query(SMS_PROVIDER, projection, selection, selectionArgs,
+                SmsConsts.DATE + " DESC LIMIT 1");
+
+        try
+        {
+            if (result.moveToFirst()) {
+                return result.getLong(0);
+            } else {
+                return PrefStore.DEFAULT_MAX_SYNCED_DATE;
+            }
+        }
+        catch (RuntimeException e)
+        {
+            result.close();
+            throw e;
+        }
+    }
+
+    /**
+     * Returns the largest date of all messages that have successfully been synced
+     * with the server.
+     */
+    protected long getMaxSyncedDate() {
+        return PrefStore.getMaxSyncedDate(this);
+    }
+
+    /**
+     * Persists the provided ID so it can later on be retrieved using
+     * {@link #getMaxSyncedDate()}. This should be called when after each
+     * successful sync request to a server.
+     *
+     * @param maxSyncedId
+     */
+    protected void updateMaxSyncedDate(long maxSyncedDate) {
+        PrefStore.setMaxSyncedDate(this, maxSyncedDate);
+        Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
     }
 
     /**

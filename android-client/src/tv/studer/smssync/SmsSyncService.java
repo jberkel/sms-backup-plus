@@ -292,55 +292,6 @@ public class SmsSyncService extends ServiceBase {
         return r.query(SMS_PROVIDER, null, selection, selectionArgs, sortOrder);
     }
 
-    /**
-     * Returns the maximum date of all SMS messages (except for drafts).
-     */
-    private long getMaxItemDate() {
-        ContentResolver r = getContentResolver();
-        String selection = SmsConsts.TYPE + " <> ?";
-        String[] selectionArgs = new String[] {
-            String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
-        };
-        String[] projection = new String[] {
-            SmsConsts.DATE
-        };
-        Cursor result = r.query(SMS_PROVIDER, projection, selection, selectionArgs,
-                SmsConsts.DATE + " DESC LIMIT 1");
-
-        try
-        {
-            if (result.moveToFirst()) {
-                return result.getLong(0);
-            } else {
-                return PrefStore.DEFAULT_MAX_SYNCED_DATE;
-            }
-        }
-        catch (RuntimeException e)
-        {
-            result.close();
-            throw e;
-        }
-    }
-
-    /**
-     * Returns the largest date of all messages that have successfully been synced
-     * with the server.
-     */
-    private long getMaxSyncedDate() {
-        return PrefStore.getMaxSyncedDate(this);
-    }
-
-    /**
-     * Persists the provided ID so it can later on be retrieved using
-     * {@link #getMaxSyncedDate()}. This should be called when after each
-     * successful sync request to a server.
-     *
-     * @param maxSyncedId
-     */
-    private void updateMaxSyncedDate(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDate(this, maxSyncedDate);
-        Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
-    }
 
     // Actions available from other classes.
 
