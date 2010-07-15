@@ -121,6 +121,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC).setOnPreferenceChangeListener(this);
         prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setOnPreferenceChangeListener(this);
         prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC).setOnPreferenceChangeListener(this);
+        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE).setOnPreferenceChangeListener(this);
 
         ServiceBase.smsSync = this;
     }
@@ -138,6 +139,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         updateUsernameLabelFromPref();
         updateImapFolderLabelFromPref();
         updateMaxItemsPerSync(null);
+        updateMaxItemsPerRestore(null);
     }
 
 
@@ -353,7 +355,9 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                         lastSyncStr =
                                             getString(R.string.status_idle_details_never);
                                     } else {
-                                        lastSyncStr = new Date(lastSync).toLocaleString();
+                                        lastSyncStr = PrefStore.getMaxSyncedDate(SmsSync.this) != -1 ?
+                                                      new Date(PrefStore.getMaxSyncedDate(SmsSync.this)).toLocaleString() :
+                                                      new Date(lastSync).toLocaleString();
                                     }
                                     statusDetails = getString(R.string.status_idle_details,
                                             lastSyncStr);
@@ -724,6 +728,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             }
         } else if (PrefStore.PREF_MAX_ITEMS_PER_SYNC.equals(preference.getKey())) {
             updateMaxItemsPerSync((String) newValue);
+        } else if (PrefStore.PREF_MAX_ITEMS_PER_RESTORE.equals(preference.getKey())) {
+            updateMaxItemsPerRestore((String) newValue);
         }
         return true;
     }
@@ -732,6 +738,15 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC);
         if (newValue == null) {
             newValue = String.valueOf(PrefStore.getMaxItemsPerSync(this));
+        }
+        pref.setTitle(newValue);
+    }
+
+    private void updateMaxItemsPerRestore(String newValue) {
+        Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE);
+        if (newValue == null) {
+            int max = PrefStore.getMaxItemsPerRestore(this);
+            newValue = max == -1 ? PrefStore.DEFAULT_MAX_ITEMS_PER_RESTORE : String.valueOf(max);
         }
         pref.setTitle(newValue);
     }

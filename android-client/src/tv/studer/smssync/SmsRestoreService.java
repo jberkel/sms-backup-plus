@@ -6,13 +6,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.android.email.mail.*;
-import com.android.email.mail.internet.BinaryTempFileBody;
+import com.fsck.k9.mail.*;
+import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import org.apache.commons.io.IOUtils;
-
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import static tv.studer.smssync.CursorToMessage.Headers.*;
 import static tv.studer.smssync.ServiceBase.SmsSyncState.*;
 
@@ -46,7 +45,7 @@ public class SmsRestoreService extends ServiceBase {
         return itemsToRestoreCount;
     }
 
-    private class RestoreTask extends AsyncTask<Integer, Integer, Integer> {
+    class RestoreTask extends AsyncTask<Integer, Integer, Integer> {
         private Set<String> ids = new HashSet<String>();
         private Set<String> uids = new HashSet<String>();
         private int max;
@@ -59,15 +58,21 @@ public class SmsRestoreService extends ServiceBase {
                 sIsRunning = true;
 
                 updateState(LOGIN);
-                Folder folder = getBackupFolder();
+                ImapStore.BackupFolder folder = getBackupFolder();
 
                 updateState(CALC);
-                Message[] msgs = folder.getMessages(null);
 
-                itemsToRestoreCount = msgs.length;
+                Message[] msgs;
+                if (max > 0) {
+                    msgs = folder.getMessagesSince(null, max);
+                } else {
+                    msgs = folder.getMessages(null);
+                }
+
+                itemsToRestoreCount = max == -1 ? msgs.length : max;
 
                 long lastPublished = System.currentTimeMillis();
-                for (int i = 0; i < msgs.length; i++) {
+                for (int i = 0; i < itemsToRestoreCount; i++) {
                     if (sCanceled) {
                         Log.i(TAG, "Restore canceled by user.");
                         updateState(CANCELED);
@@ -86,7 +91,7 @@ public class SmsRestoreService extends ServiceBase {
                         lastPublished = System.currentTimeMillis();
                     }
                 }
-                publishProgress(msgs.length);
+                publishProgress(itemsToRestoreCount);
 
                 updateAllThreads();
 
@@ -185,7 +190,7 @@ public class SmsRestoreService extends ServiceBase {
 
         synchronized (ServiceBase.class) {
             if (!sIsRunning) {
-                new RestoreTask().execute(-1);
+                new RestoreTask().execute(PrefStore.getMaxItemsPerRestore(this));
             }
         }
     }

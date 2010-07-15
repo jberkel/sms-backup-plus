@@ -10,14 +10,12 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
-import com.android.email.mail.Folder;
-import com.android.email.mail.Folder.FolderType;
-import com.android.email.mail.Folder.OpenMode;
-import com.android.email.mail.Message;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.store.ImapStore;
+
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
 
 import java.net.URLEncoder;
+
 
 public abstract class ServiceBase extends Service {
 
@@ -70,42 +68,13 @@ public abstract class ServiceBase extends Service {
         return null;
     }
 
-    protected Folder getBackupFolder()
+    protected ImapStore.BackupFolder getBackupFolder()
             throws AuthenticationErrorException {
         try {
-            ImapStore imapStore =  getImapStore();
-
-            String label = PrefStore.getImapFolder(this);
-            if (label == null)
-                throw new IllegalArgumentException("label is null");
-
-            Folder folder = imapStore.getFolder(label);
-
-            if (!folder.exists()) {
-                Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
-                folder.create(FolderType.HOLDS_MESSAGES);
-            }
-            folder.open(OpenMode.READ_WRITE);
-            return folder;
+            return new ImapStore(this).getBackupFolder();
         } catch (MessagingException e) {
             throw new AuthenticationErrorException(e);
         }
-    }
-
-    protected ImapStore getImapStore()
-        throws MessagingException {
-        String username = PrefStore.getLoginUsername(this);
-        String password = PrefStore.getLoginPassword(this);
-
-        if (username == null)
-            throw new IllegalArgumentException("username is null");
-        if (password == null)
-            throw new IllegalArgumentException("password is null");
-
-        String imapUri = "imap+ssl+://%s:%s@imap.gmail.com:993";
-
-        return new ImapStore(String.format(imapUri, URLEncoder.encode(username),
-                URLEncoder.encode(password).replace("+", "%20")));
     }
 
     protected void acquireWakeLock() {
