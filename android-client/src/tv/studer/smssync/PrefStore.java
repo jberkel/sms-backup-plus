@@ -57,6 +57,9 @@ public class PrefStore {
     /** Preference for storing whether backed up messages should be marked as read on Gmail. */
     static final String PREF_MARK_AS_READ = "mark_as_read";
 
+    /** Preference for storing whether restored messages should be marked as read. */
+    static final String PREF_MARK_AS_READ_ON_RESTORE = "mark_as_read_on_restore";
+
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
 
@@ -80,6 +83,8 @@ public class PrefStore {
 
     /** Default value for {@link #PREF_MARK_AS_READ}. */
     static final boolean DEFAULT_MARK_AS_READ = false;
+
+    static final boolean DEFAULT_MARK_AS_READ_ON_RESTORE = true;
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -203,6 +208,16 @@ public class PrefStore {
     static void setMarkAsRead(Context ctx, boolean markAsRead) {
         Editor editor = getSharedPreferences(ctx).edit();
         editor.putBoolean(PREF_MARK_AS_READ, markAsRead);
+        editor.commit();
+    }
+
+    static boolean getMarkAsReadOnRestore(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_MARK_AS_READ_ON_RESTORE, DEFAULT_MARK_AS_READ_ON_RESTORE);
+    }
+
+    static void setMarkAsReadOnRestore(Context ctx, boolean markAsRead) {
+        Editor editor = getSharedPreferences(ctx).edit();
+        editor.putBoolean(PREF_MARK_AS_READ_ON_RESTORE, markAsRead);
         editor.commit();
     }
 

@@ -72,7 +72,13 @@
 	<string name="ui_max_items_per_sync_label">Items per backup</string>
 	<string name="ui_max_items_per_sync_desc">Maximum number of items per backup.</string>
 	
-	<string name="ui_mark_as_read_label">Mark as read</string><string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string><string name="ui_enable_auto_sync_label">Auto backup</string>
+	<string name="ui_mark_as_read_label">Mark as read</string>
+	<string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
+
+	<string name="ui_mark_as_read_restore_label">Mark as read (restore)</string>
+	<string name="ui_mark_as_read_restore_desc">Whether to mark all restored messages as read or not.</string>
+
+	<string name="ui_enable_auto_sync_label">Auto backup</string>
 	<string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
 	
 	<string name="ui_dialog_missing_credentials_title">Login information</string>

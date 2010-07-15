@@ -215,11 +215,10 @@ public class SmsRestoreService extends ServiceBase {
         values.put(SmsConsts.ADDRESS, getHeader(message, ADDRESS));
         values.put(SmsConsts.TYPE, getHeader(message, TYPE));
         values.put(SmsConsts.PROTOCOL, getHeader(message, PROTOCOL));
-        values.put(SmsConsts.READ, getHeader(message, READ));
         values.put(SmsConsts.SERVICE_CENTER, getHeader(message, SERVICE_CENTER));
         values.put(SmsConsts.DATE, getHeader(message, DATE));
         values.put(SmsConsts.STATUS, getHeader(message, STATUS));
-
+        values.put(SmsConsts.READ, PrefStore.getMarkAsReadOnRestore(this) ? "1" : getHeader(message, READ));
         return values;
     }
 
