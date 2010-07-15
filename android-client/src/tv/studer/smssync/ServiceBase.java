@@ -23,7 +23,7 @@ public abstract class ServiceBase extends Service {
     public static SmsSync smsSync;
 
     enum SmsSyncState {
-        IDLE, CALC, LOGIN, SYNC, RESTORE, AUTH_FAILED, GENERAL_ERROR, CANCELED;
+        IDLE, CALC, LOGIN, SYNC, RESTORE, AUTH_FAILED, GENERAL_ERROR, FOLDER_ERROR, CANCELED;
     }
 
     /**

@@ -24,6 +24,7 @@ import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import tv.studer.smssync.CursorToMessage.ConversionResult;
+import tv.studer.smssync.ServiceBase.SmsSyncState;
 
 import java.util.List;
 import java.util.Date;
@@ -71,7 +72,7 @@ public class SmsSyncService extends ServiceBase {
      * should finish working ASAP.
      */
     private static boolean sCanceled;
-
+    
 
     @Override
     //TODO(chstuder): Clean this flow up a bit and split it into multiple
@@ -130,6 +131,10 @@ public class SmsSyncService extends ServiceBase {
                             Log.i(Consts.TAG, "", e);
                             sLastError = e.getLocalizedMessage();
                             updateState(SmsSyncState.AUTH_FAILED);
+                        } catch (FolderErrorException e) {
+                            Log.i(Consts.TAG, "", e);
+                            sLastError = e.getLocalizedMessage();
+                            updateState(SmsSyncState.FOLDER_ERROR);
                         } finally {
                             stopSelf();
                             Alarms.scheduleRegularSync(SmsSyncService.this);
@@ -188,9 +193,10 @@ public class SmsSyncService extends ServiceBase {
      * @param skipMessages whether to skip all messages on this device.
      * @throws GeneralErrorException Thrown when there there was an error during
      *             sync.
+     * @throws FolderErrorException Thrown when there was an error accessing or creating the folder
      */
     private void backup(boolean skipMessages) throws GeneralErrorException,
-            AuthenticationErrorException {
+            AuthenticationErrorException, FolderErrorException {
         Log.i(Consts.TAG, "Starting backup...");
         sCanceled = false;
 
@@ -294,58 +300,6 @@ public class SmsSyncService extends ServiceBase {
     }
 
     /**
-     * Returns the maximum date of all SMS messages (except for drafts).
-     */
-    private long getMaxItemDate() {
-        ContentResolver r = getContentResolver();
-        String selection = SmsConsts.TYPE + " <> ?";
-        String[] selectionArgs = new String[] {
-            String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
-        };
-        String[] projection = new String[] {
-            SmsConsts.DATE
-        };
-        Cursor result = r.query(SMS_PROVIDER, projection, selection, selectionArgs,
-                SmsConsts.DATE + " DESC LIMIT 1");
-
-        try
-        {
-            if (result.moveToFirst()) {
-                return result.getLong(0);
-            } else {
-                return PrefStore.DEFAULT_MAX_SYNCED_DATE;
-            }
-        }
-        catch (RuntimeException e)
-        {
-            result.close();
-            throw e;
-        }
-    }
-
-    /**
-     * Returns the largest date of all messages that have successfully been synced
-     * with the server.
-     */
-    private long getMaxSyncedDate() {
-        return PrefStore.getMaxSyncedDate(this);
-    }
-
-    /**
-     * Persists the provided ID so it can later on be retrieved using
-     * {@link #getMaxSyncedDate()}. This should be called when after each
-     * successful sync request to a server.
-     *
-     * @param maxSyncedId
-     */
-    private void updateMaxSyncedDate(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDate(this, maxSyncedDate);
-        Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate + " (" + new Date(maxSyncedDate) + ")");
-    }
-
-    // Actions available from other classes.
-
-    /**
      * Cancels the current ongoing backup.
      *
      * TODO(chstuder): Clean up this interface a bit. It's strange the backup is
@@ -445,4 +399,11 @@ public class SmsSyncService extends ServiceBase {
 
 
 
+    public static class FolderErrorException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        public FolderErrorException(Throwable t) {
+            super(t.getLocalizedMessage(), t);
+        }
+    }
 }

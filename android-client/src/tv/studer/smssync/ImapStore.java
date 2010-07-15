@@ -29,18 +29,19 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         super(new Account(Preferences.getPreferences(context), null) {
             @Override
             public String getStoreUri() {
-                 String username = PrefStore.getLoginUsername(context);
-                 String password = PrefStore.getLoginPassword(context);
+                String username = PrefStore.getLoginUsername(context);
+                String password = PrefStore.getLoginPassword(context);
 
-                 if (username == null)
+                if (username == null)
                      throw new IllegalArgumentException("username is null");
-                 if (password == null)
+                if (password == null)
                      throw new IllegalArgumentException("password is null");
-
-
-                 return String.format("imap+ssl+://%s:%s@imap.gmail.com:993",
+                // TODO use URI ctor
+                return String.format(Consts.IMAP_URI,
+                     PrefStore.getServerProtocol(context),
                      URLEncoder.encode(username),
-                     URLEncoder.encode(password).replace("+", "%20"));
+                     URLEncoder.encode(password).replace("+", "%20"),
+                     PrefStore.getServerAddress(context));
             }
         });
 

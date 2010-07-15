@@ -23,6 +23,9 @@ final class Consts {
     /** TAG used for logging. */
     static final String TAG = "SmsSync";
 
+    /** Gmail IMAP URI. */
+    static final String IMAP_URI = "imap%s://%s:%s@%s";
+    
     /** Number of times a failed sync attempt should be retried when initiated by an alarm. */
     static final int NUM_AUTO_RETRIES = 2;
 

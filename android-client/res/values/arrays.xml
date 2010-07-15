@@ -15,4 +15,19 @@
       <item>All</item>
   </string-array>
 
+  <string-array name="server_protocol_entryValues">
+      <item>+ssl+</item>
+      <item>+ssl</item>
+      <item>+tls+</item>
+      <item>+tls</item>
+      <item></item>
+  </string-array>
+
+  <string-array name="server_protocol_entries">
+      <item>SSL (Required)</item>
+      <item>SSL (Optional)</item>
+      <item>TLS (Required)</item>
+      <item>TLS (Optional)</item>
+      <item>None</item>        
+  </string-array>
 </resources>
