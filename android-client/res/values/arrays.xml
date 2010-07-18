@@ -11,7 +11,7 @@
     <item>20</item>
     <item>200</item>
     <item>2000</item>
-    <item>All</item>
+    <item>@string/all_messages</item>
   </string-array>
   <string-array name="server_protocol_entryValues">
     <item>+ssl+</item>

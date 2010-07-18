@@ -32,7 +32,7 @@
 					android:title="@string/ui_mark_as_read_restore_label"
 					android:summary="@string/ui_mark_as_read_restore_desc"
 					android:persistent="true"
-					android:defaultValue="false"/>
+					android:defaultValue="true"/>
 
 				<EditTextPreference android:key="imap_folder"
 					android:title="@string/ui_imap_folder_label"
@@ -41,6 +41,7 @@
 					android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
 					android:persistent="true"
 					android:defaultValue="SMS"/>
+
 				<ListPreference android:key="max_items_per_sync"
 					android:title="@string/ui_max_items_per_sync_label"
 					android:summary="@string/ui_max_items_per_sync_desc"
@@ -54,13 +55,14 @@
 					android:summary="@string/ui_max_items_per_restore_desc"
 					android:entries="@array/max_items_per_restore_entries"
 					android:entryValues="@array/max_items_per_restore_entries"
-					android:defaultValue="200"
+					android:defaultValue="@string/all_messages"
 					android:persistent="true"/>
 
 				<PreferenceScreen
 					android:title="@string/ui_settings_advanced_server_label"
 					android:summary="@string/ui_settings_advanced_server_desc">
 					<PreferenceCategory android:title="@string/ui_settings_advanced_server_cat_label">
+
 						<EditTextPreference android:key="server_address"
 							android:title="@string/ui_server_label"
 							android:summary="@string/ui_server_desc"
@@ -68,6 +70,7 @@
 							android:dialogMessage="@string/ui_server_dialog_msg"
 							android:defaultValue="imap.gmail.com:993"
 							android:persistent="true"/>
+
 						<ListPreference android:key="server_protocol"
 							android:title="@string/ui_protocol_label"
 							android:summary="@string/ui_protocol_desc"
