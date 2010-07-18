@@ -1,7 +1,6 @@
 package tv.studer.smssync;
 
 import android.content.Context;
-import com.fsck.k9.K9;
 import com.fsck.k9.Preferences;
 import com.fsck.k9.Account;
 import com.fsck.k9.Preferences;
@@ -46,8 +45,6 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         });
 
         this.context = context;
-        K9.app = context;
-        K9.DEBUG = true;
     }
 
     public BackupFolder getBackupFolder() throws MessagingException
