@@ -281,7 +281,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         // TODO jberkel this should be an enum
 
                         int STATUS_IDLE = 0;
@@ -295,7 +294,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                         boolean progressIndeterminate = false;
                         int progressMax = 1;
                         int progressVal = 0;
-
+                        //Log.d(TAG, "newState: " + newState);
                         switch (newState) {
                             case AUTH_FAILED:
                                 // TODO jberkel possibility to do dynamic string lookups?
@@ -349,7 +348,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                     statusDetails = getResources().getQuantityString(
                                                 R.plurals.status_restore_done_details,
                                                 SmsRestoreService.restoredCount,
-                                                SmsRestoreService.restoredCount);
+                                                SmsRestoreService.restoredCount,
+                                                SmsRestoreService.duplicateCount);
 
                                     progressIndeterminate = false;
                                     status = STATUS_DONE;

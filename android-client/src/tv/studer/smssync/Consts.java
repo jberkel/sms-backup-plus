@@ -46,8 +46,6 @@ final class Consts {
 
     /** Market link to details of this application. */
     static final String URL_MARKET_SEARCH =
-        "http://market.android.com/search?q=pname:tv.studer.smssync";
-
-
+        "http://market.android.com/search?q=pname:com.zegoggles.smssync";
 
 }

@@ -25,7 +25,7 @@ public class SmsRestoreService extends ServiceBase {
     private static SmsSyncState sState;
     private static boolean sCanceled = false;
 
-    public static int restoredCount;
+    public static int restoredCount, duplicateCount;
 
     public static void cancel() {
         sCanceled = true;
@@ -119,9 +119,12 @@ public class SmsRestoreService extends ServiceBase {
         }
 
         protected void onPostExecute(Integer result) {
-            Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
-            restoredCount = result;
-            updateState(IDLE);
+            if (result != -1) {
+                Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
+                restoredCount = result;
+                duplicateCount = uids.size() - result;
+                updateState(IDLE);
+            }
         }
 
         private void updateAllThreads() {
