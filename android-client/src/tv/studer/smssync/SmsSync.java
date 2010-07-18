@@ -348,8 +348,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                                 } else if (oldState == SmsSyncState.RESTORE) {
                                     statusDetails = getResources().getQuantityString(
                                                 R.plurals.status_restore_done_details,
-                                                SmsRestoreService.getCurrentRestoredItems(),
-                                                SmsRestoreService.getCurrentRestoredItems());
+                                                SmsRestoreService.restoredCount,
+                                                SmsRestoreService.restoredCount);
 
                                     progressIndeterminate = false;
                                     status = STATUS_DONE;

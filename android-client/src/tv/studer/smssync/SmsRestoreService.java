@@ -25,6 +25,8 @@ public class SmsRestoreService extends ServiceBase {
     private static SmsSyncState sState;
     private static boolean sCanceled = false;
 
+    public static int restoredCount;
+
     public static void cancel() {
         sCanceled = true;
     }
@@ -46,9 +48,10 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     class RestoreTask extends AsyncTask<Integer, Integer, Integer> {
-        private Set<String> ids = new HashSet<String>();
+        private Set<String> insertedIds = new HashSet<String>();
         private Set<String> uids = new HashSet<String>();
         private int max;
+        private int ignored;
 
         protected java.lang.Integer doInBackground(Integer... params) {
             this.max = params.length > 0 ? params[0] : -1;
@@ -78,7 +81,7 @@ public class SmsRestoreService extends ServiceBase {
                         updateState(CANCELED);
 
                         updateAllThreads();
-                        return ids.size();
+                        return insertedIds.size();
                     }
                     importMessage(msgs[i]);
 
@@ -95,10 +98,7 @@ public class SmsRestoreService extends ServiceBase {
 
                 updateAllThreads();
 
-                updateState(IDLE);
-
-                Log.d(TAG, "finished (" + ids.size() + "/" + uids.size() + ")");
-                return ids.size();
+                return insertedIds.size();
             } catch (AuthenticationErrorException authError) {
                 Log.e(TAG, "error", authError);
                 updateState(AUTH_FAILED);
@@ -120,6 +120,9 @@ public class SmsRestoreService extends ServiceBase {
         }
 
         protected void onPostExecute(Integer result) {
+            Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
+            restoredCount = result;
+            updateState(IDLE);
         }
 
         private void updateAllThreads() {
@@ -127,7 +130,7 @@ public class SmsRestoreService extends ServiceBase {
             // unfortunately there's no direct way to do that in the SDK, but passing a negative conversation
             // id to delete will to the trick
 
-            if (ids.isEmpty())
+            if (insertedIds.isEmpty())
                 return;
 
             // execute in background, might take some time
@@ -159,7 +162,7 @@ public class SmsRestoreService extends ServiceBase {
                 // only restore inbox messages and sent messages - otherwise sms might get sent on restore
                 if ((type == SmsConsts.MESSAGE_TYPE_INBOX || type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
                     Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
-                    ids.add(uri.getLastPathSegment());
+                    insertedIds.add(uri.getLastPathSegment());
 
                     long timestamp = values.getAsLong(SmsConsts.DATE);
 

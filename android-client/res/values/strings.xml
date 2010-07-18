@@ -37,6 +37,8 @@
     <item quantity="one">Successfully restored <xliff:g id="total_items">%1$d</xliff:g> item.</item>
     <item quantity="other">Successfully restored <xliff:g id="total_items">%1$d</xliff:g> items.</item>
   </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d items successfully restored.</string>
   
   <string name="status_unknown_error">Error</string>
   <string name="status_unknown_error_details">Error during backup/restore:\n<xliff:g id="error_description">%1$s</xliff:g></string>
@@ -45,7 +47,6 @@
   <string name="status_calc_details">Calculating\u2026</string>
   <string name="status_canceled">Canceled</string>
   <string name="status_canceled_details">%1$d/%2$d items successfully backed up.</string>
-  <string name="status_restore_canceled_details">%1$d/%2$d items successfully restored.</string>
   <string name="status_folder_error">Label error</string>
   <string name="status_folder_error_details">Could not access or create the label/folder.</string>
   
