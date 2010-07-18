@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -143,6 +144,10 @@ public abstract class ServiceBase extends Service {
     protected void updateMaxSyncedDate(long maxSyncedDate) {
         PrefStore.setMaxSyncedDate(this, maxSyncedDate);
         Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
+    }
+
+    public ConnectivityManager getConnectivityManager() {
+        return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     /**

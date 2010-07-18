@@ -72,20 +72,27 @@ public class SmsSyncService extends ServiceBase {
      * should finish working ASAP.
      */
     private static boolean sCanceled;
-    
+
 
     @Override
     //TODO(chstuder): Clean this flow up a bit and split it into multiple
     // methods. Make clean distinction between onStart(...) and backup(...).
     public void onStart(final Intent intent, int startId) {
         super.onStart(intent, startId);
+        boolean background = intent.hasExtra(Consts.KEY_NUM_RETRIES);
+
+        if (background && !getConnectivityManager().getBackgroundDataSetting()) {
+            Log.d(Consts.TAG, "SmsSyncService.onStart(): Background data disabled");
+            return;
+        }
 
         synchronized(ServiceBase.class) {
             // Only start a sync if there's no other sync / restore going on at this time.
             if (!sIsRunning && !SmsRestoreService.isWorking()) {
                 acquireWakeLock();
                 sIsRunning = true;
-                // Start sync in new thread.
+                // TODO use AsyncTask
+                // Start sync in new thread
                 new Thread() {
                     public void run() {
                         // Lower thread priority a little. We're not the UI.

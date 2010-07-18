@@ -51,7 +51,6 @@ public class SmsRestoreService extends ServiceBase {
         private Set<String> insertedIds = new HashSet<String>();
         private Set<String> uids = new HashSet<String>();
         private int max;
-        private int ignored;
 
         protected java.lang.Integer doInBackground(Integer... params) {
             this.max = params.length > 0 ? params[0] : -1;
