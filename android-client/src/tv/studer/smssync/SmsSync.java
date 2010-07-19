@@ -74,10 +74,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
     private static final int MENU_INFO = 0;
 
-    private static final int MENU_SHARE = 1;
-
-    private static final int MENU_MARKET = 2;
-
     private StatusPreference mStatusPref;
 
     private static final String TAG = "SmsSync";
@@ -144,7 +140,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case MENU_INFO:
-                // openLink(Consts.URL_INFO_LINK);
                 showDialog(DIALOG_ABOUT);
                 return true;
         }
