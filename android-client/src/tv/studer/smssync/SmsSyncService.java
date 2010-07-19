@@ -25,6 +25,7 @@ import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import tv.studer.smssync.CursorToMessage.ConversionResult;
 import tv.studer.smssync.ServiceBase.SmsSyncState;
+import com.zegoggles.smssync.R;
 
 import java.util.List;
 import java.util.Date;

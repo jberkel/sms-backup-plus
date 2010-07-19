@@ -21,7 +21,7 @@
 		<PreferenceScreen
 			android:title="@string/ui_settings_advanced_label"
 			android:summary="@string/ui_settings_advanced_desc">
-			<PreferenceCategory android:title="@string/ui_settings_advanced_cat_label">
+			<PreferenceCategory>
 				<CheckBoxPreference android:key="mark_as_read"
 					android:title="@string/ui_mark_as_read_label"
 					android:summary="@string/ui_mark_as_read_desc"
@@ -61,7 +61,7 @@
 				<PreferenceScreen
 					android:title="@string/ui_settings_advanced_server_label"
 					android:summary="@string/ui_settings_advanced_server_desc">
-					<PreferenceCategory android:title="@string/ui_settings_advanced_server_cat_label">
+					<PreferenceCategory>
 
 						<EditTextPreference android:key="server_address"
 							android:title="@string/ui_server_label"

@@ -15,6 +15,7 @@
 
 package tv.studer.smssync;
 
+import com.zegoggles.smssync.R;
 import tv.studer.smssync.ServiceBase.SmsSyncState;
 
 import java.io.BufferedReader;
@@ -96,25 +97,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         mStatusPref = new StatusPreference(this);
         mStatusPref.setSelectable(false);
 
-        int sdkLevel = 1;
-        try {
-            sdkLevel = Integer.parseInt(Build.VERSION.SDK);
-        } catch (NumberFormatException nfe) {
-            // ignore (assume sdkLevel == 1)
-        }
-
-        if (sdkLevel < 3) {
-            // Older versions don't show the title bar for PreferenceActivity
-            PreferenceCategory cat = new PreferenceCategory(this);
-            cat.setOrder(0);
-            getPreferenceScreen().addPreference(cat);
-            cat.setTitle(R.string.ui_status_label);
-            cat.addPreference(mStatusPref);
-        } else {
-            // Newer SDK version show the title bar for PreferenceActivity
-            mStatusPref.setOrder(0);
-            getPreferenceScreen().addPreference(mStatusPref);
-        }
+        mStatusPref.setOrder(0);
+        getPreferenceScreen().addPreference(mStatusPref);
 
         prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(this);
         prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER).setOnPreferenceChangeListener(this);
@@ -150,10 +134,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
         menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
                 android.R.drawable.ic_menu_info_details);
-        menu.add(0, MENU_SHARE, 1, R.string.menu_share).setIcon(
-                android.R.drawable.ic_menu_share);
-        menu.add(0, MENU_MARKET, 2, R.string.menu_market).setIcon(
-                R.drawable.ic_menu_update);
 
         return true;
     }
@@ -167,12 +147,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 // openLink(Consts.URL_INFO_LINK);
                 showDialog(DIALOG_ABOUT);
                 return true;
-            case MENU_SHARE:
-                share();
-                return true;
-            case MENU_MARKET:
-                openLink(Consts.URL_MARKET_SEARCH);
-                return true;
         }
         return false;
     }
@@ -181,16 +155,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
         startActivity(intent);
     }
-
-    private void share() {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:"));
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
-        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_body,
-                Consts.URL_MARKET_SEARCH, Consts.URL_INFO_LINK));
-        startActivity(intent);
-    }
-
-
 
     private void updateUsernameLabelFromPref() {
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
@@ -615,20 +579,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 builder.setCustomTitle(null);
                 builder.setPositiveButton(android.R.string.ok, null);
 
-                DialogInterface.OnClickListener aboutEmailListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(getString(R.string.about_email_uri)));
-                        intent.putExtra(Intent.EXTRA_SUBJECT,
-                                getString(R.string.about_email_subject,
-                                        getString(R.string.app_name),
-                                        getString(R.string.app_version)));
-                        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.about_email_content));
-                        startActivity(intent);
-                    }
-                };
-                builder.setNegativeButton(R.string.about_email_button, aboutEmailListener);
                 View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
                 webView.loadData(getAboutText(), "text/html", "utf-8");
