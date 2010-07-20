@@ -15,6 +15,15 @@
 
 package tv.studer.smssync;
 
+import oauth.signpost.OAuth;
+import oauth.signpost.OAuthProviderListener;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import oauth.signpost.exception.OAuthException;
+import oauth.signpost.exception.OAuthNotAuthorizedException;
+import oauth.signpost.http.HttpRequest;
+import oauth.signpost.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+
 import com.zegoggles.smssync.R;
 import tv.studer.smssync.ServiceBase.SmsSyncState;
 
@@ -24,6 +33,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
+import android.app.NotificationManager;
+import android.app.Notification;
+import android.widget.Toast;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
@@ -31,12 +43,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.app.PendingIntent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
@@ -53,26 +67,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
-
 /**
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
 public class SmsSync extends PreferenceActivity implements OnPreferenceChangeListener {
-    private static final int DIALOG_MISSING_CREDENTIALS = 1;
-
-    private static final int DIALOG_FIRST_SYNC = 2;
-
-    private static final int DIALOG_SYNC_DATA_RESET = 3;
-
-    private static final int DIALOG_INVALID_IMAP_FOLDER = 4;
-
-    private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 5;
-
-    private static final int DIALOG_ABOUT = 6;
-
     private static final int MENU_INFO = 0;
+    private static final int DIALOG_MISSING_CREDENTIALS = 1;
+    private static final int DIALOG_FIRST_SYNC = 2;
+    private static final int DIALOG_SYNC_DATA_RESET = 3;
+    private static final int DIALOG_INVALID_IMAP_FOLDER = 4;
+    private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 5;
+    private static final int DIALOG_ABOUT = 6;
+    private static final int DIALOG_DISCONNECT = 7;
+    private static final int DIALOG_CONNECT = 8;
 
     private StatusPreference mStatusPref;
 
@@ -104,6 +112,15 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE).setOnPreferenceChangeListener(this);
         prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS).setOnPreferenceChangeListener(this);
 
+        updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object change) {
+                boolean newValue  = (Boolean) change;
+                showDialog(newValue ? DIALOG_CONNECT : DIALOG_DISCONNECT);
+                return false;
+            }
+        });
+
         ServiceBase.smsSync = this;
     }
 
@@ -114,15 +131,26 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     }
 
     @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d(TAG, "onNewIntent:" + intent);
+
+        Uri uri = intent.getData();
+        if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL)) {
+            new OAuthCallbackTask().execute(uri);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
         SmsSyncService.setStateChangeListener(mStatusPref);
         updateUsernameLabelFromPref();
         updateImapFolderLabelFromPref();
         updateMaxItemsPerSync(null);
         updateMaxItemsPerRestore(null);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,7 +161,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -581,6 +608,31 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
 
                 Dialog d = builder.create();
                 return d;
+            case DIALOG_DISCONNECT:
+                builder = new AlertDialog.Builder(this);
+                builder.setCustomTitle(null);
+                builder.setMessage(R.string.ui_dialog_disconnect_msg);
+                builder.setNegativeButton(android.R.string.cancel, null);
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        PrefStore.setOauthTokens(SmsSync.this, null, null);
+                        updateConnected();
+                    }
+                });
+                return builder.create();
+            case DIALOG_CONNECT:
+                builder = new AlertDialog.Builder(this);
+                builder.setCustomTitle(null);
+                builder.setMessage(R.string.ui_dialog_connect_msg);
+                builder.setNegativeButton(android.R.string.cancel, null);
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                    }
+                });
+                return builder.create();
+
+
             default:
                 return null;
         }
@@ -621,15 +673,13 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         } catch (IOException e) {
             return "An error occured while reading about.html";
         }
-
-
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
+    public boolean onPreferenceChange(Preference preference, final Object newValue) {
         if (PrefStore.PREF_LOGIN_USER.equals(preference.getKey())) {
             preference.setTitle(newValue.toString());
-            SharedPreferences prefs = preference.getSharedPreferences();
+            final SharedPreferences prefs = preference.getSharedPreferences();
             final String oldValue = prefs.getString(PrefStore.PREF_LOGIN_USER, null);
             if (!newValue.equals(oldValue)) {
                 // We need to post the reset of sync state such that we do not interfere
@@ -637,13 +687,19 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (oldValue == null && newValue != null && !"".equals(newValue)) {
+                            getPreferenceManager().findPreference("connected").setEnabled(true);
+                        }
+
                         PrefStore.clearSyncData(SmsSync.this);
+
                         if (oldValue != null) {
                             showDialog(DIALOG_SYNC_DATA_RESET);
                         }
                     }
                 });
             }
+
         } else if (PrefStore.PREF_SERVER_ADDRESS.equals(preference.getKey())) {
                 preference.setTitle(newValue.toString());
                 SharedPreferences prefs = preference.getSharedPreferences();
@@ -719,9 +775,96 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         pref.setTitle(newValue);
     }
 
+    private CheckBoxPreference updateConnected() {
+        CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager().findPreference("connected");
+        boolean hasTokens = PrefStore.hasOauthTokens(this);
+
+        connected.setChecked(hasTokens);
+        connected.setEnabled(PrefStore.getLoginUsername(this) != null && !PrefStore.getLoginUsername(this).equals(""));
+        connected.setSummary(hasTokens ? R.string.gmail_already_connected : R.string.gmail_needs_connecting);
+
+        return connected;
+    }
+
+    class RequestTokenTask extends android.os.AsyncTask<String, Void, String> {
+        public String doInBackground(String... callback) {
+            synchronized(XOAuthConsumer.class) {
+                XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
+                CommonsHttpOAuthProvider provider = consumer.getProvider();
+                try {
+                    String url = provider.retrieveRequestToken(consumer, callback[0]);
+                    PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
+                    return url;
+                } catch (Exception e) {
+                    Log.e(TAG, "error requesting token", e);
+                    notifyUser(android.R.drawable.stat_sys_warning, "Error",
+                        getResources().getString(R.string.gmail_connected_fail),
+                        e.getMessage());
+
+                    return null;
+                }
+            }
+        }
+
+        protected void onPostExecute(String authorizeUrl) {
+            if (authorizeUrl != null) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authorizeUrl)));
+            }
+        }
+    }
+
+    class OAuthCallbackTask extends android.os.AsyncTask<Uri, Void, XOAuthConsumer> {
+
+        protected void onPreExecute() {
+            Toast.makeText(SmsSync.this, R.string.gmail_processing, Toast.LENGTH_LONG).show();
+        }
+
+        protected XOAuthConsumer doInBackground(Uri... callbackUri) {
+            Log.d(TAG, "oauth callback: " + callbackUri[0]);
+            XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
+            CommonsHttpOAuthProvider provider = consumer.getProvider();
+            String verifier = callbackUri[0].getQueryParameter(OAuth.OAUTH_VERIFIER);
+            try {
+                provider.retrieveAccessToken(consumer, verifier);
+
+            } catch (Exception e) {
+                Log.e(TAG, "error", e);
+
+                notifyUser(android.R.drawable.stat_sys_warning, "Error",
+                    getResources().getString(R.string.gmail_connected_fail),
+                    e.getMessage());
+
+                return null;
+            }
+            return consumer;
+        }
+
+        protected void onPostExecute(XOAuthConsumer consumer) {
+            if (consumer != null) {
+                PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
+                Toast.makeText(SmsSync.this, R.string.gmail_processing_done, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "updated tokens");
+
+                updateConnected();
+            }
+        }
+    }
+
+    private void notifyUser(int icon, String shortText, String title, String text) {
+        Notification n = new Notification(icon, shortText, System.currentTimeMillis());
+        n.setLatestEventInfo(this,
+            title,
+            text,
+            PendingIntent.getActivity(this, 0, new Intent(this, SmsSync.class), 0));
+
+        getNotifier().notify("oauth", 0, n);
+    }
+
+    private NotificationManager getNotifier() {
+        return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    }
 
     StatusPreference getStatusPreference() {
         return mStatusPref;
     }
-
 }

@@ -16,6 +16,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- handle gmail oauth callbacks -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <category android:name="android.intent.category.BROWSABLE"></category>
+                <data android:scheme="smssync" android:host="gmail"></data>
+            </intent-filter>
+
         </activity>
     <service android:name="tv.studer.smssync.SmsSyncService" android:exported="false"></service>
     <service android:name="tv.studer.smssync.SmsRestoreService" android:exported="false"></service>

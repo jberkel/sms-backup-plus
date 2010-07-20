@@ -54,18 +54,22 @@
   <string name="ui_settings_advanced_desc">Set advanced preferences.</string>
   <string name="ui_settings_advanced_server_label">Server settings</string>
   <string name="ui_settings_advanced_server_desc">Do not change unless you know what you are doing!</string>
-  
+
   <string name="ui_login_label">Username</string>
   <string name="ui_login_desc">Your Google account/e-mail address.</string>
   <string name="ui_login_dialog_msg">WARNING: Changing the username will reset all your backup information and your password.</string>
   <string name="ui_password_label">Password</string>
-  <string name="ui_password_desc">Your Google account password.</string>
+  <string name="ui_password_desc">Your IMAP account password. Only used when XOAuth is disabled.</string>
   <string name="ui_password_dialog_msg">The password is stored on this device and is only used to login at Gmail.</string>
   <string name="ui_server_label">Server address</string>
   <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
   <string name="ui_server_dialog_msg">WARNING: Changing the server address will reset all your backup information and your password. Default for gmail is \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Security</string>
   <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL (Required)\"."</string>
+  <string name="ui_authentication_label">Authentication</string>
+  <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOauth\".</string>
+  <string name="plain">Plain text</string>
+  <string name="xoauth">XOAuth</string>
   <string name="ui_imap_folder_label">Gmail label</string>
   <string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Backed up SMS messages will be tagged with this label in Gmail.</string>
@@ -89,6 +93,8 @@
   <string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?\n\nNote: The backup will be split into batches of %1$d messages.</string>
   <string name="ui_dialog_need_first_manual_sync_title">First backup</string>
   <string name="ui_dialog_need_first_manual_sync_msg">The first backup needs to be initiated manually. Would you like to perform a backup now?</string>
+  <string name="ui_dialog_connect_msg">A browser window will open where you\'ll need to log into gmail and authorize this app</string>
+  <string name="ui_dialog_disconnect_msg">Are you sure? You will need to reauthorize after disconnecting this account</string>
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
   <string name="err_could_not_create_folder">Could not create label.</string>
@@ -97,4 +103,16 @@
   <string name="err_communication_error">General communication error.</string>
   <string name="menu_info">About</string>
   <string name="all_messages">All</string>
+
+  <string name="gmail_processing">Contacting gmail</string>
+  <string name="gmail_processing_done">Success</string>
+
+  <string name="gmail_connected">Successfully authenticated with gmail</string>
+  <string name="gmail_connected_fail">Gmail authentication failure</string>
+  <string name="gmail_needs_connecting">You need to connect your Gmail account</string>
+  <string name="gmail_already_connected">Gmail account connected</string>
+
+  <string name="ui_connected_label">Connect</string>
+  <string name="ui_connected_desc">Your account needs to be authorized.</string>
+
 </resources>

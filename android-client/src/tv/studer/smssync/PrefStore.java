@@ -15,6 +15,7 @@
 
 package tv.studer.smssync;
 
+import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -41,7 +42,12 @@ public class PrefStore {
 
     /** Preference key containing the server protocol */
     static final String PREF_SERVER_PROTOCOL = "server_protocol";
- 
+
+    static final String PREF_SERVER_AUTHENTICATION = "server_authentication";
+
+    static final String PREF_OAUTH_TOKEN = "oauth_token";
+    static final String PREF_OAUTH_TOKEN_SECRET = "oauth_token_secret";
+
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
 
@@ -99,10 +105,10 @@ public class PrefStore {
 
     /** Default value for {@link #PREF_SERVER_ADDRESS}. */
     static final String DEFAULT_SERVER_ADDRESS = "imap.gmail.com:993";
- 
+
     /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
     static final String DEFAULT_SERVER_PROTOCOL = "ssl";
- 
+
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
@@ -130,12 +136,48 @@ public class PrefStore {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_PASSWORD, null);
     }
 
+    static XOAuthConsumer getOAuthConsumer(Context ctx) {
+        return new XOAuthConsumer(
+            getLoginUsername(ctx),
+            getOauthToken(ctx),
+            getOauthTokenSecret(ctx));
+    }
+
+    static String getOauthToken(Context ctx) {
+        return getSharedPreferences(ctx).getString(PREF_OAUTH_TOKEN, null);
+    }
+
+    static String getOauthTokenSecret(Context ctx) {
+        return getSharedPreferences(ctx).getString(PREF_OAUTH_TOKEN_SECRET, null);
+    }
+
+    static boolean hasOauthTokens(Context ctx) {
+        return getOauthToken(ctx) != null &&
+               getOauthTokenSecret(ctx) != null;
+    }
+
+    static void setOauthTokens(Context ctx, String token, String secret) {
+        Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString(PREF_OAUTH_TOKEN, token);
+        editor.putString(PREF_OAUTH_TOKEN_SECRET, secret);
+        editor.commit();
+    }
+
+    static boolean useXOAuth(Context ctx) {
+        return "xoauth".equals(getSharedPreferences(ctx).getString(PREF_SERVER_AUTHENTICATION, null)) &&
+                isGmail(ctx);
+    }
+
     public static boolean isLoginUsernameSet(Context ctx) {
         return getLoginUsername(ctx) != null;
     }
 
     static boolean isLoginInformationSet(Context ctx) {
-        return isLoginUsernameSet(ctx) && getLoginPassword(ctx) != null;
+        if ("plain".equals(getSharedPreferences(ctx).getString(PREF_SERVER_AUTHENTICATION, null))) {
+            return isLoginUsernameSet(ctx) && getLoginPassword(ctx) != null;
+        } else {
+            return hasOauthTokens(ctx);
+        }
     }
 
     static String getReferenceUid(Context ctx) {
@@ -172,7 +214,6 @@ public class PrefStore {
             return -1;
         }
     }
-
 
     /**
      * Returns whether an IMAP folder is valid. This is the case if the name
@@ -266,14 +307,18 @@ public class PrefStore {
     static String getServerAddress(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
     }
- 
+
     static void setServerAddress(Context ctx, String serverAddress) {
          Editor editor = getSharedPreferences(ctx).edit();
          editor.putString(PREF_SERVER_ADDRESS, serverAddress);
          editor.commit();
-     }    
- 
+     }
+
      static String getServerProtocol(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
+    }
+
+    static boolean isGmail(Context ctx) {
+        return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress(ctx));
     }
 }

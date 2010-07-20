@@ -7,12 +7,14 @@
     <item>150</item>
     <item>200</item>
   </string-array>
+
   <string-array name="max_items_per_restore_entries">
     <item>20</item>
     <item>200</item>
     <item>2000</item>
     <item>@string/all_messages</item>
   </string-array>
+
   <string-array name="server_protocol_entryValues">
     <item>+ssl+</item>
     <item>+ssl</item>
@@ -20,6 +22,7 @@
     <item>+tls</item>
     <item/>
   </string-array>
+
   <string-array name="server_protocol_entries">
     <item>SSL (Required)</item>
     <item>SSL (Optional)</item>
@@ -27,4 +30,16 @@
     <item>TLS (Optional)</item>
     <item>None</item>
   </string-array>
+
+  <string-array name="server_authentication_entries">
+    <item>@string/xoauth</item>
+    <item>@string/plain</item>
+  </string-array>
+
+  <string-array name="server_authentication_values">
+    <item>xoauth</item>
+    <item>plain</item>
+  </string-array>
+
+
 </resources>

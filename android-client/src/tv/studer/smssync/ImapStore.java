@@ -36,11 +36,20 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                 if (password == null)
                      throw new IllegalArgumentException("password is null");
                 // TODO use URI ctor
-                return String.format(Consts.IMAP_URI,
-                     PrefStore.getServerProtocol(context),
-                     URLEncoder.encode(username),
-                     URLEncoder.encode(password).replace("+", "%20"),
-                     PrefStore.getServerAddress(context));
+
+                if (PrefStore.useXOAuth(context)) {
+                  return String.format(Consts.IMAP_URI,
+                       PrefStore.getServerProtocol(context),
+                        "xoauth:" + URLEncoder.encode(username),
+                       URLEncoder.encode(PrefStore.getOAuthConsumer(context).generateXOAuthString()),
+                       PrefStore.getServerAddress(context));
+                } else {
+                  return String.format(Consts.IMAP_URI,
+                       PrefStore.getServerProtocol(context),
+                       URLEncoder.encode(username),
+                       URLEncoder.encode(password).replace("+", "%20"),
+                       PrefStore.getServerAddress(context));
+                 }
             }
         });
 

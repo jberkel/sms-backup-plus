@@ -48,4 +48,8 @@ final class Consts {
     static final String URL_MARKET_SEARCH =
         "http://market.android.com/search?q=pname:com.zegoggles.smssync";
 
+    static final String CALLBACK_URL = "smssync://gmail";
+
+    static final String GMAIL_SCOPE  = "https://mail.google.com/";
+    static final String XOAUTH_DISPLAYNAME  = "SMS Backup+Restore";
 }
