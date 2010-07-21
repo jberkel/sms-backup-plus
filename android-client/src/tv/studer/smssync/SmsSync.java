@@ -573,13 +573,13 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                     }
                 };
 
-                builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.ui_dialog_need_first_manual_sync_title);
-                builder.setMessage(R.string.ui_dialog_need_first_manual_sync_msg);
-                builder.setPositiveButton(android.R.string.yes, dialogClickListener);
-                builder.setNegativeButton(android.R.string.no, dialogClickListener);
-                builder.setCancelable(false);
-                return builder.create();
+                return new AlertDialog.Builder(this)
+                    .setTitle(R.string.ui_dialog_need_first_manual_sync_title)
+                    .setMessage(R.string.ui_dialog_need_first_manual_sync_msg)
+                    .setPositiveButton(android.R.string.yes, dialogClickListener)
+                    .setNegativeButton(android.R.string.no, dialogClickListener)
+                    .setCancelable(false)
+                    .create();
             case DIALOG_FIRST_SYNC:
                 DialogInterface.OnClickListener firstSyncListener = new DialogInterface.OnClickListener() {
                     @Override
@@ -589,48 +589,45 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                     }
                 };
 
-                builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.ui_dialog_first_sync_title);
-                builder.setMessage(getString(R.string.ui_dialog_first_sync_msg,
-                        PrefStore.getMaxItemsPerSync(this)));
-                builder.setPositiveButton(R.string.ui_sync, firstSyncListener);
-                builder.setNegativeButton(R.string.ui_skip, firstSyncListener);
-                return builder.create();
+                return new AlertDialog.Builder(this)
+                    .setTitle(R.string.ui_dialog_first_sync_title)
+                    .setMessage(getString(R.string.ui_dialog_first_sync_msg,
+                        PrefStore.getMaxItemsPerSync(this)))
+                    .setPositiveButton(R.string.ui_sync, firstSyncListener)
+                    .setNegativeButton(R.string.ui_skip, firstSyncListener)
+                    .create();
             case DIALOG_ABOUT:
-                builder = new AlertDialog.Builder(this);
-                builder.setCustomTitle(null);
-                builder.setPositiveButton(android.R.string.ok, null);
-
                 View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
                 webView.loadData(getAboutText(), "text/html", "utf-8");
-                builder.setView(contentView);
 
-                Dialog d = builder.create();
-                return d;
+                return new AlertDialog.Builder(this)
+                    .setCustomTitle(null)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setView(contentView)
+                    .create();
             case DIALOG_DISCONNECT:
-                builder = new AlertDialog.Builder(this);
-                builder.setCustomTitle(null);
-                builder.setMessage(R.string.ui_dialog_disconnect_msg);
-                builder.setNegativeButton(android.R.string.cancel, null);
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                return new AlertDialog.Builder(this)
+                    .setCustomTitle(null)
+                    .setMessage(R.string.ui_dialog_disconnect_msg)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         PrefStore.setOauthTokens(SmsSync.this, null, null);
                         updateConnected();
                     }
-                });
-                return builder.create();
+                }).create();            
             case DIALOG_CONNECT:
-                builder = new AlertDialog.Builder(this);
-                builder.setCustomTitle(null);
-                builder.setMessage(R.string.ui_dialog_connect_msg);
-                builder.setNegativeButton(android.R.string.cancel, null);
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        new RequestTokenTask().execute(Consts.CALLBACK_URL);
-                    }
-                });
-                return builder.create();
+                return new AlertDialog.Builder(this)
+                    .setCustomTitle(null)
+                    .setMessage(R.string.ui_dialog_connect_msg)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                        }
+                    }).create();
+
 
 
             default:
