@@ -18,7 +18,7 @@
 			android:title="@string/ui_enable_auto_sync_label"
 			android:summary="@string/ui_enable_auto_sync_desc"
 			android:persistent="true"
-			android:defaultValue="true"/>
+			android:defaultValue="false"/>
 
 		<PreferenceScreen
 			android:title="@string/ui_settings_advanced_label"
@@ -49,7 +49,7 @@
 					android:summary="@string/ui_max_items_per_sync_desc"
 					android:entries="@array/max_items_per_sync_entries"
 					android:entryValues="@array/max_items_per_sync_entries"
-					android:defaultValue="100"
+					android:defaultValue="200"
 					android:persistent="true"/>
 
 				<ListPreference android:key="max_items_per_restore"

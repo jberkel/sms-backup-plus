@@ -77,10 +77,10 @@
   <string name="ui_max_items_per_sync_desc">Maximum number of items per backup.</string>
   <string name="ui_max_items_per_restore_label">Items per restore</string>
   <string name="ui_max_items_per_restore_desc">Maximum number of restored messages.</string>
-  <string name="ui_mark_as_read_label">Mark as read</string>
+  <string name="ui_mark_as_read_label">Mark as read (emails)</string>
   <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
-  <string name="ui_mark_as_read_restore_label">Mark as read (restore)</string>
-  <string name="ui_mark_as_read_restore_desc">Whether to mark all restored messages as read or not.</string>
+  <string name="ui_mark_as_read_restore_label">Mark as read (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Whether to mark all restored SMS as read or not.</string>
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
   <string name="ui_dialog_missing_credentials_title">Login information</string>
@@ -109,8 +109,8 @@
 
   <string name="gmail_connected">Successfully authenticated with gmail</string>
   <string name="gmail_connected_fail">Gmail authentication failure</string>
-  <string name="gmail_needs_connecting">You need to connect your Gmail account</string>
-  <string name="gmail_already_connected">Gmail account connected</string>
+  <string name="gmail_needs_connecting">Tap to connect your Gmail account (required).</string>
+  <string name="gmail_already_connected">Gmail account connected (tap to disconnect).</string>
 
   <string name="ui_connected_label">Connect</string>
   <string name="ui_connected_desc">Your account needs to be authorized.</string>
