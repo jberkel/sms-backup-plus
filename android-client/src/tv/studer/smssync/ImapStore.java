@@ -29,13 +29,8 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
             @Override
             public String getStoreUri() {
                 String username = PrefStore.getLoginUsername(context);
-                String password = PrefStore.getLoginPassword(context);
-
                 if (username == null)
-                     throw new IllegalArgumentException("username is null");
-                if (password == null)
-                     throw new IllegalArgumentException("password is null");
-                // TODO use URI ctor
+                     throw new IllegalStateException("username is null");
 
                 if (PrefStore.useXOAuth(context)) {
                   return String.format(Consts.IMAP_URI,
@@ -44,6 +39,10 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                        URLEncoder.encode(PrefStore.getOAuthConsumer(context).generateXOAuthString()),
                        PrefStore.getServerAddress(context));
                 } else {
+                    String password = PrefStore.getLoginPassword(context);
+                    if (password == null)
+                        throw new IllegalStateException("password is null");
+
                   return String.format(Consts.IMAP_URI,
                        PrefStore.getServerProtocol(context),
                        URLEncoder.encode(username),
@@ -60,7 +59,7 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
     {
         String label = PrefStore.getImapFolder(context);
         if (label == null)
-            throw new IllegalArgumentException("label is null");
+            throw new IllegalStateException("label is null");
 
         BackupFolder folder = new BackupFolder(this, label);
 
