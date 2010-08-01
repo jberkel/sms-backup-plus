@@ -75,6 +75,8 @@ public class PrefStore {
     /** Preference for storing whether restored messages should be marked as read. */
     static final String PREF_MARK_AS_READ_ON_RESTORE = "mark_as_read_on_restore";
 
+    static final String PREF_PREFILLED  = "prefilled";
+
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
 
@@ -123,9 +125,9 @@ public class PrefStore {
     }
 
     static void setMaxSyncedDate(Context ctx, long maxSyncedDate) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.putLong(PREF_MAX_SYNCED_DATE, maxSyncedDate);
-        editor.commit();
+        getSharedPreferences(ctx).edit()
+          .putLong(PREF_MAX_SYNCED_DATE, maxSyncedDate)
+          .commit();
     }
 
     static String getLoginUsername(Context ctx) {
@@ -157,10 +159,10 @@ public class PrefStore {
     }
 
     static void setOauthTokens(Context ctx, String token, String secret) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_OAUTH_TOKEN, token);
-        editor.putString(PREF_OAUTH_TOKEN_SECRET, secret);
-        editor.commit();
+      getSharedPreferences(ctx).edit()
+        .putString(PREF_OAUTH_TOKEN, token)
+        .putString(PREF_OAUTH_TOKEN_SECRET, secret)
+        .commit();
     }
 
     static boolean useXOAuth(Context ctx) {
@@ -185,9 +187,9 @@ public class PrefStore {
     }
 
     static void setReferenceUid(Context ctx, String referenceUid) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_REFERENECE_UID, referenceUid);
-        editor.commit();
+        getSharedPreferences(ctx).edit()
+          .putString(PREF_REFERENECE_UID, referenceUid)
+          .commit();
     }
 
     static String getImapFolder(Context ctx) {
@@ -232,9 +234,9 @@ public class PrefStore {
     }
 
     static void setImapFolder(Context ctx, String imapFolder) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.putString(PREF_IMAP_FOLDER, imapFolder);
-        editor.commit();
+        getSharedPreferences(ctx).edit()
+          .putString(PREF_IMAP_FOLDER, imapFolder)
+          .commit();
     }
 
     static boolean isEnableAutoSync(Context ctx) {
@@ -247,9 +249,9 @@ public class PrefStore {
     }
 
     static void setEnableAutoSync(Context ctx, boolean enableAutoSync) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.putBoolean(PREF_ENABLE_AUTO_SYNC, enableAutoSync);
-        editor.commit();
+        getSharedPreferences(ctx).edit()
+          .putBoolean(PREF_ENABLE_AUTO_SYNC, enableAutoSync)
+          .commit();
     }
 
     static int getIncomingTimeoutSecs(Context ctx) {
@@ -267,9 +269,9 @@ public class PrefStore {
     }
 
     static void setLastSync(Context ctx) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.putLong(PREF_LAST_SYNC, System.currentTimeMillis());
-        editor.commit();
+        getSharedPreferences(ctx).edit()
+          .putLong(PREF_LAST_SYNC, System.currentTimeMillis())
+          .commit();
     }
 
     static boolean getMarkAsRead(Context ctx) {
@@ -277,9 +279,9 @@ public class PrefStore {
     }
 
     static void setMarkAsRead(Context ctx, boolean markAsRead) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.putBoolean(PREF_MARK_AS_READ, markAsRead);
-        editor.commit();
+        getSharedPreferences(ctx).edit()
+          .putBoolean(PREF_MARK_AS_READ, markAsRead)
+          .commit();
     }
 
     static boolean getMarkAsReadOnRestore(Context ctx) {
@@ -287,9 +289,9 @@ public class PrefStore {
     }
 
     static void setMarkAsReadOnRestore(Context ctx, boolean markAsRead) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.putBoolean(PREF_MARK_AS_READ_ON_RESTORE, markAsRead);
-        editor.commit();
+        getSharedPreferences(ctx).edit()
+          .putBoolean(PREF_MARK_AS_READ_ON_RESTORE, markAsRead)
+          .commit();
     }
 
     static boolean isFirstSync(Context ctx) {
@@ -297,11 +299,11 @@ public class PrefStore {
     }
 
     static void clearSyncData(Context ctx) {
-        Editor editor = getSharedPreferences(ctx).edit();
-        editor.remove(PREF_LOGIN_PASSWORD);
-        editor.remove(PREF_MAX_SYNCED_DATE);
-        editor.remove(PREF_LAST_SYNC);
-        editor.commit();
+        getSharedPreferences(ctx).edit()
+          .remove(PREF_LOGIN_PASSWORD)
+          .remove(PREF_MAX_SYNCED_DATE)
+          .remove(PREF_LAST_SYNC)
+          .commit();
     }
 
     static String getServerAddress(Context ctx) {
@@ -309,9 +311,9 @@ public class PrefStore {
     }
 
     static void setServerAddress(Context ctx, String serverAddress) {
-         Editor editor = getSharedPreferences(ctx).edit();
-         editor.putString(PREF_SERVER_ADDRESS, serverAddress);
-         editor.commit();
+         getSharedPreferences(ctx).edit()
+           .putString(PREF_SERVER_ADDRESS, serverAddress)
+           .commit();
      }
 
      static String getServerProtocol(Context ctx) {

@@ -85,6 +85,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     private StatusPreference mStatusPref;
 
     private static final String TAG = "SmsSync";
+    private static ContactAccessor sAccessor = null;
 
     enum Mode { BACKUP, RESTORE, NONE }
 
@@ -94,7 +95,8 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PreferenceManager prefMgr = getPreferenceManager();
+
+        prefillEmailAddress();
 
         addPreferencesFromResource(R.xml.main_screen);
 
@@ -104,6 +106,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         mStatusPref.setOrder(0);
         getPreferenceScreen().addPreference(mStatusPref);
 
+        PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(this);
         prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER).setOnPreferenceChangeListener(this);
         prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC).setOnPreferenceChangeListener(this);
@@ -145,6 +148,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
     protected void onResume() {
         super.onResume();
 
+
         SmsSyncService.setStateChangeListener(mStatusPref);
         updateUsernameLabelFromPref();
         updateImapFolderLabelFromPref();
@@ -178,10 +182,22 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         startActivity(intent);
     }
 
+    private void prefillEmailAddress() {
+      SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+
+      if (PrefStore.getLoginUsername(this) == null &&
+          !prefs.getBoolean(PrefStore.PREF_PREFILLED, false)) {
+
+          prefs.edit()
+            .putString(PrefStore.PREF_LOGIN_USER, getContactAccessor().getOwnerEmail(this))
+            .putBoolean(PrefStore.PREF_PREFILLED, true)
+            .commit();
+      }
+    }
+
     private void updateUsernameLabelFromPref() {
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
-        String username = prefs.getString(PrefStore.PREF_LOGIN_USER,
-                getString(R.string.ui_login_label));
+        String username = prefs.getString(PrefStore.PREF_LOGIN_USER, getString(R.string.ui_login_label));
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_LOGIN_USER);
         pref.setTitle(username);
     }
@@ -217,6 +233,28 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         } else {
             return true;
         }
+    }
+
+    public static ContactAccessor getContactAccessor() {
+       if (sAccessor == null) {
+            String className;
+            int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+            if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
+                className = "ContactAccessorPre20";
+            } else {
+                className = "ContactAccessorPost20";
+            }
+            try {
+                Class<? extends ContactAccessor> clazz =
+                   Class.forName(ContactAccessor.class.getPackage().getName() + "." + className)
+                        .asSubclass(ContactAccessor.class);
+
+                sAccessor = clazz.newInstance();
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+        return sAccessor;
     }
 
     private void startSync(boolean skip) {
@@ -794,6 +832,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
                     return url;
                 } catch (Exception e) {
                     Log.e(TAG, "error requesting token", e);
+
                     notifyUser(android.R.drawable.stat_sys_warning, "Error",
                         getResources().getString(R.string.gmail_connected_fail),
                         e.getMessage());
