@@ -17,13 +17,14 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import android.content.Context;
-import android.util.Base64;
 import android.util.Log;
+import org.apache.commons.codec.binary.Base64;
 
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   private String username;
   private static final String MAC_NAME = "HmacSHA1";
   private static final String ANONYMOUS = "anonymous";
+  private Base64 base64 = new Base64();
 
   public XOAuthConsumer(String username) {
       super(ANONYMOUS, ANONYMOUS);
@@ -68,7 +69,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
          }
 
          Log.d(Consts.TAG, "sasl: " + sasl.toString());
-         return Base64.encodeToString(sasl.toString().getBytes(OAuth.ENCODING), Base64.NO_WRAP);
+         return base64(sasl.toString().getBytes(OAuth.ENCODING));
       } catch (Exception e) {
           throw new RuntimeException(e);
       }
@@ -104,6 +105,14 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
       mac.init(key);
 
       String sbs = new SignatureBaseString(request, requestParameters).generate();
-      return Base64.encodeToString(mac.doFinal(sbs.getBytes(OAuth.ENCODING)), Base64.NO_WRAP);
+      return base64(mac.doFinal(sbs.getBytes(OAuth.ENCODING)));
+  }
+
+  private String base64(byte[] data) {
+    try {
+      return new String(base64.encodeBase64(data), "UTF-8");
+    } catch (java.io.UnsupportedEncodingException e) {
+       throw new RuntimeException(e);
+    }
   }
 }
