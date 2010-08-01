@@ -71,7 +71,8 @@ import android.widget.TextView;
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
-public class SmsSync extends PreferenceActivity implements OnPreferenceChangeListener {
+public class SmsSync extends PreferenceActivity {
+
     private static final int MENU_INFO = 0;
     private static final int DIALOG_MISSING_CREDENTIALS = 1;
     private static final int DIALOG_FIRST_SYNC = 2;
@@ -106,24 +107,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         mStatusPref.setOrder(0);
         getPreferenceScreen().addPreference(mStatusPref);
 
-        PreferenceManager prefMgr = getPreferenceManager();
-        prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(this);
-        prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER).setOnPreferenceChangeListener(this);
-        prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC).setOnPreferenceChangeListener(this);
-        prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setOnPreferenceChangeListener(this);
-        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC).setOnPreferenceChangeListener(this);
-        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE).setOnPreferenceChangeListener(this);
-        prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS).setOnPreferenceChangeListener(this);
-
-        updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object change) {
-                boolean newValue  = (Boolean) change;
-                showDialog(newValue ? DIALOG_CONNECT : DIALOG_DISCONNECT);
-                return false;
-            }
-        });
-
+        setPreferenceListeners(getPreferenceManager());
         ServiceBase.smsSync = this;
     }
 
@@ -710,89 +694,6 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         }
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, final Object newValue) {
-        if (PrefStore.PREF_LOGIN_USER.equals(preference.getKey())) {
-            preference.setTitle(newValue.toString());
-            final SharedPreferences prefs = preference.getSharedPreferences();
-            final String oldValue = prefs.getString(PrefStore.PREF_LOGIN_USER, null);
-            if (!newValue.equals(oldValue)) {
-                // We need to post the reset of sync state such that we do not interfere
-                // with the current transaction of the SharedPreference.
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (oldValue == null && newValue != null && !"".equals(newValue)) {
-                            getPreferenceManager().findPreference("connected").setEnabled(true);
-                        }
-
-                        PrefStore.clearSyncData(SmsSync.this);
-
-                        if (oldValue != null) {
-                            showDialog(DIALOG_SYNC_DATA_RESET);
-                        }
-                    }
-                });
-            }
-
-        } else if (PrefStore.PREF_SERVER_ADDRESS.equals(preference.getKey())) {
-                preference.setTitle(newValue.toString());
-                SharedPreferences prefs = preference.getSharedPreferences();
-                final String oldValue = prefs.getString(PrefStore.PREF_SERVER_ADDRESS, null);
-                if (!newValue.equals(oldValue)) {
-                    // We need to post the reset of sync state such that we do not interfere
-                    // with the current transaction of the SharedPreference.
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            PrefStore.clearSyncData(SmsSync.this);
-                            if (oldValue != null) {
-                                showDialog(DIALOG_SYNC_DATA_RESET);
-                            }
-                        }
-                    });
-                }
-        } else if (PrefStore.PREF_IMAP_FOLDER.equals(preference.getKey())) {
-            String imapFolder = newValue.toString();
-            if (PrefStore.isValidImapFolder(imapFolder)) {
-                preference.setTitle(imapFolder);
-            } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showDialog(DIALOG_INVALID_IMAP_FOLDER);
-                    }
-                });
-                return false;
-            }
-        } else if (PrefStore.PREF_ENABLE_AUTO_SYNC.equals(preference.getKey())) {
-            boolean isEnabled = (Boolean) newValue;
-            ComponentName componentName = new ComponentName(this,
-                    SmsBroadcastReceiver.class);
-            PackageManager pkgMgr = getPackageManager();
-            if (isEnabled) {
-                pkgMgr.setComponentEnabledSetting(componentName,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
-                initiateSync();
-            } else {
-                pkgMgr.setComponentEnabledSetting(componentName,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
-                Alarms.cancel(this);
-            }
-        } else if (PrefStore.PREF_LOGIN_PASSWORD.equals(preference.getKey())) {
-            if (PrefStore.isFirstSync(this) && PrefStore.isLoginUsernameSet(this)) {
-                showDialog(DIALOG_NEED_FIRST_MANUAL_SYNC);
-            }
-        } else if (PrefStore.PREF_MAX_ITEMS_PER_SYNC.equals(preference.getKey())) {
-            updateMaxItemsPerSync((String) newValue);
-        } else if (PrefStore.PREF_MAX_ITEMS_PER_RESTORE.equals(preference.getKey())) {
-            updateMaxItemsPerRestore((String) newValue);
-        }
-        return true;
-    }
-
     private void updateMaxItemsPerSync(String newValue) {
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC);
         if (newValue == null) {
@@ -900,6 +801,138 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
+    private void setPreferenceListeners(PreferenceManager prefMgr) {
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, final Object newValue) {
+                if (newValue.toString().trim().length() == 0) {
+                  return false;
+                }
+
+                preference.setTitle(newValue.toString());
+                final SharedPreferences prefs = preference.getSharedPreferences();
+                final String oldValue = prefs.getString(PrefStore.PREF_LOGIN_USER, null);
+                if (!newValue.equals(oldValue)) {
+                    // We need to post the reset of sync state such that we do not interfere
+                    // with the current transaction of the SharedPreference.
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (oldValue == null && newValue != null && !"".equals(newValue)) {
+                                getPreferenceManager().findPreference("connected").setEnabled(true);
+                            }
+
+                            PrefStore.clearSyncData(SmsSync.this);
+
+                            if (oldValue != null) {
+                                showDialog(DIALOG_SYNC_DATA_RESET);
+                            }
+                        }
+                    });
+                }
+                return true;
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, final Object newValue) {
+              String imapFolder = newValue.toString();
+              if (PrefStore.isValidImapFolder(imapFolder)) {
+                  preference.setTitle(imapFolder);
+                  return true;
+              } else {
+                  runOnUiThread(new Runnable() {
+                      @Override
+                      public void run() {
+                          showDialog(DIALOG_INVALID_IMAP_FOLDER);
+                      }
+                  });
+                  return false;
+              }
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean isEnabled = (Boolean) newValue;
+                ComponentName componentName = new ComponentName(SmsSync.this, SmsBroadcastReceiver.class);
+                PackageManager pkgMgr = getPackageManager();
+                if (isEnabled) {
+                    pkgMgr.setComponentEnabledSetting(componentName,
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP);
+                    initiateSync();
+                } else {
+                    pkgMgr.setComponentEnabledSetting(componentName,
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP);
+                    Alarms.cancel(SmsSync.this);
+                }
+                return true;
+             }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (PrefStore.isFirstSync(SmsSync.this) && PrefStore.isLoginUsernameSet(SmsSync.this)) {
+                   showDialog(DIALOG_NEED_FIRST_MANUAL_SYNC);
+                }
+                return true;
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                updateMaxItemsPerSync(newValue.toString());
+                return true;
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                updateMaxItemsPerRestore(newValue.toString());
+                return true;
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setTitle(newValue.toString());
+                SharedPreferences prefs = preference.getSharedPreferences();
+                final String oldValue = prefs.getString(PrefStore.PREF_SERVER_ADDRESS, null);
+                if (!newValue.equals(oldValue)) {
+                    // We need to post the reset of sync state such that we do not interfere
+                    // with the current transaction of the SharedPreference.
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            PrefStore.clearSyncData(SmsSync.this);
+                            if (oldValue != null) {
+                                showDialog(DIALOG_SYNC_DATA_RESET);
+                            }
+                        }
+                    });
+                }
+                return true;
+            }
+         });
+
+        updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object change) {
+                boolean newValue  = (Boolean) change;
+                showDialog(newValue ? DIALOG_CONNECT : DIALOG_DISCONNECT);
+                return false;
+            }
+        });
+    }
+ 
     StatusPreference getStatusPreference() {
         return mStatusPref;
     }
