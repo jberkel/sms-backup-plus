@@ -854,7 +854,7 @@ public class SmsSync extends PreferenceActivity implements OnPreferenceChangeLis
             text,
             PendingIntent.getActivity(this, 0, new Intent(this, SmsSync.class), 0));
 
-        getNotifier().notify("oauth", 0, n);
+        getNotifier().notify(0, n);
     }
 
     private NotificationManager getNotifier() {
