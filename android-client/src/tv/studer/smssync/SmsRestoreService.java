@@ -9,7 +9,6 @@ import android.util.Log;
 import com.fsck.k9.mail.*;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import org.apache.commons.io.IOUtils;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import static tv.studer.smssync.CursorToMessage.Headers.*;
@@ -113,11 +112,13 @@ public class SmsRestoreService extends ServiceBase {
             }
         }
 
+        @Override
         protected void onProgressUpdate(Integer... progress) {
             currentRestoredItems = progress[0];
             updateState(RESTORE);
         }
 
+        @Override
         protected void onPostExecute(Integer result) {
             if (result != -1) {
                 Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");

@@ -1,7 +1,6 @@
 package tv.studer.smssync;
 
 import oauth.signpost.OAuth;
-import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.http.HttpRequest;
@@ -16,7 +15,6 @@ import java.util.SortedSet;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import android.content.Context;
 import android.util.Log;
 import org.apache.commons.codec.binary.Base64;
 
@@ -24,7 +22,6 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   private String username;
   private static final String MAC_NAME = "HmacSHA1";
   private static final String ANONYMOUS = "anonymous";
-  private Base64 base64 = new Base64();
 
   public XOAuthConsumer(String username) {
       super(ANONYMOUS, ANONYMOUS);
@@ -110,7 +107,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
 
   private String base64(byte[] data) {
     try {
-      return new String(base64.encodeBase64(data), "UTF-8");
+      return new String(Base64.encodeBase64(data), "UTF-8");
     } catch (java.io.UnsupportedEncodingException e) {
        throw new RuntimeException(e);
     }

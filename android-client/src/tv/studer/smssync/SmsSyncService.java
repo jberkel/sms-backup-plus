@@ -28,7 +28,6 @@ import tv.studer.smssync.ServiceBase.SmsSyncState;
 import com.zegoggles.smssync.R;
 
 import java.util.List;
-import java.util.Date;
 
 public class SmsSyncService extends ServiceBase {
 
@@ -95,6 +94,7 @@ public class SmsSyncService extends ServiceBase {
                 // TODO use AsyncTask
                 // Start sync in new thread
                 new Thread() {
+                    @Override
                     public void run() {
                         // Lower thread priority a little. We're not the UI.
                         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
@@ -264,7 +264,7 @@ public class SmsSyncService extends ServiceBase {
                 List<Message> messages = result.messageList;
                 // Stop the sync if all items where uploaded or if the maximum number
                 // of messages per sync was uploaded.
-                if (messages.size() == 0
+                if (messages.isEmpty()
                         || sCurrentSyncedItems >= maxItemsPerSync) {
                     Log.i(Consts.TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
                     PrefStore.setLastSync(SmsSyncService.this);

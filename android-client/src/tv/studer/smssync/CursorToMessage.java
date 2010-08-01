@@ -274,7 +274,7 @@ public class CursorToMessage {
     }
 
     private static String generateReferenceValue() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 24; i++) {
             sb.append(Integer.toString((int)(Math.random() * 35), 36));
         }

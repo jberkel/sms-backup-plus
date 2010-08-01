@@ -15,7 +15,6 @@ import android.util.Log;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 
-import java.net.URLEncoder;
 
 
 public abstract class ServiceBase extends Service {
@@ -38,7 +37,7 @@ public abstract class ServiceBase extends Service {
         /**
          * Called whenever the sync state of the service changed.
          */
-        public void stateChanged(SmsSyncState oldState, SmsSyncState newState);
+        void stateChanged(SmsSyncState oldState, SmsSyncState newState);
     }
 
 

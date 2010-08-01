@@ -1,17 +1,13 @@
 package tv.studer.smssync;
 
 import android.content.Context;
-import com.fsck.k9.Preferences;
 import com.fsck.k9.Account;
 import com.fsck.k9.Preferences;
-import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.Folder.FolderType;
 import com.fsck.k9.mail.Folder.OpenMode;
-import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.*;
 
 import android.util.Log;
-import android.os.Debug;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;

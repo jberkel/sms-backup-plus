@@ -15,10 +15,8 @@
 
 package tv.studer.smssync;
 
-import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 public class PrefStore {
