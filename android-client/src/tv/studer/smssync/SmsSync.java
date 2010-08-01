@@ -776,7 +776,6 @@ public class SmsSync extends PreferenceActivity {
         protected void onPostExecute(XOAuthConsumer consumer) {
             if (consumer != null) {
                 PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
-                Toast.makeText(SmsSync.this, R.string.gmail_processing_done, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "updated tokens");
 
                 updateConnected();
