@@ -76,6 +76,7 @@ public class PrefStore {
     static final String PREF_MARK_AS_READ_ON_RESTORE = "mark_as_read_on_restore";
 
     static final String PREF_PREFILLED  = "prefilled";
+    static final String PREF_CONNECTED  = "connected";
 
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;

@@ -712,7 +712,7 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private CheckBoxPreference updateConnected() {
-        CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager().findPreference("connected");
+        CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager().findPreference(PrefStore.PREF_CONNECTED);
         boolean hasTokens = PrefStore.hasOauthTokens(this);
 
         connected.setChecked(hasTokens);
@@ -819,7 +819,7 @@ public class SmsSync extends PreferenceActivity {
                         @Override
                         public void run() {
                             if (oldValue == null && newValue != null && !"".equals(newValue)) {
-                                getPreferenceManager().findPreference("connected").setEnabled(true);
+                                getPreferenceManager().findPreference(PrefStore.PREF_CONNECTED).setEnabled(true);
                             }
 
                             PrefStore.clearSyncData(SmsSync.this);
