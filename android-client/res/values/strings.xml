@@ -86,7 +86,7 @@
   <string name="ui_dialog_missing_credentials_title">Login information</string>
   <string name="ui_dialog_missing_credentials_msg">You need to set the login information before backing up.</string>
   <string name="ui_dialog_sync_data_reset_title">Backup data reset</string>
-  <string name="ui_dialog_sync_data_reset_msg">Backup data has been reset. Please set your password and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.</string>
+  <string name="ui_dialog_sync_data_reset_msg">Backup data has been reset. Please reconnect your account and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.</string>
   <string name="ui_dialog_invalid_imap_folder_title">Invalid label name</string>
   <string name="ui_dialog_invalid_imap_folder_msg">The label name may only contain unaccented letters (A-Z, a-z).</string>
   <string name="ui_dialog_first_sync_title">First backup</string>

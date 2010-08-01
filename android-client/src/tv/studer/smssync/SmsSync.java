@@ -15,18 +15,6 @@
 
 package tv.studer.smssync;
 
-import oauth.signpost.OAuth;
-import oauth.signpost.OAuthProviderListener;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-import oauth.signpost.exception.OAuthException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
-import oauth.signpost.http.HttpRequest;
-import oauth.signpost.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-
-import com.zegoggles.smssync.R;
-import tv.studer.smssync.ServiceBase.SmsSyncState;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,6 +54,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import oauth.signpost.OAuth;
+import oauth.signpost.OAuthProviderListener;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import oauth.signpost.exception.OAuthException;
+import oauth.signpost.exception.OAuthNotAuthorizedException;
+
+import com.zegoggles.smssync.R;
+import tv.studer.smssync.ServiceBase.SmsSyncState;
+
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -804,12 +802,11 @@ public class SmsSync extends PreferenceActivity {
     private void setPreferenceListeners(PreferenceManager prefMgr) {
         prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, final Object newValue) {
+            public boolean onPreferenceChange(final Preference preference, final Object newValue) {
                 if (newValue.toString().trim().length() == 0) {
                   return false;
                 }
 
-                preference.setTitle(newValue.toString());
                 final SharedPreferences prefs = preference.getSharedPreferences();
                 final String oldValue = prefs.getString(PrefStore.PREF_LOGIN_USER, null);
                 if (!newValue.equals(oldValue)) {
@@ -818,11 +815,9 @@ public class SmsSync extends PreferenceActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (oldValue == null && newValue != null && !"".equals(newValue)) {
-                                getPreferenceManager().findPreference(PrefStore.PREF_CONNECTED).setEnabled(true);
-                            }
-
                             PrefStore.clearSyncData(SmsSync.this);
+                            updateConnected();
+                            preference.setTitle(newValue.toString());
 
                             if (oldValue != null) {
                                 showDialog(DIALOG_SYNC_DATA_RESET);
@@ -838,6 +833,7 @@ public class SmsSync extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, final Object newValue) {
               String imapFolder = newValue.toString();
+
               if (PrefStore.isValidImapFolder(imapFolder)) {
                   preference.setTitle(imapFolder);
                   return true;
@@ -932,7 +928,7 @@ public class SmsSync extends PreferenceActivity {
             }
         });
     }
- 
+
     StatusPreference getStatusPreference() {
         return mStatusPref;
     }
