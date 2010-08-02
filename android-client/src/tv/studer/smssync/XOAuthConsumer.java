@@ -73,8 +73,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   }
 
   public CommonsHttpOAuthProvider getProvider() {
-      System.setProperty("debug", "true");
-
+      //System.setProperty("debug", "true");
       return new CommonsHttpOAuthProvider(
           String.format("https://www.google.com/accounts/OAuthGetRequestToken?scope=%s&xoauth_displayname=%s",
             urlEncode(Consts.GMAIL_SCOPE),

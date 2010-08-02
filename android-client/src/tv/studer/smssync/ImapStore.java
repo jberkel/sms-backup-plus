@@ -39,7 +39,7 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                     if (password == null)
                         throw new IllegalStateException("password is null");
 
-                  return String.format(Consts.IMAP_URI,
+                    return String.format(Consts.IMAP_URI,
                        PrefStore.getServerProtocol(context),
                        URLEncoder.encode(username),
                        URLEncoder.encode(password).replace("+", "%20"),
