@@ -23,3 +23,5 @@ Development on the upstream project seems to have stalled at the moment. Check t
 or the [github issues](http://github.com/jberkel/android-sms/issues) for a list of things to work on.
 
 A new version of android-sms is going to be released to the market soon, see the `next-release` branch.
+
+If you want to help translating the UI to other languages: [crowdin project page](http://crowdin.net/project/sms-backup-plus/invite).
