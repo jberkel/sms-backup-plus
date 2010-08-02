@@ -813,7 +813,6 @@ public class SmsSync extends PreferenceActivity {
                         @Override
                         public void run() {
                             PrefStore.clearSyncData(SmsSync.this);
-                            updateConnected();
                             preference.setTitle(newValue.toString());
 
                             if (oldValue != null) {
@@ -822,6 +821,7 @@ public class SmsSync extends PreferenceActivity {
                         }
                     });
                 }
+                updateConnected();
                 return true;
             }
         });
