@@ -632,7 +632,7 @@ public class SmsSync extends PreferenceActivity {
                         PrefStore.setOauthTokens(SmsSync.this, null, null);
                         updateConnected();
                     }
-                }).create();            
+                }).create();
             case DIALOG_CONNECT:
                 return new AlertDialog.Builder(this)
                     .setCustomTitle(null)
@@ -798,7 +798,7 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private void setPreferenceListeners(PreferenceManager prefMgr) {
-        prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {            
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(final Preference preference, final Object newValue) {
                 if (newValue.toString().trim().length() == 0) {
                   return false;
@@ -826,7 +826,7 @@ public class SmsSync extends PreferenceActivity {
             }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {            
+        prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, final Object newValue) {
               String imapFolder = newValue.toString();
 
@@ -845,7 +845,7 @@ public class SmsSync extends PreferenceActivity {
             }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {            
+        prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean isEnabled = (Boolean) newValue;
                 ComponentName componentName = new ComponentName(SmsSync.this, SmsBroadcastReceiver.class);
@@ -865,7 +865,7 @@ public class SmsSync extends PreferenceActivity {
              }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {            
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (PrefStore.isFirstSync(SmsSync.this) && PrefStore.isLoginUsernameSet(SmsSync.this)) {
                    showDialog(DIALOG_NEED_FIRST_MANUAL_SYNC);
@@ -874,21 +874,21 @@ public class SmsSync extends PreferenceActivity {
             }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {            
+        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 updateMaxItemsPerSync(newValue.toString());
                 return true;
             }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {           
+        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 updateMaxItemsPerRestore(newValue.toString());
                 return true;
             }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {           
+        prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setTitle(newValue.toString());
                 SharedPreferences prefs = preference.getSharedPreferences();
@@ -910,7 +910,7 @@ public class SmsSync extends PreferenceActivity {
             }
          });
 
-        updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {            
+        updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 boolean newValue  = (Boolean) change;
                 showDialog(newValue ? DIALOG_CONNECT : DIALOG_DISCONNECT);
