@@ -68,14 +68,16 @@ import tv.studer.smssync.ServiceBase.SmsSyncState;
 public class SmsSync extends PreferenceActivity {
 
     private static final int MENU_INFO = 0;
-    private static final int DIALOG_MISSING_CREDENTIALS = 1;
-    private static final int DIALOG_FIRST_SYNC = 2;
-    private static final int DIALOG_SYNC_DATA_RESET = 3;
-    private static final int DIALOG_INVALID_IMAP_FOLDER = 4;
-    private static final int DIALOG_NEED_FIRST_MANUAL_SYNC = 5;
-    private static final int DIALOG_ABOUT = 6;
-    private static final int DIALOG_DISCONNECT = 7;
-    private static final int DIALOG_CONNECT = 8;
+    enum Dialogs { MISSING_CREDENTIALS,
+      FIRST_SYNC,
+      SYNC_DATA_RESET,
+      INVALID_IMAP_FOLDER,
+      NEED_FIRST_MANUAL_SYNC,
+      ABOUT,
+      DISCONNECT,
+      CONNECT,
+      CONNECT_TOKEN_ERROR
+    }
 
     private StatusPreference mStatusPref;
 
@@ -85,6 +87,7 @@ public class SmsSync extends PreferenceActivity {
     enum Mode { BACKUP, RESTORE, NONE }
 
     private Mode mode = Mode.NONE;
+    private Uri authorizeUri = null;
 
     /** Called when the activity is first created. */
     @Override
@@ -149,7 +152,7 @@ public class SmsSync extends PreferenceActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case MENU_INFO:
-                showDialog(DIALOG_ABOUT);
+                showDialog(Dialogs.ABOUT);
                 return true;
         }
         return false;
@@ -196,7 +199,7 @@ public class SmsSync extends PreferenceActivity {
     private void initiateSync() {
         if (checkLoginInformation()) {
             if (PrefStore.isFirstSync(this)) {
-                showDialog(DIALOG_FIRST_SYNC);
+                showDialog(Dialogs.FIRST_SYNC);
             } else {
                 mode = Mode.BACKUP;
                 startSync(false);
@@ -206,7 +209,7 @@ public class SmsSync extends PreferenceActivity {
 
     private boolean checkLoginInformation() {
         if (!PrefStore.isLoginInformationSet(this)) {
-            showDialog(DIALOG_MISSING_CREDENTIALS);
+            showDialog(Dialogs.MISSING_CREDENTIALS);
             return false;
         } else {
             return true;
@@ -565,26 +568,25 @@ public class SmsSync extends PreferenceActivity {
         String title;
         String msg;
         Builder builder;
-        switch (id) {
-            case DIALOG_MISSING_CREDENTIALS:
+        switch (Dialogs.values()[id]) {
+            case MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
                 msg = getString(R.string.ui_dialog_missing_credentials_msg);
                 break;
-            case DIALOG_SYNC_DATA_RESET:
+            case SYNC_DATA_RESET:
                 title = getString(R.string.ui_dialog_sync_data_reset_title);
                 msg = getString(R.string.ui_dialog_sync_data_reset_msg);
                 break;
-            case DIALOG_INVALID_IMAP_FOLDER:
+            case INVALID_IMAP_FOLDER:
                 title = getString(R.string.ui_dialog_invalid_imap_folder_title);
                 msg = getString(R.string.ui_dialog_invalid_imap_folder_msg);
                 break;
-            case DIALOG_NEED_FIRST_MANUAL_SYNC:
+            case NEED_FIRST_MANUAL_SYNC:
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // BUTTON1 == BUTTON_POSITIVE == "Yes"
                         if (which == DialogInterface.BUTTON1) {
-                            showDialog(DIALOG_FIRST_SYNC);
+                            showDialog(Dialogs.FIRST_SYNC);
                         }
                     }
                 };
@@ -596,11 +598,10 @@ public class SmsSync extends PreferenceActivity {
                     .setNegativeButton(android.R.string.no, dialogClickListener)
                     .setCancelable(false)
                     .create();
-            case DIALOG_FIRST_SYNC:
+            case FIRST_SYNC:
                 DialogInterface.OnClickListener firstSyncListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // BUTTON2 == BUTTON_NEGATIVE == "Skip"
                         startSync(which == DialogInterface.BUTTON2);
                     }
                 };
@@ -612,7 +613,7 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(R.string.ui_sync, firstSyncListener)
                     .setNegativeButton(R.string.ui_skip, firstSyncListener)
                     .create();
-            case DIALOG_ABOUT:
+            case ABOUT:
                 View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
                 webView.loadData(getAboutText(), "text/html", "utf-8");
@@ -622,7 +623,7 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(android.R.string.ok, null)
                     .setView(contentView)
                     .create();
-            case DIALOG_DISCONNECT:
+            case DISCONNECT:
                 return new AlertDialog.Builder(this)
                     .setCustomTitle(null)
                     .setMessage(R.string.ui_dialog_disconnect_msg)
@@ -633,18 +634,27 @@ public class SmsSync extends PreferenceActivity {
                         updateConnected();
                     }
                 }).create();
-            case DIALOG_CONNECT:
+            case CONNECT:
                 return new AlertDialog.Builder(this)
                     .setCustomTitle(null)
                     .setMessage(R.string.ui_dialog_connect_msg)
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                          if (authorizeUri != null) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, authorizeUri));
+                          }
+                          dismissDialog(id);
                         }
                     }).create();
-
-
+            case CONNECT_TOKEN_ERROR:
+                return new AlertDialog.Builder(this)
+                    .setCustomTitle(null)
+                    .setMessage(R.string.ui_dialog_connect_token_error)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).create();
 
             default:
                 return null;
@@ -654,17 +664,17 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private Dialog createMessageDialog(final int id, String title, String msg) {
-        Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title);
-        builder.setMessage(msg);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismissDialog(id);
-            }
-        });
-        return builder.create();
-    }
+        return new AlertDialog.Builder(this)
+          .setTitle(title)
+          .setMessage(msg)
+          .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                  dismissDialog(id);
+              }
+          })
+          .create();
+      }
 
     private String getAboutText() {
         try {
@@ -740,7 +750,13 @@ public class SmsSync extends PreferenceActivity {
         @Override
         protected void onPostExecute(String authorizeUrl) {
             if (authorizeUrl != null) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authorizeUrl)));
+                SmsSync.this.authorizeUri = Uri.parse(authorizeUrl);
+
+                showDialog(Dialogs.CONNECT);
+            } else {
+                SmsSync.this.authorizeUri = null;
+
+                showDialog(Dialogs.CONNECT_TOKEN_ERROR);
             }
         }
     }
@@ -797,6 +813,10 @@ public class SmsSync extends PreferenceActivity {
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
+    private void showDialog(Dialogs d) {
+        showDialog(d.ordinal());
+    }
+
     private void setPreferenceListeners(PreferenceManager prefMgr) {
         prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(final Preference preference, final Object newValue) {
@@ -816,7 +836,7 @@ public class SmsSync extends PreferenceActivity {
                             preference.setTitle(newValue.toString());
 
                             if (oldValue != null) {
-                                showDialog(DIALOG_SYNC_DATA_RESET);
+                                showDialog(Dialogs.SYNC_DATA_RESET);
                             }
                         }
                     });
@@ -837,7 +857,7 @@ public class SmsSync extends PreferenceActivity {
                   runOnUiThread(new Runnable() {
                       @Override
                       public void run() {
-                          showDialog(DIALOG_INVALID_IMAP_FOLDER);
+                          showDialog(Dialogs.INVALID_IMAP_FOLDER);
                       }
                   });
                   return false;
@@ -854,7 +874,10 @@ public class SmsSync extends PreferenceActivity {
                     pkgMgr.setComponentEnabledSetting(componentName,
                             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                             PackageManager.DONT_KILL_APP);
-                    initiateSync();
+
+                    if (PrefStore.isLoginInformationSet(SmsSync.this)) {
+                      initiateSync();
+                    }
                 } else {
                     pkgMgr.setComponentEnabledSetting(componentName,
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
@@ -868,7 +891,7 @@ public class SmsSync extends PreferenceActivity {
         prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (PrefStore.isFirstSync(SmsSync.this) && PrefStore.isLoginUsernameSet(SmsSync.this)) {
-                   showDialog(DIALOG_NEED_FIRST_MANUAL_SYNC);
+                   showDialog(Dialogs.NEED_FIRST_MANUAL_SYNC);
                 }
                 return true;
             }
@@ -901,7 +924,7 @@ public class SmsSync extends PreferenceActivity {
                         public void run() {
                             PrefStore.clearSyncData(SmsSync.this);
                             if (oldValue != null) {
-                                showDialog(DIALOG_SYNC_DATA_RESET);
+                                showDialog(Dialogs.SYNC_DATA_RESET);
                             }
                         }
                     });
@@ -913,7 +936,11 @@ public class SmsSync extends PreferenceActivity {
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 boolean newValue  = (Boolean) change;
-                showDialog(newValue ? DIALOG_CONNECT : DIALOG_DISCONNECT);
+                if (newValue) {
+                  new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                } else {
+                  showDialog(Dialogs.DISCONNECT);
+                }
                 return false;
             }
         });

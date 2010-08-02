@@ -94,6 +94,7 @@
   <string name="ui_dialog_need_first_manual_sync_title">First backup</string>
   <string name="ui_dialog_need_first_manual_sync_msg">The first backup needs to be initiated manually. Would you like to perform a backup now?</string>
   <string name="ui_dialog_connect_msg">A browser window will open where you\'ll need to log into gmail and authorize this app</string>
+  <string name="ui_dialog_connect_token_error">Could not obtain request token from Google. Make sure the phone is connected to the internet.</string>
   <string name="ui_dialog_disconnect_msg">Are you sure? You will need to reauthorize after disconnecting this account</string>
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
