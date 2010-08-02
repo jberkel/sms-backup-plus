@@ -25,6 +25,7 @@ import android.app.NotificationManager;
 import android.app.Notification;
 import android.widget.Toast;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.Dialog;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
@@ -75,6 +76,7 @@ public class SmsSync extends PreferenceActivity {
       NEED_FIRST_MANUAL_SYNC,
       ABOUT,
       DISCONNECT,
+      REQUEST_TOKEN,
       CONNECT,
       CONNECT_TOKEN_ERROR
     }
@@ -152,7 +154,7 @@ public class SmsSync extends PreferenceActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case MENU_INFO:
-                showDialog(Dialogs.ABOUT);
+                show(Dialogs.ABOUT);
                 return true;
         }
         return false;
@@ -199,7 +201,7 @@ public class SmsSync extends PreferenceActivity {
     private void initiateSync() {
         if (checkLoginInformation()) {
             if (PrefStore.isFirstSync(this)) {
-                showDialog(Dialogs.FIRST_SYNC);
+                show(Dialogs.FIRST_SYNC);
             } else {
                 mode = Mode.BACKUP;
                 startSync(false);
@@ -209,7 +211,7 @@ public class SmsSync extends PreferenceActivity {
 
     private boolean checkLoginInformation() {
         if (!PrefStore.isLoginInformationSet(this)) {
-            showDialog(Dialogs.MISSING_CREDENTIALS);
+            show(Dialogs.MISSING_CREDENTIALS);
             return false;
         } else {
             return true;
@@ -586,7 +588,7 @@ public class SmsSync extends PreferenceActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == DialogInterface.BUTTON1) {
-                            showDialog(Dialogs.FIRST_SYNC);
+                            show(Dialogs.FIRST_SYNC);
                         }
                     }
                 };
@@ -634,6 +636,14 @@ public class SmsSync extends PreferenceActivity {
                         updateConnected();
                     }
                 }).create();
+            case REQUEST_TOKEN:
+                ProgressDialog d = new ProgressDialog(this);
+                d.setTitle(null);
+                d.setMessage(getResources().getString(R.string.ui_dialog_request_token_msg));
+                d.setIndeterminate(true);
+                d.setCancelable(false);
+                return d;
+
             case CONNECT:
                 return new AlertDialog.Builder(this)
                     .setCustomTitle(null)
@@ -749,14 +759,16 @@ public class SmsSync extends PreferenceActivity {
 
         @Override
         protected void onPostExecute(String authorizeUrl) {
+            dismiss(Dialogs.REQUEST_TOKEN);
+
             if (authorizeUrl != null) {
                 SmsSync.this.authorizeUri = Uri.parse(authorizeUrl);
 
-                showDialog(Dialogs.CONNECT);
+                show(Dialogs.CONNECT);
             } else {
                 SmsSync.this.authorizeUri = null;
 
-                showDialog(Dialogs.CONNECT_TOKEN_ERROR);
+                show(Dialogs.CONNECT_TOKEN_ERROR);
             }
         }
     }
@@ -813,8 +825,12 @@ public class SmsSync extends PreferenceActivity {
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
-    private void showDialog(Dialogs d) {
+    private void show(Dialogs d) {
         showDialog(d.ordinal());
+    }
+
+    private void dismiss(Dialogs d) {
+        dismissDialog(d.ordinal());
     }
 
     private void setPreferenceListeners(PreferenceManager prefMgr) {
@@ -836,7 +852,7 @@ public class SmsSync extends PreferenceActivity {
                             preference.setTitle(newValue.toString());
 
                             if (oldValue != null) {
-                                showDialog(Dialogs.SYNC_DATA_RESET);
+                                show(Dialogs.SYNC_DATA_RESET);
                             }
                         }
                     });
@@ -857,7 +873,7 @@ public class SmsSync extends PreferenceActivity {
                   runOnUiThread(new Runnable() {
                       @Override
                       public void run() {
-                          showDialog(Dialogs.INVALID_IMAP_FOLDER);
+                          show(Dialogs.INVALID_IMAP_FOLDER);
                       }
                   });
                   return false;
@@ -891,7 +907,7 @@ public class SmsSync extends PreferenceActivity {
         prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (PrefStore.isFirstSync(SmsSync.this) && PrefStore.isLoginUsernameSet(SmsSync.this)) {
-                   showDialog(Dialogs.NEED_FIRST_MANUAL_SYNC);
+                   show(Dialogs.NEED_FIRST_MANUAL_SYNC);
                 }
                 return true;
             }
@@ -924,7 +940,7 @@ public class SmsSync extends PreferenceActivity {
                         public void run() {
                             PrefStore.clearSyncData(SmsSync.this);
                             if (oldValue != null) {
-                                showDialog(Dialogs.SYNC_DATA_RESET);
+                                show(Dialogs.SYNC_DATA_RESET);
                             }
                         }
                     });
@@ -937,9 +953,10 @@ public class SmsSync extends PreferenceActivity {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 boolean newValue  = (Boolean) change;
                 if (newValue) {
+                  show(Dialogs.REQUEST_TOKEN);
                   new RequestTokenTask().execute(Consts.CALLBACK_URL);
                 } else {
-                  showDialog(Dialogs.DISCONNECT);
+                  show(Dialogs.DISCONNECT);
                 }
                 return false;
             }
