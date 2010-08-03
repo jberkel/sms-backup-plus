@@ -95,9 +95,9 @@ public class PrefStore {
     static final long DEFAULT_LAST_SYNC = -1;
 
     /** Default value for {@link #PREF_MAX_ITEMS_PER_SYNC}. */
-    static final String DEFAULT_MAX_ITEMS_PER_SYNC = "100";
+    static final String DEFAULT_MAX_ITEMS_PER_SYNC = "-1";
 
-    static final String DEFAULT_MAX_ITEMS_PER_RESTORE = "All";
+    static final String DEFAULT_MAX_ITEMS_PER_RESTORE = "-1";
 
     /** Default value for {@link #PREF_MARK_AS_READ}. */
     static final boolean DEFAULT_MARK_AS_READ = false;
@@ -200,20 +200,11 @@ public class PrefStore {
     }
 
     static int getMaxItemsPerSync(Context ctx) {
-        String str = getSharedPreferences(ctx).getString(PREF_MAX_ITEMS_PER_SYNC,
-                DEFAULT_MAX_ITEMS_PER_SYNC);
-        return Integer.valueOf(str);
+        return Integer.valueOf(getSharedPreferences(ctx).getString(PREF_MAX_ITEMS_PER_SYNC, DEFAULT_MAX_ITEMS_PER_SYNC));
     }
 
     static int getMaxItemsPerRestore(Context ctx) {
-        String str = getSharedPreferences(ctx).getString(PREF_MAX_ITEMS_PER_RESTORE,
-                DEFAULT_MAX_ITEMS_PER_RESTORE);
-
-        try {
-            return Integer.valueOf(str);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
+        return Integer.valueOf(getSharedPreferences(ctx).getString(PREF_MAX_ITEMS_PER_RESTORE, DEFAULT_MAX_ITEMS_PER_RESTORE));
     }
 
     /**

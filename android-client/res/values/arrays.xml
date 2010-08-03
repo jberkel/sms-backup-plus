@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string-array name="max_items_per_sync_entries">
-    <item>25</item>
     <item>50</item>
     <item>100</item>
-    <item>150</item>
     <item>200</item>
+    <item>@string/all_messages</item>
+  </string-array>
+
+  <string-array name="max_items_per_sync_values">
+    <item>50</item>
+    <item>100</item>
+    <item>200</item>
+    <item>-1</item>
   </string-array>
 
   <string-array name="max_items_per_restore_entries">
@@ -15,20 +21,27 @@
     <item>@string/all_messages</item>
   </string-array>
 
+  <string-array name="max_items_per_restore_values">
+    <item>20</item>
+    <item>200</item>
+    <item>2000</item>
+    <item>-1</item>
+  </string-array>
+
+ <string-array name="server_protocol_entries">
+    <item>SSL (Required)</item>
+    <item>SSL (Optional)</item>
+    <item>TLS (Required)</item>
+    <item>TLS (Optional)</item>
+    <item>None</item>
+  </string-array>
+
   <string-array name="server_protocol_entryValues">
     <item>+ssl+</item>
     <item>+ssl</item>
     <item>+tls+</item>
     <item>+tls</item>
     <item/>
-  </string-array>
-
-  <string-array name="server_protocol_entries">
-    <item>SSL (Required)</item>
-    <item>SSL (Optional)</item>
-    <item>TLS (Required)</item>
-    <item>TLS (Optional)</item>
-    <item>None</item>
   </string-array>
 
   <string-array name="server_authentication_entries">
@@ -40,6 +53,4 @@
     <item>xoauth</item>
     <item>plain</item>
   </string-array>
-
-
 </resources>

@@ -72,12 +72,12 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
       }
   }
 
-  public CommonsHttpOAuthProvider getProvider() {
+  public CommonsHttpOAuthProvider getProvider(android.content.Context context ) {
       //System.setProperty("debug", "true");
       return new CommonsHttpOAuthProvider(
           String.format("https://www.google.com/accounts/OAuthGetRequestToken?scope=%s&xoauth_displayname=%s",
             urlEncode(Consts.GMAIL_SCOPE),
-            urlEncode(Consts.XOAUTH_DISPLAYNAME)),
+            urlEncode(context.getString(com.zegoggles.smssync.R.string.app_name))),
           "https://www.google.com/accounts/OAuthGetAccessToken",
           "https://www.google.com/accounts/OAuthAuthorizeToken?btmpl=mobile") {
               { setOAuth10a(true); }

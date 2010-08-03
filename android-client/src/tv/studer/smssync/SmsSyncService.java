@@ -230,9 +230,9 @@ public class SmsSyncService extends ServiceBase {
 
         Cursor items = getItemsToSync();
         int maxItemsPerSync = PrefStore.getMaxItemsPerSync(this);
-        sItemsToSync = Math.min(items.getCount(), maxItemsPerSync);
-        Log.d(Consts.TAG, "Total messages to backup: " + sItemsToSync);
-        if (sItemsToSync == 0) {
+        sItemsToSync = maxItemsPerSync > 0 ? Math.min(items.getCount(), maxItemsPerSync) : items.getCount();
+
+        if (sItemsToSync <= 0) {
             PrefStore.setLastSync(this);
             if (PrefStore.isFirstSync(this)) {
                 // If this is the first backup we need to write something to PREF_MAX_SYNCED_DATE
@@ -243,6 +243,8 @@ public class SmsSyncService extends ServiceBase {
             Log.d(Consts.TAG, "Nothing to do.");
             return;
         }
+
+        Log.d(Consts.TAG, "Total messages to backup: " + sItemsToSync);
 
         updateState(SmsSyncState.LOGIN);
         Folder folder = getBackupFolder();
@@ -259,13 +261,11 @@ public class SmsSyncService extends ServiceBase {
                     break;
                 }
                 updateState(SmsSyncState.SYNC);
-                ConversionResult result = converter.cursorToMessageArray(items,
-                        MAX_MSG_PER_REQUEST);
+                ConversionResult result = converter.cursorToMessageArray(items, MAX_MSG_PER_REQUEST);
                 List<Message> messages = result.messageList;
                 // Stop the sync if all items where uploaded or if the maximum number
                 // of messages per sync was uploaded.
-                if (messages.isEmpty()
-                        || sCurrentSyncedItems >= maxItemsPerSync) {
+                if (messages.isEmpty() || sCurrentSyncedItems >= sItemsToSync) {
                     Log.i(Consts.TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
                     PrefStore.setLastSync(SmsSyncService.this);
                     updateState(SmsSyncState.IDLE);
@@ -297,14 +297,14 @@ public class SmsSyncService extends ServiceBase {
      * <code>date &lt; {@link #getMaxSyncedDate()}</code> which are no drafs.
      */
     private Cursor getItemsToSync() {
-        ContentResolver r = getContentResolver();
-        String selection = String.format("%s > ? AND %s <> ?",
-                SmsConsts.DATE, SmsConsts.TYPE);
-        String[] selectionArgs = new String[] {
-                String.valueOf(getMaxSyncedDate()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
-        };
-        String sortOrder = SmsConsts.DATE + " LIMIT " + PrefStore.getMaxItemsPerSync(this);
-        return r.query(SMS_PROVIDER, null, selection, selectionArgs, sortOrder);
+        String sortOrder = SmsConsts.DATE;
+        if (PrefStore.getMaxItemsPerSync(this) > 0) {
+          sortOrder += " LIMIT " + PrefStore.getMaxItemsPerSync(this);
+        }
+        return getContentResolver().query(SMS_PROVIDER, null,
+              String.format("%s > ? AND %s <> ?", SmsConsts.DATE, SmsConsts.TYPE),
+              new String[] { String.valueOf(getMaxSyncedDate()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
+              sortOrder);
     }
 
     /**

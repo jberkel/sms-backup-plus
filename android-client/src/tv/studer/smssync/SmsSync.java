@@ -131,7 +131,6 @@ public class SmsSync extends PreferenceActivity {
     protected void onResume() {
         super.onResume();
 
-
         SmsSyncService.setStateChangeListener(mStatusPref);
         updateUsernameLabelFromPref();
         updateImapFolderLabelFromPref();
@@ -334,7 +333,7 @@ public class SmsSync extends PreferenceActivity {
                                     if (backedUpCount ==
                                             PrefStore.getMaxItemsPerSync(SmsSync.this)) {
                                         // Maximum msg per sync reached.
-                                        statusDetails = getResources().getString(
+                                        statusDetails = getString(
                                                 R.string.status_backup_done_details_max_per_sync,
                                                 backedUpCount);
                                     } else if (backedUpCount > 0) {
@@ -607,11 +606,14 @@ public class SmsSync extends PreferenceActivity {
                         startSync(which == DialogInterface.BUTTON2);
                     }
                 };
+                final int maxItems = PrefStore.getMaxItemsPerSync(this);
+                final String syncMsg = maxItems < 0 ?
+                             getString(R.string.ui_dialog_first_sync_msg) :
+                             getString(R.string.ui_dialog_first_sync_msg_batched, maxItems);
 
                 return new AlertDialog.Builder(this)
                     .setTitle(R.string.ui_dialog_first_sync_title)
-                    .setMessage(getString(R.string.ui_dialog_first_sync_msg,
-                        PrefStore.getMaxItemsPerSync(this)))
+                    .setMessage(syncMsg)
                     .setPositiveButton(R.string.ui_sync, firstSyncListener)
                     .setNegativeButton(R.string.ui_skip, firstSyncListener)
                     .create();
@@ -639,7 +641,7 @@ public class SmsSync extends PreferenceActivity {
             case REQUEST_TOKEN:
                 ProgressDialog d = new ProgressDialog(this);
                 d.setTitle(null);
-                d.setMessage(getResources().getString(R.string.ui_dialog_request_token_msg));
+                d.setMessage(getString(R.string.ui_dialog_request_token_msg));
                 d.setIndeterminate(true);
                 d.setCancelable(false);
                 return d;
@@ -647,7 +649,7 @@ public class SmsSync extends PreferenceActivity {
             case CONNECT:
                 return new AlertDialog.Builder(this)
                     .setCustomTitle(null)
-                    .setMessage(R.string.ui_dialog_connect_msg)
+                    .setMessage(getString(R.string.ui_dialog_connect_msg, getString(R.string.app_name)))
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -709,20 +711,20 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private void updateMaxItemsPerSync(String newValue) {
-        Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC);
-        if (newValue == null) {
-            newValue = String.valueOf(PrefStore.getMaxItemsPerSync(this));
-        }
-        pref.setTitle(newValue);
+        updateMaxItems(PrefStore.PREF_MAX_ITEMS_PER_SYNC, PrefStore.getMaxItemsPerSync(this), newValue);
     }
 
     private void updateMaxItemsPerRestore(String newValue) {
-        Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE);
+        updateMaxItems(PrefStore.PREF_MAX_ITEMS_PER_RESTORE, PrefStore.getMaxItemsPerRestore(this), newValue);
+    }
+
+    private void updateMaxItems(String prefKey, int currentValue, String newValue) {
+        Preference pref = getPreferenceManager().findPreference(prefKey);
         if (newValue == null) {
-            int max = PrefStore.getMaxItemsPerRestore(this);
-            newValue = max == -1 ? PrefStore.DEFAULT_MAX_ITEMS_PER_RESTORE : String.valueOf(max);
+            newValue = String.valueOf(currentValue);
         }
-        pref.setTitle(newValue);
+
+        pref.setTitle("-1".equals(newValue) ? getString(R.string.all_messages) : newValue);
     }
 
     private CheckBoxPreference updateConnected() {
@@ -740,7 +742,7 @@ public class SmsSync extends PreferenceActivity {
         public String doInBackground(String... callback) {
             synchronized(XOAuthConsumer.class) {
                 XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
-                CommonsHttpOAuthProvider provider = consumer.getProvider();
+                CommonsHttpOAuthProvider provider = consumer.getProvider(SmsSync.this);
                 try {
                     String url = provider.retrieveRequestToken(consumer, callback[0]);
                     PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
@@ -749,7 +751,7 @@ public class SmsSync extends PreferenceActivity {
                     Log.e(TAG, "error requesting token", e);
 
                     notifyUser(android.R.drawable.stat_sys_warning, "Error",
-                        getResources().getString(R.string.gmail_connected_fail),
+                        getString(R.string.gmail_connected_fail),
                         e.getMessage());
 
                     return null;
@@ -783,7 +785,7 @@ public class SmsSync extends PreferenceActivity {
         protected XOAuthConsumer doInBackground(Uri... callbackUri) {
             Log.d(TAG, "oauth callback: " + callbackUri[0]);
             XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
-            CommonsHttpOAuthProvider provider = consumer.getProvider();
+            CommonsHttpOAuthProvider provider = consumer.getProvider(SmsSync.this);
             String verifier = callbackUri[0].getQueryParameter(OAuth.OAUTH_VERIFIER);
             try {
                 provider.retrieveAccessToken(consumer, verifier);
@@ -792,7 +794,7 @@ public class SmsSync extends PreferenceActivity {
                 Log.e(TAG, "error", e);
 
                 notifyUser(android.R.drawable.stat_sys_warning, "Error",
-                    getResources().getString(R.string.gmail_connected_fail),
+                    getString(R.string.gmail_connected_fail),
                     e.getMessage());
 
                 return null;
@@ -857,7 +859,7 @@ public class SmsSync extends PreferenceActivity {
                         }
                     });
                 }
-                updateConnected();
+                updateConnected().setEnabled(true);
                 return true;
             }
         });

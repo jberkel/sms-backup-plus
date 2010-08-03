@@ -51,5 +51,4 @@ final class Consts {
     static final String CALLBACK_URL = "smssync://gmail";
 
     static final String GMAIL_SCOPE  = "https://mail.google.com/";
-    static final String XOAUTH_DISPLAYNAME  = "SMS Backup+Restore";
 }
