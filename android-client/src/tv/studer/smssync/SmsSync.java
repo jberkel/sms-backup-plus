@@ -869,18 +869,13 @@ public class SmsSync extends PreferenceActivity {
                 boolean isEnabled = (Boolean) newValue;
                 ComponentName componentName = new ComponentName(SmsSync.this, SmsBroadcastReceiver.class);
                 PackageManager pkgMgr = getPackageManager();
-                if (isEnabled) {
-                    pkgMgr.setComponentEnabledSetting(componentName,
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+
+                pkgMgr.setComponentEnabledSetting(componentName,
+                            isEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
+                                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                             PackageManager.DONT_KILL_APP);
 
-                    if (PrefStore.isLoginInformationSet(SmsSync.this)) {
-                      initiateSync();
-                    }
-                } else {
-                    pkgMgr.setComponentEnabledSetting(componentName,
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
+                if (!isEnabled) {
                     Alarms.cancel(SmsSync.this);
                 }
                 return true;

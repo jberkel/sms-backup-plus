@@ -59,5 +59,4 @@ public class Alarms {
         serviceIntent.putExtra(Consts.KEY_NUM_RETRIES, Consts.NUM_AUTO_RETRIES);
         return PendingIntent.getService(ctx, 0, serviceIntent, 0);
     }
-
 }
