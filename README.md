@@ -25,3 +25,8 @@ or the [github issues](http://github.com/jberkel/android-sms/issues) for a list 
 A new version of android-sms is going to be released to the market soon, see the `next-release` branch.
 
 If you want to help translating the UI to other languages: [crowdin project page](http://crowdin.net/project/sms-backup-plus/invite).
+
+### Credits
+
+  * [k9mail](http://code.google.com/p/k9mail/) IMAP library
+  * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://http://ncrow.deviantart.com/) for the gmail icons
