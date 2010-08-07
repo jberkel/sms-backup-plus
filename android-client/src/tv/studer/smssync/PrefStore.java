@@ -115,8 +115,7 @@ public class PrefStore {
     }
 
     static long getMaxSyncedDate(Context ctx) {
-        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE,
-                DEFAULT_MAX_SYNCED_DATE);
+        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE, DEFAULT_MAX_SYNCED_DATE);
     }
 
     static boolean isMaxSyncedDateSet(Context ctx) {
