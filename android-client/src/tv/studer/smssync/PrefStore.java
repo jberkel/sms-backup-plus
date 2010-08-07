@@ -89,7 +89,7 @@ public class PrefStore {
     static final int DEFAULT_INCOMING_TIMEOUT_SECONDS = 20;
 
     /** Default value for {@link PrefStore#PREF_REGULAR_TIMEOUT_SECONDS}. */
-    static final int DEFAULT_REGULAR_TIMEOUT_SECONDS = 30 * 60; // 30 minutes
+    static final int DEFAULT_REGULAR_TIMEOUT_SECONDS = 2 * 60 * 60; // 2h
 
     /** Default value for {@link #PREF_LAST_SYNC}. */
     static final long DEFAULT_LAST_SYNC = -1;
