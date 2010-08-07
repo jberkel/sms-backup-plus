@@ -51,4 +51,5 @@ final class Consts {
     static final String CALLBACK_URL = "smssync://gmail";
 
     static final String GMAIL_SCOPE  = "https://mail.google.com/";
+    static final String CONTACTS_SCOPE  = "https://www.google.com/m8/feeds/";
 }

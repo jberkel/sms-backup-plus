@@ -132,6 +132,10 @@ public class PrefStore {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null);
     }
 
+    static void setLoginUsername(Context ctx, String s) {
+       getSharedPreferences(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
+    }
+
     static String getLoginPassword(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_PASSWORD, null);
     }

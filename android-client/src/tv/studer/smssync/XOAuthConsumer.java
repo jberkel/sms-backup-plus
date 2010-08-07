@@ -9,6 +9,18 @@ import oauth.signpost.signature.SignatureBaseString;
 import java.net.URLEncoder;
 
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.HttpResponse;
+
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.SAXParser;
+import org.xml.sax.XMLReader;
+import org.xml.sax.InputSource;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
+
 import java.util.Map;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -74,14 +86,57 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
 
   public CommonsHttpOAuthProvider getProvider(android.content.Context context ) {
       //System.setProperty("debug", "true");
+      final String scope = Consts.GMAIL_SCOPE + " " + Consts.CONTACTS_SCOPE;
       return new CommonsHttpOAuthProvider(
-          String.format("https://www.google.com/accounts/OAuthGetRequestToken?scope=%s&xoauth_displayname=%s",
-            urlEncode(Consts.GMAIL_SCOPE),
+          String.format("https://www.google.com/accounts/OAuthGetRequestToken" +
+            "?scope=%s&xoauth_displayname=%s",
+            urlEncode(scope),
             urlEncode(context.getString(com.zegoggles.smssync.R.string.app_name))),
           "https://www.google.com/accounts/OAuthGetAccessToken",
           "https://www.google.com/accounts/OAuthAuthorizeToken?btmpl=mobile") {
               { setOAuth10a(true); }
           };
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getOwnerEmail() {
+    final HttpClient httpClient = new DefaultHttpClient();
+    final String url = "https://www.google.com/m8/feeds/contacts/default/thin?max-results=1";
+    final StringBuilder email = new StringBuilder();
+
+    try {
+      HttpGet get = new HttpGet(sign(url));
+      HttpResponse resp = httpClient.execute(get);
+      SAXParserFactory spf = SAXParserFactory.newInstance();
+      SAXParser sp = spf.newSAXParser();
+      XMLReader xr = sp.getXMLReader();
+      xr.setContentHandler(new DefaultHandler() {
+        boolean inEmail;
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes atts) {
+           inEmail = "email".equals(localName);
+        }
+        @Override
+        public void characters(char[] c, int start, int length) {
+          if (inEmail) {
+            email.append(c, start, length);
+          }
+        }
+      });
+      xr.parse(new InputSource(resp.getEntity().getContent()));
+      return email.toString();
+    } catch (Exception e) {
+       Log.e(Consts.TAG, "error", e);
+       return null;
+    }
   }
 
   private String urlEncode(String s) {
