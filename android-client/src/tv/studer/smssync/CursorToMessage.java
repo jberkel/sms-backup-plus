@@ -77,7 +77,8 @@ public class CursorToMessage {
         String STATUS = "X-smssync-status";
         String PROTOCOL = "X-smssync-protocol";
         String SERVICE_CENTER = "X-smssync-service_center";
-        String BACKUP_TIME = "X-smssync-backup_time";
+        String BACKUP_TIME = "X-smssync-backup-time";
+        String VERSION = "X-smssync-version";
     }
 
     public CursorToMessage(Context ctx, String userEmail) {
@@ -181,6 +182,7 @@ public class CursorToMessage {
         msg.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
         msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
         msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
+        msg.setHeader(Headers.VERSION, getVersion());
         msg.setFlag(Flag.SEEN, mMarkAsRead);
 
         return msg;
@@ -261,6 +263,20 @@ public class CursorToMessage {
             primaryEmail = getUnknownEmail(number);
         }
         return primaryEmail;
+    }
+
+    private String getVersion() {
+      android.content.pm.PackageInfo pInfo = null;
+      try {
+        pInfo = mContext.getPackageManager().getPackageInfo(
+                //getClass().getPackage().getName(),
+                "com.zegoggles.smssync",
+                android.content.pm.PackageManager.GET_META_DATA);
+        return ""+pInfo.versionCode;
+      } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+        Log.e(Consts.TAG, "error", e);
+        return null;
+      }
     }
 
     private static String getUnknownEmail(String number) {
