@@ -632,7 +632,7 @@ public class SmsSync extends PreferenceActivity {
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        PrefStore.setOauthTokens(SmsSync.this, null, null);
+                        PrefStore.clearSyncData(SmsSync.this);
                         updateConnected();
                     }
                 }).create();
@@ -726,7 +726,9 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private CheckBoxPreference updateConnected() {
-        CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager().findPreference(PrefStore.PREF_CONNECTED);
+        CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager()
+              .findPreference(PrefStore.PREF_CONNECTED);
+
         boolean hasTokens = PrefStore.hasOauthTokens(this);
 
         connected.setChecked(hasTokens);

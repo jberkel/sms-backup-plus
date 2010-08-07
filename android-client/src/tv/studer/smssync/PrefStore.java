@@ -180,7 +180,7 @@ public class PrefStore {
         if ("plain".equals(getSharedPreferences(ctx).getString(PREF_SERVER_AUTHENTICATION, null))) {
             return isLoginUsernameSet(ctx) && getLoginPassword(ctx) != null;
         } else {
-            return hasOauthTokens(ctx);
+            return hasOauthTokens(ctx) && getLoginUsername(ctx) != null;
         }
     }
 
@@ -293,10 +293,10 @@ public class PrefStore {
 
     static void clearSyncData(Context ctx) {
         getSharedPreferences(ctx).edit()
+          .remove(PREF_LOGIN_USERNAME)
           .remove(PREF_LOGIN_PASSWORD)
           .remove(PREF_OAUTH_TOKEN)
           .remove(PREF_OAUTH_TOKEN_SECRET)
-          .remove(PREF_LOGIN_PASSWORD)
           .remove(PREF_MAX_SYNCED_DATE)
           .remove(PREF_LAST_SYNC)
           .commit();
