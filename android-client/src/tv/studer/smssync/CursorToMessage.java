@@ -188,10 +188,10 @@ public class CursorToMessage {
 
     private PersonRecord lookupPerson(String address) {
         if (!mPeopleCache.containsKey(address)) {
-            
+
             //filter slashes out
             address = address.replaceAll("/", "");
-            
+
             // Look phone number
             Uri personUri = Uri.withAppendedPath(Phones.CONTENT_FILTER_URL, address);
             Cursor phoneCursor = null;
@@ -201,7 +201,7 @@ public class CursorToMessage {
             } catch (IllegalArgumentException e) {
                 Log.e(Consts.TAG, "Could not lookup person, because phone number includes illegals chars: " + address + " IllegalArgumentException: " + e.getMessage());
             }
-            
+
             if (null != phoneCursor && phoneCursor.moveToFirst()) {
                 int indexPersonId = phoneCursor.getColumnIndex(Phones.PERSON_ID);
                 int indexName = phoneCursor.getColumnIndex(People.NAME);
