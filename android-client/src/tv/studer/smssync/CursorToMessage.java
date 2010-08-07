@@ -39,7 +39,7 @@ import com.fsck.k9.mail.internet.TextBody;
 
 public class CursorToMessage {
 
-    private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@smssync.studer.tv>";
+    private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
 
     private static final String[] PHONE_PROJECTION = new String[] {
             Phones.PERSON_ID, People.NAME, Phones.NUMBER
