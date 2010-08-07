@@ -28,6 +28,6 @@ If you want to help translating the UI to other languages: [crowdin project page
 
 ## Credits
 
-  * [Christoph Studer](http://studer.tv/) <chstuder@gmail.com> Original author of SMS Backup
+  * [Christoph Studer](http://studer.tv/) (<chstuder@gmail.com>) Original author of SMS Backup
   * [k9mail](http://code.google.com/p/k9mail/) IMAP library
   * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://http://ncrow.deviantart.com/) for the gmail icons
