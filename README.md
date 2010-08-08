@@ -15,10 +15,9 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 2.1.
 
-<script type="text/javascript">
-  var flattr_url = 'http://github.com/jberkel/sms-backup-plus';
-</script>
-<script src="http://api.flattr.com/button/load.js" type="text/javascript"></script>
+<a href="http://flattr.com/thing/45809/SMS-Backup" target="_blank">
+<img src="http://api.flattr.com/button/button-static-50x60.png" alt="Flattr this" title="Flattr this" border="0" />
+</a>
 
 ## Usage
 
