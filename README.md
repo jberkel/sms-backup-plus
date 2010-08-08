@@ -13,7 +13,7 @@ Main differences / improvements:
 
   * Works with any IMAP server (but defaults to Gmail).
 
-Tested with Android 1.5 - 2.1.
+Tested with Android 1.5 - 2.2.
 
 <a href="http://flattr.com/thing/45809/SMS-Backup" target="_blank">
 <img src="http://api.flattr.com/button/button-static-50x60.png" alt="Flattr this" title="Flattr this" border="0" />
