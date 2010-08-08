@@ -24,7 +24,14 @@ Tested with Android 1.5 - 2.2.
   </a>
 </p>
 
+
 ## Usage
+
+### Installation
+
+Install via the Android market QR code link above or directly from [github downloads](http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.0.apk/qr_code).
+
+### First steps
 
 You need to have an IMAP account or a Gmail account with IMAP enabled. See the [Enabling IMAP Gmail](http://mail.google.com/support/bin/answer.py?hl=en&answer=77695) help page to learn how to enable IMAP for your Gmail account.
 
