@@ -46,7 +46,9 @@
   <string name="status_unknown_error">Error</string>
   <string name="status_unknown_error_details">Error during backup/restore:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Login error</string>
-  <string name="status_auth_failure_details">Please make sure you enabled IMAP in your Gmail account settings.</string>
+  <string name="status_auth_failure_details_xoauth">Please make sure you enabled IMAP in your Gmail account settings.</string>
+  <string name="status_auth_failure_details_plain">IMAP authorization error.
+  Make sure login and password are set correctly.</string>
   <string name="status_calc_details">Calculating\u2026</string>
   <string name="status_canceled">Canceled</string>
   <string name="status_canceled_details">%1$d/%2$d items successfully backed up.</string>
@@ -88,7 +90,11 @@
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
   <string name="ui_dialog_missing_credentials_title">Login information</string>
-  <string name="ui_dialog_missing_credentials_msg">You need to connect your Gmail account first.</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">You need to connect your Gmail account first.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">You need to set your
+  username and password first.</string>
+
   <string name="ui_dialog_sync_data_reset_title">Backup data reset</string>
   <string name="ui_dialog_sync_data_reset_msg">
       Backup data has been reset. Please reconnect your account and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.

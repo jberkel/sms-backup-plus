@@ -304,7 +304,13 @@ public class SmsSync extends PreferenceActivity {
                                 // TODO jberkel possibility to do dynamic string lookups?
 
                                 statusLabel = getText(R.string.status_auth_failure);
-                                statusDetails = getString(R.string.status_auth_failure_details);
+                                switch (PrefStore.getAuthMode(SmsSync.this)) {
+                                  case PLAIN:
+                                    statusDetails = getString(R.string.status_auth_failure_details_plain);
+                                  case XOAUTH:
+                                    statusDetails = getString(R.string.status_auth_failure_details_xoauth);
+                                }
+
                                 status = STATUS_ERROR;
                                 break;
                             case FOLDER_ERROR:
@@ -570,7 +576,12 @@ public class SmsSync extends PreferenceActivity {
         switch (Dialogs.values()[id]) {
             case MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
-                msg = getString(R.string.ui_dialog_missing_credentials_msg);
+
+                if (PrefStore.getAuthMode(this) == PrefStore.AuthMode.XOAUTH) {
+                  msg = getString(R.string.ui_dialog_missing_credentials_msg_xoauth);
+                } else {
+                  msg = getString(R.string.ui_dialog_missing_credentials_msg_plain);
+                }
                 break;
             case SYNC_DATA_RESET:
                 title = getString(R.string.ui_dialog_sync_data_reset_title);

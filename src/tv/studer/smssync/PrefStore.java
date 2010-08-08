@@ -111,6 +111,8 @@ public class PrefStore {
     /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
     static final String DEFAULT_SERVER_PROTOCOL = "ssl";
 
+    enum AuthMode { PLAIN, XOAUTH };
+
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
@@ -168,9 +170,14 @@ public class PrefStore {
         .commit();
     }
 
+    static AuthMode getAuthMode(Context ctx) {
+        return AuthMode.valueOf(
+          getSharedPreferences(ctx).getString(PREF_SERVER_AUTHENTICATION, AuthMode.XOAUTH.toString())
+                                   .toUpperCase());
+    }
+
     static boolean useXOAuth(Context ctx) {
-        return "xoauth".equals(getSharedPreferences(ctx).getString(PREF_SERVER_AUTHENTICATION, null)) &&
-                isGmail(ctx);
+        return getAuthMode(ctx) == AuthMode.XOAUTH && isGmail(ctx);
     }
 
     public static boolean isLoginUsernameSet(Context ctx) {
@@ -178,7 +185,7 @@ public class PrefStore {
     }
 
     static boolean isLoginInformationSet(Context ctx) {
-        if ("plain".equals(getSharedPreferences(ctx).getString(PREF_SERVER_AUTHENTICATION, null))) {
+        if (getAuthMode(ctx) == AuthMode.PLAIN) {
             return isLoginUsernameSet(ctx) && getLoginPassword(ctx) != null;
         } else {
             return hasOauthTokens(ctx) && getLoginUsername(ctx) != null;
