@@ -61,7 +61,7 @@ If you wish to restore messages back to your phone tap "Restore". By default all
 
 ##Screenshots
 
-![SMS Backup+ screenshot](http://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png) ![Gmail screenshot](http://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png)
+![SMS Backup+ screenshot](http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png) ![Gmail screenshot](http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png)
 
 ## Contributing
 
