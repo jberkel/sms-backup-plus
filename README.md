@@ -13,11 +13,13 @@ Main differences / improvements:
 
   * Works with any IMAP server (but defaults to Gmail).
 
+Tested with Android 1.5 - 2.1.
+
 ## Usage
 
-You need to have a Gmail account with IMAP enabled. See the [Enabling IMAP Gmail](http://mail.google.com/support/bin/answer.py?hl=en&answer=77695) help page to learn how to enable IMAP for your Gmail account.
+You need to have an IMAP account or a Gmail account with IMAP enabled. See the [Enabling IMAP Gmail](http://mail.google.com/support/bin/answer.py?hl=en&answer=77695) help page to learn how to enable IMAP for your Gmail account.
 
-After starting SMS Backup+, tap on the "Connect" check box to start the authorization process. A browser will open where Gmail either prompts you to log in *or* (if you were already logged in) a screen asking you to give SMS Backup+ permission to access your emails.
+After starting SMS Backup+, tap on the "Connect" check box to start the authorization process. A browser window will open where Gmail either prompts you to log in *or* (if you were already logged in) a screen asking you to give SMS Backup+ permission to access your emails.
 
 After clicking on "Grant Access" SMS Backup+ will become visible again, the checkbox should now be checked, indicating that the autorization process was successful.
 
@@ -43,10 +45,13 @@ If you wish to restore messages back to your phone tap "Restore". By default all
 
 ## Contributing
 
-### Building
+### Installation from source
 
+    $ git clone git://github.com/jberkel/sms-backup-plus.git
+    $ cd sms-backup-plus
     $ echo "sdk.dir=/path/to/android-sdk" > local.properties
     $ ant debug
+    $ adb install bin/sms-backup-plus-debug.apk
 
 Check the [original issue list](http://code.google.com/p/android-sms/issues/list)
 or the [github issues](http://github.com/jberkel/sms-backup-plus/issues) for a list of things to work on.
