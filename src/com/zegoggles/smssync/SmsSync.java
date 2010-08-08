@@ -856,6 +856,11 @@ public class SmsSync extends PreferenceActivity {
 
                 updateConnected();
                 updateUsernameLabelFromPref();
+
+                // Invite use to perform a backup, but only once
+                if (PrefStore.isFirstUse(SmsSync.this)) {
+                  show(Dialogs.FIRST_SYNC);
+                }
             } else {
               show(Dialogs.ACCESS_TOKEN_ERROR);
             }

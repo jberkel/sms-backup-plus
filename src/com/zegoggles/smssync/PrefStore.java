@@ -307,6 +307,18 @@ public class PrefStore {
         return !getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE);
     }
 
+    static boolean isFirstUse(Context ctx) {
+        final String key = "first_use";
+
+        if (isFirstSync(ctx) &&
+            !getSharedPreferences(ctx).contains(key)) {
+            getSharedPreferences(ctx).edit().putBoolean(key, false).commit();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     static void clearSyncData(Context ctx) {
         getSharedPreferences(ctx).edit()
           .remove(PREF_LOGIN_USER)
