@@ -78,6 +78,8 @@ public class SmsSync extends PreferenceActivity {
       ABOUT,
       DISCONNECT,
       REQUEST_TOKEN,
+      ACCESS_TOKEN,
+      ACCESS_TOKEN_ERROR,
       CONNECT,
       CONNECT_TOKEN_ERROR,
       UPGRADE
@@ -644,13 +646,23 @@ public class SmsSync extends PreferenceActivity {
                     .setView(contentView)
                     .create();
            case REQUEST_TOKEN:
-                ProgressDialog d = new ProgressDialog(this);
-                d.setTitle(null);
-                d.setMessage(getString(R.string.ui_dialog_request_token_msg));
-                d.setIndeterminate(true);
-                d.setCancelable(false);
-                return d;
-
+                ProgressDialog req = new ProgressDialog(this);
+                req.setTitle(null);
+                req.setMessage(getString(R.string.ui_dialog_request_token_msg));
+                req.setIndeterminate(true);
+                req.setCancelable(false);
+                return req;
+           case ACCESS_TOKEN:
+                ProgressDialog acc = new ProgressDialog(this);
+                acc.setTitle(null);
+                acc.setMessage(getString(R.string.ui_dialog_access_token_msg));
+                acc.setIndeterminate(true);
+                acc.setCancelable(false);
+                return acc;
+            case ACCESS_TOKEN_ERROR:
+                title = getString(R.string.ui_dialog_access_token_error_title);
+                msg = getString(R.string.ui_dialog_access_token_error_msg);
+                break;
             case CONNECT:
                 return new AlertDialog.Builder(this)
                     .setCustomTitle(null)
@@ -684,7 +696,6 @@ public class SmsSync extends PreferenceActivity {
                         updateConnected();
                     }
                 }).create();
- 
            case UPGRADE:
                 title = getString(R.string.ui_dialog_upgrade_title);
                 msg = getString(R.string.ui_dialog_upgrade_msg);
@@ -799,7 +810,7 @@ public class SmsSync extends PreferenceActivity {
 
         @Override
         protected void onPreExecute() {
-            Toast.makeText(SmsSync.this, R.string.gmail_processing, Toast.LENGTH_SHORT).show();
+            show(Dialogs.ACCESS_TOKEN);
         }
 
         protected XOAuthConsumer doInBackground(Intent... callbackIntent) {
@@ -836,13 +847,17 @@ public class SmsSync extends PreferenceActivity {
 
         @Override
         protected void onPostExecute(XOAuthConsumer consumer) {
+            dismiss(Dialogs.ACCESS_TOKEN);
             if (consumer != null) {
                 PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
                 PrefStore.setLoginUsername(SmsSync.this, consumer.getUsername());
 
                 Log.d(TAG, "updated tokens");
+
                 updateConnected();
                 updateUsernameLabelFromPref();
+            } else {
+              show(Dialogs.ACCESS_TOKEN_ERROR);
             }
         }
     }
