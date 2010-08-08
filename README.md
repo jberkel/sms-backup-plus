@@ -64,3 +64,7 @@ If you want to help translating the UI to other languages: [crowdin project page
   * [k9mail](http://code.google.com/p/k9mail/) IMAP library, with some modifications ([k9mail/sms-backup-plus](http://github.com/jberkel/k9mail))
   * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
   * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://http://ncrow.deviantart.com/) for the Gmail icons
+
+## License
+
+This application is released under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
