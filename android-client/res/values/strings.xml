@@ -8,8 +8,6 @@
      fully backwards compatible with SMS Backup.
   </string>
 
-  <string name="app_version">2.0</string>
-
   <string name="ui_sync_button_label_idle">Backup</string>
   <string name="ui_sync_button_label_done">Backup</string>
   <string name="ui_sync_button_label_canceling">Stopping</string>

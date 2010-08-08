@@ -698,9 +698,7 @@ public class SmsSync extends PreferenceActivity {
             String aboutText = buf.toString();
             aboutText = String.format(aboutText,
                     getString(R.string.app_name),
-                    getString(R.string.app_version),
-                    Consts.URL_INFO_LINK,
-                    Consts.URL_MARKET_SEARCH);
+                    PrefStore.getVersion(this, false));
             aboutText.replaceAll("percent", "%");
             return aboutText;
         } catch (IOException e) {

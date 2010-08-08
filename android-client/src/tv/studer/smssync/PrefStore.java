@@ -15,6 +15,7 @@
 
 package tv.studer.smssync;
 
+import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -319,4 +320,20 @@ public class PrefStore {
     static boolean isGmail(Context ctx) {
         return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress(ctx));
     }
+
+    static String getVersion(Context context, boolean code) {
+      android.content.pm.PackageInfo pInfo = null;
+      try {
+        pInfo = context.getPackageManager().getPackageInfo(
+                //getClass().getPackage().getName(),
+                "com.zegoggles.smssync",
+                android.content.pm.PackageManager.GET_META_DATA);
+        return ""+ (code ? pInfo.versionCode : pInfo.versionName);
+      } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+        Log.e(Consts.TAG, "error", e);
+        return null;
+      }
+    }
+
+
 }
