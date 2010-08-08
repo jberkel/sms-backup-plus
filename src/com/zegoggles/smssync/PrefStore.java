@@ -211,14 +211,14 @@ public class PrefStore {
     }
 
     static int getMaxItemsPerSync(Context ctx) {
-      return getInt(ctx, PREF_MAX_ITEMS_PER_SYNC, DEFAULT_MAX_ITEMS_PER_SYNC);
+      return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_SYNC, DEFAULT_MAX_ITEMS_PER_SYNC);
     }
 
     static int getMaxItemsPerRestore(Context ctx) {
-      return getInt(ctx, PREF_MAX_ITEMS_PER_RESTORE, DEFAULT_MAX_ITEMS_PER_RESTORE);
+      return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_RESTORE, DEFAULT_MAX_ITEMS_PER_RESTORE);
     }
 
-    private static int getInt(Context ctx, String key, String def) {
+    private static int getStringAsInt(Context ctx, String key, String def) {
         try {
           return Integer.valueOf(getSharedPreferences(ctx).getString(key, def));
         } catch (NumberFormatException e) {
