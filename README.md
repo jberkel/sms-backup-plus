@@ -21,7 +21,7 @@ You need to have an IMAP account or a Gmail account with IMAP enabled. See the [
 
 After starting SMS Backup+, tap on the "Connect" check box to start the authorization process. A browser window will open where Gmail either prompts you to log in *or* (if you were already logged in) a screen asking you to give SMS Backup+ permission to access your emails.
 
-After clicking on "Grant Access" SMS Backup+ will become visible again, the checkbox should now be checked, indicating that the autorization process was successful.
+After clicking on "Grant Access" SMS Backup+ will become visible again, the checkbox should now be checked, indicating that the authorization process was successful.
 
 ### Upgrading (for users of SMS Backup)
 
@@ -63,4 +63,4 @@ If you want to help translating the UI to other languages: [crowdin project page
   * [Christoph Studer](http://studer.tv/) (<chstuder@gmail.com>) Original author of SMS Backup
   * [k9mail](http://code.google.com/p/k9mail/) IMAP library, with some modifications ([k9mail/sms-backup-plus](http://github.com/jberkel/k9mail))
   * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
-  * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://http://ncrow.deviantart.com/) for the gmail icons
+  * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://http://ncrow.deviantart.com/) for the Gmail icons
