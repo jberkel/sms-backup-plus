@@ -91,7 +91,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
           String.format("https://www.google.com/accounts/OAuthGetRequestToken" +
             "?scope=%s&xoauth_displayname=%s",
             urlEncode(scope),
-            urlEncode(context.getString(com.zegoggles.smssync.R.string.app_name))),
+            urlEncode(context.getString(R.string.app_name))),
           "https://www.google.com/accounts/OAuthGetAccessToken",
           "https://www.google.com/accounts/OAuthAuthorizeToken?btmpl=mobile") {
               { setOAuth10a(true); }
