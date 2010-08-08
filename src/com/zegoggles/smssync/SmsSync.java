@@ -126,8 +126,9 @@ public class SmsSync extends PreferenceActivity {
         Log.d(TAG, "onNewIntent:" + intent);
 
         Uri uri = intent.getData();
-        if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL)) {
-            new OAuthCallbackTask().execute(uri);
+        if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL) &&
+           (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
+            new OAuthCallbackTask().execute(intent);
         }
     }
 
@@ -642,18 +643,7 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(android.R.string.ok, null)
                     .setView(contentView)
                     .create();
-            case DISCONNECT:
-                return new AlertDialog.Builder(this)
-                    .setCustomTitle(null)
-                    .setMessage(R.string.ui_dialog_disconnect_msg)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        PrefStore.clearSyncData(SmsSync.this);
-                        updateConnected();
-                    }
-                }).create();
-            case REQUEST_TOKEN:
+           case REQUEST_TOKEN:
                 ProgressDialog d = new ProgressDialog(this);
                 d.setTitle(null);
                 d.setMessage(getString(R.string.ui_dialog_request_token_msg));
@@ -669,7 +659,8 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                           if (authorizeUri != null) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, authorizeUri));
+                            startActivity(new Intent(Intent.ACTION_VIEW, authorizeUri)
+                                .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
                           }
                           dismissDialog(id);
                         }
@@ -682,6 +673,18 @@ public class SmsSync extends PreferenceActivity {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     }).create();
+            case DISCONNECT:
+                return new AlertDialog.Builder(this)
+                    .setCustomTitle(null)
+                    .setMessage(R.string.ui_dialog_disconnect_msg)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        PrefStore.clearSyncData(SmsSync.this);
+                        updateConnected();
+                    }
+                }).create();
+ 
            case UPGRADE:
                 title = getString(R.string.ui_dialog_upgrade_title);
                 msg = getString(R.string.ui_dialog_upgrade_msg);
@@ -792,18 +795,20 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
-    class OAuthCallbackTask extends android.os.AsyncTask<Uri, Void, XOAuthConsumer> {
+    class OAuthCallbackTask extends android.os.AsyncTask<Intent, Void, XOAuthConsumer> {
 
         @Override
         protected void onPreExecute() {
-            Toast.makeText(SmsSync.this, R.string.gmail_processing, Toast.LENGTH_LONG).show();
+            Toast.makeText(SmsSync.this, R.string.gmail_processing, Toast.LENGTH_SHORT).show();
         }
 
-        protected XOAuthConsumer doInBackground(Uri... callbackUri) {
-            Log.d(TAG, "oauth callback: " + callbackUri[0]);
+        protected XOAuthConsumer doInBackground(Intent... callbackIntent) {
+            Uri uri = callbackIntent[0].getData();
+            Log.d(TAG, "oauth callback: " + uri);
+
             XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
             CommonsHttpOAuthProvider provider = consumer.getProvider(SmsSync.this);
-            String verifier = callbackUri[0].getQueryParameter(OAuth.OAUTH_VERIFIER);
+            String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
             try {
                 provider.retrieveAccessToken(consumer, verifier);
                 // might need to retrieve user's login
@@ -815,6 +820,8 @@ public class SmsSync extends PreferenceActivity {
                     throw new IllegalStateException("Could not obtain user login");
                   }
                }
+               // intent has been handled
+               callbackIntent[0].setData(null);
             } catch (Exception e) {
                 Log.e(TAG, "error", e);
 
