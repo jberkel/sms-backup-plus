@@ -15,6 +15,11 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 2.1.
 
+  <script type="text/javascript">
+    var flattr_url = 'http://github.com/jberkel/sms-backup-plus';
+  </script>
+  <script src="http://api.flattr.com/button/load.js" type="text/javascript"></script>
+
 ## Usage
 
 You need to have an IMAP account or a Gmail account with IMAP enabled. See the [Enabling IMAP Gmail](http://mail.google.com/support/bin/answer.py?hl=en&answer=77695) help page to learn how to enable IMAP for your Gmail account.
