@@ -340,8 +340,7 @@ public class PrefStore {
       android.content.pm.PackageInfo pInfo = null;
       try {
         pInfo = context.getPackageManager().getPackageInfo(
-                //getClass().getPackage().getName(),
-                "com.zegoggles.smssync",
+                SmsSync.class.getPackage().getName(),
                 android.content.pm.PackageManager.GET_META_DATA);
         return ""+ (code ? pInfo.versionCode : pInfo.versionName);
       } catch (android.content.pm.PackageManager.NameNotFoundException e) {
@@ -349,6 +348,4 @@ public class PrefStore {
         return null;
       }
     }
-
-
 }
