@@ -348,4 +348,26 @@ public class PrefStore {
         return null;
       }
     }
+
+    static boolean showUpgradeMessage(Context ctx) {
+      final String key = "upgrade_message_seen";
+      boolean seen = getSharedPreferences(ctx).getBoolean(key, false);
+      if (!seen && isOldSmsBackupInstalled(ctx)) {
+        getSharedPreferences(ctx).edit().putBoolean(key, true).commit();
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    static boolean isOldSmsBackupInstalled(Context context) {
+      try {
+        context.getPackageManager().getPackageInfo(
+            "tv.studer.smssync",
+            android.content.pm.PackageManager.GET_META_DATA);
+        return true;
+      } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+        return false;
+      }
+    }
 }

@@ -110,6 +110,12 @@
   <string name="ui_dialog_connect_msg">A browser window will open, prompting you to log into Gmail to grant %1$s access to your emails.</string>
   <string name="ui_dialog_connect_token_error">Could not obtain request token from Google. Make sure the network connection is active.</string>
   <string name="ui_dialog_disconnect_msg">Are you sure? You will need to reauthorize your account after disconnecting and the local sync state will be reset.</string>
+
+  <string name="ui_dialog_upgrade_title">Upgrade information</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ works fine with messages backed up with SMS Backup. Make sure that \"Auto backup\" is only enabled in one app, otherwise you might get duplicates. Also you should select \"Skip\" messages for your first sync if the messages on the phone have already been backed up previously.
+  </string>
+
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
   <string name="err_could_not_create_folder">Could not create label.</string>

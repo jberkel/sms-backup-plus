@@ -69,7 +69,8 @@ import com.zegoggles.smssync.ServiceBase.SmsSyncState;
 public class SmsSync extends PreferenceActivity {
 
     private static final int MENU_INFO = 0;
-    enum Dialogs { MISSING_CREDENTIALS,
+    enum Dialogs {
+      MISSING_CREDENTIALS,
       FIRST_SYNC,
       SYNC_DATA_RESET,
       INVALID_IMAP_FOLDER,
@@ -78,7 +79,8 @@ public class SmsSync extends PreferenceActivity {
       DISCONNECT,
       REQUEST_TOKEN,
       CONNECT,
-      CONNECT_TOKEN_ERROR
+      CONNECT_TOKEN_ERROR,
+      UPGRADE
     }
 
     private StatusPreference mStatusPref;
@@ -106,6 +108,10 @@ public class SmsSync extends PreferenceActivity {
 
         setPreferenceListeners(getPreferenceManager());
         ServiceBase.smsSync = this;
+
+        if (PrefStore.showUpgradeMessage(this)) {
+          show(Dialogs.UPGRADE);
+        }
     }
 
     @Override
@@ -676,7 +682,10 @@ public class SmsSync extends PreferenceActivity {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     }).create();
-
+           case UPGRADE:
+                title = getString(R.string.ui_dialog_upgrade_title);
+                msg = getString(R.string.ui_dialog_upgrade_msg);
+                break;
             default:
                 return null;
         }
