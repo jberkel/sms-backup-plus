@@ -1,7 +1,7 @@
 ## SMS Backup+
 
 This is a fork of the Android backup tool
-[SMS Backup](http://code.google.com/p/android-sms), where development has stopped a while ago.
+[SMS Backup](http://code.google.com/p/android-sms), where development has stopped a while ago. It uses Gmail to perform SMS backups over the network.
 
 Main differences / improvements:
 
@@ -59,9 +59,9 @@ After you performed your initial backup, SMS Backup+ is ready to run in the back
 
 If you wish to restore messages back to your phone tap "Restore". By default all messages stored on Gmail will be restored (this can be changed in "Advanced Settings"). You can safely restore to a phone which has already message stored on it, SMS Backup+ will skip the restore of already existing messages.
 
-##Screenshot
+##Screenshots
 
-![SMS Backup+ screenshot](http://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png)
+![SMS Backup+ screenshot](http://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png) ![Gmail screenshot](http://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png)
 
 ## Contributing
 
