@@ -9,9 +9,9 @@
     <application android:icon="@drawable/ic_launcher_smssync3"
       android:label="@string/app_name"
       android:description="@string/app_description"
-      android:name="tv.studer.smssync.App">
+      android:name="App">
 
-        <activity android:name="tv.studer.smssync.SmsSync" android:label="@string/app_name" android:launchMode="singleInstance">
+        <activity android:name="SmsSync" android:label="@string/app_name" android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,10 +26,10 @@
             </intent-filter>
 
         </activity>
-    <service android:name="tv.studer.smssync.SmsSyncService" android:exported="false"></service>
-    <service android:name="tv.studer.smssync.SmsRestoreService" android:exported="false"></service>
+    <service android:name="SmsSyncService" android:exported="false"></service>
+    <service android:name="SmsRestoreService" android:exported="false"></service>
 
-    <receiver android:name="tv.studer.smssync.SmsBroadcastReceiver">
+    <receiver android:name="SmsBroadcastReceiver">
       <intent-filter>
 		    <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
       </intent-filter>

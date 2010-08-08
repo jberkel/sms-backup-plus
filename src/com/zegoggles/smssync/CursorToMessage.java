@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package tv.studer.smssync;
+package com.zegoggles.smssync;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package tv.studer.smssync;
+package com.zegoggles.smssync;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;

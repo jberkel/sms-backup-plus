@@ -1,4 +1,4 @@
-package tv.studer.smssync;
+package com.zegoggles.smssync;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -11,8 +11,8 @@ import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import org.apache.commons.io.IOUtils;
 import java.util.HashSet;
 import java.util.Set;
-import static tv.studer.smssync.CursorToMessage.Headers.*;
-import static tv.studer.smssync.ServiceBase.SmsSyncState.*;
+import static com.zegoggles.smssync.CursorToMessage.Headers.*;
+import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 
 public class SmsRestoreService extends ServiceBase {
 

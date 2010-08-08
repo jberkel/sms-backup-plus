@@ -1,4 +1,4 @@
-package tv.studer.smssync;
+package com.zegoggles.smssync;
 
 import android.app.Service;
 import android.content.Context;

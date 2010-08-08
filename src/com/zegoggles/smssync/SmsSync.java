@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package tv.studer.smssync;
+package com.zegoggles.smssync;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,7 +59,7 @@ import oauth.signpost.OAuth;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 
 import com.zegoggles.smssync.R;
-import tv.studer.smssync.ServiceBase.SmsSyncState;
+import com.zegoggles.smssync.ServiceBase.SmsSyncState;
 
 
 /**

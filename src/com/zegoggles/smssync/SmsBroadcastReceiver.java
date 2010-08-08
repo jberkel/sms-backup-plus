@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package tv.studer.smssync;
+package com.zegoggles.smssync;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

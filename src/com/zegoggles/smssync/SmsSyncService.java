@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package tv.studer.smssync;
+package com.zegoggles.smssync;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -23,8 +23,8 @@ import android.util.Log;
 import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import tv.studer.smssync.CursorToMessage.ConversionResult;
-import tv.studer.smssync.ServiceBase.SmsSyncState;
+import com.zegoggles.smssync.CursorToMessage.ConversionResult;
+import com.zegoggles.smssync.ServiceBase.SmsSyncState;
 import com.zegoggles.smssync.R;
 
 import java.util.List;
