@@ -293,7 +293,7 @@ public class PrefStore {
 
     static void clearSyncData(Context ctx) {
         getSharedPreferences(ctx).edit()
-          .remove(PREF_LOGIN_USERNAME)
+          .remove(PREF_LOGIN_USER)
           .remove(PREF_LOGIN_PASSWORD)
           .remove(PREF_OAUTH_TOKEN)
           .remove(PREF_OAUTH_TOKEN_SECRET)
