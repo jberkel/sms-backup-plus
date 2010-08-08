@@ -739,7 +739,7 @@ public class SmsSync extends PreferenceActivity {
               .findPreference(PrefStore.PREF_CONNECTED);
 
         boolean hasTokens = PrefStore.hasOauthTokens(this);
-
+        connected.setEnabled(PrefStore.getAuthMode(this) == PrefStore.AuthMode.XOAUTH);
         connected.setChecked(hasTokens);
         connected.setSummary(hasTokens ? R.string.gmail_already_connected : R.string.gmail_needs_connecting);
 
@@ -902,6 +902,20 @@ public class SmsSync extends PreferenceActivity {
                 return true;
             }
         });
+
+        prefMgr.findPreference(PrefStore.PREF_SERVER_AUTHENTICATION)
+               .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+               if (PrefStore.AuthMode.valueOf(newValue.toString().toUpperCase()) ==
+                   PrefStore.AuthMode.PLAIN) {
+                  updateConnected().setEnabled(false);
+               } else {
+                  updateConnected().setEnabled(true);
+               }
+               return true;
+            }
+        });
+
 
         prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
