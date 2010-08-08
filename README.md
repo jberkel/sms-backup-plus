@@ -15,10 +15,10 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 2.1.
 
-  <script type="text/javascript">
-    var flattr_url = 'http://github.com/jberkel/sms-backup-plus';
-  </script>
-  <script src="http://api.flattr.com/button/load.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var flattr_url = 'http://github.com/jberkel/sms-backup-plus';
+</script>
+<script src="http://api.flattr.com/button/load.js" type="text/javascript"></script>
 
 ## Usage
 
