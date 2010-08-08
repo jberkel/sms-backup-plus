@@ -7,6 +7,27 @@ CLEAN.include('tmp', 'bin')
 
 ant_import
 
+apk = ant.properties['out.debug.package']
+[:device, :emu].each do |t|
+  flag = (t == :device ? '-d' : '-e')
+  namespace t do
+    task :cond_debug do
+      unless uptodate?(apk, FileList['src/**/*.java', 'res/**/*', 'assets/**/*'])
+        Rake::Task[:debug].invoke
+      end
+    end
+
+    task :install => :cond_debug do
+      sh "adb #{flag} install -r #{apk}"
+    end
+
+    task :uninstall do
+      sh "adb #{flag} uninstall #{package}"
+    end
+    task :reinstall => [:uninstall, :install]
+  end
+end
+
 task :tag => :release do
   unless `git branch` =~ /^\* master$/
     puts "You must be on the master branch to release!"
@@ -53,3 +74,4 @@ module Exec
   end
 
   extend RUBY_PLATFORM =~ /java/ ? Java : MRI
+end
