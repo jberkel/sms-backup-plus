@@ -1,9 +1,0 @@
-bin
-gen
-local.properties
-*.iml
-*.ipr
-*.iws
-*.swp
-*.DS_Store
-nbproject
