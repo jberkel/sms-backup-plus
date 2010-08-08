@@ -24,8 +24,8 @@
                 <category android:name="android.intent.category.BROWSABLE"></category>
                 <data android:scheme="smssync" android:host="gmail"></data>
             </intent-filter>
-
         </activity>
+
         <service android:name="SmsSyncService" android:exported="false"></service>
         <service android:name="SmsRestoreService" android:exported="false"></service>
 
@@ -46,6 +46,6 @@
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
-    <uses-sdk android:minSdkVersion="3"></uses-sdk>
-  <supports-screens android:smallScreens="true"></supports-screens>
+    <uses-sdk android:minSdkVersion="3"/>
+    <supports-screens android:smallScreens="true"/>
 </manifest>
