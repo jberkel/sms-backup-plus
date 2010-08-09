@@ -218,10 +218,15 @@ public class SmsRestoreService extends ServiceBase {
 
     private ContentValues messageToContentValues(Message message)
             throws java.io.IOException, MessagingException {
+        java.io.InputStream is = message.getBody().getInputStream();
+
+        if (is == null) {
+          throw new MessagingException("body is null");
+        }
+
+        String body = IOUtils.toString(is);
+
         ContentValues values = new ContentValues();
-
-        String body = IOUtils.toString(message.getBody().getInputStream());
-
         values.put(SmsConsts.BODY, body);
         values.put(SmsConsts.ADDRESS, getHeader(message, ADDRESS));
         values.put(SmsConsts.TYPE, getHeader(message, TYPE));
