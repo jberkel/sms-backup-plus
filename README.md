@@ -75,8 +75,7 @@ If you wish to restore messages back to your phone tap "Restore". By default all
     $ ant debug
     $ adb install bin/sms-backup-plus-debug.apk
 
-Check the [original issue list](http://code.google.com/p/android-sms/issues/list)
-or the [github issues](http://github.com/jberkel/sms-backup-plus/issues) for a list of things to work on.
+I've imported some relevant issues from the [original issue list](http://code.google.com/p/android-sms/issues/list) to [github issues](http://github.com/jberkel/sms-backup-plus/issues).
 
 If you want to help translating the UI to other languages: [crowdin project page](http://crowdin.net/project/sms-backup-plus/invite).
 
