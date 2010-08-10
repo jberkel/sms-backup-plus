@@ -28,7 +28,7 @@ apk = ant.properties['out.debug.package']
   end
 end
 
-task :tag => :release do
+task :tag do
   unless `git branch` =~ /^\* master$/
     puts "You must be on the master branch to release!"
     exit!
@@ -37,7 +37,6 @@ task :tag => :release do
   sh "git tag #{version}"
   sh "git push origin master --tags"
 end
-
 desc "spellcheck README"
 task :spell do
   Exec.system "aspell", "--mode", "html", "--dont-backup", "check", 'README.md'
@@ -54,7 +53,7 @@ def strings(name)
 end
 
 def package() manifest.root.attribute('package') end
-def version() strings :version_name end
+def version() manifest.root.attribute('versionName') end
 def app_name()  strings :app_name end
 
 module Exec

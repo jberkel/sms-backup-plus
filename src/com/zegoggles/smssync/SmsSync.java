@@ -886,7 +886,11 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private void dismiss(Dialogs d) {
-        dismissDialog(d.ordinal());
+        try {
+            dismissDialog(d.ordinal());
+        } catch (IllegalArgumentException e) {
+          // ignore
+        }
     }
 
     private void setPreferenceListeners(PreferenceManager prefMgr) {
