@@ -9,6 +9,8 @@ Main differences / improvements:
 
   * XOAuth: SMS Backup+ will never ask you for your Gmail password. Instead it uses [XOAuth](http://code.google.com/apis/gmail/oauth/) to get access to your data.
 
+  * Faster backups. SMS Backup+ saves around 30% of data transferred by avoiding Base64 encoding of emails.
+
   * Batch size limits removed.
 
   * Works with any IMAP server (but defaults to Gmail).
