@@ -25,6 +25,10 @@ apk = ant.properties['out.debug.package']
       sh "adb #{flag} uninstall #{package}"
     end
     task :reinstall => [:uninstall, :install]
+
+    task :db do
+      sh "adb #{flag} pull /data/data/com.android.providers.telephony/databases/mmssms.db ."
+    end
   end
 end
 
