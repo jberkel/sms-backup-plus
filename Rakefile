@@ -1,5 +1,6 @@
 raise "Needs JRuby 1.5" unless RUBY_PLATFORM =~ /java/
 require 'ant'
+require 'rbconfig'
 require 'rake/clean'
 require 'rexml/document'
 
@@ -41,9 +42,53 @@ task :tag do
   sh "git tag #{version}"
   sh "git push origin master --tags"
 end
+
 desc "spellcheck README"
 task :spell do
   Exec.system "aspell", "--mode", "html", "--dont-backup", "check", 'README.md'
+end
+
+namespace :doc do
+  desc "Render markdown as if it were shown on github"
+  task :preview do
+    infile = File.expand_path('README.md')
+    outfile = "/tmp/#{File.basename(infile)}.html"
+    revision = `git rev-parse HEAD`.strip
+    markdown = `which markdown`.strip
+
+    unless $?.success?
+      puts "Make sure you have 'markdown' in your path, usage: brew install markdown"
+      exit 1
+    end
+
+    File.open(outfile, "w") do |out|
+      body = `#{markdown} #{infile}`
+      template = <<-END
+        <html>
+          <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+          <meta http-equiv="X-UA-Compatible" content="chrome=1">
+          <head>
+            <link href="https://assets0.github.com/stylesheets/bundle_common.css?#{revision}" media="screen" rel="stylesheet" type="text/css" />
+            <link href="https://assets3.github.com/stylesheets/bundle_github.css?#{revision}" media="screen" rel="stylesheet" type="text/css" />
+          </head>
+          <body>
+            <div id="readme" class="blob">
+              <div class="wikistyle">
+                #{body}
+              </div>
+            </div>
+          </body>
+        </html>
+      END
+      out.write(template)
+    end
+
+    case Config::CONFIG['host_os']
+      when /darwin/
+        puts "Launching: open #{outfile}"
+        sh "open", outfile
+     end
+  end
 end
 
 def manifest
