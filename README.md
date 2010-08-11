@@ -17,25 +17,19 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 2.2.
 
-<p>
-  <a href="http://flattr.com/thing/45809/SMS-Backup" target="_blank">
-   <img src="http://api.flattr.com/button/button-static-50x60.png" alt="Flattr this" title="Flattr this" border="0" />
-  </a>
-  <a href="http://www.cyrket.com/p/android/com.zegoggles.smssync/">
-   <img src="http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=http://cyrket.com/qr/144601" alt="QR code"/>
-  </a>
-</p>
+SMS Backup+ is available for free in the market, there will never be a pro / paid version.
 
+[![][FlattrButton]][FlattrLink] But if you like the app you can flattr it ([flattr it ??][WhatisFlattr]).
 
 ## Usage
 
 ### Installation
 
-Install via the Android market QR code link above or directly from [github downloads](http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.0.apk/qr_code).
+![MarketQRCode][] Install via the Android market QR code link or directly from [github downloads][].
 
 ### First steps
 
-You need to have an IMAP account or a Gmail account with IMAP enabled. See the [Enabling IMAP Gmail](http://mail.google.com/support/bin/answer.py?hl=en&answer=77695) help page to learn how to enable IMAP for your Gmail account.
+You need to have an IMAP account or a Gmail account with IMAP enabled. See the [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail account.
 
 After starting SMS Backup+, tap on the "Connect" check box to start the authorization process. A browser window will open where Gmail either prompts you to log in *or* (if you were already logged in) a screen asking you to give SMS Backup+ permission to access your emails.
 
@@ -63,7 +57,7 @@ If you wish to restore messages back to your phone tap "Restore". By default all
 
 ##Screenshots
 
-![SMS Backup+ screenshot](http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png) ![Gmail screenshot](http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png)
+![SMS Backup+ screenshot][shot1] ![Gmail screenshot][shot2]
 
 ## Contributing
 
@@ -75,9 +69,9 @@ If you wish to restore messages back to your phone tap "Restore". By default all
     $ ant debug
     $ adb install bin/sms-backup-plus-debug.apk
 
-I've imported some relevant issues from the [original issue list](http://code.google.com/p/android-sms/issues/list) to [github issues](http://github.com/jberkel/sms-backup-plus/issues).
+I've imported some relevant issues from the [original issue list][] to [github issues][].
 
-If you want to help translating the UI to other languages: [crowdin project page](http://crowdin.net/project/sms-backup-plus/invite).
+If you want to help translating the UI to other languages: [crowdin project page][].
 
 ## Credits
 
@@ -89,3 +83,15 @@ If you want to help translating the UI to other languages: [crowdin project page
 ## License
 
 This application is released under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
+
+[original issue list]: http://code.google.com/p/android-sms/issues/list
+[github issues]: http://github.com/jberkel/sms-backup-plus/issues
+[MarketQRCode]: http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=http://cyrket.com/qr/144601
+[WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
+[FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
+[FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
+[github downloads]: http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.0.1.apk/qr_code
+[Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
+[shot1]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png
+[shot2]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
+[crowdin project page]: http://crowdin.net/project/sms-backup-plus/invite
