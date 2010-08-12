@@ -17,6 +17,16 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 2.2.
 
+### Droid X
+
+*Important:* Motorola Droid X is currently not fully supported, there appears to be a browser bug
+which breaks the authorisation process, so connecting your Gmail account via XOAuth is not possible.
+
+There are two possible workarounds:
+
+  * Install a 3rd party browser (Dolphin HD has been reported to work)
+  * Use plain text authentication (Advanced Settings - Server Settings), use your gmail address as username and supply your password
+
 SMS Backup+ is available for free in the market, there will never be a pro / paid version.
 
 [![][FlattrButton]][FlattrLink] But if you like the app you can flattr it ([flattr it ??][WhatisFlattr]).
