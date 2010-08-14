@@ -210,8 +210,11 @@ public class SmsRestoreService extends ServiceBase {
                         values.getAsString(SmsConsts.ADDRESS), values.getAsString(SmsConsts.TYPE)}, null
         );
 
-        boolean exists = c.getCount() > 0;
-        c.close();
+        boolean exists = false;
+        if (c != null) {
+          exists = c.getCount() > 0;
+          c.close();
+        }
         return exists;
     }
 
