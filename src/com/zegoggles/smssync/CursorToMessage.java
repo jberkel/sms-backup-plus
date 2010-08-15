@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.security.MessageDigest;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -39,7 +40,8 @@ import com.fsck.k9.mail.internet.TextBody;
 
 public class CursorToMessage {
 
-    private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
+    private static final String REFERENCE_UID_TEMPLATE = "<%s/%s@sms-backup-plus.local>";
+    private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
 
     private static final String[] PHONE_PROJECTION = new String[] {
             Phones.PERSON_ID, People.NAME, Phones.NUMBER
@@ -88,8 +90,7 @@ public class CursorToMessage {
 
         mReferenceValue = PrefStore.getReferenceUid(ctx);
         if (mReferenceValue == null) {
-            mReferenceValue = generateReferenceValue();
-            PrefStore.setReferenceUid(ctx, mReferenceValue);
+          mReferenceValue = generateReferenceValue(userEmail);
         }
 
         mMarkAsRead = PrefStore.getMarkAsRead(ctx);
@@ -169,9 +170,8 @@ public class CursorToMessage {
         msg.setInternalDate(then);
         // Threading by person ID, not by thread ID. I think this value is more
         // stable.
-        msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue,
-                record._id));
-
+        msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, record._id));
+        msg.setHeader("Message-ID", createMessageId(then, address, messageType));
         msg.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
         msg.setHeader(Headers.ADDRESS, address);
         msg.setHeader(Headers.TYPE, msgMap.get(SmsConsts.TYPE));
@@ -186,6 +186,27 @@ public class CursorToMessage {
         msg.setFlag(Flag.SEEN, mMarkAsRead);
 
         return msg;
+    }
+
+    /**
+      * Create a message-id based on message date, phone number and message
+      * type.
+      */
+    private String createMessageId(Date sent, String address, int type) {
+      try {
+        MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+        digest.update(Long.toString(sent.getTime()).getBytes());
+        digest.update(address.getBytes());
+        digest.update(Integer.toString(type).getBytes());
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digest.digest()) {
+          sb.append(String.format("%02x", b));
+        }
+        return String.format(MSG_ID_TEMPLATE, sb.toString());
+      } catch (java.security.NoSuchAlgorithmException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     private PersonRecord lookupPerson(String address) {
@@ -275,25 +296,20 @@ public class CursorToMessage {
         return email.endsWith("gmail.com") || email.endsWith("googlemail.com");
     }
 
-    private static String generateReferenceValue() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 24; i++) {
-            sb.append(Integer.toString((int)(Math.random() * 35), 36));
-        }
-        return sb.toString();
+    // this will be used for threading so should be same value, even after
+    // reinstalls - just use email address
+    private static String generateReferenceValue(String email) {
+      return email;
     }
 
     public static class ConversionResult {
         public long maxDate;
-
         public List<Message> messageList;
     }
 
     private static class PersonRecord {
         String _id;
-
         String name;
-
         Address address;
     }
 }
