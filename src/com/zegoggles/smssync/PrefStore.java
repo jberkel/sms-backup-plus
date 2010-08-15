@@ -84,7 +84,7 @@ public class PrefStore {
     static final String DEFAULT_IMAP_FOLDER = "SMS";
 
     /** Default value for {@link PrefStore#PREF_ENABLE_AUTO_SYNC}. */
-    static final boolean DEFAULT_ENABLE_AUTO_SYNC = true;
+    static final boolean DEFAULT_ENABLE_AUTO_SYNC = false;
 
     /** Default value for {@link PrefStore#PREF_INCOMING_TIMEOUT_SECONDS}. */
     static final int DEFAULT_INCOMING_TIMEOUT_SECONDS = 20;
