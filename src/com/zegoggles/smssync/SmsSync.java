@@ -142,6 +142,8 @@ public class SmsSync extends PreferenceActivity {
         updateImapFolderLabelFromPref();
         updateMaxItemsPerSync(null);
         updateMaxItemsPerRestore(null);
+
+        mStatusPref.update();
     }
 
     @Override
