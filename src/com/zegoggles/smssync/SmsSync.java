@@ -68,7 +68,6 @@ import com.zegoggles.smssync.ServiceBase.SmsSyncState;
  */
 public class SmsSync extends PreferenceActivity {
 
-    private static final int MENU_INFO = 0;
     enum Dialogs {
       MISSING_CREDENTIALS,
       FIRST_SYNC,
@@ -147,28 +146,20 @@ public class SmsSync extends PreferenceActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        menu.add(0, MENU_INFO, 0, R.string.menu_info).setIcon(
-                android.R.drawable.ic_menu_info_details);
-
+        android.view.MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
-            case MENU_INFO:
+            case R.id.about:
                 show(Dialogs.ABOUT);
                 return true;
+             default:
+                return super.onOptionsItemSelected(item);
         }
-        return false;
-    }
-
-    private void openLink(String link) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-        startActivity(intent);
     }
 
     private void prefillEmailAddress() {
