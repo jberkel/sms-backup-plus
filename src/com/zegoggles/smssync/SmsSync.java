@@ -638,7 +638,8 @@ public class SmsSync extends PreferenceActivity {
             case ABOUT:
                 View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
-                webView.loadData(getAboutText(), "text/html", "utf-8");
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.loadUrl("file:///android_asset/about.html");
 
                 return new AlertDialog.Builder(this)
                     .setCustomTitle(null)
@@ -719,26 +720,6 @@ public class SmsSync extends PreferenceActivity {
           })
           .create();
       }
-
-    private String getAboutText() {
-        try {
-            InputStream input = getResources().getAssets().open("about.html");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            StringBuilder buf = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buf.append(line);
-            }
-            String aboutText = buf.toString();
-            aboutText = String.format(aboutText,
-                    getString(R.string.app_name),
-                    PrefStore.getVersion(this, false));
-            aboutText.replaceAll("percent", "%");
-            return aboutText;
-        } catch (IOException e) {
-            return "An error occured while reading about.html";
-        }
-    }
 
     private void updateMaxItemsPerSync(String newValue) {
         updateMaxItems(PrefStore.PREF_MAX_ITEMS_PER_SYNC, PrefStore.getMaxItemsPerSync(this), newValue);
