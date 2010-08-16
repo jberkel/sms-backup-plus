@@ -5,12 +5,12 @@
   <string name="app_description">使用 Gmail 来备份你的短信。这个由Christoph Studer提供的短信备份程序支持还原。</string>
   <string name="ui_sync_button_label_idle">备份</string>
   <string name="ui_sync_button_label_done">备份</string>
-  <string name="ui_sync_button_label_canceling">Stopping</string>
+  <string name="ui_sync_button_label_canceling">正在停止</string>
   <string name="ui_sync_button_label_error">备份</string>
-  <string name="ui_sync_button_label_syncing">Stop</string>
+  <string name="ui_sync_button_label_syncing">停止</string>
   <string name="ui_restore_button_label_idle">还原</string>
   <string name="ui_restore_button_label_done">还原</string>
-  <string name="ui_restore_button_label_restoring">Stop</string>
+  <string name="ui_restore_button_label_restoring">停止</string>
   <string name="ui_restore_button_label_error">还原</string>
   <string name="status_idle">空闲</string>
   <string name="status_idle_details">上次备份：</string>
@@ -20,7 +20,7 @@
   <string name="status_backup_details">已备份 / 个项目\u2026</string>
   <string name="status_restore_details">已还原 / 个项目\u2026</string>
   <string name="status_login_details">登陆\u2026</string>
-  <string name="status_done">Done</string>
+  <string name="status_done">完成</string>
   <string name="status_backup_done_details_max_per_sync">达到了每次的最多备份 %1$d 条数的限制。重启备份以继续。</string>
   <string name="status_backup_done_details_noitems">没有要备份的项目。</string>
   <string name="status_restore_canceled_details">已成功还原 %1$d/%2$d 个项目。</string>
@@ -28,10 +28,9 @@
   <string name="status_unknown_error_details">备份/还原时出错：\n</string>
   <string name="status_auth_failure">登陆错误</string>
   <string name="status_auth_failure_details_xoauth">请确定你在Gmail账户的设置中开启了 IMAP。</string>
-  <string name="status_auth_failure_details_plain">IMAP 验证错误。
-  确定你已登录且密码设置是正确的。</string>
+  <string name="status_auth_failure_details_plain">IMAP 验证错误。确定你已登录且密码设置是正确的。</string>
   <string name="status_calc_details">计算中\u2026</string>
-  <string name="status_canceled">Canceled</string>
+  <string name="status_canceled">已取消</string>
   <string name="status_canceled_details">已成功备份了 %1$d/%2$d 个项目。</string>
   <string name="status_folder_error">标签错误</string>
   <string name="status_folder_error_details">无法访问或重建标签/文件夹。</string>
@@ -49,8 +48,8 @@
   <string name="ui_server_label">服务器地址</string>
   <string name="ui_server_desc">你想要进行同步的服务器地址，包含端口。</string>
   <string name="ui_server_dialog_msg">警告：更改服务器地址将会重置你的所有备份信息和密码。默认的Gmail服务器是\"imap.gmail.com:993\"</string>
-  <string name="ui_protocol_label">Security</string>
-  <string name="ui_protocol_desc">服务器的安全协议。Gmail默认的是\"SSL (Required)\"."</string>
+  <string name="ui_protocol_label">安全性</string>
+  <string name="ui_protocol_desc">服务器的安全协议。Gmail默认的是\"SSL (Required)\"。</string>
   <string name="ui_authentication_label">身份验证</string>
   <string name="ui_authentication_desc">验证方式。默认的Gmail验证方式是\"XOauth\"。</string>
   <string name="plain">纯文本</string>
@@ -98,7 +97,7 @@
   <string name="err_sync_requires_login_info">无法在没有登陆信息的情况下备份。</string>
   <string name="err_communication_error">一般通信错误。</string>
   <string name="menu_info">关于</string>
-  <string name="all_messages">All</string>
+  <string name="all_messages">全部</string>
   <string name="gmail_connected_fail">Gmail 验证失败</string>
   <string name="gmail_needs_connecting">点击连接到你的 Gmail 账户(必须的)。</string>
   <string name="gmail_already_connected">已连接到 Gmail 账户(点击以断开连接)。</string>

@@ -28,8 +28,7 @@
   <string name="status_unknown_error_details">備份/還原時錯誤：\n</string>
   <string name="status_auth_failure">登陸錯誤</string>
   <string name="status_auth_failure_details_xoauth">請確定你在Gmail賬戶的設定中開啟了 IMAP。</string>
-  <string name="status_auth_failure_details_plain">IMAP 驗證錯誤。
-  確定你已登入且密碼設定是正確的。</string>
+  <string name="status_auth_failure_details_plain">IMAP 驗證錯誤。確定你已登入且密碼設定是正確的。</string>
   <string name="status_calc_details">計算中\u2026</string>
   <string name="status_canceled">已取消</string>
   <string name="status_canceled_details">已成功備份了 %1$d/%2$d 個項目。</string>
@@ -50,7 +49,7 @@
   <string name="ui_server_desc">你想要進行同步的伺服器位址，包含通訊埠。</string>
   <string name="ui_server_dialog_msg">警告：變更伺服器位址將會重設你的所有備份訊息和密碼。預設的Gmail伺服器是\"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">安全性</string>
-  <string name="ui_protocol_desc">伺服器的安全協議。Gmail預設的是\"SSL (Required)\"."</string>
+  <string name="ui_protocol_desc">伺服器的安全協議。Gmail預設的是\"SSL (Required)\"。</string>
   <string name="ui_authentication_label">身份驗證</string>
   <string name="ui_authentication_desc">驗證方式。預設的Gmail驗證方式是\"XOauth\"。</string>
   <string name="plain">純文字</string>
