@@ -1,4 +1,12 @@
-== 1.0.1 (08-10-2010)
+== 1.0.4 (08-13-3010)
+
+ * Chinese translation by bbs.goapk.com, message-id fixes
+
+== 1.0.3 (08-13-3010)
+
+ * GH-27, wording changes
+
+== 1.0.2 (08-10-2010)
 
  * Fix potential NPE / crash during restore
 

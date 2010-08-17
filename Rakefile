@@ -33,7 +33,14 @@ apk = ant.properties['out.debug.package']
   end
 end
 
-task :tag do
+task :check_version do
+  # make sure new version is propagated everywhere
+  raise "CHANGES not updated" unless IO.read('CHANGES') =~ /#{version}/
+  raise "README.md not updated" unless IO.read('README.md') =~ /#{version}\.apk/
+  raise "about not updated" unless IO.read('assets/about.html') =~ /#{version}/
+end
+
+task :tag => [:check_version] do
   unless `git branch` =~ /^\* master$/
     puts "You must be on the master branch to release!"
     exit!
