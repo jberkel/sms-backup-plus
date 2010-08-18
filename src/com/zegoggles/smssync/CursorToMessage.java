@@ -195,15 +195,18 @@ public class CursorToMessage {
     private String createMessageId(Date sent, String address, int type) {
       try {
         MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-        digest.update(Long.toString(sent.getTime()).getBytes());
-        digest.update(address.getBytes());
-        digest.update(Integer.toString(type).getBytes());
+
+        digest.update(Long.toString(sent.getTime()).getBytes("UTF-8"));
+        digest.update(address.getBytes("UTF-8"));
+        digest.update(Integer.toString(type).getBytes("UTF-8"));
 
         StringBuilder sb = new StringBuilder();
         for (byte b : digest.digest()) {
           sb.append(String.format("%02x", b));
         }
         return String.format(MSG_ID_TEMPLATE, sb.toString());
+      } catch (java.io.UnsupportedEncodingException e) {
+        throw new RuntimeException(e);
       } catch (java.security.NoSuchAlgorithmException e) {
         throw new RuntimeException(e);
       }
