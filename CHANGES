@@ -1,8 +1,12 @@
-== 1.0.4 (08-13-3010)
+== 1.0.5 (08-19-2010)
+
+ * Threading fixes
+
+== 1.0.4 (08-13-2010)
 
  * Chinese translation by bbs.goapk.com, message-id fixes
 
-== 1.0.3 (08-13-3010)
+== 1.0.3 (08-13-2010)
 
  * GH-27, wording changes
 
