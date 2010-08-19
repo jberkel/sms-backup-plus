@@ -40,7 +40,7 @@ import com.fsck.k9.mail.internet.TextBody;
 
 public class CursorToMessage {
 
-    private static final String REFERENCE_UID_TEMPLATE = "<%s/%s@sms-backup-plus.local>";
+    private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
 
     private static final String[] PHONE_PROJECTION = new String[] {
@@ -91,6 +91,7 @@ public class CursorToMessage {
         mReferenceValue = PrefStore.getReferenceUid(ctx);
         if (mReferenceValue == null) {
           mReferenceValue = generateReferenceValue(userEmail);
+          PrefStore.setReferenceUid(ctx, mReferenceValue);
         }
 
         mMarkAsRead = PrefStore.getMarkAsRead(ctx);
@@ -302,7 +303,12 @@ public class CursorToMessage {
     // this will be used for threading so should be same value, even after
     // reinstalls - just use email address
     private static String generateReferenceValue(String email) {
-      return email;
+      //return email;
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < 24; i++) {
+        sb.append(Integer.toString((int)(Math.random() * 35), 36));
+      }
+      return sb.toString();
     }
 
     public static class ConversionResult {
