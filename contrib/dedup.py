@@ -6,6 +6,8 @@
   machine google.com
     login your.account@gmail.com
     password yourpassword
+
+  python dedup.py SMS [label...]
 """
 
 import imaplib
@@ -13,11 +15,11 @@ import time
 import hashlib
 import re
 import sys
+import os
 import logging
 from email.parser import Parser
 from email.utils import parsedate
 from netrc import netrc
-
 
 class Deduper:
   def __init__(self, login=None, password=None):
@@ -39,6 +41,7 @@ class Deduper:
 
   @classmethod
   def msg_hash(cls, date, type, address):
+    """Same hash as used in sms backup+ (cf. CursorToMessage#createMessageId)"""
     d = hashlib.md5()
     d.update(str(date))
     d.update(address)
@@ -46,6 +49,7 @@ class Deduper:
     return d.hexdigest()
 
   def fetch(self, n):
+    """fetch a message by sequence number and return the uid and calculated hash"""
     status, data = self.m.fetch(n, '(UID BODY.PEEK[HEADER.FIELDS (X-SMSSYNC-ADDRESS \
                                                              X-SMSSYNC-TYPE \
                                                              X-SMSSYNC-DATE)])')
@@ -80,6 +84,7 @@ class Deduper:
     return dups
 
   def print_body(self):
+    """used for debugging. dump bodies of suspected dups"""
     for dup in self.dups():
       for (label, uid) in dup:
         self.m.select(label, readonly=True)
@@ -89,25 +94,41 @@ class Deduper:
         else:
           raise Exception("Error", status)
 
-  def delete(self, ids):
-    for (label, uid) in ids:
-      self.m.select(label, readonly=False)
-      status, data = self.m.uid('STORE', uid, '+FLAGS', r"\Deleted")
-      if status == 'OK':
-         self.m.expunge()
-         print "uid", uid, "deleted"
-      else:
-         raise Exception("Error", status)
+  def delete(self, dryrun = False):
+    """deletes all found duplicates"""
+    deleted = 0
+    for dup in self.dups():
+      for (label, uid) in dup:
+        self.m.select(label, readonly=False)
+        deleted += 1
+
+        if dryrun:
+          self.logger.debug("would delete %s/%s", label, uid)
+        else:
+          status, data = self.m.uid('STORE', uid, '+FLAGS', r"\Deleted")
+          if status == 'OK':
+             self.m.expunge()
+             self.logger.debug("deleted %s/%s", label, uid)
+          else:
+             raise Exception("Error", status)
+
+    self.logger.debug("deleted %s/s messages", deleted, len(self.dups()))
+    return deleted
 
   def filter(self, dups):
-    return dups
-    #return dups[1:]
+    return dups[1:]
 
   def logout(self):
       self.m.logout()
 
 if __name__ == "__main__":
+  if len(sys.argv) < 2:
+    print "%s <label...>" % os.path.basename(sys.argv[0])
+    sys.exit(1)
+
   d = Deduper()
-  d.check_label('SMSRenamed')
-  d.print_body()
+  for label in sys.argv[1:]:
+    d.check_label(label)
+
+  d.delete(dryrun = False)
   d.logout()
