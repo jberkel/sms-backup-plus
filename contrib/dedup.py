@@ -24,7 +24,7 @@ from netrc import netrc
 class Deduper:
   def __init__(self, login=None, password=None):
     self.logger = logging.getLogger()
-    self.logger.addHandler(logging.StreamHandler()) 
+    self.logger.addHandler(logging.StreamHandler())
     self.logger.setLevel(logging.DEBUG)
 
     if login == None and password == None:
@@ -77,22 +77,43 @@ class Deduper:
 
   def dups(self):
     dups = []
-    for (k,v) in self.messages.items():
+    for k,v in self.messages.items():
       if len(v) > 1:
         dups.append(self.filter(v))
 
     return dups
 
   def print_body(self):
-    """used for debugging. dump bodies of suspected dups"""
+    """used for debugging. dump bodies and relevant headers of suspected dups"""
     for dup in self.dups():
       for (label, uid) in dup:
         self.m.select(label, readonly=True)
-        status, data = self.m.uid('FETCH', uid, '(BODY[TEXT])')
+        status, data = self.m.uid('FETCH', uid,
+          '(BODY.PEEK[TEXT] BODY.PEEK[HEADER.FIELDS (X-SMSSYNC-ADDRESS \
+                           X-SMSSYNC-TYPE \
+                           X-SMSSYNC-DATE)])')
         if status == 'OK':
-          self.logger.debug("data: %s", data)
+          for d in data:
+            if len(d[1:]) > 0:
+              self.logger.debug("uid %s: %s", uid, d[1:])
         else:
           raise Exception("Error", status)
+
+  def to_json(self, filename = 'messages.json'):
+    import json
+    file = open(filename, 'w')
+    try:
+      json.dump(self.messages, file, sort_keys=True, indent=4)
+    finally:
+      file.close()
+
+  def from_json(self, filename = 'messages.json'):
+    import json
+    file = open(filename, 'r')
+    try:
+      self.messages = json.load(file)
+    finally:
+      file.close()
 
   def delete(self, dryrun = False):
     """deletes all found duplicates"""
@@ -112,7 +133,7 @@ class Deduper:
           else:
              raise Exception("Error", status)
 
-    self.logger.debug("deleted %s/s messages", deleted, len(self.dups()))
+    self.logger.debug("deleted %s/%s messages", deleted, len(self.dups()))
     return deleted
 
   def filter(self, dups):
@@ -130,5 +151,8 @@ if __name__ == "__main__":
   for label in sys.argv[1:]:
     d.check_label(label)
 
+  #d.to_json()
+  #d.print_body()
   d.delete(dryrun = False)
+
   d.logout()
