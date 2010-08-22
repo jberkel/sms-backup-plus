@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """
-  Quick hack to dedup backed up messages on gmail
+  Quick hack to dedup backed up messages on gmail/imap
   Create a file called ~/.netrc with the following:
 
-  machine google.com
+  machine smsbackup
     login your.account@gmail.com
     password yourpassword
 
@@ -28,7 +28,7 @@ class Deduper:
     self.logger.setLevel(logging.DEBUG)
 
     if login == None and password == None:
-      login, account, password = netrc().authenticators('google.com')
+      login, account, password = netrc().authenticators('smsbackup')
 
     self.messages = {}
     self.m = Deduper.connect(login, password)
@@ -83,6 +83,13 @@ class Deduper:
 
     return dups
 
+  def message_count(self):
+    count = 0
+    for v in self.messages.values():
+      count += len(v)
+    return count
+
+
   def print_body(self):
     """used for debugging. dump bodies and relevant headers of suspected dups"""
     for dup in self.dups():
@@ -133,7 +140,7 @@ class Deduper:
           else:
              raise Exception("Error", status)
 
-    self.logger.debug("deleted %s/%s messages", deleted, len(self.dups()))
+    self.logger.debug("deleted %d/%d messages", deleted, self.message_count())
     return deleted
 
   def filter(self, dups):
