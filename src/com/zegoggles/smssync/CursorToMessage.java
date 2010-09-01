@@ -38,6 +38,8 @@ import com.fsck.k9.mail.Message.RecipientType;
 import com.fsck.k9.mail.internet.MimeMessage;
 import com.fsck.k9.mail.internet.TextBody;
 
+import org.apache.james.mime4j.codec.EncoderUtil;
+
 public class CursorToMessage {
 
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
@@ -243,7 +245,8 @@ public class CursorToMessage {
                 PersonRecord record = new PersonRecord();
                 record._id = String.valueOf(personId);
                 record.name = name;
-                record.address = new Address(primaryEmail, name);
+                record.address = new Address(primaryEmail,
+                                             EncoderUtil.encodeAddressDisplayName(name));
 
                 mPeopleCache.put(address, record);
             } else {
