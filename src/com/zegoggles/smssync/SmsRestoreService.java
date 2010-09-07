@@ -70,7 +70,7 @@ public class SmsRestoreService extends ServiceBase {
                     msgs = folder.getMessages(null);
                 }
 
-                itemsToRestoreCount = max == -1 ? msgs.length : max;
+                itemsToRestoreCount = max == -1 ? msgs.length : Math.min(msgs.length, max);
 
                 long lastPublished = System.currentTimeMillis();
                 for (int i = 0; i < itemsToRestoreCount; i++) {
