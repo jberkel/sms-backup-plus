@@ -221,6 +221,11 @@ public class SmsRestoreService extends ServiceBase {
 
     private ContentValues messageToContentValues(Message message)
             throws java.io.IOException, MessagingException {
+
+        if (message == null) {
+          throw new MessagingException("message is null");
+        }
+
         java.io.InputStream is = message.getBody().getInputStream();
 
         if (is == null) {
