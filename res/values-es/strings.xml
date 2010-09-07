@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Generated with crowdin.net-->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">SMS Backup+Restore</string>
   <string name="app_description">Utilice Gmail para respaldar sus SMS. Se trata de una versión del programa SMS Backup de Christoph Studer soportando restauración.</string>
   <string name="ui_sync_button_label_idle">Copia de seguridad</string>
@@ -13,12 +13,12 @@
   <string name="ui_restore_button_label_restoring">Parar</string>
   <string name="ui_restore_button_label_error">Restaurar</string>
   <string name="status_idle">Inactivo</string>
-  <string name="status_idle_details">Última copia de seguridad: </string>
+  <string name="status_idle_details">Última copia de seguridad: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">Nunca</string>
   <string name="status_backup">Realizando copia de seguridad</string>
   <string name="status_restore">Restaurando</string>
-  <string name="status_backup_details">Respaldados / elementos\u2026</string>
-  <string name="status_restore_details">Restaurados / elementos\u2026</string>
+  <string name="status_backup_details">Respaldados <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementos\u2026</string>
+  <string name="status_restore_details">Restaurados <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>elementos\u2026</string>
   <string name="status_login_details">Iniciando sesión\u2026</string>
   <string name="status_done">Hecho</string>
   <string name="status_backup_done_details_max_per_sync">Máximo de %1$d elementos por copia de seguridad alcanzado. Reinicie la copia de seguridad para continuar.</string>
@@ -33,7 +33,7 @@
   <string name="status_canceled">Cancelado</string>
   <string name="status_canceled_details">%1$d/%2$d elementos han sido respaldados.</string>
   <string name="status_folder_error">Error de etiqueta</string>
-  <string name="status_folder_error_details">No se pudo acceder o crear la etiqueta/carpeta.</string>
+  <string name="status_folder_error_details">No se pudo acceder o crear la etiqueta/carpeta.<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="ui_settings_label">Ajustes</string>
   <string name="ui_settings_advanced_label">Configuración avanzada</string>
   <string name="ui_settings_advanced_desc">Establecer preferencias avanzadas.</string>

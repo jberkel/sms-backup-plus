@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Generated with crowdin.net-->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">SMS Backup+Restore</string>
   <string name="app_description">Użyj Gmail do przechowywania kopii zapasowej swoich SMSów. Ta wersja programu SMS Backup została stworzona przez Christoph\'a Studer\'a i obsługuje przywracanie wiadomości.</string>
   <string name="ui_sync_button_label_idle">Kopia zapasowa</string>
@@ -13,19 +13,19 @@
   <string name="ui_restore_button_label_restoring">Zatrzymaj</string>
   <string name="ui_restore_button_label_error">Przywracanie</string>
   <string name="status_idle">Bezczynny</string>
-  <string name="status_idle_details">Ostatnia kopia zapasowa:</string>
+  <string name="status_idle_details">Ostatnia kopia zapasowa: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">Nigdy</string>
   <string name="status_backup">Tworzenie kopii zapasowej</string>
   <string name="status_restore">Przywracanie</string>
-  <string name="status_backup_details">Kopia zapasowa / elementy\u2026</string>
-  <string name="status_restore_details">Przywrócone / elementy\u2026 </string>
+  <string name="status_backup_details">Kopia zapasowa <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementy\u2026</string>
+  <string name="status_restore_details">Przywrócone <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementy\u2026 </string>
   <string name="status_login_details">Uwierzytelnianie\u2026</string>
   <string name="status_done">Zakończono</string>
   <string name="status_backup_done_details_max_per_sync">Maksymalna liczba %1$d elementów na jeden cykl osiągnięta. Wykonaj ponownie kopię zapasową by kontynuować.</string>
   <string name="status_backup_done_details_noitems">Nie było żadnych elementów wymagających kopii zapasowej.</string>
   <string name="status_restore_canceled_details">%1$d/%2$d elementów poprawnie przywróconych.</string>
   <string name="status_unknown_error">Błąd</string>
-  <string name="status_unknown_error_details">Błąd podczas wykonywania kopii zapasowej/przywracania:\n</string>
+  <string name="status_unknown_error_details">Błąd podczas wykonywania kopii zapasowej/przywracania:\n <xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Błąd podczas logowania</string>
   <string name="status_auth_failure_details_xoauth">Upewnij się, że IMAP jest włączone w ustawienia konta Gmail.</string>
   <string name="status_auth_failure_details_plain">Błąd autoryzacji IMAP.
