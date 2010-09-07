@@ -41,10 +41,8 @@ SMS Backup+ is available for free in the market, there will never be a pro / pai
 
 You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
-account. *Important*: if you have a Google Apps account the following section
-does not apply. SMS Backup+ currenty lacks XOAuth support for Google Apps, see
-[GH-28](http://github.com/jberkel/sms-backup-plus/issues#issue/28) for a
-description and possible workarounds.
+account. If you use Google Apps make sure you select "Sign in with a Google
+Apps Account" ([screenshot](http://skitch.com/jberkel/ditwx/5554-emu-2.2)).
 
 After starting SMS Backup+, tap on the "Connect" check box to start the authorization process. A browser window will open where Gmail either prompts you to log in *or* (if you were already logged in) a screen asking you to give SMS Backup+ permission to access your emails.
 
