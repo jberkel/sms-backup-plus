@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Generated with crowdin.net-->
+<resources>
+  <string-array name="max_items_per_sync_entries">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>@string/all_messages</item>
+  </string-array>
+  <string-array name="max_items_per_sync_values">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>-1</item>
+  </string-array>
+  <string-array name="max_items_per_restore_entries">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>@string/all_messages</item>
+  </string-array>
+  <string-array name="max_items_per_restore_values">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>-1</item>
+  </string-array>
+  <string-array name="server_protocol_entries">
+    <item>SSL (Obligatorio)</item>
+    <item>SSL (Opcional)</item>
+    <item>TLS (Obligatorio)</item>
+    <item>TLS (Opcional)</item>
+    <item>Ninguno</item>
+  </string-array>
+  <string-array name="server_protocol_entryValues">
+    <item>+ssl+</item>
+    <item>+ssl</item>
+    <item>+tls+</item>
+    <item>+tls</item>
+    <item></item>
+  </string-array>
+  <string-array name="server_authentication_entries">
+    <item>@string/xoauth</item>
+    <item>@string/plain</item>
+  </string-array>
+  <string-array name="server_authentication_values">
+    <item>xoauth</item>
+    <item>plain</item>
+  </string-array>
+</resources>
