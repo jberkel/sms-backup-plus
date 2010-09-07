@@ -149,7 +149,9 @@ public class CursorToMessage {
             record = new PersonRecord();
             record._id = address;
             record.name = address;
-            record.address = new Address(address + "@" + UNKNOWN_PERSON);
+
+            record.address = new Address(EncoderUtil.encodeAddressLocalPart(address) +
+                "@" + UNKNOWN_PERSON);
         }
 
         msg.setSubject("SMS with " + record.name);
@@ -300,7 +302,7 @@ public class CursorToMessage {
 
     private static String getUnknownEmail(String number) {
         String no = (number == null) ? UNKNOWN_NUMBER : number;
-        return no + "@" + UNKNOWN_EMAIL;
+        return EncoderUtil.encodeAddressLocalPart(no.trim()) + "@" + UNKNOWN_EMAIL;
     }
 
     /** Returns whether the given e-mail address is a Gmail address or not. */
