@@ -99,7 +99,7 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                 //Debug.startMethodTracing("sorting");
                 Arrays.sort(msgs, new Comparator<Message>() {
                     public int compare(Message m1, Message m2) {
-                        return (m2.getSentDate() != null) ?
+                        return (m2 != null && m2.getSentDate() != null) ?
                                 m2.getSentDate().compareTo(m1.getSentDate()) : -1;
                     }
                 });
