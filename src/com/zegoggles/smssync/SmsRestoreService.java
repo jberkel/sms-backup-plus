@@ -177,6 +177,9 @@ public class SmsRestoreService extends ServiceBase {
                     Log.d(TAG, "ignoring sms");
                 }
 
+            } catch (IllegalArgumentException e) {
+                // http://code.google.com/p/android/issues/detail?id=2916
+                Log.e(TAG, "error", e);
             } catch (java.io.IOException e) {
                 Log.e(TAG, "error", e);
             } catch (MessagingException e) {
