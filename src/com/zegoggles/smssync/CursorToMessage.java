@@ -168,13 +168,18 @@ public class CursorToMessage {
         }
 
         msg.setBody(body);
-        Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
-        msg.setSentDate(then);
-        msg.setInternalDate(then);
+
+        try {
+          Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
+          msg.setSentDate(then);
+          msg.setInternalDate(then);
+          msg.setHeader("Message-ID", createMessageId(then, address, messageType));
+        } catch (NumberFormatException n) {
+          Log.e(Consts.TAG, "error parsing date", n);
+        }
         // Threading by person ID, not by thread ID. I think this value is more
         // stable.
         msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, record._id));
-        msg.setHeader("Message-ID", createMessageId(then, address, messageType));
         msg.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
         msg.setHeader(Headers.ADDRESS, address);
         msg.setHeader(Headers.TYPE, msgMap.get(SmsConsts.TYPE));
