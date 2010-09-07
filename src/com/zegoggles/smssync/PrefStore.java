@@ -235,7 +235,9 @@ public class PrefStore {
             char currChar = imapFolder.charAt(i);
             if (!((currChar >= 'a' && currChar <= 'z')
                     || (currChar >= 'A' && currChar <= 'Z')
-                    || (currChar == '.'))) {
+                    || (currChar == '.')
+                    || (currChar == '/')
+                    )) {
                 return false;
             }
         }
