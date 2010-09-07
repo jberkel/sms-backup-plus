@@ -72,6 +72,8 @@ public abstract class ServiceBase extends Service {
             throws AuthenticationErrorException {
         try {
             return new ImapStore(this).getBackupFolder();
+        } catch (IllegalArgumentException e) {
+            throw new AuthenticationErrorException(e);
         } catch (MessagingException e) {
             throw new AuthenticationErrorException(e);
         }

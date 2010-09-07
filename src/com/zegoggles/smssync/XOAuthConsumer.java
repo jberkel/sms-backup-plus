@@ -7,6 +7,8 @@ import oauth.signpost.http.HttpRequest;
 import oauth.signpost.http.HttpParameters;
 import oauth.signpost.signature.SignatureBaseString;
 import java.net.URLEncoder;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.HttpClient;
@@ -50,16 +52,17 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   }
 
   public String generateXOAuthString(final String username) {
-      final String url = String.format("https://mail.google.com/mail/b/%s/imap/", username);
-      final HttpRequest request = wrap(new HttpGet(url));
-      final HttpParameters requestParameters = new HttpParameters();
 
       try {
+        final URI uri = new URI(String.format("https://mail.google.com/mail/b/%s/imap/", username));
+        final HttpRequest request = wrap(new HttpGet(uri));
+        final HttpParameters requestParameters = new HttpParameters();
+
          completeOAuthParameters(requestParameters);
 
          StringBuilder sasl = new StringBuilder()
               .append("GET ")
-              .append(url)
+              .append(uri.toString())
               .append(" ");
 
          requestParameters.put("oauth_signature", generateSig(request, requestParameters) , true);
@@ -79,6 +82,8 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
 
          Log.d(Consts.TAG, "sasl: " + sasl.toString());
          return base64(sasl.toString().getBytes(OAuth.ENCODING));
+      } catch (URISyntaxException e) {
+          throw new IllegalArgumentException(e);
       } catch (Exception e) {
           throw new RuntimeException(e);
       }
