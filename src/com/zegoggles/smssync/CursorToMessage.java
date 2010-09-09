@@ -252,8 +252,9 @@ public class CursorToMessage {
                 PersonRecord record = new PersonRecord();
                 record._id = String.valueOf(personId);
                 record.name = name;
+
                 record.address = new Address(primaryEmail,
-                                             EncoderUtil.encodeAddressDisplayName(name));
+                                             name != null ? EncoderUtil.encodeAddressDisplayName(name) : null);
 
                 mPeopleCache.put(address, record);
             } else {
