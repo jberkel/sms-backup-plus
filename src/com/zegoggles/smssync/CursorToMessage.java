@@ -149,9 +149,7 @@ public class CursorToMessage {
             record = new PersonRecord();
             record._id = address;
             record.name = address;
-
-            record.address = new Address(EncoderUtil.encodeAddressLocalPart(address) +
-                "@" + UNKNOWN_PERSON);
+            record.address = new Address(encodeLocal(address) + "@" + UNKNOWN_PERSON);
         }
 
         msg.setSubject("SMS with " + record.name);
@@ -253,9 +251,7 @@ public class CursorToMessage {
                 record._id = String.valueOf(personId);
                 record.name = name;
 
-                record.address = new Address(primaryEmail,
-                                             name != null ? EncoderUtil.encodeAddressDisplayName(name) : null);
-
+                record.address = new Address(primaryEmail, encodeDisplayName(name));
                 mPeopleCache.put(address, record);
             } else {
                 Log.v(Consts.TAG, "Looked up unknown address: " + address);
@@ -301,9 +297,17 @@ public class CursorToMessage {
         return primaryEmail;
     }
 
+    private static String encodeLocal(String s) {
+      return (s != null ? EncoderUtil.encodeAddressLocalPart(s) : null);
+    }
+
+    private static String encodeDisplayName(String s) {
+      return (s != null ? EncoderUtil.encodeAddressDisplayName(s) : null);
+    }
+
     private static String getUnknownEmail(String number) {
         String no = (number == null) ? UNKNOWN_NUMBER : number;
-        return EncoderUtil.encodeAddressLocalPart(no.trim()) + "@" + UNKNOWN_EMAIL;
+        return encodeLocal(no.trim()) + "@" + UNKNOWN_EMAIL;
     }
 
     /** Returns whether the given e-mail address is a Gmail address or not. */
