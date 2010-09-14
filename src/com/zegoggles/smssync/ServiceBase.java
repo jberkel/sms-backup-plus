@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -15,12 +16,16 @@ import android.util.Log;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 
-
-
 public abstract class ServiceBase extends Service {
 
     // the activity
     public static SmsSync smsSync;
+
+    /**
+     * Field containing a description of the last error. See
+     * {@link #getErrorDescription()}.
+     */
+    protected static String sLastError;
 
     enum SmsSyncState {
         IDLE, CALC, LOGIN, SYNC, RESTORE, AUTH_FAILED, GENERAL_ERROR, FOLDER_ERROR, CANCELED;
@@ -52,6 +57,14 @@ public abstract class ServiceBase extends Service {
      */
     protected WifiManager.WifiLock sWifiLock;
 
+    /**
+     * Returns a description of the last error. Only valid if
+     * <code>{@link #getState()} == {@link SmsSyncState#GENERAL_ERROR}</code>.
+     */
+    static String getErrorDescription() {
+        return sLastError;
+    }
+
     public static String getHeader(Message msg, String header) {
         try {
             String[] hdrs = msg.getHeader(header);
@@ -79,22 +92,34 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    protected void acquireWakeLock() {
+    protected void acquireLocks() throws GeneralErrorException {
         if (sWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                    "SmsSyncService.sync() wakelock.");
-
-            WifiManager wMgr = (WifiManager) getSystemService(WIFI_SERVICE);
-            sWifiLock = wMgr.createWifiLock("SMS Backup");
+            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SmsSyncService wakelock.");
         }
         sWakeLock.acquire();
-        sWifiLock.acquire();
+
+        WifiManager wMgr = (WifiManager) getSystemService(WIFI_SERVICE);
+
+        if (wMgr.isWifiEnabled() &&
+            getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
+
+          // we have Wifi, lock it
+          if (sWifiLock == null)  {
+            sWifiLock = wMgr.createWifiLock("SMS Backup+");
+          }
+          sWifiLock.acquire();
+        } else if (PrefStore.isWifiOnly(this)) {
+          throw new GeneralErrorException(R.string.error_wifi_only_no_connection, this, null);
+        }
     }
 
-    protected void releaseWakeLock() {
+    protected void releaseLocks() {
         sWakeLock.release();
-        sWifiLock.release();
+
+        if (sWifiLock != null && sWifiLock.isHeld()) {
+          sWifiLock.release();
+        }
     }
 
     /**
@@ -157,11 +182,15 @@ public abstract class ServiceBase extends Service {
     public static class GeneralErrorException extends Exception {
         private static final long serialVersionUID = 1L;
 
+        public GeneralErrorException(String msg) {
+            super(msg);
+        }
+
         public GeneralErrorException(String msg, Throwable t) {
             super(msg, t);
         }
 
-        public GeneralErrorException(Context ctx, int msgId, Throwable t) {
+        public GeneralErrorException(int msgId, Context ctx, Throwable t) {
             super(ctx.getString(msgId), t);
         }
     }

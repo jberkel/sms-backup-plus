@@ -417,7 +417,7 @@ public class SmsSync extends PreferenceActivity {
                             case GENERAL_ERROR:
                                 statusLabel = getString(R.string.status_unknown_error);
                                 statusDetails = getString(R.string.status_unknown_error_details,
-                                        SmsSyncService.getErrorDescription());
+                                        ServiceBase.getErrorDescription());
                                 status = STATUS_ERROR;
                                 break;
                             case CANCELED:

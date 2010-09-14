@@ -56,12 +56,6 @@ public class SmsSyncService extends ServiceBase {
     private static int sCurrentSyncedItems;
 
     /**
-     * Field containing a description of the last error. See
-     * {@link #getErrorDescription()}.
-     */
-    private static String sLastError;
-
-    /**
      * This {@link StateChangeListener} is notified whenever {@link #sState} is
      * updated.
      */
@@ -89,7 +83,6 @@ public class SmsSyncService extends ServiceBase {
         synchronized(ServiceBase.class) {
             // Only start a sync if there's no other sync / restore going on at this time.
             if (!sIsRunning && !SmsRestoreService.isWorking()) {
-                acquireWakeLock();
                 sIsRunning = true;
                 // TODO use AsyncTask
                 // Start sync in new thread
@@ -99,12 +92,14 @@ public class SmsSyncService extends ServiceBase {
                         // Lower thread priority a little. We're not the UI.
                         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                         try {
+                            acquireLocks();
+
                             // On first sync we need to know whether to skip or
                             // sync current messages.
                             if (PrefStore.isFirstSync(SmsSyncService.this)
                                     && !intent.hasExtra(Consts.KEY_SKIP_MESSAGES)) {
-                                throw new GeneralErrorException(SmsSyncService.this,
-                                        R.string.err_first_sync_needs_skip_flag, null);
+                                throw new GeneralErrorException(R.string.err_first_sync_needs_skip_flag,
+                                  SmsSyncService.this, null);
                             }
                             boolean skipMessages = intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES,
                                     false);
@@ -148,7 +143,7 @@ public class SmsSyncService extends ServiceBase {
                             Alarms.scheduleRegularSync(SmsSyncService.this);
                             sIsRunning = false;
                             sCanceled = false;
-                            releaseWakeLock();
+                            releaseLocks();
                         }
                     }
                 }.start();
@@ -209,7 +204,7 @@ public class SmsSyncService extends ServiceBase {
         sCanceled = false;
 
         if (!PrefStore.isLoginInformationSet(this)) {
-            throw new GeneralErrorException(this, R.string.err_sync_requires_login_info, null);
+            throw new GeneralErrorException(R.string.err_sync_requires_login_info, this, null);
         }
 
       updateState(SmsSyncState.CALC);
@@ -282,7 +277,7 @@ public class SmsSyncService extends ServiceBase {
                 messages = null;
             }
         } catch (MessagingException e) {
-            throw new GeneralErrorException(this, R.string.err_communication_error, e);
+            throw new GeneralErrorException(R.string.err_communication_error, this, e);
         } finally {
             items.close();
         }
@@ -341,14 +336,6 @@ public class SmsSyncService extends ServiceBase {
      */
     static SmsSyncState getState() {
         return sState;
-    }
-
-    /**
-     * Returns a description of the last error. Only valid if
-     * <code>{@link #getState()} == {@link SmsSyncState#GENERAL_ERROR}</code>.
-     */
-    static String getErrorDescription() {
-        return (sState == SmsSyncState.GENERAL_ERROR) ? sLastError : null;
     }
 
     /**

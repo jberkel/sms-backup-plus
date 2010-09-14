@@ -89,6 +89,11 @@
   <string name="ui_mark_as_read_restore_desc">Whether to mark all restored SMS as read or not.</string>
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
+
+  <string name="ui_wifi_only_label">Require Wifi</string>
+  <string name="ui_wifi_only_desc">Only backup/restore when connected to Wifi</string>
+  <string name="error_wifi_only_no_connection">No Wifi connection</string>
+
   <string name="ui_dialog_missing_credentials_title">Login information</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">You need to connect your Gmail account first.</string>

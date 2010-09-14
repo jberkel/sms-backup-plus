@@ -76,6 +76,7 @@ public class PrefStore {
 
     static final String PREF_PREFILLED  = "prefilled";
     static final String PREF_CONNECTED  = "connected";
+    static final String PREF_WIFI_ONLY  = "wifi_only";
 
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
@@ -216,6 +217,10 @@ public class PrefStore {
 
     static int getMaxItemsPerRestore(Context ctx) {
       return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_RESTORE, DEFAULT_MAX_ITEMS_PER_RESTORE);
+    }
+
+    static boolean isWifiOnly(Context ctx) {
+      return (getSharedPreferences(ctx).getBoolean(PREF_WIFI_ONLY, false));
     }
 
     private static int getStringAsInt(Context ctx, String key, String def) {

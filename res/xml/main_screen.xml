@@ -53,6 +53,12 @@
           android:defaultValue="-1"
           android:persistent="true"/>
 
+      <CheckBoxPreference android:key="wifi_only"
+          android:title="@string/ui_wifi_only_label"
+          android:summary="@string/ui_wifi_only_desc"
+          android:persistent="true"
+          android:defaultValue="false"/>
+
         <PreferenceScreen
           android:title="@string/ui_settings_advanced_server_label"
           android:summary="@string/ui_settings_advanced_server_desc">

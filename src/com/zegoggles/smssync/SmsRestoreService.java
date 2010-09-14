@@ -58,7 +58,7 @@ public class SmsRestoreService extends ServiceBase {
             this.max = params.length > 0 ? params[0] : -1;
 
             try {
-                acquireWakeLock();
+                acquireLocks();
                 sIsRunning = true;
 
                 updateState(LOGIN);
@@ -105,6 +105,11 @@ public class SmsRestoreService extends ServiceBase {
                 updateAllThreads();
 
                 return insertedIds.size();
+            } catch (GeneralErrorException error) {
+                Log.e(TAG, "error", error);
+                sLastError = error.getLocalizedMessage();
+                updateState(GENERAL_ERROR);
+                return -1;
             } catch (AuthenticationErrorException authError) {
                 Log.e(TAG, "error", authError);
                 updateState(AUTH_FAILED);
@@ -114,7 +119,7 @@ public class SmsRestoreService extends ServiceBase {
                 updateState(GENERAL_ERROR);
                 return -1;
             } finally {
-                releaseWakeLock();
+                releaseLocks();
                 sCanceled = false;
                 sIsRunning = false;
             }
