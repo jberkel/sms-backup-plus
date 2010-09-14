@@ -11,6 +11,9 @@ import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import org.apache.commons.io.IOUtils;
 import java.util.HashSet;
 import java.util.Set;
+import java.io.File;
+import java.io.FilenameFilter;
+
 import static com.zegoggles.smssync.CursorToMessage.Headers.*;
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 
@@ -90,6 +93,11 @@ public class SmsRestoreService extends ServiceBase {
                         // don't publish too often or we get ANRs
                         publishProgress(i);
                         lastPublished = System.currentTimeMillis();
+                    }
+
+                    if (i % 50 == 0) {
+                      //clear cache periodically otherwise SD card fills up
+                      clearCache();
                     }
                 }
                 publishProgress(itemsToRestoreCount);
@@ -190,7 +198,8 @@ public class SmsRestoreService extends ServiceBase {
 
     @Override
     public void onCreate() {
-        BinaryTempFileBody.setTempDirectory(getCacheDir());
+       clearCache();
+       BinaryTempFileBody.setTempDirectory(getCacheDir());
     }
 
     @Override
@@ -201,6 +210,19 @@ public class SmsRestoreService extends ServiceBase {
             if (!sIsRunning) {
                 new RestoreTask().execute(PrefStore.getMaxItemsPerRestore(this));
             }
+        }
+    }
+
+    private void clearCache() {
+        File tmp = getCacheDir();
+        Log.d(TAG, "clearing cache in " + tmp);
+        for (File f : tmp.listFiles(new FilenameFilter() {
+          public boolean accept(File dir, String name) {
+            return name.startsWith("body");
+          }
+        })) {
+          //Log.d(TAG, "deleting " + f);
+          f.delete();
         }
     }
 
