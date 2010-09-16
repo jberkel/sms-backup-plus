@@ -21,7 +21,7 @@
           android:title="@string/ui_mark_as_read_label"
           android:summary="@string/ui_mark_as_read_desc"
           android:persistent="true"
-          android:defaultValue="false"/>
+          android:defaultValue="true"/>
 
         <CheckBoxPreference android:key="mark_as_read_on_restore"
           android:title="@string/ui_mark_as_read_restore_label"

@@ -102,7 +102,7 @@ public class PrefStore {
     static final String DEFAULT_MAX_ITEMS_PER_RESTORE = "-1";
 
     /** Default value for {@link #PREF_MARK_AS_READ}. */
-    static final boolean DEFAULT_MARK_AS_READ = false;
+    static final boolean DEFAULT_MARK_AS_READ = true;
 
     static final boolean DEFAULT_MARK_AS_READ_ON_RESTORE = true;
 
