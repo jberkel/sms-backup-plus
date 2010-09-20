@@ -7,7 +7,7 @@
   android:paddingRight="10dip"
   android:paddingTop="10dip"
   android:paddingBottom="10dip">
-  <RelativeLayout 
+  <RelativeLayout
       android:layout_width="fill_parent"
       android:layout_height="wrap_content">
 
@@ -42,7 +42,7 @@
       android:layout_alignBaseline="@id/status_icon"
       android:width="90sp"
       />
-          
+
     <TextView
       android:id="@+id/status_label"
       android:layout_width="fill_parent"
@@ -54,8 +54,8 @@
       android:textColor="@color/status_done"
       android:layout_marginLeft="6dip"
       android:layout_alignBaseline="@id/status_icon"
-      android:layout_toLeftOf="@id/sync_button"/>        
-        
+      android:layout_toLeftOf="@id/sync_button"/>
+
       <LinearLayout
         android:id="@+id/details_sync"
         android:orientation="vertical"
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/status_label"
         android:layout_below="@id/sync_button">
-        
+
         <ProgressBar
           android:id="@+id/details_sync_progress"
           android:layout_width="fill_parent"
@@ -71,29 +71,12 @@
           style="?android:attr/progressBarStyleHorizontal"
           android:indeterminate="false"
           />
-        <ProgressBar
-          android:id="@+id/details_sync_progress_indet"
-          android:visibility="gone"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          style="?android:attr/progressBarStyleHorizontal"
-          android:indeterminate="true"
-          />
-        <TextView
+       <TextView
           android:id="@+id/details_sync_label"
           android:layout_marginTop="6dip"
           android:layout_height="wrap_content"
           android:layout_width="fill_parent"
           />
       </LinearLayout>
-        
-      <TextView
-        android:id="@+id/details_error"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:lines="3"
-        android:layout_alignLeft="@id/status_label"
-        android:layout_below="@id/sync_button"
-       />
   </RelativeLayout>
 </LinearLayout>

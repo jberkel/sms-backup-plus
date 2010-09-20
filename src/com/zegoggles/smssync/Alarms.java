@@ -55,7 +55,7 @@ public class Alarms {
     }
 
     private static PendingIntent createPendingIntent(Context ctx) {
-        Intent serviceIntent = new Intent(ctx, SmsSyncService.class);
+        Intent serviceIntent = new Intent(ctx, SmsBackupService.class);
         serviceIntent.putExtra(Consts.KEY_NUM_RETRIES, Consts.NUM_AUTO_RETRIES);
         return PendingIntent.getService(ctx, 0, serviceIntent, 0);
     }

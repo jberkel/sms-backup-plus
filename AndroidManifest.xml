@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="SmsSyncService" android:exported="false"></service>
+        <service android:name="SmsBackupService" android:exported="false"></service>
         <service android:name="SmsRestoreService" android:exported="false"></service>
 
         <receiver android:name="SmsBroadcastReceiver">

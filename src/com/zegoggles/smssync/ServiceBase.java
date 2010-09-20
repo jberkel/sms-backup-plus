@@ -21,30 +21,12 @@ public abstract class ServiceBase extends Service {
     // the activity
     public static SmsSync smsSync;
 
-    /**
-     * Field containing a description of the last error. See
-     * {@link #getErrorDescription()}.
-     */
-    protected static String sLastError;
+    /** Field containing a description of the last error. */
+    public static String lastError;
 
     enum SmsSyncState {
         IDLE, CALC, LOGIN, SYNC, RESTORE, AUTH_FAILED, GENERAL_ERROR, FOLDER_ERROR, CANCELED;
     }
-
-    /**
-     * A state change listener interface that provides a callback that is called
-     * whenever the state of the {@link SmsSyncService} changes.
-     *
-     * @see SmsSyncService#setStateChangeListener(StateChangeListener)
-     */
-    public interface StateChangeListener {
-
-        /**
-         * Called whenever the sync state of the service changed.
-         */
-        void stateChanged(SmsSyncState oldState, SmsSyncState newState);
-    }
-
 
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
 
@@ -56,14 +38,6 @@ public abstract class ServiceBase extends Service {
      * A wifilock held while this service is working.
      */
     protected WifiManager.WifiLock sWifiLock;
-
-    /**
-     * Returns a description of the last error. Only valid if
-     * <code>{@link #getState()} == {@link SmsSyncState#GENERAL_ERROR}</code>.
-     */
-    static String getErrorDescription() {
-        return sLastError;
-    }
 
     public static String getHeader(Message msg, String header) {
         try {
@@ -95,7 +69,7 @@ public abstract class ServiceBase extends Service {
     protected void acquireLocks() throws GeneralErrorException {
         if (sWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SmsSyncService wakelock.");
+            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SmsBackupService wakelock.");
         }
         sWakeLock.acquire();
 
@@ -110,7 +84,7 @@ public abstract class ServiceBase extends Service {
           }
           sWifiLock.acquire();
         } else if (PrefStore.isWifiOnly(this)) {
-          throw new GeneralErrorException(R.string.error_wifi_only_no_connection, this, null);
+          throw new GeneralErrorException(getString(R.string.error_wifi_only_no_connection));
         }
     }
 
@@ -180,27 +154,18 @@ public abstract class ServiceBase extends Service {
      * Exception indicating an error while synchronizing.
      */
     public static class GeneralErrorException extends Exception {
-        private static final long serialVersionUID = 1L;
-
         public GeneralErrorException(String msg) {
             super(msg);
         }
 
-        public GeneralErrorException(String msg, Throwable t) {
-            super(msg, t);
+        public GeneralErrorException(Throwable t) {
+            super(t);
         }
+   }
 
-        public GeneralErrorException(int msgId, Context ctx, Throwable t) {
-            super(ctx.getString(msgId), t);
-        }
-    }
-
-    public static class AuthenticationErrorException extends Exception {
-        private static final long serialVersionUID = 1L;
-
+    public static class AuthenticationErrorException extends GeneralErrorException {
         public AuthenticationErrorException(Throwable t) {
-            super(t.getLocalizedMessage(), t);
+            super(t);
         }
     }
-
 }
