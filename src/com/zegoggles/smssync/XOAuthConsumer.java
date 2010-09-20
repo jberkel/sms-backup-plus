@@ -138,7 +138,17 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
       });
       xr.parse(new InputSource(resp.getEntity().getContent()));
       return email.toString();
-    } catch (Exception e) {
+
+    } catch (oauth.signpost.exception.OAuthException e) {
+       Log.e(Consts.TAG, "error", e);
+       return null;
+    } catch (org.xml.sax.SAXException e) {
+       Log.e(Consts.TAG, "error", e);
+       return null;
+    } catch (java.io.IOException e) {
+       Log.e(Consts.TAG, "error", e);
+       return null;
+    } catch (javax.xml.parsers.ParserConfigurationException e) {
        Log.e(Consts.TAG, "error", e);
        return null;
     }

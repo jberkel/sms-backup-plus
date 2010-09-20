@@ -752,7 +752,7 @@ public class SmsSync extends PreferenceActivity {
                     String url = provider.retrieveRequestToken(consumer, callback[0]);
                     PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
                     return url;
-                } catch (Exception e) {
+                } catch (oauth.signpost.exception.OAuthException e) {
                     Log.e(TAG, "error requesting token", e);
 
                     notifyUser(android.R.drawable.stat_sys_warning, "Error",
@@ -807,7 +807,7 @@ public class SmsSync extends PreferenceActivity {
                }
                // intent has been handled
                callbackIntent[0].setData(null);
-            } catch (Exception e) {
+            } catch (oauth.signpost.exception.OAuthException e) {
                 Log.e(TAG, "error", e);
 
                 notifyUser(android.R.drawable.stat_sys_warning, "Error",
