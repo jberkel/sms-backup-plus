@@ -22,8 +22,12 @@
   <string name="status_idle">Idle</string>
   <string name="status_idle_details">Last SMS backed up: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">Never</string>
+
+  <string name="status_working">Working</string>
+
   <string name="status_backup">Backing up</string>
   <string name="status_restore">Restoring</string>
+
   <string name="status_backup_details">Backed up <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
   <string name="status_restore_details">Restored <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
   <string name="status_login_details">Logging in\u2026</string>
@@ -135,6 +139,8 @@
   <string name="err_sync_requires_login_info">Cannot backup without login information.</string>
   <string name="err_communication_error">General communication error.</string>
   <string name="menu_info">About</string>
+  <string name="menu_reset">Reset</string>
+  <string name="menu_reset_message">Reset current sync state?</string>
   <string name="all_messages">All</string>
 
   <string name="gmail_connected_fail">Gmail authentication failure</string>

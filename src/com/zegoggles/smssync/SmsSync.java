@@ -76,6 +76,7 @@ public class SmsSync extends PreferenceActivity {
       INVALID_IMAP_FOLDER,
       NEED_FIRST_MANUAL_SYNC,
       ABOUT,
+      RESET,
       DISCONNECT,
       REQUEST_TOKEN,
       ACCESS_TOKEN,
@@ -89,9 +90,6 @@ public class SmsSync extends PreferenceActivity {
 
     private static ContactAccessor sAccessor = null;
 
-    enum Mode { BACKUP, RESTORE, NONE }
-
-    private Mode mMode = Mode.NONE;
     private Uri mAuthorizeUri = null;
 
     @Override
@@ -151,8 +149,11 @@ public class SmsSync extends PreferenceActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about:
+            case R.id.menu_about:
                 show(Dialogs.ABOUT);
+                return true;
+            case R.id.menu_reset:
+                show(Dialogs.RESET);
                 return true;
              default:
                 return super.onOptionsItemSelected(item);
@@ -174,7 +175,6 @@ public class SmsSync extends PreferenceActivity {
 
     private void initiateRestore() {
         if (checkLoginInformation()) {
-            mMode = Mode.RESTORE;
             startRestore();
         }
     }
@@ -184,7 +184,6 @@ public class SmsSync extends PreferenceActivity {
             if (PrefStore.isFirstSync(this)) {
                 show(Dialogs.FIRST_SYNC);
             } else {
-                mMode = Mode.BACKUP;
                 startSync(false);
             }
         }
@@ -254,9 +253,8 @@ public class SmsSync extends PreferenceActivity {
         }
 
         public void update() {
-          stateChanged(SmsBackupService.getState(),
-                       SmsBackupService.getState());
-          // XXX
+            // XXX
+            stateChanged(SmsBackupService.getState());
         }
 
         private void authFailed() {
@@ -274,12 +272,12 @@ public class SmsSync extends PreferenceActivity {
         }
 
         private void calc() {
-            mStatusLabel.setText(getStatusLabelResource());
+            mStatusLabel.setText(R.string.status_working);
             mSyncDetailsLabel.setText(R.string.status_calc_details);
             mProgressBar.setIndeterminate(true);
         }
 
-        private void idleAfterBackup() {
+        private void finishedBackup() {
             mStatusLabel.setText(R.string.status_done);
             int backedUpCount = SmsBackupService.getCurrentSyncedItems();
 
@@ -293,7 +291,8 @@ public class SmsSync extends PreferenceActivity {
             }
         }
 
-        private void idleAfterRestore() {
+        private void finishedRestore() {
+            mStatusLabel.setText(R.string.status_done);
             mSyncDetailsLabel.setText(getResources().getQuantityString(
                   R.plurals.status_restore_done_details,
                   SmsRestoreService.sRestoredCount,
@@ -304,7 +303,6 @@ public class SmsSync extends PreferenceActivity {
         private void idle() {
             mStatusLabel.setText(R.string.status_idle);
             long lastSync = PrefStore.getLastSync(getContext());
-
             String lastSyncStr;
             if (lastSync == PrefStore.DEFAULT_LAST_SYNC) {
                 lastSyncStr = getString(R.string.status_idle_details_never);
@@ -316,26 +314,19 @@ public class SmsSync extends PreferenceActivity {
             mSyncDetailsLabel.setText(getString(R.string.status_idle_details, lastSyncStr));
         }
 
-        public void stateChanged(final SmsSyncState oldState, final SmsSyncState newState) {
+        public void stateChanged(final SmsSyncState newState) {
             if (mView == null) return;
             switch (newState) {
-               case IDLE:
-                    if (oldState == SmsSyncState.SYNC
-                     || oldState == SmsSyncState.CALC) {
-                      idleAfterBackup();
-                    } else if (oldState == SmsSyncState.RESTORE) {
-                      idleAfterRestore();
-                    } else {
-                      idle();
-                    }
-                    break;
-                case LOGIN:
-                    mStatusLabel.setText(getStatusLabelResource());
+               case FINISHED_RESTORE: finishedRestore(); break;
+               case FINISHED_BACKUP: finishedBackup(); break;
+               case IDLE: idle(); break;
+               case LOGIN:
+                    mStatusLabel.setText(R.string.status_working);
                     mSyncDetailsLabel.setText(R.string.status_login_details);
                     mProgressBar.setIndeterminate(true);
                     break;
                 case CALC: calc(); break;
-                case SYNC:
+                case BACKUP:
                     mRestoreButton.setEnabled(false);
                     mSyncButton.setText(R.string.ui_sync_button_label_syncing);
                     mStatusLabel.setText(R.string.status_backup);
@@ -370,26 +361,20 @@ public class SmsSync extends PreferenceActivity {
                           ServiceBase.lastError == null ? "N/A" : ServiceBase.lastError));
                       // XXX res
                     break;
-                case CANCELED:
-                    mSyncButton.setEnabled(true);
-                    mRestoreButton.setEnabled(true);
+                case CANCELED_BACKUP:
                     mStatusLabel.setText(R.string.status_canceled);
-                    mProgressBar.setProgress(0);
 
-                    switch(mMode) {
-                        case BACKUP:
-                            mSyncButton.setText(R.string.ui_sync_button_label_idle);
-                            mSyncDetailsLabel.setText(getString(R.string.status_canceled_details,
-                                SmsBackupService.getCurrentSyncedItems(),
-                                SmsBackupService.getItemsToSyncCount()));
-                            break;
-                        case RESTORE:
-                             mRestoreButton.setText(R.string.ui_restore_button_label_idle);
-                             mSyncDetailsLabel.setText(getString(R.string.status_restore_canceled_details,
-                                SmsRestoreService.getCurrentRestoredItems(),
-                                SmsRestoreService.getItemsToRestoreCount()));
-                            break;
-                  }
+                    mSyncDetailsLabel.setText(getString(R.string.status_canceled_details,
+                        SmsBackupService.getCurrentSyncedItems(),
+                        SmsBackupService.getItemsToSyncCount()));
+                    break;
+                case CANCELED_RESTORE:
+                    mStatusLabel.setText(R.string.status_canceled);
+
+                    mSyncDetailsLabel.setText(getString(R.string.status_restore_canceled_details,
+                        SmsRestoreService.getCurrentRestoredItems(),
+                        SmsRestoreService.getItemsToRestoreCount()));
+                    break;
               }
               setAttributes(newState);
           }
@@ -399,7 +384,6 @@ public class SmsSync extends PreferenceActivity {
             case GENERAL_ERROR:
             case FOLDER_ERROR:
             case AUTH_FAILED:
-
               mProgressBar.setProgress(0);
               mProgressBar.setIndeterminate(false);
               mStatusLabel.setTextColor(getResources().getColor(R.color.status_error));
@@ -407,12 +391,20 @@ public class SmsSync extends PreferenceActivity {
               break;
             case LOGIN:
             case CALC:
-            case SYNC:
+            case BACKUP:
             case RESTORE:
               mStatusLabel.setTextColor(getResources().getColor(R.color.status_sync));
               mStatusIcon.setImageResource(R.drawable.ic_syncing);
               break;
             default:
+              mProgressBar.setProgress(0);
+              mProgressBar.setIndeterminate(false);
+              mRestoreButton.setEnabled(true);
+              mSyncButton.setEnabled(true);
+
+              mSyncButton.setText(R.string.ui_sync_button_label_idle);
+              mRestoreButton.setText(R.string.ui_restore_button_label_idle);
+
               mStatusLabel.setTextColor(getResources().getColor(R.color.status_done));
               mStatusIcon.setImageResource(R.drawable.ic_idle);
           }
@@ -421,8 +413,7 @@ public class SmsSync extends PreferenceActivity {
         @Override
         public void onClick(View v) {
             if (v == mSyncButton) {
-
-                if (!SmsBackupService.isWorking() && !SmsBackupService.isCancelling()) {
+                if (!SmsBackupService.isWorking()) {
                     Log.d(TAG, "user requested sync");
                     initiateSync();
                 } else {
@@ -434,7 +425,7 @@ public class SmsSync extends PreferenceActivity {
                 }
             } else if (v == mRestoreButton) {
                 Log.d(TAG, "restore");
-                if (!SmsRestoreService.isWorking() && !SmsRestoreService.isCancelling()) {
+                if (!SmsRestoreService.isWorking()) {
                     initiateRestore();
                 } else {
                     mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
@@ -463,15 +454,6 @@ public class SmsSync extends PreferenceActivity {
             }
             return mView;
         }
-
-        public int getStatusLabelResource() {
-             switch (mMode) {
-                 case BACKUP: return R.string.status_backup;
-                 case RESTORE:return R.string.status_restore;
-                 case NONE: return R.string.status_idle;
-                 default: throw new IllegalStateException();
-             }
-        }
     }
 
     @Override
@@ -482,12 +464,8 @@ public class SmsSync extends PreferenceActivity {
         switch (Dialogs.values()[id]) {
             case MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
-
-                if (PrefStore.getAuthMode(this) == PrefStore.AuthMode.XOAUTH) {
-                  msg = getString(R.string.ui_dialog_missing_credentials_msg_xoauth);
-                } else {
-                  msg = getString(R.string.ui_dialog_missing_credentials_msg_plain);
-                }
+                msg = PrefStore.useXOAuth(this) ? getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
+                                                  getString(R.string.ui_dialog_missing_credentials_msg_plain);
                 break;
             case SYNC_DATA_RESET:
                 title = getString(R.string.ui_dialog_sync_data_reset_title);
@@ -499,13 +477,11 @@ public class SmsSync extends PreferenceActivity {
                 break;
             case NEED_FIRST_MANUAL_SYNC:
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == DialogInterface.BUTTON1) {
                             show(Dialogs.FIRST_SYNC);
                         }
-                    }
-                };
+                    }};
 
                 return new AlertDialog.Builder(this)
                     .setTitle(R.string.ui_dialog_need_first_manual_sync_title)
@@ -532,7 +508,7 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(R.string.ui_sync, firstSyncListener)
                     .setNegativeButton(R.string.ui_skip, firstSyncListener)
                     .create();
-            case ABOUT:
+           case ABOUT:
                 View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
                 webView.getSettings().setJavaScriptEnabled(true);
@@ -543,6 +519,19 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(android.R.string.ok, null)
                     .setView(contentView)
                     .create();
+           case RESET:
+                return new AlertDialog.Builder(this)
+                    .setCustomTitle(null)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int which) {
+                          Log.d(TAG, "resetting sync data");
+                          PrefStore.clearLastSyncData(SmsSync.this);
+                          dismissDialog(id);
+                       }})
+                    .setMessage(R.string.menu_reset_message)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create();
+
            case REQUEST_TOKEN:
                 ProgressDialog req = new ProgressDialog(this);
                 req.setTitle(null);

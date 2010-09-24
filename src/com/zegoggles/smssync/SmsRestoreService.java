@@ -37,10 +37,6 @@ public class SmsRestoreService extends ServiceBase {
         return sIsRunning;
     }
 
-    public static boolean isCancelling() {
-        return sCanceled;
-    }
-
     public static int getCurrentRestoredItems() {
         return sCurrentRestoredItems;
     }
@@ -79,7 +75,7 @@ public class SmsRestoreService extends ServiceBase {
                 for (int i = 0; i < sItemsToRestoreCount; i++) {
                     if (sCanceled) {
                         Log.i(TAG, "Restore canceled by user.");
-                        publishProgress(CANCELED);
+                        publishProgress(CANCELED_RESTORE);
 
                         updateAllThreads();
                         return insertedIds.size();
@@ -122,24 +118,26 @@ public class SmsRestoreService extends ServiceBase {
                 return null;
             } finally {
                 releaseLocks();
-                sCanceled = false;
-                sIsRunning = false;
-            }
+           }
         }
 
         @Override
         protected void onPostExecute(Integer result) {
-            if (result != null) {
+            if (sCanceled) {
+                publishProgress(CANCELED_RESTORE);
+            } else if (result != null) {
                 Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
                 sRestoredCount = result;
                 sDuplicateCount = uids.size() - result;
-                publishProgress(IDLE);
+                publishProgress(FINISHED_RESTORE);
             }
+            sCanceled = false;
+            sIsRunning = false;
         }
 
         @Override
         protected void onProgressUpdate(SmsSyncState... progress) {
-          smsSync.statusPref.stateChanged(sState, progress[0]);
+          smsSync.statusPref.stateChanged(progress[0]);
           sState = progress[0];
         }
 

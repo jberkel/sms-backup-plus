@@ -25,7 +25,9 @@ public abstract class ServiceBase extends Service {
     public static String lastError;
 
     enum SmsSyncState {
-        IDLE, CALC, LOGIN, SYNC, RESTORE, AUTH_FAILED, GENERAL_ERROR, FOLDER_ERROR, CANCELED;
+        IDLE, CALC, LOGIN, BACKUP, RESTORE, AUTH_FAILED, GENERAL_ERROR, FOLDER_ERROR,
+        CANCELED_BACKUP, CANCELED_RESTORE,
+        FINISHED_BACKUP, FINISHED_RESTORE
     }
 
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");

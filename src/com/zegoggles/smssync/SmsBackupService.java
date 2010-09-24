@@ -81,31 +81,57 @@ public class SmsBackupService extends ServiceBase {
     /** BackupTask does all the work */
     class BackupTask extends AsyncTask<Intent, SmsSyncState, Integer>
     {
-      private Exception ex;
-      private android.content.Context context = SmsBackupService.this;
+        private Exception ex;
+        private android.content.Context context = SmsBackupService.this;
+        int maxItemsPerSync = PrefStore.getMaxItemsPerSync(context);
 
-         protected java.lang.Integer doInBackground(Intent... params) {
+
+        @Override
+        protected void onPreExecute () {
+        }
+
+        @Override
+        protected java.lang.Integer doInBackground(Intent... params) {
             Intent intent = params[0];
 
             if (intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false)) {
                return skip();
             }
 
+            Cursor items = null;
             try {
-              if (!PrefStore.isLoginInformationSet(context)) {
-                 throw new GeneralErrorException(getString(R.string.err_sync_requires_login_info));
-              }
-
               acquireLocks();
 
-              sCanceled = false;
-              publishProgress(LOGIN);
-              Folder folder = getBackupFolder();
+              items = getItemsToSync();
+              sCurrentSyncedItems = 0;
+              sItemsToSync = maxItemsPerSync > 0 ? Math.min(items.getCount(), maxItemsPerSync) : items.getCount();
 
-              return backup(folder);
+              if (sItemsToSync <= 0) {
+                  PrefStore.setLastSync(context);
+                  if (PrefStore.isFirstSync(context)) {
+                      // If this is the first backup we need to write something to PREF_MAX_SYNCED_DATE
+                      // such that we know that we've performed a backup before.
+                      PrefStore.setMaxSyncedDate(context, PrefStore.DEFAULT_MAX_SYNCED_DATE);
+                  }
+                  Log.d(TAG, "Nothing to do.");
+                  return 0;
+              } else {
+                if (!PrefStore.isLoginInformationSet(context)) {
+                   throw new GeneralErrorException(getString(R.string.err_sync_requires_login_info));
+                }
 
+                publishProgress(LOGIN);
+                Folder folder = getBackupFolder();
+
+                try {
+                  return backup(folder, items);
+                } finally {
+                  folder.close();
+                }
+              }
             } catch (AuthenticationErrorException authError) {
               publishProgress(AUTH_FAILED);
+              this.ex = authError;
               return null;
             } catch (GeneralErrorException e) {
               Log.e(TAG, "error during backup", e);
@@ -115,95 +141,66 @@ public class SmsBackupService extends ServiceBase {
               return null;
             } finally {
               releaseLocks();
+              if (items != null) items.close();
+
               stopSelf();
               Alarms.scheduleRegularSync(context);
-              sIsRunning = false;
-              sCanceled = false;
-            }
-          }
+           }
+        }
 
         @Override
         protected void onProgressUpdate(SmsSyncState... progress) {
-          smsSync.statusPref.stateChanged(sState, progress[0]);
+          smsSync.statusPref.stateChanged(progress[0]);
           sState = progress[0];
         }
 
         @Override
         protected void onPostExecute(Integer result) {
-          if (result != null) {
-            Log.d(TAG, result + " items backed up");
-          }
+           if (sCanceled) {
+              Log.d(TAG, "backup canceled by user");
+              publishProgress(CANCELED_BACKUP);
+           } else if (result != null) {
+              Log.d(TAG, result + " items backed up");
+              if (result == sItemsToSync) {
+                publishProgress(FINISHED_BACKUP);
+              }
+           }
+           sIsRunning = false;
+           sCanceled = false;
         }
 
       /**
        * @throws GeneralErrorException Thrown when there there was an error during sync.
        * @throws FolderErrorException Thrown when there was an error accessing or creating the folder
        */
-      private int backup(final Folder folder) throws GeneralErrorException {
-          Log.i(TAG, "Starting backup...");
+      private int backup(final Folder folder, Cursor items) throws GeneralErrorException {
+          Log.i(TAG, String.format("Starting backup (%d messages)", sItemsToSync));
 
           publishProgress(CALC);
 
-          sItemsToSync = 0;
-          sCurrentSyncedItems = 0;
-
-          Cursor items = getItemsToSync();
-          int maxItemsPerSync = PrefStore.getMaxItemsPerSync(context);
-          sItemsToSync = maxItemsPerSync > 0 ? Math.min(items.getCount(), maxItemsPerSync) : items.getCount();
-
-          if (sItemsToSync <= 0) {
-              PrefStore.setLastSync(context);
-              if (PrefStore.isFirstSync(context)) {
-                  // If this is the first backup we need to write something to PREF_MAX_SYNCED_DATE
-                  // such that we know that we've performed a backup before.
-                  PrefStore.setMaxSyncedDate(context, PrefStore.DEFAULT_MAX_SYNCED_DATE);
-              }
-              publishProgress(IDLE);
-              Log.d(TAG, "Nothing to do.");
-              return 0;
-          }
-
-          Log.d(TAG, "Total messages to backup: " + sItemsToSync);
-
           CursorToMessage converter = new CursorToMessage(context, PrefStore.getLoginUsername(context));
           try {
-              while (true) {
-                  // Cancel sync if requested by the user.
-                  if (sCanceled) {
-                      Log.i(TAG, "Backup canceled by user.");
-                      // TODO: close IMAP ?
-                      sCanceled = false;
-                      publishProgress(CANCELED);
-                      break;
-                  }
-                  publishProgress(SYNC);
+              while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
+                  publishProgress(BACKUP);
                   ConversionResult result = converter.cursorToMessageArray(items, MAX_MSG_PER_REQUEST);
                   List<Message> messages = result.messageList;
-                  // Stop the sync if all items where uploaded or if the maximum number
-                  // of messages per sync was uploaded.
-                  if (messages.isEmpty() || sCurrentSyncedItems >= sItemsToSync) {
-                      Log.i(TAG, "Sync done: " + sCurrentSyncedItems + " items uploaded.");
-                      PrefStore.setLastSync(context);
-                      publishProgress(IDLE);
-                      folder.close();
-                      break;
-                  }
+
+                  if (messages.isEmpty()) break;
 
                   Log.d(TAG, "Sending " + messages.size() + " messages to server.");
                   folder.appendMessages(messages.toArray(new Message[messages.size()]));
                   sCurrentSyncedItems += messages.size();
-                  publishProgress(SYNC);
+                  publishProgress(BACKUP);
                   updateMaxSyncedDate(result.maxDate);
+
                   result = null;
                   messages = null;
               }
               return sCurrentSyncedItems;
           } catch (MessagingException e) {
               throw new GeneralErrorException(getString(R.string.err_communication_error));
-          } finally {
-              items.close();
           }
-      }
+        }
 
       /**
        * Returns a cursor of SMS messages that have not yet been synced with the
@@ -233,12 +230,13 @@ public class SmsBackupService extends ServiceBase {
           return 0;
       }
     }
+
     /**
      * Cancels the current ongoing backup.
     */
     static void cancel() {
-        if (SmsBackupService.sIsRunning) {
-            SmsBackupService.sCanceled = true;
+        if (sIsRunning) {
+          sCanceled = true;
         }
     }
 
@@ -248,10 +246,6 @@ public class SmsBackupService extends ServiceBase {
      */
     static boolean isWorking() {
         return sIsRunning;
-    }
-
-    public static boolean isCancelling() {
-        return sCanceled;
     }
 
     /**

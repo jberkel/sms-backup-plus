@@ -337,6 +337,13 @@ public class PrefStore {
           .commit();
     }
 
+    static void clearLastSyncData(Context ctx) {
+        getSharedPreferences(ctx).edit()
+          .remove(PREF_MAX_SYNCED_DATE)
+          .remove(PREF_LAST_SYNC)
+          .commit();
+    }
+
     static String getServerAddress(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
     }
