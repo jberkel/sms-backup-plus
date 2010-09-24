@@ -109,16 +109,17 @@ public class SmsRestoreService extends ServiceBase {
             } catch (AuthenticationErrorException authError) {
                 Log.e(TAG, "error", authError);
                 publishProgress(AUTH_FAILED);
-                return -1;
+                return null;
             } catch (GeneralErrorException error) {
                 Log.e(TAG, "error", error);
                 lastError = error.getLocalizedMessage();
                 publishProgress(GENERAL_ERROR);
-                return -1;
+                return null;
             } catch (MessagingException e) {
                 Log.e(TAG, "error", e);
+                lastError = e.getLocalizedMessage();
                 publishProgress(GENERAL_ERROR);
-                return -1;
+                return null;
             } finally {
                 releaseLocks();
                 sCanceled = false;
@@ -128,7 +129,7 @@ public class SmsRestoreService extends ServiceBase {
 
         @Override
         protected void onPostExecute(Integer result) {
-            if (result != -1) {
+            if (result != null) {
                 Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
                 sRestoredCount = result;
                 sDuplicateCount = uids.size() - result;
