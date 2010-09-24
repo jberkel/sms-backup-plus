@@ -22,9 +22,8 @@ public class SmsRestoreService extends ServiceBase {
 
     private static int sCurrentRestoredItems;
     private static int sItemsToRestoreCount;
-    public static int sRestoredCount, sDuplicateCount;
 
-    private static SmsSyncState sState = SmsSyncState.IDLE;
+    public static int sRestoredCount, sDuplicateCount;
 
     private static boolean sIsRunning = false;
     private static boolean sCanceled = false;
@@ -54,7 +53,7 @@ public class SmsRestoreService extends ServiceBase {
             this.max = params.length > 0 ? params[0] : -1;
 
             try {
-                acquireLocks();
+                acquireLocks(false);
                 sIsRunning = true;
 
                 publishProgress(LOGIN);
@@ -72,14 +71,8 @@ public class SmsRestoreService extends ServiceBase {
                 sItemsToRestoreCount = max == -1 ? msgs.length : Math.min(msgs.length, max);
 
                 long lastPublished = System.currentTimeMillis();
-                for (int i = 0; i < sItemsToRestoreCount; i++) {
-                    if (sCanceled) {
-                        Log.i(TAG, "Restore canceled by user.");
-                        publishProgress(CANCELED_RESTORE);
+                for (int i = 0; i < sItemsToRestoreCount && !sCanceled; i++) {
 
-                        updateAllThreads();
-                        return insertedIds.size();
-                    }
                     importMessage(msgs[i]);
                     sCurrentRestoredItems = i;
 
@@ -97,10 +90,7 @@ public class SmsRestoreService extends ServiceBase {
                       clearCache();
                     }
                 }
-                publishProgress(RESTORE);
-
                 updateAllThreads();
-
                 return insertedIds.size();
             } catch (AuthenticationErrorException authError) {
                 Log.e(TAG, "error", authError);
@@ -124,6 +114,7 @@ public class SmsRestoreService extends ServiceBase {
         @Override
         protected void onPostExecute(Integer result) {
             if (sCanceled) {
+                Log.d(TAG, "restore canceled by user");
                 publishProgress(CANCELED_RESTORE);
             } else if (result != null) {
                 Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
@@ -274,5 +265,16 @@ public class SmsRestoreService extends ServiceBase {
         values.put(SmsConsts.STATUS, getHeader(message, STATUS));
         values.put(SmsConsts.READ, PrefStore.getMarkAsReadOnRestore(this) ? "1" : getHeader(message, READ));
         return values;
+    }
+
+    private String getHeader(Message msg, String header) {
+        try {
+            String[] hdrs = msg.getHeader(header);
+            if (hdrs != null && hdrs.length > 0) {
+                return hdrs[0];
+            }
+        } catch (MessagingException e) {
+        }
+        return null;
     }
 }

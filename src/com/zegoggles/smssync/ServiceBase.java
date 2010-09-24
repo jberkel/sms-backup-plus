@@ -17,7 +17,6 @@ import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 
 public abstract class ServiceBase extends Service {
-
     // the activity
     public static SmsSync smsSync;
 
@@ -30,6 +29,9 @@ public abstract class ServiceBase extends Service {
         FINISHED_BACKUP, FINISHED_RESTORE
     }
 
+    protected static SmsSyncState sState = SmsSyncState.IDLE;
+    public static SmsSyncState getState() { return sState; }
+
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
 
     /**
@@ -40,17 +42,6 @@ public abstract class ServiceBase extends Service {
      * A wifilock held while this service is working.
      */
     protected WifiManager.WifiLock sWifiLock;
-
-    public static String getHeader(Message msg, String header) {
-        try {
-            String[] hdrs = msg.getHeader(header);
-            if (hdrs != null && hdrs.length > 0) {
-                return hdrs[0];
-            }
-        } catch (MessagingException e) {
-        }
-        return null;
-    }
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -68,10 +59,14 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    protected void acquireLocks() throws GeneralErrorException {
+    /**
+     * Acquire locks
+     * @params background if service is running in background (no UI)
+     */
+    protected void acquireLocks(boolean background) throws GeneralErrorException {
         if (sWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SmsBackupService wakelock.");
+            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SmsBackup+");
         }
         sWakeLock.acquire();
 

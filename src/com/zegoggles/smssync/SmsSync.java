@@ -127,7 +127,6 @@ public class SmsSync extends PreferenceActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         ServiceBase.smsSync = this;
 
         updateUsernameLabelFromPref();
@@ -135,7 +134,6 @@ public class SmsSync extends PreferenceActivity {
         updateMaxItemsPerSync(null);
         updateMaxItemsPerRestore(null);
 
-        //XXX
         statusPref.update();
     }
 
@@ -253,8 +251,7 @@ public class SmsSync extends PreferenceActivity {
         }
 
         public void update() {
-            // XXX
-            stateChanged(SmsBackupService.getState());
+            stateChanged(ServiceBase.getState());
         }
 
         private void authFailed() {
@@ -266,11 +263,6 @@ public class SmsSync extends PreferenceActivity {
             }
         }
 
-        private void folderError() {
-            mStatusLabel.setText(R.string.status_folder_error);
-            mSyncDetailsLabel.setText(R.string.status_folder_error_details);
-        }
-
         private void calc() {
             mStatusLabel.setText(R.string.status_working);
             mSyncDetailsLabel.setText(R.string.status_calc_details);
@@ -278,17 +270,18 @@ public class SmsSync extends PreferenceActivity {
         }
 
         private void finishedBackup() {
-            mStatusLabel.setText(R.string.status_done);
             int backedUpCount = SmsBackupService.getCurrentSyncedItems();
-
+            String text = null;
             if (backedUpCount == PrefStore.getMaxItemsPerSync(getContext())) {
-                mSyncDetailsLabel.setText(getString(R.string.status_backup_done_details_max_per_sync, backedUpCount));
+                text = getString(R.string.status_backup_done_details_max_per_sync, backedUpCount);
             } else if (backedUpCount > 0) {
-                mSyncDetailsLabel.setText(getResources().getQuantityString(
-                        R.plurals.status_backup_done_details, backedUpCount, backedUpCount));
+                text = getResources().getQuantityString(R.plurals.status_backup_done_details, backedUpCount,
+                                                        backedUpCount);
             } else if (backedUpCount == 0) {
-                mSyncDetailsLabel.setText(R.string.status_backup_done_details_noitems);
+                text = getString(R.string.status_backup_done_details_noitems);
             }
+            mSyncDetailsLabel.setText(text);
+            mStatusLabel.setText(R.string.status_done);
         }
 
         private void finishedRestore() {
@@ -301,17 +294,17 @@ public class SmsSync extends PreferenceActivity {
         }
 
         private void idle() {
-            mStatusLabel.setText(R.string.status_idle);
             long lastSync = PrefStore.getLastSync(getContext());
-            String lastSyncStr;
+            String text;
             if (lastSync == PrefStore.DEFAULT_LAST_SYNC) {
-                lastSyncStr = getString(R.string.status_idle_details_never);
+                text = getString(R.string.status_idle_details_never);
             } else {
-                lastSyncStr = PrefStore.getMaxSyncedDate(SmsSync.this) != -1 ?
+                text = PrefStore.getMaxSyncedDate(SmsSync.this) != -1 ?
                               new Date(PrefStore.getMaxSyncedDate(SmsSync.this)).toLocaleString() :
                               new Date(lastSync).toLocaleString();
             }
-            mSyncDetailsLabel.setText(getString(R.string.status_idle_details, lastSyncStr));
+            mSyncDetailsLabel.setText(getString(R.string.status_idle_details, text));
+            mStatusLabel.setText(R.string.status_idle);
         }
 
         public void stateChanged(final SmsSyncState newState) {
@@ -354,7 +347,10 @@ public class SmsSync extends PreferenceActivity {
                     mProgressBar.setMax(SmsRestoreService.getItemsToRestoreCount());
                     break;
                 case AUTH_FAILED: authFailed(); break;
-                case FOLDER_ERROR: folderError(); break;
+                case FOLDER_ERROR:
+                  mStatusLabel.setText(R.string.status_folder_error);
+                  mSyncDetailsLabel.setText(R.string.status_folder_error_details);
+                   break;
                 case GENERAL_ERROR:
                     mStatusLabel.setText(R.string.status_unknown_error);
                     mSyncDetailsLabel.setText(getString(R.string.status_unknown_error_details,
@@ -620,7 +616,6 @@ public class SmsSync extends PreferenceActivity {
         if (newValue == null) {
             newValue = String.valueOf(currentValue);
         }
-
         pref.setTitle("-1".equals(newValue) ? getString(R.string.all_messages) : newValue);
     }
 

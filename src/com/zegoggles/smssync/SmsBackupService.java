@@ -41,8 +41,6 @@ public class SmsBackupService extends ServiceBase {
     /** Flag indicating whether this service is already running. */
     private static boolean sIsRunning = false;
 
-    private static SmsSyncState sState = SmsSyncState.IDLE;
-    public static SmsSyncState getState() { return sState; }
 
     /** Number of messages that currently need a sync. */
     private static int sItemsToSync;
@@ -56,23 +54,24 @@ public class SmsBackupService extends ServiceBase {
      */
     private static boolean sCanceled;
 
+    private boolean isBackground(final Intent intent) {
+      return intent.hasExtra(Consts.KEY_NUM_RETRIES);
+    }
+
     @Override
     public void onStart(final Intent intent, int startId) {
         super.onStart(intent, startId);
-        boolean background = intent.hasExtra(Consts.KEY_NUM_RETRIES);
 
-        if (background && !getConnectivityManager().getBackgroundDataSetting()) {
+        if (isBackground(intent) && !getConnectivityManager().getBackgroundDataSetting()) {
             Log.d(TAG, "onStart(): Background data disabled");
-
             stopSelf();
-            return;
-        }
-
-        synchronized(ServiceBase.class) {
-          // Only start a sync if there's no other sync / restore going on at this time.
-          if (!sIsRunning && !SmsRestoreService.isWorking()) {
-            sIsRunning = true;
-            new BackupTask().execute(intent);
+        } else {
+          synchronized(ServiceBase.class) {
+            // Only start a sync if there's no other sync / restore going on at this time.
+            if (!sIsRunning && !SmsRestoreService.isWorking()) {
+              sIsRunning = true;
+              new BackupTask().execute(intent);
+            }
           }
         }
     }
@@ -83,8 +82,8 @@ public class SmsBackupService extends ServiceBase {
     {
         private Exception ex;
         private android.content.Context context = SmsBackupService.this;
-        int maxItemsPerSync = PrefStore.getMaxItemsPerSync(context);
-
+        private int maxItemsPerSync = PrefStore.getMaxItemsPerSync(context);
+        private boolean background;
 
         @Override
         protected void onPreExecute () {
@@ -92,7 +91,8 @@ public class SmsBackupService extends ServiceBase {
 
         @Override
         protected java.lang.Integer doInBackground(Intent... params) {
-            Intent intent = params[0];
+            final Intent intent = params[0];
+            this.background = isBackground(intent);
 
             if (intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false)) {
                return skip();
@@ -100,7 +100,7 @@ public class SmsBackupService extends ServiceBase {
 
             Cursor items = null;
             try {
-              acquireLocks();
+              acquireLocks(background);
 
               items = getItemsToSync();
               sCurrentSyncedItems = 0;
@@ -120,7 +120,7 @@ public class SmsBackupService extends ServiceBase {
                    throw new GeneralErrorException(getString(R.string.err_sync_requires_login_info));
                 }
 
-                publishProgress(LOGIN);
+                publish(LOGIN);
                 Folder folder = getBackupFolder();
 
                 try {
@@ -130,13 +130,13 @@ public class SmsBackupService extends ServiceBase {
                 }
               }
             } catch (AuthenticationErrorException authError) {
-              publishProgress(AUTH_FAILED);
+              publish(AUTH_FAILED);
               this.ex = authError;
               return null;
             } catch (GeneralErrorException e) {
               Log.e(TAG, "error during backup", e);
               lastError = e.getMessage();
-              publishProgress(GENERAL_ERROR);
+              publish(GENERAL_ERROR);
               this.ex = e;
               return null;
             } finally {
@@ -158,16 +158,20 @@ public class SmsBackupService extends ServiceBase {
         protected void onPostExecute(Integer result) {
            if (sCanceled) {
               Log.d(TAG, "backup canceled by user");
-              publishProgress(CANCELED_BACKUP);
+              publish(CANCELED_BACKUP);
            } else if (result != null) {
               Log.d(TAG, result + " items backed up");
               if (result == sItemsToSync) {
-                publishProgress(FINISHED_BACKUP);
+                publish(FINISHED_BACKUP);
               }
            }
            sIsRunning = false;
            sCanceled = false;
         }
+
+      protected void publish(SmsSyncState s) {
+        if (!background) publishProgress(s);
+      }
 
       /**
        * @throws GeneralErrorException Thrown when there there was an error during sync.
@@ -176,12 +180,12 @@ public class SmsBackupService extends ServiceBase {
       private int backup(final Folder folder, Cursor items) throws GeneralErrorException {
           Log.i(TAG, String.format("Starting backup (%d messages)", sItemsToSync));
 
-          publishProgress(CALC);
+          publish(CALC);
 
           CursorToMessage converter = new CursorToMessage(context, PrefStore.getLoginUsername(context));
           try {
               while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-                  publishProgress(BACKUP);
+                  publish(BACKUP);
                   ConversionResult result = converter.cursorToMessageArray(items, MAX_MSG_PER_REQUEST);
                   List<Message> messages = result.messageList;
 
@@ -190,7 +194,7 @@ public class SmsBackupService extends ServiceBase {
                   Log.d(TAG, "Sending " + messages.size() + " messages to server.");
                   folder.appendMessages(messages.toArray(new Message[messages.size()]));
                   sCurrentSyncedItems += messages.size();
-                  publishProgress(BACKUP);
+                  publish(BACKUP);
                   updateMaxSyncedDate(result.maxDate);
 
                   result = null;
@@ -225,7 +229,7 @@ public class SmsBackupService extends ServiceBase {
           sItemsToSync = 0;
           sCurrentSyncedItems = 0;
           sIsRunning = false;
-          publishProgress(IDLE);
+          publish(IDLE);
           Log.i(TAG, "All messages skipped.");
           return 0;
       }
