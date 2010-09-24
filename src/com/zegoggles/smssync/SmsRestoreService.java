@@ -163,20 +163,21 @@ public class SmsRestoreService extends ServiceBase {
                 ContentValues values = messageToContentValues(message);
 
                 Integer type = values.getAsInteger(SmsConsts.TYPE);
-                if (type == null)
-                    return;
-
                 // only restore inbox messages and sent messages - otherwise sms might get sent on restore
-                if ((type == SmsConsts.MESSAGE_TYPE_INBOX || type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
+                if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
+                                     type == SmsConsts.MESSAGE_TYPE_SENT) &&
+                                     !smsExists(values)) {
                     Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
-                    insertedIds.add(uri.getLastPathSegment());
+                    if (uri != null) {
+                      insertedIds.add(uri.getLastPathSegment());
 
-                    long timestamp = values.getAsLong(SmsConsts.DATE);
+                      long timestamp = values.getAsLong(SmsConsts.DATE);
 
-                    if (getMaxSyncedDate() < timestamp) {
-                        updateMaxSyncedDate(timestamp);
+                      if (getMaxSyncedDate() < timestamp) {
+                          updateMaxSyncedDate(timestamp);
+                      }
+                      Log.d(TAG, "inserted " + uri);
                     }
-                    Log.d(TAG, "inserted " + uri);
                 } else {
                     Log.d(TAG, "ignoring sms");
                 }
