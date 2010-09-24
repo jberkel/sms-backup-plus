@@ -170,7 +170,24 @@ public class SmsBackupService extends ServiceBase {
         }
 
       protected void publish(SmsSyncState s) {
-        if (!background) publishProgress(s);
+        if (!background) {
+           publishProgress(s);
+        } else {
+           switch(s) {
+            case AUTH_FAILED:
+                int details = PrefStore.useXOAuth(context) ? R.string.status_auth_failure_details_xoauth :
+                                                             R.string.status_auth_failure_details_plain;
+                notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
+                           getString(R.string.status_auth_failure), getString(details));
+                break;
+            case GENERAL_ERROR:
+                notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
+                           getString(R.string.status_unknown_error), lastError);
+                break;
+
+            default:
+           }
+        }
       }
 
       /**

@@ -29,5 +29,4 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             Log.i(Consts.TAG, "Received SMS but not ready to sync.");
         }
     }
-
 }

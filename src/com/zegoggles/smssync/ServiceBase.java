@@ -12,6 +12,9 @@ import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+import android.app.NotificationManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
@@ -147,6 +150,20 @@ public abstract class ServiceBase extends Service {
     protected void updateMaxSyncedDate(long maxSyncedDate) {
         PrefStore.setMaxSyncedDate(this, maxSyncedDate);
         Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
+    }
+
+    protected void notifyUser(int icon, String shortText, String title, String text) {
+        Notification n = new Notification(icon, shortText, System.currentTimeMillis());
+        n.setLatestEventInfo(this,
+            title,
+            text,
+            PendingIntent.getActivity(this, 0, new Intent(this, SmsSync.class), 0));
+
+        getNotifier().notify(0, n);
+    }
+
+    protected NotificationManager getNotifier() {
+        return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     public ConnectivityManager getConnectivityManager() {

@@ -50,7 +50,7 @@
   <string name="status_unknown_error">Error</string>
   <string name="status_unknown_error_details">Error during backup/restore:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Login error</string>
-  <string name="status_auth_failure_details_xoauth">Please make sure you enabled IMAP in your Gmail account settings.</string>
+  <string name="status_auth_failure_details_xoauth">XOAuth authorization error. Please make sure you enabled IMAP in your Gmail account settings.</string>
   <string name="status_auth_failure_details_plain">IMAP authorization error.
   Make sure login and password are set correctly.</string>
   <string name="status_calc_details">Calculating\u2026</string>

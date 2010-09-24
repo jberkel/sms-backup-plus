@@ -21,9 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
-import android.app.NotificationManager;
-import android.app.Notification;
-import android.widget.Toast;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Dialog;
@@ -81,6 +78,7 @@ public class SmsSync extends PreferenceActivity {
       REQUEST_TOKEN,
       ACCESS_TOKEN,
       ACCESS_TOKEN_ERROR,
+      REQUEST_TOKEN_ERROR,
       CONNECT,
       CONNECT_TOKEN_ERROR,
       UPGRADE
@@ -257,9 +255,10 @@ public class SmsSync extends PreferenceActivity {
         private void authFailed() {
             mStatusLabel.setText(R.string.status_auth_failure);
 
-            switch (PrefStore.getAuthMode(getContext())) {
-              case PLAIN: mSyncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
-              case XOAUTH: mSyncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
+            if (PrefStore.useXOAuth(getContext())) {
+              mSyncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
+            } else {
+              mSyncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
             }
         }
 
@@ -453,8 +452,7 @@ public class SmsSync extends PreferenceActivity {
 
     @Override
     protected Dialog onCreateDialog(final int id) {
-        String title;
-        String msg;
+        String title, msg;
         Builder builder;
         switch (Dialogs.values()[id]) {
             case MISSING_CREDENTIALS:
@@ -578,14 +576,13 @@ public class SmsSync extends PreferenceActivity {
                         updateConnected();
                     }
                 }).create();
-           case UPGRADE:
+            case UPGRADE:
                 title = getString(R.string.ui_dialog_upgrade_title);
                 msg = getString(R.string.ui_dialog_upgrade_msg);
                 break;
             default:
                 return null;
         }
-
         return createMessageDialog(id, title, msg);
     }
 
@@ -641,11 +638,6 @@ public class SmsSync extends PreferenceActivity {
                     return url;
                 } catch (oauth.signpost.exception.OAuthException e) {
                     Log.e(TAG, "error requesting token", e);
-
-                    notifyUser(android.R.drawable.stat_sys_warning, "Error",
-                        getString(R.string.gmail_connected_fail),
-                        e.getMessage());
-
                     return null;
                 }
             }
@@ -695,11 +687,6 @@ public class SmsSync extends PreferenceActivity {
                callbackIntent[0].setData(null);
             } catch (oauth.signpost.exception.OAuthException e) {
                 Log.e(TAG, "error", e);
-
-                notifyUser(android.R.drawable.stat_sys_warning, "Error",
-                    getString(R.string.gmail_connected_fail),
-                    e.getMessage());
-
                 return null;
             }
             return consumer;
@@ -727,19 +714,6 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
-    private void notifyUser(int icon, String shortText, String title, String text) {
-        Notification n = new Notification(icon, shortText, System.currentTimeMillis());
-        n.setLatestEventInfo(this,
-            title,
-            text,
-            PendingIntent.getActivity(this, 0, new Intent(this, SmsSync.class), 0));
-
-        getNotifier().notify(0, n);
-    }
-
-    private NotificationManager getNotifier() {
-        return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    }
 
     private void show(Dialogs d) {
         showDialog(d.ordinal());
