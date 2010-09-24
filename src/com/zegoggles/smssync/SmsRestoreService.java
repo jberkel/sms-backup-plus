@@ -92,14 +92,10 @@ public class SmsRestoreService extends ServiceBase {
                 }
                 updateAllThreads();
                 return insertedIds.size();
-            } catch (AuthenticationErrorException authError) {
-                Log.e(TAG, "error", authError);
-                publishProgress(AUTH_FAILED);
-                return null;
             } catch (GeneralErrorException error) {
                 Log.e(TAG, "error", error);
                 lastError = error.getLocalizedMessage();
-                publishProgress(GENERAL_ERROR);
+                publishProgress(error.state());
                 return null;
             } catch (MessagingException e) {
                 Log.e(TAG, "error", e);

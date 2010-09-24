@@ -351,11 +351,12 @@ public class SmsSync extends PreferenceActivity {
                   mSyncDetailsLabel.setText(R.string.status_folder_error_details);
                    break;
                 case GENERAL_ERROR:
+                case CONNECTIVITY_ERROR:
                     mStatusLabel.setText(R.string.status_unknown_error);
                     mSyncDetailsLabel.setText(getString(R.string.status_unknown_error_details,
                           ServiceBase.lastError == null ? "N/A" : ServiceBase.lastError));
                     break;
-                case CANCELED_BACKUP:
+               case CANCELED_BACKUP:
                     mStatusLabel.setText(R.string.status_canceled);
 
                     mSyncDetailsLabel.setText(getString(R.string.status_canceled_details,
@@ -376,6 +377,7 @@ public class SmsSync extends PreferenceActivity {
         public void setAttributes(final SmsSyncState state) {
           switch (state) {
             case GENERAL_ERROR:
+            case CONNECTIVITY_ERROR:
             case FOLDER_ERROR:
             case AUTH_FAILED:
               mProgressBar.setProgress(0);

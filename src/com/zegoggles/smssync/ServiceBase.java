@@ -27,7 +27,8 @@ public abstract class ServiceBase extends Service {
     public static String lastError;
 
     enum SmsSyncState {
-        IDLE, CALC, LOGIN, BACKUP, RESTORE, AUTH_FAILED, GENERAL_ERROR, FOLDER_ERROR,
+        IDLE, CALC, LOGIN, BACKUP, RESTORE,
+        AUTH_FAILED, CONNECTIVITY_ERROR, GENERAL_ERROR, FOLDER_ERROR,
         CANCELED_BACKUP, CANCELED_RESTORE,
         FINISHED_BACKUP, FINISHED_RESTORE
     }
@@ -84,13 +85,13 @@ public abstract class ServiceBase extends Service {
           }
           sWifiLock.acquire();
         } else if (PrefStore.isWifiOnly(this)) {
-          throw new GeneralErrorException(getString(R.string.error_wifi_only_no_connection));
+          throw new ConnectivityErrorException(getString(R.string.error_wifi_only_no_connection));
         }
 
         NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
 
         if (active == null || !active.isConnectedOrConnecting()) {
-          throw new GeneralErrorException(getString(R.string.error_no_connection));
+          throw new ConnectivityErrorException(getString(R.string.error_no_connection));
         }
     }
 
@@ -177,15 +178,25 @@ public abstract class ServiceBase extends Service {
         public GeneralErrorException(String msg) {
             super(msg);
         }
-
         public GeneralErrorException(Throwable t) {
             super(t);
         }
-   }
+        public SmsSyncState state() { return SmsSyncState.GENERAL_ERROR; };
+    }
+
+    public static class ConnectivityErrorException extends GeneralErrorException {
+        public ConnectivityErrorException(String msg) {
+            super(msg);
+        }
+        @Override
+        public SmsSyncState state() { return SmsSyncState.CONNECTIVITY_ERROR; };
+    }
 
     public static class AuthenticationErrorException extends GeneralErrorException {
         public AuthenticationErrorException(Throwable t) {
             super(t);
         }
+        @Override
+        public SmsSyncState state() { return SmsSyncState.AUTH_FAILED; };
     }
 }

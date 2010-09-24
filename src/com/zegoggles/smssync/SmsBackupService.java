@@ -129,15 +129,12 @@ public class SmsBackupService extends ServiceBase {
                   folder.close();
                 }
               }
-            } catch (AuthenticationErrorException authError) {
-              publish(AUTH_FAILED);
-              this.ex = authError;
-              return null;
             } catch (GeneralErrorException e) {
               Log.e(TAG, "error during backup", e);
-              lastError = e.getMessage();
-              publish(GENERAL_ERROR);
+              lastError = e.getLocalizedMessage();
               this.ex = e;
+              publish(e.state());
+
               return null;
             } finally {
               releaseLocks();
@@ -178,11 +175,11 @@ public class SmsBackupService extends ServiceBase {
                 int details = PrefStore.useXOAuth(context) ? R.string.status_auth_failure_details_xoauth :
                                                              R.string.status_auth_failure_details_plain;
                 notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
-                           getString(R.string.status_auth_failure), getString(details));
+                           getString(R.string.notification_auth_failure), getString(details));
                 break;
             case GENERAL_ERROR:
                 notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
-                           getString(R.string.status_unknown_error), lastError);
+                           getString(R.string.notification_unknown_error), lastError);
                 break;
 
             default:
