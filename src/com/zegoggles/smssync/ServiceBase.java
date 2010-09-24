@@ -71,17 +71,23 @@ public abstract class ServiceBase extends Service {
         sWakeLock.acquire();
 
         WifiManager wMgr = (WifiManager) getSystemService(WIFI_SERVICE);
-
         if (wMgr.isWifiEnabled() &&
+            getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null &&
             getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
 
           // we have Wifi, lock it
-          if (sWifiLock == null)  {
+          if (sWifiLock == null) {
             sWifiLock = wMgr.createWifiLock("SMS Backup+");
           }
           sWifiLock.acquire();
         } else if (PrefStore.isWifiOnly(this)) {
           throw new GeneralErrorException(getString(R.string.error_wifi_only_no_connection));
+        }
+
+        NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
+
+        if (active == null || !active.isConnectedOrConnecting()) {
+          throw new GeneralErrorException(getString(R.string.error_no_connection));
         }
     }
 
