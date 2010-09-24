@@ -146,7 +146,9 @@
   <string name="err_communication_error">General communication error.</string>
   <string name="menu_info">About</string>
   <string name="menu_reset">Reset</string>
-  <string name="menu_reset_message">Reset current sync state?</string>
+  <string name="ui_dialog_reset_title">Reset current sync state</string>
+  <string name="ui_dialog_reset_message">Do you want to reset the current sync
+  state? You can still choose to skip all messages later.</string>
   <string name="all_messages">All</string>
 
   <string name="gmail_connected_fail">Gmail authentication failure</string>

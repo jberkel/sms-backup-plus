@@ -514,14 +514,13 @@ public class SmsSync extends PreferenceActivity {
                     .create();
            case RESET:
                 return new AlertDialog.Builder(this)
-                    .setCustomTitle(null)
+                    .setTitle(R.string.ui_dialog_reset_title)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                        public void onClick(DialogInterface dialog, int which) {
-                          Log.d(TAG, "resetting sync data");
                           PrefStore.clearLastSyncData(SmsSync.this);
                           dismissDialog(id);
                        }})
-                    .setMessage(R.string.menu_reset_message)
+                    .setMessage(R.string.ui_dialog_reset_message)
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
 
