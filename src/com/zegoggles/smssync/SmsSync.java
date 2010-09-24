@@ -783,13 +783,13 @@ public class SmsSync extends PreferenceActivity {
         prefMgr.findPreference(PrefStore.PREF_SERVER_AUTHENTICATION)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-               if (PrefStore.AuthMode.valueOf(newValue.toString().toUpperCase()) ==
-                   PrefStore.AuthMode.PLAIN) {
-                  updateConnected().setEnabled(false);
-               } else {
-                  updateConnected().setEnabled(true);
-               }
-               return true;
+                final boolean plain = (PrefStore.AuthMode.valueOf(newValue.toString().toUpperCase()) ==
+                   PrefStore.AuthMode.PLAIN);
+
+                updateConnected().setEnabled(!plain);
+                prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setEnabled(plain);
+                prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setEnabled(plain);
+                return true;
             }
         });
 
@@ -831,7 +831,7 @@ public class SmsSync extends PreferenceActivity {
                     }
                     return true;
                 }
-         });
+        });
 
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
