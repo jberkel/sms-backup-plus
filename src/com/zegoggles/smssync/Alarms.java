@@ -42,16 +42,18 @@ public class Alarms {
     }
 
     private static void scheduleSync(Context ctx, int inSeconds) {
-        if (!PrefStore.isEnableAutoSync(ctx) || SmsRestoreService.isWorking()) {
-            Log.d(Consts.TAG, "Not scheduling sync because auto sync is disabled.");
-            return;
-        }
+        if (!PrefStore.isEnableAutoSync(ctx) ||
+            inSeconds < 0 ||
+            SmsRestoreService.isWorking()) {
 
-        long atTime = System.currentTimeMillis() + inSeconds * 1000l;
-        PendingIntent pi = createPendingIntent(ctx);
-        AlarmManager aMgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        aMgr.set(AlarmManager.RTC_WAKEUP, atTime, pi);
-        Log.d(Consts.TAG, "Scheduled sync due in " + inSeconds + " seconds.");
+            Log.d(Consts.TAG, "Not scheduling sync because auto sync is disabled.");
+        } else {
+          long atTime = System.currentTimeMillis() + inSeconds * 1000l;
+          PendingIntent pi = createPendingIntent(ctx);
+          AlarmManager aMgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+          aMgr.set(AlarmManager.RTC_WAKEUP, atTime, pi);
+          Log.d(Consts.TAG, "Scheduled sync due in " + inSeconds + " seconds.");
+       }
     }
 
     private static PendingIntent createPendingIntent(Context ctx) {

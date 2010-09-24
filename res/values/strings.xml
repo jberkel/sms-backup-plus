@@ -94,6 +94,12 @@
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
 
+  <string name="ui_auto_backup_schedule_label">Regular backup schedule</string>
+  <string name="ui_auto_backup_schedule_desc">When to backup SMS</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Incoming backup schedule</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">When to backup incoming SMS (after arrival)</string>
+
   <string name="ui_wifi_only_label">Require Wifi</string>
   <string name="ui_wifi_only_desc">Only backup/restore when connected to Wifi</string>
   <string name="error_wifi_only_no_connection">No Wifi connection</string>

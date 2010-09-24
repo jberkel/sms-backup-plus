@@ -59,6 +59,22 @@
           android:persistent="true"
           android:defaultValue="false"/>
 
+      <ListPreference android:key="auto_backup_schedule"
+        android:title="@string/ui_auto_backup_schedule_label"
+        android:summary="@string/ui_auto_backup_schedule_desc"
+        android:entries="@array/auto_backup_schedule_entries"
+        android:entryValues="@array/auto_backup_schedule_values"
+        android:defaultValue="7200"
+        android:persistent="true"/>
+
+      <ListPreference android:key="auto_backup_incoming_schedule"
+        android:title="@string/ui_auto_backup_incoming_schedule_label"
+        android:summary="@string/ui_auto_backup_incoming_schedule_desc"
+        android:entries="@array/auto_backup_incoming_schedule_entries"
+        android:entryValues="@array/auto_backup_incoming_schedule_values"
+        android:defaultValue="180"
+        android:persistent="true"/>
+
         <PreferenceScreen
           android:title="@string/ui_settings_advanced_server_label"
           android:summary="@string/ui_settings_advanced_server_desc">

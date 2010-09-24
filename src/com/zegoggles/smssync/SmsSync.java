@@ -355,7 +355,6 @@ public class SmsSync extends PreferenceActivity {
                     mStatusLabel.setText(R.string.status_unknown_error);
                     mSyncDetailsLabel.setText(getString(R.string.status_unknown_error_details,
                           ServiceBase.lastError == null ? "N/A" : ServiceBase.lastError));
-                      // XXX res
                     break;
                 case CANCELED_BACKUP:
                     mStatusLabel.setText(R.string.status_canceled);
@@ -673,6 +672,7 @@ public class SmsSync extends PreferenceActivity {
             show(Dialogs.ACCESS_TOKEN);
         }
 
+        @Override
         protected XOAuthConsumer doInBackground(Intent... callbackIntent) {
             Uri uri = callbackIntent[0].getData();
             Log.d(TAG, "oauth callback: " + uri);
@@ -719,7 +719,7 @@ public class SmsSync extends PreferenceActivity {
 
                 // Invite use to perform a backup, but only once
                 if (PrefStore.isFirstUse(SmsSync.this)) {
-                  show(Dialogs.FIRST_SYNC);
+                    show(Dialogs.FIRST_SYNC);
                 }
             } else {
               show(Dialogs.ACCESS_TOKEN_ERROR);
@@ -753,7 +753,7 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
-    private void setPreferenceListeners(PreferenceManager prefMgr) {
+    private void setPreferenceListeners(final PreferenceManager prefMgr) {
         prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, final Object newValue) {
@@ -789,6 +789,9 @@ public class SmsSync extends PreferenceActivity {
                 if (!isEnabled) {
                     Alarms.cancel(SmsSync.this);
                 }
+
+                prefMgr.findPreference(PrefStore.PREF_INCOMING_TIMEOUT_SECONDS).setEnabled(isEnabled);
+                prefMgr.findPreference(PrefStore.PREF_REGULAR_TIMEOUT_SECONDS).setEnabled(isEnabled);
                 return true;
              }
         });
@@ -833,26 +836,27 @@ public class SmsSync extends PreferenceActivity {
             }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                preference.setTitle(newValue.toString());
-                SharedPreferences prefs = preference.getSharedPreferences();
-                final String oldValue = prefs.getString(PrefStore.PREF_SERVER_ADDRESS, null);
-                if (!newValue.equals(oldValue)) {
-                    // We need to post the reset of sync state such that we do not interfere
-                    // with the current transaction of the SharedPreference.
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            PrefStore.clearSyncData(SmsSync.this);
-                            if (oldValue != null) {
-                                show(Dialogs.SYNC_DATA_RESET);
+        prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS).setOnPreferenceChangeListener(
+              new OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    preference.setTitle(newValue.toString());
+                    SharedPreferences prefs = preference.getSharedPreferences();
+                    final String oldValue = prefs.getString(PrefStore.PREF_SERVER_ADDRESS, null);
+                    if (!newValue.equals(oldValue)) {
+                        // We need to post the reset of sync state such that we do not interfere
+                        // with the current transaction of the SharedPreference.
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PrefStore.clearSyncData(SmsSync.this);
+                                if (oldValue != null) {
+                                    show(Dialogs.SYNC_DATA_RESET);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                    return true;
                 }
-                return true;
-            }
          });
 
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {

@@ -54,10 +54,10 @@ public class PrefStore {
     static final String PREF_ENABLE_AUTO_SYNC = "enable_auto_sync";
 
     /** Preference key for the timeout between an SMS is received and the scheduled sync. */
-    static final String PREF_INCOMING_TIMEOUT_SECONDS = "incoming_timeout_seconds";
+    static final String PREF_INCOMING_TIMEOUT_SECONDS = "auto_backup_incoming_schedule";
 
     /** Preference key for the interval between backup of outgoing SMS. */
-    static final String PREF_REGULAR_TIMEOUT_SECONDS = "regular_timeout_seconds";
+    static final String PREF_REGULAR_TIMEOUT_SECONDS = "auto_backup_schedule";
 
     /** Preference for storing the time of the last sync. */
     static final String PREF_LAST_SYNC = "last_sync";
@@ -97,9 +97,9 @@ public class PrefStore {
     static final long DEFAULT_LAST_SYNC = -1;
 
     /** Default value for {@link #PREF_MAX_ITEMS_PER_SYNC}. */
-    static final String DEFAULT_MAX_ITEMS_PER_SYNC = "-1";
+    static final int DEFAULT_MAX_ITEMS_PER_SYNC = -1;
 
-    static final String DEFAULT_MAX_ITEMS_PER_RESTORE = "-1";
+    static final int DEFAULT_MAX_ITEMS_PER_RESTORE = -1;
 
     /** Default value for {@link #PREF_MARK_AS_READ}. */
     static final boolean DEFAULT_MARK_AS_READ = true;
@@ -223,11 +223,14 @@ public class PrefStore {
       return (getSharedPreferences(ctx).getBoolean(PREF_WIFI_ONLY, false));
     }
 
-    private static int getStringAsInt(Context ctx, String key, String def) {
+    private static int getStringAsInt(Context ctx, String key, int def) {
         try {
-          return Integer.valueOf(getSharedPreferences(ctx).getString(key, def));
+          String s = getSharedPreferences(ctx).getString(key, null);
+          if (s == null) return def;
+
+          return Integer.valueOf(s);
         } catch (NumberFormatException e) {
-           return Integer.valueOf(def);
+          return def;
         }
       }
 
@@ -271,13 +274,11 @@ public class PrefStore {
     }
 
     static int getIncomingTimeoutSecs(Context ctx) {
-       return getSharedPreferences(ctx).getInt(PREF_INCOMING_TIMEOUT_SECONDS,
-               DEFAULT_INCOMING_TIMEOUT_SECONDS);
+       return getStringAsInt(ctx, PREF_INCOMING_TIMEOUT_SECONDS, DEFAULT_INCOMING_TIMEOUT_SECONDS);
     }
 
     static int getRegularTimeoutSecs(Context ctx) {
-        return getSharedPreferences(ctx).getInt(PREF_REGULAR_TIMEOUT_SECONDS,
-                DEFAULT_REGULAR_TIMEOUT_SECONDS);
+        return getStringAsInt(ctx, PREF_REGULAR_TIMEOUT_SECONDS, DEFAULT_REGULAR_TIMEOUT_SECONDS);
     }
 
     static long getLastSync(Context ctx) {
