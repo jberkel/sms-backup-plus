@@ -1,5 +1,7 @@
-== 1.0.9 tba
+== 1.0.9 09-25-2010
 
+ * UI code / service integration code rewrite
+ * Issues: GH-17,21,26,41
  * Chinese translation updates [marcher233]
 
 == 1.0.8 09-17-2010
