@@ -21,15 +21,30 @@ import android.content.Intent;
 import android.util.Log;
 
 public class SmsBroadcastReceiver extends BroadcastReceiver {
+    public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+
     @Override
     public void onReceive(Context ctx, Intent intent) {
+        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+          bootup(ctx);
+        } else if (intent.getAction().equals(SMS_RECEIVED)) {
+          incomingSMS(ctx);
+        }
+    }
+
+    private void bootup(Context ctx) {
+        Log.d(Consts.TAG, "SMSBackup+ bootup");
+        incomingSMS(ctx);
+    }
+
+    private void incomingSMS(Context ctx) {
         if (PrefStore.isEnableAutoSync(ctx) &&
             PrefStore.isLoginInformationSet(ctx) &&
             !PrefStore.isFirstSync(ctx)) {
 
             Alarms.scheduleIncomingSync(ctx);
         } else {
-            Log.i(Consts.TAG, "Received SMS but not set up to sync.");
+            Log.i(Consts.TAG, "Received SMS / bootup but not set up to sync.");
         }
     }
 }
