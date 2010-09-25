@@ -3,7 +3,10 @@
   <string name="app_name">SMS Backup+</string>
 
   <string name="app_description">
-     使用 Gmail 来备份您的短信。这款应用支持短信还原功能，是 Christoph Studer 设计的 SMS Backup 的增强版本。此应用与 SMS Backup 完全向下兼容。</string>
+     使用 Gmail 来备份您的短信。这款应用支持短信还原功能，
+	 是 Christoph Studer 设计的 SMS Backup 的增强版本。
+	 此应用与 SMS Backup 完全向下兼容。
+  </string>
 
   <string name="ui_sync_button_label_idle">备份</string>
   <string name="ui_sync_button_label_done">备份</string>
@@ -19,8 +22,12 @@
   <string name="status_idle">空闲</string>
   <string name="status_idle_details">最近一次备份于: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">尚未备份</string>
+
+  <string name="status_working">进行中</string>
+
   <string name="status_backup">正在备份</string>
   <string name="status_restore">正在还原</string>
+
   <string name="status_backup_details">已经备份 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 条\u2026</string>
   <string name="status_restore_details">已经还原 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 条\u2026</string>
   <string name="status_login_details">正在登录\u2026</string>
@@ -41,9 +48,13 @@
   <string name="status_restore_canceled_details">成功还原了 %1$d/%2$d 条短信。</string>
 
   <string name="status_unknown_error">错误</string>
+  <string name="notification_unknown_error">SMS Backup+ 出错</string>
+
   <string name="status_unknown_error_details">备份/还原时出错:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">登录出错</string>
-  <string name="status_auth_failure_details_xoauth">请确认您已经在您的 Gmail 设置中开启 IMAP。</string>
+  <string name="notification_auth_failure">SMS Backup+ 登录出错</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth 授权出错。请确认您已经在您的 Gmail 设置中开启 IMAP。</string>
   <string name="status_auth_failure_details_plain">IMAP 授权出错。
   请确认用户名和密码填写正确。</string>
   <string name="status_calc_details">计算中\u2026</string>
@@ -79,7 +90,7 @@
   <string name="ui_max_items_per_sync_label">每次备份条数</string>
   <string name="ui_max_items_per_sync_desc">每次备份的最大数量。</string>
   <string name="ui_max_items_per_restore_label">每次还原条数</string>
-  <string name="ui_max_items_per_restore_desc">每次备份的最大数量。</string>
+  <string name="ui_max_items_per_restore_desc">每次还原的最大数量。</string>
   <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
   <string name="ui_mark_as_read_restore_label">标记为已读 (短信)</string>
@@ -87,14 +98,21 @@
   <string name="ui_enable_auto_sync_label">自动备份</string>
   <string name="ui_enable_auto_sync_desc">是否自己备份新短信。</string>
 
-  <string name="ui_wifi_only_label">强制 Wifi</string>
+  <string name="ui_auto_backup_schedule_label">定时备份计划</string>
+  <string name="ui_auto_backup_schedule_desc">何时备份短信。</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">新短信备份计划</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">何时备份新短信 (在收到后)。</string>
+  <string name="ui_wifi_only_label">强制使用 Wifi</string>
   <string name="ui_wifi_only_desc">仅在连接到 Wifi 网络时才备份/还原。</string>
   <string name="error_wifi_only_no_connection">无 Wifi 网络连接</string>
+  <string name="error_no_connection">无互联网连接</string>
 
   <string name="ui_dialog_missing_credentials_title">登录信息</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">您需要首先连接到您的 Gmail 帐户。</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">您需要首先设置您的用户名和密码。</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">您需要首先设置您的
+  用户名和密码。</string>
 
   <string name="ui_dialog_sync_data_reset_title">备份数据重置</string>
   <string name="ui_dialog_sync_data_reset_msg">
@@ -111,7 +129,9 @@
   <string name="ui_dialog_access_token_msg">正在请求访问权...</string>
 
   <string name="ui_dialog_access_token_error_title">授权失败</string>
-  <string name="ui_dialog_access_token_error_msg">无法获取访问权。请确认您选择了“授权访问”。</string>
+  <string name="ui_dialog_access_token_error_msg">无法获取访问权。请确认您选择了
+    “授权访问”。
+  </string>
 
   <string name="ui_dialog_connect_msg">将会打开一个浏览器窗口，提示您登录到 Gmail 并为 %1$s 授予访问您电子邮件的权限。</string>
   <string name="ui_dialog_connect_token_error">无法从 Google 获得获得授权。请确认目前网络可用。</string>
@@ -119,7 +139,8 @@
 
   <string name="ui_dialog_upgrade_title">升级信息</string>
   <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ 与 SMS Backup 软件完全向下兼容。但是，请确保只在其中一款软件中启用“自动备份”，否则您将会重复备份。如果您已经对手机中的信息进行过备份，在第一次进行同步操作时应该选择“跳过”。</string>
+   SMS Backup+ 与 SMS Backup 软件完全向下兼容。但是，请确保只在其中一款软件中启用“自动备份”，否则您将会重复备份。如果您已经对手机中的信息进行过备份，在第一次进行同步操作时应该选择“跳过”。
+  </string>
 
   <string name="ui_sync">备份</string>
   <string name="ui_skip">跳过</string>
@@ -128,9 +149,13 @@
   <string name="err_sync_requires_login_info">没有登录信息，无法备份。</string>
   <string name="err_communication_error">一般通讯错误。</string>
   <string name="menu_info">关于</string>
+  <string name="menu_reset">重置</string>
+  <string name="ui_dialog_reset_title">重置当前的同步状态</string>
+  <string name="ui_dialog_reset_message">您是否要重置当前的同步状态？
+  您仍旧可以在之后选择跳过所有消息。</string>
   <string name="all_messages">所有</string>
-
-  <string name="gmail_connected_fail">Gmail 认证失败</string>
+  
+  <string name="gmail_connected_fail">Gmail 验证失败</string>
   <string name="gmail_needs_connecting">轻触以连接到您的 Gmail 帐户 (必需)。</string>
   <string name="gmail_already_connected">Gmail 帐户已连接 (轻触以断开)。</string>
 
