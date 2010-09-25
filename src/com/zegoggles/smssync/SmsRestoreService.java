@@ -132,22 +132,21 @@ public class SmsRestoreService extends ServiceBase {
 
         private void updateAllThreads() {
             // thread dates + states might be wrong, we need to force a full update
-            // unfortunately there's no direct way to do that in the SDK, but passing a negative conversation
-            // id to delete will to the trick
+            // unfortunately there's no direct way to do that in the SDK, but passing a
+            // negative conversation id to delete should to the trick
 
-            if (insertedIds.isEmpty())
-                return;
-
-            // execute in background, might take some time
-            new Thread() {
-                @Override
-                public void run() {
-                    Log.d(TAG, "updating threads");
-                    getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
-                    Log.d(TAG, "finished");
-                }
-            }.start();
-        }
+            if (!insertedIds.isEmpty()) {
+              // execute in background, might take some time
+              new Thread() {
+                  @Override
+                  public void run() {
+                      Log.d(TAG, "updating threads");
+                      getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
+                      Log.d(TAG, "finished");
+                  }
+              }.start();
+            }
+          }
 
         private void importMessage(Message message) {
             uids.add(message.getUid());
@@ -217,7 +216,7 @@ public class SmsRestoreService extends ServiceBase {
             return name.startsWith("body");
           }
         })) {
-          //Log.d(TAG, "deleting " + f);
+          if (LOCAL_LOGV) Log.v(TAG, "deleting " + f);
           f.delete();
         }
     }
@@ -225,10 +224,12 @@ public class SmsRestoreService extends ServiceBase {
     private boolean smsExists(ContentValues values) {
         // just assume equality on date+address+type
         Cursor c = getContentResolver().query(SMS_PROVIDER,
-                new String[]{"_id"},
+                new String[] { "_id" },
                 "date = ? AND address = ? AND type = ?",
-                new String[]{values.getAsString(SmsConsts.DATE),
-                        values.getAsString(SmsConsts.ADDRESS), values.getAsString(SmsConsts.TYPE)}, null
+                new String[] { values.getAsString(SmsConsts.DATE),
+                               values.getAsString(SmsConsts.ADDRESS),
+                               values.getAsString(SmsConsts.TYPE)},
+                               null
         );
 
         boolean exists = false;
@@ -238,7 +239,6 @@ public class SmsRestoreService extends ServiceBase {
         }
         return exists;
     }
-
 
     private ContentValues messageToContentValues(Message message)
             throws java.io.IOException, MessagingException {
