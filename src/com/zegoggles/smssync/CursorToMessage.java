@@ -212,7 +212,6 @@ public class CursorToMessage {
                 long personId = c.getLong(c.getColumnIndex(Phones.PERSON_ID));
                 String name   = c.getString(c.getColumnIndex(People.NAME));
                 String number = c.getString(c.getColumnIndex(Phones.NUMBER));
-                c.close();
 
                 String primaryEmail = getPrimaryEmail(personId, number);
 
@@ -233,6 +232,8 @@ public class CursorToMessage {
 
                 mPeopleCache.put(address, record);
             }
+
+            if (c != null) c.close();
         }
         return mPeopleCache.get(address);
     }
