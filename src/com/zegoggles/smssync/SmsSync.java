@@ -712,7 +712,7 @@ public class SmsSync extends PreferenceActivity {
 
                 updateConnected().setEnabled(!plain);
                 prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setEnabled(plain);
-
+                prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setEnabled(plain);
                 return true;
             }
         });
