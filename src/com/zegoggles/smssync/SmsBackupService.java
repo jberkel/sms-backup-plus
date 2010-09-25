@@ -31,6 +31,7 @@ import com.zegoggles.smssync.R;
 import java.util.List;
 
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
+import static com.zegoggles.smssync.App.*;
 
 public class SmsBackupService extends ServiceBase {
     public static final String TAG = SmsBackupService.class.getName();
@@ -101,10 +102,10 @@ public class SmsBackupService extends ServiceBase {
             Cursor items = null;
             try {
               acquireLocks(background);
+              items = getItemsToSync(maxItemsPerSync);
 
-              items = getItemsToSync();
               sCurrentSyncedItems = 0;
-              sItemsToSync = maxItemsPerSync > 0 ? Math.min(items.getCount(), maxItemsPerSync) : items.getCount();
+              sItemsToSync = items.getCount();
 
               if (sItemsToSync <= 0) {
                   PrefStore.setLastSync(context);
@@ -179,7 +180,7 @@ public class SmsBackupService extends ServiceBase {
           try {
               while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
                   publish(BACKUP);
-                  ConversionResult result = converter.cursorToMessageArray(items, MAX_MSG_PER_REQUEST);
+                  ConversionResult result = converter.cursorToMessages(items, MAX_MSG_PER_REQUEST);
                   List<Message> messages = result.messageList;
 
                   if (messages.isEmpty()) break;
@@ -205,10 +206,12 @@ public class SmsBackupService extends ServiceBase {
        * server. This includes all messages with
        * <code>date &lt; {@link #getMaxSyncedDate()}</code> which are no drafs.
        */
-      private Cursor getItemsToSync() {
+      private Cursor getItemsToSync(int max) {
+          Log.d(TAG, "getItemToSync(max=" + max+")");
           String sortOrder = SmsConsts.DATE;
-          if (PrefStore.getMaxItemsPerSync(context) > 0) {
-            sortOrder += " LIMIT " + PrefStore.getMaxItemsPerSync(context);
+
+          if (max > 0) {
+            sortOrder += " LIMIT " + max;
           }
           return getContentResolver().query(SMS_PROVIDER, null,
                 String.format("%s > ? AND %s <> ?", SmsConsts.DATE, SmsConsts.TYPE),
@@ -241,6 +244,7 @@ public class SmsBackupService extends ServiceBase {
       /* Only update the max synced ID, do not really sync. */
       private int skip() {
           updateMaxSyncedDate(getMaxItemDate());
+
           PrefStore.setLastSync(context);
           sItemsToSync = 0;
           sCurrentSyncedItems = 0;
