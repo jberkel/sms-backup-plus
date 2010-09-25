@@ -17,6 +17,8 @@ import java.io.FilenameFilter;
 import static com.zegoggles.smssync.CursorToMessage.Headers.*;
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 
+import static com.zegoggles.smssync.App.*;
+
 public class SmsRestoreService extends ServiceBase {
     public static final String TAG = SmsRestoreService.class.getName();
 

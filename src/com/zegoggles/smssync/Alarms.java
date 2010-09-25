@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.util.Log;
 
 public class Alarms {
+
     /**
      * Schedule a sync right after an SMS arrived.
      */
@@ -37,23 +38,24 @@ public class Alarms {
     }
 
     static void cancel(Context ctx) {
-        AlarmManager aMgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        aMgr.cancel(createPendingIntent(ctx));
+        getAlarmManager(ctx).cancel(createPendingIntent(ctx));
     }
 
     private static void scheduleSync(Context ctx, int inSeconds) {
-        if (!PrefStore.isEnableAutoSync(ctx) ||
-            inSeconds < 0 ||
-            SmsRestoreService.isWorking()) {
+        if (PrefStore.isEnableAutoSync(ctx) &&
+            inSeconds > 0 &&
+            !SmsRestoreService.isWorking()) {
 
-            Log.d(Consts.TAG, "Not scheduling sync because auto sync is disabled.");
-        } else {
           long atTime = System.currentTimeMillis() + inSeconds * 1000l;
-          PendingIntent pi = createPendingIntent(ctx);
-          AlarmManager aMgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-          aMgr.set(AlarmManager.RTC_WAKEUP, atTime, pi);
+          getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx));
           Log.d(Consts.TAG, "Scheduled sync due in " + inSeconds + " seconds.");
-       }
+        } else {
+          Log.d(Consts.TAG, "Not scheduling sync because auto sync is disabled.");
+        }
+    }
+
+    private static AlarmManager getAlarmManager(Context ctx) {
+      return (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
     }
 
     private static PendingIntent createPendingIntent(Context ctx) {

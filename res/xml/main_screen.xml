@@ -65,6 +65,7 @@
         android:entries="@array/auto_backup_schedule_entries"
         android:entryValues="@array/auto_backup_schedule_values"
         android:defaultValue="7200"
+        android:dependency="enable_auto_sync"
         android:persistent="true"/>
 
       <ListPreference android:key="auto_backup_incoming_schedule"
@@ -73,6 +74,7 @@
         android:entries="@array/auto_backup_incoming_schedule_entries"
         android:entryValues="@array/auto_backup_incoming_schedule_values"
         android:defaultValue="180"
+        android:dependency="enable_auto_sync"
         android:persistent="true"/>
 
         <PreferenceScreen
@@ -116,6 +118,7 @@
               android:summary="@string/ui_password_desc"
               android:singleLine="true"
               android:password="true"
+              android:dependency="login_user"
               android:dialogMessage="@string/ui_password_dialog_msg"
               android:persistent="true"/>
           </PreferenceCategory>

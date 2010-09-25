@@ -23,10 +23,13 @@ import android.util.Log;
 public class SmsBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context ctx, Intent intent) {
-        if (!PrefStore.isFirstSync(ctx) && PrefStore.isLoginInformationSet(ctx)) {
+        if (PrefStore.isEnableAutoSync(ctx) &&
+            PrefStore.isLoginInformationSet(ctx) &&
+            !PrefStore.isFirstSync(ctx)) {
+
             Alarms.scheduleIncomingSync(ctx);
         } else {
-            Log.i(Consts.TAG, "Received SMS but not ready to sync.");
+            Log.i(Consts.TAG, "Received SMS but not set up to sync.");
         }
     }
 }

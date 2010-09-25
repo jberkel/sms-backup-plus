@@ -15,15 +15,13 @@ import android.util.Log;
 import android.app.NotificationManager;
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.util.Config;
 
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 
-public abstract class ServiceBase extends Service {
-    public static final boolean DEBUG = false;
-    protected static final boolean LOCAL_LOGV = DEBUG ? Config.LOGD : Config.LOGV;
+import static com.zegoggles.smssync.App.*;
 
+public abstract class ServiceBase extends Service {
     // the activity
     public static SmsSync smsSync;
 
@@ -154,7 +152,9 @@ public abstract class ServiceBase extends Service {
      */
     protected void updateMaxSyncedDate(long maxSyncedDate) {
         PrefStore.setMaxSyncedDate(this, maxSyncedDate);
-        Log.d(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
+        if (LOCAL_LOGV) {
+          Log.v(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
+        }
     }
 
     protected void notifyUser(int icon, String shortText, String title, String text) {

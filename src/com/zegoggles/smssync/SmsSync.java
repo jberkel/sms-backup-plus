@@ -33,7 +33,6 @@ import android.app.PendingIntent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.CheckBoxPreference;
@@ -69,9 +68,7 @@ public class SmsSync extends PreferenceActivity {
     enum Dialogs {
       MISSING_CREDENTIALS,
       FIRST_SYNC,
-      SYNC_DATA_RESET,
       INVALID_IMAP_FOLDER,
-      NEED_FIRST_MANUAL_SYNC,
       ABOUT,
       RESET,
       DISCONNECT,
@@ -85,14 +82,12 @@ public class SmsSync extends PreferenceActivity {
     }
 
     StatusPreference statusPref;
-
-    private static ContactAccessor sAccessor = null;
-
     private Uri mAuthorizeUri = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ServiceBase.smsSync = this;
 
         addPreferencesFromResource(R.xml.main_screen);
 
@@ -103,8 +98,6 @@ public class SmsSync extends PreferenceActivity {
         getPreferenceScreen().addPreference(statusPref);
         setPreferenceListeners(getPreferenceManager());
 
-        ServiceBase.smsSync = this;
-
         if (PrefStore.showUpgradeMessage(this)) {
           show(Dialogs.UPGRADE);
         }
@@ -113,11 +106,10 @@ public class SmsSync extends PreferenceActivity {
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(TAG, "onNewIntent:" + intent);
-
         Uri uri = intent.getData();
         if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL) &&
            (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
+
             new OAuthCallbackTask().execute(intent);
         }
     }
@@ -133,6 +125,11 @@ public class SmsSync extends PreferenceActivity {
         updateMaxItemsPerRestore(null);
 
         statusPref.update();
+
+        // XXX
+        getPreferenceManager()
+          .findPreference(PrefStore.PREF_LOGIN_USER)
+          .setEnabled(!PrefStore.useXOAuth(this));
     }
 
     @Override
@@ -192,28 +189,6 @@ public class SmsSync extends PreferenceActivity {
         } else {
             return true;
         }
-    }
-
-    public static ContactAccessor getContactAccessor() {
-       if (sAccessor == null) {
-            String className;
-            int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
-            if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
-                className = "ContactAccessorPre20";
-            } else {
-                className = "ContactAccessorPost20";
-            }
-            try {
-                Class<? extends ContactAccessor> clazz =
-                   Class.forName(ContactAccessor.class.getPackage().getName() + "." + className)
-                        .asSubclass(ContactAccessor.class);
-
-                sAccessor = clazz.newInstance();
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
-            }
-        }
-        return sAccessor;
     }
 
     private void startSync(boolean skip) {
@@ -462,30 +437,11 @@ public class SmsSync extends PreferenceActivity {
                 msg = PrefStore.useXOAuth(this) ? getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
                                                   getString(R.string.ui_dialog_missing_credentials_msg_plain);
                 break;
-            case SYNC_DATA_RESET:
-                title = getString(R.string.ui_dialog_sync_data_reset_title);
-                msg = getString(R.string.ui_dialog_sync_data_reset_msg);
-                break;
             case INVALID_IMAP_FOLDER:
                 title = getString(R.string.ui_dialog_invalid_imap_folder_title);
                 msg = getString(R.string.ui_dialog_invalid_imap_folder_msg);
                 break;
-            case NEED_FIRST_MANUAL_SYNC:
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == DialogInterface.BUTTON1) {
-                            show(Dialogs.FIRST_SYNC);
-                        }
-                    }};
-
-                return new AlertDialog.Builder(this)
-                    .setTitle(R.string.ui_dialog_need_first_manual_sync_title)
-                    .setMessage(R.string.ui_dialog_need_first_manual_sync_msg)
-                    .setPositiveButton(android.R.string.yes, dialogClickListener)
-                    .setNegativeButton(android.R.string.no, dialogClickListener)
-                    .setCancelable(false)
-                    .create();
-            case FIRST_SYNC:
+           case FIRST_SYNC:
                 DialogInterface.OnClickListener firstSyncListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -613,6 +569,7 @@ public class SmsSync extends PreferenceActivity {
         if (newValue == null) {
             newValue = String.valueOf(currentValue);
         }
+        // XXX
         pref.setTitle("-1".equals(newValue) ? getString(R.string.all_messages) : newValue);
     }
 
@@ -620,11 +577,9 @@ public class SmsSync extends PreferenceActivity {
         CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager()
               .findPreference(PrefStore.PREF_CONNECTED);
 
-        boolean hasTokens = PrefStore.hasOauthTokens(this);
-        connected.setEnabled(PrefStore.getAuthMode(this) == PrefStore.AuthMode.XOAUTH);
-        connected.setChecked(hasTokens);
-        connected.setSummary(hasTokens ? R.string.gmail_already_connected : R.string.gmail_needs_connecting);
-
+        connected.setEnabled(PrefStore.useXOAuth(this));
+        connected.setChecked(PrefStore.hasOauthTokens(this));
+        connected.setSummary(connected.isEnabled() ? R.string.gmail_already_connected : R.string.gmail_needs_connecting);
         return connected;
     }
 
@@ -729,25 +684,6 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private void setPreferenceListeners(final PreferenceManager prefMgr) {
-        prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER)
-               .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, final Object newValue) {
-              String imapFolder = newValue.toString();
-
-              if (PrefStore.isValidImapFolder(imapFolder)) {
-                  preference.setTitle(imapFolder);
-                  return true;
-              } else {
-                  runOnUiThread(new Runnable() {
-                      @Override
-                      public void run() {
-                          show(Dialogs.INVALID_IMAP_FOLDER);
-                      }
-                  });
-                  return false;
-              }
-            }
-        });
 
         prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -764,36 +700,22 @@ public class SmsSync extends PreferenceActivity {
                 if (!isEnabled) {
                     Alarms.cancel(SmsSync.this);
                 }
-
-                prefMgr.findPreference(PrefStore.PREF_INCOMING_TIMEOUT_SECONDS).setEnabled(isEnabled);
-                prefMgr.findPreference(PrefStore.PREF_REGULAR_TIMEOUT_SECONDS).setEnabled(isEnabled);
                 return true;
              }
-        });
-
-        prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD)
-               .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (PrefStore.isFirstSync(SmsSync.this) && PrefStore.isLoginUsernameSet(SmsSync.this)) {
-                   show(Dialogs.NEED_FIRST_MANUAL_SYNC);
-                }
-                return true;
-            }
         });
 
         prefMgr.findPreference(PrefStore.PREF_SERVER_AUTHENTICATION)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                final boolean plain = (PrefStore.AuthMode.valueOf(newValue.toString().toUpperCase()) ==
-                   PrefStore.AuthMode.PLAIN);
+                final boolean plain = (PrefStore.AuthMode.PLAIN) ==
+                  PrefStore.AuthMode.valueOf(newValue.toString().toUpperCase());
 
                 updateConnected().setEnabled(!plain);
-                prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setEnabled(plain);
                 prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setEnabled(plain);
+
                 return true;
             }
         });
-
 
         prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -811,29 +733,6 @@ public class SmsSync extends PreferenceActivity {
             }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_SERVER_ADDRESS).setOnPreferenceChangeListener(
-              new OnPreferenceChangeListener() {
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    preference.setTitle(newValue.toString());
-                    SharedPreferences prefs = preference.getSharedPreferences();
-                    final String oldValue = prefs.getString(PrefStore.PREF_SERVER_ADDRESS, null);
-                    if (!newValue.equals(oldValue)) {
-                        // We need to post the reset of sync state such that we do not interfere
-                        // with the current transaction of the SharedPreference.
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                PrefStore.clearSyncData(SmsSync.this);
-                                if (oldValue != null) {
-                                    show(Dialogs.SYNC_DATA_RESET);
-                                }
-                            }
-                        });
-                    }
-                    return true;
-                }
-        });
-
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 boolean newValue = (Boolean) change;
@@ -844,6 +743,26 @@ public class SmsSync extends PreferenceActivity {
                   show(Dialogs.DISCONNECT);
                 }
                 return false;
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER)
+               .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, final Object newValue) {
+              String imapFolder = newValue.toString();
+
+              if (PrefStore.isValidImapFolder(imapFolder)) {
+                  preference.setTitle(imapFolder);
+                  return true;
+              } else {
+                  runOnUiThread(new Runnable() {
+                      @Override
+                      public void run() {
+                          show(Dialogs.INVALID_IMAP_FOLDER);
+                      }
+                  });
+                  return false;
+              }
             }
         });
     }
