@@ -40,6 +40,9 @@ task :check_version do
   raise "about not updated" unless IO.read('assets/about.html') =~ /#{version}/
 end
 
+desc "release"
+task :release => :tag
+
 task :tag => [:check_version] do
   unless `git branch` =~ /^\* master$/
     puts "You must be on the master branch to release!"
