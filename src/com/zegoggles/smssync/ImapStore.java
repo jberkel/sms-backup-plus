@@ -110,7 +110,6 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
 
                 return recent;
             }
-
             return msgs;
         }
     }

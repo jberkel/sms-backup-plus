@@ -154,7 +154,8 @@ public class SmsRestoreService extends ServiceBase {
             fp.add(FetchProfile.Item.BODY);
 
             try {
-                Log.d(TAG, "fetching message uid " + message.getUid());
+                if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
+
                 message.getFolder().fetch(new Message[]{message}, fp, null);
                 ContentValues values = messageToContentValues(message);
 
@@ -172,10 +173,10 @@ public class SmsRestoreService extends ServiceBase {
                       if (getMaxSyncedDate() < timestamp) {
                           updateMaxSyncedDate(timestamp);
                       }
-                      Log.d(TAG, "inserted " + uri);
+                      if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
                     }
                 } else {
-                    Log.d(TAG, "ignoring sms");
+                    if (LOCAL_LOGV) Log.d(TAG, "ignoring sms");
                 }
 
             } catch (IllegalArgumentException e) {

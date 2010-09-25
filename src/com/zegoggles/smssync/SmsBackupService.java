@@ -63,7 +63,7 @@ public class SmsBackupService extends ServiceBase {
         super.onStart(intent, startId);
 
         if (isBackground(intent) && !getConnectivityManager().getBackgroundDataSetting()) {
-            Log.d(TAG, "onStart(): Background data disabled");
+            Log.d(TAG, "background data disabled");
             stopSelf();
         } else {
           synchronized(ServiceBase.class) {
@@ -113,7 +113,7 @@ public class SmsBackupService extends ServiceBase {
                       // such that we know that we've performed a backup before.
                       PrefStore.setMaxSyncedDate(context, PrefStore.DEFAULT_MAX_SYNCED_DATE);
                   }
-                  Log.d(TAG, "Nothing to do.");
+                  Log.i(TAG, "Nothing to do.");
                   return 0;
               } else {
                 if (!PrefStore.isLoginInformationSet(context)) {
@@ -154,10 +154,10 @@ public class SmsBackupService extends ServiceBase {
         @Override
         protected void onPostExecute(Integer result) {
            if (sCanceled) {
-              Log.d(TAG, "backup canceled by user");
+              Log.i(TAG, "backup canceled by user");
               publish(CANCELED_BACKUP);
            } else if (result != null) {
-              Log.d(TAG, result + " items backed up");
+              Log.i(TAG, result + " items backed up");
               if (result == sItemsToSync) {
                 publish(FINISHED_BACKUP);
               }
@@ -165,27 +165,6 @@ public class SmsBackupService extends ServiceBase {
            sIsRunning = false;
            sCanceled = false;
         }
-
-      protected void publish(SmsSyncState s) {
-        if (!background) {
-           publishProgress(s);
-        } else {
-           switch(s) {
-            case AUTH_FAILED:
-                int details = PrefStore.useXOAuth(context) ? R.string.status_auth_failure_details_xoauth :
-                                                             R.string.status_auth_failure_details_plain;
-                notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
-                           getString(R.string.notification_auth_failure), getString(details));
-                break;
-            case GENERAL_ERROR:
-                notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
-                           getString(R.string.notification_unknown_error), lastError);
-                break;
-
-            default:
-           }
-        }
-      }
 
       /**
        * @throws GeneralErrorException Thrown when there there was an error during sync.
@@ -205,7 +184,8 @@ public class SmsBackupService extends ServiceBase {
 
                   if (messages.isEmpty()) break;
 
-                  Log.d(TAG, "Sending " + messages.size() + " messages to server.");
+                  if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " messages to server.");
+
                   folder.appendMessages(messages.toArray(new Message[messages.size()]));
                   sCurrentSyncedItems += messages.size();
                   publish(BACKUP);
@@ -236,8 +216,30 @@ public class SmsBackupService extends ServiceBase {
                 sortOrder);
       }
 
-      public int skip() {
-          // Only update the max synced ID, do not really sync.
+      protected void publish(SmsSyncState s) {
+        if (!background) {
+           publishProgress(s);
+        } else {
+           switch(s) {
+            case AUTH_FAILED:
+                int details = PrefStore.useXOAuth(context) ? R.string.status_auth_failure_details_xoauth :
+                                                             R.string.status_auth_failure_details_plain;
+                notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
+                           getString(R.string.notification_auth_failure), getString(details));
+                break;
+            case GENERAL_ERROR:
+                notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
+                           getString(R.string.notification_unknown_error), lastError);
+                break;
+
+            default:
+           }
+        }
+      }
+
+
+      /* Only update the max synced ID, do not really sync. */
+      private int skip() {
           updateMaxSyncedDate(getMaxItemDate());
           PrefStore.setLastSync(context);
           sItemsToSync = 0;

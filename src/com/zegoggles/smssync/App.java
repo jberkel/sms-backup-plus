@@ -8,6 +8,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         K9.app = this;
-        //K9.DEBUG = true;
+        K9.DEBUG = ServiceBase.DEBUG;
     }
 }

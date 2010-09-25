@@ -15,11 +15,15 @@ import android.util.Log;
 import android.app.NotificationManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.util.Config;
 
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 
 public abstract class ServiceBase extends Service {
+    public static final boolean DEBUG = false;
+    protected static final boolean LOCAL_LOGV = DEBUG ? Config.LOGD : Config.LOGV;
+
     // the activity
     public static SmsSync smsSync;
 
