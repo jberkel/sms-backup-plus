@@ -17,15 +17,20 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 2.2.
 
-### Droid X
+### Users of Opera Mini / Droid X / non-standard browsers
 
-*Important:* Motorola Droid X is currently not fully supported, there appears to be a browser bug
-which breaks the authorisation process, so connecting your Gmail account via XOAuth is not possible.
+*Important:* Some browsers / handsets which ship with non-standard browsers are
+currently not fully supported, there appears to be a problem which breaks
+the authorisation process, so connecting your Gmail account via XOAuth is not
+possible.
 
-There are two possible workarounds:
+Some possible workarounds:
 
-  * Install a 3rd party browser (Dolphin HD has been reported to work)
-  * Use plain text authentication (Advanced Settings - Server Settings), use your gmail address as username and supply your password
+  * Use the stock Android browser for the authentication (you can switch back
+  afterwards)
+  * Droid X: install a 3rd party browser (Dolphin HD has been reported to work)
+  * Use plain text authentication (Advanced Settings - Server Settings), use
+  your gmail address as username and supply your password
 
 SMS Backup+ is available for free in the market, there will never be a pro / paid version.
 
@@ -44,9 +49,14 @@ You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 account. If you use Google Apps make sure you select "Sign in with a Google
 Apps Account" ([screenshot](http://skitch.com/jberkel/ditwx/5554-emu-2.2)).
 
-After starting SMS Backup+, tap on the "Connect" check box to start the authorization process. A browser window will open where Gmail either prompts you to log in *or* (if you were already logged in) a screen asking you to give SMS Backup+ permission to access your emails.
+After starting SMS Backup+, tap on the "Connect" check box to start the
+authorization process. A browser window will open where Gmail either prompts
+you to log in *or* (if you were already logged in) a screen asking you to give
+SMS Backup+ permission to access your emails.
 
-After clicking on "Grant Access" SMS Backup+ will become visible again, the checkbox should now be checked, indicating that the authorization process was successful.
+After clicking on "Grant Access" SMS Backup+ will become visible again, the
+checkbox should now be checked, indicating that the authorization process was
+successful.
 
 ### Upgrading (for users of SMS Backup)
 
