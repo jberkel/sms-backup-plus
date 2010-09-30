@@ -1,6 +1,6 @@
 == 1.0.10 09-30-2010
 
- * Issues: GH-45,46
+ * Issues: GH-46,47
  * Use separate preference for XOAuth (avoid conflicts with plain)
  * Always reload gmail username after completing OAuth dance
 
