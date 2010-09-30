@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.AuthenticationFailedException;
 import com.zegoggles.smssync.CursorToMessage.ConversionResult;
 import com.zegoggles.smssync.ServiceBase.SmsSyncState;
 import com.zegoggles.smssync.R;
@@ -34,7 +35,7 @@ import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 import static com.zegoggles.smssync.App.*;
 
 public class SmsBackupService extends ServiceBase {
-    public static final String TAG = SmsBackupService.class.getName();
+    public static final String TAG = SmsBackupService.class.getSimpleName();
 
     /** Number of messages sent per sync request. */
     private static final int MAX_MSG_PER_REQUEST = 1;
@@ -100,6 +101,7 @@ public class SmsBackupService extends ServiceBase {
             }
 
             Cursor items = null;
+            Folder folder = null;
             try {
               acquireLocks(background);
               items = getItemsToSync(maxItemsPerSync);
@@ -118,28 +120,33 @@ public class SmsBackupService extends ServiceBase {
                   return 0;
               } else {
                 if (!PrefStore.isLoginInformationSet(context)) {
-                   throw new GeneralErrorException(getString(R.string.err_sync_requires_login_info));
+                   lastError = getString(R.string.err_sync_requires_login_info);
+                   publish(GENERAL_ERROR);
+                   return null;
                 }
 
                 publish(LOGIN);
-                Folder folder = getBackupFolder();
-
-                try {
-                  return backup(folder, items);
-                } finally {
-                  folder.close();
-                }
+                folder = getBackupFolder();
+                return backup(folder, items);
               }
-            } catch (GeneralErrorException e) {
+            } catch (AuthenticationFailedException e) {
+              Log.e(TAG, "authentication failed", e);
+              publish(AUTH_FAILED);
+              return null;
+            } catch (MessagingException e) {
+              this.ex = e;
               Log.e(TAG, "error during backup", e);
               lastError = e.getLocalizedMessage();
-              this.ex = e;
-              publish(e.state());
-
+              publish(GENERAL_ERROR);
+              return null;
+            } catch (ConnectivityErrorException e) {
+              publish(CONNECTIVITY_ERROR);
               return null;
             } finally {
               releaseLocks();
+
               if (items != null) items.close();
+              if (folder != null) folder.close();
 
               stopSelf();
               Alarms.scheduleRegularSync(context);
@@ -168,37 +175,32 @@ public class SmsBackupService extends ServiceBase {
         }
 
       /**
-       * @throws GeneralErrorException Thrown when there there was an error during sync.
-       * @throws FolderErrorException Thrown when there was an error accessing or creating the folder
+       * @throws MessagingException Thrown when there was an error accessing or creating the folder
        */
-      private int backup(final Folder folder, Cursor items) throws GeneralErrorException {
+      private int backup(final Folder folder, Cursor items) throws MessagingException {
           Log.i(TAG, String.format("Starting backup (%d messages)", sItemsToSync));
 
           publish(CALC);
 
           CursorToMessage converter = new CursorToMessage(context, PrefStore.getLoginUsername(context));
-          try {
-              while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-                  publish(BACKUP);
-                  ConversionResult result = converter.cursorToMessages(items, MAX_MSG_PER_REQUEST);
-                  List<Message> messages = result.messageList;
+          while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
+              publish(BACKUP);
+              ConversionResult result = converter.cursorToMessages(items, MAX_MSG_PER_REQUEST);
+              List<Message> messages = result.messageList;
 
-                  if (messages.isEmpty()) break;
+              if (messages.isEmpty()) break;
 
-                  if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " messages to server.");
+              if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " messages to server.");
 
-                  folder.appendMessages(messages.toArray(new Message[messages.size()]));
-                  sCurrentSyncedItems += messages.size();
-                  publish(BACKUP);
-                  updateMaxSyncedDate(result.maxDate);
+              folder.appendMessages(messages.toArray(new Message[messages.size()]));
+              sCurrentSyncedItems += messages.size();
+              publish(BACKUP);
+              updateMaxSyncedDate(result.maxDate);
 
-                  result = null;
-                  messages = null;
-              }
-              return sCurrentSyncedItems;
-          } catch (MessagingException e) {
-              throw new GeneralErrorException(getString(R.string.err_communication_error));
+              result = null;
+              messages = null;
           }
+          return sCurrentSyncedItems;
         }
 
       /**

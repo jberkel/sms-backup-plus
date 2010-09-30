@@ -15,6 +15,8 @@
 
 package com.zegoggles.smssync;
 
+import java.net.URLEncoder;
+
 import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -46,6 +48,7 @@ public class PrefStore {
 
     static final String PREF_OAUTH_TOKEN = "oauth_token";
     static final String PREF_OAUTH_TOKEN_SECRET = "oauth_token_secret";
+    static final String PREF_OAUTH_USER = "oauth_user";
 
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
@@ -146,7 +149,7 @@ public class PrefStore {
 
     static XOAuthConsumer getOAuthConsumer(Context ctx) {
         return new XOAuthConsumer(
-            getLoginUsername(ctx),
+            getOauthUsername(ctx),
             getOauthToken(ctx),
             getOauthTokenSecret(ctx));
     }
@@ -162,6 +165,14 @@ public class PrefStore {
     static boolean hasOauthTokens(Context ctx) {
         return getOauthToken(ctx) != null &&
                getOauthTokenSecret(ctx) != null;
+    }
+
+    static String getOauthUsername(Context ctx) {
+        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, getLoginUsername(ctx));
+    }
+
+    static void setOauthUsername(Context ctx, String s) {
+        getSharedPreferences(ctx).edit().putString(PREF_OAUTH_USER, s).commit();
     }
 
     static void setOauthTokens(Context ctx, String token, String secret) {
@@ -181,15 +192,11 @@ public class PrefStore {
         return getAuthMode(ctx) == AuthMode.XOAUTH && isGmail(ctx);
     }
 
-    public static boolean isLoginUsernameSet(Context ctx) {
-        return getLoginUsername(ctx) != null;
-    }
-
     static boolean isLoginInformationSet(Context ctx) {
         if (getAuthMode(ctx) == AuthMode.PLAIN) {
-            return isLoginUsernameSet(ctx) && getLoginPassword(ctx) != null;
+            return getLoginPassword(ctx) != null && getLoginUsername(ctx) != null;
         } else {
-            return hasOauthTokens(ctx) && getLoginUsername(ctx) != null;
+            return hasOauthTokens(ctx) && getOauthUsername(ctx) != null;
         }
     }
 
@@ -327,14 +334,11 @@ public class PrefStore {
         }
     }
 
-    static void clearSyncData(Context ctx) {
+    static void clearOauthData(Context ctx) {
         getSharedPreferences(ctx).edit()
-          .remove(PREF_LOGIN_USER)
-          .remove(PREF_LOGIN_PASSWORD)
+          .remove(PREF_OAUTH_USER)
           .remove(PREF_OAUTH_TOKEN)
           .remove(PREF_OAUTH_TOKEN_SECRET)
-          .remove(PREF_MAX_SYNCED_DATE)
-          .remove(PREF_LAST_SYNC)
           .commit();
     }
 
@@ -361,6 +365,24 @@ public class PrefStore {
 
     static boolean isGmail(Context ctx) {
         return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress(ctx));
+    }
+
+    static String getStoreUri(Context ctx) {
+        if (useXOAuth(ctx)) {
+          XOAuthConsumer consumer = getOAuthConsumer(ctx);
+
+          return String.format(Consts.IMAP_URI,
+               getServerProtocol(ctx),
+                "xoauth:" + URLEncoder.encode(consumer.getUsername()),
+               URLEncoder.encode(consumer.generateXOAuthString()),
+               getServerAddress(ctx));
+        } else {
+            return String.format(Consts.IMAP_URI,
+               getServerProtocol(ctx),
+               URLEncoder.encode(getLoginUsername(ctx)),
+               URLEncoder.encode(getLoginPassword(ctx)).replace("+", "%20"),
+               getServerAddress(ctx));
+        }
     }
 
     static String getVersion(Context context, boolean code) {

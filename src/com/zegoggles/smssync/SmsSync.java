@@ -63,7 +63,7 @@ import com.zegoggles.smssync.ServiceBase.SmsSyncState;
  * providing controls to configure it.
  */
 public class SmsSync extends PreferenceActivity {
-    private static final String TAG = SmsSync.class.getName();
+    private static final String TAG = SmsSync.class.getSimpleName();
 
     enum Dialogs {
       MISSING_CREDENTIALS,
@@ -119,8 +119,8 @@ public class SmsSync extends PreferenceActivity {
         super.onResume();
         ServiceBase.smsSync = this;
 
-        updateUsernameLabelFromPref();
         updateImapFolderLabelFromPref();
+        updateUsernameLabel(null);
         updateMaxItemsPerSync(null);
         updateMaxItemsPerRestore(null);
 
@@ -153,9 +153,11 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
-    private void updateUsernameLabelFromPref() {
-        SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
-        String username = prefs.getString(PrefStore.PREF_LOGIN_USER, getString(R.string.ui_login_label));
+    private void updateUsernameLabel(String username) {
+        if (username == null) {
+          SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+          username = prefs.getString(PrefStore.PREF_LOGIN_USER, getString(R.string.ui_login_label));
+        }
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_LOGIN_USER);
         pref.setTitle(username);
     }
@@ -256,9 +258,11 @@ public class SmsSync extends PreferenceActivity {
             }
             mSyncDetailsLabel.setText(text);
             mStatusLabel.setText(R.string.status_done);
+            mStatusLabel.setTextColor(getResources().getColor(R.color.status_done));
         }
 
         private void finishedRestore() {
+            mStatusLabel.setTextColor(getResources().getColor(R.color.status_done));
             mStatusLabel.setText(R.string.status_done);
             mSyncDetailsLabel.setText(getResources().getQuantityString(
                   R.plurals.status_restore_done_details,
@@ -283,6 +287,8 @@ public class SmsSync extends PreferenceActivity {
 
         public void stateChanged(final SmsSyncState newState) {
             if (mView == null) return;
+            setAttributes(newState);
+
             switch (newState) {
                case FINISHED_RESTORE: finishedRestore(); break;
                case FINISHED_BACKUP: finishedBackup(); break;
@@ -346,7 +352,6 @@ public class SmsSync extends PreferenceActivity {
                         SmsRestoreService.getItemsToRestoreCount()));
                     break;
               }
-              setAttributes(newState);
           }
 
         public void setAttributes(final SmsSyncState state) {
@@ -376,7 +381,7 @@ public class SmsSync extends PreferenceActivity {
               mSyncButton.setText(R.string.ui_sync_button_label_idle);
               mRestoreButton.setText(R.string.ui_restore_button_label_idle);
 
-              mStatusLabel.setTextColor(getResources().getColor(R.color.status_done));
+              mStatusLabel.setTextColor(getResources().getColor(R.color.status_idle));
               mStatusIcon.setImageResource(R.drawable.ic_idle);
           }
         }
@@ -529,7 +534,8 @@ public class SmsSync extends PreferenceActivity {
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        PrefStore.clearSyncData(SmsSync.this);
+                        PrefStore.clearOauthData(SmsSync.this);
+                        PrefStore.clearLastSyncData(SmsSync.this);
                         updateConnected();
                     }
                 }).create();
@@ -579,7 +585,12 @@ public class SmsSync extends PreferenceActivity {
 
         connected.setEnabled(PrefStore.useXOAuth(this));
         connected.setChecked(PrefStore.hasOauthTokens(this));
-        connected.setSummary(connected.isEnabled() ? R.string.gmail_already_connected : R.string.gmail_needs_connecting);
+
+        String summary = connected.isChecked() ? getString(R.string.gmail_already_connected,
+                                                 PrefStore.getOauthUsername(this)) :
+                                                 getString(R.string.gmail_needs_connecting);
+        connected.setSummary(summary);
+
         return connected;
     }
 
@@ -630,35 +641,33 @@ public class SmsSync extends PreferenceActivity {
             String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
             try {
                 provider.retrieveAccessToken(consumer, verifier);
-                // might need to retrieve user's login
-                if (consumer.getUsername() == null) {
-                  String ownerEmail = consumer.getOwnerEmail();
-                  if (ownerEmail != null) {
-                    consumer.setUsername(ownerEmail);
-                  } else {
-                    throw new IllegalStateException("Could not obtain user login");
-                  }
-               }
-               // intent has been handled
-               callbackIntent[0].setData(null);
-            } catch (oauth.signpost.exception.OAuthException e) {
+                String username = consumer.loadUsernameFromContacts();
+
+                if (username != null) {
+                  Log.i(TAG, "Valid access token for " + username);
+                  // intent has been handled
+                  callbackIntent[0].setData(null);
+
+                  return consumer;
+                } else {
+                  Log.e(TAG, "No valid user name");
+                  return null;
+                }
+           } catch (oauth.signpost.exception.OAuthException e) {
                 Log.e(TAG, "error", e);
                 return null;
             }
-            return consumer;
         }
 
         @Override
         protected void onPostExecute(XOAuthConsumer consumer) {
             dismiss(Dialogs.ACCESS_TOKEN);
             if (consumer != null) {
+                PrefStore.setOauthUsername(SmsSync.this, consumer.getUsername());
                 PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
-                PrefStore.setLoginUsername(SmsSync.this, consumer.getUsername());
-
-                Log.d(TAG, "updated tokens");
 
                 updateConnected();
-                updateUsernameLabelFromPref();
+                updateUsernameLabel(null);
 
                 // Invite use to perform a backup, but only once
                 if (PrefStore.isFirstUse(SmsSync.this)) {
@@ -713,6 +722,22 @@ public class SmsSync extends PreferenceActivity {
                 updateConnected().setEnabled(!plain);
                 prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setEnabled(plain);
                 prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setEnabled(plain);
+                return true;
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC)
+                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                updateMaxItemsPerSync(newValue.toString());
+                return true;
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_USER)
+                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                updateUsernameLabel(newValue.toString());
                 return true;
             }
         });

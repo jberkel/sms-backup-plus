@@ -33,13 +33,13 @@ import android.util.Log;
 import org.apache.commons.codec.binary.Base64;
 
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
-  private String username;
+  private String mUsername;
   private static final String MAC_NAME = "HmacSHA1";
   private static final String ANONYMOUS = "anonymous";
 
   public XOAuthConsumer(String username) {
       super(ANONYMOUS, ANONYMOUS);
-      this.username = username;
+      this.mUsername = username;
   }
 
   public XOAuthConsumer(String username, String token, String secret) {
@@ -48,7 +48,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   }
 
   public String generateXOAuthString() {
-      return generateXOAuthString(username);
+      return generateXOAuthString(mUsername);
   }
 
   public String generateXOAuthString(final String username) {
@@ -104,14 +104,17 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   }
 
   public String getUsername() {
-    return username;
+     return mUsername;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public String loadUsernameFromContacts() {
+    this.mUsername = getUsernameFromContacts();
+    return this.mUsername;
   }
 
-  public String getOwnerEmail() {
+  /** Retrieves the google email account address using the contacts API */
+  protected String getUsernameFromContacts() {
+
     final HttpClient httpClient = new DefaultHttpClient();
     final String url = "https://www.google.com/m8/feeds/contacts/default/thin?max-results=1";
     final StringBuilder email = new StringBuilder();

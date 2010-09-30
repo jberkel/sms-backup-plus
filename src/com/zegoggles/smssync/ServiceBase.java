@@ -18,6 +18,7 @@ import android.app.PendingIntent;
 
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.AuthenticationFailedException;
 
 import static com.zegoggles.smssync.App.*;
 
@@ -54,22 +55,15 @@ public abstract class ServiceBase extends Service {
         return null;
     }
 
-    protected ImapStore.BackupFolder getBackupFolder()
-            throws AuthenticationErrorException {
-        try {
-            return new ImapStore(this).getBackupFolder();
-        } catch (IllegalArgumentException e) {
-            throw new AuthenticationErrorException(e);
-        } catch (MessagingException e) {
-            throw new AuthenticationErrorException(e);
-        }
+    protected ImapStore.BackupFolder getBackupFolder() throws MessagingException {
+      return new ImapStore(this).getBackupFolder();
     }
 
     /**
      * Acquire locks
      * @params background if service is running in background (no UI)
      */
-    protected void acquireLocks(boolean background) throws GeneralErrorException {
+    protected void acquireLocks(boolean background) throws ConnectivityErrorException {
         if (sWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
             sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SmsBackup+");
@@ -159,10 +153,13 @@ public abstract class ServiceBase extends Service {
 
     protected void notifyUser(int icon, String shortText, String title, String text) {
         Notification n = new Notification(icon, shortText, System.currentTimeMillis());
+        n.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL;
+        final Intent intent = new Intent(this, SmsSync.class);
+
         n.setLatestEventInfo(this,
             title,
             text,
-            PendingIntent.getActivity(this, 0, new Intent(this, SmsSync.class), 0));
+            PendingIntent.getActivity(this, 0, intent,  0));
 
         getNotifier().notify(0, n);
     }
@@ -176,31 +173,11 @@ public abstract class ServiceBase extends Service {
     }
 
     /**
-     * Exception indicating an error while synchronizing.
+     * Exception connecting.
      */
-    public static class GeneralErrorException extends Exception {
-        public GeneralErrorException(String msg) {
-            super(msg);
-        }
-        public GeneralErrorException(Throwable t) {
-            super(t);
-        }
-        public SmsSyncState state() { return SmsSyncState.GENERAL_ERROR; };
-    }
-
-    public static class ConnectivityErrorException extends GeneralErrorException {
+    public static class ConnectivityErrorException extends Exception {
         public ConnectivityErrorException(String msg) {
             super(msg);
         }
-        @Override
-        public SmsSyncState state() { return SmsSyncState.CONNECTIVITY_ERROR; };
-    }
-
-    public static class AuthenticationErrorException extends GeneralErrorException {
-        public AuthenticationErrorException(Throwable t) {
-            super(t);
-        }
-        @Override
-        public SmsSyncState state() { return SmsSyncState.AUTH_FAILED; };
     }
 }

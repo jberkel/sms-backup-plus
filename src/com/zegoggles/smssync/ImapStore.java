@@ -8,7 +8,6 @@ import com.fsck.k9.mail.Folder.OpenMode;
 import com.fsck.k9.mail.*;
 
 import android.util.Log;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Comparator;
@@ -20,34 +19,12 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
     private Context context;
 
     public ImapStore(final Context context) throws MessagingException {
-
         super(new Account(Preferences.getPreferences(context), null) {
             @Override
             public String getStoreUri() {
-                String username = PrefStore.getLoginUsername(context);
-                if (username == null)
-                     throw new IllegalStateException("username is null");
-
-                if (PrefStore.useXOAuth(context)) {
-                  return String.format(Consts.IMAP_URI,
-                       PrefStore.getServerProtocol(context),
-                        "xoauth:" + URLEncoder.encode(username),
-                       URLEncoder.encode(PrefStore.getOAuthConsumer(context).generateXOAuthString()),
-                       PrefStore.getServerAddress(context));
-                } else {
-                    String password = PrefStore.getLoginPassword(context);
-                    if (password == null)
-                        throw new IllegalStateException("password is null");
-
-                    return String.format(Consts.IMAP_URI,
-                       PrefStore.getServerProtocol(context),
-                       URLEncoder.encode(username),
-                       URLEncoder.encode(password).replace("+", "%20"),
-                       PrefStore.getServerAddress(context));
-                 }
+              return PrefStore.getStoreUri(context);
             }
         });
-
         this.context = context;
     }
 
@@ -60,8 +37,8 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         BackupFolder folder = new BackupFolder(this, label);
 
         if (!folder.exists()) {
-            Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
             folder.create(FolderType.HOLDS_MESSAGES);
+            Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
         }
         folder.open(OpenMode.READ_WRITE);
         return folder;

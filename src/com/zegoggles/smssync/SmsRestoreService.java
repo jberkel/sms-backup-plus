@@ -20,7 +20,7 @@ import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 import static com.zegoggles.smssync.App.*;
 
 public class SmsRestoreService extends ServiceBase {
-    public static final String TAG = SmsRestoreService.class.getName();
+    public static final String TAG = SmsRestoreService.class.getSimpleName();
 
     private static int sCurrentRestoredItems;
     private static int sItemsToRestoreCount;
@@ -94,10 +94,11 @@ public class SmsRestoreService extends ServiceBase {
                 }
                 updateAllThreads();
                 return insertedIds.size();
-            } catch (GeneralErrorException error) {
-                Log.e(TAG, "error", error);
-                lastError = error.getLocalizedMessage();
-                publishProgress(error.state());
+            } catch (ConnectivityErrorException e) {
+                publishProgress(CONNECTIVITY_ERROR);
+                return null;
+            } catch (AuthenticationFailedException e) {
+                publishProgress(AUTH_FAILED);
                 return null;
             } catch (MessagingException e) {
                 Log.e(TAG, "error", e);
