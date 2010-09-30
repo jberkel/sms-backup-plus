@@ -95,6 +95,7 @@ public class SmsRestoreService extends ServiceBase {
                 updateAllThreads();
                 return insertedIds.size();
             } catch (ConnectivityErrorException e) {
+                lastError = e.getLocalizedMessage();
                 publishProgress(CONNECTIVITY_ERROR);
                 return null;
             } catch (AuthenticationFailedException e) {

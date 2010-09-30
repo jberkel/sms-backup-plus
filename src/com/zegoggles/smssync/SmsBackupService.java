@@ -140,6 +140,7 @@ public class SmsBackupService extends ServiceBase {
               publish(GENERAL_ERROR);
               return null;
             } catch (ConnectivityErrorException e) {
+              lastError = e.getLocalizedMessage();
               publish(CONNECTIVITY_ERROR);
               return null;
             } finally {
