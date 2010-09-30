@@ -1,3 +1,9 @@
+== 1.0.10 09-30-2010
+
+ * Issues: GH-45,46
+ * Use separate preference for XOAuth (avoid conflicts with plain)
+ * Always reload gmail username after completing OAuth dance
+
 == 1.0.9 09-25-2010
 
  * UI code / service integration code rewrite
