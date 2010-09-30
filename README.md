@@ -113,7 +113,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
-[github downloads]: http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.0.9.apk/qr_code
+[github downloads]: http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.0.10.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [shot1]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png
 [shot2]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
