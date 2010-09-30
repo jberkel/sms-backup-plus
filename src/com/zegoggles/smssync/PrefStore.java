@@ -168,7 +168,7 @@ public class PrefStore {
     }
 
     static String getOauthUsername(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, getLoginUsername(ctx));
+        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, getLoginUsername(ctx) /* XXX remove */);
     }
 
     static void setOauthUsername(Context ctx, String s) {
@@ -417,6 +417,13 @@ public class PrefStore {
         return true;
       } catch (android.content.pm.PackageManager.NameNotFoundException e) {
         return false;
+      }
+    }
+
+    static void upgradeOAuthUsername(Context ctx) {
+      if (useXOAuth(ctx) && getSharedPreferences(ctx).getString(PREF_OAUTH_USER, null) == null &&
+                            getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null) != null) {
+        setOauthUsername(ctx, getLoginUsername(ctx));
       }
     }
 }

@@ -101,6 +101,8 @@ public class SmsSync extends PreferenceActivity {
         if (PrefStore.showUpgradeMessage(this)) {
           show(Dialogs.UPGRADE);
         }
+
+        PrefStore.upgradeOAuthUsername(this);
     }
 
     @Override
