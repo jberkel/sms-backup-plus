@@ -734,26 +734,18 @@ public class SmsSync extends PreferenceActivity {
             }
         });
 
-        prefMgr.findPreference(PrefStore.PREF_LOGIN_USER)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                updateUsernameLabel(newValue.toString());
-                return true;
-            }
-        });
-
-        prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_SYNC)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                updateMaxItemsPerSync(newValue.toString());
-                return true;
-            }
-        });
-
         prefMgr.findPreference(PrefStore.PREF_MAX_ITEMS_PER_RESTORE)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 updateMaxItemsPerRestore(newValue.toString());
+                return true;
+            }
+        });
+
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_USER)
+                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                updateUsernameLabel(newValue.toString());
                 return true;
             }
         });
