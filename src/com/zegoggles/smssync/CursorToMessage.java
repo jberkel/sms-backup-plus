@@ -26,9 +26,12 @@ import java.security.MessageDigest;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.Contacts.ContactMethods;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 
 import com.fsck.k9.mail.Address;
@@ -48,9 +51,9 @@ public class CursorToMessage {
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
 
     private static final String[] PHONE_PROJECTION = new String[] {
-        Phones.PERSON_ID, People.NAME, Phones.NUMBER
+        Contacts._ID, Contacts.DISPLAY_NAME
     };
-
+    
     private static final String UNKNOWN_NUMBER = "unknown_number";
     private static final String UNKNOWN_EMAIL = "unknown.email";
     private static final String UNKNOWN_PERSON = "unknown.person";
@@ -205,13 +208,13 @@ public class CursorToMessage {
     /* Look up a person */
     private PersonRecord lookupPerson(String address) {
         if (!mPeopleCache.containsKey(address)) {
-            Uri personUri = Uri.withAppendedPath(Phones.CONTENT_FILTER_URL, Uri.encode(address));
+            Uri personUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
             Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
 
             if (c != null && c.moveToFirst()) {
-                long personId = c.getLong(c.getColumnIndex(Phones.PERSON_ID));
-                String name   = c.getString(c.getColumnIndex(People.NAME));
-                String number = c.getString(c.getColumnIndex(Phones.NUMBER));
+                long personId = c.getLong(c.getColumnIndex(Contacts._ID));
+                String name   = c.getString(c.getColumnIndex(Contacts.DISPLAY_NAME));
+                String number = address;
 
                 String primaryEmail = getPrimaryEmail(personId, number);
 
@@ -246,15 +249,15 @@ public class CursorToMessage {
 
         // Get all e-mail addresses for that person.
         Cursor c = mContext.getContentResolver().query(
-                ContactMethods.CONTENT_EMAIL_URI,
-                new String[] { ContactMethods.DATA },
-                ContactMethods.PERSON_ID + " = ?", new String[] { String.valueOf(personId) },
-                ContactMethods.ISPRIMARY + " DESC");
+        		ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                new String[] { ContactsContract.CommonDataKinds.Email.DATA },
+                ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[] { String.valueOf(personId) },
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY + " DESC");
 
         // Loop over cursor and find a Gmail address for that person.
         // If there is none, pick first e-mail address.
         while (c.moveToNext()) {
-            String e = c.getString(c.getColumnIndex(ContactMethods.DATA));
+            String e = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
             if (primaryEmail == null) {
                 primaryEmail = e;
             }

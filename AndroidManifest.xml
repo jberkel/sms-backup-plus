@@ -49,6 +49,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
-    <uses-sdk android:minSdkVersion="3"/>
+    <uses-sdk android:minSdkVersion="5"/>
     <supports-screens android:smallScreens="true"/>
 </manifest>
