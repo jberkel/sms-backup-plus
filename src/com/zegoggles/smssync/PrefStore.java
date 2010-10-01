@@ -356,6 +356,10 @@ public class PrefStore {
           .commit();
     }
 
+    static boolean isNotificationEnabled(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean("notifications", true);
+    }
+
     static String getServerAddress(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
     }

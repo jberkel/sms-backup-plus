@@ -227,6 +227,8 @@ public class SmsBackupService extends ServiceBase {
         if (!background) {
            publishProgress(s);
         } else {
+           if (!PrefStore.isNotificationEnabled(SmsBackupService.this)) return;
+
            switch(s) {
             case AUTH_FAILED:
                 int details = PrefStore.useXOAuth(context) ? R.string.status_auth_failure_details_xoauth :
