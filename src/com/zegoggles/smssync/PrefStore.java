@@ -135,15 +135,15 @@ public class PrefStore {
           .commit();
     }
 
-    static String getLoginUsername(Context ctx) {
+    static String getImapUsername(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null);
     }
 
-    static void setLoginUsername(Context ctx, String s) {
+    static void setImapUsername(Context ctx, String s) {
        getSharedPreferences(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
     }
 
-    static String getLoginPassword(Context ctx) {
+    static String getImapPassword(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_PASSWORD, null);
     }
 
@@ -168,7 +168,7 @@ public class PrefStore {
     }
 
     static String getOauthUsername(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, getLoginUsername(ctx) /* XXX remove */);
+        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, getImapUsername(ctx) /* XXX remove */);
     }
 
     static void setOauthUsername(Context ctx, String s) {
@@ -195,13 +195,13 @@ public class PrefStore {
     static String getUserEmail(Context ctx) {
       switch(getAuthMode(ctx)) {
         case XOAUTH: return getOauthUsername(ctx);
-        default:     return getLoginUsername(ctx);
+        default:     return getImapUsername(ctx);
       }
     }
 
     static boolean isLoginInformationSet(Context ctx) {
         if (getAuthMode(ctx) == AuthMode.PLAIN) {
-            return getLoginPassword(ctx) != null && getLoginUsername(ctx) != null;
+            return getImapPassword(ctx) != null && getImapUsername(ctx) != null;
         } else {
             return hasOauthTokens(ctx) && getOauthUsername(ctx) != null;
         }
@@ -390,8 +390,8 @@ public class PrefStore {
         } else {
             return String.format(Consts.IMAP_URI,
                getServerProtocol(ctx),
-               URLEncoder.encode(getLoginUsername(ctx)),
-               URLEncoder.encode(getLoginPassword(ctx)).replace("+", "%20"),
+               URLEncoder.encode(getImapUsername(ctx)),
+               URLEncoder.encode(getImapPassword(ctx)).replace("+", "%20"),
                getServerAddress(ctx));
         }
     }
@@ -434,7 +434,7 @@ public class PrefStore {
     static void upgradeOAuthUsername(Context ctx) {
       if (useXOAuth(ctx) && getSharedPreferences(ctx).getString(PREF_OAUTH_USER, null) == null &&
                             getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null) != null) {
-        setOauthUsername(ctx, getLoginUsername(ctx));
+        setOauthUsername(ctx, getImapUsername(ctx));
       }
     }
 }
