@@ -192,6 +192,13 @@ public class PrefStore {
         return getAuthMode(ctx) == AuthMode.XOAUTH && isGmail(ctx);
     }
 
+    static String getUserEmail(Context ctx) {
+      switch(getAuthMode(ctx)) {
+        case XOAUTH: return getOauthUsername(ctx);
+        default:     return getLoginUsername(ctx);
+      }
+    }
+
     static boolean isLoginInformationSet(Context ctx) {
         if (getAuthMode(ctx) == AuthMode.PLAIN) {
             return getLoginPassword(ctx) != null && getLoginUsername(ctx) != null;

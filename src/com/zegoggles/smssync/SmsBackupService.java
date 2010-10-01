@@ -30,6 +30,7 @@ import com.zegoggles.smssync.ServiceBase.SmsSyncState;
 import com.zegoggles.smssync.R;
 
 import java.util.List;
+import java.io.IOException;
 
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 import static com.zegoggles.smssync.App.*;
@@ -183,7 +184,7 @@ public class SmsBackupService extends ServiceBase {
 
           publish(CALC);
 
-          CursorToMessage converter = new CursorToMessage(context, PrefStore.getLoginUsername(context));
+          CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
           while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
               publish(BACKUP);
               ConversionResult result = converter.cursorToMessages(items, MAX_MSG_PER_REQUEST);
@@ -237,7 +238,6 @@ public class SmsBackupService extends ServiceBase {
                 notifyUser(android.R.drawable.stat_sys_warning, "SmsBackup+",
                            getString(R.string.notification_unknown_error), lastError);
                 break;
-
             default:
            }
         }
