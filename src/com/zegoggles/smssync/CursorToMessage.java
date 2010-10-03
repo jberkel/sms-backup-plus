@@ -26,9 +26,13 @@ import java.security.MessageDigest;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.ContactsContract;
 import android.provider.Contacts.ContactMethods;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 
 import com.fsck.k9.mail.Address;
@@ -47,9 +51,12 @@ public class CursorToMessage {
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
 
-    private static final String[] PHONE_PROJECTION = new String[] {
-        Phones.PERSON_ID, People.NAME, Phones.NUMBER
-    };
+    private static final int sdkVersion = Build.VERSION.SDK_INT;
+    private static final String[] PHONE_PROJECTION =
+      sdkVersion < Build.VERSION_CODES.ECLAIR ?
+          new String[] { Phones.PERSON_ID, People.NAME, Phones.NUMBER } :
+          new String[] { Contacts._ID, Contacts.DISPLAY_NAME };
+
 
     private static final String UNKNOWN_NUMBER = "unknown_number";
     private static final String UNKNOWN_EMAIL = "unknown.email";
@@ -205,13 +212,25 @@ public class CursorToMessage {
     /* Look up a person */
     private PersonRecord lookupPerson(String address) {
         if (!mPeopleCache.containsKey(address)) {
-            Uri personUri = Uri.withAppendedPath(Phones.CONTENT_FILTER_URL, Uri.encode(address));
+          Uri personUri = (sdkVersion < Build.VERSION_CODES.ECLAIR) ?
+            Uri.withAppendedPath(Phones.CONTENT_FILTER_URL, Uri.encode(address)) :
+            Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
+
             Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
 
             if (c != null && c.moveToFirst()) {
-                long personId = c.getLong(c.getColumnIndex(Phones.PERSON_ID));
-                String name   = c.getString(c.getColumnIndex(People.NAME));
-                String number = c.getString(c.getColumnIndex(Phones.NUMBER));
+              long personId;
+              String name;
+              String number;
+              if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
+                personId = c.getLong(c.getColumnIndex(Phones.PERSON_ID));
+                name   = c.getString(c.getColumnIndex(People.NAME));
+                number = c.getString(c.getColumnIndex(Phones.NUMBER));
+              } else {
+                  personId = c.getLong(c.getColumnIndex(Contacts._ID));
+                  name   = c.getString(c.getColumnIndex(Contacts.DISPLAY_NAME));
+                  number = address;
+              }
 
                 String primaryEmail = getPrimaryEmail(personId, number);
 
@@ -245,16 +264,27 @@ public class CursorToMessage {
         String primaryEmail = null;
 
         // Get all e-mail addresses for that person.
-        Cursor c = mContext.getContentResolver().query(
-                ContactMethods.CONTENT_EMAIL_URI,
-                new String[] { ContactMethods.DATA },
-                ContactMethods.PERSON_ID + " = ?", new String[] { String.valueOf(personId) },
-                ContactMethods.ISPRIMARY + " DESC");
-
+        Cursor c;
+        int columnIndex;
+        if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
+          c = mContext.getContentResolver().query(
+              ContactMethods.CONTENT_EMAIL_URI,
+              new String[] { ContactMethods.DATA },
+              ContactMethods.PERSON_ID + " = ?", new String[] { String.valueOf(personId) },
+              ContactMethods.ISPRIMARY + " DESC");
+          columnIndex = c.getColumnIndex(ContactMethods.DATA);
+        } else {
+          c = mContext.getContentResolver().query(
+              ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                    new String[] { ContactsContract.CommonDataKinds.Email.DATA },
+                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[] { String.valueOf(personId) },
+                    ContactsContract.CommonDataKinds.Email.IS_PRIMARY + " DESC");
+            columnIndex = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
+        }
         // Loop over cursor and find a Gmail address for that person.
         // If there is none, pick first e-mail address.
         while (c.moveToNext()) {
-            String e = c.getString(c.getColumnIndex(ContactMethods.DATA));
+            String e = c.getString(columnIndex);
             if (primaryEmail == null) {
                 primaryEmail = e;
             }

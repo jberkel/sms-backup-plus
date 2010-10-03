@@ -185,6 +185,7 @@ public class SmsBackupService extends ServiceBase {
           publish(CALC);
 
           CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
+
           while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
               publish(BACKUP);
               ConversionResult result = converter.cursorToMessages(items, MAX_MSG_PER_REQUEST);
