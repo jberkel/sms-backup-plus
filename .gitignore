@@ -9,3 +9,4 @@ local.properties
 .rvmrc
 *.DS_Store
 nbproject
+mmssms.db
