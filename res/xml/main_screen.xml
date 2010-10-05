@@ -1,4 +1,4 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:key="first_preferencescreen">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBoxPreference android:key="connected"
       android:title="@string/ui_connected_label"
@@ -15,6 +15,7 @@
     <PreferenceScreen
       android:title="@string/ui_settings_advanced_label"
       android:summary="@string/ui_settings_advanced_desc">
+
         <CheckBoxPreference android:key="mark_as_read"
           android:title="@string/ui_mark_as_read_label"
           android:summary="@string/ui_mark_as_read_desc"
@@ -51,39 +52,39 @@
           android:defaultValue="-1"
           android:persistent="true"/>
 
-      <PreferenceCategory android:title="@string/auto_backup_settings" 
-              android:dependency="enable_auto_sync"
-              android:persistent="false"
-              android:key="auto_backup_settings">
+        <PreferenceCategory android:title="@string/auto_backup_settings"
+           android:dependency="enable_auto_sync"
+           android:persistent="false"
+           android:key="auto_backup_settings">
 
-      <ListPreference android:key="auto_backup_schedule"
-        android:title="@string/ui_auto_backup_schedule_label"
-        android:summary="@string/ui_auto_backup_schedule_desc"
-        android:entries="@array/auto_backup_schedule_entries"
-        android:entryValues="@array/auto_backup_schedule_values"
-        android:defaultValue="7200"
-        android:persistent="true"/>
+            <ListPreference android:key="auto_backup_schedule"
+              android:title="@string/ui_auto_backup_schedule_label"
+              android:summary="@string/ui_auto_backup_schedule_desc"
+              android:entries="@array/auto_backup_schedule_entries"
+              android:entryValues="@array/auto_backup_schedule_values"
+              android:defaultValue="7200"
+              android:persistent="true"/>
 
-      <ListPreference android:key="auto_backup_incoming_schedule"
-        android:title="@string/ui_auto_backup_incoming_schedule_label"
-        android:summary="@string/ui_auto_backup_incoming_schedule_desc"
-        android:entries="@array/auto_backup_incoming_schedule_entries"
-        android:entryValues="@array/auto_backup_incoming_schedule_values"
-        android:defaultValue="180"
-        android:persistent="true"/>
+            <ListPreference android:key="auto_backup_incoming_schedule"
+              android:title="@string/ui_auto_backup_incoming_schedule_label"
+              android:summary="@string/ui_auto_backup_incoming_schedule_desc"
+              android:entries="@array/auto_backup_incoming_schedule_entries"
+              android:entryValues="@array/auto_backup_incoming_schedule_values"
+              android:defaultValue="180"
+              android:persistent="true"/>
 
-      <CheckBoxPreference android:key="wifi_only"
-          android:title="@string/ui_wifi_only_label"
-          android:summary="@string/ui_wifi_only_desc"
-          android:persistent="true"
-          android:defaultValue="false"/>
+            <CheckBoxPreference android:key="wifi_only"
+              android:title="@string/ui_wifi_only_label"
+              android:summary="@string/ui_wifi_only_desc"
+              android:persistent="true"
+              android:defaultValue="false"/>
 
-      <CheckBoxPreference android:key="notifications"
-            android:title="@string/ui_notifications_label"
-            android:summary="@string/ui_notifications_desc"
-            android:persistent="true"
-            android:defaultValue="true"/>
-      </PreferenceCategory>
+            <CheckBoxPreference android:key="notifications"
+              android:title="@string/ui_notifications_label"
+              android:summary="@string/ui_notifications_desc"
+              android:persistent="true"
+              android:defaultValue="true"/>
+        </PreferenceCategory>
 
         <PreferenceScreen
           android:title="@string/ui_settings_advanced_server_label"
@@ -97,7 +98,10 @@
               android:defaultValue="xoauth"
               android:persistent="true"/>
 
-            <PreferenceCategory android:key="imap_settings" android:persistent="false" android:title="@string/imap_settings">
+            <PreferenceCategory android:key="imap_settings"
+                android:persistent="false"
+                android:title="@string/imap_settings">
+
               <EditTextPreference android:key="server_address"
                 android:title="@string/ui_server_label"
                 android:summary="@string/ui_server_desc"
@@ -115,19 +119,19 @@
                 android:persistent="true"/>
 
               <EditTextPreference android:key="login_user"
-                  android:title="@string/ui_login_label"
-                  android:summary="@string/ui_login_desc"
-                  android:singleLine="true"
-                  android:dialogMessage="@string/ui_login_dialog_msg"
-                  android:persistent="true"/>
+                android:title="@string/ui_login_label"
+                android:summary="@string/ui_login_desc"
+                android:singleLine="true"
+                android:dialogMessage="@string/ui_login_dialog_msg"
+                android:persistent="true"/>
 
-               <EditTextPreference android:key="login_password"
-                  android:title="@string/ui_password_label"
-                  android:summary="@string/ui_password_desc"
-                  android:singleLine="true"
-                  android:password="true"
-                  android:dialogMessage="@string/ui_password_dialog_msg"
-                  android:persistent="true"/>
+              <EditTextPreference android:key="login_password"
+                android:title="@string/ui_password_label"
+                android:summary="@string/ui_password_desc"
+                android:singleLine="true"
+                android:password="true"
+                android:dialogMessage="@string/ui_password_dialog_msg"
+                android:persistent="true"/>
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceScreen>
