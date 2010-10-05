@@ -32,7 +32,6 @@ import android.provider.Contacts.ContactMethods;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
 import android.provider.ContactsContract.Contacts;
-import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 
 import com.fsck.k9.mail.Address;
@@ -229,7 +228,7 @@ public class CursorToMessage {
     private PersonRecord lookupPerson(final String address) {
         if (!mPeopleCache.containsKey(address)) {
             Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
-                                                 PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
+                                                 Phones.CONTENT_FILTER_URL, Uri.encode(address));
 
             Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
             final PersonRecord record = new PersonRecord();
