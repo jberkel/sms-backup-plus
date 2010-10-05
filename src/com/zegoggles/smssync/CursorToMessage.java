@@ -234,17 +234,17 @@ public class CursorToMessage {
             final PersonRecord record = new PersonRecord();
             if (c != null && c.moveToFirst()) {
                 long id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
-                record._id  = String.valueOf(id);
-                record.name = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
-                record.email = getPrimaryEmail(id, record.number);
-                record.number = NEW_CONTACT_API ? address :
-                                                  c.getString(c.getColumnIndex(PHONE_PROJECTION[2]));
+                record._id    = String.valueOf(id);
+                record.name   = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
+                record.email  = getPrimaryEmail(id, record.number);
+                record.number = sanitize(NEW_CONTACT_API ? address :
+                                                  c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
             } else {
                 if (LOCAL_LOGV) Log.v(Consts.TAG, "Looked up unknown address: " + address);
 
-                record._id = address;
-                record.number = address;
-                record.email = encodeLocal(address) + "@" + UNKNOWN_PERSON;
+                record._id    = sanitize(address);
+                record.number = sanitize(address);
+                record.email  = encodeLocal(address) + "@" + UNKNOWN_PERSON;
             }
             mPeopleCache.put(address, record);
 
