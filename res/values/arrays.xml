@@ -28,6 +28,18 @@
     <item>-1</item>
   </string-array>
 
+  <string-array name="email_address_style_entries">
+    <item>Name</item>
+    <item>Name (+00 123456)</item>
+    <item>+00 123456</item>
+  </string-array>
+
+  <string-array name="email_address_style_values">
+    <item>name</item>
+    <item>name_and_number</item>
+    <item>number</item>
+  </string-array>
+
   <string-array name="auto_backup_schedule_entries">
     <item>30 mins</item>
     <item>1 h</item>

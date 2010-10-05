@@ -77,6 +77,8 @@ public class PrefStore {
     /** Preference for storing whether restored messages should be marked as read. */
     static final String PREF_MARK_AS_READ_ON_RESTORE = "mark_as_read_on_restore";
 
+    static final String PREF_EMAIL_ADDRESS_STYLE = "email_address_style";
+
     static final String PREF_PREFILLED  = "prefilled";
     static final String PREF_CONNECTED  = "connected";
     static final String PREF_WIFI_ONLY  = "wifi_only";
@@ -231,6 +233,10 @@ public class PrefStore {
 
     static int getMaxItemsPerRestore(Context ctx) {
       return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_RESTORE, DEFAULT_MAX_ITEMS_PER_RESTORE);
+    }
+
+    static String getEmailAddressStyle(Context ctx) {
+      return getSharedPreferences(ctx).getString(PREF_EMAIL_ADDRESS_STYLE, null);
     }
 
     static boolean isWifiOnly(Context ctx) {

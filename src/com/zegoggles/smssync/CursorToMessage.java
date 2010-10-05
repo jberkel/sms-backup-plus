@@ -47,7 +47,7 @@ import org.apache.james.mime4j.codec.EncoderUtil;
 import static com.zegoggles.smssync.App.*;
 
 public class CursorToMessage {
-    //ContactsContract.CommonDataKinds.Email.CONTENT_URI)
+    //ContactsContract.CommonDataKinds.Email.CONTENT_URI
     public static final Uri ECLAIR_CONTENT_URI = Uri.parse("content://com.android.contacts/data/emails");
 
     // PhoneLookup.CONTENT_FILTER_URI
@@ -77,6 +77,9 @@ public class CursorToMessage {
 
     private String mReferenceValue;
     private boolean mMarkAsRead = false;
+
+    private enum Style { NAME, NAME_AND_NUMBER, NUMBER };
+    private Style mStyle = Style.NAME;
 
     public static interface Headers {
         String ID = "X-smssync-id";
@@ -111,6 +114,10 @@ public class CursorToMessage {
         }
 
         mMarkAsRead = PrefStore.getMarkAsRead(ctx);
+
+        if (PrefStore.getEmailAddressStyle(ctx) != null) {
+          mStyle = Style.valueOf(PrefStore.getEmailAddressStyle(ctx).toUpperCase());
+        }
 
         Log.d(Consts.TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
@@ -149,18 +156,18 @@ public class CursorToMessage {
         }
 
         PersonRecord record = lookupPerson(address);
-        msg.setSubject("SMS with " + record.name);
+        msg.setSubject("SMS with " + record.getName());
 
         TextBody body = new TextBody(msgMap.get(SmsConsts.BODY));
 
         int messageType = Integer.valueOf(msgMap.get(SmsConsts.TYPE));
         if (SmsConsts.MESSAGE_TYPE_INBOX == messageType) {
             // Received message
-            msg.setFrom(record.address);
+            msg.setFrom(record.getAddress());
             msg.setRecipient(RecipientType.TO, mUserAddress);
         } else {
             // Sent message
-            msg.setRecipient(RecipientType.TO, record.address);
+            msg.setRecipient(RecipientType.TO, record.getAddress());
             msg.setFrom(mUserAddress);
         }
 
@@ -176,9 +183,10 @@ public class CursorToMessage {
         }
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
-        msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, record._id));
+        msg.setHeader("References",
+                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
         msg.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
-        msg.setHeader(Headers.ADDRESS, address);
+        msg.setHeader(Headers.ADDRESS, sanitize(address));
         msg.setHeader(Headers.TYPE, msgMap.get(SmsConsts.TYPE));
         msg.setHeader(Headers.DATE, msgMap.get(SmsConsts.DATE));
         msg.setHeader(Headers.THREAD_ID, msgMap.get(SmsConsts.THREAD_ID));
@@ -218,36 +226,28 @@ public class CursorToMessage {
     }
 
     /* Look up a person */
-    private PersonRecord lookupPerson(String address) {
+    private PersonRecord lookupPerson(final String address) {
         if (!mPeopleCache.containsKey(address)) {
             Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
                                                  PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
 
             Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
-
+            final PersonRecord record = new PersonRecord();
             if (c != null && c.moveToFirst()) {
-                long personId = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
-                String name   = c.getString(c.getColumnIndex(PHONE_PROJECTION[1]));
-                String number = NEW_CONTACT_API ? address : c.getString(c.getColumnIndex(PHONE_PROJECTION[2]));
-                String primaryEmail = getPrimaryEmail(personId, number);
-
-                PersonRecord record = new PersonRecord();
-                record._id = String.valueOf(personId);
-                record.name = name;
-                record.address = new Address(primaryEmail, encodeDisplayName(name));
-
-                mPeopleCache.put(address, record);
+                long id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
+                record._id  = String.valueOf(id);
+                record.name = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
+                record.email = getPrimaryEmail(id, record.number);
+                record.number = NEW_CONTACT_API ? address :
+                                                  c.getString(c.getColumnIndex(PHONE_PROJECTION[2]));
             } else {
                 if (LOCAL_LOGV) Log.v(Consts.TAG, "Looked up unknown address: " + address);
 
-                PersonRecord record = new PersonRecord();
-                record = new PersonRecord();
                 record._id = address;
-                record.name = address;
-                record.address = new Address(encodeLocal(address) + "@" + UNKNOWN_PERSON);
-
-                mPeopleCache.put(address, record);
+                record.number = address;
+                record.email = encodeLocal(address) + "@" + UNKNOWN_PERSON;
             }
+            mPeopleCache.put(address, record);
 
             if (c != null) c.close();
         }
@@ -302,12 +302,16 @@ public class CursorToMessage {
         }
     }
 
+    private static String sanitize(String s) {
+        return s != null ? s.replaceAll("\\p{Cntrl}", "") : null;
+    }
+
     private static String encodeLocal(String s) {
-      return (s != null ? EncoderUtil.encodeAddressLocalPart(s) : null);
+      return (s != null ? EncoderUtil.encodeAddressLocalPart(sanitize(s)) : null);
     }
 
     private static String encodeDisplayName(String s) {
-      return (s != null ? EncoderUtil.encodeAddressDisplayName(s) : null);
+      return (s != null ? EncoderUtil.encodeAddressDisplayName(sanitize(s)) : null);
     }
 
     private static String getUnknownEmail(String number) {
@@ -328,14 +332,34 @@ public class CursorToMessage {
       return sb.toString();
     }
 
-    public static class ConversionResult {
+    public class ConversionResult {
         public long maxDate;
         public List<Message> messageList;
     }
 
-    private static class PersonRecord {
-        String _id;
-        String name;
-        Address address;
+    private class PersonRecord {
+        public String _id, name, email, number;
+        private Address mAddress;
+
+        public Address getAddress() {
+          if (mAddress == null) {
+            switch(mStyle) {
+              case NUMBER:
+                  mAddress = new Address(email, number);
+                  break;
+              case NAME_AND_NUMBER:
+                  mAddress = new Address(email,
+                                         name == null ? number : String.format("%s (%s)", name, number));
+                  break;
+              case NAME:
+                  mAddress = new Address(email, name);
+                  break;
+            }
+          }
+          return mAddress;
+        }
+        public String getName() {
+          return sanitize(name != null ? name : number);
+        }
     }
 }

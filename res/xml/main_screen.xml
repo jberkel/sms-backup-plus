@@ -52,6 +52,14 @@
           android:defaultValue="-1"
           android:persistent="true"/>
 
+        <ListPreference android:key="email_address_style"
+          android:title="@string/ui_email_address_style_label"
+          android:summary="@string/ui_email_address_style_desc"
+          android:entries="@array/email_address_style_entries"
+          android:entryValues="@array/email_address_style_values"
+          android:defaultValue="name"
+          android:persistent="true"/>
+
         <PreferenceCategory android:title="@string/auto_backup_settings"
            android:dependency="enable_auto_sync"
            android:persistent="false"

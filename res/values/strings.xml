@@ -96,6 +96,10 @@
   <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
   <string name="ui_mark_as_read_restore_label">Mark as read (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Whether to mark all restored SMS as read or not.</string>
+
+  <string name="ui_email_address_style_label">Email address style</string>
+  <string name="ui_email_address_style_desc">Format of email addresses</string>
+
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
 
