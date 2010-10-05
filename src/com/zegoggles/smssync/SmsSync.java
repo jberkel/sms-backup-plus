@@ -128,10 +128,8 @@ public class SmsSync extends PreferenceActivity {
 
         statusPref.update();
 
-        // XXX
-        getPreferenceManager()
-          .findPreference(PrefStore.PREF_LOGIN_USER)
-          .setEnabled(!PrefStore.useXOAuth(this));
+        updateImapSettings(!PrefStore.useXOAuth(this));
+        updateAutoBackupSettings(PrefStore.isEnableAutoSync(this));
     }
 
     @Override
@@ -689,8 +687,16 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
-    private void setPreferenceListeners(final PreferenceManager prefMgr) {
+    private void updateImapSettings(boolean enabled) {
+      getPreferenceManager().findPreference("imap_settings").setEnabled(enabled);
+    }
 
+    private void updateAutoBackupSettings(boolean enabled) {
+      getPreferenceManager().findPreference("auto_backup_settings").setEnabled(enabled);
+    }
+
+
+    private void setPreferenceListeners(final PreferenceManager prefMgr) {
         prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -706,6 +712,8 @@ public class SmsSync extends PreferenceActivity {
                 if (!isEnabled) {
                     Alarms.cancel(SmsSync.this);
                 }
+
+                updateAutoBackupSettings(isEnabled);
                 return true;
              }
         });
@@ -716,10 +724,9 @@ public class SmsSync extends PreferenceActivity {
                 final boolean plain = (PrefStore.AuthMode.PLAIN) ==
                   PrefStore.AuthMode.valueOf(newValue.toString().toUpperCase());
 
-                updateConnected().setEnabled(!plain);
-                prefMgr.findPreference(PrefStore.PREF_LOGIN_USER).setEnabled(plain);
-                prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD).setEnabled(plain);
-                return true;
+               updateConnected().setEnabled(!plain);
+               updateImapSettings(plain);
+               return true;
             }
         });
 

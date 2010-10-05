@@ -69,8 +69,9 @@
   <string name="ui_settings_advanced_server_label">Server settings</string>
   <string name="ui_settings_advanced_server_desc">Do not change unless you know what you are doing!</string>
 
+  <string name="imap_settings">IMAP settings</string>
   <string name="ui_login_label">Username</string>
-  <string name="ui_login_desc">Your Google account/e-mail address.</string>
+  <string name="ui_login_desc">Your IMAP account/e-mail address.</string>
   <string name="ui_login_dialog_msg">WARNING: Changing the username might break things when using XOAuth.</string>
   <string name="ui_password_label">Password</string>
   <string name="ui_password_desc">Your IMAP account password. Only used when XOAuth is disabled.</string>
@@ -98,17 +99,18 @@
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
 
-  <string name="ui_auto_backup_schedule_label">Regular backup schedule</string>
+  <string name="auto_backup_settings">Auto backup</string>
+  <string name="ui_auto_backup_schedule_label">Regular schedule</string>
   <string name="ui_auto_backup_schedule_desc">When to backup SMS</string>
 
-  <string name="ui_auto_backup_incoming_schedule_label">Incoming backup schedule</string>
+  <string name="ui_auto_backup_incoming_schedule_label">Incoming schedule</string>
   <string name="ui_auto_backup_incoming_schedule_desc">When to backup incoming SMS (after arrival)</string>
 
   <string name="ui_wifi_only_label">Require Wifi</string>
   <string name="ui_wifi_only_desc">Only backup/restore when connected to Wifi</string>
 
   <string name="ui_notifications_label">Notifications</string>
-  <string name="ui_notifications_desc">Background notifications (auto backup)</string>
+  <string name="ui_notifications_desc">Background notifications</string>
 
   <string name="error_wifi_only_no_connection">No Wifi connection</string>
   <string name="error_no_connection">No internet connection</string>
