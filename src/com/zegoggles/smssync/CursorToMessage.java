@@ -353,6 +353,8 @@ public class CursorToMessage {
               case NAME:
                   mAddress = new Address(email, name);
                   break;
+              default:
+                  mAddress = new Address(email);
             }
           }
           return mAddress;
