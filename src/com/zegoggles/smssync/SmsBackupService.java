@@ -212,12 +212,13 @@ public class SmsBackupService extends ServiceBase {
        * <code>date &lt; {@link #getMaxSyncedDate()}</code> which are no drafs.
        */
       private Cursor getItemsToSync(int max) {
-          Log.d(TAG, "getItemToSync(max=" + max+")");
-          String sortOrder = SmsConsts.DATE;
-
-          if (max > 0) {
-            sortOrder += " LIMIT " + max;
+          if (LOCAL_LOGV) {
+            Log.v(TAG, String.format("getItemToSync(max=%s),  maxSyncedDate=%d", max, getMaxSyncedDate()));
           }
+
+          String sortOrder = SmsConsts.DATE;
+          if (max > 0) sortOrder += " LIMIT " + max;
+
           return getContentResolver().query(SMS_PROVIDER, null,
                 String.format("%s > ? AND %s <> ?", SmsConsts.DATE, SmsConsts.TYPE),
                 new String[] { String.valueOf(getMaxSyncedDate()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
