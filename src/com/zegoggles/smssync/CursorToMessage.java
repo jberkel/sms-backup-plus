@@ -243,11 +243,9 @@ public class CursorToMessage {
         Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null); 
 
         // _id, mid, seq, ct, name, chset, cd, fn, cid, cl, ctt_s, ctt_t, _data, text
-        Log.d(SmsBackupService.TAG, "count: " + curPart.getCount());
         while(curPart.moveToNext()) {
         	String id = curPart.getString(curPart.getColumnIndex("_id"));
         	String contentType = curPart.getString(curPart.getColumnIndex("ct"));
-        	Log.d(SmsBackupService.TAG, "   type " + contentType);
         	if (contentType.equals("image/jpeg")) {
         		InputStream is = inputStreamForPart(id);
         		

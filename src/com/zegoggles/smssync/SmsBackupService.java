@@ -213,9 +213,7 @@ public class SmsBackupService extends ServiceBase {
               messages = null;
           }
           
-          Log.d(TAG, "hitting mms block");
           while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-        	  Log.d(TAG, "pulling mms");
         	  publish(BACKUP);
               ConversionResult result = converter.cursorToMessages(mmsItems, MAX_MSG_PER_REQUEST, true);
               List<Message> messages = result.messageList;
