@@ -21,9 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.security.MessageDigest;
 
 import android.content.Context;
@@ -38,13 +42,21 @@ import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 
 import com.fsck.k9.mail.Address;
+import com.fsck.k9.mail.Body;
+import com.fsck.k9.mail.BodyPart;
 import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.Message.RecipientType;
+import com.fsck.k9.mail.filter.Base64OutputStream;
+import com.fsck.k9.mail.internet.MimeBodyPart;
+import com.fsck.k9.mail.internet.MimeHeader;
 import com.fsck.k9.mail.internet.MimeMessage;
+import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.TextBody;
+import com.fsck.k9.mail.store.LocalStore.LocalAttachmentBody;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
 import static com.zegoggles.smssync.App.*;
 
@@ -215,12 +227,11 @@ public class CursorToMessage {
         String address = null;
         boolean inbound = true;
         
-        int dbId = Integer.parseInt(msgMap.get(MmsConsts.ID));
         Uri msgRef = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
         Uri uriAddr = Uri.withAppendedPath(msgRef, "addr");
         Cursor curAddr = mContext.getContentResolver().query(uriAddr, null, null, null, null);
  
-        TextBody body = new TextBody("");
+        MimeMultipart body = new MimeMultipart();
         
         // TODO: this is probably not the best way to determine if a message is inbound or outbound.
         // Also, messages can have multiple recipients (more than 2 addresses)
@@ -247,17 +258,24 @@ public class CursorToMessage {
         	String id = curPart.getString(curPart.getColumnIndex("_id"));
         	String contentType = curPart.getString(curPart.getColumnIndex("ct"));
         	if (contentType.equals("image/jpeg")) {
-        		InputStream is = inputStreamForPart(id);
+        		String name = "attachment.jpg";
+        		Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
+        		MmsAttachmentBody attachment = new MmsAttachmentBody(partUri, mContext);
         		
-        		// TODO: attach image to email
-        		
+        		BodyPart imagePart = new MimeBodyPart(attachment, contentType);
+        		imagePart.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
+                        String.format("%s;\n name=\"%s\"",
+                        		contentType, name));
+        		imagePart.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
+        		//imagePart.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,
+                //      String.format("attachment;\n filename=\"%s\";\n size=%d", name, size);
+        		body.addBodyPart(imagePart);
         	} else if (contentType.equals("text/plain")) {
-        		body = new TextBody(curPart.getString(curPart.getColumnIndex("text")));
+        		Body textBody = new TextBody(curPart.getString(curPart.getColumnIndex("text")));
+        		BodyPart textPart = new MimeBodyPart(textBody);
+        		body.addBodyPart(textPart);
         	}
-	    } 
-        if (address != null) {
-        	return null;
-        }
+	    }
         
         PersonRecord record = lookupPerson(address);
         msg.setSubject("SMS with " + record.getName());
@@ -275,10 +293,10 @@ public class CursorToMessage {
         msg.setBody(body);
 
         try {
-          Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
+          Date then = new Date(Long.valueOf(msgMap.get(MmsConsts.DATE)));
           msg.setSentDate(then);
           msg.setInternalDate(then);
-          msg.setHeader("Message-ID", createMessageId(then, address, dbId));
+          msg.setHeader("Message-ID", createMessageId(then, address, 1));
         } catch (NumberFormatException n) {
           Log.e(Consts.TAG, "error parsing date", n);
         }
@@ -402,16 +420,6 @@ public class CursorToMessage {
           return primaryEmail;
         }
     }
-    
-    private InputStream inputStreamForPart(String id) 
-    { 
-    	Uri partURI = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
-    	try {
-    		return mContext.getContentResolver().openInputStream(partURI);
-    	} catch (FileNotFoundException e) {
-    		return null;
-    	}
-    }
 
     private static String sanitize(String s) {
         return s != null ? s.replaceAll("\\p{Cntrl}", "") : null;
@@ -473,6 +481,47 @@ public class CursorToMessage {
         }
         public String getName() {
           return sanitize(name != null ? name : number);
+        }
+    }
+    
+    public static class MmsAttachmentBody implements Body
+    {
+        private Context mContext;
+        private Uri mUri;
+
+        public MmsAttachmentBody(Uri uri, Context context)
+        {
+            mContext = context;
+            mUri = uri;
+        }
+
+        public InputStream getInputStream() throws MessagingException
+        {
+            try
+            {
+                return mContext.getContentResolver().openInputStream(mUri);
+            }
+            catch (FileNotFoundException fnfe)
+            {
+                /*
+                 * Since it's completely normal for us to try to serve up attachments that
+                 * have been blown away, we just return an empty stream.
+                 */
+                return new ByteArrayInputStream(new byte[0]);
+            }
+        }
+
+        public void writeTo(OutputStream out) throws IOException, MessagingException
+        {
+            InputStream in = getInputStream();
+            Base64OutputStream base64Out = new Base64OutputStream(out);
+            IOUtils.copy(in, base64Out);
+            base64Out.close();
+        }
+
+        public Uri getContentUri()
+        {
+            return mUri;
         }
     }
 }

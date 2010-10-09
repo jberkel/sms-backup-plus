@@ -225,6 +225,7 @@ public class SmsBackupService extends ServiceBase {
               folder.appendMessages(messages.toArray(new Message[messages.size()]));
               sCurrentSyncedItems += messages.size();
               publish(BACKUP);
+
               updateMaxSyncedDateMms(result.maxDate);
 
               result = null;
