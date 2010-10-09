@@ -15,6 +15,8 @@ import java.util.Arrays;
 import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
 import java.io.IOException;
 
+import static com.zegoggles.smssync.App.*;
+
 public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
     private Context context;
 
@@ -63,16 +65,15 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
 
             Message[] msgs = search(searcher, null);
 
-            Log.d(Consts.TAG, "Found " + msgs.length + " msgs" + (since == null ? "" : " (since " + since + ")"));
-
+            Log.i(Consts.TAG, "Found " + msgs.length + " msgs" + (since == null ? "" : " (since " + since + ")"));
             if (max != -1 && msgs.length > max) {
-                Log.d(Consts.TAG, "Fetching envelopes");
+                if (LOCAL_LOGV) Log.v(Consts.TAG, "Fetching envelopes");
 
                 FetchProfile fp = new FetchProfile();
                 fp.add(FetchProfile.Item.DATE);
                 fetch(msgs, fp, null);
 
-                Log.d(Consts.TAG, "Sorting");
+                if (LOCAL_LOGV) Log.v(Consts.TAG, "Sorting");
                 //Debug.startMethodTracing("sorting");
                 Arrays.sort(msgs, new Comparator<Message>() {
                     public int compare(Message m1, Message m2) {
@@ -81,6 +82,7 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                     }
                 });
                 //Debug.stopMethodTracing();
+                if (LOCAL_LOGV) Log.v(Consts.TAG, "Sorting done");
 
                 Message[] recent = new Message[max];
                 System.arraycopy(msgs, 0, recent, 0, max);
