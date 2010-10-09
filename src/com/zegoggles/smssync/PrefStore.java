@@ -27,7 +27,8 @@ public class PrefStore {
      * Preference key containing the maximum date of messages that were
      * successfully synced.
      */
-    static final String PREF_MAX_SYNCED_DATE = "max_synced_date";
+    static final String PREF_MAX_SYNCED_DATE_SMS = "max_synced_date";
+    static final String PREF_MAX_SYNCED_DATE_MMS = "max_synced_date_mms";
 
     /** Preference key containing the Google account username. */
     static final String PREF_LOGIN_USER = "login_user";
@@ -83,7 +84,7 @@ public class PrefStore {
     static final String PREF_CONNECTED  = "connected";
     static final String PREF_WIFI_ONLY  = "wifi_only";
 
-    /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE}. */
+    /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE_SMS}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
 
     /** Default value for {@link PrefStore#PREF_IMAP_FOLDER}. */
@@ -123,17 +124,27 @@ public class PrefStore {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
-    static long getMaxSyncedDate(Context ctx) {
-        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE, DEFAULT_MAX_SYNCED_DATE);
+    static long getMaxSyncedDateSms(Context ctx) {
+        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_SMS, DEFAULT_MAX_SYNCED_DATE);
+    }
+    
+    static long getMaxSyncedDateMms(Context ctx) {
+        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_MMS, DEFAULT_MAX_SYNCED_DATE);
     }
 
     static boolean isMaxSyncedDateSet(Context ctx) {
-        return getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE);
+        return getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
     }
 
-    static void setMaxSyncedDate(Context ctx, long maxSyncedDate) {
+    static void setMaxSyncedDateSms(Context ctx, long maxSyncedDate) {
         getSharedPreferences(ctx).edit()
-          .putLong(PREF_MAX_SYNCED_DATE, maxSyncedDate)
+          .putLong(PREF_MAX_SYNCED_DATE_SMS, maxSyncedDate)
+          .commit();
+    }
+    
+    static void setMaxSyncedDateMms(Context ctx, long maxSyncedDate) {
+        getSharedPreferences(ctx).edit()
+          .putLong(PREF_MAX_SYNCED_DATE_MMS, maxSyncedDate)
           .commit();
     }
 
@@ -332,7 +343,7 @@ public class PrefStore {
     }
 
     static boolean isFirstSync(Context ctx) {
-        return !getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE);
+        return !getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
     }
 
     static boolean isFirstUse(Context ctx) {
@@ -357,7 +368,7 @@ public class PrefStore {
 
     static void clearLastSyncData(Context ctx) {
         getSharedPreferences(ctx).edit()
-          .remove(PREF_MAX_SYNCED_DATE)
+          .remove(PREF_MAX_SYNCED_DATE_SMS)
           .remove(PREF_LAST_SYNC)
           .commit();
     }

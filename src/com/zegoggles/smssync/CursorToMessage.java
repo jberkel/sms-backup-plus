@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 
 import android.content.Context;
@@ -121,7 +124,7 @@ public class CursorToMessage {
         Log.d(Consts.TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
 
-    public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries) throws MessagingException {
+    public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries, boolean isMms) throws MessagingException {
         List<Message> messageList = new ArrayList<Message>(maxEntries);
         long maxDate = PrefStore.DEFAULT_MAX_SYNCED_DATE;
         final String[] columns = cursor.getColumnNames();
@@ -134,9 +137,16 @@ public class CursorToMessage {
 
             Map<String, String> msgMap = new HashMap<String, String>(columns.length);
             for (int i = 0; i < columns.length; i++) {
-              msgMap.put(columns[i], cursor.getString(i));
+                msgMap.put(columns[i], cursor.getString(i));
             }
-            Message m = messageFromMap(msgMap);
+            
+            Message m;
+            if (isMms) {
+                m = messageFromMapMms(msgMap);
+            } else {
+            	m = messageFromMapSms(msgMap);
+            }
+            
             if (m != null) messageList.add(m);
         }
 
@@ -146,7 +156,7 @@ public class CursorToMessage {
         return result;
     }
 
-    private Message messageFromMap(Map<String, String> msgMap) throws MessagingException {
+    private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
         Message msg = new MimeMessage();
 
         String address = msgMap.get(SmsConsts.ADDRESS);
@@ -193,6 +203,100 @@ public class CursorToMessage {
         msg.setHeader(Headers.STATUS, msgMap.get(SmsConsts.STATUS));
         msg.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
         msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
+        msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
+        msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
+        msg.setFlag(Flag.SEEN, mMarkAsRead);
+
+        return msg;
+    }
+    
+    private Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
+        Message msg = new MimeMessage();
+        String address = null;
+        boolean inbound = true;
+        
+        int dbId = Integer.parseInt(msgMap.get(MmsConsts.ID));
+        Uri msgRef = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
+        Uri uriAddr = Uri.withAppendedPath(msgRef, "addr");
+        Cursor curAddr = mContext.getContentResolver().query(uriAddr, null, null, null, null);
+ 
+        TextBody body = new TextBody("");
+        
+        // TODO: this is probably not the best way to determine if a message is inbound or outbound.
+        // Also, messages can have multiple recipients (more than 2 addresses)
+        if (curAddr.getCount() > 1) { 
+        	curAddr.moveToNext();
+            address = curAddr.getString(curAddr.getColumnIndex("address"));
+            
+            if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
+            	inbound = false;
+            	curAddr.moveToNext();
+            	address = curAddr.getString(curAddr.getColumnIndex("address"));
+            }
+        }
+        
+        if (address == null || address.trim().length() == 0) {
+           return null;
+        }
+        
+        Uri uriPart = Uri.withAppendedPath(msgRef, "part");
+        Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null); 
+
+        // _id, mid, seq, ct, name, chset, cd, fn, cid, cl, ctt_s, ctt_t, _data, text
+        Log.d(SmsBackupService.TAG, "count: " + curPart.getCount());
+        while(curPart.moveToNext()) {
+        	String id = curPart.getString(curPart.getColumnIndex("_id"));
+        	String contentType = curPart.getString(curPart.getColumnIndex("ct"));
+        	Log.d(SmsBackupService.TAG, "   type " + contentType);
+        	if (contentType.equals("image/jpeg")) {
+        		InputStream is = inputStreamForPart(id);
+        		
+        		// TODO: attach image to email
+        		
+        	} else if (contentType.equals("text/plain")) {
+        		body = new TextBody(curPart.getString(curPart.getColumnIndex("text")));
+        	}
+	    } 
+        if (address != null) {
+        	return null;
+        }
+        
+        PersonRecord record = lookupPerson(address);
+        msg.setSubject("SMS with " + record.getName());
+
+        if (inbound) {
+            // Received message
+            msg.setFrom(record.getAddress());
+            msg.setRecipient(RecipientType.TO, mUserAddress);
+        } else {
+            // Sent message
+            msg.setRecipient(RecipientType.TO, record.getAddress());
+            msg.setFrom(mUserAddress);
+        }
+
+        msg.setBody(body);
+
+        try {
+          Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
+          msg.setSentDate(then);
+          msg.setInternalDate(then);
+          msg.setHeader("Message-ID", createMessageId(then, address, dbId));
+        } catch (NumberFormatException n) {
+          Log.e(Consts.TAG, "error parsing date", n);
+        }
+
+        // Threading by person ID, not by thread ID. I think this value is more stable.
+        msg.setHeader("References",
+                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
+        msg.setHeader(Headers.ID, msgMap.get(MmsConsts.ID));
+        msg.setHeader(Headers.ADDRESS, sanitize(address));
+        msg.setHeader(Headers.TYPE, "mms");
+        msg.setHeader(Headers.DATE, msgMap.get(MmsConsts.DATE));
+        msg.setHeader(Headers.THREAD_ID, msgMap.get(MmsConsts.THREAD_ID));
+        msg.setHeader(Headers.READ, msgMap.get(MmsConsts.READ));
+        //msg.setHeader(Headers.STATUS, msgMap.get(SmsConsts.STATUS));
+        //msg.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
+        //msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
         msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
         msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
         msg.setFlag(Flag.SEEN, mMarkAsRead);
@@ -299,6 +403,16 @@ public class CursorToMessage {
         } else {
           return primaryEmail;
         }
+    }
+    
+    private InputStream inputStreamForPart(String id) 
+    { 
+    	Uri partURI = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
+    	try {
+    		return mContext.getContentResolver().openInputStream(partURI);
+    	} catch (FileNotFoundException e) {
+    		return null;
+    	}
     }
 
     private static String sanitize(String s) {

@@ -47,6 +47,8 @@ public class SmsBackupService extends ServiceBase {
 
     /** Number of messages that currently need a sync. */
     private static int sItemsToSync;
+    private static int sItemsToSyncSms;
+    private static int sItemsToSyncMms;
 
     /** Number of messages already synced during this cycle.  */
     private static int sCurrentSyncedItems;
@@ -101,21 +103,27 @@ public class SmsBackupService extends ServiceBase {
                return skip();
             }
 
-            Cursor items = null;
+            Cursor smsItems = null;
+            Cursor mmsItems = null;
             Folder folder = null;
             try {
               acquireLocks(background);
-              items = getItemsToSync(maxItemsPerSync);
+              smsItems = getSmsItemsToSync(maxItemsPerSync);
+              mmsItems = getMmsItemsToSync(maxItemsPerSync - smsItems.getCount());
+              Log.d(TAG, "mms sync: " + mmsItems.getCount());
 
               sCurrentSyncedItems = 0;
-              sItemsToSync = items.getCount();
+              sItemsToSyncSms = smsItems.getCount(); 
+              sItemsToSyncMms = mmsItems.getCount();
+              sItemsToSync = sItemsToSyncSms + sItemsToSyncMms;
 
               if (sItemsToSync <= 0) {
                   PrefStore.setLastSync(context);
                   if (PrefStore.isFirstSync(context)) {
                       // If this is the first backup we need to write something to PREF_MAX_SYNCED_DATE
                       // such that we know that we've performed a backup before.
-                      PrefStore.setMaxSyncedDate(context, PrefStore.DEFAULT_MAX_SYNCED_DATE);
+                      PrefStore.setMaxSyncedDateSms(context, PrefStore.DEFAULT_MAX_SYNCED_DATE);
+                      PrefStore.setMaxSyncedDateMms(context, PrefStore.DEFAULT_MAX_SYNCED_DATE);
                   }
                   Log.i(TAG, "Nothing to do.");
                   return 0;
@@ -128,7 +136,7 @@ public class SmsBackupService extends ServiceBase {
 
                 publish(LOGIN);
                 folder = getBackupFolder();
-                return backup(folder, items);
+                return backup(folder, smsItems, mmsItems);
               }
             } catch (AuthenticationFailedException e) {
               Log.e(TAG, "authentication failed", e);
@@ -147,7 +155,8 @@ public class SmsBackupService extends ServiceBase {
             } finally {
               releaseLocks();
 
-              if (items != null) items.close();
+              if (smsItems != null) smsItems.close();
+              if (mmsItems != null) mmsItems.close();
               if (folder != null) folder.close();
 
               stopSelf();
@@ -179,40 +188,61 @@ public class SmsBackupService extends ServiceBase {
       /**
        * @throws MessagingException Thrown when there was an error accessing or creating the folder
        */
-      private int backup(final Folder folder, Cursor items) throws MessagingException {
+      private int backup(final Folder folder, Cursor smsItems, Cursor mmsItems) throws MessagingException {
           Log.i(TAG, String.format("Starting backup (%d messages)", sItemsToSync));
 
           publish(CALC);
 
           CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
 
-          while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
+          while (!sCanceled && (sCurrentSyncedItems < sItemsToSyncSms)) {
               publish(BACKUP);
-              ConversionResult result = converter.cursorToMessages(items, MAX_MSG_PER_REQUEST);
+              ConversionResult result = converter.cursorToMessages(smsItems, MAX_MSG_PER_REQUEST, false);
               List<Message> messages = result.messageList;
 
               if (messages.isEmpty()) break;
 
-              if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " messages to server.");
+              if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
 
               folder.appendMessages(messages.toArray(new Message[messages.size()]));
               sCurrentSyncedItems += messages.size();
               publish(BACKUP);
-              updateMaxSyncedDate(result.maxDate);
+              updateMaxSyncedDateSms(result.maxDate);
 
               result = null;
               messages = null;
           }
+          
+          Log.d(TAG, "hitting mms block");
+          while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
+        	  Log.d(TAG, "pulling mms");
+        	  publish(BACKUP);
+              ConversionResult result = converter.cursorToMessages(mmsItems, MAX_MSG_PER_REQUEST, true);
+              List<Message> messages = result.messageList;
+
+              if (messages.isEmpty()) break;
+
+              if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " mms messages to server.");
+
+              folder.appendMessages(messages.toArray(new Message[messages.size()]));
+              sCurrentSyncedItems += messages.size();
+              publish(BACKUP);
+              updateMaxSyncedDateMms(result.maxDate);
+
+              result = null;
+              messages = null;
+          }
+          
           return sCurrentSyncedItems;
         }
 
       /**
        * Returns a cursor of SMS messages that have not yet been synced with the
        * server. This includes all messages with
-       * <code>date &lt; {@link #getMaxSyncedDate()}</code> which are no drafs.
+       * <code>date &lt; {@link #getMaxSyncedDateSms()}</code> which are not drafts.
        */
-      private Cursor getItemsToSync(int max) {
-          Log.d(TAG, "getItemToSync(max=" + max+")");
+      private Cursor getSmsItemsToSync(int max) {
+          Log.d(TAG, "getSmsItemsToSync(max=" + max+")");
           String sortOrder = SmsConsts.DATE;
 
           if (max > 0) {
@@ -220,7 +250,25 @@ public class SmsBackupService extends ServiceBase {
           }
           return getContentResolver().query(SMS_PROVIDER, null,
                 String.format("%s > ? AND %s <> ?", SmsConsts.DATE, SmsConsts.TYPE),
-                new String[] { String.valueOf(getMaxSyncedDate()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
+                new String[] { String.valueOf(getMaxSyncedDateSms()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
+                sortOrder);
+      }
+      
+      /**
+       * Returns a cursor of MMS messages that have not yet been synced with the
+       * server. This includes all messages with
+       * <code>date &lt; {@link #getMaxSyncedDateSms()}</code> which are not drafts.
+       */
+      private Cursor getMmsItemsToSync(int max) {
+          Log.d(TAG, "getMmsItemsToSync(max=" + max+")");
+          String sortOrder = SmsConsts.DATE;
+
+          if (max > 0) {
+            sortOrder += " LIMIT " + max;
+          }
+          return getContentResolver().query(MMS_PROVIDER, null,
+                String.format("%s > ?", SmsConsts.DATE),
+                new String[] { String.valueOf(getMaxSyncedDateMms()) },
                 sortOrder);
       }
 
@@ -249,8 +297,9 @@ public class SmsBackupService extends ServiceBase {
 
       /* Only update the max synced ID, do not really sync. */
       private int skip() {
-          updateMaxSyncedDate(getMaxItemDate());
-
+          updateMaxSyncedDateSms(getMaxItemDate());
+          updateMaxSyncedDateMms(getMaxItemDate());
+          
           PrefStore.setLastSync(context);
           sItemsToSync = 0;
           sCurrentSyncedItems = 0;
