@@ -173,8 +173,8 @@ public class SmsRestoreService extends ServiceBase {
 
                       long timestamp = values.getAsLong(SmsConsts.DATE);
 
-                      if (getMaxSyncedDate() < timestamp) {
-                          updateMaxSyncedDate(timestamp);
+                      if (getMaxSyncedDateSms() < timestamp) {
+                          updateMaxSyncedDateSms(timestamp);
                       }
                       if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
                     }

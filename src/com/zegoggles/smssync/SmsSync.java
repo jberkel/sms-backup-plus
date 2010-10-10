@@ -277,8 +277,8 @@ public class SmsSync extends PreferenceActivity {
             if (lastSync == PrefStore.DEFAULT_LAST_SYNC) {
                 text = getString(R.string.status_idle_details_never);
             } else {
-                text = PrefStore.getMaxSyncedDate(SmsSync.this) != -1 ?
-                              new Date(PrefStore.getMaxSyncedDate(SmsSync.this)).toLocaleString() :
+                text = PrefStore.getMaxSyncedDateSms(SmsSync.this) != -1 ?
+                              new Date(PrefStore.getMaxSyncedDateSms(SmsSync.this)).toLocaleString() :
                               new Date(lastSync).toLocaleString();
             }
             mSyncDetailsLabel.setText(getString(R.string.status_idle_details, text));

@@ -40,6 +40,7 @@ public abstract class ServiceBase extends Service {
     public static SmsSyncState getState() { return sState; }
 
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
+    public static final Uri MMS_PROVIDER = Uri.parse("content://mms");
 
     /**
      * A wakelock held while this service is working.
@@ -130,24 +131,39 @@ public abstract class ServiceBase extends Service {
     }
 
     /**
-     * Returns the largest date of all messages that have successfully been synced
+     * Returns the largest date of all sms messages that have successfully been synced
      * with the server.
      */
-    protected long getMaxSyncedDate() {
-        return PrefStore.getMaxSyncedDate(this);
+    protected long getMaxSyncedDateSms() {
+        return PrefStore.getMaxSyncedDateSms(this);
+    }
+    
+    /**
+     * Returns the largest date of all mms messages that have successfully been synced
+     * with the server.
+     */
+    protected long getMaxSyncedDateMms() {
+        return PrefStore.getMaxSyncedDateMms(this);
     }
 
     /**
      * Persists the provided ID so it can later on be retrieved using
-     * {@link #getMaxSyncedDate()}. This should be called when after each
+     * {@link #getMaxSyncedDateSms()}. This should be called when after each
      * successful sync request to a server.
      *
      * @param maxSyncedId
      */
-    protected void updateMaxSyncedDate(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDate(this, maxSyncedDate);
+    protected void updateMaxSyncedDateSms(long maxSyncedDate) {
+        PrefStore.setMaxSyncedDateSms(this, maxSyncedDate);
         if (LOCAL_LOGV) {
-          Log.v(Consts.TAG, "Max synced date set to: " + maxSyncedDate);
+          Log.v(Consts.TAG, "Max synced date for sms set to: " + maxSyncedDate);
+        }
+    }
+    
+    protected void updateMaxSyncedDateMms(long maxSyncedDate) {
+        PrefStore.setMaxSyncedDateMms(this, maxSyncedDate);
+        if (LOCAL_LOGV) {
+          Log.v(Consts.TAG, "Max synced date for mms set to: " + maxSyncedDate);
         }
     }
 
