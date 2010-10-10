@@ -137,7 +137,7 @@ public abstract class ServiceBase extends Service {
     protected long getMaxSyncedDateSms() {
         return PrefStore.getMaxSyncedDateSms(this);
     }
-    
+
     /**
      * Returns the largest date of all mms messages that have successfully been synced
      * with the server.
@@ -159,7 +159,7 @@ public abstract class ServiceBase extends Service {
           Log.v(Consts.TAG, "Max synced date for sms set to: " + maxSyncedDate);
         }
     }
-    
+
     protected void updateMaxSyncedDateMms(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateMms(this, maxSyncedDate);
         if (LOCAL_LOGV) {

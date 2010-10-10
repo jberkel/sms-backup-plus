@@ -151,14 +151,14 @@ public class CursorToMessage {
             for (int i = 0; i < columns.length; i++) {
                 msgMap.put(columns[i], cursor.getString(i));
             }
-            
+
             Message m;
             if (isMms) {
                 m = messageFromMapMms(msgMap);
             } else {
-            	m = messageFromMapSms(msgMap);
+              m = messageFromMapSms(msgMap);
             }
-            
+
             if (m != null) messageList.add(m);
         }
 
@@ -221,62 +221,62 @@ public class CursorToMessage {
 
         return msg;
     }
-    
+
     private Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
         Message msg = new MimeMessage();
         String address = null;
         boolean inbound = true;
-        
+
         Uri msgRef = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
         Uri uriAddr = Uri.withAppendedPath(msgRef, "addr");
         Cursor curAddr = mContext.getContentResolver().query(uriAddr, null, null, null, null);
- 
+
         MimeMultipart body = new MimeMultipart();
-        
+
         // TODO: this is probably not the best way to determine if a message is inbound or outbound.
         // Also, messages can have multiple recipients (more than 2 addresses)
-        if (curAddr.getCount() > 1) { 
-        	curAddr.moveToNext();
+        if (curAddr.getCount() > 1) {
+          curAddr.moveToNext();
             address = curAddr.getString(curAddr.getColumnIndex("address"));
-            
+
             if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
-            	inbound = false;
-            	curAddr.moveToNext();
-            	address = curAddr.getString(curAddr.getColumnIndex("address"));
+              inbound = false;
+              curAddr.moveToNext();
+              address = curAddr.getString(curAddr.getColumnIndex("address"));
             }
         }
-        
+
         if (address == null || address.trim().length() == 0) {
            return null;
         }
-        
+
         Uri uriPart = Uri.withAppendedPath(msgRef, "part");
-        Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null); 
+        Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null);
 
         // _id, mid, seq, ct, name, chset, cd, fn, cid, cl, ctt_s, ctt_t, _data, text
         while(curPart.moveToNext()) {
-        	String id = curPart.getString(curPart.getColumnIndex("_id"));
-        	String contentType = curPart.getString(curPart.getColumnIndex("ct"));
-        	if (contentType.equals("image/jpeg")) {
-        		String name = "attachment.jpg";
-        		Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
-        		MmsAttachmentBody attachment = new MmsAttachmentBody(partUri, mContext);
-        		
-        		BodyPart imagePart = new MimeBodyPart(attachment, contentType);
-        		imagePart.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
+          String id = curPart.getString(curPart.getColumnIndex("_id"));
+          String contentType = curPart.getString(curPart.getColumnIndex("ct"));
+          if (contentType.equals("image/jpeg")) {
+            String name = "attachment.jpg";
+            Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
+            MmsAttachmentBody attachment = new MmsAttachmentBody(partUri, mContext);
+
+            BodyPart imagePart = new MimeBodyPart(attachment, contentType);
+            imagePart.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
                         String.format("%s;\n name=\"%s\"",
-                        		contentType, name));
-        		imagePart.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
-        		//imagePart.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,
+                            contentType, name));
+            imagePart.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
+            //imagePart.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,
                 //      String.format("attachment;\n filename=\"%s\";\n size=%d", name, size);
-        		body.addBodyPart(imagePart);
-        	} else if (contentType.equals("text/plain")) {
-        		Body textBody = new TextBody(curPart.getString(curPart.getColumnIndex("text")));
-        		BodyPart textPart = new MimeBodyPart(textBody);
-        		body.addBodyPart(textPart);
-        	}
-	    }
-        
+            body.addBodyPart(imagePart);
+          } else if (contentType.equals("text/plain")) {
+            Body textBody = new TextBody(curPart.getString(curPart.getColumnIndex("text")));
+            BodyPart textPart = new MimeBodyPart(textBody);
+            body.addBodyPart(textPart);
+          }
+      }
+
         PersonRecord record = lookupPerson(address);
         msg.setSubject("SMS with " + record.getName());
 
@@ -483,7 +483,7 @@ public class CursorToMessage {
           return sanitize(name != null ? name : number);
         }
     }
-    
+
     public static class MmsAttachmentBody implements Body
     {
         private Context mContext;

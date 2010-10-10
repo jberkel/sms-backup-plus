@@ -127,7 +127,7 @@ public class PrefStore {
     static long getMaxSyncedDateSms(Context ctx) {
         return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_SMS, DEFAULT_MAX_SYNCED_DATE);
     }
-    
+
     static long getMaxSyncedDateMms(Context ctx) {
         return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_MMS, DEFAULT_MAX_SYNCED_DATE);
     }
@@ -141,7 +141,7 @@ public class PrefStore {
           .putLong(PREF_MAX_SYNCED_DATE_SMS, maxSyncedDate)
           .commit();
     }
-    
+
     static void setMaxSyncedDateMms(Context ctx, long maxSyncedDate) {
         getSharedPreferences(ctx).edit()
           .putLong(PREF_MAX_SYNCED_DATE_MMS, maxSyncedDate)

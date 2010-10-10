@@ -113,7 +113,7 @@ public class SmsBackupService extends ServiceBase {
               Log.d(TAG, "mms sync: " + mmsItems.getCount());
 
               sCurrentSyncedItems = 0;
-              sItemsToSyncSms = smsItems.getCount(); 
+              sItemsToSyncSms = smsItems.getCount();
               sItemsToSyncMms = mmsItems.getCount();
               sItemsToSync = sItemsToSyncSms + sItemsToSyncMms;
 
@@ -212,9 +212,9 @@ public class SmsBackupService extends ServiceBase {
               result = null;
               messages = null;
           }
-          
+
           while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-        	  publish(BACKUP);
+            publish(BACKUP);
               ConversionResult result = converter.cursorToMessages(mmsItems, MAX_MSG_PER_REQUEST, true);
               List<Message> messages = result.messageList;
 
@@ -231,7 +231,7 @@ public class SmsBackupService extends ServiceBase {
               result = null;
               messages = null;
           }
-          
+
           return sCurrentSyncedItems;
         }
 
@@ -252,7 +252,7 @@ public class SmsBackupService extends ServiceBase {
                 new String[] { String.valueOf(getMaxSyncedDateSms()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
                 sortOrder);
       }
-      
+
       /**
        * Returns a cursor of MMS messages that have not yet been synced with the
        * server. This includes all messages with
@@ -298,7 +298,7 @@ public class SmsBackupService extends ServiceBase {
       private int skip() {
           updateMaxSyncedDateSms(getMaxItemDate());
           updateMaxSyncedDateMms(getMaxItemDate());
-          
+
           PrefStore.setLastSync(context);
           sItemsToSync = 0;
           sCurrentSyncedItems = 0;
