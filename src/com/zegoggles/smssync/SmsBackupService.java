@@ -39,6 +39,7 @@ public class SmsBackupService extends ServiceBase {
     public static final String TAG = SmsBackupService.class.getSimpleName();
 
     /** Number of messages sent per sync request. */
+    /** Changing this value will cause mms/sms messages to thread out of order. */
     private static final int MAX_MSG_PER_REQUEST = 1;
 
     /** Flag indicating whether this service is already running. */
@@ -195,38 +196,49 @@ public class SmsBackupService extends ServiceBase {
 
           CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
 
-          while (!sCanceled && (sCurrentSyncedItems < sItemsToSyncSms)) {
-              publish(BACKUP);
-              ConversionResult result = converter.cursorToMessages(smsItems, MAX_MSG_PER_REQUEST, false);
-              List<Message> messages = result.messageList;
-
-              if (messages.isEmpty()) break;
-
-              if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
-
-              folder.appendMessages(messages.toArray(new Message[messages.size()]));
-              sCurrentSyncedItems += messages.size();
-              publish(BACKUP);
-              updateMaxSyncedDateSms(result.maxDate);
-
-              result = null;
-              messages = null;
-          }
-          
           while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-        	  publish(BACKUP);
-              ConversionResult result = converter.cursorToMessages(mmsItems, MAX_MSG_PER_REQUEST, true);
+              publish(BACKUP);
+              
+              long smsDate = -1, mmsDate = -1;
+              Cursor curCursor;
+              boolean isMms = false;
+              if (smsItems.moveToNext()) {
+            	  smsDate = smsItems.getLong(smsItems.getColumnIndex(SmsConsts.DATE));
+            	  smsItems.moveToPrevious();
+              }
+              if (mmsItems.moveToNext()) {
+            	  // Mms date is in seconds, sms in millis.
+            	  mmsDate = 1000*mmsItems.getLong(mmsItems.getColumnIndex(MmsConsts.DATE));
+            	  mmsItems.moveToPrevious();
+              }
+              
+              if (smsDate != -1 && (mmsDate == -1 || smsDate < mmsDate)) {
+            	  curCursor = smsItems;
+              } else {
+            	  curCursor = mmsItems;
+            	  isMms = true;
+              }
+              
+              ConversionResult result = converter.cursorToMessages(curCursor, MAX_MSG_PER_REQUEST, isMms);
               List<Message> messages = result.messageList;
 
               if (messages.isEmpty()) break;
 
-              if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " mms messages to server.");
-
+              if (isMms) {
+            	  updateMaxSyncedDateMms(result.maxDate);
+            	  if (LOCAL_LOGV) {
+            		  Log.v(TAG, "Sending " + messages.size() + " mms messages to server.");
+            	  }
+        	  } else {
+        		  updateMaxSyncedDateSms(result.maxDate);
+        		  if (LOCAL_LOGV) {
+        			  Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
+        		  }
+        	  }
+              
               folder.appendMessages(messages.toArray(new Message[messages.size()]));
               sCurrentSyncedItems += messages.size();
               publish(BACKUP);
-
-              updateMaxSyncedDateMms(result.maxDate);
 
               result = null;
               messages = null;
