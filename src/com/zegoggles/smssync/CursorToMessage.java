@@ -293,7 +293,7 @@ public class CursorToMessage {
         msg.setBody(body);
 
         try {
-          Date then = new Date(Long.valueOf(msgMap.get(MmsConsts.DATE)));
+          Date then = new Date(1000*Long.valueOf(msgMap.get(MmsConsts.DATE)));
           msg.setSentDate(then);
           msg.setInternalDate(then);
           msg.setHeader("Message-ID", createMessageId(then, address, 1));
