@@ -91,7 +91,7 @@
               android:title="@string/ui_notifications_label"
               android:summary="@string/ui_notifications_desc"
               android:persistent="true"
-              android:defaultValue="true"/>
+              android:defaultValue="false"/>
         </PreferenceCategory>
 
         <PreferenceScreen

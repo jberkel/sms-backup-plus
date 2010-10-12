@@ -375,7 +375,7 @@ public class PrefStore {
     }
 
     static boolean isNotificationEnabled(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean("notifications", true);
+        return getSharedPreferences(ctx).getBoolean("notifications", false);
     }
 
     static String getServerAddress(Context ctx) {
