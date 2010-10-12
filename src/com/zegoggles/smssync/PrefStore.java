@@ -369,6 +369,7 @@ public class PrefStore {
     static void clearLastSyncData(Context ctx) {
         getSharedPreferences(ctx).edit()
           .remove(PREF_MAX_SYNCED_DATE_SMS)
+          .remove(PREF_MAX_SYNCED_DATE_MMS)
           .remove(PREF_LAST_SYNC)
           .commit();
     }
