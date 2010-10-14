@@ -69,6 +69,7 @@
   <string name="ui_settings_advanced_server_label">服务器设置</string>
   <string name="ui_settings_advanced_server_desc">除非您知道该怎么做，否则请勿修改！</string>
 
+  <string name="imap_settings">IMAP 设置</string>
   <string name="ui_login_label">用户名</string>
   <string name="ui_login_desc">您的 Google 帐户/电子邮件地址。</string>
   <string name="ui_login_dialog_msg">警告: 使用 XOAuth 时更改用户名可能会造成错误。</string>
@@ -84,27 +85,43 @@
   <string name="ui_authentication_desc">身份验证方法。对于 Gmail，默认设置为 XOAuth。</string>
   <string name="plain">纯文本</string>
   <string name="xoauth">XOAuth</string>
+  
   <string name="ui_imap_folder_label">Gmail 标签</string>
   <string name="ui_imap_folder_desc">应用到短信的 Gmail 标签。</string>
   <string name="ui_imap_folder_label_dialog_msg">备份的短信将在 Gmail 中以此标签标记。</string>
+
   <string name="ui_max_items_per_sync_label">每次备份条数</string>
   <string name="ui_max_items_per_sync_desc">每次备份的最大数量。</string>
   <string name="ui_max_items_per_restore_label">每次还原条数</string>
   <string name="ui_max_items_per_restore_desc">每次还原的最大数量。</string>
+
+  <string name="ui_backup_mms_label">备份彩信</string>
+  <string name="ui_backup_mms_desc">启用彩信备份功能 (beta 测试)。</string>
+
   <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
   <string name="ui_mark_as_read_restore_label">标记为已读 (短信)</string>
   <string name="ui_mark_as_read_restore_desc">是否将还原的短信标记为已读。</string>
-  <string name="ui_enable_auto_sync_label">自动备份</string>
-  <string name="ui_enable_auto_sync_desc">是否自己备份新短信。</string>
 
+  <string name="ui_email_address_style_label">邮件地址样式</string>
+  <string name="ui_email_address_style_desc">邮件地址的格式。</string>
+
+  <string name="ui_enable_auto_sync_label">自动备份</string>
+  <string name="ui_enable_auto_sync_desc">是否自动备份新短信。</string>
+
+  <string name="auto_backup_settings">自动备份</string>
   <string name="ui_auto_backup_schedule_label">定时备份计划</string>
   <string name="ui_auto_backup_schedule_desc">何时备份短信。</string>
 
   <string name="ui_auto_backup_incoming_schedule_label">新短信备份计划</string>
   <string name="ui_auto_backup_incoming_schedule_desc">何时备份新短信 (在收到后)。</string>
+
   <string name="ui_wifi_only_label">强制使用 Wifi</string>
   <string name="ui_wifi_only_desc">仅在连接到 Wifi 网络时才备份/还原。</string>
+
+  <string name="ui_notifications_label">通知</string>
+  <string name="ui_notifications_desc">后台通知。</string>
+
   <string name="error_wifi_only_no_connection">无 Wifi 网络连接</string>
   <string name="error_no_connection">无互联网连接</string>
 
