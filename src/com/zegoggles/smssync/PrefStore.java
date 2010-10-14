@@ -80,7 +80,8 @@ public class PrefStore {
 
     static final String PREF_EMAIL_ADDRESS_STYLE = "email_address_style";
 
-    static final String PREF_PREFILLED  = "prefilled";
+    static final String PREF_BACKUP_MMS  = "backup_mms";
+
     static final String PREF_CONNECTED  = "connected";
     static final String PREF_WIFI_ONLY  = "wifi_only";
 
@@ -218,6 +219,10 @@ public class PrefStore {
         } else {
             return hasOauthTokens(ctx) && getOauthUsername(ctx) != null;
         }
+    }
+
+    static boolean isMmsBackupEnabled(Context ctx) {
+      return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
     static String getReferenceUid(Context ctx) {

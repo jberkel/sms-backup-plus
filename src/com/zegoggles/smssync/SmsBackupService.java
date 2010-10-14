@@ -18,6 +18,7 @@ package com.zegoggles.smssync;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Process;
 import android.util.Log;
 import android.os.AsyncTask;
@@ -111,12 +112,16 @@ public class SmsBackupService extends ServiceBase {
               acquireLocks(background);
               smsItems = getSmsItemsToSync(maxItemsPerSync);
               mmsItems = getMmsItemsToSync(maxItemsPerSync - smsItems.getCount());
-              Log.d(TAG, "mms sync: " + mmsItems.getCount());
 
               sCurrentSyncedItems = 0;
               sItemsToSyncSms = smsItems.getCount();
               sItemsToSyncMms = mmsItems.getCount();
               sItemsToSync = sItemsToSyncSms + sItemsToSyncMms;
+
+              if (LOCAL_LOGV) {
+                Log.v(TAG, String.format("items to backup:  %d SMS, %d MMS, %d total", sItemsToSyncSms,
+                                         sItemsToSyncMms, sItemsToSync));
+              }
 
               if (sItemsToSync <= 0) {
                   PrefStore.setLastSync(context);
@@ -247,12 +252,12 @@ public class SmsBackupService extends ServiceBase {
                 if (LOCAL_LOGV) {
                   Log.v(TAG, "Sending " + messages.size() + " mms messages to server.");
                 }
-            } else {
-              updateMaxSyncedDateSms(result.maxDate);
-              if (LOCAL_LOGV) {
-                Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
+              } else {
+                updateMaxSyncedDateSms(result.maxDate);
+                if (LOCAL_LOGV) {
+                  Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
+                }
               }
-            }
 
               folder.appendMessages(messages.toArray(new Message[messages.size()]));
               sCurrentSyncedItems += messages.size();
@@ -271,10 +276,10 @@ public class SmsBackupService extends ServiceBase {
        * <code>date &lt; {@link #getMaxSyncedDateSms()}</code> which are not drafts.
        */
       private Cursor getSmsItemsToSync(int max) {
-          if (LOCAL_LOGV) {
-            Log.v(TAG, String.format("getItemToSync(max=%s),  maxSyncedDate=%d", max, getMaxSyncedDateSms()));
-          }
-          String sortOrder = SmsConsts.DATE;
+         if (LOCAL_LOGV) {
+            Log.v(TAG, String.format("getSmsItemToSync(max=%d),  maxSyncedDate=%d", max, getMaxSyncedDateSms()));
+         }
+         String sortOrder = SmsConsts.DATE;
           if (max > 0) sortOrder += " LIMIT " + max;
 
           return getContentResolver().query(SMS_PROVIDER, null,
@@ -289,7 +294,13 @@ public class SmsBackupService extends ServiceBase {
        * <code>date &lt; {@link #getMaxSyncedDateSms()}</code> which are not drafts.
        */
       private Cursor getMmsItemsToSync(int max) {
-          Log.d(TAG, "getMmsItemsToSync(max=" + max+")");
+          if (LOCAL_LOGV) Log.v(TAG, "getMmsItemsToSync(max=" + max+")");
+
+          if (!PrefStore.isMmsBackupEnabled(SmsBackupService.this)) {
+            // return empty cursor if we don't have MMS
+            if (LOCAL_LOGV) Log.v(TAG, "MMS backup disabled, returning empty cursor");
+            return new MatrixCursor(new String[0], 0);
+          }
           String sortOrder = SmsConsts.DATE;
 
           if (max > 0) {

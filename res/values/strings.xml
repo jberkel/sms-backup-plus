@@ -85,13 +85,19 @@
   <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOauth\".</string>
   <string name="plain">Plain text</string>
   <string name="xoauth">XOAuth</string>
+
   <string name="ui_imap_folder_label">Gmail label</string>
   <string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Backed up SMS messages will be tagged with this label in Gmail.</string>
+
   <string name="ui_max_items_per_sync_label">Items per backup</string>
   <string name="ui_max_items_per_sync_desc">Maximum number of items per backup.</string>
   <string name="ui_max_items_per_restore_label">Items per restore</string>
   <string name="ui_max_items_per_restore_desc">Maximum number of restored messages.</string>
+
+  <string name="ui_backup_mms_label">Backup MMS</string>
+  <string name="ui_backup_mms_desc">Enable MMS backup (beta)</string>
+
   <string name="ui_mark_as_read_label">Mark as read (emails)</string>
   <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
   <string name="ui_mark_as_read_restore_label">Mark as read (SMS)</string>
