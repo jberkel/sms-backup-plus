@@ -36,14 +36,20 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         if (label == null)
             throw new IllegalStateException("label is null");
 
-        BackupFolder folder = new BackupFolder(this, label);
+        try {
+          BackupFolder folder = new BackupFolder(this, label);
 
-        if (!folder.exists()) {
-            folder.create(FolderType.HOLDS_MESSAGES);
-            Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
+          if (!folder.exists()) {
+              folder.create(FolderType.HOLDS_MESSAGES);
+              Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
+          }
+          folder.open(OpenMode.READ_WRITE);
+          return folder;
+        } catch (java.lang.NumberFormatException e) {
+          // thrown inside K9
+          Log.e(Consts.TAG, "K9 error", e);
+          throw new MessagingException(e.getMessage());
         }
-        folder.open(OpenMode.READ_WRITE);
-        return folder;
     }
 
 

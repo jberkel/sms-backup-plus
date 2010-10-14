@@ -388,19 +388,19 @@ public class CursorToMessage {
               new String[] { ContactsContract.CommonDataKinds.Email.DATA },
               ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[] { String.valueOf(personId) },
               ContactsContract.CommonDataKinds.Email.IS_PRIMARY + " DESC");
-          columnIndex = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
+          columnIndex = c != null ? c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA) : -1;
         } else {
           c = mContext.getContentResolver().query(
               ContactMethods.CONTENT_EMAIL_URI,
               new String[] { ContactMethods.DATA },
               ContactMethods.PERSON_ID + " = ?", new String[] { String.valueOf(personId) },
               ContactMethods.ISPRIMARY + " DESC");
-          columnIndex = c.getColumnIndex(ContactMethods.DATA);
+          columnIndex = c!= null ? c.getColumnIndex(ContactMethods.DATA) : -1;
         }
 
         // Loop over cursor and find a Gmail address for that person.
         // If there is none, pick first e-mail address.
-        while (c.moveToNext()) {
+        while (c != null && c.moveToNext()) {
             String e = c.getString(columnIndex);
             if (primaryEmail == null) {
                 primaryEmail = e;
@@ -410,7 +410,8 @@ public class CursorToMessage {
                 break;
             }
         }
-        c.close();
+
+        if (c != null) c.close();
 
         // Return found e-mail address or a dummy "unknown e-mail address"
         // if there is none.
