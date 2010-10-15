@@ -85,7 +85,8 @@ If you wish to restore messages back to your phone tap "Restore". By default all
 
 ## FAQ
 
-### [All the timestamps of my backups are wrong in Gmail!](#faq-timestamps)
+
+### <a name="faq-timestamps">All the timestamps of my backups are wrong in Gmail!</a>
 
 This is actually a bug in Gmail's threading. The email has the correct timestamp set. You
 can verify this by selecting [Show original][showoriginal] in Gmail, and then
@@ -94,7 +95,7 @@ check the Date header in the email ([screenshot][source]).
 When reading your email with a normal (desktop) email client the dates should
 display correctly.
 
-### [What's the difference between regular and incoming backup schedule?](#faq-schedule)
+### <a name="faq-schedule">What's the difference between regular and incoming backup schedule?</a>
 
 Incoming backup schedule is used for incoming messages. 3 minutes here means
 that any incoming SMS will trigger a backup after 3 minutes. It is a full
