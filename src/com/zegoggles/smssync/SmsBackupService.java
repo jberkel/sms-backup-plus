@@ -202,24 +202,6 @@ public class SmsBackupService extends ServiceBase {
           CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
 
           while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-              publish(BACKUP);
-              ConversionResult result = converter.cursorToMessages(smsItems, MAX_MSG_PER_REQUEST, false);
-              List<Message> messages = result.messageList;
-
-              if (messages.isEmpty()) break;
-
-              if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
-
-              folder.appendMessages(messages.toArray(new Message[messages.size()]));
-              sCurrentSyncedItems += messages.size();
-              publish(BACKUP);
-              updateMaxSyncedDateSms(result.maxDate);
-
-              result = null;
-              messages = null;
-          }
-
-          while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
             publish(BACKUP);
 
               long smsDate = -1, mmsDate = -1;
