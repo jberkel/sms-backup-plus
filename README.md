@@ -82,6 +82,32 @@ If you wish to restore messages back to your phone tap "Restore". By default all
 
 ![SMS Backup+ screenshot][shot1] ![Gmail screenshot][shot2]
 
+
+## FAQ
+
+### [All the timestamps of my backups are wrong in Gmail!](#faq-timestamps)
+
+This is actually a bug in Gmail's threading. The email has the correct timestamp set. You
+can verify this by selecting [Show original][showoriginal] in Gmail, and then
+check the Date header in the email ([screenshot][source]).
+
+When reading your email with a normal (desktop) email client the dates should
+display correctly.
+
+### [What's the difference between regular and incoming backup schedule?](#faq-schedule)
+
+Incoming backup schedule is used for incoming messages. 3 minutes here means
+that any incoming SMS will trigger a backup after 3 minutes. It is a full
+backup (including any sent messages). You should set the incoming schedule to a
+low value if you want to make sure that incoming SMS show up in
+Gmail shortly after arrival.
+
+Regular schedule is used to perform backups in specific intervals. 2 hours here
+means that the device will try to backup all messages every 2 hours.
+
+Fewer updates performed by the app means less energy consumed, so there's
+a trade-off data protection vs. battery life.
+
 ## Contributing
 
 ### Installation from source
@@ -122,3 +148,5 @@ This application is released under the terms of the [Apache License, Version 2.0
 [shot1]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png
 [shot2]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
 [crowdin project page]: http://crowdin.net/project/sms-backup-plus/invite
+[showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
+[source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
