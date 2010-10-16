@@ -59,6 +59,7 @@ import com.fsck.k9.mail.store.LocalStore.LocalAttachmentBody;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
 import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.Consts.TAG;
 
 public class CursorToMessage {
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
@@ -133,7 +134,7 @@ public class CursorToMessage {
           mStyle = Style.valueOf(PrefStore.getEmailAddressStyle(ctx).toUpperCase());
         }
 
-        Log.d(Consts.TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
+        Log.d(TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
 
     public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries, boolean isMms) throws MessagingException {
@@ -200,7 +201,7 @@ public class CursorToMessage {
           msg.setInternalDate(then);
           msg.setHeader("Message-ID", createMessageId(then, address, messageType));
         } catch (NumberFormatException n) {
-          Log.e(Consts.TAG, "error parsing date", n);
+          Log.e(TAG, "error parsing date", n);
         }
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
@@ -231,7 +232,10 @@ public class CursorToMessage {
         Uri uriAddr = Uri.withAppendedPath(msgRef, "addr");
         Cursor curAddr = mContext.getContentResolver().query(uriAddr, null, null, null, null);
 
-        MimeMultipart body = new MimeMultipart();
+        if (curAddr == null) {
+          Log.w(TAG, "Cursor == null");
+          return null;
+        }
 
         // TODO: this is probably not the best way to determine if a message is inbound or outbound.
         // Also, messages can have multiple recipients (more than 2 addresses)
@@ -250,6 +254,7 @@ public class CursorToMessage {
            return null;
         }
 
+        MimeMultipart body = new MimeMultipart();
         Uri uriPart = Uri.withAppendedPath(msgRef, "part");
         Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null);
 
@@ -298,7 +303,7 @@ public class CursorToMessage {
           msg.setInternalDate(then);
           msg.setHeader("Message-ID", createMessageId(then, address, 1));
         } catch (NumberFormatException n) {
-          Log.e(Consts.TAG, "error parsing date", n);
+          Log.e(TAG, "error parsing date", n);
         }
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
@@ -360,7 +365,7 @@ public class CursorToMessage {
                 record.number = sanitize(NEW_CONTACT_API ? address :
                                                   c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
             } else {
-                if (LOCAL_LOGV) Log.v(Consts.TAG, "Looked up unknown address: " + address);
+                if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
 
                 record._id    = sanitize(address);
                 record.number = sanitize(address);
