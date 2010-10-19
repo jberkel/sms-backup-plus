@@ -33,6 +33,7 @@ import android.app.PendingIntent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.CheckBoxPreference;
@@ -64,7 +65,7 @@ import com.zegoggles.smssync.ServiceBase.SmsSyncState;
  */
 public class SmsSync extends PreferenceActivity {
     private static final String TAG = SmsSync.class.getSimpleName();
-
+    private static final int MIN_VERSION_MMS = Build.VERSION_CODES.FROYO;
     enum Dialogs {
       MISSING_CREDENTIALS,
       FIRST_SYNC,
@@ -97,6 +98,13 @@ public class SmsSync extends PreferenceActivity {
 
         getPreferenceScreen().addPreference(statusPref);
         setPreferenceListeners(getPreferenceManager());
+
+        int version = Integer.parseInt(Build.VERSION.SDK);
+        if (version < MIN_VERSION_MMS) {
+	        Preference backupMms = findPreference("backup_mms");
+	        backupMms.setEnabled(false);
+	        backupMms.setSummary(R.string.ui_backup_mms_not_supported);
+        }
 
         if (PrefStore.showUpgradeMessage(this)) {
           show(Dialogs.UPGRADE);
