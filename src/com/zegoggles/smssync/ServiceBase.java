@@ -103,7 +103,7 @@ public abstract class ServiceBase extends Service {
     /**
      * Returns the maximum date of all SMS messages (except for drafts).
      */
-    protected long getMaxItemDate() {
+    protected long getMaxItemDateSms() {
         ContentResolver r = getContentResolver();
         String selection = SmsConsts.TYPE + " <> ?";
         String[] selectionArgs = new String[] {
@@ -113,6 +113,32 @@ public abstract class ServiceBase extends Service {
             SmsConsts.DATE
         };
         Cursor result = r.query(SMS_PROVIDER, projection, selection, selectionArgs,
+                SmsConsts.DATE + " DESC LIMIT 1");
+
+        try
+        {
+            if (result.moveToFirst()) {
+                return result.getLong(0);
+            } else {
+                return PrefStore.DEFAULT_MAX_SYNCED_DATE;
+            }
+        }
+        catch (RuntimeException e)
+        {
+            result.close();
+            throw e;
+        }
+    }
+    
+    /**
+     * Returns the maximum date of all MMS messages
+     */
+    protected long getMaxItemDateMms() {
+        ContentResolver r = getContentResolver();
+        String[] projection = new String[] {
+            SmsConsts.DATE
+        };
+        Cursor result = r.query(MMS_PROVIDER, projection, null, null,
                 SmsConsts.DATE + " DESC LIMIT 1");
 
         try

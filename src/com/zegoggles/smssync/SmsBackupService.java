@@ -319,8 +319,8 @@ public class SmsBackupService extends ServiceBase {
 
       /* Only update the max synced ID, do not really sync. */
       private int skip() {
-          updateMaxSyncedDateSms(getMaxItemDate());
-          updateMaxSyncedDateMms(getMaxItemDate());
+          updateMaxSyncedDateSms(getMaxItemDateSms());
+          updateMaxSyncedDateMms(getMaxItemDateMms());
 
           PrefStore.setLastSync(context);
           sItemsToSync = 0;
