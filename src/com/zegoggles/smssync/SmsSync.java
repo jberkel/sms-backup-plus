@@ -65,7 +65,7 @@ import com.zegoggles.smssync.ServiceBase.SmsSyncState;
  */
 public class SmsSync extends PreferenceActivity {
     private static final String TAG = SmsSync.class.getSimpleName();
-    private static final int MIN_VERSION_MMS = Build.VERSION_CODES.FROYO;
+    private static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
     enum Dialogs {
       MISSING_CREDENTIALS,
       FIRST_SYNC,
