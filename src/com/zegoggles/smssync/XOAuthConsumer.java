@@ -54,7 +54,8 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   public String generateXOAuthString(final String username) {
 
       try {
-        final URI uri = new URI(String.format("https://mail.google.com/mail/b/%s/imap/", username));
+        final URI uri = new URI(String.format("https://mail.google.com/mail/b/%s/imap/",
+                                              urlEncode(username)));
         final HttpRequest request = wrap(new HttpGet(uri));
         final HttpParameters requestParameters = new HttpParameters();
 
