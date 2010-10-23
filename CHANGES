@@ -1,3 +1,8 @@
+== 1.1.2 10-23-2010
+
+ * Disable MMS backup on unsupported devices
+ * Fix for gmail timestamps (GH-60)
+
 == 1.1.1 10-14-2010
 
  * Make MMS backup optional

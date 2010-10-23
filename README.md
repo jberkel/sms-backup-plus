@@ -85,16 +85,6 @@ If you wish to restore messages back to your phone tap "Restore". By default all
 
 ## FAQ
 
-
-### <a name="faq-timestamps">All the timestamps of my backups are wrong in Gmail!</a>
-
-This is actually a bug in Gmail's threading. The email has the correct timestamp set. You
-can verify this by selecting [Show original][showoriginal] in Gmail, and then
-check the Date header in the email ([screenshot][source]).
-
-When reading your email with a normal (desktop) email client the dates should
-display correctly.
-
 ### <a name="faq-schedule">What's the difference between regular and incoming backup schedule?</a>
 
 Incoming backup schedule is used for incoming messages. 3 minutes here means
@@ -144,7 +134,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
-[github downloads]: http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.1.1.apk/qr_code
+[github downloads]: http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.1.2.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [shot1]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_restoring.png
 [shot2]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
