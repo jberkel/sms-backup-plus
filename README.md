@@ -161,6 +161,7 @@ If you want to help translating the UI to other languages: [crowdin project page
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
   * [skolima](http://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
+  * Gabriele Ravanetti - Italian translation
 
 ## License
 
