@@ -14,6 +14,8 @@ Main differences / improvements:
   uses [XOAuth](http://code.google.com/apis/gmail/oauth/) to get access to your
   data.
 
+  * MMS backup support (since 1.1)
+
   * Faster backups. SMS Backup+ saves around 30% of data transferred by
   avoiding Base64 encoding of emails.
 
