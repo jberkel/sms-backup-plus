@@ -1,15 +1,21 @@
 ## SMS Backup+
 
 This is a fork of the Android backup tool
-[SMS Backup](http://code.google.com/p/android-sms), where development has stopped a while ago. It uses Gmail to perform SMS backups over the network.
+[SMS Backup](http://code.google.com/p/android-sms), where development has
+stopped a while ago. It uses Gmail to perform SMS backups over the network.
 
 Main differences / improvements:
 
-  * New restore feature. SMS stored on Gmail can be transferred back to the phone. This even works for users who have already created their backups with older versions of SMS Backup.
+  * New restore feature. SMS stored on Gmail can be transferred back to the
+  phone. This even works for users who have already created their backups with
+  older versions of SMS Backup.
 
-  * XOAuth: SMS Backup+ will never ask you for your Gmail password. Instead it uses [XOAuth](http://code.google.com/apis/gmail/oauth/) to get access to your data.
+  * XOAuth: SMS Backup+ will never ask you for your Gmail password. Instead it
+  uses [XOAuth](http://code.google.com/apis/gmail/oauth/) to get access to your
+  data.
 
-  * Faster backups. SMS Backup+ saves around 30% of data transferred by avoiding Base64 encoding of emails.
+  * Faster backups. SMS Backup+ saves around 30% of data transferred by
+  avoiding Base64 encoding of emails.
 
   * Batch size limits removed.
 
@@ -61,23 +67,43 @@ successful.
 
 ### Upgrading (for users of SMS Backup)
 
-You don't need to uninstall the old version in order to try out SMS Backup+. However make sure that "Auto backup" is disabled in both apps, otherwise you might end up with messages backed up multiple times, resulting in duplicates in Gmail.
+You don't need to uninstall the old version in order to try out SMS Backup+.
+However make sure that "Auto backup" is disabled in both apps, otherwise you
+might end up with messages backed up multiple times, resulting in duplicates in
+Gmail.
 
-If you've used SMS Backup before you should just connect your Gmail account as described above (SMS Backup+ is not able to access login information stored by SMS Backup). Make sure you select "Skip" when asked about the initial sync, otherwise already backed up messages will be backed up again.
+If you've used SMS Backup before you should just connect your Gmail account as
+described above (SMS Backup+ is not able to access login information stored by
+SMS Backup). Make sure you select "Skip" when asked about the initial sync,
+otherwise already backed up messages will be backed up again.
 
 ### Initial backup
 
-It is important that you perform the first backup manually. SMS Backup+ needs to know whether you want to upload messages currently stored on your device or not.
+It is important that you perform the first backup manually. SMS Backup+ needs
+to know whether you want to upload messages currently stored on your device or
+not.
 
-After having connected your Gmail account, SMS Backup+ will ask you to perform a first sync. If you choose "Backup", SMS Backup+ will start backing up all your messages to Gmail.
+After having connected your Gmail account, SMS Backup+ will ask you to perform
+a first sync. If you choose "Backup", SMS Backup+ will start backing up all
+your messages to Gmail.
 
-If you choose "Skip", nothing is sent to Gmail and all messages currently stored on your device are simply marked "backed up". This option is handy if you previously uninstalled SMS Backup+ and do not want to send your messages again to Gmail. Please note that any messages arrived after you last uninstalled SMS Backup and this initial backup won't ever be backed up to Gmail.
+If you choose "Skip", nothing is sent to Gmail and all messages currently
+stored on your device are simply marked "backed up". This option is handy if
+you previously uninstalled SMS Backup+ and do not want to send your messages
+again to Gmail. Please note that any messages arrived after you last
+uninstalled SMS Backup and this initial backup won't ever be backed up to
+Gmail.
 
-After you performed your initial backup, SMS Backup+ is ready to run in the background and finish uploading all of your current and future messages (check "Auto Backup").
+After you performed your initial backup, SMS Backup+ is ready to run in the
+background and finish uploading all of your current and future messages (check
+"Auto Backup").
 
 ### Restoring
 
-If you wish to restore messages back to your phone tap "Restore". By default all messages stored on Gmail will be restored (this can be changed in "Advanced Settings"). You can safely restore to a phone which has already message stored on it, SMS Backup+ will skip the restore of already existing messages.
+If you wish to restore messages back to your phone tap "Restore". By default
+all messages stored on Gmail will be restored (this can be changed in "Advanced
+Settings"). You can safely restore to a phone which has already message stored
+on it, SMS Backup+ will skip the restore of already existing messages.
 
 ##Screenshots
 
