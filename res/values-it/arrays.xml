@@ -35,9 +35,9 @@
   </string-array>
 
   <string-array name="email_address_style_values">
-    <item>nome</item>
-    <item>nome_e_numero</item>
-    <item>numero</item>
+    <item>name</item>
+    <item>name_and_number</item>
+    <item>number</item>
   </string-array>
 
   <string-array name="auto_backup_schedule_entries">
@@ -97,6 +97,6 @@
 
   <string-array name="server_authentication_values">
     <item>xoauth</item>
-    <item>testo</item>
+    <item>plain</item>
   </string-array>
 </resources>
