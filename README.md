@@ -137,6 +137,12 @@ in Gmail, and then check the Date header in the email ([screenshot][source]).
 
 All SMS backed up with version 1.1.2+ should show the correct time.
 
+### <a name="faq-request-token">When connecting, I get 'Could not obtain request token...'</a>
+
+If you get this error message and your network connection is active
+double-check that your time zone settings are correct, and that the local time is
+displaying correctly. The authentication process won't work otherwise.
+
 ## Contributing
 
 ### Installation from source

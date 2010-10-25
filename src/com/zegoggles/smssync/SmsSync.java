@@ -606,6 +606,9 @@ public class SmsSync extends PreferenceActivity {
                     String url = provider.retrieveRequestToken(consumer, callback[0]);
                     PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
                     return url;
+                } catch (oauth.signpost.exception.OAuthCommunicationException e) {
+                    Log.e(TAG, "error requesting token: " + e.getResponseBody(), e);
+                    return null;
                 } catch (oauth.signpost.exception.OAuthException e) {
                     Log.e(TAG, "error requesting token", e);
                     return null;
