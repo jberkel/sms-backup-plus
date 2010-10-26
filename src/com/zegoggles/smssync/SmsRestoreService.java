@@ -53,6 +53,7 @@ public class SmsRestoreService extends ServiceBase {
 
         protected java.lang.Integer doInBackground(Integer... params) {
             this.max = params.length > 0 ? params[0] : -1;
+            final boolean starredOnly = PrefStore.isRestoreStarredOnly(SmsRestoreService.this);
 
             try {
                 acquireLocks(false);
@@ -63,12 +64,7 @@ public class SmsRestoreService extends ServiceBase {
 
                 publishProgress(CALC);
 
-                Message[] msgs;
-                if (max > 0) {
-                    msgs = folder.getMessagesSince(null, max);
-                } else {
-                    msgs = folder.getMessages(null);
-                }
+                Message[] msgs = folder.getMessagesSince(null, max, starredOnly);
 
                 sItemsToRestoreCount = max == -1 ? msgs.length : Math.min(msgs.length, max);
 

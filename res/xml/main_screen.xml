@@ -58,6 +58,12 @@
           android:defaultValue="-1"
           android:persistent="true"/>
 
+        <CheckBoxPreference android:key="restore_starred_only"
+            android:title="@string/ui_restore_starred_only_label"
+            android:summary="@string/ui_restore_starred_only_desc"
+            android:persistent="true"
+            android:defaultValue="false"/>
+
         <ListPreference android:key="email_address_style"
           android:title="@string/ui_email_address_style_label"
           android:summary="@string/ui_email_address_style_desc"

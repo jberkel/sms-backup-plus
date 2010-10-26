@@ -59,20 +59,22 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
             super(store, name);
         }
 
-        public Message[] getMessagesSince(final Date since, int max) throws MessagingException  {
+        public Message[] getMessagesSince(final Date since, final int max, final boolean flagged)
+          throws MessagingException  {
             ImapSearcher searcher = new ImapSearcher()
             {
                 public List<ImapResponse> search() throws IOException, MessagingException
                 {
                     String sentSince = since != null ? " SENTSINCE " + RFC3501_DATE.format(since) : "";
-                    return executeSimpleCommand("UID SEARCH 1:* NOT DELETED" + sentSince);
+                    return executeSimpleCommand("UID SEARCH 1:* NOT DELETED" + sentSince
+                                               + (flagged ? " FLAGGED" : ""));
                 }
             };
 
             Message[] msgs = search(searcher, null);
 
             Log.i(Consts.TAG, "Found " + msgs.length + " msgs" + (since == null ? "" : " (since " + since + ")"));
-            if (max != -1 && msgs.length > max) {
+            if (max > 0 && msgs.length > max) {
                 if (LOCAL_LOGV) Log.v(Consts.TAG, "Fetching envelopes");
 
                 FetchProfile fp = new FetchProfile();

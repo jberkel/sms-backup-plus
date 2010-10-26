@@ -72,6 +72,9 @@ public class PrefStore {
     /** Preference for storing the maximum items per restore. */
     static final String PREF_MAX_ITEMS_PER_RESTORE = "max_items_per_restore";
 
+    /** Preference for storing the maximum items per restore. */
+    static final String PREF_RESTORE_STARRED_ONLY = "restore_starred_only";
+
     /** Preference for storing whether backed up messages should be marked as read on Gmail. */
     static final String PREF_MARK_AS_READ = "mark_as_read";
 
@@ -223,6 +226,10 @@ public class PrefStore {
 
     static boolean isMmsBackupEnabled(Context ctx) {
       return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
+    }
+
+    static boolean isRestoreStarredOnly(Context ctx) {
+      return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_STARRED_ONLY, false);
     }
 
     static String getReferenceUid(Context ctx) {

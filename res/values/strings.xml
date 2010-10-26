@@ -95,6 +95,9 @@
   <string name="ui_max_items_per_restore_label">Items per restore</string>
   <string name="ui_max_items_per_restore_desc">Maximum number of restored messages.</string>
 
+  <string name="ui_restore_starred_only_label">Starred SMS</string>
+  <string name="ui_restore_starred_only_desc">Only restore starred messages.</string>
+
   <string name="ui_backup_mms_label">Backup MMS</string>
   <string name="ui_backup_mms_desc">Enable MMS backup (beta)</string>
   <string name="ui_backup_mms_not_supported">MMS backup not supported on this platform.</string>
