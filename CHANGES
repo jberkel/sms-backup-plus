@@ -1,6 +1,8 @@
 == 1.1.4 tbd
 
  * Italian translation (Gabriele Ravanetti)
+ * Restore only starred messages (GH-63)
+ * Request token warning message
 
 == 1.1.2, 1.1.3 10-23-2010
 

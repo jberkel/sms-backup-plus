@@ -66,7 +66,7 @@ public class SmsRestoreService extends ServiceBase {
 
                 Message[] msgs = folder.getMessagesSince(null, max, starredOnly);
 
-                sItemsToRestoreCount = max == -1 ? msgs.length : Math.min(msgs.length, max);
+                sItemsToRestoreCount = max <= 0 ? msgs.length : Math.min(msgs.length, max);
 
                 long lastPublished = System.currentTimeMillis();
                 for (int i = 0; i < sItemsToRestoreCount && !sCanceled; i++) {
