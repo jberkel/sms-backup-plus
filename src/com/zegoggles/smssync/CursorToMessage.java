@@ -94,7 +94,7 @@ public class CursorToMessage {
     private boolean mMarkAsRead = false;
 
     private enum Style { NAME, NAME_AND_NUMBER, NUMBER };
-    private Style mStyle = Style.NAME;
+    private static Style mStyle = Style.NAME;
 
     public static interface Headers {
         String ID = "X-smssync-id";
@@ -350,7 +350,7 @@ public class CursorToMessage {
     }
 
     /* Look up a person */
-    private PersonRecord lookupPerson(final String address) {
+    public PersonRecord lookupPerson(final String address) {
         if (!mPeopleCache.containsKey(address)) {
             Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
                                                  Phones.CONTENT_FILTER_URL, Uri.encode(address));
@@ -370,6 +370,7 @@ public class CursorToMessage {
                 record._id    = sanitize(address);
                 record.number = sanitize(address);
                 record.email  = encodeLocal(address) + "@" + UNKNOWN_PERSON;
+                record.unknown = true;
             }
             mPeopleCache.put(address, record);
 
@@ -462,8 +463,9 @@ public class CursorToMessage {
         public List<Message> messageList;
     }
 
-    private class PersonRecord {
+    public static class PersonRecord {
         public String _id, name, email, number;
+        public boolean unknown = false;
         private Address mAddress;
 
         public Address getAddress() {
