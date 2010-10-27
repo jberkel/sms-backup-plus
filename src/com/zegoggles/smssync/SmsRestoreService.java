@@ -167,9 +167,9 @@ public class SmsRestoreService extends ServiceBase {
                     if (uri != null) {
                       insertedIds.add(uri.getLastPathSegment());
 
-                      long timestamp = values.getAsLong(SmsConsts.DATE);
+                      Long timestamp = values.getAsLong(SmsConsts.DATE);
 
-                      if (getMaxSyncedDateSms() < timestamp) {
+                      if (timestamp != null && getMaxSyncedDateSms() < timestamp) {
                           updateMaxSyncedDateSms(timestamp);
                       }
                       if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
