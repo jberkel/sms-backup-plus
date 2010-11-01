@@ -48,7 +48,7 @@
 
   <string name="status_unknown_error_details">Erreur pendant la sauvgarde/réstauration :\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Erreur d\'identification</string>
-  <string name="notification_auth_failure">Erreur d\'identification SMSBackup+</string>
+  <string name="notification_auth_failure">Erreur d\'identification SMS Backup+</string>
 
   <string name="status_auth_failure_details_xoauth">Erreur d\'authentification XOAuth. Veuillez vérifier que vous avez bien activé le protocol IMAP dans les réglages de votre compte Gmail.</string>
   <string name="status_auth_failure_details_plain">Erreur d\'authentification IMAP.
