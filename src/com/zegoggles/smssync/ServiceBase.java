@@ -81,7 +81,7 @@ public abstract class ServiceBase extends Service {
             sWifiLock = wMgr.createWifiLock("SMS Backup+");
           }
           sWifiLock.acquire();
-        } else if (PrefStore.isWifiOnly(this)) {
+        } else if (background && PrefStore.isWifiOnly(this)) {
           throw new ConnectivityErrorException(getString(R.string.error_wifi_only_no_connection));
         }
 
