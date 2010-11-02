@@ -2,18 +2,18 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">SMS Backup+</string>
 
-    <string name="app_description">Sauvgarder vos SMS dans votre compte Gmail. Ceci est une version ameliorée de l\'application "SMS Backup" de Christpoh Studer qui ajoute la possibilité de réstaurer vos SMS sauvgardés sur votre mobile. Cette version est entièrement compatible avec les sauvgardes faites avec l\'ancienne version.</string>
+    <string name="app_description">Sauvgarder vos SMS dans votre compte Gmail. Ceci est une version ameliorée de l\'application "SMS Backup" de Christpoh Studer qui ajoute la possibilité de restaurer vos SMS sauvgardés sur votre mobile. Cette version est entièrement rétro-compatible avec les sauvgardes faites avec l\'ancienne version.</string>
 
-  <string name="ui_sync_button_label_idle">Backup</string>
-  <string name="ui_sync_button_label_done">Backup</string>
-  <string name="ui_sync_button_label_canceling">Stopping</string>
-  <string name="ui_sync_button_label_error">Backup</string>
+  <string name="ui_sync_button_label_idle">Sauvgarder</string>
+  <string name="ui_sync_button_label_done">Sauvgarder</string>
+  <string name="ui_sync_button_label_canceling">Arrêt</string>
+  <string name="ui_sync_button_label_error">Sauvgarder</string>
   <string name="ui_sync_button_label_syncing">Annuler</string>
 
-  <string name="ui_restore_button_label_idle">Restore</string>
-  <string name="ui_restore_button_label_done">Restore</string>
+  <string name="ui_restore_button_label_idle">Restaurer</string>
+  <string name="ui_restore_button_label_done">Restaurer</string>
   <string name="ui_restore_button_label_restoring">Annuler</string>
-  <string name="ui_restore_button_label_error">Restore</string>
+  <string name="ui_restore_button_label_error">Restaurer</string>
 
   <string name="status_idle">Inactif</string>
   <string name="status_idle_details">Dernier SMS sauvgardé à : <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -22,7 +22,7 @@
   <string name="status_working">En état de marche</string>
 
   <string name="status_backup">Sauvgarde en cours</string>
-  <string name="status_restore">Réstauration en cours</string>
+  <string name="status_restore">Restauration en cours</string>
 
   <string name="status_backup_details">Sauvgardé <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
   <string name="status_restore_details">Restauré <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
@@ -46,7 +46,7 @@
   <string name="status_unknown_error">Erreur</string>
   <string name="notification_unknown_error">Erreur SMSBackup+</string>
 
-  <string name="status_unknown_error_details">Erreur pendant la sauvgarde/réstauration :\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_unknown_error_details">Erreur pendant la sauvgarde/restauration :\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Erreur d\'identification</string>
   <string name="notification_auth_failure">Erreur d\'identification SMS Backup+</string>
 
@@ -89,10 +89,10 @@
   <string name="ui_max_items_per_sync_label">Objets par sauvgarde</string>
   <string name="ui_max_items_per_sync_desc">Numéro maximum d\'objets par sauvgarde.</string>
   <string name="ui_max_items_per_restore_label">Objets par restauration</string>
-  <string name="ui_max_items_per_restore_desc">Numéro maximum de messages à réstaurer.</string>
+  <string name="ui_max_items_per_restore_desc">Numéro maximum de messages à restaurer.</string>
 
   <string name="ui_restore_starred_only_label">SMS favoris</string>
-  <string name="ui_restore_starred_only_desc">Ne réstaurer que les SMS classés "favoris".</string>
+  <string name="ui_restore_starred_only_desc">Ne restaurer que les SMS classés "favoris".</string>
 
   <string name="ui_backup_mms_label">Sauvgarde de MMS</string>
   <string name="ui_backup_mms_desc">Activer la sauvgarde de MMS (beta)</string>
@@ -101,7 +101,7 @@
   <string name="ui_mark_as_read_label">Marquer comme lus (e-mails)</string>
   <string name="ui_mark_as_read_desc">Définir si les messages (dans Gmail) seront classés en tant que lus, ou non.</string>
   <string name="ui_mark_as_read_restore_label">Marquer comme lus (SMS)</string>
-  <string name="ui_mark_as_read_restore_desc">Définir si les messages réstaurés seront classés comme lus, ou non (sur cet appareil).</string>
+  <string name="ui_mark_as_read_restore_desc">Définir si les messages restaurés seront classés comme lus, ou non (sur cet appareil).</string>
 
   <string name="ui_email_address_style_label">Style d\'adresse e-mail</string>
   <string name="ui_email_address_style_desc">Format des adresses e-mail</string>
@@ -117,7 +117,7 @@
   <string name="ui_auto_backup_incoming_schedule_desc">Définir quand les SMS seront sauvgardés après leur réception.</string>
 
   <string name="ui_wifi_only_label">WiFi requis</string>
-  <string name="ui_wifi_only_desc">Ne sauvgarder/réstaurer que quand l\'appareil est connecté à la WiFi</string>
+  <string name="ui_wifi_only_desc">Ne sauvgarder/restaurer que quand l\'appareil est connecté à la WiFi</string>
 
   <string name="ui_notifications_label">Notifications</string>
   <string name="ui_notifications_desc">Notifications d\'arrière plan</string>
