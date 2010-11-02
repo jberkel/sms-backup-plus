@@ -191,7 +191,7 @@ public class SmsRestoreService extends ServiceBase {
 
     @Override
     public void onCreate() {
-       clearCache();
+       asyncClearCache();
        BinaryTempFileBody.setTempDirectory(getCacheDir());
     }
 
@@ -204,6 +204,12 @@ public class SmsRestoreService extends ServiceBase {
                 new RestoreTask().execute(PrefStore.getMaxItemsPerRestore(this));
             }
         }
+    }
+
+    private synchronized void asyncClearCache() {
+       new Thread("clearCache") {
+          @Override public void run() { clearCache(); }
+       }.start();
     }
 
     private void clearCache() {
