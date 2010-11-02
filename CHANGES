@@ -1,4 +1,9 @@
-== 1.1.4 tbd
+== 1.1.5 tbd
+
+ * French translation (Christian Sorgi)
+ * Russian translation (Petr P. Gornostaev)
+
+== 1.1.4 10-26-2010
 
  * Italian translation (Gabriele Ravanetti)
  * Restore only starred messages (GH-63)
