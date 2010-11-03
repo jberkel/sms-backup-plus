@@ -327,7 +327,8 @@ public class SmsRestoreService extends ServiceBase {
         final Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
                                                     new Object[] { this, lookupNumber(recipient)  });
         if (LOCAL_LOGV) Log.v(TAG, "threadId for " + recipient + ": " + id);
-        mThreadIdCache.put(recipient, id);
+        if (id != null) mThreadIdCache.put(recipient, id);
+
         return id;
       } catch (InvocationTargetException e) {
         return noThreadsAvailable(e);
