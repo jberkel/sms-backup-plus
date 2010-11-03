@@ -12,6 +12,8 @@ import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import org.apache.commons.io.IOUtils;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Map;
+import java.util.LinkedHashMap;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.lang.reflect.Method;
@@ -41,7 +43,15 @@ public class SmsRestoreService extends ServiceBase {
     private Method getOrCreateThreadId;
     private boolean threadsAvailable = true;
 
-    private CursorToMessage ctm;
+    private static final int MAX_THREAD_CACHE_SIZE = 500;
+    private Map<String, Long> mThreadIdCache =
+          new LinkedHashMap<String, Long>(MAX_THREAD_CACHE_SIZE+1, .75F, true) {
+          @Override
+          public boolean removeEldestEntry(Map.Entry eldest) {
+            return size() > MAX_THREAD_CACHE_SIZE;
+          }
+      };
+
 
     public static void cancel() {
         sCanceled = true;
@@ -63,7 +73,6 @@ public class SmsRestoreService extends ServiceBase {
         private Set<String> insertedIds = new HashSet<String>();
         private Set<String> uids = new HashSet<String>();
         private int max;
-
         protected java.lang.Integer doInBackground(Integer... params) {
             this.max = params.length > 0 ? params[0] : -1;
             final boolean starredOnly = PrefStore.isRestoreStarredOnly(SmsRestoreService.this);
@@ -212,7 +221,6 @@ public class SmsRestoreService extends ServiceBase {
     public void onCreate() {
        asyncClearCache();
        BinaryTempFileBody.setTempDirectory(getCacheDir());
-       ctm = new CursorToMessage(this, PrefStore.getUserEmail(this));
     }
 
     @Override
@@ -294,48 +302,44 @@ public class SmsRestoreService extends ServiceBase {
 
     private String lookupNumber(String address) {
         return address;
-
-        /*
-        PersonRecord p = ctm.lookupPerson(address);
-        return p.unknown ? address : p.number;
-        */
     }
 
     private Long getThreadId(final String recipient) {
-      if (recipient == null) return null;
+      if (recipient == null || !threadsAvailable) return null;
 
-      if (threadsAvailable && getOrCreateThreadId == null) {
+      if (mThreadIdCache.containsKey(recipient)) {
+        return mThreadIdCache.get(recipient);
+      }
+
+      if (getOrCreateThreadId == null) {
         try {
           telephonyThreads = Class.forName("android.provider.Telephony$Threads");
           getOrCreateThreadId = telephonyThreads.getMethod("getOrCreateThreadId",
                                                   new Class[] { Context.class, String.class });
         } catch (NoSuchMethodException e) {
-          Log.e(TAG, "threadsNotAvailable", e);
-          threadsAvailable = false;
+          return noThreadsAvailable(e);
         } catch (ClassNotFoundException e) {
-          Log.e(TAG, "threadsNotAvailable", e);
-          threadsAvailable = false;
+          return noThreadsAvailable(e);
         }
       }
 
-      if (threadsAvailable) {
-        try {
-          Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
-                                                      new Object[] { this, lookupNumber(recipient)  });
-          Log.d(TAG, "threadId for " + recipient + ": " + id);
-          return id;
-        } catch (InvocationTargetException e) {
-          Log.e(TAG, "threadsNotAvailable", e);
-          threadsAvailable = false;
-          return null;
-        } catch (IllegalAccessException e) {
-          Log.e(TAG, "threadsNotAvailable", e);
-          threadsAvailable = false;
-          return null;
-        }
-      } else {
-        return null;
+      try {
+        final Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
+                                                    new Object[] { this, lookupNumber(recipient)  });
+        if (LOCAL_LOGV) Log.v(TAG, "threadId for " + recipient + ": " + id);
+        mThreadIdCache.put(recipient, id);
+        return id;
+      } catch (InvocationTargetException e) {
+        return noThreadsAvailable(e);
+      } catch (IllegalAccessException e) {
+        return noThreadsAvailable(e);
       }
+    }
+
+    private Long noThreadsAvailable(Throwable e) {
+        Log.e(TAG, "threadsNotAvailable", e);
+        threadsAvailable = false;
+        return null;
     }
 
     private String getHeader(Message msg, String header) {
