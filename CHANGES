@@ -2,6 +2,11 @@
 
  * French translation (Christian Sorgi)
  * Russian translation (Petr P. Gornostaev)
+ * Updating thread progress message (GH-69)
+ * Label prefix patch (Daniele Battista)
+ * Warning message for DROID X users
+ * cache clearing on start is now async
+ * Ignore Require WiFi setting on manual backup (GH-65)
 
 == 1.1.4 10-26-2010
 
