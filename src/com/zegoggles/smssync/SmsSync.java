@@ -334,6 +334,10 @@ public class SmsSync extends PreferenceActivity {
                     mProgressBar.setProgress(SmsRestoreService.getCurrentRestoredItems());
                     mProgressBar.setMax(SmsRestoreService.getItemsToRestoreCount());
                     break;
+                case UPDATING_THREADS:
+                    mProgressBar.setIndeterminate(true);
+                    mSyncDetailsLabel.setText(getString(R.string.status_updating_threads));
+                    break;
                 case AUTH_FAILED: authFailed(); break;
                 case CONNECTIVITY_ERROR:
                 case GENERAL_ERROR:

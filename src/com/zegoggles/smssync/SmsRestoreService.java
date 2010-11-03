@@ -88,7 +88,9 @@ public class SmsRestoreService extends ServiceBase {
                       clearCache();
                     }
                 }
-                updateAllThreads();
+                publishProgress(UPDATING_THREADS);
+                updateAllThreads(false);
+
                 return insertedIds.size();
             } catch (ConnectivityErrorException e) {
                 lastError = e.getLocalizedMessage();
@@ -128,23 +130,27 @@ public class SmsRestoreService extends ServiceBase {
           sState = progress[0];
         }
 
-        private void updateAllThreads() {
+        private void updateAllThreads(final boolean async) {
             // thread dates + states might be wrong, we need to force a full update
             // unfortunately there's no direct way to do that in the SDK, but passing a
             // negative conversation id to delete should to the trick
 
             if (!insertedIds.isEmpty()) {
               // execute in background, might take some time
-              new Thread() {
+              final Thread t = new Thread() {
                   @Override
                   public void run() {
                       Log.d(TAG, "updating threads");
                       getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
                       Log.d(TAG, "finished");
                   }
-              }.start();
+              };
+              t.start();
+              try {
+                if (!async) t.join();
+              } catch (InterruptedException e) { }
             }
-          }
+        }
 
         private void importMessage(Message message) {
             uids.add(message.getUid());

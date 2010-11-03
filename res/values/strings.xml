@@ -31,6 +31,7 @@
   <string name="status_backup_details">Backed up <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
   <string name="status_restore_details">Restored <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
   <string name="status_login_details">Logging in\u2026</string>
+  <string name="status_updating_threads">Updating threads\u2026</string>
   <string name="status_done">Done</string>
   <string name="status_backup_done_details_max_per_sync">Maximum of %1$d items per backup reached. Restart backup to continue.</string>
   <string name="status_backup_done_details_noitems">There were no items to backup.</string>
