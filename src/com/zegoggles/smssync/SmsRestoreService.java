@@ -81,6 +81,8 @@ public class SmsRestoreService extends ServiceBase {
                 acquireLocks(false);
                 sIsRunning = true;
 
+                SmsRestoreService.this.mThreadIdCache.clear();
+
                 publishProgress(LOGIN);
                 ImapStore.BackupFolder folder = getBackupFolder();
 
@@ -157,21 +159,19 @@ public class SmsRestoreService extends ServiceBase {
             // unfortunately there's no direct way to do that in the SDK, but passing a
             // negative conversation id to delete should to the trick
 
-            if (!insertedIds.isEmpty()) {
-              // execute in background, might take some time
-              final Thread t = new Thread() {
-                  @Override
-                  public void run() {
-                      Log.d(TAG, "updating threads");
-                      getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
-                      Log.d(TAG, "finished");
-                  }
-              };
-              t.start();
-              try {
-                if (!async) t.join();
-              } catch (InterruptedException e) { }
-            }
+            // execute in background, might take some time
+            final Thread t = new Thread() {
+                @Override
+                public void run() {
+                    Log.d(TAG, "updating threads");
+                    getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
+                    Log.d(TAG, "finished");
+                }
+            };
+            t.start();
+            try {
+              if (!async) t.join();
+            } catch (InterruptedException e) { }
         }
 
         private void importMessage(Message message) {
