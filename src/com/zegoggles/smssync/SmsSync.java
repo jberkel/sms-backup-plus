@@ -101,9 +101,9 @@ public class SmsSync extends PreferenceActivity {
 
         int version = Integer.parseInt(Build.VERSION.SDK);
         if (version < MIN_VERSION_MMS) {
-	        Preference backupMms = findPreference("backup_mms");
-	        backupMms.setEnabled(false);
-	        backupMms.setSummary(R.string.ui_backup_mms_not_supported);
+          Preference backupMms = findPreference("backup_mms");
+          backupMms.setEnabled(false);
+          backupMms.setSummary(R.string.ui_backup_mms_not_supported);
         }
 
         if (PrefStore.showUpgradeMessage(this)) {
