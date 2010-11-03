@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.content.Context;
 import android.util.Log;
 import com.fsck.k9.mail.*;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
@@ -13,8 +14,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.NoSuchMethodException;
+import java.lang.ClassNotFoundException;
+
 
 import static com.zegoggles.smssync.CursorToMessage.Headers.*;
+import static com.zegoggles.smssync.CursorToMessage.PersonRecord;
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 
 import static com.zegoggles.smssync.App.*;
@@ -29,6 +36,12 @@ public class SmsRestoreService extends ServiceBase {
 
     private static boolean sIsRunning = false;
     private static boolean sCanceled = false;
+
+    private Class telephonyThreads;
+    private Method getOrCreateThreadId;
+    private boolean threadsAvailable = true;
+
+    private CursorToMessage ctm;
 
     public static void cancel() {
         sCanceled = true;
@@ -199,6 +212,7 @@ public class SmsRestoreService extends ServiceBase {
     public void onCreate() {
        asyncClearCache();
        BinaryTempFileBody.setTempDirectory(getCacheDir());
+       ctm = new CursorToMessage(this, PrefStore.getUserEmail(this));
     }
 
     @Override
@@ -273,8 +287,55 @@ public class SmsRestoreService extends ServiceBase {
         values.put(SmsConsts.SERVICE_CENTER, getHeader(message, SERVICE_CENTER));
         values.put(SmsConsts.DATE, getHeader(message, DATE));
         values.put(SmsConsts.STATUS, getHeader(message, STATUS));
+        values.put(SmsConsts.THREAD_ID, getThreadId(getHeader(message, ADDRESS)));
         values.put(SmsConsts.READ, PrefStore.getMarkAsReadOnRestore(this) ? "1" : getHeader(message, READ));
         return values;
+    }
+
+    private String lookupNumber(String address) {
+        return address;
+
+        /*
+        PersonRecord p = ctm.lookupPerson(address);
+        return p.unknown ? address : p.number;
+        */
+    }
+
+    private Long getThreadId(final String recipient) {
+      if (recipient == null) return null;
+
+      if (threadsAvailable && getOrCreateThreadId == null) {
+        try {
+          telephonyThreads = Class.forName("android.provider.Telephony$Threads");
+          getOrCreateThreadId = telephonyThreads.getMethod("getOrCreateThreadId",
+                                                  new Class[] { Context.class, String.class });
+        } catch (NoSuchMethodException e) {
+          Log.e(TAG, "threadsNotAvailable", e);
+          threadsAvailable = false;
+        } catch (ClassNotFoundException e) {
+          Log.e(TAG, "threadsNotAvailable", e);
+          threadsAvailable = false;
+        }
+      }
+
+      if (threadsAvailable) {
+        try {
+          Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
+                                                      new Object[] { this, lookupNumber(recipient)  });
+          Log.d(TAG, "threadId for " + recipient + ": " + id);
+          return id;
+        } catch (InvocationTargetException e) {
+          Log.e(TAG, "threadsNotAvailable", e);
+          threadsAvailable = false;
+          return null;
+        } catch (IllegalAccessException e) {
+          Log.e(TAG, "threadsNotAvailable", e);
+          threadsAvailable = false;
+          return null;
+        }
+      } else {
+        return null;
+      }
     }
 
     private String getHeader(Message msg, String header) {
