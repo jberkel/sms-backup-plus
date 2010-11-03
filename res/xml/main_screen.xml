@@ -42,6 +42,13 @@
           android:persistent="true"
           android:defaultValue="SMS"/>
 
+        <CheckBoxPreference android:key="mail_subject_prefix"
+          android:title="@string/ui_mail_subject_prefix_label"
+          android:persistent="true"
+          android:defaultValue="false"
+          android:summary="@string/ui_mail_subject_prefix_desc">
+        </CheckBoxPreference>
+
         <ListPreference android:key="max_items_per_sync"
           android:title="@string/ui_max_items_per_sync_label"
           android:summary="@string/ui_max_items_per_sync_desc"

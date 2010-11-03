@@ -89,6 +89,8 @@
   <string name="ui_imap_folder_label">Etichetta Gmail</string>
   <string name="ui_imap_folder_desc">Etichetta Gmail assegnata agli SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">I messaggi SMS salvati saranno taggati con questa etichetta in Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">Prefisso oggetto email</string>
+  <string name="ui_mail_subject_prefix_desc">Utilizza l\'etichetta Gmail come prefisso da inserire nell\'oggetto dell\'email</string>
 
   <string name="ui_max_items_per_sync_label">Elementi per backup</string>
   <string name="ui_max_items_per_sync_desc">Massimo numero di elementi per backup.</string>
@@ -137,7 +139,7 @@
       I dati del backup sono stati resettati. Si prega di riconnetere il tuo account ed effettuare un backup manualmente. Sarete in grado di decidere se effettuare il backup o saltare la memorizzazione dei messaggi su questo dispositivo.
   </string>
   <string name="ui_dialog_invalid_imap_folder_title">Nome etichetta non valido</string>
-  <string name="ui_dialog_invalid_imap_folder_msg">Il nome dell\'etichetta deve contenere solo lettere non accentate (A-Z, a-z) e \'/\'.</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Il nome dell\'etichetta deve contenere solo lettere non accentate e numeri (A-Z, a-z, 0-9), \'/\', \'.\' e spazi (ma non all\'inizio e alla fine).</string>
   <string name="ui_dialog_first_sync_title">Primo backup</string>
   <string name="ui_dialog_first_sync_msg">Salva o trascura tutti i messaggi attualmente memorizzati su questo dispositivo?</string>
   <string name="ui_dialog_first_sync_msg_batched">Salva o trascura tutti i messaggi attualmente memorizzati su questo dispositivo?\n\nNota: Il backup potrebbe essere diviso in parti da %1$d messaggi.</string>

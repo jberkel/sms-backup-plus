@@ -54,6 +54,9 @@ public class PrefStore {
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
 
+    /** Preference key containing the IMAP folder name where SMS should be backed up to. */
+    static final String PREF_MAIL_SUBJECT_PREFIX = "mail_subject_prefix";
+
     /** Preference key for storing whether to enable auto sync or not. */
     static final String PREF_ENABLE_AUTO_SYNC = "enable_auto_sync";
 
@@ -93,6 +96,9 @@ public class PrefStore {
 
     /** Default value for {@link PrefStore#PREF_IMAP_FOLDER}. */
     static final String DEFAULT_IMAP_FOLDER = "SMS";
+
+    /** Default value for {@link PrefStore#PREF_MAIL_SUBJECT_PREFIX}. */
+    static final boolean DEFAULT_MAIL_SUBJECT_PREFIX = false;
 
     /** Default value for {@link PrefStore#PREF_ENABLE_AUTO_SYNC}. */
     static final boolean DEFAULT_ENABLE_AUTO_SYNC = false;
@@ -246,6 +252,10 @@ public class PrefStore {
         return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER, DEFAULT_IMAP_FOLDER);
     }
 
+    static boolean getMailSubjectPrefix(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_MAIL_SUBJECT_PREFIX, DEFAULT_MAIL_SUBJECT_PREFIX);
+    }
+
     static boolean isImapFolderSet(Context ctx) {
         return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER);
     }
@@ -279,15 +289,21 @@ public class PrefStore {
 
     /**
      * Returns whether an IMAP folder is valid. This is the case if the name
-     * only contains unaccented latin letters <code>[a-zA-Z]</code>.
+     * only contains unaccented latin letters <code>[a-zA-Z]</code>, spaces, numbers, dots and /.
      */
     static boolean isValidImapFolder(String imapFolder) {
+      if (imapFolder == null || imapFolder.length() == 0) return false;
+      if (imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ')
+          return false;
+
         for (int i = 0; i < imapFolder.length(); i++) {
             char currChar = imapFolder.charAt(i);
             if (!((currChar >= 'a' && currChar <= 'z')
                     || (currChar >= 'A' && currChar <= 'Z')
                     || (currChar == '.')
                     || (currChar == '/')
+                    || (currChar == ' ')
+                    || (currChar >= '0' && currChar <= '9')
                     )) {
                 return false;
             }

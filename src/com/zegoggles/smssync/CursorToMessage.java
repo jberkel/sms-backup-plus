@@ -41,6 +41,8 @@ import android.provider.Contacts.Phones;
 import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 
+import com.zegoggles.smssync.PrefStore;
+
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.BodyPart;
@@ -178,7 +180,10 @@ public class CursorToMessage {
         }
 
         PersonRecord record = lookupPerson(address);
-        msg.setSubject("SMS with " + record.getName());
+        if (PrefStore.getMailSubjectPrefix(mContext))
+          msg.setSubject("[" + PrefStore.getImapFolder(mContext) + "] " + record.getName());
+        else
+          msg.setSubject("SMS with " + record.getName());
 
         TextBody body = new TextBody(msgMap.get(SmsConsts.BODY));
 
@@ -283,7 +288,10 @@ public class CursorToMessage {
       }
 
         PersonRecord record = lookupPerson(address);
-        msg.setSubject("SMS with " + record.getName());
+        if (PrefStore.getMailSubjectPrefix(mContext))
+          msg.setSubject("[" + PrefStore.getImapFolder(mContext) + "] " + record.getName());
+        else
+          msg.setSubject("SMS with " + record.getName());
 
         if (inbound) {
             // Received message
