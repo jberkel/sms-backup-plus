@@ -79,7 +79,8 @@ public class SmsSync extends PreferenceActivity {
       REQUEST_TOKEN_ERROR,
       CONNECT,
       CONNECT_TOKEN_ERROR,
-      UPGRADE
+      UPGRADE,
+      BROKEN_DROIDX
     }
 
     StatusPreference statusPref;
@@ -108,6 +109,14 @@ public class SmsSync extends PreferenceActivity {
 
         if (PrefStore.showUpgradeMessage(this)) {
           show(Dialogs.UPGRADE);
+        }
+
+        if ("DROIDX".equals(Build.MODEL) &&
+            Integer.parseInt(Build.VERSION.SDK) == Build.VERSION_CODES.FROYO &&
+            !getPreferences(MODE_PRIVATE).getBoolean("droidx_warning_displayed", false)) {
+
+          getPreferences(MODE_PRIVATE).edit().putBoolean("droidx_warning_displayed", true).commit();
+          show(Dialogs.BROKEN_DROIDX);
         }
 
         PrefStore.upgradeOAuthUsername(this);
@@ -549,6 +558,10 @@ public class SmsSync extends PreferenceActivity {
             case UPGRADE:
                 title = getString(R.string.ui_dialog_upgrade_title);
                 msg = getString(R.string.ui_dialog_upgrade_msg);
+                break;
+            case BROKEN_DROIDX:
+                title = getString(R.string.ui_dialog_brokendroidx_title);
+                msg   = getString(R.string.ui_dialog_brokendroidx_msg);
                 break;
             default:
                 return null;
