@@ -143,6 +143,11 @@ If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
 
+### <a name="droidx-received">I'm using a Motorola DROID X, and it does not back up received messages!</a>
+
+It's a known SMS bug in the 2.2 update ([details][droidbug]). As a workaround
+you can try installing [SMS Time fix][].
+
 ## Contributing
 
 ### Installation from source
@@ -186,3 +191,5 @@ This application is released under the terms of the [Apache License, Version 2.0
 [crowdin project page]: http://crowdin.net/project/sms-backup-plus/invite
 [showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
 [source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
+[droidbug]: http://www.enterprisemobiletoday.com/news/article.php/3905466/Android-22-Droid-X-Update-Causing-SMS-Bug.htm
+[SMS Time fix]: http://www.appbrain.com/app/sms-time-fix/com.mattprecious.smsfix
