@@ -15,4 +15,8 @@ public class MmsConsts {
   public static final String THREAD_ID = "thread_id";
 
   public static final String INSERT_ADDRESS_TOKEN = "insert-address-token";
+
+  public static final String TYPE = "m_type";
+
+  public static final String DELIVERY_REPORT = "134"; // 0x86
 }

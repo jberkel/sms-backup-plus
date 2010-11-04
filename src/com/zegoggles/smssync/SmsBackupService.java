@@ -182,9 +182,7 @@ public class SmsBackupService extends ServiceBase {
               publish(CANCELED_BACKUP);
            } else if (result != null) {
               Log.i(TAG, result + " items backed up");
-              if (result == sItemsToSync) {
-                publish(FINISHED_BACKUP);
-              }
+              publish(FINISHED_BACKUP);
            }
            sIsRunning = false;
            sCanceled = false;
@@ -265,7 +263,8 @@ public class SmsBackupService extends ServiceBase {
 
           return getContentResolver().query(SMS_PROVIDER, null,
                 String.format("%s > ? AND %s <> ?", SmsConsts.DATE, SmsConsts.TYPE),
-                new String[] { String.valueOf(getMaxSyncedDateSms()), String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
+                new String[] { String.valueOf(getMaxSyncedDateSms()),
+                               String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
                 sortOrder);
       }
 
@@ -288,8 +287,9 @@ public class SmsBackupService extends ServiceBase {
             sortOrder += " LIMIT " + max;
           }
           return getContentResolver().query(MMS_PROVIDER, null,
-                String.format("%s > ?", SmsConsts.DATE),
-                new String[] { String.valueOf(getMaxSyncedDateMms()) },
+                String.format("%s > ? AND %s <> ?", SmsConsts.DATE, MmsConsts.TYPE),
+                new String[] { String.valueOf(getMaxSyncedDateMms()),
+                               MmsConsts.DELIVERY_REPORT },
                 sortOrder);
       }
 
