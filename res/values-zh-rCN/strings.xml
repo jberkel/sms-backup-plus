@@ -31,6 +31,7 @@
   <string name="status_backup_details">已经备份 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 条\u2026</string>
   <string name="status_restore_details">已经还原 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 条\u2026</string>
   <string name="status_login_details">正在登录\u2026</string>
+  <string name="status_updating_threads">正在更新会话\u2026</string>
   <string name="status_done">完成</string>
   <string name="status_backup_done_details_max_per_sync">达到每次备份 %1$d 条的最大限制数。要继续，请重新启动备份。</string>
   <string name="status_backup_done_details_noitems">没有需要备份的内容。</string>
@@ -89,14 +90,20 @@
   <string name="ui_imap_folder_label">Gmail 标签</string>
   <string name="ui_imap_folder_desc">应用到短信的 Gmail 标签。</string>
   <string name="ui_imap_folder_label_dialog_msg">备份的短信将在 Gmail 中以此标签标记。</string>
+  <string name="ui_mail_subject_prefix_label">邮件主题前缀</string>
+  <string name="ui_mail_subject_prefix_desc">以 IMAP 文件夹名称作为邮件主题前缀</string>
 
   <string name="ui_max_items_per_sync_label">每次备份条数</string>
   <string name="ui_max_items_per_sync_desc">每次备份的最大数量。</string>
   <string name="ui_max_items_per_restore_label">每次还原条数</string>
   <string name="ui_max_items_per_restore_desc">每次还原的最大数量。</string>
 
+  <string name="ui_restore_starred_only_label">已加星标的短信</string>
+  <string name="ui_restore_starred_only_desc">仅还原已加星标的信息。</string>
+
   <string name="ui_backup_mms_label">备份彩信</string>
   <string name="ui_backup_mms_desc">启用彩信备份功能 (beta 测试)。</string>
+  <string name="ui_backup_mms_not_supported">此平台暂不支持彩信备份。</string>
 
   <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
@@ -158,6 +165,11 @@
   <string name="ui_dialog_upgrade_msg">
    SMS Backup+ 与 SMS Backup 软件完全向下兼容。但是，请确保只在其中一款软件中启用“自动备份”，否则您将会重复备份。如果您已经对手机中的信息进行过备份，在第一次进行同步操作时应该选择“跳过”。
   </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X 短信 Bug</string>
+  <string name="ui_dialog_brokendroidx_msg">在 Droid X 上存在一个 Bug 
+  导致本程序无法备份收到的短消息。请登录网站查看 FAQ 以便
+  了解更多信息。</string>
 
   <string name="ui_sync">备份</string>
   <string name="ui_skip">跳过</string>
