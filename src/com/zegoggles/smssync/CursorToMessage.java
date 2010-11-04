@@ -274,11 +274,9 @@ public class CursorToMessage {
 
             BodyPart imagePart = new MimeBodyPart(attachment, contentType);
             imagePart.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
-                        String.format("%s;\n name=\"%s\"",
-                            contentType, name));
+                  String.format("%s;\n name=\"%s\"", contentType, name));
             imagePart.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
-            //imagePart.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,
-                //      String.format("attachment;\n filename=\"%s\";\n size=%d", name, size);
+            imagePart.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION, "attachment");
             body.addBodyPart(imagePart);
           } else if (contentType.equals("text/plain")) {
             Body textBody = new TextBody(curPart.getString(curPart.getColumnIndex("text")));
