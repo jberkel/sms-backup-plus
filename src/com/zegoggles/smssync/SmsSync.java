@@ -289,14 +289,12 @@ public class SmsSync extends PreferenceActivity {
         }
 
         private void idle() {
-            long lastSync = PrefStore.getLastSync(getContext());
             String text;
-            if (lastSync == PrefStore.DEFAULT_LAST_SYNC) {
+            final long lastSync = PrefStore.getMostRecentSyncedDate(SmsSync.this);
+            if (lastSync < 0) {
                 text = getString(R.string.status_idle_details_never);
             } else {
-                text = PrefStore.getMaxSyncedDateSms(SmsSync.this) != -1 ?
-                              new Date(PrefStore.getMaxSyncedDateSms(SmsSync.this)).toLocaleString() :
-                              new Date(lastSync).toLocaleString();
+                text = new Date(lastSync).toLocaleString();
             }
             mSyncDetailsLabel.setText(getString(R.string.status_idle_details, text));
             mStatusLabel.setText(R.string.status_idle);

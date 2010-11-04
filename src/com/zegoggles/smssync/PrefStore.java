@@ -66,9 +66,6 @@ public class PrefStore {
     /** Preference key for the interval between backup of outgoing SMS. */
     static final String PREF_REGULAR_TIMEOUT_SECONDS = "auto_backup_schedule";
 
-    /** Preference for storing the time of the last sync. */
-    static final String PREF_LAST_SYNC = "last_sync";
-
     /** Preference for storing the maximum items per sync. */
     static final String PREF_MAX_ITEMS_PER_SYNC = "max_items_per_sync";
 
@@ -132,6 +129,13 @@ public class PrefStore {
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
+    }
+
+    static long getMostRecentSyncedDate(Context ctx) {
+        return Math.max(
+            getMaxSyncedDateSms(ctx),
+            getMaxSyncedDateMms(ctx) * 1000
+        );
     }
 
     static long getMaxSyncedDateSms(Context ctx) {
@@ -340,16 +344,6 @@ public class PrefStore {
         return getStringAsInt(ctx, PREF_REGULAR_TIMEOUT_SECONDS, DEFAULT_REGULAR_TIMEOUT_SECONDS);
     }
 
-    static long getLastSync(Context ctx) {
-        return getSharedPreferences(ctx).getLong(PREF_LAST_SYNC, DEFAULT_LAST_SYNC);
-    }
-
-    static void setLastSync(Context ctx) {
-        getSharedPreferences(ctx).edit()
-          .putLong(PREF_LAST_SYNC, System.currentTimeMillis())
-          .commit();
-    }
-
     static boolean getMarkAsRead(Context ctx) {
         return getSharedPreferences(ctx).getBoolean(PREF_MARK_AS_READ, DEFAULT_MARK_AS_READ);
     }
@@ -398,7 +392,6 @@ public class PrefStore {
         getSharedPreferences(ctx).edit()
           .remove(PREF_MAX_SYNCED_DATE_SMS)
           .remove(PREF_MAX_SYNCED_DATE_MMS)
-          .remove(PREF_LAST_SYNC)
           .commit();
     }
 

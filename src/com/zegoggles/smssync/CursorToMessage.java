@@ -147,7 +147,7 @@ public class CursorToMessage {
         while (messageList.size() < maxEntries && cursor.moveToNext()) {
             final long date = cursor.getLong(cursor.getColumnIndex(SmsConsts.DATE));
             if (date > maxDate) {
-                maxDate = date;
+              maxDate = date;
             }
 
             Map<String, String> msgMap = new HashMap<String, String>(columns.length);
@@ -159,7 +159,7 @@ public class CursorToMessage {
             if (isMms) {
                 m = messageFromMapMms(msgMap);
             } else {
-              m = messageFromMapSms(msgMap);
+                m = messageFromMapSms(msgMap);
             }
 
             if (m != null) messageList.add(m);
@@ -306,7 +306,7 @@ public class CursorToMessage {
         msg.setBody(body);
 
         try {
-          Date then = new Date(1000*Long.valueOf(msgMap.get(MmsConsts.DATE)));
+          Date then = new Date(1000 * Long.valueOf(msgMap.get(MmsConsts.DATE)));
           msg.setSentDate(then);
           msg.setInternalDate(then);
           msg.setHeader("Message-ID", createMessageId(then, address, 1));

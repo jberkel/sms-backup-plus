@@ -124,7 +124,6 @@ public class SmsBackupService extends ServiceBase {
               }
 
               if (sItemsToSync <= 0) {
-                  PrefStore.setLastSync(context);
                   if (PrefStore.isFirstSync(context)) {
                       // If this is the first backup we need to write something to PREF_MAX_SYNCED_DATE
                       // such that we know that we've performed a backup before.
@@ -202,7 +201,7 @@ public class SmsBackupService extends ServiceBase {
           CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
 
           while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-            publish(BACKUP);
+              publish(BACKUP);
 
               long smsDate = -1, mmsDate = -1;
               Cursor curCursor;
@@ -322,7 +321,6 @@ public class SmsBackupService extends ServiceBase {
           updateMaxSyncedDateSms(getMaxItemDateSms());
           updateMaxSyncedDateMms(getMaxItemDateMms());
 
-          PrefStore.setLastSync(context);
           sItemsToSync = 0;
           sCurrentSyncedItems = 0;
           sIsRunning = false;
