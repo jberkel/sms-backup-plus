@@ -5,9 +5,11 @@
  * Updating thread progress message (GH-69)
  * Label prefix patch (Daniele Battista)
  * Warning message for DROID X users
- * cache clearing on start is now async
+ * Cache clearing on start is now async
  * Ignore Require WiFi setting on manual backup (GH-65)
  * Better threading on restore
+ * fix gets stuck on mms read receipts (GH-66)
+ * MMS: gmail doesn't show attachment paperclip (GH-71)
 
 == 1.1.4 10-26-2010
 
