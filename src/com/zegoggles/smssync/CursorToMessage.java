@@ -426,9 +426,9 @@ public class CursorToMessage {
                 long id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
                 record._id    = String.valueOf(id);
                 record.name   = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
-                record.email  = getPrimaryEmail(id, record.number);
                 record.number = sanitize(NEW_CONTACT_API ? address :
                                                   c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
+                record.email  = getPrimaryEmail(id, record.number);
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
 
