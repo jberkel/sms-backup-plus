@@ -242,6 +242,11 @@ public class CursorToMessage {
            return null;
         }
 
+        //handle callers without callerid so they display as "Unknown"
+        if (address.equals("-1")) {
+           address = "Unknown";
+        }
+
         PersonRecord record = lookupPerson(address);
         if (PrefStore.getMailSubjectPrefix(mContext))
           msg.setSubject("[" + PrefStore.getCalllogFolder(mContext) + "] " + record.getName());
