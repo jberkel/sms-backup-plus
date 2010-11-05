@@ -34,6 +34,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.Contacts.ContactMethods;
 import android.provider.Contacts.People;
@@ -69,6 +70,8 @@ public class CursorToMessage {
 
     // PhoneLookup.CONTENT_FILTER_URI
     public static final Uri ECLAIR_CONTENT_FILTER_URI = Uri.parse("content://com.android.contacts/phone_lookup");
+
+    public static enum DataType {MMS, SMS, CALLLOG};
 
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
@@ -110,6 +113,7 @@ public class CursorToMessage {
         String SERVICE_CENTER = "X-smssync-service_center";
         String BACKUP_TIME = "X-smssync-backup-time";
         String VERSION = "X-smssync-version";
+        String DURATION = "X-smssync-duration";
     }
 
     public CursorToMessage(Context ctx, String userEmail) {
@@ -139,7 +143,7 @@ public class CursorToMessage {
         Log.d(TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
 
-    public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries, boolean isMms) throws MessagingException {
+    public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries, DataType dataType) throws MessagingException {
         List<Message> messageList = new ArrayList<Message>(maxEntries);
         long maxDate = PrefStore.DEFAULT_MAX_SYNCED_DATE;
         final String[] columns = cursor.getColumnNames();
@@ -156,10 +160,12 @@ public class CursorToMessage {
             }
 
             Message m;
-            if (isMms) {
+            if (dataType.equals(DataType.MMS)) {
                 m = messageFromMapMms(msgMap);
-            } else {
+            } else if (dataType.equals(DataType.SMS)){
                 m = messageFromMapSms(msgMap);
+            } else {
+                m = messageFromMapCalllog(msgMap);
             }
 
             if (m != null) messageList.add(m);
@@ -221,6 +227,59 @@ public class CursorToMessage {
         msg.setHeader(Headers.STATUS, msgMap.get(SmsConsts.STATUS));
         msg.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
         msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
+        msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
+        msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
+        msg.setFlag(Flag.SEEN, mMarkAsRead);
+
+        return msg;
+    }
+
+    private Message messageFromMapCalllog(Map<String, String> msgMap) throws MessagingException {
+        Message msg = new MimeMessage();
+
+        String address = msgMap.get(CallLog.Calls.NUMBER);
+        if (address == null || address.trim().length() == 0) {
+           return null;
+        }
+
+        PersonRecord record = lookupPerson(address);
+        if (PrefStore.getMailSubjectPrefix(mContext))
+          msg.setSubject("[" + PrefStore.getCalllogFolder(mContext) + "] " + record.getName());
+        else
+          msg.setSubject("Call with " + record.getName());
+
+        TextBody body = new TextBody(msgMap.get(CallLog.Calls.DURATION) + "s\n" + msgMap.get(CallLog.Calls.NUMBER));
+
+        int callType = Integer.valueOf(msgMap.get(CallLog.Calls.TYPE));
+        if (CallLog.Calls.OUTGOING_TYPE == callType) {
+            // call made by user
+            msg.setRecipient(RecipientType.TO, record.getAddress());
+            msg.setFrom(mUserAddress);
+        } else {
+            // incoming or missed call
+            msg.setFrom(record.getAddress());
+            msg.setRecipient(RecipientType.TO, mUserAddress);
+        }
+
+        msg.setBody(body);
+
+        try {
+          Date then = new Date(Long.valueOf(msgMap.get(CallLog.Calls.DATE)));
+          msg.setSentDate(then);
+          msg.setInternalDate(then);
+          msg.setHeader("Message-ID", createMessageId(then, address, callType));
+        } catch (NumberFormatException n) {
+          Log.e(TAG, "error parsing date", n);
+        }
+
+        // Threading by person ID, not by thread ID. I think this value is more stable.
+        msg.setHeader("References",
+                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
+        msg.setHeader(Headers.ID, msgMap.get(CallLog.Calls._ID));
+        msg.setHeader(Headers.ADDRESS, sanitize(address));
+        msg.setHeader(Headers.TYPE, msgMap.get(CallLog.Calls.TYPE));
+        msg.setHeader(Headers.DATE, msgMap.get(CallLog.Calls.DATE));
+        msg.setHeader(Headers.DURATION, msgMap.get(CallLog.Calls.DURATION));
         msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
         msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
         msg.setFlag(Flag.SEEN, mMarkAsRead);

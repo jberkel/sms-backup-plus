@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.provider.CallLog;
 import android.util.Log;
 import android.app.NotificationManager;
 import android.app.Notification;
@@ -42,6 +43,7 @@ public abstract class ServiceBase extends Service {
 
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
     public static final Uri MMS_PROVIDER = Uri.parse("content://mms");
+    public static final Uri CALLLOG_PROVIDER = CallLog.Calls.CONTENT_URI;
 
     /**
      * A wakelock held while this service is working.
@@ -57,8 +59,12 @@ public abstract class ServiceBase extends Service {
         return null;
     }
 
-    protected ImapStore.BackupFolder getBackupFolder() throws MessagingException {
-      return new ImapStore(this).getBackupFolder();
+    protected ImapStore.BackupFolder getSMSBackupFolder() throws MessagingException {
+      return new ImapStore(this).getSMSBackupFolder();
+    }
+
+    protected ImapStore.BackupFolder getCalllogBackupFolder() throws MessagingException {
+        return new ImapStore(this).getCalllogBackupFolder();
     }
 
     /**
@@ -174,6 +180,14 @@ public abstract class ServiceBase extends Service {
     }
 
     /**
+     * Returns the largest date of all calllog entries that have successfully been synced
+     * with the server.
+     */
+    protected long getMaxSyncedDateCalllog() {
+        return PrefStore.getMaxSyncedDateCalllog(this);
+    }
+
+    /**
      * Persists the provided ID so it can later on be retrieved using
      * {@link #getMaxSyncedDateSms()}. This should be called when after each
      * successful sync request to a server.
@@ -189,6 +203,13 @@ public abstract class ServiceBase extends Service {
 
     protected void updateMaxSyncedDateMms(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateMms(this, maxSyncedDate);
+        if (LOCAL_LOGV) {
+          Log.v(Consts.TAG, "Max synced date for calllog set to: " + maxSyncedDate);
+        }
+    }
+
+    protected void updateMaxSyncedDateCalllog(long maxSyncedDate) {
+        PrefStore.setMaxSyncedDateCalllog(this, maxSyncedDate);
         if (LOCAL_LOGV) {
           Log.v(Consts.TAG, "Max synced date for mms set to: " + maxSyncedDate);
         }

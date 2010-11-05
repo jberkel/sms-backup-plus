@@ -30,9 +30,19 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         this.context = context;
     }
 
-    public BackupFolder getBackupFolder() throws MessagingException
+    public BackupFolder getSMSBackupFolder() throws MessagingException
     {
         String label = PrefStore.getImapFolder(context);
+        return getBackupFolder(label);
+    }
+    public BackupFolder getCalllogBackupFolder() throws MessagingException
+    {
+        String label = PrefStore.getCalllogFolder(context);
+        return getBackupFolder(label);
+    }
+
+    private BackupFolder getBackupFolder(String label) throws MessagingException
+    {
         if (label == null)
             throw new IllegalStateException("label is null");
 

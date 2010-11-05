@@ -29,6 +29,7 @@ public class PrefStore {
      */
     static final String PREF_MAX_SYNCED_DATE_SMS = "max_synced_date";
     static final String PREF_MAX_SYNCED_DATE_MMS = "max_synced_date_mms";
+    static final String PREF_MAX_SYNCED_DATE_CALLLOG = "max_synced_date_calllog";
 
     /** Preference key containing the Google account username. */
     static final String PREF_LOGIN_USER = "login_user";
@@ -53,6 +54,9 @@ public class PrefStore {
 
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
+
+    /** Preference key containing the IMAP folder name where SMS should be backed up to. */
+    static final String PREF_IMAP_FOLDER_CALLLOG = "imap_folder_calllog";
 
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_MAIL_SUBJECT_PREFIX = "mail_subject_prefix";
@@ -85,6 +89,8 @@ public class PrefStore {
 
     static final String PREF_BACKUP_MMS  = "backup_mms";
 
+    static final String PREF_BACKUP_CALLLOG  = "backup_calllog";
+
     static final String PREF_CONNECTED  = "connected";
     static final String PREF_WIFI_ONLY  = "wifi_only";
 
@@ -93,6 +99,9 @@ public class PrefStore {
 
     /** Default value for {@link PrefStore#PREF_IMAP_FOLDER}. */
     static final String DEFAULT_IMAP_FOLDER = "SMS";
+
+    /** Default value for {@link PrefStore#PREF_IMAP_FOLDER_CALLLOG}. */
+    static final String DEFAULT_IMAP_FOLDER_CALLLOG = "Calllog";
 
     /** Default value for {@link PrefStore#PREF_MAIL_SUBJECT_PREFIX}. */
     static final boolean DEFAULT_MAIL_SUBJECT_PREFIX = false;
@@ -132,10 +141,10 @@ public class PrefStore {
     }
 
     static long getMostRecentSyncedDate(Context ctx) {
-        return Math.max(
+        return Math.max(Math.max(
             getMaxSyncedDateSms(ctx),
-            getMaxSyncedDateMms(ctx) * 1000
-        );
+            getMaxSyncedDateMms(ctx) * 1000),
+            getMaxSyncedDateCalllog(ctx));
     }
 
     static long getMaxSyncedDateSms(Context ctx) {
@@ -144,6 +153,10 @@ public class PrefStore {
 
     static long getMaxSyncedDateMms(Context ctx) {
         return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_MMS, DEFAULT_MAX_SYNCED_DATE);
+    }
+
+    static long getMaxSyncedDateCalllog(Context ctx) {
+        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_CALLLOG, DEFAULT_MAX_SYNCED_DATE);
     }
 
     static boolean isMaxSyncedDateSet(Context ctx) {
@@ -162,6 +175,11 @@ public class PrefStore {
           .commit();
     }
 
+    static void setMaxSyncedDateCalllog(Context ctx, long maxSyncedDate) {
+        getSharedPreferences(ctx).edit()
+          .putLong(PREF_MAX_SYNCED_DATE_CALLLOG, maxSyncedDate)
+          .commit();
+    }
     static String getImapUsername(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null);
     }
@@ -238,6 +256,10 @@ public class PrefStore {
       return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
+    static boolean isCalllogBackupEnabled(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_CALLLOG, false);
+    }
+
     static boolean isRestoreStarredOnly(Context ctx) {
       return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_STARRED_ONLY, false);
     }
@@ -256,12 +278,20 @@ public class PrefStore {
         return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER, DEFAULT_IMAP_FOLDER);
     }
 
+    static String getCalllogFolder(Context ctx) {
+        return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER_CALLLOG, DEFAULT_IMAP_FOLDER_CALLLOG);
+    }
+
     static boolean getMailSubjectPrefix(Context ctx) {
         return getSharedPreferences(ctx).getBoolean(PREF_MAIL_SUBJECT_PREFIX, DEFAULT_MAIL_SUBJECT_PREFIX);
     }
 
     static boolean isImapFolderSet(Context ctx) {
         return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER);
+    }
+
+    static boolean isCalllogFolderSet(Context ctx) {
+        return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER_CALLLOG);
     }
 
     static int getMaxItemsPerSync(Context ctx) {
@@ -392,6 +422,7 @@ public class PrefStore {
         getSharedPreferences(ctx).edit()
           .remove(PREF_MAX_SYNCED_DATE_SMS)
           .remove(PREF_MAX_SYNCED_DATE_MMS)
+          .remove(PREF_MAX_SYNCED_DATE_CALLLOG)
           .commit();
     }
 
