@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Generated with crowdin.net-->
 <resources>
   <string-array name="max_items_per_sync_entries">
     <item>100</item>
@@ -7,24 +6,74 @@
     <item>500</item>
     <item>@string/all_messages</item>
   </string-array>
+  
   <string-array name="max_items_per_sync_values">
     <item>100</item>
     <item>200</item>
     <item>500</item>
     <item>-1</item>
   </string-array>
+  
   <string-array name="max_items_per_restore_entries">
     <item>100</item>
     <item>200</item>
     <item>500</item>
     <item>@string/all_messages</item>
   </string-array>
+  
   <string-array name="max_items_per_restore_values">
     <item>100</item>
     <item>200</item>
     <item>500</item>
     <item>-1</item>
   </string-array>
+
+  <string-array name="email_address_style_entries">
+    <item>Nombre</item>
+    <item>Nombre (+00 123456)</item>
+    <item>+00 123456</item>
+  </string-array>
+
+  <string-array name="email_address_style_values">
+    <item>nombre</item>
+    <item>nombre_y_numero</item>
+    <item>numero</item>
+  </string-array>
+  
+  <string-array name="auto_backup_schedule_entries">
+    <item>30 mins</item>
+    <item>1 h</item>
+    <item>2 h</item>
+    <item>6 h</item>
+    <item>24 h</item>
+    <item>Nunca</item>
+  </string-array>
+  
+  <string-array name="auto_backup_schedule_values">
+    <item>1800</item>
+    <item>3600</item>
+    <item>7200</item>
+    <item>21600</item>
+    <item>86400</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="auto_backup_incoming_schedule_entries">
+    <item>1 min</item>
+    <item>3 mins</item>
+    <item>30 mins</item>
+    <item>1 h</item>
+    <item>Nunca</item>
+  </string-array>
+
+  <string-array name="auto_backup_incoming_schedule_values">
+    <item>60</item>
+    <item>180</item>
+    <item>1800</item>
+    <item>3600</item>
+    <item>-1</item>
+  </string-array>
+
   <string-array name="server_protocol_entries">
     <item>SSL (Obligatorio)</item>
     <item>SSL (Opcional)</item>
@@ -32,6 +81,7 @@
     <item>TLS (Opcional)</item>
     <item>Ninguno</item>
   </string-array>
+  
   <string-array name="server_protocol_entryValues">
     <item>+ssl+</item>
     <item>+ssl</item>
@@ -39,6 +89,7 @@
     <item>+tls</item>
     <item></item>
   </string-array>
+  
   <string-array name="server_authentication_entries">
     <item>@string/xoauth</item>
     <item>@string/plain</item>

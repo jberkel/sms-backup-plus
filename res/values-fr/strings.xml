@@ -2,7 +2,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">SMS Backup+</string>
 
-    <string name="app_description">Sauvegardez vos SMS dans votre compte Gmail. Ceci est une version ameliorée de l\'application "SMS Backup" de Christpoh Studer qui ajoute la possibilité de restaurer vos SMS sauvegardés sur votre mobile. Cette version est entièrement rétro-compatible avec les sauvegardes faites avec l\'ancienne version.</string>
+    <string name="app_description">
+	 Sauvegardez vos SMS dans votre compte Gmail. Ceci est une version ameliorée de l\'application "SMS Backup" de 
+	 Christpoh Studer qui ajoute la possibilité de restaurer vos SMS sauvegardés sur votre mobile.
+	 Cette version est entièrement rétro-compatible avec les sauvegardes faites avec l\'ancienne version.
+	</string>
 
   <string name="ui_sync_button_label_idle">Sauvegarder</string>
   <string name="ui_sync_button_label_done">Sauvegarder</string>
@@ -27,6 +31,7 @@
   <string name="status_backup_details">Sauvegardé <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
   <string name="status_restore_details">Restauré <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
   <string name="status_login_details">Identification :\u2026</string>
+  <string name="status_updating_threads">Mise a jour\u2026</string> 
   <string name="status_done">Identifié avec succès</string>
   <string name="status_backup_done_details_max_per_sync">Le maximum de %1$d objets par sauvegarde a été atteint. Relancez la sauvegarde pour continuer.</string>
   <string name="status_backup_done_details_noitems">Il n\'y a pas d\'objets à sauvegarder.</string>
@@ -63,7 +68,7 @@
   <string name="ui_settings_advanced_label">Paramètres avancés</string>
   <string name="ui_settings_advanced_desc">Définir les réglages avancés</string>
   <string name="ui_settings_advanced_server_label">Paramètres de serveur</string>
-  <string name="ui_settings_advanced_server_desc">Réservé aux utilisateurs avertis !</string>
+  <string name="ui_settings_advanced_server_desc">Ne pas modifier si vous ne vous y connaissez pas !</string>
 
   <string name="imap_settings">Paramètres IMAP</string>
   <string name="ui_login_label">Nom d\'utilisateur</string>
@@ -130,7 +135,8 @@
   <string name="ui_dialog_missing_credentials_title">Informations d\'identification</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">Vous devez d\'abord vous connecter à votre compte Gmail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Vous devez d\'abord définir vos identifiants.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Vous devez d\'abord définir 
+  vos identifiants.</string>
 
   <string name="ui_dialog_sync_data_reset_title">Réinitialiser les données de sauvegarde</string>
   <string name="ui_dialog_sync_data_reset_msg">
@@ -160,6 +166,12 @@
    SMS Backup+ est entièrement rétro-compatible avec SMS Backup. Veuillez cependant vérifier que l\'option \"Sauvegarde automatique\" n\'est activée que dans une des deux applications, sinon vous aurez des sauvegardes en double. Il est également conseillé de séléctionner \"Ignorer\" les messages pour votre première sauvgarde, si vous les avez déjà sauvegardés.
   </string>
 
+  <string name="ui_dialog_brokendroidx_title">Bug SMS DROID X</string>
+  <string name="ui_dialog_brokendroidx_msg">Il y a un bug avec le Droid X qui 
+  empeche cette application de sauvegarder les message entrants. Plus d\'informations dans FAQ
+  disponible sur le site.</string>
+
+  
   <string name="ui_sync">Sauvegarder</string>
   <string name="ui_skip">Ignorer</string>
   <string name="err_could_not_create_folder">Impossible de créer le libellé</string>
