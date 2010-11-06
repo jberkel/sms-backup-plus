@@ -35,11 +35,11 @@
   </string-array>
 
   <string-array name="email_address_style_values">
-    <item>nombre</item>
-    <item>nombre_y_numero</item>
-    <item>numero</item>
+    <item>name</item>
+    <item>name_and_number</item>
+    <item>number</item>
   </string-array>
-  
+
   <string-array name="auto_backup_schedule_entries">
     <item>30 mins</item>
     <item>1 h</item>
