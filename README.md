@@ -16,6 +16,8 @@ Main differences / improvements:
 
   * MMS backup support (since 1.1)
 
+  * Call log backup (since 1.2)
+
   * Faster backups. SMS Backup+ saves around 30% of data transferred by
   avoiding Base64 encoding of emails.
 
@@ -107,10 +109,16 @@ all messages stored on Gmail will be restored (this can be changed in "Advanced
 Settings"). You can safely restore to a phone which has already message stored
 on it, SMS Backup+ will skip the restore of already existing messages.
 
+### Call log support (backup only)
+
+SMS Backup+ can also backup your call logs. It stores all calls using a
+separate label (defaults to `Calllog`, but can be changed in Advanced
+Settings). The body of the message contains the number and the duration of the
+call in seconds. 0 seconds here means missed call.
+
 ##Screenshots
 
 ![SMS Backup+ screenshot][shot1] ![Gmail screenshot][shot2]
-
 
 ## FAQ
 
@@ -169,6 +177,7 @@ If you want to help translating the UI to other languages: [crowdin project page
   * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
   * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://ncrow.deviantart.com/) for the Gmail icons
   * [Ben Dodson](http://github.com/bjdodson) - Contacts 2.0 / MMS support
+  * [dicer](http://github.com/dicer) - Call log backup code
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
   * [skolima](http://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
