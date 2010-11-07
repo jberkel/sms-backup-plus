@@ -102,7 +102,7 @@
   <string name="ui_restore_starred_only_desc">Restaurar unicamente los mensajes .</string>
 
   <string name="ui_backup_mms_label">Añadir los MMS</string>
-  <string name="ui_backup_mms_desc">Activar la copia de los MMS(beta)</string>
+  <string name="ui_backup_mms_desc">Activar la copia de los MMS</string>
   <string name="ui_backup_mms_not_supported">La copia de los MMS no es soportada en esta plataforma.</string>
 
   <string name="ui_mark_as_read_label">Marcar como leído (emails)</string>

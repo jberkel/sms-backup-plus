@@ -102,7 +102,7 @@
   <string name="ui_restore_starred_only_desc">Ne restaurer que les SMS classés "favoris".</string>
 
   <string name="ui_backup_mms_label">Sauvegarde de MMS</string>
-  <string name="ui_backup_mms_desc">Activer la sauvegarde de MMS (beta)</string>
+  <string name="ui_backup_mms_desc">Activer la sauvegarde de MMS</string>
   <string name="ui_backup_mms_not_supported">La sauvegarde de MMS n\'est pas gérée sur cette plateforme.</string>
 
   <string name="ui_mark_as_read_label">Marquer comme lus (e-mails)</string>

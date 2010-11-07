@@ -83,7 +83,7 @@
   <string name="ui_restore_starred_only_label">Помеченные SMS</string>
   <string name="ui_restore_starred_only_desc">Восстанавливать только помеченные SMS.</string>
   <string name="ui_backup_mms_label">Сохранение MMS</string>
-  <string name="ui_backup_mms_desc">Активировать сохранение MMS (бета)</string>
+  <string name="ui_backup_mms_desc">Активировать сохранение MMS</string>
   <string name="ui_backup_mms_not_supported">Сохранение MMS не поддерживается на этом устройстве.</string>
   <string name="ui_mark_as_read_label">Помечать прочитанными (emails)</string>
   <string name="ui_mark_as_read_desc">Помечать сообщения в Gmail прочитанными?</string>
