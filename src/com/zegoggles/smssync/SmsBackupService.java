@@ -380,6 +380,7 @@ public class SmsBackupService extends ServiceBase {
       private int skip() {
           updateMaxSyncedDateSms(getMaxItemDateSms());
           updateMaxSyncedDateMms(getMaxItemDateMms());
+          updateMaxSyncedDateCalllog(getMaxSyncedDateCalllog());
 
           sItemsToSync = 0;
           sCurrentSyncedItems = 0;
