@@ -7,76 +7,78 @@
   android:paddingRight="10dip"
   android:paddingTop="10dip"
   android:paddingBottom="10dip">
-  <RelativeLayout
+
+    <RelativeLayout
       android:layout_width="fill_parent"
       android:layout_height="wrap_content">
 
-    <ImageView
-      android:id="@+id/status_icon"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:src="@drawable/ic_done"
-      />
+        <ImageView
+          android:id="@+id/status_icon"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentLeft="true"
+          android:src="@drawable/ic_done"
+        />
 
-    <Button
-      android:id="@+id/restore_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/ui_restore_button_label_idle"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentTop="true"
-      android:textStyle="bold"
-      android:layout_alignBaseline="@id/status_icon"
-      android:width="90sp"
-      />
+        <Button
+          android:id="@+id/restore_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/ui_restore_button_label_idle"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentTop="true"
+          android:textStyle="bold"
+          android:layout_alignBaseline="@id/status_icon"
+          android:width="90sp"
+        />
 
-    <Button
-      android:id="@+id/sync_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/ui_sync_button_label_idle"
-      android:layout_toLeftOf="@id/restore_button"
-      android:layout_alignParentTop="true"
-      android:textStyle="bold"
-      android:layout_alignBaseline="@id/status_icon"
-      android:width="90sp"
-      />
+        <Button
+          android:id="@+id/sync_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/ui_sync_button_label_idle"
+          android:layout_toLeftOf="@id/restore_button"
+          android:layout_alignParentTop="true"
+          android:textStyle="bold"
+          android:layout_alignBaseline="@id/status_icon"
+          android:width="90sp"
+        />
 
-    <TextView
-      android:id="@+id/status_label"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_toRightOf="@id/status_icon"
-      android:layout_alignParentTop="true"
-      android:textSize="16sp"
-      android:textStyle="bold"
-      android:textColor="@color/status_done"
-      android:layout_marginLeft="6dip"
-      android:layout_alignBaseline="@id/status_icon"
-      android:layout_toLeftOf="@id/sync_button"/>
-
-      <LinearLayout
-        android:id="@+id/details_sync"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/status_label"
-        android:layout_below="@id/sync_button">
-
-        <ProgressBar
-          android:id="@+id/details_sync_progress"
+        <TextView
+          android:id="@+id/status_label"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          style="?android:attr/progressBarStyleHorizontal"
-          android:indeterminate="false"
-          />
-       <TextView
-          android:id="@+id/details_sync_label"
-          android:layout_marginTop="6dip"
-          android:layout_height="wrap_content"
+          android:layout_toRightOf="@id/status_icon"
+          android:layout_alignParentTop="true"
+          android:textSize="16sp"
+          android:textStyle="bold"
+          android:textColor="@color/status_done"
+          android:layout_marginLeft="6dip"
+          android:layout_alignBaseline="@id/status_icon"
+          android:layout_toLeftOf="@id/sync_button"/>
+
+        <LinearLayout
+          android:id="@+id/details_sync"
+          android:orientation="vertical"
           android:layout_width="fill_parent"
-          />
-      </LinearLayout>
-  </RelativeLayout>
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@id/status_label"
+          android:layout_below="@id/sync_button">
+
+            <ProgressBar
+              android:id="@+id/details_sync_progress"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              style="?android:attr/progressBarStyleHorizontal"
+              android:indeterminate="false"
+             />
+
+            <TextView
+              android:id="@+id/details_sync_label"
+              android:layout_marginTop="6dip"
+              android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+            />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
