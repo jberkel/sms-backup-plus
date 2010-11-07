@@ -118,7 +118,7 @@ call in seconds. 0 seconds here means missed call.
 
 ##Screenshots
 
-![SMS Backup+ screenshot][shot1] ![Gmail screenshot][shot2]
+![SMS Backup+ screenshot][smsbackupshot] ![Gmail screenshot][gmailshot]
 
 ## FAQ
 
@@ -195,8 +195,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
 [github downloads]: http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.1.5.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
-[shot1]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen.png
-[shot2]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
+[smsbackupshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_2.png
+[gmailshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
 [crowdin project page]: http://crowdin.net/project/sms-backup-plus/invite
 [showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
 [source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
