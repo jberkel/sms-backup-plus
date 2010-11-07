@@ -2,17 +2,18 @@
 
 This is a fork of the Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms), where development has
-stopped a while ago. It uses Gmail to perform SMS backups over the network.
+stopped a while ago. It uses Gmail to perform SMS, MMS and call log backups over
+the network.
 
 Main differences / improvements:
 
   * New restore feature. SMS stored on Gmail can be transferred back to the
   phone. This even works for users who have already created their backups with
-  older versions of SMS Backup.
+  older versions of SMS Backup. Note: MMS are currently not restored.
 
   * XOAuth: SMS Backup+ will never ask you for your Gmail password. Instead it
   uses [XOAuth](http://code.google.com/apis/gmail/oauth/) to get access to your
-  data.
+  data. You can revoke the access rights at any time.
 
   * MMS backup support (since 1.1)
 
@@ -193,7 +194,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
-[github downloads]: http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.1.5.apk/qr_code
+[github downloads]: http://github.com/downloads/jberkel/sms-backup-plus/sms-backup-plus-v1.2.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_2.png
 [gmailshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
