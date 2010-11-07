@@ -17,7 +17,7 @@
       android:summary="@string/ui_backup_mms_desc"
       android:persistent="true"
       android:defaultValue="false"/>
-      
+
     <CheckBoxPreference android:key="backup_calllog"
       android:title="@string/ui_backup_calllog_label"
       android:summary="@string/ui_backup_calllog_desc"
@@ -55,7 +55,7 @@
           android:dialogMessage="@string/ui_imap_folder_calllog_label_dialog_msg"
           android:persistent="true"
           android:defaultValue="Calllog"/>
-          
+
         <CheckBoxPreference android:key="mail_subject_prefix"
           android:title="@string/ui_mail_subject_prefix_label"
           android:persistent="true"
