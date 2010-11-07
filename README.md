@@ -15,7 +15,7 @@ Main differences / improvements:
   uses [XOAuth](http://code.google.com/apis/gmail/oauth/) to get access to your
   data. You can revoke the access rights at any time.
 
-  * MMS backup support (since 1.1)
+  * MMS backup support (since 1.1), only available on Android 2.x
 
   * Call log backup (since 1.2)
 
