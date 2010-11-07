@@ -84,7 +84,7 @@ public class SmsRestoreService extends ServiceBase {
                 SmsRestoreService.this.mThreadIdCache.clear();
 
                 publishProgress(LOGIN);
-                ImapStore.BackupFolder folder = getBackupFolder();
+                ImapStore.BackupFolder folder = getSMSBackupFolder();
 
                 publishProgress(CALC);
 

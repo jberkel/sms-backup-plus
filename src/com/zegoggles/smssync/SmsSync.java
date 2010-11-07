@@ -139,6 +139,7 @@ public class SmsSync extends PreferenceActivity {
         ServiceBase.smsSync = this;
 
         updateImapFolderLabelFromPref();
+        updateImapCallogFolderLabelFromPref();
         updateUsernameLabel(null);
         updateMaxItemsPerSync(null);
         updateMaxItemsPerRestore(null);
@@ -182,6 +183,12 @@ public class SmsSync extends PreferenceActivity {
     private void updateImapFolderLabelFromPref() {
         String imapFolder = PrefStore.getImapFolder(this);
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_IMAP_FOLDER);
+        pref.setTitle(imapFolder);
+    }
+
+    private void updateImapCallogFolderLabelFromPref() {
+        String imapFolder = PrefStore.getCalllogFolder(this);
+        Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_IMAP_FOLDER_CALLLOG);
         pref.setTitle(imapFolder);
     }
 
