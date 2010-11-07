@@ -105,7 +105,14 @@
   <string name="ui_backup_mms_desc">Activar la copia de los MMS</string>
   <string name="ui_backup_mms_not_supported">La copia de los MMS no es soportada en esta plataforma.</string>
 
-  <string name="ui_mark_as_read_label">Marcar como leído (emails)</string>
+  <string name="ui_backup_calllog_label">Copiar el registro de llamadas</string>
+  <string name="ui_backup_calllog_desc">Activar la copia del registro de llamadas (beta)</string>
+
+  <string name="ui_imap_folder_calllog_label">Label del registro de llamadas</string>
+  <string name="ui_imap_folder_calllog_desc">Label Gmail del registro de llamadas.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Las llamadas copiadas en Gmail tendaran este label.</string>
+
+ <string name="ui_mark_as_read_label">Marcar como leído (emails)</string>
   <string name="ui_mark_as_read_desc">Si se marcan los mensajes en Gmail como leídos o no.</string>
   <string name="ui_mark_as_read_restore_label">Marcar como leído (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Si se debe marcar todos los SMS restaurados como leídos o no.</string>
