@@ -10,7 +10,7 @@
 
   <string name="ui_sync_button_label_idle">Backup</string>
   <string name="ui_sync_button_label_done">Backup</string>
-  <string name="ui_sync_button_label_canceling">Fermata</string>
+  <string name="ui_sync_button_label_canceling">Fermato</string>
   <string name="ui_sync_button_label_error">Backup</string>
   <string name="ui_sync_button_label_syncing">Ferma</string>
 
@@ -30,7 +30,8 @@
 
   <string name="status_backup_details">Salvati <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementi\u2026</string>
   <string name="status_restore_details">Ripristinati <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementi\u2026</string>
-  <string name="status_login_details">Accesso\u2026</string>
+  <string name="status_login_details">Accesso in corso\u2026</string>
+   <string name="status_updating_threads">Aggiornamento conversazioni\u2026</string>
   <string name="status_done">Fatto</string>
   <string name="status_backup_done_details_max_per_sync">Massimo di %1$d elementi raggiunti per backup. Riavvia il backup per continuare.</string>
   <string name="status_backup_done_details_noitems">Non ci sono elementi da salvare.</string>
@@ -96,10 +97,20 @@
   <string name="ui_max_items_per_sync_desc">Massimo numero di elementi per backup.</string>
   <string name="ui_max_items_per_restore_label">Elementi per ripristino</string>
   <string name="ui_max_items_per_restore_desc">Massimo numero di messaggi ripristinati.</string>
+  
+  <string name="ui_restore_starred_only_label">SMS Preferiti</string>
+  <string name="ui_restore_starred_only_desc">Ripristina solo messaggi preferiti.</string>
 
   <string name="ui_backup_mms_label">Backup MMS</string>
-  <string name="ui_backup_mms_desc">Abilita backup MMS</string>
+  <string name="ui_backup_mms_desc">Abilita backup MMS (beta)</string>
   <string name="ui_backup_mms_not_supported">Il backup MMS non è supportato su questa piattaforma.</string>
+  
+  <string name="ui_backup_calllog_label">Backup log chiamate</string>
+  <string name="ui_backup_calllog_desc">Abilita backup log chiamate (beta)</string>
+
+  <string name="ui_imap_folder_calllog_label">Etichetta log chiamate</string>
+  <string name="ui_imap_folder_calllog_desc">Etichetta Gmail assegnata al log chiamate.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Le voci del log chiamate salvate saranno taggate con questa etichetta in Gmail.</string>
 
   <string name="ui_mark_as_read_label">Segna come letto (email)</string>
   <string name="ui_mark_as_read_desc">Se segnare o meno come letti i messaggi in Gmail.</string>
@@ -161,6 +172,11 @@
   <string name="ui_dialog_upgrade_msg">
    SMS Backup+ è pienametne compatibile con SMS Backup. Tuttavia si puà fare in modo che \"Backup automatico\" sia abilitato solo su una delle due applicazioni, altrimenti si potrebbero ottenere dei duplicati. Inoltre è necessario selezionare \"Trascura\" messaggi per la tua prima sincronizzazione se i messaggi sul telefono sono già stati salvati precedentemente.
   </string>
+  
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
+  <string name="ui_dialog_brokendroidx_msg">Questo è un bug del Droid X che
+  impedisce all\' applicazione di effettuare il backup dei messaggi arrivati. Guarda le FAQ
+  sul nostro sito web per maggiori informazioni.</string>
 
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Trascura</string>
