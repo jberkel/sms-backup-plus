@@ -99,7 +99,9 @@ Gmail.
 
 After you performed your initial backup, SMS Backup+ is ready to run in the
 background and finish uploading all of your current and future messages (check
-"Auto Backup").
+"Auto Backup"). Make sure that you have `Background data` enabled in your
+Android `Accounts & Sync` settings
+([screenshot](http://skitch.com/jberkel/d9pi7/5554-emu-2.2)).
 
 ### Restoring
 
