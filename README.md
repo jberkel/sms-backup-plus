@@ -183,6 +183,7 @@ If you want to help translating the UI to other languages: [crowdin project page
   * [skolima](http://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
   * Gabriele Ravanetti - Italian translation
+  * Harun Şahin - Turkish translation
 
 ## License
 
