@@ -145,7 +145,6 @@ public class SmsBackupService extends ServiceBase {
                    return null;
                 }
 
-                publish(LOGIN);
                 return backup(smsItems, mmsItems, calllogItems);
               }
             } catch (AuthenticationFailedException e) {
@@ -193,94 +192,100 @@ public class SmsBackupService extends ServiceBase {
         }
 
       /**
-       * @param calllogItems 
+       * @param calllogItems
      * @throws MessagingException Thrown when there was an error accessing or creating the folder
        */
       private int backup(Cursor smsItems, Cursor mmsItems, Cursor calllogItems) throws MessagingException {
           Log.i(TAG, String.format("Starting backup (%d messages)", sItemsToSync));
+          final CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
 
-          publish(CALC);
-
-          CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
-
-          Folder smsmmsfolder = getSMSBackupFolder();
-          Folder calllogfolder = getCalllogBackupFolder();
-
-          try {
-
-          while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-              publish(BACKUP);
-
-              long smsDate = Long.MAX_VALUE, mmsDate = Long.MAX_VALUE, calllogDate = Long.MAX_VALUE;
-              Cursor curCursor;
-              DataType dataType = DataType.SMS;
-              if (smsItems.moveToNext()) {
-                smsDate = smsItems.getLong(smsItems.getColumnIndex(SmsConsts.DATE));
-                smsItems.moveToPrevious();
-              }
-              if (mmsItems.moveToNext()) {
-                // Mms date is in seconds, sms in millis.
-                mmsDate = 1000*mmsItems.getLong(mmsItems.getColumnIndex(MmsConsts.DATE));
-                mmsItems.moveToPrevious();
-              }
-
-              if (calllogItems.moveToNext()) {
-                // calllog entry date is in millis
-                calllogDate = calllogItems.getLong(calllogItems.getColumnIndex(CallLog.Calls.DATE));
-                calllogItems.moveToPrevious();
-              }
-
-              if (smsDate < mmsDate && smsDate < calllogDate) {
-                curCursor = smsItems;
-                dataType = DataType.SMS;
-              } else if (mmsDate < smsDate && mmsDate < calllogDate) {
-                curCursor = mmsItems;
-                dataType = DataType.MMS;
-              } else if (calllogDate < smsDate && calllogDate < mmsDate) {
-                curCursor = calllogItems;
-                dataType = DataType.CALLLOG;
-              } else {
-                break;
-              }
-
-              ConversionResult result = converter.cursorToMessages(curCursor, MAX_MSG_PER_REQUEST, dataType);
-              List<Message> messages = result.messageList;
-
-              if (messages.isEmpty()) break;
-
-              if (dataType.equals(DataType.MMS)) {
-                updateMaxSyncedDateMms(result.maxDate);
-                if (LOCAL_LOGV) {
-                  Log.v(TAG, "Sending " + messages.size() + " mms messages to server.");
-                }
-              } else if (dataType.equals(DataType.SMS)){
-                updateMaxSyncedDateSms(result.maxDate);
-                if (LOCAL_LOGV) {
-                  Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
-                }
-              } else {
-                  updateMaxSyncedDateCalllog(result.maxDate);
-                  if (LOCAL_LOGV) {
-                    Log.v(TAG, "Sending " + messages.size() + " calllog messages to server.");
-                  }
-              }
-
-              if (dataType.equals(DataType.CALLLOG)) {
-                calllogfolder.appendMessages(messages.toArray(new Message[messages.size()]));
-              } else {
-                smsmmsfolder.appendMessages(messages.toArray(new Message[messages.size()]));
-              }
-              sCurrentSyncedItems += messages.size();
-              publish(BACKUP);
-
-              result = null;
-              messages = null;
+          publish(LOGIN);
+          Folder smsmmsfolder  = getSMSBackupFolder();
+          Folder calllogfolder = null;
+          if (PrefStore.isCalllogBackupEnabled(SmsBackupService.this)) {
+            calllogfolder = getCalllogBackupFolder();
           }
 
-          return sCurrentSyncedItems;
+          try {
+            publish(CALC);
+
+            while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
+                long smsDate = Long.MAX_VALUE, mmsDate = Long.MAX_VALUE, calllogDate = Long.MAX_VALUE;
+                Cursor curCursor;
+                DataType dataType = DataType.SMS;
+                if (smsItems.moveToNext()) {
+                  smsDate = smsItems.getLong(smsItems.getColumnIndex(SmsConsts.DATE));
+                  smsItems.moveToPrevious();
+                }
+                if (mmsItems.moveToNext()) {
+                  // Mms date is in seconds, sms in millis.
+                  mmsDate = 1000*mmsItems.getLong(mmsItems.getColumnIndex(MmsConsts.DATE));
+                  mmsItems.moveToPrevious();
+                }
+
+                if (calllogItems.moveToNext()) {
+                  // calllog entry date is in millis
+                  calllogDate = calllogItems.getLong(calllogItems.getColumnIndex(CallLog.Calls.DATE));
+                  calllogItems.moveToPrevious();
+                }
+
+                if (smsDate < mmsDate && smsDate < calllogDate) {
+                  curCursor = smsItems;
+                  dataType = DataType.SMS;
+                } else if (mmsDate < smsDate && mmsDate < calllogDate) {
+                  curCursor = mmsItems;
+                  dataType = DataType.MMS;
+                } else if (calllogDate < smsDate && calllogDate < mmsDate) {
+                  curCursor = calllogItems;
+                  dataType = DataType.CALLLOG;
+                } else {
+                  break;
+                }
+
+                ConversionResult result = converter.cursorToMessages(curCursor, MAX_MSG_PER_REQUEST,
+                                                                     dataType);
+                List<Message> messages = result.messageList;
+
+                if (messages.isEmpty()) break;
+
+                switch (dataType) {
+                  case MMS:
+                    updateMaxSyncedDateMms(result.maxDate);
+                    if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " mms messages to server.");
+                    break;
+                  case SMS:
+                    updateMaxSyncedDateSms(result.maxDate);
+                    if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
+                    break;
+                  case CALLLOG:
+                    updateMaxSyncedDateCalllog(result.maxDate);
+                    if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() +
+                                          " calllog messages to server.");
+                    break;
+                }
+
+                switch (dataType) {
+                  case CALLLOG:
+                    if (calllogfolder != null) {
+                      calllogfolder.appendMessages(messages.toArray(new Message[messages.size()]));
+                    }
+                    break;
+                  default:
+                    smsmmsfolder.appendMessages(messages.toArray(new Message[messages.size()]));
+                    break;
+                }
+
+                sCurrentSyncedItems += messages.size();
+                publish(BACKUP);
+
+                result = null;
+                messages = null;
+            }
+
+            return sCurrentSyncedItems;
 
           } finally {
-              if (smsmmsfolder != null) smsmmsfolder.close();
+              if (smsmmsfolder != null)  smsmmsfolder.close();
               if (calllogfolder != null) calllogfolder.close();
           }
         }
