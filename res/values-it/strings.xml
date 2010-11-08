@@ -102,7 +102,7 @@
   <string name="ui_restore_starred_only_desc">Ripristina solo messaggi preferiti.</string>
 
   <string name="ui_backup_mms_label">Backup MMS</string>
-  <string name="ui_backup_mms_desc">Abilita backup MMS (beta)</string>
+  <string name="ui_backup_mms_desc">Abilita backup MMS</string>
   <string name="ui_backup_mms_not_supported">Il backup MMS non è supportato su questa piattaforma.</string>
   
   <string name="ui_backup_calllog_label">Backup log chiamate</string>
