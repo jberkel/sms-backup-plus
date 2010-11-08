@@ -126,8 +126,9 @@ public class SmsBackupService extends ServiceBase {
               sItemsToSync = sItemsToSyncSms + sItemsToSyncMms + sItemsToSyncCalllog;
 
               if (LOCAL_LOGV) {
-                Log.v(TAG, String.format("items to backup:  %d SMS, %d MMS, %d calls, %d total", sItemsToSyncSms,
-                                         sItemsToSyncMms, sItemsToSyncCalllog, sItemsToSync));
+                Log.v(TAG, String.format("items to backup:  %d SMS, %d MMS, %d calls, %d total",
+                                         sItemsToSyncSms, sItemsToSyncMms, sItemsToSyncCalllog,
+                                         sItemsToSync));
               }
 
               if (sItemsToSync <= 0) {
@@ -140,13 +141,14 @@ public class SmsBackupService extends ServiceBase {
                   Log.i(TAG, "Nothing to do.");
                   return 0;
               } else {
+
                 if (!PrefStore.isLoginInformationSet(context)) {
                    lastError = getString(R.string.err_sync_requires_login_info);
                    publish(GENERAL_ERROR);
                    return null;
+                } else {
+                   return backup(smsItems, mmsItems, calllogItems);
                 }
-
-                return backup(smsItems, mmsItems, calllogItems);
               }
             } catch (AuthenticationFailedException e) {
               Log.e(TAG, "authentication failed", e);
