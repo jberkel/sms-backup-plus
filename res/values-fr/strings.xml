@@ -188,7 +188,7 @@
   <string name="menu_info">A propos de</string>
   <string name="menu_reset">Réinitialiser</string>
   <string name="ui_dialog_reset_title">Réinitialiser l\'état actuel de synchronisation</string>
-  <string name="ui_dialog_reset_message">Voulez-vous réinitialiser l\'état de synchronisation acutelle ? Vous pourrez choisir d\'ignorer les messages ou non, plus tard.</string>
+  <string name="ui_dialog_reset_message">Voulez-vous réinitialiser l\'état de synchronisation actuelle ? Vous pourrez choisir d\'ignorer les messages ou non, plus tard.</string>
   <string name="all_messages">Tout</string>
 
   <string name="gmail_connected_fail">Echec de l\'identification Gmail</string>
