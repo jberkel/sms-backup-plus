@@ -176,11 +176,11 @@ If you want to help translating the UI to other languages: [crowdin project page
 ## Credits
 
   * [Christoph Studer](http://studer.tv/) Original author of SMS Backup
+  * [Ben Dodson](http://github.com/bjdodson) - Contacts 2.0 / MMS support
+  * [Felix Knecht](http://github.com/dicer) - Call log backup code
   * [k9mail](http://code.google.com/p/k9mail/) IMAP library, with some modifications ([k9mail/sms-backup-plus](http://github.com/jberkel/k9mail))
   * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
   * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://ncrow.deviantart.com/) for the Gmail icons
-  * [Ben Dodson](http://github.com/bjdodson) - Contacts 2.0 / MMS support
-  * [dicer](http://github.com/dicer) - Call log backup code
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
   * [skolima](http://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
