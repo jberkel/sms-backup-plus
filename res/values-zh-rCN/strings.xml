@@ -102,8 +102,15 @@
   <string name="ui_restore_starred_only_desc">仅还原已加星标的信息。</string>
 
   <string name="ui_backup_mms_label">备份彩信</string>
-  <string name="ui_backup_mms_desc">启用彩信备份功能 (beta 测试)。</string>
+  <string name="ui_backup_mms_desc">启用彩信备份功能。</string>
   <string name="ui_backup_mms_not_supported">此平台暂不支持彩信备份。</string>
+
+  <string name="ui_backup_calllog_label">备份通话记录</string>
+  <string name="ui_backup_calllog_desc">启用通话记录备份功能 (beta 测试)。</string>
+
+  <string name="ui_imap_folder_calllog_label">通话记录标签</string>
+  <string name="ui_imap_folder_calllog_desc">应用到通话记录的 Gmail 标签。</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">备份的通话记录将在 Gmail 中以此标签标记。</string>
 
   <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
