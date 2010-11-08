@@ -167,8 +167,11 @@ public class SmsBackupService extends ServiceBase {
             } finally {
               releaseLocks();
 
-              if (smsItems != null) smsItems.close();
-              if (mmsItems != null) mmsItems.close();
+              try {
+                if (smsItems != null) smsItems.close();
+                if (mmsItems != null) mmsItems.close();
+                if (calllogItems != null) calllogItems.close();
+              } catch (Exception e) { /* ignore */ }
 
               stopSelf();
               Alarms.scheduleRegularSync(context);
