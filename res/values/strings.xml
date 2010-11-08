@@ -20,7 +20,7 @@
   <string name="ui_restore_button_label_error">Restore</string>
 
   <string name="status_idle">Idle</string>
-  <string name="status_idle_details">Last SMS backed up: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details">Last item backed up: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">Never</string>
 
   <string name="status_working">Working</string>
