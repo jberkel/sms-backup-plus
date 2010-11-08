@@ -128,6 +128,11 @@ public class SmsRestoreService extends ServiceBase {
                 lastError = e.getLocalizedMessage();
                 publishProgress(GENERAL_ERROR);
                 return null;
+            } catch (IllegalStateException e) {
+                // usually memory problems (Couldn't init cursor window)
+                lastError = e.getLocalizedMessage();
+                publishProgress(GENERAL_ERROR);
+                return null;
             } finally {
                 releaseLocks();
            }
