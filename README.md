@@ -33,14 +33,15 @@ Tested with Android 1.5 - 2.2.
 *Important:* Some browsers / handsets which ship with non-standard browsers are
 currently not fully supported, there appears to be a problem which breaks
 the authorisation process, so connecting your Gmail account via XOAuth is not
-possible.
+possible. You'll see the error message "You do not have permission to open this
+page".
 
 Some possible workarounds:
 
   * Use the stock Android browser for the authentication (you can switch back
   afterwards)
   * Droid X: install a 3rd party browser (Dolphin HD has been reported to
-  work). However Droid X 2.2 has been reported to work.
+  work). Droid X 2.2 seems to work.
   * Use plain text authentication (Advanced Settings - Server Settings), use
   your gmail address as username and supply your password
 
@@ -103,7 +104,9 @@ Gmail.
 
 After you performed your initial backup, SMS Backup+ is ready to run in the
 background and finish uploading all of your current and future messages (check
-"Auto Backup").
+"Auto Backup"). Make sure that you have `Background data` enabled in your
+Android `Accounts & Sync` settings
+([screenshot](http://skitch.com/jberkel/d9pi7/5554-emu-2.2)).
 
 ### Restoring
 
