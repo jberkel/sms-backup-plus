@@ -105,6 +105,7 @@ public class CursorToMessage {
     public static interface Headers {
         String ID = "X-smssync-id";
         String ADDRESS = "X-smssync-address";
+        String DATATYPE  = "X-smssync-datatype";
         String TYPE  = "X-smssync-type";
         String DATE =  "X-smssync-date";
         String THREAD_ID = "X-smssync-thread";
@@ -221,6 +222,7 @@ public class CursorToMessage {
                       String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
         msg.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
+        msg.setHeader(Headers.DATATYPE, DataType.SMS.toString());
         msg.setHeader(Headers.TYPE, msgMap.get(SmsConsts.TYPE));
         msg.setHeader(Headers.DATE, msgMap.get(SmsConsts.DATE));
         msg.setHeader(Headers.THREAD_ID, msgMap.get(SmsConsts.THREAD_ID));
@@ -283,6 +285,7 @@ public class CursorToMessage {
                       String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
         msg.setHeader(Headers.ID, msgMap.get(CallLog.Calls._ID));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
+        msg.setHeader(Headers.DATATYPE, DataType.CALLLOG.toString());
         msg.setHeader(Headers.TYPE, msgMap.get(CallLog.Calls.TYPE));
         msg.setHeader(Headers.DATE, msgMap.get(CallLog.Calls.DATE));
         msg.setHeader(Headers.DURATION, msgMap.get(CallLog.Calls.DURATION));
@@ -382,7 +385,8 @@ public class CursorToMessage {
                       String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
         msg.setHeader(Headers.ID, msgMap.get(MmsConsts.ID));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
-        msg.setHeader(Headers.TYPE, "mms");
+        msg.setHeader(Headers.DATATYPE, DataType.MMS.toString());
+        msg.setHeader(Headers.TYPE, msgMap.get(MmsConsts.TYPE));
         msg.setHeader(Headers.DATE, msgMap.get(MmsConsts.DATE));
         msg.setHeader(Headers.THREAD_ID, msgMap.get(MmsConsts.THREAD_ID));
         msg.setHeader(Headers.READ, msgMap.get(MmsConsts.READ));

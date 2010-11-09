@@ -9,6 +9,9 @@ import android.content.Context;
 import android.util.Log;
 import com.fsck.k9.mail.*;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
+import com.zegoggles.smssync.CursorToMessage.DataType;
+import com.zegoggles.smssync.CursorToMessage.Headers;
+
 import org.apache.commons.io.IOUtils;
 import java.util.HashSet;
 import java.util.Set;
@@ -191,7 +194,22 @@ public class SmsRestoreService extends ServiceBase {
                 message.getFolder().fetch(new Message[]{message}, fp, null);
                 ContentValues values = messageToContentValues(message);
 
+                //we have two possible header sets here
+                //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE 
+                //         contains either the string "mms" or an integer which is the internal type of the sms
+                //current: there IS a Headers.DATATYPE containing a string representation of CursorToMessage.DataType
+                //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
+                //The current header set was introduced in version 1.2.00
+
+                String dataType = getHeader(message, Headers.DATATYPE);
                 Integer type = values.getAsInteger(SmsConsts.TYPE);
+
+                //only restore sms for now. first check for current headers
+                if (null != dataType && !dataType.equalsIgnoreCase(DataType.SMS.toString())) {
+                    if (LOCAL_LOGV) Log.d(TAG, "ignoring entry because no sms: " + dataType);
+                    return;
+                }
+
                 // only restore inbox messages and sent messages - otherwise sms might get sent on restore
                 if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
                                      type == SmsConsts.MESSAGE_TYPE_SENT) &&
