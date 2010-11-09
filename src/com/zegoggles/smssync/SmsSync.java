@@ -820,5 +820,25 @@ public class SmsSync extends PreferenceActivity {
               }
             }
         });
+
+        prefMgr.findPreference(PrefStore.PREF_IMAP_FOLDER_CALLLOG)
+               .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, final Object newValue) {
+              String imapFolder = newValue.toString();
+
+              if (PrefStore.isValidImapFolder(imapFolder)) {
+                preference.setTitle(imapFolder);
+                return true;
+              } else {
+                  runOnUiThread(new Runnable() {
+                      @Override
+                      public void run() {
+                          show(Dialogs.INVALID_IMAP_FOLDER);
+                      }
+                  });
+                  return false;
+              }
+            }
+        });
     }
 }
