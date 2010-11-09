@@ -1,143 +1,192 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">SMS Backup+</string>
 
-  <string name="app_description">Используйте почту Gmail для резервного копирования SMS. Это улучшенная версия программы "SMS Backup",  автор - Christoph Studer, позволяющая восстанавливать SMS в телефоне. Полностью обратно совместима с  SMS Backup.</string>
+  <string name="app_description">
+     Используйте почту Gmail для резервного копирования SMS. Это улучшенная версия программы "SMS Backup",  автор - Christoph Studer, позволяющая восстанавливать SMS в телефоне. Полностью обратно совместима с  SMS Backup.</string>
 
   <string name="ui_sync_button_label_idle">Backup</string>
   <string name="ui_sync_button_label_done">Backup</string>
   <string name="ui_sync_button_label_canceling">Останавливаю</string>
   <string name="ui_sync_button_label_error">Backup</string>
-  <string name="ui_sync_button_label_syncing">Стоп</string>
+  <string name="ui_sync_button_label_syncing">Stop</string>
+
   <string name="ui_restore_button_label_idle">Restore</string>
   <string name="ui_restore_button_label_done">Restore</string>
-  <string name="ui_restore_button_label_restoring">Стоп</string>
+  <string name="ui_restore_button_label_restoring">Stop</string>
   <string name="ui_restore_button_label_error">Restore</string>
-  <string name="status_idle">Ожидание</string>
-  <string name="status_idle_details">Последнее сохранение:<g id="last_backup_date" xmlns="urn:oasis:names:tc:xliff:document:1.2">%1$s</g></string>
+
+  <string name="status_idle">Idle</string>
+  <string name="status_idle_details">Последнее сохранение: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">Никогда</string>
+
   <string name="status_working">Работаю</string>
-  <string name="status_backup">Сохраняю</string>
-  <string name="status_restore">Востанавливаю</string>
 
-  <string name="status_backup_details">Сохранено<g id="backed_up_items" xmlns="urn:oasis:names:tc:xliff:document:1.2">%1$d</g>/<g id="total_items" xmlns="urn:oasis:names:tc:xliff:document:1.2">%2$d</g>items\u2026</string>
+  <string name="status_backup">Сохранение</string>
+  <string name="status_restore">Восстановление</string>
 
-  <string name="status_restore_details">Восстановлено
-    <g id="backed_up_items" xmlns="urn:oasis:names:tc:xliff:document:1.2">%1$d</g>/<g id="total_items" xmlns="urn:oasis:names:tc:xliff:document:1.2">%2$d</g>items\u2026</string>
-
-  <string name="status_login_details">Включить\u2026</string>
-  <string name="status_done">Готово</string><string name="status_backup_done_details_max_per_sync">Достигнуто максимальное число :%1$d SMS для сохранения. Перезапустите для продолжения.</string>
+  <string name="status_backup_details">Сохранено: <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> SMS\u2026</string>
+  <string name="status_restore_details">Восстановлено: <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> iSMS\u2026</string>
+  <string name="status_login_details">Подключаюсь\u2026</string>
+  <string name="status_updating_threads">Обновление\u2026</string>
+  <string name="status_done">Готово</string>
+  <string name="status_backup_done_details_max_per_sync">Достигнут максимум SMS: %1$d для одного сохранения. Перезапустите backup для продолжения.</string>
   <string name="status_backup_done_details_noitems">Нечего сохранять.</string>
 
   <plurals name="status_backup_done_details">
-    <item quantity="one">Успешно сохранено: <g id="total_items" xmlns="urn:oasis:names:tc:xliff:document:1.2">%1$d</g>SMS.</item>
-    <item quantity="other">Успешно сохранено: <g id="total_items" xmlns="urn:oasis:names:tc:xliff:document:1.2">%1$d</g>SMS.</item>
+    <item quantity="one">Успешно сохранено: <xliff:g id="total_items">%1$d</xliff:g> SMS.</item>
+    <item quantity="other">Успешно сохранено: <xliff:g id="total_items">%1$d</xliff:g> SMS.</item>
   </plurals>
 
   <plurals name="status_restore_done_details">
-    <item quantity="one">Успешно восстановлено: <g id="total_items" xmlns="urn:oasis:names:tc:xliff:document:1.2">%1$d</g>SMS (%2$d dups).</item>
-    <item quantity="other">Успешно восстановлено: <g id="total_items" xmlns="urn:oasis:names:tc:xliff:document:1.2">%1$d</g>SMS (%2$d dups).</item>
+    <item quantity="one">Успешно восстановлено: <xliff:g id="total_items">%1$d</xliff:g> SMS (%2$d dups).</item>
+    <item quantity="other">Успешно восстановлено: <xliff:g id="total_items">%1$d</xliff:g> SMS (%2$d dups).</item>
   </plurals>
 
-  <string name="status_restore_canceled_details">%1$d/%2$d SMS успешно восстановлено</string>
-  <string name="status_unknown_error">Ошибка</string><string name="notification_unknown_error">SMSBackup+ ошибка</string>
-  <string name="status_unknown_error_details">Ошибка сохранения\восстановления:\n<g id="error_description" xmlns="urn:oasis:names:tc:xliff:document:1.2">%1$s</g></string>
+  <string name="status_restore_canceled_details">%1$d/%2$d sms успешно восстановлено:.</string>
 
-  <string name="status_auth_failure">Ошибка при входе</string>
-  <string name="notification_auth_failure">SMSBackup+ Ошибка при входе</string>
-  <string name="status_auth_failure_details_xoauth">XOAuth ошибка авторизации. Пожалуйста активируйте IMAP в настройках Gmail.</string>
-  <string name="status_auth_failure_details_plain">IMAP ошибка авторизации.   Проверьте логин и пароль.</string>
-  <string name="status_calc_details">Расчет\u2026</string>
+  <string name="status_unknown_error">Ошибка</string>
+  <string name="notification_unknown_error">Ошибка SMSBackup+</string>
+
+  <string name="status_unknown_error_details">Ошибка сохранения/восстановления:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Ошибка логина</string>
+  <string name="notification_auth_failure">SMSBackup+ ошибка логина</string>
+
+  <string name="status_auth_failure_details_xoauth">Ошибка XOAuth. Проверьте включен ли доступ по IMAP в настройках Gmail.</string>
+  <string name="status_auth_failure_details_plain">Ошибка IMAP.  проверьте правильность логина и пароля.</string>
+  <string name="status_calc_details">Обработка\u2026</string>
   <string name="status_canceled">Отменено</string>
-  <string name="status_canceled_details">%1$d/%2$d SMS успешно сохранено.</string>
+  <string name="status_canceled_details">%1$d/%2$d sms успешно сохранено.</string>
   <string name="status_folder_error">Ошибка ярлыка</string>
-  <string name="status_folder_error_details">Не могу создать ярлык или папку.</string>
+  <string name="status_folder_error_details">Не могу создать или получить доступ к ярлыку/папке.</string>
+
   <string name="ui_settings_label">Настройки</string>
-  <string name="ui_settings_advanced_label">Расширенные Настройки</string>
-  <string name="ui_settings_advanced_desc">Установить расширенные настройки.</string>
+  <string name="ui_settings_advanced_label">Расширенные настройки</string>
+  <string name="ui_settings_advanced_desc">Настройки расписания, уведомлений и тп..</string>
   <string name="ui_settings_advanced_server_label">Настройки сервера</string>
-  <string name="ui_settings_advanced_server_desc">Не меняйте настройки, если вы не знаете что делаете!</string>
-  <string name="imap_settings">Настройки IMAP </string>
+  <string name="ui_settings_advanced_server_desc">Не меняйте настройки если вы не знаете что делаете!!! </string>
+
+  <string name="imap_settings">Настройки IMAP</string>
   <string name="ui_login_label">Логин</string>
-  <string name="ui_login_desc">Ваш IMAP логин/e-mail адрес.</string>
-  <string name="ui_login_dialog_msg">Внимание: Изменение логина может привести к проблемам использования XOAuth.</string>
+  <string name="ui_login_desc">Ваш логин/адрес эл. почты.</string>
+  <string name="ui_login_dialog_msg">ВНИМАНИЕ:Изменение логина может вызвать проблемы при использовании XOAuth.</string>
   <string name="ui_password_label">Пароль</string>
-  <string name="ui_password_desc">Ваш IMAP Пароль. Используется только, когда XOAuth отключено.</string>
-  <string name="ui_password_dialog_msg">Пароль сохраняется в вашем телефоне и используется только для входа.</string>
+  <string name="ui_password_desc">Ваш пароль IMAP. Используется только при отключении XOAuth.</string>
+  <string name="ui_password_dialog_msg">Пароль хранится в телефоне и используется только для входа.</string>
   <string name="ui_server_label">Имя сервера</string>
   <string name="ui_server_desc">Имя сервера должно включать и номер порта.</string>
-  <string name="ui_server_dialog_msg">По умолчанию для  Gmail \"imap.gmail.com:993\"</string>
+  <string name="ui_server_dialog_msg">по умолчанию для gmail  \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Настройки безопасности</string>
-  <string name="ui_protocol_desc">Настройки протокола. По умолчанию для Gmail \"SSL (Required)\"."</string>
+  <string name="ui_protocol_desc">Настройки протокола. По умолчанию для gmail \"SSL (Required)\"."</string>
   <string name="ui_authentication_label">Авторизация</string>
-  <string name="ui_authentication_desc">Способ авторизации. По умолчанию для Gmail \"XOauth\".</string>
+  <string name="ui_authentication_desc">Метод Авторизации. По умолчанию для gmail \"XOauth\".</string>
   <string name="plain">Plain text</string>
   <string name="xoauth">XOAuth</string>
-  <string name="ui_imap_folder_label">Ярлык Gmail </string>
-  <string name="ui_imap_folder_desc">Ярлык Gmail, присваиваемый  SMS.</string>
-  <string name="ui_imap_folder_label_dialog_msg">Сохраненным SMS будет присвоен этот ярлык Gmail.</string>
-  <string name="ui_max_items_per_sync_label">Количество SMS для сохранения</string>
+
+  <string name="ui_imap_folder_label">Ярлык Gmail</string>
+  <string name="ui_imap_folder_desc">Ярлык Gmail для SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Сохранным SMS будет присвоен этот ярлык Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">Заголовок Email</string>
+  <string name="ui_mail_subject_prefix_desc">Использовать имя IMAP папки как заголовок email</string>
+
+  <string name="ui_max_items_per_sync_label">Количество SMS для сохраненияItems per backup</string>
   <string name="ui_max_items_per_sync_desc">Максимальное количество SMS для сохранения.</string>
   <string name="ui_max_items_per_restore_label">Количество SMS для восстановления</string>
   <string name="ui_max_items_per_restore_desc">Максимальное количество SMS для восстановления.</string>
+
   <string name="ui_restore_starred_only_label">Помеченные SMS</string>
-  <string name="ui_restore_starred_only_desc">Восстанавливать только помеченные SMS.</string>
-  <string name="ui_backup_mms_label">Сохранение MMS</string>
-  <string name="ui_backup_mms_desc">Активировать сохранение MMS</string>
-  <string name="ui_backup_mms_not_supported">Сохранение MMS не поддерживается на этом устройстве.</string>
-  <string name="ui_mark_as_read_label">Помечать прочитанными (emails)</string>
-  <string name="ui_mark_as_read_desc">Помечать сообщения в Gmail прочитанными?</string>
+  <string name="ui_restore_starred_only_desc">Восстанавливать только помеченные sms.</string>
+
+  <string name="ui_backup_mms_label">Сохранять MMS</string>
+  <string name="ui_backup_mms_desc">Включить сохранение MMS</string>
+  <string name="ui_backup_mms_not_supported">Сохранение MMS не поддердивается на этом девайсе.</string>
+
+  <string name="ui_backup_calllog_label">Сохранять Журнал Вызовов</string>
+  <string name="ui_backup_calllog_desc">Включить сохранение Журнала Вызовов  (beta)</string>
+
+  <string name="ui_imap_folder_calllog_label">Ярлык для Журнала Вызовов </string>
+  <string name="ui_imap_folder_calllog_desc">Ярлык Gmail для Журнала Вызовов.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Сохраненным звонкам будет присвоен этот ярлык  Gmail.</string>
+
+  <string name="ui_mark_as_read_label">Помечать прочитанными  (emails)</string>
+  <string name="ui_mark_as_read_desc">Помечать прочитанными сообщения в Gmail?</string>
   <string name="ui_mark_as_read_restore_label">Помечать прочитанными (SMS)</string>
-  <string name="ui_mark_as_read_restore_desc">Помечать SMS прочитанными?</string>
-  <string name="ui_email_address_style_label">Стиль адреса Email </string>
-  <string name="ui_email_address_style_desc">Формат адреса Еmail</string>
-  <string name="ui_enable_auto_sync_label">Авто сохранение</string>
-  <string name="ui_enable_auto_sync_desc">Сохранять новые SMS автоматически?</string>
-  <string name="auto_backup_settings">Авто сохранение</string>
+  <string name="ui_mark_as_read_restore_desc">Помечать прочитанными восстановленные SMS?.</string>
+
+  <string name="ui_email_address_style_label">Стиль адресаEmail </string>
+  <string name="ui_email_address_style_desc">Формат адреса Email</string>
+
+  <string name="ui_enable_auto_sync_label">Автосохранение</string>
+  <string name="ui_enable_auto_sync_desc">Включить авто сохранение новых SMS?</string>
+
+  <string name="auto_backup_settings">Автосохранение</string>
   <string name="ui_auto_backup_schedule_label">Расписание</string>
   <string name="ui_auto_backup_schedule_desc">Когда сохранять SMS</string>
+
   <string name="ui_auto_backup_incoming_schedule_label">Расписание для входящих SMS</string>
-  <string name="ui_auto_backup_incoming_schedule_desc">Когда сохранять входящие SMS (после получения)</string>
-  <string name="ui_wifi_only_label">Использовать Wifi</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Когда сохранять входящие (после получения)</string>
+
+  <string name="ui_wifi_only_label">Только по Wifi</string>
   <string name="ui_wifi_only_desc">Сохранять/восстанавливать только по Wifi</string>
-  <string name="ui_notifications_label">Уведомления</string><string name="ui_notifications_desc">Уведомления в фоне</string>
-  <string name="error_wifi_only_no_connection">Нет подключения к Wifi</string>
+
+  <string name="ui_notifications_label">Уведомления</string>
+  <string name="ui_notifications_desc">Фоновые уведомления</string>
+
+  <string name="error_wifi_only_no_connection">Нет подключения по Wifi</string>
   <string name="error_no_connection">Нет подключения к интернету</string>
-  <string name="ui_dialog_missing_credentials_title">Логин</string>
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Подключитесь к вашей учетной записи Gmail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Введите логин и пароль.</string>
-  <string name="ui_dialog_sync_data_reset_title">Удаление сохранных SMS</string>
-  <string name="ui_dialog_sync_data_reset_msg">Сохраненные SMS были удалены. Пожалуйста переподключите вашу учетную запись и сделайте ручное сохранение. Вы сможете решить сохранять или пропустить SMS, сохраненные в этом телефоне.</string>
+
+  <string name="ui_dialog_missing_credentials_title">Информация о подключении</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Вы должны быть подключены к своей учетной записи.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Введите логин и пароль</string>
+
+  <string name="ui_dialog_sync_data_reset_title">Сброс настроек синхронизации</string>
+  <string name="ui_dialog_sync_data_reset_msg">
+      Произведен сброс настроек синхронизации. Пожалуйста переподключитесь к Gmail и выполните ручное сохранение. Вы сможете выбрать сохранить или пропустить все сообщения сохраненные в телефоне
+  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Недопустимое имя ярлыка</string>
-  <string name="ui_dialog_invalid_imap_folder_msg">Имя ярлыка должно содержать только символы (A-Z, a-z, А-Я, а-я) and \'/\'.</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Ярлык может содержать только  (А-Я, а-я,A-Z, a-z, 0-9), \'/\', \'.\' и пробелы (не первым и не последним).</string>
   <string name="ui_dialog_first_sync_title">Первое сохранение</string>
   <string name="ui_dialog_first_sync_msg">Сохранить или пропустить все сообщения сохраненные в телефоне?</string>
-  <string name="ui_dialog_first_sync_msg_batched">Сохранить или пропустить все сообщения сохраненные в телефоне? \n\n Примечание: Архив будет разбит на f %1$d частей.</string>
+  <string name="ui_dialog_first_sync_msg_batched">Сохранить или пропустить все сообщения сохраненные в телефоне?\n\nNote: Сообщения будут разбиты на  %1$d группы/групп.</string>
   <string name="ui_dialog_need_first_manual_sync_title">Первое сохранение</string>
   <string name="ui_dialog_need_first_manual_sync_msg">Первое сохранение должно быть запущено вручную. Запустить сохранение сейчас?</string>
-  <string name="ui_dialog_request_token_msg">Соединение с Google...</string>
-  <string name="ui_dialog_access_token_msg">Запрос доступа...</string>
+  <string name="ui_dialog_request_token_msg">Соединение с  Google...</string>
+  <string name="ui_dialog_access_token_msg">Запрашиваю доступ...</string>
+
   <string name="ui_dialog_access_token_error_title">Ошибка авторизации</string>
-  <string name="ui_dialog_access_token_error_msg">Не могу получить доступ. Проверьте, выбрано ли    \"Grant access\".</string>
-  <string name="ui_dialog_connect_msg">Перейдите в броузер и войдите в свою учетную запись для разрешения доступа %1$s к вашему почтовому ящику.</string>
-  <string name="ui_dialog_connect_token_error">Не могу получить доступ к Google. Проверьте настройки сети и настройки часового пояса.</string>
-  <string name="ui_dialog_disconnect_msg">Вы уверены? Вам будет необходимо перезайти в вашу учетную запись после отключения и все локальные настройки синхронизации будут сброшены.</string>
-  <string name="ui_dialog_upgrade_title">Обновление</string>
-  <string name="ui_dialog_upgrade_msg">SMS Backup+ полностью совместим с SMS Backup. Однако, убедитесь что \"Автоматическое сохранение" включено только в одном приложении, в противном случае возможно появление дубликатов. Так же выберите \"Пропустить\" SMS при первой синхронизации, если вы уже сохраняли сообщения ранее.</string>
-  <string name="ui_sync">Сохранение</string>
-  <string name="ui_skip">Пропустить</string>
-  <string name="err_could_not_create_folder">Не могу создать ярлык.</string>
-  <string name="err_first_sync_needs_skip_flag">Внутренняя ошибка: Первое сохранение без настройки пропуска SMS.</string>
-  <string name="err_sync_requires_login_info">Не могу сохранить без настроек логина/пароля .</string>
+  <string name="ui_dialog_access_token_error_msg">Не могу получить доступ. Убедитесь что вы выбрали  \"Grant access\".
+  </string>
+
+  <string name="ui_dialog_connect_msg">В открышемся окне броузера подтвердите разрешение  %1$s получить доступ к вашему почтовому ящику.</string>
+  <string name="ui_dialog_connect_token_error">Не могу соединится со службой  Google. Убедитесьь что вы подкулючены к сети и правильно указали настройки времени/временной зоны.</string>
+  <string name="ui_dialog_disconnect_msg">Вы уверены?  Вам будет необходимо заново подтвердить разрешение на доступ к вашему ящику. Текущее состояние сохранения будет сброшено.</string>
+
+  <string name="ui_dialog_upgrade_title">Информация о совместимости</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ полность совместим с SMS Backup. Однако, если включить "Автосохранение" в обоих версиях , могут появится дубликаты SMS. Так же вам следует выбрать "Пропуск" во время первой синхронизации, в случае если вы уже делали сохрание ранее.
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
+  <string name="ui_dialog_brokendroidx_msg">Существует проблема с сохранением входящих сообщений на Droid X. Обратитесь к разделу FAQ на веб сайте</string>
+
+  <string name="ui_sync">Backup</string>
+  <string name="ui_skip">Пропуск</string>
+  <string name="err_could_not_create_folder">Не могу создаль ярлык.</string>
+  <string name="err_first_sync_needs_skip_flag">Внутренняя ошибка: Первое сохранение без указания - пропускать сообщения или нет.</string>
+  <string name="err_sync_requires_login_info">Не могу выполнить сохранение без логина/пароля.</string>
   <string name="err_communication_error">Общая ошибка.</string>
   <string name="menu_info">О программе</string>
   <string name="menu_reset">Сброс</string>
-  <string name="ui_dialog_reset_title">Сброс текущего состояния синхронизации</string>
-  <string name="ui_dialog_reset_message">Выполнить сброс текущего состояния синхронизации? Вы по прежнему можете выбрать «Пропустить» SMS позже.</string>
-  <string name="all_messages">Все</string>
-  <string name="gmail_connected_fail">Ошибка авторизации в Gmail</string>
-  <string name="gmail_needs_connecting">Коснитесь для подключения к вашей учетной записи Gmail (обязательно).</string>
-  <string name="gmail_already_connected">Подключено как %1$s (коснитесь для выхода).</string>
-  <string name="ui_connected_label">Подключено</string>
-  <string name="ui_connected_desc">Ваша учетная запись должна быть подключена.</string>
+  <string name="ui_dialog_reset_title">Сброс состояния синхронизации</string>
+  <string name="ui_dialog_reset_message">Выполнить сброс состояния синхронизации? Все сообщения будут сохранены заново. Вы можете пропустить сохранение позже.</string>
+  <string name="all_messages">All</string>
+
+  <string name="gmail_connected_fail">Ошибка входа в Gmail</string>
+  <string name="gmail_needs_connecting">Коснитесь для входа в учетную запись Gmail (обязательно).</string>
+  <string name="gmail_already_connected">Подключен как: %1$s (коснитесь для выхода).</string>
+
+  <string name="ui_connected_label">Подключение</string>
+  <string name="ui_connected_desc">Требуется подключение.</string>
+
 </resources>

@@ -1,89 +1,102 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
- <string-array name="max_items_per_sync_entries">
-  <item>100</item>
-  <item>200</item>
-  <item>500</item>
-  <item>@string/all_messages</item>
- </string-array>
- <string-array name="max_items_per_sync_values">
-  <item>100</item>
-  <item>200</item>
-  <item>500</item>
-  <item>-1</item>
- </string-array>
- <string-array name="max_items_per_restore_entries">
-  <item>100</item>
-  <item>200</item>
-  <item>500</item>
-  <item>@string/all_messages</item>
- </string-array>
- <string-array name="max_items_per_restore_values">
-  <item>100</item>
-  <item>200</item>
-  <item>500</item>
-  <item>-1</item>
- </string-array>
- <string-array name="email_address_style_entries">
-  <item>Имя</item>
-  <item>Имя (+00 123456)</item>
-  <item>+00 123456</item>
- </string-array>
- <string-array name="email_address_style_values">
-  <item>name</item>
-  <item>name_and_number</item>
-  <item>number</item>
- </string-array>
- <string-array name="auto_backup_schedule_entries">
-  <item>30 мин</item>
-  <item>1 ч</item>
-  <item>2 ч</item>
-  <item>6 ч</item>
-  <item>24 ч</item>
-  <item>Никогда</item>
- </string-array>
- <string-array name="auto_backup_schedule_values">
-  <item>1800</item>
-  <item>3600</item>
-  <item>7200</item>
-  <item>21600</item>
-  <item>86400</item>
-  <item>-1</item>
- </string-array>
- <string-array name="auto_backup_incoming_schedule_entries">
-  <item>1 мин</item>
-  <item>3 мин</item>
-  <item>30 мин</item>
-  <item>1 ч</item>
-  <item>Никогда</item>
- </string-array>
- <string-array name="auto_backup_incoming_schedule_values">
-  <item>60</item>
-  <item>180</item>
-  <item>1800</item>
-  <item>3600</item>
-  <item>-1</item>
- </string-array>
- <string-array name="server_protocol_entries">
-  <item>SSL (Required)</item>
-  <item>SSL (Optional)</item>
-  <item>TLS (Required)</item>
-  <item>TLS (Optional)</item>
-  <item>None</item>
- </string-array>
- <string-array name="server_protocol_entryValues">
-  <item>+ssl+</item>
-  <item>+ssl</item>
-  <item>+tls+</item>
-  <item>+tls</item>
-  <item></item>
- </string-array>
- <string-array name="server_authentication_entries">
-  <item>@string/xoauth</item>
-  <item>@string/plain</item>
- </string-array>
- <string-array name="server_authentication_values">
-  <item>xoauth</item>
-  <item>plain</item>
- </string-array>
+  <string-array name="max_items_per_sync_entries">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>@string/all_messages</item>
+  </string-array>
+
+  <string-array name="max_items_per_sync_values">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="max_items_per_restore_entries">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>@string/all_messages</item>
+  </string-array>
+
+  <string-array name="max_items_per_restore_values">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="email_address_style_entries">
+    <item>Имя</item>
+    <item>Имя (+00 123456)</item>
+    <item>+00 123456</item>
+  </string-array>
+
+  <string-array name="email_address_style_values">
+    <item>Имя</item>
+    <item>name_and_number</item>
+    <item>Номер</item>
+  </string-array>
+
+  <string-array name="auto_backup_schedule_entries">
+    <item>30 мин</item>
+    <item>1 ч</item>
+    <item>2 ч</item>
+    <item>6 ч</item>
+    <item>24 ч</item>
+    <item>Никогда</item>
+  </string-array>
+
+  <string-array name="auto_backup_schedule_values">
+    <item>1800</item>
+    <item>3600</item>
+    <item>7200</item>
+    <item>21600</item>
+    <item>86400</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="auto_backup_incoming_schedule_entries">
+    <item>1 мин</item>
+    <item>3 мин</item>
+    <item>30 мин</item>
+    <item>1 ч</item>
+    <item>Никогда</item>
+  </string-array>
+
+  <string-array name="auto_backup_incoming_schedule_values">
+    <item>60</item>
+    <item>180</item>
+    <item>1800</item>
+    <item>3600</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="server_protocol_entries">
+    <item>SSL (Required)</item>
+    <item>SSL (Optional)</item>
+    <item>TLS (Required)</item>
+    <item>TLS (Optional)</item>
+    <item>None</item>
+  </string-array>
+
+  <string-array name="server_protocol_entryValues">
+    <item>+ssl+</item>
+    <item>+ssl</item>
+    <item>+tls+</item>
+    <item>+tls</item>
+    <item/>
+  </string-array>
+
+  <string-array name="server_authentication_entries">
+    <item>@string/xoauth</item>
+    <item>@string/plain</item>
+  </string-array>
+
+  <string-array name="server_authentication_values">
+    <item>xoauth</item>
+    <item>plain</item>
+  </string-array>
 </resources>
