@@ -1,8 +1,9 @@
-== 1.2 tbd
+== 1.2 11-10-2010
 
  * Call log support (Felix Knecht)
+ * Backup all MMS attachments (GH-78)
+ * Lift folder name restrictions (GH-79)
  * Turkish translation (Harun Sahin)
- * Backup all MMS attachments
 
 == 1.1.5 11-04-2010
 

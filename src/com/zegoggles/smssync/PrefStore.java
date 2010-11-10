@@ -323,27 +323,14 @@ public class PrefStore {
       }
 
     /**
-     * Returns whether an IMAP folder is valid. This is the case if the name
-     * only contains unaccented latin letters <code>[a-zA-Z]</code>, spaces, numbers, dots and /.
+     * Returns whether an IMAP folder is valid.
      */
     static boolean isValidImapFolder(String imapFolder) {
       if (imapFolder == null || imapFolder.length() == 0) return false;
       if (imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ')
           return false;
 
-        for (int i = 0; i < imapFolder.length(); i++) {
-            char currChar = imapFolder.charAt(i);
-            if (!((currChar >= 'a' && currChar <= 'z')
-                    || (currChar >= 'A' && currChar <= 'Z')
-                    || (currChar == '.')
-                    || (currChar == '/')
-                    || (currChar == ' ')
-                    || (currChar >= '0' && currChar <= '9')
-                    )) {
-                return false;
-            }
-        }
-        return true;
+       return true;
     }
 
     static void setImapFolder(Context ctx, String imapFolder) {
