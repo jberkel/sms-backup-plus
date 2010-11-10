@@ -10,3 +10,4 @@ local.properties
 *.DS_Store
 nbproject
 mmssms.db
+com.zegoggles.smssync_preferences.xml
