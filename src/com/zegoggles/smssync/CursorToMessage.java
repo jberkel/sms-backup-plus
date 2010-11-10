@@ -342,7 +342,7 @@ public class CursorToMessage {
 
           if (contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
             Body textBody = new TextBody(text);
-            BodyPart textPart = new MimeBodyPart(textBody);
+            BodyPart textPart = new MimeBodyPart(textBody, contentType);
             body.addBodyPart(textPart);
           } else {
             Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
