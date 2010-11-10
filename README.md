@@ -119,11 +119,11 @@ on it, SMS Backup+ will skip the restore of already existing messages.
 
 SMS Backup+ can also backup your call logs. It stores all calls using a
 separate label (defaults to `Calllog`, but can be changed in Advanced
-Settings). If you wish you can set this to the value as `SMS`, to make all backed
+Settings). If you wish you can set this to the same value as `SMS`, to make all backed
 up data use the same label.
 
-The body of the call log message contains the number and the duration of the
-call in seconds. 0 seconds here means missed call.
+The body of the call log message contains the duration of the
+call in seconds (0s = missed call) followed by the phone number.
 
 An example:
 
