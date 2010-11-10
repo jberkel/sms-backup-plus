@@ -30,6 +30,15 @@ apk = ant.properties['out.debug.package']
     task :db do
       sh "adb #{flag} pull /data/data/com.android.providers.telephony/databases/mmssms.db ."
     end
+
+    namespace :prefs do
+      task :pull do
+        sh "adb #{flag} pull /data/data/#{package}/shared_prefs/#{package}_preferences.xml ."
+      end
+      task :push do
+        sh "adb #{flag} push #{package}_preferences.xml /data/data/#{package}/shared_prefs/#{package}_preferences.xml"
+      end
+    end
   end
 end
 

@@ -340,6 +340,9 @@ public class CursorToMessage {
           final String fileName = curPart.getString(curPart.getColumnIndex("cl"));
           final String text = curPart.getString(curPart.getColumnIndex("text"));
 
+          if (LOCAL_LOGV) Log.v(TAG, String.format("processing part %s, name=%s (%s)", id,
+                                                   fileName, contentType));
+
           if (contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
             Body textBody = new TextBody(text);
             BodyPart textPart = new MimeBodyPart(textBody, contentType);
