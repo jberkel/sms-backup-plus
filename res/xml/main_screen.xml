@@ -55,7 +55,7 @@
           android:singleLine="true"
           android:dialogMessage="@string/ui_imap_folder_calllog_label_dialog_msg"
           android:persistent="true"
-          android:defaultValue="Calllog"/>
+          android:defaultValue="Call log"/>
 
         <CheckBoxPreference android:key="mail_subject_prefix"
           android:title="@string/ui_mail_subject_prefix_label"

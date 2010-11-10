@@ -102,7 +102,7 @@ public class PrefStore {
     static final String DEFAULT_IMAP_FOLDER = "SMS";
 
     /** Default value for {@link PrefStore#PREF_IMAP_FOLDER_CALLLOG}. */
-    static final String DEFAULT_IMAP_FOLDER_CALLLOG = "Calllog";
+    static final String DEFAULT_IMAP_FOLDER_CALLLOG = "Call log";
 
     /** Default value for {@link PrefStore#PREF_MAIL_SUBJECT_PREFIX}. */
     static final boolean DEFAULT_MAIL_SUBJECT_PREFIX = false;

@@ -118,7 +118,7 @@ on it, SMS Backup+ will skip the restore of already existing messages.
 ### <a name="call-log-support">Call log support (backup only)</a>
 
 SMS Backup+ can also backup your call logs. It stores all calls using a
-separate label (defaults to `Calllog`, but can be changed in Advanced
+separate label (defaults to `Call log`, but can be changed in Advanced
 Settings). If you wish you can set this to the same value as `SMS`, to make all backed
 up data use the same label.
 
