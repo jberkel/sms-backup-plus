@@ -15,9 +15,9 @@ Main differences / improvements:
   uses [XOAuth](http://code.google.com/apis/gmail/oauth/) to get access to your
   data. You can revoke the access rights at any time.
 
-  * MMS backup support (since 1.1), only available on Android 2.x
+  * MMS backup support (since `1.1`), only available on Android 2.x
 
-  * Call log backup (since 1.2)
+  * Call log backup (since `1.2`)
 
   * Faster backups. SMS Backup+ saves around 30% of data transferred by
   avoiding Base64 encoding of emails.
@@ -115,12 +115,20 @@ all messages stored on Gmail will be restored (this can be changed in "Advanced
 Settings"). You can safely restore to a phone which has already message stored
 on it, SMS Backup+ will skip the restore of already existing messages.
 
-### Call log support (backup only)
+### <a name="call-log-support">Call log support (backup only)</a>
 
 SMS Backup+ can also backup your call logs. It stores all calls using a
 separate label (defaults to `Calllog`, but can be changed in Advanced
-Settings). The body of the message contains the number and the duration of the
+Settings). If you wish you can set this to the value as `SMS`, to make all backed
+up data use the same label.
+
+The body of the call log message contains the number and the duration of the
 call in seconds. 0 seconds here means missed call.
+
+An example:
+
+    267s
+    +44123456789
 
 ##Screenshots
 
