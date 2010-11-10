@@ -344,18 +344,18 @@ public class CursorToMessage {
                                                    fileName, contentType));
 
           if (contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
-            Body textBody = new TextBody(text);
-            BodyPart textPart = new MimeBodyPart(textBody, contentType);
-            body.addBodyPart(textPart);
+            // text
+            body.addBodyPart(new MimeBodyPart(new TextBody(text), contentType));
+          } else if (contentType.equalsIgnoreCase("application/smil")) {
+            // silently ignore SMIL stuff
           } else {
-            Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
-            MmsAttachmentBody attachment = new MmsAttachmentBody(partUri, mContext);
-
-            BodyPart part = new MimeBodyPart(attachment, contentType);
+            // attach everything else
+            final Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
+            BodyPart part = new MimeBodyPart(new MmsAttachmentBody(partUri, mContext), contentType);
             part.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
                   String.format("%s;\n name=\"%s\"", contentType, fileName != null ? fileName : "attachment"));
             part.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
-            part.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION, "attachment");
+            part.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,       "attachment");
 
             body.addBodyPart(part);
           }
