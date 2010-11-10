@@ -46,6 +46,7 @@
               android:id="@+id/details_sync_progress"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+              android:paddingRight="10dip"
               style="?android:attr/progressBarStyleHorizontal"
               android:indeterminate="false"
              />
