@@ -36,7 +36,7 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
     private Context context;
 
     public ImapStore(final Context context) throws MessagingException {
-        super(new Account(Preferences.getPreferences(context), null) {
+        super(new Account(context) {
             @Override
             public String getStoreUri() {
               return PrefStore.getStoreUri(context);
