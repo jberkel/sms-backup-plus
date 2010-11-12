@@ -582,7 +582,9 @@ public class SmsSync extends PreferenceActivity {
           .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
-                  dismissDialog(id);
+                  try {
+                    dismissDialog(id);
+                  } catch (java.lang.IllegalArgumentException e) { /* ignore */ }
               }
           })
           .create();

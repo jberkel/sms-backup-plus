@@ -115,11 +115,8 @@ public abstract class ServiceBase extends Service {
     }
 
     protected void releaseLocks() {
-        sWakeLock.release();
-
-        if (sWifiLock != null && sWifiLock.isHeld()) {
-          sWifiLock.release();
-        }
+        if (sWakeLock != null && sWakeLock.isHeld()) sWakeLock.release();
+        if (sWifiLock != null && sWifiLock.isHeld()) sWifiLock.release();
     }
 
     /**
