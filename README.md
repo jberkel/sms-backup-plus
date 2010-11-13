@@ -165,9 +165,9 @@ If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
 
-### <a name="droidx-received">I'm using a Motorola DROID X, and it does not back up received messages!</a>
+### <a name="droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
 
-It's a known SMS bug in the 2.2 update ([details][droidbug]). As a workaround
+It's a known SMS bug in the latest OTA 2.2 update ([details][droidbug]). As a workaround
 you can try installing [SMS Time fix][].
 
 ## Contributing
