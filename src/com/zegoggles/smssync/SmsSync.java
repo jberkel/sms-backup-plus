@@ -59,6 +59,7 @@ import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.ServiceBase.SmsSyncState;
 
+import static com.zegoggles.smssync.App.*;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -412,17 +413,17 @@ public class SmsSync extends PreferenceActivity {
         public void onClick(View v) {
             if (v == mSyncButton) {
                 if (!SmsBackupService.isWorking()) {
-                    Log.d(TAG, "user requested sync");
+                    if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
                     initiateSync();
                 } else {
-                    Log.d(TAG, "user requested cancel");
+                    if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
                     // Sync button will be restored on next status update.
                     mSyncButton.setText(R.string.ui_sync_button_label_canceling);
                     mSyncButton.setEnabled(false);
                     SmsBackupService.cancel();
                 }
             } else if (v == mRestoreButton) {
-                Log.d(TAG, "restore");
+                if (LOCAL_LOGV) Log.v(TAG, "restore");
                 if (!SmsRestoreService.isWorking()) {
                     initiateRestore();
                 } else {
@@ -665,7 +666,7 @@ public class SmsSync extends PreferenceActivity {
         @Override
         protected XOAuthConsumer doInBackground(Intent... callbackIntent) {
             Uri uri = callbackIntent[0].getData();
-            Log.d(TAG, "oauth callback: " + uri);
+            if (LOCAL_LOGV) Log.v(TAG, "oauth callback: " + uri);
 
             XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
             CommonsHttpOAuthProvider provider = consumer.getProvider(SmsSync.this);

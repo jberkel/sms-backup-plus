@@ -47,6 +47,8 @@ import javax.crypto.spec.SecretKeySpec;
 import android.util.Log;
 import org.apache.commons.codec.binary.Base64;
 
+import static com.zegoggles.smssync.App.*;
+
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   private String mUsername;
   private static final String MAC_NAME = "HmacSHA1";
@@ -96,7 +98,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
              }
          }
 
-         Log.d(Consts.TAG, "sasl: " + sasl.toString());
+         if (LOCAL_LOGV) Log.v(Consts.TAG, "sasl: " + sasl.toString());
          return base64(sasl.toString().getBytes(OAuth.ENCODING));
       } catch (URISyntaxException e) {
           throw new IllegalArgumentException(e);
