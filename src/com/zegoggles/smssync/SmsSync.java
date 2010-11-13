@@ -698,7 +698,6 @@ public class SmsSync extends PreferenceActivity {
                 PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
 
                 updateConnected();
-                updateUsernameLabel(null);
 
                 // Invite use to perform a backup, but only once
                 if (PrefStore.isFirstUse(SmsSync.this)) {
