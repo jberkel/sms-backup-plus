@@ -197,6 +197,7 @@ If you want to help translating the UI to other languages: [crowdin project page
   * Roberto Elena Ormad - Spanish translation
   * Gabriele Ravanetti - Italian translation
   * Harun Sahin - Turkish translation
+  * [Lukas Pribyl](http://www.lukaspribyl.eu) - Czech translation
 
 ## License
 
