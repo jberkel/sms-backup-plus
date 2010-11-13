@@ -146,12 +146,13 @@ public class CursorToMessage {
         Log.d(TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
 
-    public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries, DataType dataType) throws MessagingException {
+    public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries,
+                                             DataType dataType) throws MessagingException {
         List<Message> messageList = new ArrayList<Message>(maxEntries);
         long maxDate = PrefStore.DEFAULT_MAX_SYNCED_DATE;
         final String[] columns = cursor.getColumnNames();
 
-        while (messageList.size() < maxEntries && cursor.moveToNext()) {
+        do {
             final long date = cursor.getLong(cursor.getColumnIndex(SmsConsts.DATE));
             if (date > maxDate) {
               maxDate = date;
@@ -161,18 +162,14 @@ public class CursorToMessage {
             for (int i = 0; i < columns.length; i++) {
                 msgMap.put(columns[i], cursor.getString(i));
             }
-
-            Message m;
-            if (dataType.equals(DataType.MMS)) {
-                m = messageFromMapMms(msgMap);
-            } else if (dataType.equals(DataType.SMS)){
-                m = messageFromMapSms(msgMap);
-            } else {
-                m = messageFromMapCalllog(msgMap);
+            Message m = null;
+            switch (dataType) {
+              case MMS: m = messageFromMapMms(msgMap); break;
+              case SMS: m = messageFromMapSms(msgMap); break;
+              case CALLLOG: m = messageFromMapCalllog(msgMap); break;
             }
-
             if (m != null) messageList.add(m);
-        }
+        } while (messageList.size() < maxEntries && cursor.moveToNext());
 
         ConversionResult result = new ConversionResult();
         result.maxDate = maxDate;
@@ -298,94 +295,59 @@ public class CursorToMessage {
     }
 
     private Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
-        Message msg = new MimeMessage();
-        String address = null;
-        boolean inbound = true;
+        if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
         final Uri msgRef  = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
-        final Uri uriAddr = Uri.withAppendedPath(msgRef, "addr");
-        Cursor curAddr = mContext.getContentResolver().query(uriAddr, null, null, null, null);
+        Cursor curAddr = mContext.getContentResolver().query(Uri.withAppendedPath(msgRef, "addr"),
+                                                            null, null, null, null);
 
-        if (curAddr == null) {
-          Log.w(TAG, "Cursor == null");
-          return null;
-        }
-
-        // TODO: this is probably not the best way to determine if a message is inbound or outbound.
-        // Also, messages can have multiple recipients (more than 2 addresses)
-        if (curAddr.getCount() > 1) {
-           curAddr.moveToNext();
-           address = curAddr.getString(curAddr.getColumnIndex("address"));
-
-           if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
-              inbound = false;
-              curAddr.moveToNext();
-              address = curAddr.getString(curAddr.getColumnIndex("address"));
+        final List<String> recipients = new ArrayList<String>(); // MMS recipients
+        while (curAddr != null && curAddr.moveToNext()) {
+           final String address = curAddr.getString(curAddr.getColumnIndex("address"));
+           final int type       = curAddr.getInt(curAddr.getColumnIndex("type"));
+           if (type == MmsConsts.TO && !MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
+             recipients.add(address);
            }
         }
-
         if (curAddr != null) curAddr.close();
-        if (address == null || address.trim().length() == 0) {
+        if (recipients.isEmpty()) {
+           Log.w(TAG, "no recipients found");
            return null;
         }
 
-        MimeMultipart body = new MimeMultipart();
-        Uri uriPart = Uri.withAppendedPath(msgRef, "part");
-        Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null);
-
-        // _id, mid, seq, ct, name, chset, cd, fn, cid, cl, ctt_s, ctt_t, _data, text
-        while (curPart.moveToNext()) {
-          final String id = curPart.getString(curPart.getColumnIndex("_id"));
-          final String contentType = curPart.getString(curPart.getColumnIndex("ct"));
-          final String fileName = curPart.getString(curPart.getColumnIndex("cl"));
-          final String text = curPart.getString(curPart.getColumnIndex("text"));
-
-          if (LOCAL_LOGV) Log.v(TAG, String.format("processing part %s, name=%s (%s)", id,
-                                                   fileName, contentType));
-
-          if (contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
-            // text
-            body.addBodyPart(new MimeBodyPart(new TextBody(text), contentType));
-          } else if (contentType.equalsIgnoreCase("application/smil")) {
-            // silently ignore SMIL stuff
-          } else {
-            // attach everything else
-            final Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
-            BodyPart part = new MimeBodyPart(new MmsAttachmentBody(partUri, mContext), contentType);
-            part.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
-                  String.format("%s;\n name=\"%s\"", contentType, fileName != null ? fileName : "attachment"));
-            part.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
-            part.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,       "attachment");
-
-            body.addBodyPart(part);
-          }
-        }
-
-        if (curPart != null) curPart.close();
-
+        final String address = recipients.get(0);
+        final Message msg = new MimeMessage();
         PersonRecord record = lookupPerson(address);
+
         if (PrefStore.getMailSubjectPrefix(mContext))
           msg.setSubject("[" + PrefStore.getImapFolder(mContext) + "] " + record.getName());
         else
           msg.setSubject("SMS with " + record.getName());
 
-        if (inbound) {
+        final int msg_box = Integer.parseInt(msgMap.get("msg_box"));
+        if (msg_box == MmsConsts.MESSAGE_BOX_INBOX) {
             // Received message
             msg.setFrom(record.getAddress());
             msg.setRecipient(RecipientType.TO, mUserAddress);
         } else {
             // Sent message
-            msg.setRecipient(RecipientType.TO, record.getAddress());
+            if (recipients.size() == 1) {
+              msg.setRecipient(RecipientType.TO, record.getAddress());
+            } else {
+              Address[] addresses = new Address[recipients.size()];
+              for (int i = 0; i < recipients.size(); i++) {
+                addresses[i] = lookupPerson(recipients.get(i)).getAddress();
+              }
+              msg.setRecipients(RecipientType.TO, addresses);
+            }
             msg.setFrom(mUserAddress);
         }
 
-        msg.setBody(body);
-
-        try {
+       try {
           Date then = new Date(1000 * Long.valueOf(msgMap.get(MmsConsts.DATE)));
           msg.setSentDate(then);
           msg.setInternalDate(then);
-          msg.setHeader("Message-ID", createMessageId(then, address, 1));
+          msg.setHeader("Message-ID", createMessageId(then, address, msg_box));
         } catch (NumberFormatException n) {
           Log.e(TAG, "error parsing date", n);
         }
@@ -400,14 +362,53 @@ public class CursorToMessage {
         msg.setHeader(Headers.DATE, msgMap.get(MmsConsts.DATE));
         msg.setHeader(Headers.THREAD_ID, msgMap.get(MmsConsts.THREAD_ID));
         msg.setHeader(Headers.READ, msgMap.get(MmsConsts.READ));
-        //msg.setHeader(Headers.STATUS, msgMap.get(SmsConsts.STATUS));
-        //msg.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
-        //msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
         msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
         msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
         msg.setFlag(Flag.SEEN, mMarkAsRead);
 
+        // deal with attachments
+        MimeMultipart body = new MimeMultipart();
+        for (BodyPart p : getBodyParts(Uri.withAppendedPath(msgRef, "part"))) {
+          body.addBodyPart(p);
+        }
+        msg.setBody(body);
         return msg;
+    }
+
+    private List<BodyPart> getBodyParts(final Uri uriPart) throws MessagingException {
+        final List<BodyPart> parts = new ArrayList<BodyPart>();
+        Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null);
+
+        // _id, mid, seq, ct, name, chset, cd, fn, cid, cl, ctt_s, ctt_t, _data, text
+        while (curPart.moveToNext()) {
+          final String id = curPart.getString(curPart.getColumnIndex("_id"));
+          final String contentType = curPart.getString(curPart.getColumnIndex("ct"));
+          final String fileName = curPart.getString(curPart.getColumnIndex("cl"));
+          final String text = curPart.getString(curPart.getColumnIndex("text"));
+
+          if (LOCAL_LOGV) Log.v(TAG, String.format("processing part %s, name=%s (%s)", id,
+                                                   fileName, contentType));
+
+          if (contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
+            // text
+            parts.add(new MimeBodyPart(new TextBody(text), contentType));
+          } else if (contentType.equalsIgnoreCase("application/smil")) {
+            // silently ignore SMIL stuff
+          } else {
+            // attach everything else
+            final Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
+            BodyPart part = new MimeBodyPart(new MmsAttachmentBody(partUri, mContext), contentType);
+            part.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
+                  String.format("%s;\n name=\"%s\"", contentType, fileName != null ? fileName : "attachment"));
+            part.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
+            part.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,       "attachment");
+
+            parts.add(part);
+          }
+        }
+
+        if (curPart != null) curPart.close();
+        return parts;
     }
 
     /**

@@ -213,72 +213,48 @@ public class SmsBackupService extends ServiceBase {
           }
 
           try {
-            publish(CALC);
-
-            while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-                long smsDate = Long.MAX_VALUE, mmsDate = Long.MAX_VALUE, calllogDate = Long.MAX_VALUE;
-                Cursor curCursor;
-                DataType dataType = DataType.SMS;
+           Cursor curCursor = null;
+           DataType dataType = null;
+           publish(CALC);
+           while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
                 if (smsItems.moveToNext()) {
-                  smsDate = smsItems.getLong(smsItems.getColumnIndex(SmsConsts.DATE));
-                  smsItems.moveToPrevious();
-                }
-                if (mmsItems.moveToNext()) {
-                  // Mms date is in seconds, sms in millis.
-                  mmsDate = 1000*mmsItems.getLong(mmsItems.getColumnIndex(MmsConsts.DATE));
-                  mmsItems.moveToPrevious();
-                }
-
-                if (calllogItems.moveToNext()) {
-                  // calllog entry date is in millis
-                  calllogDate = calllogItems.getLong(calllogItems.getColumnIndex(CallLog.Calls.DATE));
-                  calllogItems.moveToPrevious();
-                }
-
-                if (smsDate < mmsDate && smsDate < calllogDate) {
-                  curCursor = smsItems;
                   dataType = DataType.SMS;
-                } else if (mmsDate < smsDate && mmsDate < calllogDate) {
-                  curCursor = mmsItems;
+                  curCursor = smsItems;
+                } else if (mmsItems.moveToNext()) {
                   dataType = DataType.MMS;
-                } else if (calllogDate < smsDate && calllogDate < mmsDate) {
-                  curCursor = calllogItems;
+                  curCursor = mmsItems;
+                } else if (calllogItems.moveToNext()) {
                   dataType = DataType.CALLLOG;
-                } else {
-                  break;
-                }
+                  curCursor = calllogItems;
+                } else break;
+
+                if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
 
                 ConversionResult result = converter.cursorToMessages(curCursor, MAX_MSG_PER_REQUEST,
                                                                      dataType);
                 List<Message> messages = result.messageList;
+                if (!messages.isEmpty()) {
+                  switch (dataType) {
+                    case MMS:
+                      updateMaxSyncedDateMms(result.maxDate);
+                      if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " mms messages to server.");
+                      smsmmsfolder.appendMessages(messages.toArray(new Message[messages.size()]));
+                      break;
+                    case SMS:
+                      updateMaxSyncedDateSms(result.maxDate);
+                      if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
+                      smsmmsfolder.appendMessages(messages.toArray(new Message[messages.size()]));
+                      break;
+                    case CALLLOG:
+                      updateMaxSyncedDateCalllog(result.maxDate);
+                      if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() +
+                                            " calllog messages to server.");
 
-                if (messages.isEmpty()) break;
-
-                switch (dataType) {
-                  case MMS:
-                    updateMaxSyncedDateMms(result.maxDate);
-                    if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " mms messages to server.");
-                    break;
-                  case SMS:
-                    updateMaxSyncedDateSms(result.maxDate);
-                    if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() + " sms messages to server.");
-                    break;
-                  case CALLLOG:
-                    updateMaxSyncedDateCalllog(result.maxDate);
-                    if (LOCAL_LOGV) Log.v(TAG, "Sending " + messages.size() +
-                                          " calllog messages to server.");
-                    break;
-                }
-
-                switch (dataType) {
-                  case CALLLOG:
-                    if (calllogfolder != null) {
-                      calllogfolder.appendMessages(messages.toArray(new Message[messages.size()]));
-                    }
-                    break;
-                  default:
-                    smsmmsfolder.appendMessages(messages.toArray(new Message[messages.size()]));
-                    break;
+                      if (calllogfolder != null) {
+                        calllogfolder.appendMessages(messages.toArray(new Message[messages.size()]));
+                      }
+                      break;
+                  }
                 }
 
                 sCurrentSyncedItems += messages.size();

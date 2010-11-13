@@ -34,4 +34,10 @@ public class MmsConsts {
   public static final String TYPE = "m_type";
 
   public static final String DELIVERY_REPORT = "134"; // 0x86
+
+  public static final int MESSAGE_BOX_INBOX = 1;
+  public static final int MESSAGE_BOX_SENT  = 2;
+
+  public static final int TO                = 0x97;
+  public static final int FROM              = 0x89;
 }
