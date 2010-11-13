@@ -28,7 +28,7 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 2.2.
 
-### Users of Opera Mini / Droid X < 2.2 / non-standard browsers
+### <a name="browser-bug">Users of Opera Mini / Droid X < 2.2 / non-standard browsers</a>
 
 *Important:* Some browsers / handsets which ship with non-standard browsers are
 currently not fully supported, there appears to be a problem which breaks
