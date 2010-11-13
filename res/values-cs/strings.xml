@@ -86,8 +86,8 @@
   <string name="plain">Prostý text</string>
   <string name="xoauth">XOAuth</string>
 
-  <string name="ui_imap_folder_label">Gmail složka</string>
-  <string name="ui_imap_folder_desc">Gmail složka pro SMS.</string>
+  <string name="ui_imap_folder_label">GMail složka</string>
+  <string name="ui_imap_folder_desc">GMail složka pro SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Zálohované zprávy budou na GMailu uloženy v této složce.</string>
   <string name="ui_mail_subject_prefix_label">Prefix v předmětu emailu</string>
   <string name="ui_mail_subject_prefix_desc">Použít název složky jako prefix v předmětu emailu</string>
@@ -188,7 +188,7 @@
   <string name="all_messages">Vše</string>
 
   <string name="gmail_connected_fail">Chyba příhlášení do GMailu</string>
-  <string name="gmail_needs_connecting">Stiskněte pro připojeni GMailu (vzžadováno).</string>
+  <string name="gmail_needs_connecting">Stiskněte pro připojeni GMailu (vyžadováno).</string>
   <string name="gmail_already_connected">Připojeno jako %1$s (stiskněte pro odpojení).</string>
 
   <string name="ui_connected_label">Připojit</string>
