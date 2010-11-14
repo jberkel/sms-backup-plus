@@ -168,7 +168,14 @@ displaying correctly. The authentication process won't work otherwise.
 ### <a name="droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
 
 It's a known SMS bug in the latest OTA 2.2 update ([details][droidbug]). As a workaround
-you can try installing [SMS Time fix][].
+you can try installing [SMS Time fix][] and activate the "Last Resort" option.
+
+### <a name="faq-threading">In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.</a>
+
+It's a Gmail feature, but you can disable it.
+In Gmail settings, set conversation view to `off`
+([screenshot][converationviewoff]).
+
 
 ## Contributing
 
@@ -216,5 +223,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [crowdin project page]: http://crowdin.net/project/sms-backup-plus/invite
 [showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
 [source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
-[droidbug]: http://www.enterprisemobiletoday.com/news/article.php/3905466/Android-22-Droid-X-Update-Causing-SMS-Bug.htm
+[droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/
 [SMS Time fix]: http://www.appbrain.com/app/sms-time-fix/com.mattprecious.smsfix
+[converationviewoff]: https://skitch.com/jberkel/ryk8y/soundcloud.com-mail-settings-jan-soundcloud.com
