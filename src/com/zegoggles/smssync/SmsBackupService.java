@@ -50,12 +50,8 @@ public class SmsBackupService extends ServiceBase {
     /** Flag indicating whether this service is already running. */
     private static boolean sIsRunning = false;
 
-
     /** Number of messages that currently need a sync. */
-    private static int sItemsToSync;
-    private static int sItemsToSyncSms;
-    private static int sItemsToSyncMms;
-    private static int sItemsToSyncCalllog;
+    private static int sItemsToSync, sItemsToSyncSms, sItemsToSyncMms, sItemsToSyncCalllog;
 
     /** Number of messages already synced during this cycle.  */
     private static int sCurrentSyncedItems;
