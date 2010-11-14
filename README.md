@@ -168,7 +168,8 @@ displaying correctly. The authentication process won't work otherwise.
 ### <a name="droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
 
 It's a known SMS bug in the latest OTA 2.2 update ([details][droidbug]). As a workaround
-you can try installing [SMS Time fix][] and activate the "Last Resort" option.
+you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and activate the "Last Resort" option
+([screenshot][smstimefixshot]).
 
 ### <a name="faq-threading">In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.</a>
 
@@ -226,3 +227,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/
 [SMS Time fix]: http://www.appbrain.com/app/sms-time-fix/com.mattprecious.smsfix
 [converationviewoff]: https://skitch.com/jberkel/ryk8y/soundcloud.com-mail-settings-jan-soundcloud.com
+[smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
+[smstimefixshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_time_fix.png
+
