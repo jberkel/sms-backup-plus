@@ -59,10 +59,11 @@ SMS Backup+ is available for free in the market, there will never be a pro / pai
 
 You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
-account. If you use Google Apps make sure you select "Sign in with a Google
-Apps Account" ([screenshot](http://skitch.com/jberkel/ditwx/5554-emu-2.2)).
-Also note that it does not work when two-step authentication is enabled for a
-Google Apps account login.
+account or look at this [screenshot][imapenableshot]. If you use Google Apps
+make sure you select "Sign in with a Google Apps Account"
+([screenshot](http://skitch.com/jberkel/ditwx/5554-emu-2.2)).  Also note that
+it does not work when two-step authentication is enabled for a Google Apps
+account login.
 
 After starting SMS Backup+, tap on the "Connect" check box to start the
 authorization process. A browser window will open where Gmail either prompts
@@ -229,4 +230,4 @@ This application is released under the terms of the [Apache License, Version 2.0
 [converationviewoff]: https://skitch.com/jberkel/ryk8y/soundcloud.com-mail-settings-jan-soundcloud.com
 [smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
 [smstimefixshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_time_fix.png
-
+[imapenableshot]: https://skitch.com/jberkel/ryk1c/google-mail-settings-jan.berkel-gmail.com#lightbox
