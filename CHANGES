@@ -2,6 +2,7 @@
 
  * Czech translation
  * Support multi-recipient MMS
+ * Fix "Could not skip all call logs after re-configuration" (GH-82)
  * Minor bugfixes
 
 == 1.2 11-10-2010
