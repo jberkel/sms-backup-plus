@@ -123,80 +123,42 @@ public abstract class ServiceBase extends Service {
      * Returns the maximum date of all SMS messages (except for drafts).
      */
     protected long getMaxItemDateSms() {
-        ContentResolver r = getContentResolver();
-        String selection = SmsConsts.TYPE + " <> ?";
-        String[] selectionArgs = new String[] {
-            String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
-        };
-        String[] projection = new String[] {
-            SmsConsts.DATE
-        };
-        Cursor result = r.query(SMS_PROVIDER, projection, selection, selectionArgs,
+        Cursor result = getContentResolver().query(SMS_PROVIDER,
+                new String[] { SmsConsts.DATE },
+                SmsConsts.TYPE + " <> ?",
+                new String[] { String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
                 SmsConsts.DATE + " DESC LIMIT 1");
 
-        try
-        {
-            if (result.moveToFirst()) {
-                return result.getLong(0);
-            } else {
-                return PrefStore.DEFAULT_MAX_SYNCED_DATE;
-            }
-        }
-        catch (RuntimeException e)
-        {
-            result.close();
-            throw e;
+        try {
+           return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
+        } finally {
+          if (result != null) result.close();
         }
     }
-    
+
     /**
      * Returns the maximum date of all MMS messages
      */
     protected long getMaxItemDateMms() {
-        ContentResolver r = getContentResolver();
-        String[] projection = new String[] {
-            SmsConsts.DATE
-        };
-        Cursor result = r.query(MMS_PROVIDER, projection, null, null,
-                SmsConsts.DATE + " DESC LIMIT 1");
-
-        try
-        {
-            if (result.moveToFirst()) {
-                return result.getLong(0);
-            } else {
-                return PrefStore.DEFAULT_MAX_SYNCED_DATE;
-            }
-        }
-        catch (RuntimeException e)
-        {
-            result.close();
-            throw e;
+        Cursor result = getContentResolver().query(MMS_PROVIDER,
+                new String[] { MmsConsts.DATE }, null, null,
+                MmsConsts.DATE + " DESC LIMIT 1");
+        try {
+            return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
+        } finally {
+            if (result != null) result.close();
         }
     }
 
-    /**
-     * Returns the largest date of all sms messages that have successfully been synced
-     * with the server.
-     */
-    protected long getMaxSyncedDateSms() {
-        return PrefStore.getMaxSyncedDateSms(this);
-    }
-
-    /**
-     * Returns the largest date of all mms messages that have successfully been synced
-     * with the server.
-     */
-    protected long getMaxSyncedDateMms() {
-        return PrefStore.getMaxSyncedDateMms(this);
-    }
-
-    /**
-     * Returns the largest date of all calllog entries that have successfully been synced
-     * with the server.
-     */
-    protected long getMaxSyncedDateCalllog() {
-        return PrefStore.getMaxSyncedDateCalllog(this);
+    protected long getMaxItemDateCalllog() {
+        Cursor result = getContentResolver().query(CALLLOG_PROVIDER,
+                new String[] { CallLog.Calls.DATE }, null, null,
+                CallLog.Calls.DATE + " DESC LIMIT 1");
+        try {
+            return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
+        } finally {
+            if (result != null) result.close();
+        }
     }
 
     /**

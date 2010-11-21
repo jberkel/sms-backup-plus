@@ -195,7 +195,7 @@ public class SmsRestoreService extends ServiceBase {
                 ContentValues values = messageToContentValues(message);
 
                 //we have two possible header sets here
-                //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE 
+                //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
                 //         contains either the string "mms" or an integer which is the internal type of the sms
                 //current: there IS a Headers.DATATYPE containing a string representation of CursorToMessage.DataType
                 //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
@@ -220,7 +220,8 @@ public class SmsRestoreService extends ServiceBase {
 
                       Long timestamp = values.getAsLong(SmsConsts.DATE);
 
-                      if (timestamp != null && getMaxSyncedDateSms() < timestamp) {
+                      if (timestamp != null &&
+                          PrefStore.getMaxSyncedDateSms(SmsRestoreService.this) < timestamp) {
                           updateMaxSyncedDateSms(timestamp);
                       }
                       if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);

@@ -470,7 +470,8 @@ public class SmsSync extends PreferenceActivity {
                 msg = getString(R.string.ui_dialog_invalid_imap_folder_msg);
                 break;
            case FIRST_SYNC:
-                DialogInterface.OnClickListener firstSyncListener = new DialogInterface.OnClickListener() {
+                DialogInterface.OnClickListener firstSyncListener =
+                  new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         startSync(which == DialogInterface.BUTTON2);

@@ -275,14 +275,15 @@ public class SmsBackupService extends ServiceBase {
        */
       private Cursor getSmsItemsToSync(int max) {
          if (LOCAL_LOGV) {
-            Log.v(TAG, String.format("getSmsItemToSync(max=%d),  maxSyncedDate=%d", max, getMaxSyncedDateSms()));
+            Log.v(TAG, String.format("getSmsItemToSync(max=%d),  maxSyncedDate=%d", max,
+            PrefStore.getMaxSyncedDateSms(SmsBackupService.this)));
          }
          String sortOrder = SmsConsts.DATE;
           if (max > 0) sortOrder += " LIMIT " + max;
 
           return getContentResolver().query(SMS_PROVIDER, null,
                 String.format("%s > ? AND %s <> ?", SmsConsts.DATE, SmsConsts.TYPE),
-                new String[] { String.valueOf(getMaxSyncedDateSms()),
+                new String[] { String.valueOf(PrefStore.getMaxSyncedDateSms(SmsBackupService.this)),
                                String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
                 sortOrder);
       }
@@ -307,7 +308,7 @@ public class SmsBackupService extends ServiceBase {
           }
           return getContentResolver().query(MMS_PROVIDER, null,
                 String.format("%s > ? AND %s <> ?", SmsConsts.DATE, MmsConsts.TYPE),
-                new String[] { String.valueOf(getMaxSyncedDateMms()),
+                new String[] { String.valueOf(PrefStore.getMaxSyncedDateMms(SmsBackupService.this)),
                                MmsConsts.DELIVERY_REPORT },
                 sortOrder);
       }
@@ -332,7 +333,7 @@ public class SmsBackupService extends ServiceBase {
 
           return getContentResolver().query(CALLLOG_PROVIDER, null,
                 String.format("%s > ?", CallLog.Calls.DATE),
-                new String[] { String.valueOf(getMaxSyncedDateCalllog())},
+                new String[] { String.valueOf(PrefStore.getMaxSyncedDateCalllog(SmsBackupService.this)) },
                 sortOrder);
       }
 
@@ -363,7 +364,7 @@ public class SmsBackupService extends ServiceBase {
       private int skip() {
           updateMaxSyncedDateSms(getMaxItemDateSms());
           updateMaxSyncedDateMms(getMaxItemDateMms());
-          updateMaxSyncedDateCalllog(getMaxSyncedDateCalllog());
+          updateMaxSyncedDateCalllog(getMaxItemDateCalllog());
 
           sItemsToSync = 0;
           sCurrentSyncedItems = 0;
@@ -376,7 +377,7 @@ public class SmsBackupService extends ServiceBase {
 
     /**
      * Cancels the current ongoing backup.
-    */
+     */
     static void cancel() {
         if (sIsRunning) {
           sCanceled = true;
