@@ -40,8 +40,7 @@ Some possible workarounds:
 
   * Use the stock Android browser for the authentication (you can switch back
   afterwards)
-  * Droid X: install a 3rd party browser (Dolphin HD has been reported to
-  work). Droid X 2.2 seems to work.
+  * Install a 3rd party browser (Dolphin HD has been reported to work)
   * Use plain text authentication (Advanced Settings - Server Settings), use
   your gmail address as username and supply your password
 
