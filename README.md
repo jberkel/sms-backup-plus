@@ -177,6 +177,11 @@ It's a Gmail feature, but you can disable it.
 In Gmail settings, set conversation view to `off`
 ([screenshot][converationviewoff]).
 
+### <a name="faq-show-imap">I get the following Error during backup/restore: Command: SELECT "SMS"; response: #6# [NO, Unknown, Mailbox; SMS, [Failure]]</a>
+
+Make sure you have the "Show IMAP" option checked in the Gmail label settings:
+
+![Screenshot][showimap]
 
 ## Contributing
 
@@ -230,3 +235,4 @@ This application is released under the terms of the [Apache License, Version 2.0
 [smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
 [smstimefixshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_time_fix.png
 [imapenableshot]: https://skitch.com/jberkel/ryk1c/google-mail-settings-jan.berkel-gmail.com#lightbox
+[showimap]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/show_imap.png
