@@ -63,6 +63,7 @@
   <string name="status_canceled_details">%1$d/%2$d items successfully backed up.</string>
   <string name="status_folder_error">Label error</string>
   <string name="status_folder_error_details">Could not access or create the label/folder.</string>
+  <string name="status_gmail_temp_error">Temporary Gmail IMAP error, try again later.</string>
 
   <string name="ui_settings_label">Settings</string>
   <string name="ui_settings_advanced_label">Advanced settings</string>

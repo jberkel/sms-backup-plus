@@ -153,11 +153,11 @@ public class SmsBackupService extends ServiceBase {
             } catch (MessagingException e) {
               this.ex = e;
               Log.e(TAG, "error during backup", e);
-              lastError = e.getLocalizedMessage();
+              lastError = translateException(e);
               publish(GENERAL_ERROR);
               return null;
             } catch (ConnectivityErrorException e) {
-              lastError = e.getLocalizedMessage();
+              lastError = translateException(e);
               publish(CONNECTIVITY_ERROR);
               return null;
             } finally {

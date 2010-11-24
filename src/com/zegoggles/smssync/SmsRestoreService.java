@@ -120,7 +120,7 @@ public class SmsRestoreService extends ServiceBase {
 
                 return insertedIds.size();
             } catch (ConnectivityErrorException e) {
-                lastError = e.getLocalizedMessage();
+                lastError = translateException(e);
                 publishProgress(CONNECTIVITY_ERROR);
                 return null;
             } catch (AuthenticationFailedException e) {
@@ -128,12 +128,12 @@ public class SmsRestoreService extends ServiceBase {
                 return null;
             } catch (MessagingException e) {
                 Log.e(TAG, "error", e);
-                lastError = e.getLocalizedMessage();
+                lastError = translateException(e);
                 publishProgress(GENERAL_ERROR);
                 return null;
             } catch (IllegalStateException e) {
                 // usually memory problems (Couldn't init cursor window)
-                lastError = e.getLocalizedMessage();
+                lastError = translateException(e);
                 publishProgress(GENERAL_ERROR);
                 return null;
             } finally {

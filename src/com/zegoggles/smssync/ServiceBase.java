@@ -210,6 +210,15 @@ public abstract class ServiceBase extends Service {
         return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
+    protected String translateException(Exception e) {
+       if (e instanceof MessagingException &&
+           "Unable to get IMAP prefix".equals(e.getMessage())) {
+        return getString(R.string.status_gmail_temp_error);
+      } else {
+        return e.getLocalizedMessage();
+      }
+    }
+
     /**
      * Exception connecting.
      */
