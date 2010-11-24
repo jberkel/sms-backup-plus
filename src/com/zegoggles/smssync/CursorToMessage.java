@@ -254,9 +254,10 @@ public class CursorToMessage {
         else
           msg.setSubject("Call with " + record.getName());
 
-        TextBody body = new TextBody(msgMap.get(CallLog.Calls.DURATION) + "s\n" + msgMap.get(CallLog.Calls.NUMBER));
+        final int duration = Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
+        final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
+        final String number= msgMap.get(CallLog.Calls.NUMBER);
 
-        int callType = Integer.valueOf(msgMap.get(CallLog.Calls.TYPE));
         if (CallLog.Calls.OUTGOING_TYPE == callType) {
             // call made by user
             msg.setRecipient(RecipientType.TO, record.getAddress());
@@ -267,7 +268,22 @@ public class CursorToMessage {
             msg.setRecipient(RecipientType.TO, mUserAddress);
         }
 
-        msg.setBody(body);
+        final StringBuilder text = new StringBuilder();
+        text.append(duration)
+            .append("s")
+            .append(String.format(" (%02d:%02d:%02d)",
+              duration / 3600,
+              duration % 3600 / 60,
+              duration % 3600 % 60))
+            .append("\n")
+            .append(number)
+            .append(" (")
+            .append(mContext.getString(
+                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing :
+                    (duration == 0 ? R.string.call_missed : R.string.call_incoming)))
+            .append(")");
+
+        msg.setBody(new TextBody(text.toString()));
 
         try {
           Date then = new Date(Long.valueOf(msgMap.get(CallLog.Calls.DATE)));

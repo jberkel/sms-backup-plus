@@ -199,4 +199,9 @@
   <string name="ui_connected_label">Connect</string>
   <string name="ui_connected_desc">Your account needs to be connected.</string>
 
+  <string name="call_incoming">incoming call</string>
+  <string name="call_outgoing">outgoing call</string>
+  <string name="call_missed">missed call</string>
+
+
 </resources>
