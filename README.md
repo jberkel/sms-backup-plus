@@ -198,7 +198,14 @@ Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
 I've imported some relevant issues from the [original issue list][] to [github issues][].
 
-If you want to help translating the UI to other languages: [crowdin project page][].
+If you want to help translating the UI to other languages download and
+translate the following files, then send the translated files via email:
+
+  * [strings.xml](https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml)
+  * [arrays.xml](https://github.com/jberkel/sms-backup-plus/raw/master/res/values/arrays.xml)
+
+However, if you're already familiar with Git I'd prefer if you cloned the
+repository and send me a [pull request](http://help.github.com/pull-requests/).
 
 ##<a name="credits">Credits</a>
 
