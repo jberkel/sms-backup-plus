@@ -2,7 +2,9 @@
 
  * Czech translation
  * Support multi-recipient MMS
+ * Call Log needs Incoming/Outgoing/Missed Status (GH-81)
  * Fix "Could not skip all call logs after re-configuration" (GH-82)
+ * Better error messages (GH-83)
  * Minor bugfixes
 
 == 1.2 11-10-2010
