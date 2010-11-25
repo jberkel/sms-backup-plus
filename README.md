@@ -184,6 +184,8 @@ In Gmail settings, set conversation view to `off`
 
 Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
+![Screenshot][showimap]
+
 ### <a name="faq-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
 
 This seems to be a limitation of Gmail. After the first hundred or so SMS being
@@ -194,8 +196,6 @@ together.
 
 A way around this is to do a full backup 100 SMS at a time (see `Advanced
 settings`).
-
-![Screenshot][showimap]
 
 ## <a name="contributing">Contributing</a>
 
