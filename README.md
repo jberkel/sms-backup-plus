@@ -241,6 +241,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [converationviewoff]: https://skitch.com/jberkel/ryk8y/soundcloud.com-mail-settings-jan-soundcloud.com
 [smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
 
-[smstimefixshot]: http://cloud.github.com/downloads/jberkel/sms-bs_time_fix.png
+[smstimefixshot]: https://cloud.github.com/downloads/jberkel/sms-bs_time_fix.png
 [imapenableshot]: https://skitch.com/jberkel/ryk1c/google-mail-settings-jan.berkel-gmail.com#lightbox
 [showimap]: http://cloud.github.com/downloads/jberkel/show_imap.png
