@@ -184,6 +184,17 @@ In Gmail settings, set conversation view to `off`
 
 Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
+### <a name="faq-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
+
+This seems to be a limitation of Gmail. After the first hundred or so SMS being
+backed up, Gmail will cease to properly thread many of the conversations.
+You will notice that Gmail will eventually treat each SMS (in that initial
+backup) as individual conversations and will not longer group/thread them
+together.
+
+A way around this is to do a full backup 100 SMS at a time (see `Advanced
+settings`).
+
 ![Screenshot][showimap]
 
 ## <a name="contributing">Contributing</a>
