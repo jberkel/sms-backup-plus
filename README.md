@@ -48,7 +48,7 @@ SMS Backup+ is available for free in the market, there will never be a pro / pai
 
 [![][FlattrButton]][FlattrLink] But if you like the app you can flattr it ([flattr it ??][WhatisFlattr]).
 
-## Usage
+## <a name="usage">Usage</a>
 
 ### Installation
 
@@ -137,11 +137,7 @@ with.
 
 If you only want to backup specific call types you can do so as well.
 
-##Screenshots
-
-![SMS Backup+ screenshot][smsbackupshot] ![Gmail screenshot][gmailshot]
-
-## FAQ
+## <a name="faq">FAQ</a>
 
 ### <a name="faq-schedule">What's the difference between regular and incoming backup schedule?</a>
 
@@ -190,7 +186,7 @@ Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
 ![Screenshot][showimap]
 
-## Contributing
+## <a name="contributing">Contributing</a>
 
 ### Installation from source
 
@@ -204,7 +200,7 @@ I've imported some relevant issues from the [original issue list][] to [github i
 
 If you want to help translating the UI to other languages: [crowdin project page][].
 
-## Credits
+##<a name="credits">Credits</a>
 
   * [Christoph Studer](http://studer.tv/) Original author of SMS Backup
   * [Ben Dodson](http://github.com/bjdodson) - Contacts 2.0 / MMS support
@@ -219,7 +215,11 @@ If you want to help translating the UI to other languages: [crowdin project page
   * Harun Sahin - Turkish translation
   * [Lukas Pribyl](http://www.lukaspribyl.eu) - Czech translation
 
-## License
+##<a name="screenhots">Screenshots</a>
+
+![SMS Backup+ screenshot][smsbackupshot] ![Gmail screenshot][gmailshot] ![Gcal screenshot][gcalshot]
+
+##<a name="license">License</a>
 
 This application is released under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
@@ -233,6 +233,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_2.png
 [gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
+[gcalshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gcal_screenshot.png
 [crowdin project page]: http://crowdin.net/project/sms-backup-plus/invite
 [showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
 [source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
