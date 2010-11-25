@@ -109,11 +109,11 @@
   <string name="ui_backup_calllog_label">Backup Call log</string>
   <string name="ui_backup_calllog_desc">Enable Call log backup (beta)</string>
 
-  <string name="ui_backup_calllog_sync_calendar_enabled_label">Call log calendar sync</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Calendar sync</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Add call log entries to calendar</string>
 
-  <string name="ui_backup_calllog_types_label">Call log types</string>
-  <string name="ui_backup_calllog_types_desc">Which call log entries to back up</string>
+  <string name="ui_backup_calllog_types_label">Call types</string>
+  <string name="ui_backup_calllog_types_desc">Which call types to back up</string>
 
   <string name="ui_backup_calllog_sync_calendar_label">None</string>
   <string name="ui_backup_calllog_sync_calendar_desc">Calendar used for call logs</string>

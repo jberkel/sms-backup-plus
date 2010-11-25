@@ -17,7 +17,7 @@ Main differences / improvements:
 
   * MMS backup support (since `1.1`), only available on Android 2.x
 
-  * Call log backup (since `1.2`)
+  * Call log backup (since `1.2`), with Google Calendar integration (since `1.3.`)
 
   * Faster backups. SMS Backup+ saves around 30% of data transferred by
   avoiding Base64 encoding of emails.
@@ -123,12 +123,19 @@ Settings). If you wish you can set this to the same value as `SMS`, to make all 
 up data use the same label.
 
 The body of the call log message contains the duration of the
-call in seconds (0s = missed call) followed by the phone number.
+call in seconds followed by the phone number and call type (`incoming` /
+`outgoing` / `missed`).
 
 An example:
 
-    267s
-    +44123456789
+    267s (00:04:07)
+    +44123456789 (incoming call)
+
+You can also add call log entries to a Google calendar. Just select `Calendar
+sync` in Advanced settings, and make sure you have selected a calendar to sync
+with.
+
+If you only want to backup specific call types you can do so as well.
 
 ##Screenshots
 
@@ -222,7 +229,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
-[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.2.apk/qr_code
+[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.3.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_2.png
 [gmailshot]: http://cloud.github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
