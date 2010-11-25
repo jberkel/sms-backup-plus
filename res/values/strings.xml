@@ -219,4 +219,9 @@
   <string name="call_number_field">Number: %1$s</string>
   <string name="call_duration_field">Duration: %1$s</string>
   <string name="calllog_settings">Call log settings</string>
+
+  <string name="sms_with_field">SMS with %1$s</string>
+  <string name="mms_with_field">SMS with %1$s</string>
+  <string name="call_with_field">Call with %1$s</string>
+
 </resources>

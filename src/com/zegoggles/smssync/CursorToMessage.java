@@ -85,8 +85,8 @@ public class CursorToMessage {
           new String[] { Phones.PERSON_ID, People.NAME, Phones.NUMBER };
 
 
-    private static final String UNKNOWN_NUMBER = "unknown_number";
-    private static final String UNKNOWN_EMAIL = "unknown.email";
+    private static final String UNKNOWN_NUMBER = "unknown.number";
+    private static final String UNKNOWN_EMAIL  = "unknown.email";
     private static final String UNKNOWN_PERSON = "unknown.person";
 
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
@@ -183,10 +183,7 @@ public class CursorToMessage {
         }
 
         PersonRecord record = lookupPerson(address);
-        if (PrefStore.getMailSubjectPrefix(mContext))
-          msg.setSubject("[" + PrefStore.getImapFolder(mContext) + "] " + record.getName());
-        else
-          msg.setSubject("SMS with " + record.getName());
+        msg.setSubject(getSubject(DataType.SMS, record));
 
         TextBody body = new TextBody(msgMap.get(SmsConsts.BODY));
 
@@ -245,10 +242,7 @@ public class CursorToMessage {
 
         Message msg = new MimeMessage();
         PersonRecord record = lookupPerson(address);
-        if (PrefStore.getMailSubjectPrefix(mContext))
-          msg.setSubject("[" + PrefStore.getCalllogFolder(mContext) + "] " + record.getName());
-        else
-          msg.setSubject("Call with " + record.getName());
+        msg.setSubject(getSubject(DataType.CALLLOG, record));
 
         final int duration = Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
         final String number= msgMap.get(CallLog.Calls.NUMBER);
@@ -301,6 +295,25 @@ public class CursorToMessage {
         return msg;
     }
 
+    private String getSubject(DataType type, PersonRecord record) {
+       final boolean prefix = PrefStore.getMailSubjectPrefix(mContext);
+       switch (type) {
+          case SMS:
+            return prefix ?
+              String.format("[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
+              mContext.getString(R.string.sms_with_field, record.getName());
+          case MMS:
+            return prefix ?
+              String.format("[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
+              mContext.getString(R.string.mms_with_field, record.getName());
+          case CALLLOG:
+            return prefix ?
+              String.format("[%s] %s", PrefStore.getCalllogFolder(mContext), record.getName()) :
+              mContext.getString(R.string.call_with_field, record.getName());
+          default: throw new RuntimeException("unknown type:" + type);
+       }
+    }
+
     public static String formattedDuration(int duration) {
         return String.format("%02d:%02d:%02d",
               duration / 3600,
@@ -348,11 +361,7 @@ public class CursorToMessage {
         final Message msg = new MimeMessage();
         PersonRecord record = lookupPerson(address);
 
-        if (PrefStore.getMailSubjectPrefix(mContext))
-          msg.setSubject("[" + PrefStore.getImapFolder(mContext) + "] " + record.getName());
-        else
-          msg.setSubject("SMS with " + record.getName());
-
+        msg.setSubject(getSubject(DataType.MMS, record));
         final int msg_box = Integer.parseInt(msgMap.get("msg_box"));
         if (msg_box == MmsConsts.MESSAGE_BOX_INBOX) {
             // Received message
@@ -484,7 +493,8 @@ public class CursorToMessage {
 
                 record._id    = sanitize(address);
                 record.number = sanitize(address);
-                record.email  = encodeLocal(address) + "@" + UNKNOWN_PERSON;
+                record.email  = getUnknownEmail(address);
+
                 record.unknown = true;
             }
             mPeopleCache.put(address, record);
@@ -537,7 +547,7 @@ public class CursorToMessage {
     }
 
     private static String sanitize(String s) {
-        return s != null ? s.replaceAll("\\p{Cntrl}", "") : null;
+      return s != null ? s.replaceAll("\\p{Cntrl}", "") : null;
     }
 
     private static String encodeLocal(String s) {
@@ -549,8 +559,8 @@ public class CursorToMessage {
     }
 
     private static String getUnknownEmail(String number) {
-        String no = (number == null) ? UNKNOWN_NUMBER : number;
-        return encodeLocal(no.trim()) + "@" + UNKNOWN_EMAIL;
+      final String no = (number == null || "-1".equals(number)) ? UNKNOWN_NUMBER : number;
+      return encodeLocal(no.trim()) + "@" + UNKNOWN_EMAIL;
     }
 
     /** Returns whether the given e-mail address is a Gmail address or not. */
@@ -584,14 +594,15 @@ public class CursorToMessage {
           if (mAddress == null) {
             switch(mStyle) {
               case NUMBER:
-                  mAddress = new Address(email, number);
+                  mAddress = new Address(email, getNumber());
                   break;
               case NAME_AND_NUMBER:
                   mAddress = new Address(email,
-                                         name == null ? number : String.format("%s (%s)", name, number));
+                                         name == null ? getNumber() :
+                                         String.format("%s (%s)", getName(), getNumber()));
                   break;
               case NAME:
-                  mAddress = new Address(email, name);
+                  mAddress = new Address(email, getName());
                   break;
               default:
                   mAddress = new Address(email);
