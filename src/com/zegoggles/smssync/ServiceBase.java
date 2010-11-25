@@ -171,21 +171,21 @@ public abstract class ServiceBase extends Service {
     protected void updateMaxSyncedDateSms(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateSms(this, maxSyncedDate);
         if (LOCAL_LOGV) {
-          Log.v(Consts.TAG, "Max synced date for sms set to: " + maxSyncedDate);
+          Log.v(TAG, "Max synced date for sms set to: " + maxSyncedDate);
         }
     }
 
     protected void updateMaxSyncedDateMms(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateMms(this, maxSyncedDate);
         if (LOCAL_LOGV) {
-          Log.v(Consts.TAG, "Max synced date for mms set to: " + maxSyncedDate);
+          Log.v(TAG, "Max synced date for mms set to: " + maxSyncedDate);
         }
     }
 
     protected void updateMaxSyncedDateCalllog(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateCalllog(this, maxSyncedDate);
         if (LOCAL_LOGV) {
-          Log.v(Consts.TAG, "Max synced date for call log set to: " + maxSyncedDate);
+          Log.v(TAG, "Max synced date for call log set to: " + maxSyncedDate);
         }
     }
 

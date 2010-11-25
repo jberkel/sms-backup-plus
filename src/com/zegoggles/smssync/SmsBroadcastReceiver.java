@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import static com.zegoggles.smssync.App.*;
+
 public class SmsBroadcastReceiver extends BroadcastReceiver {
     public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
@@ -33,7 +35,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void bootup(Context ctx) {
-        Log.d(Consts.TAG, "SMSBackup+ bootup");
+        Log.d(TAG, "SMSBackup+ bootup");
         incomingSMS(ctx);
     }
 
@@ -44,7 +46,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
             Alarms.scheduleIncomingSync(ctx);
         } else {
-            Log.i(Consts.TAG, "Received SMS / bootup but not set up to sync.");
+            Log.i(TAG, "Received SMS / bootup but not set up to sync.");
         }
     }
 }

@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import static com.zegoggles.smssync.App.*;
+
 public class Alarms {
 
     /**
@@ -49,9 +51,9 @@ public class Alarms {
 
           long atTime = System.currentTimeMillis() + inSeconds * 1000l;
           getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx));
-          Log.d(Consts.TAG, "Scheduled sync due in " + inSeconds + " seconds.");
+          Log.d(TAG, "Scheduled sync due in " + inSeconds + " seconds.");
         } else {
-          Log.d(Consts.TAG, "Not scheduling sync because auto sync is disabled.");
+          Log.d(TAG, "Not scheduling sync because auto sync is disabled.");
         }
     }
 

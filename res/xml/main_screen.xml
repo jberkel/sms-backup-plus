@@ -48,21 +48,11 @@
           android:persistent="true"
           android:defaultValue="SMS"/>
 
-        <EditTextPreference android:key="imap_folder_calllog"
-          android:dependency="backup_calllog"
-          android:title="@string/ui_imap_folder_calllog_label"
-          android:summary="@string/ui_imap_folder_calllog_desc"
-          android:singleLine="true"
-          android:dialogMessage="@string/ui_imap_folder_calllog_label_dialog_msg"
-          android:persistent="true"
-          android:defaultValue="Call log"/>
-
         <CheckBoxPreference android:key="mail_subject_prefix"
           android:title="@string/ui_mail_subject_prefix_label"
           android:persistent="true"
           android:defaultValue="false"
-          android:summary="@string/ui_mail_subject_prefix_desc">
-        </CheckBoxPreference>
+          android:summary="@string/ui_mail_subject_prefix_desc"/>
 
         <ListPreference android:key="max_items_per_sync"
           android:title="@string/ui_max_items_per_sync_label"
@@ -126,6 +116,44 @@
               android:summary="@string/ui_notifications_desc"
               android:persistent="true"
               android:defaultValue="false"/>
+        </PreferenceCategory>
+
+        <PreferenceCategory android:title="@string/calllog_settings"
+          android:dependency="backup_calllog"
+          android:persistent="false"
+          android:key="calllog_settings">
+
+          <EditTextPreference android:key="imap_folder_calllog"
+            android:dependency="backup_calllog"
+            android:title="@string/ui_imap_folder_calllog_label"
+            android:summary="@string/ui_imap_folder_calllog_desc"
+            android:singleLine="true"
+            android:dialogMessage="@string/ui_imap_folder_calllog_label_dialog_msg"
+            android:persistent="true"
+            android:defaultValue="Call log"/>
+
+          <ListPreference android:key="backup_calllog_types"
+            android:dependency="backup_calllog"
+            android:title="@string/ui_backup_calllog_types_label"
+            android:persistent="true"
+            android:defaultValue="everything"
+            android:summary="@string/ui_backup_calllog_types_desc"
+            android:entries="@array/backup_calllog_types_entries"
+            android:entryValues="@array/backup_calllog_types_values"/>
+
+          <CheckBoxPreference android:key="backup_calllog_sync_calendar_enabled"
+            android:dependency="backup_calllog"
+            android:title="@string/ui_backup_calllog_sync_calendar_enabled_label"
+            android:persistent="true"
+            android:defaultValue="false"
+            android:summary="@string/ui_backup_calllog_sync_calendar_enabled_desc"/>
+
+          <ListPreference android:key="backup_calllog_sync_calendar"
+            android:dependency="backup_calllog_sync_calendar_enabled"
+            android:title="@string/ui_backup_calllog_sync_calendar_label"
+            android:persistent="true"
+            android:defaultValue="-1"
+            android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
         </PreferenceCategory>
 
         <PreferenceScreen

@@ -64,7 +64,6 @@ import com.fsck.k9.mail.store.LocalStore.LocalAttachmentBody;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
 import static com.zegoggles.smssync.App.*;
-import static com.zegoggles.smssync.Consts.TAG;
 
 public class CursorToMessage {
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
@@ -148,33 +147,31 @@ public class CursorToMessage {
 
     public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries,
                                              DataType dataType) throws MessagingException {
-        List<Message> messageList = new ArrayList<Message>(maxEntries);
-        long maxDate = PrefStore.DEFAULT_MAX_SYNCED_DATE;
         final String[] columns = cursor.getColumnNames();
-
+        final ConversionResult result = new ConversionResult(dataType);
         do {
             final long date = cursor.getLong(cursor.getColumnIndex(SmsConsts.DATE));
-            if (date > maxDate) {
-              maxDate = date;
+            if (date > result.maxDate) {
+              result.maxDate = date;
             }
-
             Map<String, String> msgMap = new HashMap<String, String>(columns.length);
             for (int i = 0; i < columns.length; i++) {
                 msgMap.put(columns[i], cursor.getString(i));
             }
+
             Message m = null;
             switch (dataType) {
               case MMS: m = messageFromMapMms(msgMap); break;
               case SMS: m = messageFromMapSms(msgMap); break;
               case CALLLOG: m = messageFromMapCalllog(msgMap); break;
             }
-            if (m != null) messageList.add(m);
-        } while (messageList.size() < maxEntries && cursor.moveToNext());
+            if (m != null) {
+              result.messageList.add(m);
+              result.mapList.add(msgMap);
+            }
+        } while (result.messageList.size() < maxEntries && cursor.moveToNext());
 
-        ConversionResult result = new ConversionResult();
-        result.maxDate = maxDate;
-        result.messageList = messageList;
-        return result;
+       return result;
     }
 
     private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
@@ -236,18 +233,17 @@ public class CursorToMessage {
     }
 
     private Message messageFromMapCalllog(Map<String, String> msgMap) throws MessagingException {
+        final String address = msgMap.get(CallLog.Calls.NUMBER);
+        final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
+
+        if (address == null || address.trim().length() == 0 ||
+            !PrefStore.isCalllogTypeEnabled(mContext, callType)) {
+
+          if (LOCAL_LOGV) Log.v(TAG, "ignoring call log entry: " + msgMap);
+          return null;
+        }
+
         Message msg = new MimeMessage();
-
-        String address = msgMap.get(CallLog.Calls.NUMBER);
-        if (address == null || address.trim().length() == 0) {
-           return null;
-        }
-
-        //handle callers without callerid so they display as "Unknown"
-        if (address.equals("-1")) {
-           address = "Unknown";
-        }
-
         PersonRecord record = lookupPerson(address);
         if (PrefStore.getMailSubjectPrefix(mContext))
           msg.setSubject("[" + PrefStore.getCalllogFolder(mContext) + "] " + record.getName());
@@ -255,7 +251,6 @@ public class CursorToMessage {
           msg.setSubject("Call with " + record.getName());
 
         final int duration = Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
-        final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
         final String number= msgMap.get(CallLog.Calls.NUMBER);
 
         if (CallLog.Calls.OUTGOING_TYPE == callType) {
@@ -269,19 +264,15 @@ public class CursorToMessage {
         }
 
         final StringBuilder text = new StringBuilder();
-        text.append(duration)
-            .append("s")
-            .append(String.format(" (%02d:%02d:%02d)",
-              duration / 3600,
-              duration % 3600 / 60,
-              duration % 3600 % 60))
-            .append("\n")
-            .append(number)
-            .append(" (")
-            .append(mContext.getString(
-                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing :
-                    (duration == 0 ? R.string.call_missed : R.string.call_incoming)))
-            .append(")");
+
+        if (callType != CallLog.Calls.MISSED_TYPE) {
+          text.append(duration)
+              .append("s")
+              .append(" (").append(formattedDuration(duration)).append(")")
+              .append("\n");
+        }
+        text.append(record.getNumber())
+            .append(" (").append(callTypeString(callType, null)).append(")");
 
         msg.setBody(new TextBody(text.toString()));
 
@@ -308,6 +299,28 @@ public class CursorToMessage {
         msg.setFlag(Flag.SEEN, mMarkAsRead);
 
         return msg;
+    }
+
+    public static String formattedDuration(int duration) {
+        return String.format("%02d:%02d:%02d",
+              duration / 3600,
+              duration % 3600 / 60,
+              duration % 3600 % 60);
+    }
+
+    public String callTypeString(int callType, String name) {
+        if (name == null) {
+          return mContext.getString(
+                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing :
+                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming :
+                    R.string.call_missed);
+        } else {
+          return mContext.getString(
+                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing_text :
+                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming_text :
+                    R.string.call_missed_text,
+                    name);
+        }
     }
 
     private Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
@@ -520,14 +533,7 @@ public class CursorToMessage {
         }
 
         if (c != null) c.close();
-
-        // Return found e-mail address or a dummy "unknown e-mail address"
-        // if there is none.
-        if (primaryEmail == null) {
-          return getUnknownEmail(number);
-        } else {
-          return primaryEmail;
-        }
+        return (primaryEmail != null) ? primaryEmail : getUnknownEmail(number);
     }
 
     private static String sanitize(String s) {
@@ -561,8 +567,12 @@ public class CursorToMessage {
     }
 
     public class ConversionResult {
-        public long maxDate;
-        public List<Message> messageList;
+        public final DataType type;
+        public final List<Message> messageList = new ArrayList<Message>();
+        public final List<Map<String,String>> mapList = new ArrayList<Map<String,String>>();
+        public long maxDate = PrefStore.DEFAULT_MAX_SYNCED_DATE;
+
+        public ConversionResult(DataType type) { this.type = type; }
     }
 
     public static class PersonRecord {
@@ -589,8 +599,13 @@ public class CursorToMessage {
           }
           return mAddress;
         }
+
+        public String getNumber() {
+          return sanitize("-1".equals(number) ? "Unknown" : number);
+        }
+
         public String getName() {
-          return sanitize(name != null ? name : number);
+          return sanitize(name != null ? name : getNumber());
         }
     }
 

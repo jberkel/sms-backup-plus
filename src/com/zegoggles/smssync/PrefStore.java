@@ -22,6 +22,9 @@ import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.provider.CallLog;
+
+import static com.zegoggles.smssync.App.*;
 
 public class PrefStore {
     /**
@@ -92,6 +95,11 @@ public class PrefStore {
 
     static final String PREF_BACKUP_CALLLOG  = "backup_calllog";
 
+    static final String PREF_CALLLOG_SYNC_CALENDAR  = "backup_calllog_sync_calendar";
+    static final String PREF_CALLLOG_SYNC_CALENDAR_ENABLED  = "backup_calllog_sync_calendar_enabled";
+
+    static final String PREF_CALLLOG_TYPES  = "backup_calllog_types";
+
     static final String PREF_CONNECTED  = "connected";
     static final String PREF_WIFI_ONLY  = "wifi_only";
 
@@ -136,6 +144,7 @@ public class PrefStore {
     static final String DEFAULT_SERVER_PROTOCOL = "ssl";
 
     enum AuthMode { PLAIN, XOAUTH };
+    enum CallLogTypes { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING };
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -261,8 +270,35 @@ public class PrefStore {
         return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_CALLLOG, false);
     }
 
+    static boolean isCalllogCalendarSyncEnabled(Context ctx) {
+        return
+          getCalllogCalendarId(ctx) >= 0 &&
+          getSharedPreferences(ctx).getBoolean(PREF_CALLLOG_SYNC_CALENDAR_ENABLED, false);
+    }
+
+    static CallLogTypes getCalllogType(Context ctx) {
+        return CallLogTypes.valueOf(
+          getSharedPreferences(ctx).getString(PREF_CALLLOG_TYPES, CallLogTypes.EVERYTHING.toString())
+                                   .toUpperCase());
+    }
+
+    static boolean isCalllogTypeEnabled(Context ctx, int type) {
+      switch (getCalllogType(ctx)) {
+        case OUTGOING: return type == CallLog.Calls.OUTGOING_TYPE;
+        case INCOMING: return type == CallLog.Calls.INCOMING_TYPE;
+        case MISSED:   return type == CallLog.Calls.MISSED_TYPE;
+        case INCOMING_OUTGOING: return type != CallLog.Calls.MISSED_TYPE;
+
+        default: return true;
+      }
+    }
+
+    static int getCalllogCalendarId(Context ctx) {
+        return getStringAsInt(ctx, PREF_CALLLOG_SYNC_CALENDAR, -1);
+    }
+
     static boolean isRestoreStarredOnly(Context ctx) {
-      return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_STARRED_ONLY, false);
+        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_STARRED_ONLY, false);
     }
 
     static String getReferenceUid(Context ctx) {
@@ -462,7 +498,7 @@ public class PrefStore {
                 android.content.pm.PackageManager.GET_META_DATA);
         return ""+ (code ? pInfo.versionCode : pInfo.versionName);
       } catch (android.content.pm.PackageManager.NameNotFoundException e) {
-        Log.e(Consts.TAG, "error", e);
+        Log.e(TAG, "error", e);
         return null;
       }
     }

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -40,6 +41,7 @@ import android.preference.Preference;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.ListPreference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
 import android.view.Menu;
@@ -95,6 +97,24 @@ public class SmsSync extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.main_screen);
 
+        final ListPreference calendarPref = (ListPreference)
+              findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
+        final Map<String, String> calendars = CalendarApi.getCalendars(this);
+        if (calendars.size() > 0) {
+          calendarPref.setEntries(calendars.values().toArray(new String[calendars.size()]));
+          calendarPref.setEntryValues(calendars.keySet().toArray(new String[calendars.size()]));
+          calendarPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+              @Override
+              public boolean onPreferenceChange(Preference preference, final Object newValue) {
+                calendarPref.setTitle(calendars.get(newValue.toString()));
+                return true;
+              }
+          });
+        } else {
+          calendarPref.setEnabled(false);
+          findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(false);
+        }
+
         statusPref = new StatusPreference(this);
         statusPref.setSelectable(false);
         statusPref.setOrder(0);
@@ -140,6 +160,7 @@ public class SmsSync extends PreferenceActivity {
         super.onResume();
         ServiceBase.smsSync = this;
 
+        updateCalllogCalendarLabelFromPref();
         updateImapFolderLabelFromPref();
         updateImapCallogFolderLabelFromPref();
         updateUsernameLabel(null);
@@ -180,6 +201,14 @@ public class SmsSync extends PreferenceActivity {
         }
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_LOGIN_USER);
         pref.setTitle(username);
+    }
+
+    private void updateCalllogCalendarLabelFromPref() {
+      final ListPreference calendarPref = (ListPreference)
+            findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
+
+      calendarPref.setTitle(calendarPref.getEntry() != null ? calendarPref.getEntry() :
+                            getString(R.string.ui_backup_calllog_sync_calendar_label));
     }
 
     private void updateImapFolderLabelFromPref() {

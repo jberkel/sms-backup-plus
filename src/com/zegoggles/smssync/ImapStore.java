@@ -66,13 +66,13 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
 
           if (!folder.exists()) {
               folder.create(FolderType.HOLDS_MESSAGES);
-              Log.i(Consts.TAG, "Label '" + label + "' does not exist yet. Creating.");
+              Log.i(TAG, "Label '" + label + "' does not exist yet. Creating.");
           }
           folder.open(OpenMode.READ_WRITE);
           return folder;
         } catch (java.lang.NumberFormatException e) {
           // thrown inside K9
-          Log.e(Consts.TAG, "K9 error", e);
+          Log.e(TAG, "K9 error", e);
           throw new MessagingException(e.getMessage());
         }
     }
@@ -98,15 +98,15 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
 
             Message[] msgs = search(searcher, null);
 
-            Log.i(Consts.TAG, "Found " + msgs.length + " msgs" + (since == null ? "" : " (since " + since + ")"));
+            Log.i(TAG, "Found " + msgs.length + " msgs" + (since == null ? "" : " (since " + since + ")"));
             if (max > 0 && msgs.length > max) {
-                if (LOCAL_LOGV) Log.v(Consts.TAG, "Fetching envelopes");
+                if (LOCAL_LOGV) Log.v(TAG, "Fetching envelopes");
 
                 FetchProfile fp = new FetchProfile();
                 fp.add(FetchProfile.Item.DATE);
                 fetch(msgs, fp, null);
 
-                if (LOCAL_LOGV) Log.v(Consts.TAG, "Sorting");
+                if (LOCAL_LOGV) Log.v(TAG, "Sorting");
                 //Debug.startMethodTracing("sorting");
                 Arrays.sort(msgs, new Comparator<Message>() {
                     public int compare(Message m1, Message m2) {
@@ -116,7 +116,7 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                     }
                 });
                 //Debug.stopMethodTracing();
-                if (LOCAL_LOGV) Log.v(Consts.TAG, "Sorting done");
+                if (LOCAL_LOGV) Log.v(TAG, "Sorting done");
 
                 Message[] recent = new Message[max];
                 System.arraycopy(msgs, 0, recent, 0, max);

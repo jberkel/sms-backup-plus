@@ -98,7 +98,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
              }
          }
 
-         if (LOCAL_LOGV) Log.v(Consts.TAG, "sasl: " + sasl.toString());
+         if (LOCAL_LOGV) Log.v(TAG, "sasl: " + sasl.toString());
          return base64(sasl.toString().getBytes(OAuth.ENCODING));
       } catch (URISyntaxException e) {
           throw new IllegalArgumentException(e);
@@ -161,16 +161,16 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
       return email.toString();
 
     } catch (oauth.signpost.exception.OAuthException e) {
-       Log.e(Consts.TAG, "error", e);
+       Log.e(TAG, "error", e);
        return null;
     } catch (org.xml.sax.SAXException e) {
-       Log.e(Consts.TAG, "error", e);
+       Log.e(TAG, "error", e);
        return null;
     } catch (java.io.IOException e) {
-       Log.e(Consts.TAG, "error", e);
+       Log.e(TAG, "error", e);
        return null;
     } catch (javax.xml.parsers.ParserConfigurationException e) {
-       Log.e(Consts.TAG, "error", e);
+       Log.e(TAG, "error", e);
        return null;
     }
   }

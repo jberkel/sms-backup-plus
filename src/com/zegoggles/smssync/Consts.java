@@ -20,10 +20,6 @@ package com.zegoggles.smssync;
  * Class containing application wide constants.
  */
 final class Consts {
-
-    /** TAG used for logging. */
-    static final String TAG = "SmsSync";
-
     /** Gmail IMAP URI. */
     static final String IMAP_URI = "imap%s://%s:%s@%s";
 

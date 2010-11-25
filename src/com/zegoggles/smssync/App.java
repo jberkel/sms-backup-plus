@@ -25,6 +25,7 @@ import android.util.Config;
 public class App extends Application {
     public static final boolean DEBUG = false;
     public static final boolean LOCAL_LOGV = App.DEBUG ? Config.LOGD : Config.LOGV;
+    public static final String TAG = "SmsBackup+";
 
     private static ContactAccessor sAccessor = null;
 

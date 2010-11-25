@@ -35,6 +35,8 @@ import com.zegoggles.smssync.ServiceBase.SmsSyncState;
 import com.zegoggles.smssync.R;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Date;
 import java.io.IOException;
 
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
@@ -249,6 +251,10 @@ public class SmsBackupService extends ServiceBase {
                       if (calllogfolder != null) {
                         calllogfolder.appendMessages(messages.toArray(new Message[messages.size()]));
                       }
+
+                      if (PrefStore.isCalllogCalendarSyncEnabled(SmsBackupService.this)) {
+                        syncCalendar(converter, result);
+                      }
                       break;
                   }
                 }
@@ -266,7 +272,38 @@ public class SmsBackupService extends ServiceBase {
               if (smsmmsfolder != null)  smsmmsfolder.close();
               if (calllogfolder != null) calllogfolder.close();
           }
+      }
+
+      private void syncCalendar(CursorToMessage converter, ConversionResult result) {
+        if (result.type == DataType.CALLLOG) {
+          for (Map<String, String> m : result.mapList) {
+            final int duration = Integer.parseInt(m.get(CallLog.Calls.DURATION));
+            final int callType = Integer.parseInt(m.get(CallLog.Calls.TYPE));
+            final String number= m.get(CallLog.Calls.NUMBER);
+            final Date then    = new Date(Long.valueOf(m.get(CallLog.Calls.DATE)));
+            final CursorToMessage.PersonRecord record = converter.lookupPerson(number);
+
+            StringBuilder description = new StringBuilder();
+            description.append(getString(R.string.call_number_field, record.getNumber()))
+                       .append(" (")
+                       .append(converter.callTypeString(callType, null))
+                       .append(" )")
+                       .append("\n");
+
+            if (callType != CallLog.Calls.MISSED_TYPE) {
+              description.append(getString(R.string.call_duration_field,
+                                           converter.formattedDuration(duration)));
+            }
+
+            // insert into calendar
+            CalendarApi.addEntry(SmsBackupService.this,
+                                 PrefStore.getCalllogCalendarId(SmsBackupService.this),
+                                 then, duration,
+                                 converter.callTypeString(callType, record.getName()),
+                                 description.toString());
+          }
         }
+      }
 
       /**
        * Returns a cursor of SMS messages that have not yet been synced with the
