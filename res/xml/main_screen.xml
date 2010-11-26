@@ -48,6 +48,13 @@
           android:persistent="true"
           android:defaultValue="SMS"/>
 
+        <ListPreference android:key="backup_contact_group"
+          android:title="@string/ui_backup_contact_group_label"
+          android:summary="@string/ui_backup_contact_group_desc"
+          android:entries="@array/backup_contact_group_entries"
+          android:entryValues="@array/backup_contact_group_values"
+          android:persistent="true"/>
+
         <CheckBoxPreference android:key="mail_subject_prefix"
           android:title="@string/ui_mail_subject_prefix_label"
           android:persistent="true"

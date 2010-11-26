@@ -35,7 +35,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void bootup(Context ctx) {
-        Log.d(TAG, "SMSBackup+ bootup");
+        Log.d(TAG, "bootup");
         incomingSMS(ctx);
     }
 

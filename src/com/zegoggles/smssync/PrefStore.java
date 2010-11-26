@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
 
+import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.App.*;
 
 public class PrefStore {
@@ -99,6 +100,7 @@ public class PrefStore {
     static final String PREF_CALLLOG_SYNC_CALENDAR_ENABLED  = "backup_calllog_sync_calendar_enabled";
 
     static final String PREF_CALLLOG_TYPES  = "backup_calllog_types";
+    static final String PREF_BACKUP_CONTACT_GROUP  = "backup_contact_group";
 
     static final String PREF_CONNECTED  = "connected";
     static final String PREF_WIFI_ONLY  = "wifi_only";
@@ -143,7 +145,7 @@ public class PrefStore {
     /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
     static final String DEFAULT_SERVER_PROTOCOL = "ssl";
 
-    enum AuthMode { PLAIN, XOAUTH };
+    enum AuthMode     { PLAIN, XOAUTH };
     enum CallLogTypes { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING };
 
     static SharedPreferences getSharedPreferences(Context ctx) {
@@ -241,6 +243,10 @@ public class PrefStore {
         return AuthMode.valueOf(
           getSharedPreferences(ctx).getString(PREF_SERVER_AUTHENTICATION, AuthMode.XOAUTH.toString())
                                    .toUpperCase());
+    }
+
+    static ContactGroup getBackupContactGroup(Context ctx) {
+        return new ContactGroup(getStringAsInt(ctx, PREF_BACKUP_CONTACT_GROUP, -1));
     }
 
     static boolean useXOAuth(Context ctx) {

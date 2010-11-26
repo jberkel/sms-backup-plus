@@ -15,10 +15,25 @@
  */
 package com.zegoggles.smssync;
 
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import android.content.Context;
 
 public class ContactAccessorPre20 implements ContactAccessor {
   public String getOwnerEmail(Context context) {
     return null;
+  }
+
+  public GroupContactIds getGroupContactIds(Context context, ContactGroup group) {
+    return new GroupContactIds();
+  }
+
+  public Map<Integer,Group> getGroups(Context context) {
+    return Collections.emptyMap();
   }
 }

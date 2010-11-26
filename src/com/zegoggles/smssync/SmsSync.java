@@ -22,6 +22,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -99,27 +102,15 @@ public class SmsSync extends PreferenceActivity {
 
         final ListPreference calendarPref = (ListPreference)
               findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
-        final Map<String, String> calendars = CalendarApi.getCalendars(this);
-        if (calendars.size() > 0) {
-          calendarPref.setEntries(calendars.values().toArray(new String[calendars.size()]));
-          calendarPref.setEntryValues(calendars.keySet().toArray(new String[calendars.size()]));
-          calendarPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-              @Override
-              public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                calendarPref.setTitle(calendars.get(newValue.toString()));
-                return true;
-              }
-          });
-        } else {
-          calendarPref.setEnabled(false);
-          findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(false);
-        }
 
-        statusPref = new StatusPreference(this);
-        statusPref.setSelectable(false);
-        statusPref.setOrder(0);
+        Utils.initListPreference(calendarPref, CalendarApi.getCalendars(this));
+        findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
 
-        getPreferenceScreen().addPreference(statusPref);
+        Utils.initListPreference((ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP),
+                                 App.contacts().getGroups(this));
+
+        this.statusPref = new StatusPreference(this);
+        getPreferenceScreen().addPreference(this.statusPref);
         setPreferenceListeners(getPreferenceManager());
 
         int version = Integer.parseInt(Build.VERSION.SDK);
@@ -150,7 +141,6 @@ public class SmsSync extends PreferenceActivity {
         Uri uri = intent.getData();
         if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL) &&
            (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
-
             new OAuthCallbackTask().execute(intent);
         }
     }
@@ -160,6 +150,7 @@ public class SmsSync extends PreferenceActivity {
         super.onResume();
         ServiceBase.smsSync = this;
 
+        updateBackupContactGroupLabelFromPref();
         updateCalllogCalendarLabelFromPref();
         updateImapFolderLabelFromPref();
         updateImapCallogFolderLabelFromPref();
@@ -201,6 +192,14 @@ public class SmsSync extends PreferenceActivity {
         }
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_LOGIN_USER);
         pref.setTitle(username);
+    }
+
+    private void updateBackupContactGroupLabelFromPref() {
+      final ListPreference groupPref = (ListPreference)
+            findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP);
+
+      groupPref.setTitle(groupPref.getEntry() != null ? groupPref.getEntry() :
+                            getString(R.string.ui_backup_contact_group_label));
     }
 
     private void updateCalllogCalendarLabelFromPref() {
@@ -278,6 +277,8 @@ public class SmsSync extends PreferenceActivity {
 
         public StatusPreference(Context context) {
             super(context);
+            setSelectable(false);
+            setOrder(0);
         }
 
         public void update() {

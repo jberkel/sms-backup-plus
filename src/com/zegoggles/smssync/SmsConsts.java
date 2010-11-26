@@ -42,6 +42,7 @@ public class SmsConsts {
 
     public static final String PROTOCOL = "protocol";
 
+    public static final String PERSON = "person";
 
     public static final int MESSAGE_TYPE_ALL = 0;
 

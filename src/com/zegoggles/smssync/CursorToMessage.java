@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.io.BufferedWriter;
@@ -44,8 +45,6 @@ import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 import android.text.TextUtils;
 
-import com.zegoggles.smssync.PrefStore;
-
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.BodyPart;
@@ -63,6 +62,8 @@ import com.fsck.k9.mail.store.LocalStore.LocalAttachmentBody;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
+
+import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.App.*;
 
 public class CursorToMessage {
@@ -72,7 +73,7 @@ public class CursorToMessage {
     // PhoneLookup.CONTENT_FILTER_URI
     public static final Uri ECLAIR_CONTENT_FILTER_URI = Uri.parse("content://com.android.contacts/phone_lookup");
 
-    public static enum DataType {MMS, SMS, CALLLOG};
+    public enum DataType { MMS, SMS, CALLLOG };
 
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
@@ -84,62 +85,68 @@ public class CursorToMessage {
           new String[] { Contacts._ID, Contacts.DISPLAY_NAME } :
           new String[] { Phones.PERSON_ID, People.NAME, Phones.NUMBER };
 
-
     private static final String UNKNOWN_NUMBER = "unknown.number";
     private static final String UNKNOWN_EMAIL  = "unknown.email";
     private static final String UNKNOWN_PERSON = "unknown.person";
 
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
+    private static Style mStyle = Style.NAME;
 
     private Context mContext;
     private Address mUserAddress;
 
-    private Map<String, PersonRecord> mPeopleCache;
-
-    private String mReferenceValue;
-    private boolean mMarkAsRead = false;
-
-    private enum Style { NAME, NAME_AND_NUMBER, NUMBER };
-    private static Style mStyle = Style.NAME;
-
-    public static interface Headers {
-        String ID = "X-smssync-id";
-        String ADDRESS = "X-smssync-address";
-        String DATATYPE  = "X-smssync-datatype";
-        String TYPE  = "X-smssync-type";
-        String DATE =  "X-smssync-date";
-        String THREAD_ID = "X-smssync-thread";
-        String READ = "X-smssync-read";
-        String STATUS = "X-smssync-status";
-        String PROTOCOL = "X-smssync-protocol";
-        String SERVICE_CENTER = "X-smssync-service_center";
-        String BACKUP_TIME = "X-smssync-backup-time";
-        String VERSION = "X-smssync-version";
-        String DURATION = "X-smssync-duration";
-    }
-
-    public CursorToMessage(Context ctx, String userEmail) {
-        mContext = ctx;
-        // simple LRU cache
-        mPeopleCache = new LinkedHashMap<String, PersonRecord>(MAX_PEOPLE_CACHE_SIZE+1, .75F, true) {
+    // simple LRU cache
+    private Map<String, PersonRecord> mPeopleCache =
+      new LinkedHashMap<String, PersonRecord>(MAX_PEOPLE_CACHE_SIZE+1, .75F, true) {
             @Override
             public boolean removeEldestEntry(Map.Entry eldest) {
               return size() > MAX_PEOPLE_CACHE_SIZE;
             }
-        };
+       };
 
-        mUserAddress = new Address(userEmail);
+    private String mReferenceValue;
+    private boolean mMarkAsRead = true;
+    private boolean mPrefix     = false;
 
+    private ContactAccessor.GroupContactIds allowedIds;
+
+    private enum Style { NAME, NAME_AND_NUMBER, NUMBER };
+
+    public interface Headers {
+        String ID             = "X-smssync-id";
+        String ADDRESS        = "X-smssync-address";
+        String DATATYPE       = "X-smssync-datatype";
+        String TYPE           = "X-smssync-type";
+        String DATE           = "X-smssync-date";
+        String THREAD_ID      = "X-smssync-thread";
+        String READ           = "X-smssync-read";
+        String STATUS         = "X-smssync-status";
+        String PROTOCOL       = "X-smssync-protocol";
+        String SERVICE_CENTER = "X-smssync-service_center";
+        String BACKUP_TIME    = "X-smssync-backup-time";
+        String VERSION        = "X-smssync-version";
+        String DURATION       = "X-smssync-duration";
+    }
+
+    public CursorToMessage(Context ctx, String userEmail) {
+        mContext = ctx;
+        mUserAddress    = new Address(userEmail);
+        mMarkAsRead     = PrefStore.getMarkAsRead(ctx);
         mReferenceValue = PrefStore.getReferenceUid(ctx);
+        mPrefix         = PrefStore.getMailSubjectPrefix(mContext);
+
         if (mReferenceValue == null) {
           mReferenceValue = generateReferenceValue(userEmail);
           PrefStore.setReferenceUid(ctx, mReferenceValue);
         }
 
-        mMarkAsRead = PrefStore.getMarkAsRead(ctx);
-
         if (PrefStore.getEmailAddressStyle(ctx) != null) {
           mStyle = Style.valueOf(PrefStore.getEmailAddressStyle(ctx).toUpperCase());
+        }
+
+        if (PrefStore.getBackupContactGroup(ctx).type != ContactGroup.Type.EVERYBODY) {
+          allowedIds = App.contacts().getGroupContactIds(ctx, PrefStore.getBackupContactGroup(ctx));
+          if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
         }
 
         Log.d(TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
@@ -161,8 +168,8 @@ public class CursorToMessage {
 
             Message m = null;
             switch (dataType) {
-              case MMS: m = messageFromMapMms(msgMap); break;
               case SMS: m = messageFromMapSms(msgMap); break;
+              case MMS: m = messageFromMapMms(msgMap); break;
               case CALLLOG: m = messageFromMapCalllog(msgMap); break;
             }
             if (m != null) {
@@ -175,19 +182,18 @@ public class CursorToMessage {
     }
 
     private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
-        Message msg = new MimeMessage();
-
-        String address = msgMap.get(SmsConsts.ADDRESS);
+        final String address = msgMap.get(SmsConsts.ADDRESS);
         if (address == null || address.trim().length() == 0) {
            return null;
         }
-
         PersonRecord record = lookupPerson(address);
+        if (!backupPerson(record, DataType.SMS)) return null;
+
+        final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.SMS, record));
+        msg.setBody(new TextBody(msgMap.get(SmsConsts.BODY)));
 
-        TextBody body = new TextBody(msgMap.get(SmsConsts.BODY));
-
-        int messageType = Integer.valueOf(msgMap.get(SmsConsts.TYPE));
+        final int messageType = Integer.valueOf(msgMap.get(SmsConsts.TYPE));
         if (SmsConsts.MESSAGE_TYPE_INBOX == messageType) {
             // Received message
             msg.setFrom(record.getAddress());
@@ -198,10 +204,8 @@ public class CursorToMessage {
             msg.setFrom(mUserAddress);
         }
 
-        msg.setBody(body);
-
         try {
-          Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
+          final Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
           msg.setSentDate(then);
           msg.setInternalDate(then);
           msg.setHeader("Message-ID", createMessageId(then, address, messageType));
@@ -211,7 +215,7 @@ public class CursorToMessage {
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
         msg.setHeader("References",
-                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
+                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
         msg.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
         msg.setHeader(Headers.DATATYPE, DataType.SMS.toString());
@@ -240,8 +244,10 @@ public class CursorToMessage {
           return null;
         }
 
-        Message msg = new MimeMessage();
         PersonRecord record = lookupPerson(address);
+        if (!backupPerson(record, DataType.CALLLOG)) return null;
+
+        final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.CALLLOG, record));
 
         final int duration = Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
@@ -281,7 +287,7 @@ public class CursorToMessage {
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
         msg.setHeader("References",
-                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
+                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
         msg.setHeader(Headers.ID, msgMap.get(CallLog.Calls._ID));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
         msg.setHeader(Headers.DATATYPE, DataType.CALLLOG.toString());
@@ -295,19 +301,27 @@ public class CursorToMessage {
         return msg;
     }
 
+    private boolean backupPerson(PersonRecord record, DataType type) {
+      switch (type) {
+        default:
+          final boolean backup = (allowedIds == null || allowedIds.ids.contains(record._id));
+          if (LOCAL_LOGV && !backup) Log.v(TAG, "not backing up " + type + " / "  + record);
+          return backup;
+      }
+    }
+
     private String getSubject(DataType type, PersonRecord record) {
-       final boolean prefix = PrefStore.getMailSubjectPrefix(mContext);
        switch (type) {
           case SMS:
-            return prefix ?
+            return mPrefix ?
               String.format("[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
               mContext.getString(R.string.sms_with_field, record.getName());
           case MMS:
-            return prefix ?
+            return mPrefix ?
               String.format("[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
               mContext.getString(R.string.mms_with_field, record.getName());
           case CALLLOG:
-            return prefix ?
+            return mPrefix ?
               String.format("[%s] %s", PrefStore.getCalllogFolder(mContext), record.getName()) :
               mContext.getString(R.string.call_with_field, record.getName());
           default: throw new RuntimeException("unknown type:" + type);
@@ -358,30 +372,35 @@ public class CursorToMessage {
         }
 
         final String address = recipients.get(0);
-        final Message msg = new MimeMessage();
-        PersonRecord record = lookupPerson(address);
+        final PersonRecord[] records = new PersonRecord[recipients.size()];
+        final Address[] addresses = new Address[recipients.size()];
+        for (int i=0; i < recipients.size(); i++) {
+          records[i]   = lookupPerson(recipients.get(i));
+          addresses[i] = records[i].getAddress();
+        }
 
-        msg.setSubject(getSubject(DataType.MMS, record));
+        boolean backup = false;
+        for (PersonRecord r : records) {
+          if (backupPerson(r, DataType.MMS)) {
+            backup = true;
+            break;
+          }
+        }
+        if (!backup) return null;
+
+        final Message msg = new MimeMessage();
+        msg.setSubject(getSubject(DataType.MMS, records[0]));
         final int msg_box = Integer.parseInt(msgMap.get("msg_box"));
         if (msg_box == MmsConsts.MESSAGE_BOX_INBOX) {
             // Received message
-            msg.setFrom(record.getAddress());
+            msg.setFrom(records[0].getAddress());
             msg.setRecipient(RecipientType.TO, mUserAddress);
         } else {
-            // Sent message
-            if (recipients.size() == 1) {
-              msg.setRecipient(RecipientType.TO, record.getAddress());
-            } else {
-              Address[] addresses = new Address[recipients.size()];
-              for (int i = 0; i < recipients.size(); i++) {
-                addresses[i] = lookupPerson(recipients.get(i)).getAddress();
-              }
-              msg.setRecipients(RecipientType.TO, addresses);
-            }
+            msg.setRecipients(RecipientType.TO, addresses);
             msg.setFrom(mUserAddress);
         }
 
-       try {
+        try {
           Date then = new Date(1000 * Long.valueOf(msgMap.get(MmsConsts.DATE)));
           msg.setSentDate(then);
           msg.setInternalDate(then);
@@ -391,8 +410,8 @@ public class CursorToMessage {
         }
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
-        msg.setHeader("References",
-                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record._id)));
+        msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue,
+                                                  sanitize(records[0].getId())));
         msg.setHeader(Headers.ID, msgMap.get(MmsConsts.ID));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
         msg.setHeader(Headers.DATATYPE, DataType.MMS.toString());
@@ -455,13 +474,13 @@ public class CursorToMessage {
       */
     private String createMessageId(Date sent, String address, int type) {
       try {
-        MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+        final MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
 
         digest.update(Long.toString(sent.getTime()).getBytes("UTF-8"));
         digest.update(address.getBytes("UTF-8"));
         digest.update(Integer.toString(type).getBytes("UTF-8"));
 
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         for (byte b : digest.digest()) {
           sb.append(String.format("%02x", b));
         }
@@ -482,19 +501,16 @@ public class CursorToMessage {
             Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
             final PersonRecord record = new PersonRecord();
             if (c != null && c.moveToFirst()) {
-                long id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
-                record._id    = String.valueOf(id);
+                record._id    = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
                 record.name   = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
                 record.number = sanitize(NEW_CONTACT_API ? address :
                                                   c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
-                record.email  = getPrimaryEmail(id, record.number);
+                record.email  = getPrimaryEmail(record._id, record.number);
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
 
-                record._id    = sanitize(address);
                 record.number = sanitize(address);
                 record.email  = getUnknownEmail(address);
-
                 record.unknown = true;
             }
             mPeopleCache.put(address, record);
@@ -586,7 +602,8 @@ public class CursorToMessage {
     }
 
     public static class PersonRecord {
-        public String _id, name, email, number;
+        public long _id;
+        public String name, email, number;
         public boolean unknown = false;
         private Address mAddress;
 
@@ -611,12 +628,20 @@ public class CursorToMessage {
           return mAddress;
         }
 
+        public String getId() {
+          return unknown ? number : String.valueOf(_id);
+        }
+
         public String getNumber() {
           return sanitize("-1".equals(number) ? "Unknown" : number);
         }
 
         public String getName() {
           return sanitize(name != null ? name : getNumber());
+        }
+
+        public String toString() {
+          return String.format("[name=%s email=%s id=%d]", getName(), email, _id);
         }
     }
 

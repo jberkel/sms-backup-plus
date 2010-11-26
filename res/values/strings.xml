@@ -224,4 +224,8 @@
   <string name="mms_with_field">SMS with %1$s</string>
   <string name="call_with_field">Call with %1$s</string>
 
+  <string name="ui_backup_contact_group_label">Contacts to backup</string>
+  <string name="ui_backup_contact_group_desc">Only backup items from a specific group</string>
+
+  <string name="everybody">Everybody</string>
 </resources>

@@ -36,7 +36,7 @@ public class App extends Application {
         K9.DEBUG = DEBUG;
     }
 
-    public static ContactAccessor getContactAccessor() {
+    public static ContactAccessor contacts() {
        if (sAccessor == null) {
             String className;
             int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
