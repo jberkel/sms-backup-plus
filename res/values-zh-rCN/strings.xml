@@ -63,6 +63,7 @@
   <string name="status_canceled_details">成功备份了 %1$d/%2$d 条信息。</string>
   <string name="status_folder_error">标签出错</string>
   <string name="status_folder_error_details">无法访问或创建标签/文件夹。</string>
+  <string name="status_gmail_temp_error">临时性 Gmail IMAP 错误，请稍候重试。</string>
 
   <string name="ui_settings_label">设置</string>
   <string name="ui_settings_advanced_label">高级设置</string>
@@ -108,6 +109,15 @@
   <string name="ui_backup_calllog_label">备份通话记录</string>
   <string name="ui_backup_calllog_desc">启用通话记录备份功能 (beta 测试)。</string>
 
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">日历同步</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">将通话记录添加到日历。</string>
+
+  <string name="ui_backup_calllog_types_label">通话类型</string>
+  <string name="ui_backup_calllog_types_desc">需要备份何种通话类型。</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">无</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">用于通话记录的日历。</string>
+
   <string name="ui_imap_folder_calllog_label">通话记录标签</string>
   <string name="ui_imap_folder_calllog_desc">应用到通话记录的 Gmail 标签。</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">备份的通话记录将在 Gmail 中以此标签标记。</string>
@@ -150,7 +160,7 @@
    已经将备份数据重置。请重新连接您的帐户并手动执行一次备份。您可以选择备份或跳过这个设备上的信息。
   </string>
   <string name="ui_dialog_invalid_imap_folder_title">无效的标签名称</string>
-  <string name="ui_dialog_invalid_imap_folder_msg">标签名称应只包含无重音符号的字母 (A-Z, a-z) 以及 /。</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">标签名称不能为空格 (在名称开头或结尾)。</string>
   <string name="ui_dialog_first_sync_title">首次备份</string>
   <string name="ui_dialog_first_sync_msg">备份或跳过当前此设备上存储的所有信息？</string>
   <string name="ui_dialog_first_sync_msg_batched">备份或跳过当前此设备上存储的所有信息？\n\n注意: 备份将会以每批次 %1$d 条消息处理。</string>
@@ -197,5 +207,21 @@
 
   <string name="ui_connected_label">连接</string>
   <string name="ui_connected_desc">需要连接到您的帐户。</string>
+
+  <string name="call_incoming">已接来电</string>
+  <string name="call_outgoing">已拨电话</string>
+  <string name="call_missed">未接来电</string>
+
+  <string name="call_missed_text">自 %1$s 的未接来电</string>
+  <string name="call_incoming_text">自 %1$s 的已接来电</string>
+  <string name="call_outgoing_text">至 %1$s 的已拨电话</string>
+
+  <string name="call_number_field">号码: %1$s</string>
+  <string name="call_duration_field">时长: %1$s</string>
+  <string name="calllog_settings">通话记录设置</string>
+
+  <string name="sms_with_field">与 %1$s 的短信记录</string>
+  <string name="mms_with_field">与 %1$s 的彩信记录</string>
+  <string name="call_with_field">与 %1$s 的通话记录</string>
 
 </resources>

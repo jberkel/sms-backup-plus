@@ -40,6 +40,22 @@
     <item>number</item>
   </string-array>
 
+  <string-array name="backup_calllog_types_entries">
+    <item>所有通话</item>
+    <item>仅已接来电</item>
+    <item>仅已拨电话</item>
+    <item>已接来电和已拨电话</item>
+    <item>仅未接来电</item>
+  </string-array>
+
+  <string-array name="backup_calllog_types_values">
+    <item>everything</item>
+    <item>incoming</item>
+    <item>outgoing</item>
+    <item>incoming_outgoing</item>
+    <item>missed</item>
+  </string-array>
+
   <string-array name="auto_backup_schedule_entries">
     <item>30 分钟</item>
     <item>1 小时</item>
