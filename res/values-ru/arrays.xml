@@ -40,12 +40,28 @@
     <item>Номер</item>
   </string-array>
 
+  <string-array name="backup_calllog_types_entries">
+    <item>Все</item>
+    <item>Только входящие звонки</item>
+    <item>Только исходящие звонки</item>
+    <item>Входящие &amp; Исходящие</item>
+    <item>Только пропущенные звонки</item>
+  </string-array>
+
+  <string-array name="backup_calllog_types_values">
+    <item>все</item>
+    <item>входящие</item>
+    <item>исходящие</item>
+    <item>incoming_outgoing</item>
+    <item>пропущенные</item>
+  </string-array>
+
   <string-array name="auto_backup_schedule_entries">
     <item>30 мин</item>
-    <item>1 ч</item>
-    <item>2 ч</item>
-    <item>6 ч</item>
-    <item>24 ч</item>
+    <item>1 час</item>
+    <item>2 часа</item>
+    <item>6 часов</item>
+    <item>24 часа</item>
     <item>Никогда</item>
   </string-array>
 
@@ -62,7 +78,7 @@
     <item>1 мин</item>
     <item>3 мин</item>
     <item>30 мин</item>
-    <item>1 ч</item>
+    <item>1 час</item>
     <item>Никогда</item>
   </string-array>
 
