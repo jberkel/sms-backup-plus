@@ -55,6 +55,8 @@
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
 
-    <uses-sdk android:minSdkVersion="3"/>
+    <uses-sdk android:minSdkVersion="3"
+              android:targetSdkVersion="5"/>
+
     <supports-screens android:smallScreens="true"/>
 </manifest>
