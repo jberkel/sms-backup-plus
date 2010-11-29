@@ -1,6 +1,7 @@
 == 1.3 tbd
 
  * Add call log entries to calendar (similar to CallTrack)
+ * Ability to specify which contacts' SMSes will be backed up (GH-24)
  * Selective call log backups (incoming/outgoing/missed)
  * Czech translation (Lukas Pribyl)
  * Support multi-recipient MMS
