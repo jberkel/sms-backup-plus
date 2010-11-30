@@ -156,6 +156,7 @@ public class SmsRestoreService extends ServiceBase {
 
         @Override
         protected void onProgressUpdate(SmsSyncState... progress) {
+          if (progress == null || progress.length == 0) return;
           if (smsSync != null) smsSync.statusPref.stateChanged(progress[0]);
           sState = progress[0];
         }
