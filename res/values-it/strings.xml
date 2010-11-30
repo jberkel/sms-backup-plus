@@ -63,6 +63,7 @@
   <string name="status_canceled_details">%1$d/%2$d elementi salvati con successo.</string>
   <string name="status_folder_error">Errore etichetta</string>
   <string name="status_folder_error_details">Non è possibile accedere o creare l\'etichetta/cartella.</string>
+   <string name="status_gmail_temp_error">Errore IMAP Gmail temporaneo, riprovare più tardi.</string>
 
   <string name="ui_settings_label">Impostazioni</string>
   <string name="ui_settings_advanced_label">Impostazioni avanzate</string>
@@ -107,6 +108,15 @@
   
   <string name="ui_backup_calllog_label">Backup log chiamate</string>
   <string name="ui_backup_calllog_desc">Abilita backup log chiamate (beta)</string>
+  
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Sincronizza calendario</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Aggiungi voci log chiamate al calendario</string>
+  
+  <string name="ui_backup_calllog_types_label">Tipi chiamate</string>
+  <string name="ui_backup_calllog_types_desc">Quali tipi di chiamate da salvare</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Nessuna</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Calendario usato per il log chiamate</string>
 
   <string name="ui_imap_folder_calllog_label">Etichetta log chiamate</string>
   <string name="ui_imap_folder_calllog_desc">Etichetta Gmail assegnata al log chiamate.</string>
@@ -197,5 +207,26 @@
 
   <string name="ui_connected_label">Connessione</string>
   <string name="ui_connected_desc">Il tuo account deve essere connesso.</string>
+  
+  <string name="call_incoming">chiamata in arrivo</string>
+  <string name="call_outgoing">chiamata in uscita</string>
+  <string name="call_missed">chiamata senza risposta</string>
+
+  <string name="call_missed_text">Chiamata senza risposta da %1$s</string>
+  <string name="call_incoming_text">Chiamata da %1$s</string>
+  <string name="call_outgoing_text">Chiamato %1$s</string>
+
+  <string name="call_number_field">Numero: %1$s</string>
+  <string name="call_duration_field">Durata: %1$s</string>
+  <string name="calllog_settings">Impostazioni log chiamate</string>
+
+  <string name="sms_with_field">SMS con %1$s</string>
+  <string name="mms_with_field">SMS con %1$s</string>
+  <string name="call_with_field">Chiamata con %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Contatti da salvare</string>
+  <string name="ui_backup_contact_group_desc">Salva solo gli elementi di uno specifico gruppo</string>
+
+  <string name="everybody">Tutti</string>
 
 </resources>

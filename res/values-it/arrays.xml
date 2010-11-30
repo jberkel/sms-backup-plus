@@ -33,6 +33,22 @@
     <item>Nome (+00 123456)</item>
     <item>+00 123456</item>
   </string-array>
+  
+  <string-array name="backup_calllog_types_entries">
+    <item>Tutte</item>
+    <item>Solo chiamate in arrivo</item>
+    <item>Solo chiamate in uscita</item>
+    <item>In atrrivo &amp; In uscita</item>
+    <item>Solo chiamate senza risposta</item>
+  </string-array>
+
+  <string-array name="backup_calllog_types_values">
+    <item>everything</item>
+    <item>incoming</item>
+    <item>outgoing</item>
+    <item>incoming_outgoing</item>
+    <item>missed</item>
+  </string-array>
 
   <string-array name="email_address_style_values">
     <item>name</item>
