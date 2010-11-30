@@ -240,9 +240,7 @@ public class PrefStore {
     }
 
     static AuthMode getAuthMode(Context ctx) {
-        return AuthMode.valueOf(
-          getSharedPreferences(ctx).getString(PREF_SERVER_AUTHENTICATION, AuthMode.XOAUTH.toString())
-                                   .toUpperCase());
+        return getDefaultType(ctx, PREF_SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
     }
 
     static ContactGroup getBackupContactGroup(Context ctx) {
@@ -282,10 +280,19 @@ public class PrefStore {
           getSharedPreferences(ctx).getBoolean(PREF_CALLLOG_SYNC_CALENDAR_ENABLED, false);
     }
 
+    static <T extends Enum<T>> T getDefaultType(Context ctx, String pref, Class<T> tClazz,
+                                                T defaultType) {
+        try {
+          final String s = getSharedPreferences(ctx).getString(pref, null);
+          return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase());
+        } catch (IllegalArgumentException e) {
+          Log.e(TAG, "getDefaultType("+pref+")", e);
+          return defaultType;
+        }
+    }
+
     static CallLogTypes getCalllogType(Context ctx) {
-        return CallLogTypes.valueOf(
-          getSharedPreferences(ctx).getString(PREF_CALLLOG_TYPES, CallLogTypes.EVERYTHING.toString())
-                                   .toUpperCase());
+      return getDefaultType(ctx, PREF_CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
     }
 
     static boolean isCalllogTypeEnabled(Context ctx, int type) {
