@@ -209,6 +209,8 @@ settings`).
 
 I've imported some relevant issues from the [original issue list][] to [github issues][].
 
+### <a name="translating">Translating the UI</a>
+
 If you want to help translating the UI to other languages download and
 translate the following files, then send the translated files via email:
 
