@@ -41,11 +41,11 @@
   </string-array>
 
   <string-array name="backup_calllog_types_entries">
-    <item>Everything</item>
-    <item>Incoming calls only</item>
-    <item>Outgoing calls only</item>
-    <item>Incoming &amp; Outgoing</item>
-    <item>Missed calls only</item>
+    <item>@string/call_type_everything</item>
+    <item>@string/call_type_incoming</item>
+    <item>@string/call_type_outgoing</item>
+    <item>@string/call_type_incoming_outgoing</item>
+    <item>@string/call_type_missed</item>
   </string-array>
 
   <string-array name="backup_calllog_types_values">

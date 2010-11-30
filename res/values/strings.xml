@@ -228,4 +228,10 @@
   <string name="ui_backup_contact_group_desc">Only backup items from a specific group</string>
 
   <string name="everybody">Everybody</string>
+
+  <string name="call_type_everything">Everything</string>
+  <string name="call_type_incoming">Incoming calls only</string>
+  <string name="call_type_outgoing">Outgoing calls only</string>
+  <string name="call_type_incoming_outgoing">Incoming &amp; Outgoing</string>
+  <string name="call_type_missed">Missed calls only</string>
 </resources>
