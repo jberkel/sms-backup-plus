@@ -362,11 +362,16 @@ public class CursorToMessage {
         Cursor curAddr = mContext.getContentResolver().query(Uri.withAppendedPath(msgRef, "addr"),
                                                             null, null, null, null);
 
+        // TODO: this is probably not the best way to determine if a message is inbound or outbound
+        boolean inbound = true;
         final List<String> recipients = new ArrayList<String>(); // MMS recipients
         while (curAddr != null && curAddr.moveToNext()) {
            final String address = curAddr.getString(curAddr.getColumnIndex("address"));
-           final int type       = curAddr.getInt(curAddr.getColumnIndex("type"));
-           if (type == MmsConsts.TO && !MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
+           //final int type       = curAddr.getInt(curAddr.getColumnIndex("type"));
+
+           if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
+             inbound = false;
+           } else {
              recipients.add(address);
            }
         }
@@ -396,8 +401,8 @@ public class CursorToMessage {
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.MMS, records[0]));
         final int msg_box = Integer.parseInt(msgMap.get("msg_box"));
-        if (msg_box == MmsConsts.MESSAGE_BOX_INBOX) {
-            // Received message
+        if (inbound) {
+            // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
             msg.setFrom(records[0].getAddress());
             msg.setRecipient(RecipientType.TO, mUserAddress);
         } else {
