@@ -32,8 +32,6 @@ import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 import static com.zegoggles.smssync.App.*;
 
 public class SmsRestoreService extends ServiceBase {
-    public static final String TAG = SmsRestoreService.class.getSimpleName();
-
     private static int sCurrentRestoredItems;
     private static int sItemsToRestoreCount;
 

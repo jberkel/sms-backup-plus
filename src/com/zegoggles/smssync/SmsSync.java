@@ -71,7 +71,6 @@ import static com.zegoggles.smssync.App.*;
  * providing controls to configure it.
  */
 public class SmsSync extends PreferenceActivity {
-    private static final String TAG = SmsSync.class.getSimpleName();
     private static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
     enum Dialogs {
       MISSING_CREDENTIALS,

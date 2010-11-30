@@ -46,8 +46,6 @@ import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 import static com.zegoggles.smssync.App.*;
 
 public class SmsBackupService extends ServiceBase {
-    public static final String TAG = SmsBackupService.class.getSimpleName();
-
     /** Number of messages sent per sync request. */
     /** Changing this value will cause mms/sms messages to thread out of order. */
     private static final int MAX_MSG_PER_REQUEST = 1;
