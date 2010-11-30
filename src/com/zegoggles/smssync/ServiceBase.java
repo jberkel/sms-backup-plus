@@ -119,6 +119,19 @@ public abstract class ServiceBase extends Service {
         if (sWifiLock != null && sWifiLock.isHeld()) sWifiLock.release();
     }
 
+    protected abstract void handleIntent(final Intent intent);
+
+    // Android api level < 5
+    @Override public void onStart(final Intent intent, int startId) {
+        handleIntent(intent);
+    }
+
+    // Android api level >= 5
+    @Override public int onStartCommand(final Intent intent, int flags, int startId) {
+        handleIntent(intent);
+        return START_NOT_STICKY;
+    }
+
     /**
      * Returns the maximum date of all SMS messages (except for drafts).
      */

@@ -239,16 +239,12 @@ public class SmsRestoreService extends ServiceBase {
         }
     }
 
-    @Override
-    public void onCreate() {
+    @Override public void onCreate() {
        asyncClearCache();
        BinaryTempFileBody.setTempDirectory(getCacheDir());
     }
 
-    @Override
-    public void onStart(final Intent intent, int startId) {
-        super.onStart(intent, startId);
-
+    @Override protected void handleIntent(final Intent intent) {
         synchronized (ServiceBase.class) {
             if (!sIsRunning) {
                 new RestoreTask().execute(PrefStore.getMaxItemsPerRestore(this));

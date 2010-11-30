@@ -69,9 +69,8 @@ public class SmsBackupService extends ServiceBase {
       return intent.hasExtra(Consts.KEY_NUM_RETRIES);
     }
 
-    @Override
-    public void onStart(final Intent intent, int startId) {
-        super.onStart(intent, startId);
+    @Override protected void handleIntent(final Intent intent) {
+        if (intent == null) return; // NB: should not happen with START_NOT_STICKY
 
         if (isBackground(intent) && !getConnectivityManager().getBackgroundDataSetting()) {
             Log.d(TAG, "background data disabled");
@@ -86,7 +85,6 @@ public class SmsBackupService extends ServiceBase {
           }
         }
     }
-
 
     /** BackupTask does all the work */
     class BackupTask extends AsyncTask<Intent, SmsSyncState, Integer>
