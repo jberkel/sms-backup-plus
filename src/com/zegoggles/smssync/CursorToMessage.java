@@ -68,12 +68,15 @@ import static com.zegoggles.smssync.App.*;
 
 public class CursorToMessage {
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
-    public static final Uri ECLAIR_CONTENT_URI = Uri.parse("content://com.android.contacts/data/emails");
+    public static final Uri ECLAIR_CONTENT_URI =
+      Uri.parse("content://com.android.contacts/data/emails");
 
     // PhoneLookup.CONTENT_FILTER_URI
-    public static final Uri ECLAIR_CONTENT_FILTER_URI = Uri.parse("content://com.android.contacts/phone_lookup");
+    public static final Uri ECLAIR_CONTENT_FILTER_URI =
+      Uri.parse("content://com.android.contacts/phone_lookup");
 
     public enum DataType { MMS, SMS, CALLLOG };
+    private enum Style   { NAME, NAME_AND_NUMBER, NUMBER };
 
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
@@ -92,11 +95,11 @@ public class CursorToMessage {
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
     private static Style mStyle = Style.NAME;
 
-    private Context mContext;
-    private Address mUserAddress;
+    private final Context mContext;
+    private final Address mUserAddress;
 
     // simple LRU cache
-    private Map<String, PersonRecord> mPeopleCache =
+    private final Map<String, PersonRecord> mPeopleCache =
       new LinkedHashMap<String, PersonRecord>(MAX_PEOPLE_CACHE_SIZE+1, .75F, true) {
             @Override
             public boolean removeEldestEntry(Map.Entry eldest) {
@@ -105,13 +108,13 @@ public class CursorToMessage {
        };
 
     private String mReferenceValue;
-    private boolean mMarkAsRead = true;
-    private boolean mPrefix     = false;
+    private final boolean mMarkAsRead;
+    private final boolean mPrefix;
 
-    private ContactAccessor.GroupContactIds allowedIds;
+    /** used for whitelisting specific contacts */
+    private final ContactAccessor.GroupContactIds allowedIds;
 
-    private enum Style { NAME, NAME_AND_NUMBER, NUMBER };
-
+    /** email headers used to record meta data */
     public interface Headers {
         String ID             = "X-smssync-id";
         String ADDRESS        = "X-smssync-address";
@@ -144,9 +147,11 @@ public class CursorToMessage {
           mStyle = Style.valueOf(PrefStore.getEmailAddressStyle(ctx).toUpperCase());
         }
 
-        if (PrefStore.getBackupContactGroup(ctx).type != ContactGroup.Type.EVERYBODY) {
-          allowedIds = App.contacts().getGroupContactIds(ctx, PrefStore.getBackupContactGroup(ctx));
-          if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
+        switch (PrefStore.getBackupContactGroup(ctx).type) {
+          case EVERYBODY: allowedIds = null; break;
+          default:
+            allowedIds = App.contacts().getGroupContactIds(ctx, PrefStore.getBackupContactGroup(ctx));
+            if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
         }
 
         Log.d(TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
@@ -161,7 +166,7 @@ public class CursorToMessage {
             if (date > result.maxDate) {
               result.maxDate = date;
             }
-            Map<String, String> msgMap = new HashMap<String, String>(columns.length);
+            final Map<String, String> msgMap = new HashMap<String, String>(columns.length);
             for (int i = 0; i < columns.length; i++) {
                 msgMap.put(columns[i], cursor.getString(i));
             }
