@@ -36,8 +36,10 @@ public class Utils {
       if (pref.getEntryValues() != null) ev.addAll(Arrays.asList(pref.getEntryValues()));
 
       for (Map.Entry entry : fields.entrySet()) {
-        e.add(entry.getValue().toString());
-        ev.add(entry.getKey().toString());
+        if (entry.getValue() != null && entry.getKey() != null) {
+          e.add(entry.getValue().toString());
+          ev.add(entry.getKey().toString());
+        }
       }
 
       pref.setEntries(e.toArray(new CharSequence[e.size()]));
