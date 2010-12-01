@@ -198,4 +198,24 @@
   <string name="ui_connected_label">Connecter</string>
   <string name="ui_connected_desc">Votre compte doit être connecté.</string>
 
+  <string name="email_address_style_name">Nom</string>
+  <string name="email_address_style_name_and_number">Nom (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="never">Jamais</string>
+
+  <string name="_1h">1 h</string>
+  <string name="_2h">2 h</string>
+  <string name="_6h">6 h</string>
+  <string name="_24h">24 h</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="ssl_required">SSL (Requis)</string>
+  <string name="ssl_optional">SSL (Facultatif)</string>
+  <string name="tls_required">TLS (Requis)</string>
+  <string name="tls_optional">TLS (Facultatif)</string>
+  <string name="none">Aucun</string>
 </resources>

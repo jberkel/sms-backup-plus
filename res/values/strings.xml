@@ -234,4 +234,24 @@
   <string name="call_type_outgoing">Outgoing calls only</string>
   <string name="call_type_incoming_outgoing">Incoming &amp; Outgoing</string>
   <string name="call_type_missed">Missed calls only</string>
+
+  <string name="email_address_style_name">Name</string>
+  <string name="email_address_style_name_and_number">Name (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 h</string>
+  <string name="_2h">2 h</string>
+  <string name="_6h">6 h</string>
+  <string name="_24h">24 h</string>
+  <string name="never">Never</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 mins</string>
+  <string name="_30mins">30 mins</string>
+
+  <string name="ssl_required">SSL (Required)</string>
+  <string name="ssl_optional">SSL (Optional)</string>
+  <string name="tls_required">TLS (Required)</string>
+  <string name="tls_optional">TLS (Optional)</string>
+  <string name="none">None</string>
 </resources>

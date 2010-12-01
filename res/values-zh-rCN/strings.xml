@@ -224,4 +224,29 @@
   <string name="mms_with_field">与 %1$s 的彩信记录</string>
   <string name="call_with_field">与 %1$s 的通话记录</string>
 
+  <string name="call_type_everything">所有通话</string>
+  <string name="call_type_incoming">仅已接来电</string>
+  <string name="call_type_outgoing">仅已拨电话</string>
+  <string name="call_type_incoming_outgoing">已接来电和已拨电话</string>
+  <string name="call_type_missed">仅未接来电</string>
+
+  <string name="email_address_style_name">姓名</string>
+  <string name="email_address_style_name_and_number">姓名 (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 小时</string>
+  <string name="_2h">2 小时</string>
+  <string name="_6h">6 小时</string>
+  <string name="_24h">24 小时</string>
+  <string name="never">禁用</string>
+
+  <string name="_1min">1 分钟</string>
+  <string name="_3mins">3 分钟</string>
+  <string name="_30mins">30 分钟</string>
+
+  <string name="ssl_required">SSL (必需)</string>
+  <string name="ssl_optional">SSL (可选)</string>
+  <string name="tls_required">TLS (必需)</string>
+  <string name="tls_optional">TLS (可选)</string>
+  <string name="none">无</string>
 </resources>

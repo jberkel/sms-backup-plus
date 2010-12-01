@@ -102,4 +102,10 @@ Upewnij się, że nazwa użytkownika i hasło zostały poprawnie wprowadzone.</s
   <string name="gmail_already_connected">Konto Gmail połączone (dotknij by rozłączyć).</string>
   <string name="ui_connected_label">Połącz</string>
   <string name="ui_connected_desc">Twoje konto musi być uwierzytelnione.</string>
+
+  <string name="ssl_required">SSL (wymagane)</string>
+  <string name="ssl_optional">SSL (opcjonalne)</string>
+  <string name="tls_required">TLS (wymagane)</string>
+  <string name="tls_optional">TLS (opcjonalne)</string>
+  <string name="none">brak</string>
 </resources>

@@ -29,9 +29,9 @@
   </string-array>
 
   <string-array name="email_address_style_entries">
-    <item>Name</item>
-    <item>Name (+00 123456)</item>
-    <item>+00 123456</item>
+    <item>@string/email_address_style_name</item>
+    <item>@string/email_address_style_name_and_number</item>
+    <item>@string/email_address_style_number</item>
   </string-array>
 
   <string-array name="email_address_style_values">
@@ -57,12 +57,12 @@
   </string-array>
 
   <string-array name="auto_backup_schedule_entries">
-    <item>30 mins</item>
-    <item>1 h</item>
-    <item>2 h</item>
-    <item>6 h</item>
-    <item>24 h</item>
-    <item>Never</item>
+    <item>@string/_30mins</item>
+    <item>@string/_1h</item>
+    <item>@string/_2h</item>
+    <item>@string/_6h</item>
+    <item>@string/_24h</item>
+    <item>@string/never</item>
   </string-array>
 
   <string-array name="auto_backup_schedule_values">
@@ -75,11 +75,11 @@
   </string-array>
 
   <string-array name="auto_backup_incoming_schedule_entries">
-    <item>1 min</item>
-    <item>3 mins</item>
-    <item>30 mins</item>
-    <item>1 h</item>
-    <item>Never</item>
+    <item>@string/_1min</item>
+    <item>@string/_3mins</item>
+    <item>@string/_30mins</item>
+    <item>@string/_1h</item>
+    <item>@string/never</item>
   </string-array>
 
   <string-array name="auto_backup_incoming_schedule_values">
@@ -91,11 +91,11 @@
   </string-array>
 
   <string-array name="server_protocol_entries">
-    <item>SSL (Required)</item>
-    <item>SSL (Optional)</item>
-    <item>TLS (Required)</item>
-    <item>TLS (Optional)</item>
-    <item>None</item>
+    <item>@string/ssl_required</item>
+    <item>@string/ssl_optional</item>
+    <item>@string/tls_required</item>
+    <item>@string/tls_optional</item>
+    <item>@string/none</item>
   </string-array>
 
   <string-array name="server_protocol_entryValues">

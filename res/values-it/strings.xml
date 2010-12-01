@@ -229,4 +229,30 @@
 
   <string name="everybody">Tutti</string>
 
+  <string name="call_type_everything">Tutte</string>
+  <string name="call_type_incoming">Solo chiamate in arrivo</string>
+  <string name="call_type_outgoing">Solo chiamate in uscita</string>
+  <string name="call_type_incoming_outgoing">In atrrivo &amp; In uscita</string>
+  <string name="call_type_missed">Solo chiamate senza risposta</string>
+
+  <string name="email_address_style_name">Nome</string>
+  <string name="email_address_style_name_and_number">Nome (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 ora</string>
+  <string name="_2h">2 ore</string>
+  <string name="_6h">6 ore</string>
+  <string name="_24h">24 ore</string>
+  <string name="never">Mai</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="ssl_required">SSL (Richiesto)</string>
+  <string name="ssl_optional">SSL (Opzionale)</string>
+  <string name="tls_required">TLS (Richiesto)</string>
+  <string name="tls_optional">TLS (Opzionale)</string>
+  <string name="none">Nessuno</string>
+
 </resources>

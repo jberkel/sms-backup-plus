@@ -190,4 +190,23 @@
   <string name="ui_connected_label">Bağlan</string>
   <string name="ui_connected_desc">Hesabınıza bağlanmanız gerekiyor.</string>
 
+  <string name="email_address_style_name">İsim</string>
+  <string name="email_address_style_name_and_number">İsim (+90 123456)</string>
+  <string name="email_address_style_number">+90 123456</string>
+
+  <string name="_1h">1 saat</string>
+  <string name="_2h">2 saat</string>
+  <string name="_6h">6 saat</string>
+  <string name="_24h">24 saat</string>
+  <string name="never">Asla</string>
+
+  <string name="_1min">1 dakika</string>
+  <string name="_3mins">3 dakika</string>
+  <string name="_30mins">30 dakika</string>
+
+  <string name="ssl_required">SSL (Önerilir)</string>
+  <string name="ssl_optional">SSL (İsteğe bağlı)</string>
+  <string name="tls_required">TLS (Önerilir)</string>
+  <string name="tls_optional">TLS (İsteğe bağlı)</string>
+  <string name="none">Yok</string>
 </resources>

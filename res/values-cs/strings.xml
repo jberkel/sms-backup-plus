@@ -194,4 +194,29 @@
   <string name="ui_connected_label">Připojit</string>
   <string name="ui_connected_desc">Váš účet potřebuje být připojen.</string>
 
+  <string name="call_type_everything">Everything</string>
+  <string name="call_type_incoming">Incoming calls only</string>
+  <string name="call_type_outgoing">Outgoing calls only</string>
+  <string name="call_type_incoming_outgoing">Incoming &amp; Outgoing</string>
+  <string name="call_type_missed">Missed calls only</string>
+
+  <string name="email_address_style_name">Jméno</string>
+  <string name="email_address_style_name_and_number">Jméno (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 h</string>
+  <string name="_2h">2 h</string>
+  <string name="_6h">6 h</string>
+  <string name="_24h">24 h</string>
+  <string name="never">Nikdy</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="ssl_required">SSL (Vyžadováno)</string>
+  <string name="ssl_optional">SSL (Volitelně)</string>
+  <string name="tls_required">TLS (Vyžadováno)</string>
+  <string name="tls_optional">TLS (Volitelně)</string>
+  <string name="none">None</string>
 </resources>
