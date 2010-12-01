@@ -145,8 +145,9 @@ public class PrefStore {
     /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
     static final String DEFAULT_SERVER_PROTOCOL = "ssl";
 
-    enum AuthMode     { PLAIN, XOAUTH };
-    enum CallLogTypes { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING };
+    enum AuthMode            { PLAIN, XOAUTH };
+    enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING };
+    public enum AddressStyle { NAME, NAME_AND_NUMBER, NUMBER };
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -352,8 +353,8 @@ public class PrefStore {
       return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_RESTORE, DEFAULT_MAX_ITEMS_PER_RESTORE);
     }
 
-    static String getEmailAddressStyle(Context ctx) {
-      return getSharedPreferences(ctx).getString(PREF_EMAIL_ADDRESS_STYLE, null);
+    static AddressStyle getEmailAddressStyle(Context ctx) {
+      return getDefaultType(ctx, PREF_EMAIL_ADDRESS_STYLE, AddressStyle.class, AddressStyle.NAME);
     }
 
     static boolean isWifiOnly(Context ctx) {

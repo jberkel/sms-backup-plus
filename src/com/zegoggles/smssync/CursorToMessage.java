@@ -63,7 +63,8 @@ import com.fsck.k9.mail.store.LocalStore.LocalAttachmentBody;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
 
-import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
+import com.zegoggles.smssync.PrefStore.AddressStyle;
+import com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.App.*;
 
 public class CursorToMessage {
@@ -76,7 +77,6 @@ public class CursorToMessage {
       Uri.parse("content://com.android.contacts/phone_lookup");
 
     public enum DataType { MMS, SMS, CALLLOG };
-    private enum Style   { NAME, NAME_AND_NUMBER, NUMBER };
 
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
@@ -93,7 +93,7 @@ public class CursorToMessage {
     private static final String UNKNOWN_PERSON = "unknown.person";
 
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
-    private static Style mStyle = Style.NAME;
+    private final AddressStyle mStyle;
 
     private final Context mContext;
     private final Address mUserAddress;
@@ -137,14 +137,11 @@ public class CursorToMessage {
         mMarkAsRead     = PrefStore.getMarkAsRead(ctx);
         mReferenceValue = PrefStore.getReferenceUid(ctx);
         mPrefix         = PrefStore.getMailSubjectPrefix(mContext);
+        mStyle          = PrefStore.getEmailAddressStyle(ctx);
 
         if (mReferenceValue == null) {
           mReferenceValue = generateReferenceValue(userEmail);
           PrefStore.setReferenceUid(ctx, mReferenceValue);
-        }
-
-        if (PrefStore.getEmailAddressStyle(ctx) != null) {
-          mStyle = Style.valueOf(PrefStore.getEmailAddressStyle(ctx).toUpperCase());
         }
 
         switch (PrefStore.getBackupContactGroup(ctx).type) {
@@ -611,7 +608,7 @@ public class CursorToMessage {
         public ConversionResult(DataType type) { this.type = type; }
     }
 
-    public static class PersonRecord {
+    public class PersonRecord {
         public long _id;
         public String name, email, number;
         public boolean unknown = false;

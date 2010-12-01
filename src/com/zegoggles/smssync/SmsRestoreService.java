@@ -24,9 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.NoSuchMethodException;
 import java.lang.ClassNotFoundException;
 
-
 import static com.zegoggles.smssync.CursorToMessage.Headers.*;
-import static com.zegoggles.smssync.CursorToMessage.PersonRecord;
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 
 import static com.zegoggles.smssync.App.*;
