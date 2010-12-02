@@ -40,6 +40,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.preference.Preference;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
@@ -98,15 +99,7 @@ public class SmsSync extends PreferenceActivity {
         ServiceBase.smsSync = this;
 
         addPreferencesFromResource(R.xml.main_screen);
-
-        final ListPreference calendarPref = (ListPreference)
-              findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
-
-        Utils.initListPreference(calendarPref, CalendarApi.getCalendars(this));
-        findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
-
-        Utils.initListPreference((ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP),
-                                 App.contacts().getGroups(this));
+        initCalendarAndGroups();
 
         this.statusPref = new StatusPreference(this);
         getPreferenceScreen().addPreference(this.statusPref);
@@ -219,6 +212,34 @@ public class SmsSync extends PreferenceActivity {
         String imapFolder = PrefStore.getCalllogFolder(this);
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_IMAP_FOLDER_CALLLOG);
         pref.setTitle(imapFolder);
+    }
+
+    private void initCalendarAndGroups() {
+        // need to this in the background to avoid ANR
+        new AsyncTask<Void, Void, Void>() {
+          Map<String, String> calendars;
+          Map<Integer, ContactAccessor.Group> groups;
+          ListPreference calendarPref = (ListPreference) findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
+          ListPreference groupPref = (ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP);
+
+          @Override public Void doInBackground(Void... unused) {
+            calendars = CalendarApi.getCalendars(SmsSync.this);
+            groups    = App.contacts().getGroups(SmsSync.this);
+            return null;
+          }
+
+          @Override public void onPostExecute(Void unused) {
+            if (isCancelled()) return;
+
+            if (calendars != null) Utils.initListPreference(calendarPref, calendars);
+            if (groups != null)    Utils.initListPreference(groupPref, groups);
+            findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED)
+               .setEnabled(calendarPref.isEnabled());
+
+            updateCalllogCalendarLabelFromPref();
+            updateBackupContactGroupLabelFromPref();
+          }
+        }.execute();
     }
 
     private void initiateRestore() {
@@ -653,7 +674,7 @@ public class SmsSync extends PreferenceActivity {
         return connected;
     }
 
-    class RequestTokenTask extends android.os.AsyncTask<String, Void, String> {
+    class RequestTokenTask extends AsyncTask<String, Void, String> {
         public String doInBackground(String... callback) {
             synchronized(XOAuthConsumer.class) {
                 XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
@@ -686,7 +707,7 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
-    class OAuthCallbackTask extends android.os.AsyncTask<Intent, Void, XOAuthConsumer> {
+    class OAuthCallbackTask extends AsyncTask<Intent, Void, XOAuthConsumer> {
 
         @Override
         protected void onPreExecute() {
