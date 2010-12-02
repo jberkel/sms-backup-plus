@@ -153,15 +153,6 @@ means that the device will try to backup all messages every 2 hours.
 Fewer updates performed by the app means less energy consumed, so there's
 a trade-off data protection vs. battery life.
 
-### <a name="faq-timestamps">All the timestamps of my backups are wrong in Gmail!</a>
-
-This is caused by a bug which has been fixed in 1.1.2. However even older
-backups have the correct timestamp set, just not in the threading view.
-You can verify this by selecting [Show original][showoriginal]
-in Gmail, and then check the Date header in the email ([screenshot][source]).
-
-All SMS backed up with version 1.1.2+ should show the correct time.
-
 ### <a name="faq-request-token">When connecting, I get 'Could not obtain request token...'</a>
 
 If you get this error message and your network connection is active
