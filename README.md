@@ -203,10 +203,9 @@ I've imported some relevant issues from the [original issue list][] to [github i
 ### <a name="translating">Translating the UI</a>
 
 If you want to help translating the UI to other languages download and
-translate the following files, then send the translated files via email:
+translate the following file, then send the translated version via email:
 
   * [strings.xml](https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml)
-  * [arrays.xml](https://github.com/jberkel/sms-backup-plus/raw/master/res/values/arrays.xml)
 
 However, if you're already familiar with Git I'd prefer if you cloned the
 repository and send me a [pull request](http://help.github.com/pull-requests/).
