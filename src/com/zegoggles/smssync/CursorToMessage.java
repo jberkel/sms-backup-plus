@@ -252,19 +252,25 @@ public class CursorToMessage {
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.CALLLOG, record));
 
-        final int duration = Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
-        final String number= msgMap.get(CallLog.Calls.NUMBER);
-
-        if (CallLog.Calls.OUTGOING_TYPE == callType) {
-            // call made by user
-            msg.setRecipient(RecipientType.TO, record.getAddress());
+        switch (callType) {
+          case CallLog.Calls.OUTGOING_TYPE:
             msg.setFrom(mUserAddress);
-        } else {
-            // incoming or missed call
+            msg.setRecipient(RecipientType.TO, record.getAddress());
+            break;
+          case CallLog.Calls.MISSED_TYPE:
+          case CallLog.Calls.INCOMING_TYPE:
             msg.setFrom(record.getAddress());
             msg.setRecipient(RecipientType.TO, mUserAddress);
+            break;
+
+          default:
+            // some weird phones seem to have SMS in their call logs, which is
+            // not part of the official API.
+            Log.i(TAG, "ignoring unknown call type: " + callType);
+            return null;
         }
 
+        final int duration = Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
         final StringBuilder text = new StringBuilder();
 
         if (callType != CallLog.Calls.MISSED_TYPE) {
