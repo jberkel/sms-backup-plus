@@ -87,7 +87,7 @@
   <string name="ui_authentication_desc">身份验证方法。对于 Gmail，默认设置为 XOAuth。</string>
   <string name="plain">纯文本</string>
   <string name="xoauth">XOAuth</string>
-  
+
   <string name="ui_imap_folder_label">Gmail 标签</string>
   <string name="ui_imap_folder_desc">应用到短信的 Gmail 标签。</string>
   <string name="ui_imap_folder_label_dialog_msg">备份的短信将在 Gmail 中以此标签标记。</string>
@@ -200,7 +200,7 @@
   <string name="ui_dialog_reset_message">您是否要重置当前的同步状态？
   您仍旧可以在之后选择跳过所有消息。</string>
   <string name="all_messages">所有</string>
-  
+
   <string name="gmail_connected_fail">Gmail 验证失败</string>
   <string name="gmail_needs_connecting">轻触以连接到您的 Gmail 帐户 (必需)。</string>
   <string name="gmail_already_connected">Gmail 帐户已连接 (轻触以断开)。</string>
@@ -223,6 +223,11 @@
   <string name="sms_with_field">与 %1$s 的短信记录</string>
   <string name="mms_with_field">与 %1$s 的彩信记录</string>
   <string name="call_with_field">与 %1$s 的通话记录</string>
+
+  <string name="ui_backup_contact_group_label">需要备份的联系人</string>
+  <string name="ui_backup_contact_group_desc">仅备份来自指定群组的信息。</string>
+
+  <string name="everybody">所有人</string>
 
   <string name="call_type_everything">所有通话</string>
   <string name="call_type_incoming">仅已接来电</string>
