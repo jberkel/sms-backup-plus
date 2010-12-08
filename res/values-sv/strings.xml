@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Use Gmail to back up your SMS. This is an improved version of the application "SMS Backup" by
+     Christoph Studer which supports restoring SMS back to the phone. It is
+     fully backwards compatible with SMS Backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Backup</string>
+  <string name="ui_sync_button_label_done">Backup</string>
+  <string name="ui_sync_button_label_canceling">Stopping</string>
+  <string name="ui_sync_button_label_error">Backup</string>
+  <string name="ui_sync_button_label_syncing">Stop</string>
+
+  <string name="ui_restore_button_label_idle">Restore</string>
+  <string name="ui_restore_button_label_done">Restore</string>
+  <string name="ui_restore_button_label_restoring">Stop</string>
+  <string name="ui_restore_button_label_error">Restore</string>
+
+  <string name="status_idle">Idle</string>
+  <string name="status_idle_details">Last item backed up: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">Never</string>
+
+  <string name="status_working">Working</string>
+
+  <string name="status_backup">Backing up</string>
+  <string name="status_restore">Restoring</string>
+
+  <string name="status_backup_details">Backed up <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_restore_details">Restored <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_login_details">Logging in\u2026</string>
+  <string name="status_updating_threads">Updating threads\u2026</string>
+  <string name="status_done">Done</string>
+  <string name="status_backup_done_details_max_per_sync">Maximum of %1$d items per backup reached. Restart backup to continue.</string>
+  <string name="status_backup_done_details_noitems">There were no items to backup.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Successfully backed up <xliff:g id="total_items">%1$d</xliff:g> item.</item>
+    <item quantity="other">Successfully backed up <xliff:g id="total_items">%1$d</xliff:g> items.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Successfully restored <xliff:g id="total_items">%1$d</xliff:g> item (%2$d dups).</item>
+    <item quantity="other">Successfully restored <xliff:g id="total_items">%1$d</xliff:g> items (%2$d dups).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d items successfully restored.</string>
+
+  <string name="status_unknown_error">Error</string>
+  <string name="notification_unknown_error">SMSBackup+ error</string>
+
+  <string name="status_unknown_error_details">Error during backup/restore:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Login error</string>
+  <string name="notification_auth_failure">SMSBackup+ login error</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth authorization error. Please make sure you enabled IMAP in your Gmail account settings.</string>
+  <string name="status_auth_failure_details_plain">IMAP authorization error.
+  Make sure login and password are set correctly.</string>
+  <string name="status_calc_details">Calculating\u2026</string>
+  <string name="status_canceled">Canceled</string>
+  <string name="status_canceled_details">%1$d/%2$d items successfully backed up.</string>
+  <string name="status_folder_error">Label error</string>
+  <string name="status_folder_error_details">Could not access or create the label/folder.</string>
+  <string name="status_gmail_temp_error">Temporary Gmail IMAP error, try again later.</string>
+
+  <string name="ui_settings_label">Settings</string>
+  <string name="ui_settings_advanced_label">Advanced settings</string>
+  <string name="ui_settings_advanced_desc">Set advanced preferences.</string>
+  <string name="ui_settings_advanced_server_label">Server settings</string>
+  <string name="ui_settings_advanced_server_desc">Do not change unless you know what you are doing!</string>
+
+  <string name="imap_settings">IMAP settings</string>
+  <string name="ui_login_label">Username</string>
+  <string name="ui_login_desc">Your IMAP account/e-mail address.</string>
+  <string name="ui_login_dialog_msg">WARNING: Changing the username might break things when using XOAuth.</string>
+  <string name="ui_password_label">Password</string>
+  <string name="ui_password_desc">Your IMAP account password. Only used when XOAuth is disabled.</string>
+  <string name="ui_password_dialog_msg">The password is stored on this device and is only used to login.</string>
+  <string name="ui_server_label">Server address</string>
+  <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
+  <string name="ui_server_dialog_msg">Default for gmail is \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Security</string>
+  <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL (Required)\"."</string>
+  <string name="ui_authentication_label">Authentication</string>
+  <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOauth\".</string>
+  <string name="plain">Plain text</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Gmail label</string>
+  <string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Backed up SMS messages will be tagged with this label in Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">Email subject prefix</string>
+  <string name="ui_mail_subject_prefix_desc">Use IMAP folder name as prefix in email subject</string>
+
+  <string name="ui_max_items_per_sync_label">Items per backup</string>
+  <string name="ui_max_items_per_sync_desc">Maximum number of items per backup.</string>
+  <string name="ui_max_items_per_restore_label">Items per restore</string>
+  <string name="ui_max_items_per_restore_desc">Maximum number of restored messages.</string>
+
+  <string name="ui_restore_starred_only_label">Starred SMS</string>
+  <string name="ui_restore_starred_only_desc">Only restore starred messages.</string>
+
+  <string name="ui_backup_mms_label">Backup MMS</string>
+  <string name="ui_backup_mms_desc">Enable MMS backup</string>
+  <string name="ui_backup_mms_not_supported">MMS backup not supported on this platform.</string>
+
+  <string name="ui_backup_calllog_label">Backup Call log</string>
+  <string name="ui_backup_calllog_desc">Enable Call log backup (beta)</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Calendar sync</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Add call log entries to calendar</string>
+
+  <string name="ui_backup_calllog_types_label">Call types</string>
+  <string name="ui_backup_calllog_types_desc">Which call types to back up</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">None</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Calendar used for call logs</string>
+
+  <string name="ui_imap_folder_calllog_label">Call log label</string>
+  <string name="ui_imap_folder_calllog_desc">Gmail label assigned to call log.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
+
+  <string name="ui_mark_as_read_label">Mark as read (emails)</string>
+  <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
+  <string name="ui_mark_as_read_restore_label">Mark as read (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Whether to mark all restored SMS as read or not.</string>
+
+  <string name="ui_email_address_style_label">Email address style</string>
+  <string name="ui_email_address_style_desc">Format of email addresses</string>
+
+  <string name="ui_enable_auto_sync_label">Auto backup</string>
+  <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
+
+  <string name="auto_backup_settings">Auto backup</string>
+  <string name="ui_auto_backup_schedule_label">Regular schedule</string>
+  <string name="ui_auto_backup_schedule_desc">When to backup SMS</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Incoming schedule</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">When to backup incoming SMS (after arrival)</string>
+
+  <string name="ui_wifi_only_label">Require Wifi</string>
+  <string name="ui_wifi_only_desc">Only backup/restore when connected to Wifi</string>
+
+  <string name="ui_notifications_label">Notifications</string>
+  <string name="ui_notifications_desc">Background notifications</string>
+
+  <string name="error_wifi_only_no_connection">No Wifi connection</string>
+  <string name="error_no_connection">No internet connection</string>
+
+  <string name="ui_dialog_missing_credentials_title">Login information</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">You need to connect your Gmail account first.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">You need to set your
+  username and password first.</string>
+
+  <string name="ui_dialog_sync_data_reset_title">Backup data reset</string>
+  <string name="ui_dialog_sync_data_reset_msg">
+      Backup data has been reset. Please reconnect your account and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.
+  </string>
+  <string name="ui_dialog_invalid_imap_folder_title">Invalid label name</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">The label name may not spaces (at the beginning or end).</string>
+  <string name="ui_dialog_first_sync_title">First backup</string>
+  <string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Backup or skip all messages currently stored on this device?\n\nNote: The backup will be split into batches of %1$d messages.</string>
+  <string name="ui_dialog_need_first_manual_sync_title">First backup</string>
+  <string name="ui_dialog_need_first_manual_sync_msg">The first backup needs to be initiated manually. Would you like to perform a backup now?</string>
+  <string name="ui_dialog_request_token_msg">Contacting Google...</string>
+  <string name="ui_dialog_access_token_msg">Requesting access...</string>
+
+  <string name="ui_dialog_access_token_error_title">Authorisation failure</string>
+  <string name="ui_dialog_access_token_error_msg">Could not obtain access token. Make sure you select
+    \"Grant access\".
+  </string>
+
+  <string name="ui_dialog_connect_msg">A browser window will open, prompting you to log into Gmail to grant %1$s access to your emails.</string>
+  <string name="ui_dialog_connect_token_error">Could not obtain request token from Google. Make sure the network connection is active and your time / time zone is configured properly.</string>
+  <string name="ui_dialog_disconnect_msg">Are you sure? You will need to reauthorize your account after disconnecting and the local sync state will be reset.</string>
+
+  <string name="ui_dialog_upgrade_title">Upgrade information</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ is fully backwards compatible with SMS Backup. However make sure that \"Auto backup\" is only enabled in one app, otherwise you might get duplicates. Also you should select \"Skip\" messages for your first sync if the messages on the phone have already been backed up previously.
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
+  <string name="ui_dialog_brokendroidx_msg">There is a bug in Droid X which
+  prevents this application from backing up incoming messages. See the FAQ
+  on the website for more information.</string>
+
+  <string name="ui_sync">Backup</string>
+  <string name="ui_skip">Skip</string>
+  <string name="err_could_not_create_folder">Could not create label.</string>
+  <string name="err_first_sync_needs_skip_flag">Internal error: First backup without indication whether to skip messages or not.</string>
+  <string name="err_sync_requires_login_info">Cannot backup without login information.</string>
+  <string name="err_communication_error">General communication error.</string>
+  <string name="menu_info">About</string>
+  <string name="menu_reset">Reset</string>
+  <string name="ui_dialog_reset_title">Reset current sync state</string>
+  <string name="ui_dialog_reset_message">Do you want to reset the current sync
+  state? You can still choose to skip all messages later.</string>
+  <string name="all_messages">All</string>
+
+  <string name="gmail_connected_fail">Gmail authentication failure</string>
+  <string name="gmail_needs_connecting">Tap to connect your Gmail account (required).</string>
+  <string name="gmail_already_connected">Connected as %1$s (tap to disconnect).</string>
+
+  <string name="ui_connected_label">Connect</string>
+  <string name="ui_connected_desc">Your account needs to be connected.</string>
+
+  <string name="call_incoming">incoming call</string>
+  <string name="call_outgoing">outgoing call</string>
+  <string name="call_missed">missed call</string>
+
+  <string name="call_missed_text">Missed call from %1$s</string>
+  <string name="call_incoming_text">Call from %1$s</string>
+  <string name="call_outgoing_text">Called %1$s</string>
+
+  <string name="call_number_field">Number: %1$s</string>
+  <string name="call_duration_field">Duration: %1$s</string>
+  <string name="calllog_settings">Call log settings</string>
+
+  <string name="sms_with_field">SMS with %1$s</string>
+  <string name="mms_with_field">SMS with %1$s</string>
+  <string name="call_with_field">Call with %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Contacts to backup</string>
+  <string name="ui_backup_contact_group_desc">Only backup items from a specific group</string>
+
+  <string name="everybody">Everybody</string>
+
+  <string name="call_type_everything">Everything</string>
+  <string name="call_type_incoming">Incoming calls only</string>
+  <string name="call_type_outgoing">Outgoing calls only</string>
+  <string name="call_type_incoming_outgoing">Incoming &amp; Outgoing</string>
+  <string name="call_type_missed">Missed calls only</string>
+
+  <string name="email_address_style_name">Name</string>
+  <string name="email_address_style_name_and_number">Name (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 h</string>
+  <string name="_2h">2 h</string>
+  <string name="_6h">6 h</string>
+  <string name="_24h">24 h</string>
+  <string name="never">Never</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 mins</string>
+  <string name="_30mins">30 mins</string>
+
+  <string name="ssl_required">SSL (Required)</string>
+  <string name="ssl_optional">SSL (Optional)</string>
+  <string name="tls_required">TLS (Required)</string>
+  <string name="tls_optional">TLS (Optional)</string>
+  <string name="none">None</string>
+</resources>
