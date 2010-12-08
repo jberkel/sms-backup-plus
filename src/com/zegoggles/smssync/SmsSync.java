@@ -215,7 +215,16 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private void initCalendarAndGroups() {
-        // need to this in the background to avoid ANR
+       final ListPreference calendarPref = (ListPreference)
+             findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
+
+        Utils.initListPreference(calendarPref, CalendarApi.getCalendars(this));
+        findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
+        Utils.initListPreference((ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP),
+                                 App.contacts().getGroups(this));
+
+        /*
+        // for some reason this does not work reliably on all devices
         new AsyncTask<Void, Void, Void>() {
           Map<String, String> calendars;
           Map<Integer, ContactAccessor.Group> groups;
@@ -240,6 +249,7 @@ public class SmsSync extends PreferenceActivity {
             updateBackupContactGroupLabelFromPref();
           }
         }.execute();
+        */
     }
 
     private void initiateRestore() {
