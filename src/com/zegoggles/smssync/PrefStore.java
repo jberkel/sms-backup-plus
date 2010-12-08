@@ -105,6 +105,8 @@ public class PrefStore {
     static final String PREF_CONNECTED  = "connected";
     static final String PREF_WIFI_ONLY  = "wifi_only";
 
+    static final String PREF_THIRD_PARTY_INTEGRATION  = "third_party_integration";
+
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE_SMS}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
 
@@ -359,6 +361,10 @@ public class PrefStore {
 
     static boolean isWifiOnly(Context ctx) {
       return (getSharedPreferences(ctx).getBoolean(PREF_WIFI_ONLY, false));
+    }
+
+    static boolean isAllow3rdPartyIntegration(Context ctx) {
+      return (getSharedPreferences(ctx).getBoolean(PREF_THIRD_PARTY_INTEGRATION, false));
     }
 
     private static int getStringAsInt(Context ctx, String key, int def) {

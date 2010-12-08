@@ -30,28 +30,34 @@ public class Alarms {
      * Schedule a sync right after an SMS arrived.
      */
     static void scheduleIncomingSync(Context ctx) {
-        scheduleSync(ctx, PrefStore.getIncomingTimeoutSecs(ctx));
+        scheduleSync(ctx, PrefStore.getIncomingTimeoutSecs(ctx), false);
     }
 
     /**
      * Schedule a sync at default rate for syncing outgoing SMS.
      */
     static void scheduleRegularSync(Context ctx) {
-        scheduleSync(ctx, PrefStore.getRegularTimeoutSecs(ctx));
+        scheduleSync(ctx, PrefStore.getRegularTimeoutSecs(ctx), false);
+    }
+
+    /**
+     * Schedule a sync ASAP
+     */
+    static void scheduleImmediateSync(Context ctx) {
+        scheduleSync(ctx, -1, true);
     }
 
     static void cancel(Context ctx) {
         getAlarmManager(ctx).cancel(createPendingIntent(ctx));
     }
 
-    private static void scheduleSync(Context ctx, int inSeconds) {
-        if (PrefStore.isEnableAutoSync(ctx) &&
-            inSeconds > 0 &&
-            !SmsRestoreService.isWorking()) {
+    private static void scheduleSync(Context ctx, int inSeconds, boolean force) {
+        if (LOCAL_LOGV) Log.v(TAG, "scheduleSync("+ctx+", "+inSeconds+")");
 
-          long atTime = System.currentTimeMillis() + inSeconds * 1000l;
+        if ((PrefStore.isEnableAutoSync(ctx) && inSeconds > 0) || force) {
+          final long atTime = System.currentTimeMillis() + inSeconds * 1000l;
           getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx));
-          Log.d(TAG, "Scheduled sync due in " + inSeconds + " seconds.");
+          Log.d(TAG, "Scheduled sync due " + (inSeconds > 0 ? "in "+ inSeconds + " seconds" : "now"));
         } else {
           Log.d(TAG, "Not scheduling sync because auto sync is disabled.");
         }

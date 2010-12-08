@@ -191,7 +191,7 @@ public class SmsSync extends PreferenceActivity {
             findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP);
 
       groupPref.setTitle(groupPref.getEntry() != null ? groupPref.getEntry() :
-                            getString(R.string.ui_backup_contact_group_label));
+                         getString(R.string.ui_backup_contact_group_label));
     }
 
     private void updateCalllogCalendarLabelFromPref() {
@@ -796,20 +796,17 @@ public class SmsSync extends PreferenceActivity {
     private void setPreferenceListeners(final PreferenceManager prefMgr) {
         prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean isEnabled = (Boolean) newValue;
-                ComponentName componentName = new ComponentName(SmsSync.this, SmsBroadcastReceiver.class);
-                PackageManager pkgMgr = getPackageManager();
-
-                pkgMgr.setComponentEnabledSetting(componentName,
+                final ComponentName componentName = new ComponentName(SmsSync.this,
+                                                                      SmsBroadcastReceiver.class);
+                getPackageManager().setComponentEnabledSetting(componentName,
                             isEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
                                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                             PackageManager.DONT_KILL_APP);
 
-                if (!isEnabled) {
-                    Alarms.cancel(SmsSync.this);
-                }
-
+                if (!isEnabled) Alarms.cancel(SmsSync.this);
                 updateAutoBackupSettings(isEnabled);
                 return true;
              }

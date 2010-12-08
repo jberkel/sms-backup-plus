@@ -254,4 +254,7 @@
   <string name="tls_required">TLS (Required)</string>
   <string name="tls_optional">TLS (Optional)</string>
   <string name="none">None</string>
+
+  <string name="ui_third_party_integration_label">3rd party integration</string>
+  <string name="ui_third_party_integration_desc">Allow other apps to trigger backups via intent broadcasts</string>
 </resources>

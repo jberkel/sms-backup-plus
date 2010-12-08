@@ -1,5 +1,4 @@
-/* Copyright (c) 2009 Christoph Studer <chstuder@gmail.com>
- * Copyright (c) 2010 Jan Berkel <jan.berkel@gmail.com>
+/* Copyright (c) 2010 Jan Berkel <jan.berkel@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,33 +21,24 @@ import android.util.Log;
 
 import static com.zegoggles.smssync.App.*;
 
-public class SmsBroadcastReceiver extends BroadcastReceiver {
-    public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+public class BackupBroadcastReceiver extends BroadcastReceiver {
+    public static final String BACKUP_ACTION = "com.zegoggles.smssync.BACKUP";
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
         if (LOCAL_LOGV) Log.v(TAG, "onReceive("+ctx+","+intent+")");
 
-        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-          bootup(ctx);
-        } else if (intent.getAction().equals(SMS_RECEIVED)) {
-          incomingSMS(ctx);
+        if (intent.getAction().equals(BACKUP_ACTION)) {
+          backupRequested(ctx, intent);
         }
     }
 
-    private void bootup(Context ctx) {
-        Log.d(TAG, "bootup");
-        incomingSMS(ctx);
-    }
-
-    private void incomingSMS(Context ctx) {
-        if (PrefStore.isEnableAutoSync(ctx) &&
-            PrefStore.isLoginInformationSet(ctx) &&
-            !PrefStore.isFirstSync(ctx)) {
-
-            Alarms.scheduleIncomingSync(ctx);
+    private void backupRequested(Context ctx, Intent intent) {
+        if (PrefStore.isAllow3rdPartyIntegration(ctx)) {
+          Log.d(TAG, "backup requested via broadcast intent");
+          Alarms.scheduleImmediateSync(ctx);
         } else {
-            Log.i(TAG, "Received SMS / bootup but not set up to sync.");
+          Log.d(TAG, "backup requested via broadcast intent but ignored");
         }
     }
 }

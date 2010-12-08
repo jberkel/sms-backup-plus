@@ -70,6 +70,7 @@ public class SmsBackupService extends ServiceBase {
     }
 
     @Override protected void handleIntent(final Intent intent) {
+        if (LOCAL_LOGV) Log.v(TAG, "handleIntent("+intent+")");
         if (intent == null) return; // NB: should not happen with START_NOT_STICKY
 
         if (isBackground(intent) && !getConnectivityManager().getBackgroundDataSetting()) {

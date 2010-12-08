@@ -163,6 +163,11 @@
               android:defaultValue="false"/>
         </PreferenceCategory>
 
+        <CheckBoxPreference android:key="third_party_integration"
+          android:title="@string/ui_third_party_integration_label"
+          android:summary="@string/ui_third_party_integration_desc"
+          android:persistent="true"
+          android:defaultValue="false"/>
 
         <PreferenceScreen
           android:title="@string/ui_settings_advanced_server_label"
