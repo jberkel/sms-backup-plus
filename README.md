@@ -137,6 +137,13 @@ with.
 
 If you only want to backup specific call types you can do so as well.
 
+### <a name="3rdparty">3rd party app integration</a>
+
+If you want to trigger backups from another app, enable `3rd party integration`
+in Advanced Settings and send the broadcast intent
+`com.zegoggles.smssync.BACKUP`. This will work even when Auto Backup is
+disabled.
+
 ## <a name="faq">FAQ</a>
 
 ### <a name="faq-schedule">What's the difference between regular and incoming backup schedule?</a>
