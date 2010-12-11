@@ -259,6 +259,8 @@ public class SmsRestoreService extends ServiceBase {
 
     private void clearCache() {
         File tmp = getCacheDir();
+        if (tmp == null) return; // not sure why this would return null
+
         Log.d(TAG, "clearing cache in " + tmp);
         for (File f : tmp.listFiles(new FilenameFilter() {
           public boolean accept(File dir, String name) {
