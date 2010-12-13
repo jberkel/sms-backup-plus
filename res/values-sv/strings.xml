@@ -19,7 +19,7 @@
   <string name="ui_restore_button_label_restoring">Stopp</string>
   <string name="ui_restore_button_label_error">Återställ</string>
 
-  <string name="status_idle">Ledig</string>
+  <string name="status_idle">Overksam</string>
   <string name="status_idle_details">Senaste säkerhetskopiering: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">Aldrig</string>
 
@@ -33,17 +33,17 @@
   <string name="status_login_details">Loggar in\u2026</string>
   <string name="status_updating_threads">Uppdaterar trådar\u2026</string>
   <string name="status_done">Klar</string>
-  <string name="status_backup_done_details_max_per_sync">maximalt antal av %1$d poster per backup nått. Starta om säkerhetskopiering för att fortsätta.</string>
+  <string name="status_backup_done_details_max_per_sync">maximalt antal av %1$d poster per backup uppnått. Starta om säkerhetskopiering för att fortsätta.</string>
   <string name="status_backup_done_details_noitems">Det fanns inga poster att säkerhetskopiera.</string>
 
   <plurals name="status_backup_done_details">
-    <item quantity="one">Lyckades säkerhetskopiera <xliff:g id="total_items">%1$d</xliff:g> post.</item>
-    <item quantity="other">Lyckades säkerhetskopiera <xliff:g id="total_items">%1$d</xliff:g> poster.</item>
+    <item quantity="one">Säkerhetskopierade <xliff:g id="total_items">%1$d</xliff:g> post.</item>
+    <item quantity="other">Säkerhetskopierade <xliff:g id="total_items">%1$d</xliff:g> poster.</item>
   </plurals>
 
   <plurals name="status_restore_done_details">
-    <item quantity="one">Lyckades återställa <xliff:g id="total_items">%1$d</xliff:g> post (%2$d dups).</item>
-    <item quantity="other">Lyckades återställa <xliff:g id="total_items">%1$d</xliff:g> poster (%2$d dups).</item>
+    <item quantity="one">Återställde <xliff:g id="total_items">%1$d</xliff:g> post (%2$d dubletter).</item>
+    <item quantity="other">Återställde <xliff:g id="total_items">%1$d</xliff:g> poster (%2$d dubletter).</item>
   </plurals>
 
   <string name="status_restore_canceled_details">%1$d/%2$d poster återställdes.</string>
@@ -55,7 +55,7 @@
   <string name="status_auth_failure">Inloggningsfel</string>
   <string name="notification_auth_failure">SMSBackup+ inloggningsfel</string>
 
-  <string name="status_auth_failure_details_xoauth">XOAuth authorization error. Kontrollera att du aktiverat IMAP i ditt Gmail kontoinställningar.</string>
+  <string name="status_auth_failure_details_xoauth">XOAuth autentiseringsfel. Kontrollera att du aktiverat IMAP i ditt Gmail kontoinställningar.</string>
   <string name="status_auth_failure_details_plain">IMAP autentiseringsfel.
   Kontrollera användarnamn och lösenord.</string>
   <string name="status_calc_details">Beräknar\u2026</string>
@@ -91,7 +91,7 @@
   <string name="ui_imap_folder_label">Gmail-etikett</string>
   <string name="ui_imap_folder_desc">Etikett i gmail som tilldelas SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Säkerhetskopierade SMS kommer att markeras med denna etikett i Gmail.</string>
-  <string name="ui_mail_subject_prefix_label">Prefix ämnesrad</string>
+  <string name="ui_mail_subject_prefix_label">Ämnesrad</string>
   <string name="ui_mail_subject_prefix_desc">Använd IMAP-mappens namn som prefix i ämnesraden</string>
 
   <string name="ui_max_items_per_sync_label">Poster per säkerhetskopiering</string>
@@ -102,24 +102,24 @@
   <string name="ui_restore_starred_only_label">Stjärnmärkta SMS</string>
   <string name="ui_restore_starred_only_desc">Återställ bara stjärnmärkta meddelanden.</string>
 
-  <string name="ui_backup_mms_label">Säkerhetskopiera MMS</string>
+  <string name="ui_backup_mms_label">Backup av MMS</string>
   <string name="ui_backup_mms_desc">Aktivera säkerhetskopiering av MMS</string>
   <string name="ui_backup_mms_not_supported">Säkerhetskopiering av MMS stöds inte på den här plattformen.</string>
 
-  <string name="ui_backup_calllog_label">Säkerhetskopiera samtalslista</string>
-  <string name="ui_backup_calllog_desc">Aktivera säkerhetskopiering av samtalslista (beta)</string>
+  <string name="ui_backup_calllog_label">Backup av samtalshistorik</string>
+  <string name="ui_backup_calllog_desc">Aktivera säkerhetskopiering av samtalshistorik (beta)</string>
 
-  <string name="ui_backup_calllog_sync_calendar_enabled_label">Synkronisera med kalender</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Kalendersynkronisering</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Lägg till samtal i kalender</string>
 
   <string name="ui_backup_calllog_types_label">Samtalstyper</string>
   <string name="ui_backup_calllog_types_desc">De typer av samtal som ska säkerhetskopieras</string>
 
   <string name="ui_backup_calllog_sync_calendar_label">Ingen</string>
-  <string name="ui_backup_calllog_sync_calendar_desc">Kalender som används för samtalslista</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Kalender som används för samtalshistorik</string>
 
-  <string name="ui_imap_folder_calllog_label">Etikett för samtalslista</string>
-  <string name="ui_imap_folder_calllog_desc">Etikett i Gmail för samtalslista.</string>
+  <string name="ui_imap_folder_calllog_label">Etikett för samtalshistorik</string>
+  <string name="ui_imap_folder_calllog_desc">Etikett i Gmail för samtalshistorik.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Samtalslistan kommer att markeras med denna etikett i Gmail.</string>
 
   <string name="ui_mark_as_read_label">Markera som läst (e-post)</string>
@@ -137,7 +137,7 @@
   <string name="ui_auto_backup_schedule_label">Regelbundet schema</string>
   <string name="ui_auto_backup_schedule_desc">Anger när SMS ska säkerhetskopieras</string>
 
-  <string name="ui_auto_backup_incoming_schedule_label">Inkommand schema</string>
+  <string name="ui_auto_backup_incoming_schedule_label">Inkommande schema</string>
   <string name="ui_auto_backup_incoming_schedule_desc">Anger när inkommade SMS ska säkerhetskopieras</string>
 
   <string name="ui_wifi_only_label">Kräv Wi-Fi</string>
