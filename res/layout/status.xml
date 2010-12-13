@@ -76,7 +76,6 @@
             android:id="@+id/sync_button"
             android:text="@string/ui_sync_button_label_idle"
             android:textStyle="bold"
-            android:width="90sp"
             android:gravity="center"
           />
 
@@ -84,7 +83,6 @@
             android:id="@+id/restore_button"
             android:text="@string/ui_restore_button_label_idle"
             android:textStyle="bold"
-            android:width="90sp"
             android:gravity="center"
           />
 
