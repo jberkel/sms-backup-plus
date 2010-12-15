@@ -160,6 +160,12 @@ means that the device will try to backup all messages every 2 hours.
 Fewer updates performed by the app means less energy consumed, so there's
 a trade-off data protection vs. battery life.
 
+### <a name="faq-scheduling>">I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
+
+If you require more control over the backup schedule than what SMS Backup+ already
+provides you can use a 3rd party app to trigger the backup. [Tasker][] for
+example supports SMS Backup+ since version 1.0.14.
+
 ### <a name="faq-request-token">When connecting, I get 'Could not obtain request token...'</a>
 
 If you get this error message and your network connection is active
@@ -262,3 +268,4 @@ This application is released under the terms of the [Apache License, Version 2.0
 [smstimefixshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_time_fix.png
 [imapenableshot]: https://skitch.com/jberkel/ryk1c/google-mail-settings-jan.berkel-gmail.com#lightbox
 [showimap]: https://github.com/downloads/jberkel/sms-backup-plus/show_imap.png
+[Tasker]: http://tasker.dinglisch.net/
