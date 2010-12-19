@@ -34,6 +34,7 @@ public class App extends Application {
         super.onCreate();
         K9.app = this;
         K9.DEBUG = DEBUG;
+        K9.DEBUG_PROTOCOL_IMAP = DEBUG;
     }
 
     public static ContactAccessor contacts() {

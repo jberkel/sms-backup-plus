@@ -145,7 +145,7 @@ public class PrefStore {
     static final String DEFAULT_SERVER_ADDRESS = "imap.gmail.com:993";
 
     /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
-    static final String DEFAULT_SERVER_PROTOCOL = "ssl";
+    static final String DEFAULT_SERVER_PROTOCOL = "+ssl+";
 
     enum AuthMode            { PLAIN, XOAUTH };
     enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING };
@@ -497,7 +497,7 @@ public class PrefStore {
           XOAuthConsumer consumer = getOAuthConsumer(ctx);
 
           return String.format(Consts.IMAP_URI,
-               getServerProtocol(ctx),
+               DEFAULT_SERVER_PROTOCOL,
                 "xoauth:" + URLEncoder.encode(consumer.getUsername()),
                URLEncoder.encode(consumer.generateXOAuthString()),
                getServerAddress(ctx));
