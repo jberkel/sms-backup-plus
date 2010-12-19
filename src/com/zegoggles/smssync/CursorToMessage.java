@@ -76,7 +76,7 @@ public class CursorToMessage {
     public static final Uri ECLAIR_CONTENT_FILTER_URI =
       Uri.parse("content://com.android.contacts/phone_lookup");
 
-    public enum DataType { MMS, SMS, CALLLOG };
+    public enum DataType { MMS, SMS, CALLLOG }
 
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";

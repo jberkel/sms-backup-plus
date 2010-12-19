@@ -147,9 +147,9 @@ public class PrefStore {
     /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
     static final String DEFAULT_SERVER_PROTOCOL = "+ssl+";
 
-    enum AuthMode            { PLAIN, XOAUTH };
-    enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING };
-    public enum AddressStyle { NAME, NAME_AND_NUMBER, NUMBER };
+    enum AuthMode            { PLAIN, XOAUTH }
+    enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING }
+    public enum AddressStyle { NAME, NAME_AND_NUMBER, NUMBER }
 
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
