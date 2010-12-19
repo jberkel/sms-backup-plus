@@ -99,7 +99,6 @@ public class SmsSync extends PreferenceActivity {
         ServiceBase.smsSync = this;
 
         addPreferencesFromResource(R.xml.main_screen);
-        initCalendarAndGroups();
 
         this.statusPref = new StatusPreference(this);
         getPreferenceScreen().addPreference(this.statusPref);
@@ -141,6 +140,8 @@ public class SmsSync extends PreferenceActivity {
     protected void onResume() {
         super.onResume();
         ServiceBase.smsSync = this;
+
+        initCalendarAndGroups();
 
         updateBackupContactGroupLabelFromPref();
         updateCalllogCalendarLabelFromPref();
@@ -218,38 +219,10 @@ public class SmsSync extends PreferenceActivity {
        final ListPreference calendarPref = (ListPreference)
              findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
 
-        Utils.initListPreference(calendarPref, CalendarApi.getCalendars(this));
+        Utils.initListPreference(calendarPref, CalendarApi.getCalendars(this), false);
         findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
         Utils.initListPreference((ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP),
-                                 App.contacts().getGroups(this));
-
-        /*
-        // for some reason this does not work reliably on all devices
-        new AsyncTask<Void, Void, Void>() {
-          Map<String, String> calendars;
-          Map<Integer, ContactAccessor.Group> groups;
-          ListPreference calendarPref = (ListPreference) findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
-          ListPreference groupPref = (ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP);
-
-          @Override public Void doInBackground(Void... unused) {
-            calendars = CalendarApi.getCalendars(SmsSync.this);
-            groups    = App.contacts().getGroups(SmsSync.this);
-            return null;
-          }
-
-          @Override public void onPostExecute(Void unused) {
-            if (isCancelled()) return;
-
-            if (calendars != null) Utils.initListPreference(calendarPref, calendars);
-            if (groups != null)    Utils.initListPreference(groupPref, groups);
-            findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED)
-               .setEnabled(calendarPref.isEnabled());
-
-            updateCalllogCalendarLabelFromPref();
-            updateBackupContactGroupLabelFromPref();
-          }
-        }.execute();
-        */
+                                 App.contacts().getGroups(this), false);
     }
 
     private void initiateRestore() {

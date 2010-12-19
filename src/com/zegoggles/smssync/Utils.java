@@ -28,12 +28,15 @@ public class Utils {
   private Utils() {}
 
   public static void initListPreference(final ListPreference pref,
-                                        final Map<?, ?> fields) {
+                                        final Map<?, ?> fields, boolean keepExisting) {
     if (fields.size() > 0) {
       final List<CharSequence> e   = new ArrayList<CharSequence>();
       final List<CharSequence> ev  = new ArrayList<CharSequence>();
-      if (pref.getEntries() != null)     e.addAll(Arrays.asList(pref.getEntries()));
-      if (pref.getEntryValues() != null) ev.addAll(Arrays.asList(pref.getEntryValues()));
+
+      if (keepExisting) {
+        if (pref.getEntries() != null)     e.addAll(Arrays.asList(pref.getEntries()));
+        if (pref.getEntryValues() != null) ev.addAll(Arrays.asList(pref.getEntryValues()));
+      }
 
       for (Map.Entry entry : fields.entrySet()) {
         if (entry.getValue() != null && entry.getKey() != null) {

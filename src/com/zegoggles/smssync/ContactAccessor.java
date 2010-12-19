@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface ContactAccessor {
+  int EVERYBODY_ID = -1;
+
   static class ContactGroup {
     public final long _id;
     public final Type type;
@@ -30,7 +32,7 @@ public interface ContactAccessor {
 
     public ContactGroup(final long id) {
       this._id  = id;
-      this.type = id >= 0 ? Type.GROUP : Type.EVERYBODY;
+      this.type = (id == EVERYBODY_ID ? Type.EVERYBODY : Type.GROUP);
     }
   }
 
