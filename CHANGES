@@ -1,5 +1,7 @@
-== 1.3.5 tbd
+== 1.3.5 12-19-2010
 
+  * Upgraded to K9 mail HEAD
+  * IMAP timeout fixes
   * Swedish translation (Erik Eloff)
   * Polish translation update (Arkadiusz Kałka)
   * Norwegian translation (Toralv Berge)

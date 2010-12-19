@@ -28,22 +28,6 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 2.2.
 
-### <a name="browser-bug">Users of Opera Mini / Droid X < 2.2 / non-standard browsers</a>
-
-*Important:* Some browsers / handsets which ship with non-standard browsers are
-currently not fully supported, there appears to be a problem which breaks
-the authorisation process, so connecting your Gmail account via XOAuth is not
-possible. You'll see the error message "You do not have permission to open this
-page".
-
-Some possible workarounds:
-
-  * Use the stock Android browser for the authentication (you can switch back
-  afterwards)
-  * Install a 3rd party browser (Dolphin HD has been reported to work)
-  * Use plain text authentication (Advanced Settings - Server Settings), use
-  your gmail address as username and supply your password
-
 SMS Backup+ is available for free in the market, there will never be a pro / paid version.
 
 [![][FlattrButton]][FlattrLink] But if you like the app you can flattr it ([flattr it ??][WhatisFlattr]).
@@ -145,6 +129,26 @@ in Advanced Settings and send the broadcast intent
 disabled.
 
 ## <a name="faq">FAQ</a>
+
+<a name="browser-bug"/>
+### <a name="faq-browser">When connecting, I get the message "You do do not have permission to open this page"</a>
+
+Some browsers / handsets which ship with non-standard browsers are
+currently not fully supported, there appears to be a problem which breaks
+the authorisation process, so connecting your Gmail account via XOAuth is not
+possible.
+
+Some possible workarounds:
+
+  * Use the stock Android browser for the authentication (you can switch back
+  afterwards)
+  * Install a 3rd party browser (Dolphin HD has been reported to work)
+  * Use plain text authentication (Advanced Settings - Server Settings), use
+  your gmail address as username and supply your password
+
+### <a name="faq-browser">After connecting, the Messaging app opens.</a>
+
+See the answer to the previous question, it's the same problem.
 
 ### <a name="faq-schedule">What's the difference between regular and incoming backup schedule?</a>
 
@@ -252,7 +256,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
-[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.3.4.apk/qr_code
+[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.3.5.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_2.png
 [gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
