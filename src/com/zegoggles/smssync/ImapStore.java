@@ -31,6 +31,8 @@ import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
 import java.io.IOException;
 
 import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.CursorToMessage.Headers;
+import static com.zegoggles.smssync.CursorToMessage.DataType;
 
 public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
     private Context context;
@@ -86,17 +88,24 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
 
         public Message[] getMessagesSince(final Date since, final int max, final boolean flagged)
           throws MessagingException  {
-            ImapSearcher searcher = new ImapSearcher()
-            {
-                public List<ImapResponse> search() throws IOException, MessagingException
-                {
-                    String sentSince = since != null ? " SENTSINCE " + RFC3501_DATE.format(since) : "";
-                    return executeSimpleCommand("UID SEARCH 1:* NOT DELETED" + sentSince
-                                               + (flagged ? " FLAGGED" : ""));
+            if (LOCAL_LOGV) Log.v(TAG, String.format("getMessagesSince(%s, %d, %b)", since, max, flagged));
+
+            final ImapSearcher searcher = new ImapSearcher() {
+                @Override public List<ImapResponse> search() throws IOException, MessagingException {
+                   final String HEADER_Q = String.format("OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\"))",
+                                                          Headers.DATATYPE, DataType.SMS,
+                                                          Headers.DATATYPE,
+                                                          Headers.TYPE, SmsConsts.MESSAGE_TYPE_INBOX,
+                                                          Headers.TYPE, SmsConsts.MESSAGE_TYPE_SENT);
+                    StringBuilder sb = new StringBuilder(String.format("UID SEARCH 1:* (%s) UNDELETED", HEADER_Q));
+                    if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.format(since));
+                    if (flagged) sb.append(" FLAGGED");
+
+                    return executeSimpleCommand(sb.toString());
                 }
             };
 
-            Message[] msgs = search(searcher, null);
+            final Message[] msgs = search(searcher, null);
 
             Log.i(TAG, "Found " + msgs.length + " msgs" + (since == null ? "" : " (since " + since + ")"));
             if (max > 0 && msgs.length > max) {
@@ -112,13 +121,13 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                     public int compare(Message m1, Message m2) {
                         return (m2 != null && m2.getSentDate() != null &&
                                 m1 != null && m1.getSentDate() != null) ?
-                                m2.getSentDate().compareTo(m1.getSentDate()) : -1;
+                                m1.getSentDate().compareTo(m2.getSentDate()) : 1;
                     }
                 });
                 //Debug.stopMethodTracing();
                 if (LOCAL_LOGV) Log.v(TAG, "Sorting done");
 
-                Message[] recent = new Message[max];
+                final Message[] recent = new Message[max];
                 System.arraycopy(msgs, 0, recent, 0, max);
 
                 return recent;

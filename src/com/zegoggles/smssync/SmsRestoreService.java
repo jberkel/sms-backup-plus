@@ -87,7 +87,7 @@ public class SmsRestoreService extends ServiceBase {
 
                 publishProgress(CALC);
 
-                Message[] msgs = folder.getMessagesSince(null, max, starredOnly);
+                final Message[] msgs = folder.getMessagesSince(null, max, starredOnly);
 
                 sItemsToRestoreCount = max <= 0 ? msgs.length : Math.min(msgs.length, max);
 
@@ -188,8 +188,7 @@ public class SmsRestoreService extends ServiceBase {
             try {
                 if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
 
-                message.getFolder().fetch(new Message[]{message}, fp, null);
-                ContentValues values = messageToContentValues(message);
+                message.getFolder().fetch(new Message[] { message }, fp, null);
 
                 //we have two possible header sets here
                 //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
@@ -197,15 +196,16 @@ public class SmsRestoreService extends ServiceBase {
                 //current: there IS a Headers.DATATYPE containing a string representation of CursorToMessage.DataType
                 //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
                 //The current header set was introduced in version 1.2.00
-
-                String dataType = getHeader(message, Headers.DATATYPE);
-                Integer type = values.getAsInteger(SmsConsts.TYPE);
+                final String dataType = getHeader(message, Headers.DATATYPE);
 
                 //only restore sms for now. first check for current headers
                 if (null != dataType && !dataType.equalsIgnoreCase(DataType.SMS.toString())) {
                     if (LOCAL_LOGV) Log.d(TAG, "ignoring entry because no sms: " + dataType);
                     return;
                 }
+
+                ContentValues values = messageToContentValues(message);
+                Integer type = values.getAsInteger(SmsConsts.TYPE);
 
                 // only restore inbox messages and sent messages - otherwise sms might get sent on restore
                 if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
@@ -301,7 +301,7 @@ public class SmsRestoreService extends ServiceBase {
         java.io.InputStream is = message.getBody().getInputStream();
 
         if (is == null) {
-          throw new MessagingException("body is null");
+          throw new MessagingException("body.getInputStream() is null for " + message.getBody());
         }
 
         String body = IOUtils.toString(is);

@@ -122,6 +122,14 @@ class Deduper:
     finally:
       file.close()
 
+  def search(self, label):
+    self.m.select(label, readonly=True)
+    status, data = self.m.search(None, 'UNDELETED',  '(OR HEADER X-SMSSYNC-DATATYPE "SMS" HEADER X-SMSSYNC-DATATYPE "MMS")')
+    if status == 'OK':
+      print "OK:" + str(data)
+    else:
+      raise Exception("Error", status)
+
   def delete(self, dryrun = False):
     """deletes all found duplicates"""
     deleted = 0
@@ -156,6 +164,7 @@ if __name__ == "__main__":
 
   d = Deduper()
   for label in sys.argv[1:]:
+    #d.search(label)
     d.check_label(label)
 
   #d.to_json()
