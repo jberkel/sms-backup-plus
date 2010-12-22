@@ -117,13 +117,7 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
 
                 if (LOCAL_LOGV) Log.v(TAG, "Sorting");
                 //Debug.startMethodTracing("sorting");
-                Arrays.sort(msgs, new Comparator<Message>() {
-                    public int compare(Message m1, Message m2) {
-                        return (m2 != null && m2.getSentDate() != null &&
-                                m1 != null && m1.getSentDate() != null) ?
-                                m2.getSentDate().compareTo(m1.getSentDate()) : 1;
-                    }
-                });
+                Arrays.sort(msgs, MessageComparator.INSTANCE);
                 //Debug.stopMethodTracing();
                 if (LOCAL_LOGV) Log.v(TAG, "Sorting done");
 
@@ -134,5 +128,16 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
             }
             return msgs;
         }
+    }
+
+    static class MessageComparator implements Comparator<Message> {
+      static final MessageComparator INSTANCE = new MessageComparator();
+      static final Date EARLY = new Date(0);
+
+      public int compare(final Message m1, final Message m2) {
+          final Date d1 = m1 == null ? EARLY : m1.getSentDate() != null ? m1.getSentDate() : EARLY;
+          final Date d2 = m2 == null ? EARLY : m2.getSentDate() != null ? m2.getSentDate() : EARLY;
+          return d2.compareTo(d1);
+      }
     }
 }
