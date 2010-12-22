@@ -221,7 +221,7 @@
   <string name="calllog_settings">Call log settings</string>
 
   <string name="sms_with_field">SMS with %1$s</string>
-  <string name="mms_with_field">SMS with %1$s</string>
+  <string name="mms_with_field">MMS with %1$s</string>
   <string name="call_with_field">Call with %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contacts to backup</string>

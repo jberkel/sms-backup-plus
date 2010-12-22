@@ -241,6 +241,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * Gabriele Ravanetti - Italian translation
   * Harun Sahin - Turkish translation
   * [Lukas Pribyl](http://www.lukaspribyl.eu) - Czech translation
+  * João Pedro Ferreira - Portugese translation
 
 ##<a name="screenhots">Screenshots</a>
 
@@ -256,7 +257,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
-[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.3.6.apk/qr_code
+[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.3.7.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_2.png
 [gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
