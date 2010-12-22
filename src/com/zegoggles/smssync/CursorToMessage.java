@@ -270,7 +270,8 @@ public class CursorToMessage {
             return null;
         }
 
-        final int duration = Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
+        final int duration = msgMap.get(CallLog.Calls.DURATION) == null ? 0 :
+                             Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
         final StringBuilder text = new StringBuilder();
 
         if (callType != CallLog.Calls.MISSED_TYPE) {
