@@ -121,7 +121,7 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                     public int compare(Message m1, Message m2) {
                         return (m2 != null && m2.getSentDate() != null &&
                                 m1 != null && m1.getSentDate() != null) ?
-                                m1.getSentDate().compareTo(m2.getSentDate()) : 1;
+                                m2.getSentDate().compareTo(m1.getSentDate()) : 1;
                     }
                 });
                 //Debug.stopMethodTracing();
