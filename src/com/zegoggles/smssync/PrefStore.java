@@ -92,9 +92,14 @@ public class PrefStore {
 
     static final String PREF_EMAIL_ADDRESS_STYLE = "email_address_style";
 
+    static final String PREF_BACKUP_SMS  = "backup_sms";
+    static final String PREF_RESTORE_SMS  = "restore_sms";
+
     static final String PREF_BACKUP_MMS  = "backup_mms";
+    static final String PREF_RESTORE_MMS  = "restore_mms";
 
     static final String PREF_BACKUP_CALLLOG  = "backup_calllog";
+    static final String PREF_RESTORE_CALLLOG  = "restore_calllog";
 
     static final String PREF_CALLLOG_SYNC_CALENDAR  = "backup_calllog_sync_calendar";
     static final String PREF_CALLLOG_SYNC_CALENDAR_ENABLED  = "backup_calllog_sync_calendar_enabled";
@@ -315,6 +320,18 @@ public class PrefStore {
 
     static boolean isRestoreStarredOnly(Context ctx) {
         return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_STARRED_ONLY, false);
+    }
+
+    static boolean isRestoreSms(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_SMS, true);
+    }
+
+    static boolean isRestoreMms(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_MMS, false);
+    }
+
+    static boolean isRestoreCallLog(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_CALLLOG, true);
     }
 
     static String getReferenceUid(Context ctx) {
