@@ -15,6 +15,7 @@ import com.zegoggles.smssync.CursorToMessage.Headers;
 import org.apache.commons.io.IOUtils;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.io.File;
@@ -72,6 +73,8 @@ public class SmsRestoreService extends ServiceBase {
         private Set<String> insertedIds = new HashSet<String>();
         private Set<String> uids = new HashSet<String>();
         private int max;
+        private ImapStore.BackupFolder smsFolder, callFolder;
+
         protected java.lang.Integer doInBackground(Integer... params) {
             this.max = params.length > 0 ? params[0] : -1;
             final boolean starredOnly = PrefStore.isRestoreStarredOnly(SmsRestoreService.this);
@@ -84,22 +87,23 @@ public class SmsRestoreService extends ServiceBase {
                 SmsRestoreService.this.mThreadIdCache.clear();
 
                 publishProgress(LOGIN);
-                ImapStore.BackupFolder folder = getSMSBackupFolder();
+                smsFolder = getSMSBackupFolder();
+                if (restoreCallLog) callFolder = getCallLogBackupFolder();
 
                 publishProgress(CALC);
 
-                final Message[] msgs = folder.getMessagesSince(null, max, starredOnly);
+                final List<Message> msgs = smsFolder.getMessages(max, starredOnly, null);
+                if (restoreCallLog) msgs.addAll(callFolder.getMessages(max, starredOnly, null));
 
-                sItemsToRestoreCount = max <= 0 ? msgs.length : Math.min(msgs.length, max);
+                sItemsToRestoreCount = max <= 0 ? msgs.size() : Math.min(msgs.size(), max);
 
                 long lastPublished = System.currentTimeMillis();
                 for (int i = 0; i < sItemsToRestoreCount && !sCanceled; i++) {
 
-                    importMessage(msgs[i]);
+                    importMessage(msgs.get(i));
                     sCurrentRestoredItems = i;
 
-                    // help GC
-                    msgs[i] = null;
+                    msgs.set(i, null); // help gc
 
                     if (System.currentTimeMillis() - lastPublished > 1000) {
                         // don't publish too often or we get ANRs
@@ -191,20 +195,37 @@ public class SmsRestoreService extends ServiceBase {
 
                 message.getFolder().fetch(new Message[] { message }, fp, null);
 
+                final String dataTypeHeader = getHeader(message, Headers.DATATYPE);
+                final String typeHeader = getHeader(message, Headers.TYPE);
+                final DataType dataType;
                 //we have two possible header sets here
                 //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
                 //         contains either the string "mms" or an integer which is the internal type of the sms
                 //current: there IS a Headers.DATATYPE containing a string representation of CursorToMessage.DataType
                 //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
                 //The current header set was introduced in version 1.2.00
-                final String dataType = getHeader(message, Headers.DATATYPE);
-
-                //only restore sms for now. first check for current headers
-                if (null != dataType && !dataType.equalsIgnoreCase(DataType.SMS.toString())) {
-                    if (LOCAL_LOGV) Log.d(TAG, "ignoring entry because no sms: " + dataType);
-                    return;
+                if (dataTypeHeader == null) {
+                   dataType = "mms".equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
+                } else {
+                   dataType = DataType.valueOf(dataTypeHeader);
                 }
 
+                //only restore sms+call log for now
+                switch (dataType) {
+                    case CALLLOG: importCallLog(message); break;
+                    case SMS:     importSms(message); break;
+                    default: if (LOCAL_LOGV) Log.d(TAG, "ignoring restore of type: " + dataType);
+                }
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, "error", e); // might get thrown by DataType.valueOf
+            } catch (MessagingException e) {
+                Log.e(TAG, "error", e);
+            }
+        }
+
+        private void importSms(final Message message) {
+            if (LOCAL_LOGV) Log.v(TAG, "importSms("+message+")");
+            try {
                 ContentValues values = messageToContentValues(message);
                 Integer type = values.getAsInteger(SmsConsts.TYPE);
 
@@ -227,7 +248,6 @@ public class SmsRestoreService extends ServiceBase {
                 } else {
                     if (LOCAL_LOGV) Log.d(TAG, "ignoring sms");
                 }
-
             } catch (IllegalArgumentException e) {
                 // http://code.google.com/p/android/issues/detail?id=2916
                 Log.e(TAG, "error", e);
@@ -236,6 +256,10 @@ public class SmsRestoreService extends ServiceBase {
             } catch (MessagingException e) {
                 Log.e(TAG, "error", e);
             }
+        }
+
+        private void importCallLog(final Message message) {
+            if (LOCAL_LOGV) Log.v(TAG, "importCallLog("+message+")");
         }
     }
 

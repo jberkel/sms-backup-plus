@@ -24,6 +24,7 @@ import com.fsck.k9.mail.*;
 
 import android.util.Log;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Arrays;
@@ -93,10 +94,11 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
             this.type = type;
         }
 
-        public Message[] getMessagesSince(final Date since, final int max, final boolean flagged)
-          throws MessagingException  {
-            if (LOCAL_LOGV) Log.v(TAG, String.format("getMessagesSince(%s, %d, %b)", since, max, flagged));
+        public List<Message> getMessages(final int max, final boolean flagged, final Date since)
+          throws MessagingException {
+            if (LOCAL_LOGV) Log.v(TAG, String.format("getMessages(%d, %b, %s)", max, flagged, since));
 
+            final List<Message> messages;
             final ImapSearcher searcher = new ImapSearcher() {
                 @Override public List<ImapResponse> search() throws IOException, MessagingException {
                     final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
@@ -125,12 +127,14 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                 //Debug.stopMethodTracing();
                 if (LOCAL_LOGV) Log.v(TAG, "Sorting done");
 
-                final Message[] recent = new Message[max];
-                System.arraycopy(msgs, 0, recent, 0, max);
-
-                return recent;
+                messages = new ArrayList<Message>(max);
+                for (int i=0; i<max; i++) messages.add(msgs[i]);
+            } else {
+              messages = new ArrayList<Message>(msgs.length);
+              for (Message m : msgs) messages.add(m);
             }
-            return msgs;
+
+            return messages;
         }
 
         private String getQuery() {
