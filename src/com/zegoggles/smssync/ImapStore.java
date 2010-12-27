@@ -139,14 +139,20 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
 
         private String getQuery() {
            switch(type) {
+            /* MMS/SMS are special cases since we need to support legacy backup headers */
             case SMS:
-              /* SMS is a special case since we need to support legacy backup headers */
               return
               String.format("OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\"))",
-                        Headers.DATATYPE, type,
-                        Headers.DATATYPE,
-                        Headers.TYPE, SmsConsts.MESSAGE_TYPE_INBOX,
-                        Headers.TYPE, SmsConsts.MESSAGE_TYPE_SENT);
+                            Headers.DATATYPE, type,
+                            Headers.DATATYPE,
+                            Headers.TYPE, SmsConsts.MESSAGE_TYPE_INBOX,
+                            Headers.TYPE, SmsConsts.MESSAGE_TYPE_SENT);
+            case MMS:
+              return
+              String.format("OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\")",
+                            Headers.DATATYPE, type,
+                            Headers.DATATYPE,
+                            Headers.TYPE, MmsConsts.LEGACY_HEADER);
 
             default: return String.format("HEADER %s \"%s\"", Headers.DATATYPE, type);
            }

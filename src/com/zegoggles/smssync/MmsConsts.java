@@ -40,4 +40,6 @@ public interface MmsConsts {
 
    int TO                = 0x97;
    int FROM              = 0x89;
+
+   String LEGACY_HEADER  = "mms";
 }

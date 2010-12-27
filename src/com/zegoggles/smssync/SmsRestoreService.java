@@ -205,7 +205,7 @@ public class SmsRestoreService extends ServiceBase {
                 //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
                 //The current header set was introduced in version 1.2.00
                 if (dataTypeHeader == null) {
-                   dataType = "mms".equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
+                   dataType = MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
                 } else {
                    dataType = DataType.valueOf(dataTypeHeader);
                 }
