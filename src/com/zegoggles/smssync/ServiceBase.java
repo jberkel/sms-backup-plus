@@ -78,8 +78,8 @@ public abstract class ServiceBase extends Service {
       return new ImapStore(this).getSMSBackupFolder();
     }
 
-    protected ImapStore.BackupFolder getCalllogBackupFolder() throws MessagingException {
-        return new ImapStore(this).getCalllogBackupFolder();
+    protected ImapStore.BackupFolder getCallLogBackupFolder() throws MessagingException {
+        return new ImapStore(this).getCallLogBackupFolder();
     }
 
     /**
@@ -163,7 +163,7 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    protected long getMaxItemDateCalllog() {
+    protected long getMaxItemDateCallLog() {
         Cursor result = getContentResolver().query(CALLLOG_PROVIDER,
                 new String[] { CallLog.Calls.DATE }, null, null,
                 CallLog.Calls.DATE + " DESC LIMIT 1");
@@ -195,8 +195,8 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    protected void updateMaxSyncedDateCalllog(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDateCalllog(this, maxSyncedDate);
+    protected void updateMaxSyncedDateCallLog(long maxSyncedDate) {
+        PrefStore.setMaxSyncedDateCallLog(this, maxSyncedDate);
         if (LOCAL_LOGV) {
           Log.v(TAG, "Max synced date for call log set to: " + maxSyncedDate);
         }

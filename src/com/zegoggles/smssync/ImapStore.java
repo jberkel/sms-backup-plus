@@ -59,9 +59,9 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         return getBackupFolder(label, DataType.MMS);
     }
 
-    public BackupFolder getCalllogBackupFolder() throws MessagingException
+    public BackupFolder getCallLogBackupFolder() throws MessagingException
     {
-        String label = PrefStore.getCalllogFolder(context);
+        String label = PrefStore.getCallLogFolder(context);
         return getBackupFolder(label, DataType.CALLLOG);
     }
 

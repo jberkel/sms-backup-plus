@@ -144,7 +144,7 @@ public class SmsSync extends PreferenceActivity {
         initCalendarAndGroups();
 
         updateBackupContactGroupLabelFromPref();
-        updateCalllogCalendarLabelFromPref();
+        updateCallLogCalendarLabelFromPref();
         updateImapFolderLabelFromPref();
         updateImapCallogFolderLabelFromPref();
         updateUsernameLabel(null);
@@ -195,7 +195,7 @@ public class SmsSync extends PreferenceActivity {
                          getString(R.string.ui_backup_contact_group_label));
     }
 
-    private void updateCalllogCalendarLabelFromPref() {
+    private void updateCallLogCalendarLabelFromPref() {
       final ListPreference calendarPref = (ListPreference)
             findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
 
@@ -210,7 +210,7 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private void updateImapCallogFolderLabelFromPref() {
-        String imapFolder = PrefStore.getCalllogFolder(this);
+        String imapFolder = PrefStore.getCallLogFolder(this);
         Preference pref = getPreferenceManager().findPreference(PrefStore.PREF_IMAP_FOLDER_CALLLOG);
         pref.setTitle(imapFolder);
     }

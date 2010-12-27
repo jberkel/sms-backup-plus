@@ -164,7 +164,7 @@ public class PrefStore {
         return Math.max(Math.max(
             getMaxSyncedDateSms(ctx),
             getMaxSyncedDateMms(ctx) * 1000),
-            getMaxSyncedDateCalllog(ctx));
+            getMaxSyncedDateCallLog(ctx));
     }
 
     static long getMaxSyncedDateSms(Context ctx) {
@@ -175,7 +175,7 @@ public class PrefStore {
         return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_MMS, DEFAULT_MAX_SYNCED_DATE);
     }
 
-    static long getMaxSyncedDateCalllog(Context ctx) {
+    static long getMaxSyncedDateCallLog(Context ctx) {
         return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_CALLLOG, DEFAULT_MAX_SYNCED_DATE);
     }
 
@@ -195,7 +195,7 @@ public class PrefStore {
           .commit();
     }
 
-    static void setMaxSyncedDateCalllog(Context ctx, long maxSyncedDate) {
+    static void setMaxSyncedDateCallLog(Context ctx, long maxSyncedDate) {
         getSharedPreferences(ctx).edit()
           .putLong(PREF_MAX_SYNCED_DATE_CALLLOG, maxSyncedDate)
           .commit();
@@ -278,13 +278,13 @@ public class PrefStore {
       return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
-    static boolean isCalllogBackupEnabled(Context ctx) {
+    static boolean isCallLogBackupEnabled(Context ctx) {
         return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_CALLLOG, false);
     }
 
-    static boolean isCalllogCalendarSyncEnabled(Context ctx) {
+    static boolean isCallLogCalendarSyncEnabled(Context ctx) {
         return
-          getCalllogCalendarId(ctx) >= 0 &&
+          getCallLogCalendarId(ctx) >= 0 &&
           getSharedPreferences(ctx).getBoolean(PREF_CALLLOG_SYNC_CALENDAR_ENABLED, false);
     }
 
@@ -299,12 +299,12 @@ public class PrefStore {
         }
     }
 
-    static CallLogTypes getCalllogType(Context ctx) {
+    static CallLogTypes getCallLogType(Context ctx) {
       return getDefaultType(ctx, PREF_CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
     }
 
-    static boolean isCalllogTypeEnabled(Context ctx, int type) {
-      switch (getCalllogType(ctx)) {
+    static boolean isCallLogTypeEnabled(Context ctx, int type) {
+      switch (getCallLogType(ctx)) {
         case OUTGOING: return type == CallLog.Calls.OUTGOING_TYPE;
         case INCOMING: return type == CallLog.Calls.INCOMING_TYPE;
         case MISSED:   return type == CallLog.Calls.MISSED_TYPE;
@@ -314,7 +314,7 @@ public class PrefStore {
       }
     }
 
-    static int getCalllogCalendarId(Context ctx) {
+    static int getCallLogCalendarId(Context ctx) {
         return getStringAsInt(ctx, PREF_CALLLOG_SYNC_CALENDAR, -1);
     }
 
@@ -348,7 +348,7 @@ public class PrefStore {
         return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER, DEFAULT_IMAP_FOLDER);
     }
 
-    static String getCalllogFolder(Context ctx) {
+    static String getCallLogFolder(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER_CALLLOG, DEFAULT_IMAP_FOLDER_CALLLOG);
     }
 
@@ -360,7 +360,7 @@ public class PrefStore {
         return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER);
     }
 
-    static boolean isCalllogFolderSet(Context ctx) {
+    static boolean isCallLogFolderSet(Context ctx) {
         return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER_CALLLOG);
     }
 

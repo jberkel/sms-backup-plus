@@ -172,7 +172,7 @@ public class CursorToMessage {
             switch (dataType) {
               case SMS: m = messageFromMapSms(msgMap); break;
               case MMS: m = messageFromMapMms(msgMap); break;
-              case CALLLOG: m = messageFromMapCalllog(msgMap); break;
+              case CALLLOG: m = messageFromMapCallLog(msgMap); break;
             }
             if (m != null) {
               result.messageList.add(m);
@@ -235,12 +235,12 @@ public class CursorToMessage {
         return msg;
     }
 
-    private Message messageFromMapCalllog(Map<String, String> msgMap) throws MessagingException {
+    private Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
 
         if (address == null || address.trim().length() == 0 ||
-            !PrefStore.isCalllogTypeEnabled(mContext, callType)) {
+            !PrefStore.isCallLogTypeEnabled(mContext, callType)) {
 
           if (LOCAL_LOGV) Log.v(TAG, "ignoring call log entry: " + msgMap);
           return null;
@@ -331,7 +331,7 @@ public class CursorToMessage {
               mContext.getString(R.string.mms_with_field, record.getName());
           case CALLLOG:
             return mPrefix ?
-              String.format("[%s] %s", PrefStore.getCalllogFolder(mContext), record.getName()) :
+              String.format("[%s] %s", PrefStore.getCallLogFolder(mContext), record.getName()) :
               mContext.getString(R.string.call_with_field, record.getName());
           default: throw new RuntimeException("unknown type:" + type);
        }

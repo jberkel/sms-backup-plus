@@ -75,6 +75,7 @@ public class SmsRestoreService extends ServiceBase {
         protected java.lang.Integer doInBackground(Integer... params) {
             this.max = params.length > 0 ? params[0] : -1;
             final boolean starredOnly = PrefStore.isRestoreStarredOnly(SmsRestoreService.this);
+            final boolean restoreCallLog = PrefStore.isRestoreCallLog(SmsRestoreService.this);
 
             try {
                 acquireLocks(false);
