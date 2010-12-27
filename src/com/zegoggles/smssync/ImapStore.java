@@ -50,21 +50,27 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
     public BackupFolder getSMSBackupFolder() throws MessagingException
     {
         String label = PrefStore.getImapFolder(context);
-        return getBackupFolder(label);
+        return getBackupFolder(label, DataType.SMS);
     }
+
+    public BackupFolder getMMSBackupFolder() throws MessagingException
+    {
+        String label = PrefStore.getImapFolder(context);
+        return getBackupFolder(label, DataType.MMS);
+    }
+
     public BackupFolder getCalllogBackupFolder() throws MessagingException
     {
         String label = PrefStore.getCalllogFolder(context);
-        return getBackupFolder(label);
+        return getBackupFolder(label, DataType.CALLLOG);
     }
 
-    private BackupFolder getBackupFolder(String label) throws MessagingException
+    private BackupFolder getBackupFolder(String label, DataType type) throws MessagingException
     {
-        if (label == null)
-            throw new IllegalStateException("label is null");
+        if (label == null) throw new IllegalStateException("label is null");
 
         try {
-          BackupFolder folder = new BackupFolder(this, label);
+          final BackupFolder folder = new BackupFolder(this, label, type);
 
           if (!folder.exists()) {
               folder.create(FolderType.HOLDS_MESSAGES);
@@ -79,11 +85,12 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         }
     }
 
-
     public class BackupFolder extends ImapFolder {
+        private final DataType type;
 
-        public BackupFolder(ImapStore store, String name) {
+        public BackupFolder(ImapStore store, String name, DataType type) {
             super(store, name);
+            this.type = type;
         }
 
         public Message[] getMessagesSince(final Date since, final int max, final boolean flagged)
@@ -92,12 +99,9 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
 
             final ImapSearcher searcher = new ImapSearcher() {
                 @Override public List<ImapResponse> search() throws IOException, MessagingException {
-                   final String HEADER_Q = String.format("OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\"))",
-                                                          Headers.DATATYPE, DataType.SMS,
-                                                          Headers.DATATYPE,
-                                                          Headers.TYPE, SmsConsts.MESSAGE_TYPE_INBOX,
-                                                          Headers.TYPE, SmsConsts.MESSAGE_TYPE_SENT);
-                    StringBuilder sb = new StringBuilder(String.format("UID SEARCH 1:* (%s) UNDELETED", HEADER_Q));
+                    final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
+                        .append(" (").append(getQuery()).append(")")
+                        .append(" UNDELETED ");
                     if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.format(since));
                     if (flagged) sb.append(" FLAGGED");
 
@@ -127,6 +131,21 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                 return recent;
             }
             return msgs;
+        }
+
+        private String getQuery() {
+           switch(type) {
+            case SMS:
+              /* SMS is a special case since we need to support legacy backup headers */
+              return
+              String.format("OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\"))",
+                        Headers.DATATYPE, type,
+                        Headers.DATATYPE,
+                        Headers.TYPE, SmsConsts.MESSAGE_TYPE_INBOX,
+                        Headers.TYPE, SmsConsts.MESSAGE_TYPE_SENT);
+
+            default: return String.format("HEADER %s \"%s\"", Headers.DATATYPE, type);
+           }
         }
     }
 
