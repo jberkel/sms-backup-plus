@@ -18,6 +18,7 @@ package com.zegoggles.smssync;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Process;
@@ -91,9 +92,9 @@ public class SmsBackupService extends ServiceBase {
     class BackupTask extends AsyncTask<Intent, SmsSyncState, Integer>
     {
         private Exception ex;
-        private android.content.Context context = SmsBackupService.this;
+        private final Context context = SmsBackupService.this;
         private final int maxItemsPerSync = PrefStore.getMaxItemsPerSync(context);
-        private final ContactGroup groupToBackup = PrefStore.getBackupContactGroup(SmsBackupService.this);
+        private final ContactGroup groupToBackup = PrefStore.getBackupContactGroup(context);
         private boolean background;
 
         @Override
@@ -209,7 +210,7 @@ public class SmsBackupService extends ServiceBase {
           publish(LOGIN);
           Folder smsmmsfolder  = getSMSBackupFolder();
           Folder callLogfolder = null;
-          if (PrefStore.isCallLogBackupEnabled(SmsBackupService.this)) {
+          if (PrefStore.isCallLogBackupEnabled(context)) {
             callLogfolder = getCallLogBackupFolder();
           }
 
@@ -250,7 +251,7 @@ public class SmsBackupService extends ServiceBase {
                       if (callLogfolder != null) {
                         callLogfolder.appendMessages(messages.toArray(new Message[messages.size()]));
                       }
-                      if (PrefStore.isCallLogCalendarSyncEnabled(SmsBackupService.this)) {
+                      if (PrefStore.isCallLogCalendarSyncEnabled(context)) {
                         syncCalendar(converter, result);
                       }
                       break;
@@ -294,8 +295,8 @@ public class SmsBackupService extends ServiceBase {
             }
 
             // insert into calendar
-            CalendarApi.addEntry(SmsBackupService.this,
-                                 PrefStore.getCallLogCalendarId(SmsBackupService.this),
+            CalendarApi.addEntry(context,
+                                 PrefStore.getCallLogCalendarId(context),
                                  then, duration,
                                  converter.callTypeString(callType, record.getName()),
                                  description.toString());
@@ -311,7 +312,7 @@ public class SmsBackupService extends ServiceBase {
       private Cursor getSmsItemsToSync(int max, ContactGroup group) {
          if (LOCAL_LOGV) {
             Log.v(TAG, String.format("getSmsItemToSync(max=%d),  maxSyncedDate=%d", max,
-            PrefStore.getMaxSyncedDateSms(SmsBackupService.this)));
+                       PrefStore.getMaxSyncedDateSms(context)));
          }
          String sortOrder = SmsConsts.DATE;
          if (max > 0) sortOrder += " LIMIT " + max;
@@ -319,7 +320,7 @@ public class SmsBackupService extends ServiceBase {
          return getContentResolver().query(SMS_PROVIDER, null,
                 String.format("%s > ? AND %s <> ? %s", SmsConsts.DATE, SmsConsts.TYPE,
                                                        groupSelection(DataType.SMS, group)),
-                new String[] { String.valueOf(PrefStore.getMaxSyncedDateSms(SmsBackupService.this)),
+                new String[] { String.valueOf(PrefStore.getMaxSyncedDateSms(context)),
                                String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
                 sortOrder);
       }
@@ -332,7 +333,7 @@ public class SmsBackupService extends ServiceBase {
       private Cursor getMmsItemsToSync(int max, ContactGroup group) {
           if (LOCAL_LOGV) Log.v(TAG, "getMmsItemsToSync(max=" + max+")");
 
-          if (!PrefStore.isMmsBackupEnabled(SmsBackupService.this)) {
+          if (!PrefStore.isMmsBackupEnabled(context)) {
             // return empty cursor if we don't have MMS
             if (LOCAL_LOGV) Log.v(TAG, "MMS backup disabled, returning empty cursor");
             return new MatrixCursor(new String[0], 0);
@@ -343,7 +344,7 @@ public class SmsBackupService extends ServiceBase {
           return getContentResolver().query(MMS_PROVIDER, null,
                 String.format("%s > ? AND %s <> ? %s", SmsConsts.DATE, MmsConsts.TYPE,
                                                        groupSelection(DataType.MMS, group)),
-                new String[] { String.valueOf(PrefStore.getMaxSyncedDateMms(SmsBackupService.this)),
+                new String[] { String.valueOf(PrefStore.getMaxSyncedDateMms(context)),
                                MmsConsts.DELIVERY_REPORT },
                 sortOrder);
       }
@@ -356,7 +357,7 @@ public class SmsBackupService extends ServiceBase {
       private Cursor getCallLogItemsToSync(int max) {
           if (LOCAL_LOGV) Log.v(TAG, "getCallLogItemsToSync(max=" + max+")");
 
-          if (!PrefStore.isCallLogBackupEnabled(SmsBackupService.this)) {
+          if (!PrefStore.isCallLogBackupEnabled(context)) {
             if (LOCAL_LOGV) Log.v(TAG, "CallLog backup disabled, returning empty cursor");
             return new MatrixCursor(new String[0], 0);
           }
@@ -365,7 +366,7 @@ public class SmsBackupService extends ServiceBase {
 
           return getContentResolver().query(CALLLOG_PROVIDER, null,
                 String.format("%s > ?", CallLog.Calls.DATE),
-                new String[] { String.valueOf(PrefStore.getMaxSyncedDateCallLog(SmsBackupService.this)) },
+                new String[] { String.valueOf(PrefStore.getMaxSyncedDateCallLog(context)) },
                 sortOrder);
       }
 
@@ -373,7 +374,7 @@ public class SmsBackupService extends ServiceBase {
          /* MMS group selection not supported at the moment */
          if (type != DataType.SMS || group.type == ContactGroup.Type.EVERYBODY) return "";
 
-         final Set<Long> ids = App.contacts().getGroupContactIds(SmsBackupService.this, group).rawIds;
+         final Set<Long> ids = App.contacts().getGroupContactIds(context, group).rawIds;
          if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
          return String.format(" AND (%s = %d OR %s IN (%s))",
                           SmsConsts.TYPE,
@@ -387,7 +388,7 @@ public class SmsBackupService extends ServiceBase {
         if (!background) {
            publishProgress(s);
         } else {
-           if (!PrefStore.isNotificationEnabled(SmsBackupService.this)) return;
+           if (!PrefStore.isNotificationEnabled(context)) return;
 
            switch(s) {
             case AUTH_FAILED:
