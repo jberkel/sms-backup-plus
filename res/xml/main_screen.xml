@@ -170,16 +170,15 @@
             android:persistent="true"
             android:defaultValue="true"/>
 
-          <CheckBoxPreference android:key="restore_mms"
-            android:title="@string/ui_restore_mms_label"
-            android:summary="@string/ui_restore_mms_desc"
-            android:persistent="true"
-            android:enabled="false"
-            android:defaultValue="false"/>
-
           <CheckBoxPreference android:key="restore_calllog"
             android:title="@string/ui_restore_calllog_label"
             android:summary="@string/ui_restore_calllog_desc"
+            android:persistent="true"
+            android:defaultValue="false"/>
+
+          <CheckBoxPreference android:key="restore_mms"
+            android:title="@string/ui_restore_mms_label"
+            android:summary="@string/ui_restore_mms_desc"
             android:persistent="true"
             android:enabled="false"
             android:defaultValue="false"/>

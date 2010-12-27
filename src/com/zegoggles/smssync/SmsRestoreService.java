@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.content.Context;
 import android.util.Log;
+import android.provider.CallLog;
 import com.fsck.k9.mail.*;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.zegoggles.smssync.CursorToMessage.DataType;
@@ -50,14 +51,14 @@ public class SmsRestoreService extends ServiceBase {
         private Set<String> insertedIds = new HashSet<String>();
         private Set<String> uids = new HashSet<String>();
         private ImapStore.BackupFolder smsFolder, callFolder;
+        private final Context context = SmsRestoreService.this;
+        private CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
         private int max;
-        private CursorToMessage converter = new CursorToMessage(SmsRestoreService.this,
-                                                PrefStore.getUserEmail(SmsRestoreService.this));
 
         protected java.lang.Integer doInBackground(Integer... params) {
             this.max = params.length > 0 ? params[0] : -1;
-            final boolean starredOnly = PrefStore.isRestoreStarredOnly(SmsRestoreService.this);
-            final boolean restoreCallLog = PrefStore.isRestoreCallLog(SmsRestoreService.this);
+            final boolean starredOnly = PrefStore.isRestoreStarredOnly(context);
+            final boolean restoreCallLog = PrefStore.isRestoreCallLog(context);
 
             try {
                 acquireLocks(false);
@@ -180,45 +181,45 @@ public class SmsRestoreService extends ServiceBase {
                 }
             } catch (MessagingException e) {
                 Log.e(TAG, "error", e);
-            }
-        }
-
-        private void importSms(final Message message) {
-            if (LOCAL_LOGV) Log.v(TAG, "importSms("+message+")");
-            try {
-                final ContentValues values = converter.messageToContentValues(message);
-                final Integer type = values.getAsInteger(SmsConsts.TYPE);
-
-                // only restore inbox messages and sent messages - otherwise sms might get sent on restore
-                if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
-                                     type == SmsConsts.MESSAGE_TYPE_SENT) &&
-                                     !smsExists(values)) {
-                    final Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
-                    if (uri != null) {
-                      insertedIds.add(uri.getLastPathSegment());
-                      Long timestamp = values.getAsLong(SmsConsts.DATE);
-
-                      if (timestamp != null &&
-                          PrefStore.getMaxSyncedDateSms(SmsRestoreService.this) < timestamp) {
-                          updateMaxSyncedDateSms(timestamp);
-                      }
-                      if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
-                    }
-                } else {
-                    if (LOCAL_LOGV) Log.d(TAG, "ignoring sms");
-                }
             } catch (IllegalArgumentException e) {
                 // http://code.google.com/p/android/issues/detail?id=2916
                 Log.e(TAG, "error", e);
             } catch (java.io.IOException e) {
                 Log.e(TAG, "error", e);
-            } catch (MessagingException e) {
-                Log.e(TAG, "error", e);
             }
         }
 
-        private void importCallLog(final Message message) {
+        private void importSms(final Message message) throws IOException, MessagingException {
+            if (LOCAL_LOGV) Log.v(TAG, "importSms("+message+")");
+            final ContentValues values = converter.messageToContentValues(message);
+            final Integer type = values.getAsInteger(SmsConsts.TYPE);
+
+            // only restore inbox messages and sent messages - otherwise sms might get sent on restore
+            if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
+                                 type == SmsConsts.MESSAGE_TYPE_SENT) &&
+                                 !smsExists(values)) {
+                final Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
+                if (uri != null) {
+                  insertedIds.add(uri.getLastPathSegment());
+                  Long timestamp = values.getAsLong(SmsConsts.DATE);
+
+                  if (timestamp != null &&
+                      PrefStore.getMaxSyncedDateSms(context) < timestamp) {
+                      updateMaxSyncedDateSms(timestamp);
+                  }
+                  if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
+                }
+            } else {
+                if (LOCAL_LOGV) Log.d(TAG, "ignoring sms");
+            }
+        }
+
+        private void importCallLog(final Message message) throws MessagingException, IOException {
             if (LOCAL_LOGV) Log.v(TAG, "importCallLog("+message+")");
+            final ContentValues values = converter.messageToContentValues(message);
+            if (!callLogExists(values)) {
+              getContentResolver().insert(CALLLOG_PROVIDER, values);
+            }
         }
     }
 
@@ -256,7 +257,26 @@ public class SmsRestoreService extends ServiceBase {
         }
     }
 
+    private boolean callLogExists(ContentValues values) {
+        // TODO use managedQuery
+        Cursor c = getContentResolver().query(CALLLOG_PROVIDER,
+                new String[] { "_id" },
+                "number = ? AND duration = ? AND type = ?",
+                new String[] { values.getAsString(CallLog.Calls.NUMBER),
+                               values.getAsString(CallLog.Calls.DURATION),
+                               values.getAsString(CallLog.Calls.TYPE) },
+                               null
+        );
+        boolean exists = false;
+        if (c != null) {
+          exists = c.getCount() > 0;
+          c.close();
+        }
+        return exists;
+    }
+
     private boolean smsExists(ContentValues values) {
+        // TODO use managedQuery
         // just assume equality on date+address+type
         Cursor c = getContentResolver().query(SMS_PROVIDER,
                 new String[] { "_id" },

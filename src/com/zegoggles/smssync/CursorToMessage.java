@@ -186,39 +186,58 @@ public class CursorToMessage {
        return result;
     }
 
-    public ContentValues messageToContentValues(Message message)
+    public ContentValues messageToContentValues(final Message message)
             throws IOException, MessagingException {
+        if (message == null) throw new MessagingException("message is null");
 
-        if (message == null || message.getBody() == null) {
-          throw new MessagingException("message/body is null");
+        final ContentValues values = new ContentValues();
+        switch (getDataType(message)) {
+          case SMS:
+            if (message.getBody() == null) throw new MessagingException("body is null");
+
+            InputStream is = message.getBody().getInputStream();
+            if (is == null) {
+              throw new MessagingException("body.getInputStream() is null for " + message.getBody());
+            }
+            final String body = IOUtils.toString(is);
+            final String address = getHeader(message, Headers.ADDRESS);
+            values.put(SmsConsts.BODY, body);
+            values.put(SmsConsts.ADDRESS, address);
+            values.put(SmsConsts.TYPE, getHeader(message, Headers.TYPE));
+            values.put(SmsConsts.PROTOCOL, getHeader(message, Headers.PROTOCOL));
+            values.put(SmsConsts.SERVICE_CENTER, getHeader(message, Headers.SERVICE_CENTER));
+            values.put(SmsConsts.DATE, getHeader(message, Headers.DATE));
+            values.put(SmsConsts.STATUS, getHeader(message, Headers.STATUS));
+            values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(address));
+            values.put(SmsConsts.READ, PrefStore.getMarkAsReadOnRestore(mContext) ? "1" : getHeader(message, Headers.READ));
+            break;
+          case CALLLOG:
+            values.put(CallLog.Calls.NUMBER, getHeader(message, Headers.ADDRESS));
+            values.put(CallLog.Calls.TYPE, Integer.valueOf(getHeader(message, Headers.TYPE)));
+            values.put(CallLog.Calls.DATE, message.getSentDate().getDate());
+            values.put(CallLog.Calls.DURATION, Long.valueOf(getHeader(message, Headers.DURATION)));
+            values.put(CallLog.Calls.NEW, Integer.valueOf(0));
+            /*
+            if (ci != null) {
+                values.put(CallLog.Calls.CACHED_NAME, ci.name);
+                values.put(CallLog.Calls.CACHED_NUMBER_TYPE, ci.numberType);
+                values.put(CallLog.Calls.CACHED_NUMBER_LABEL, ci.numberLabel);
+            }
+
+            if ((ci != null) && (ci.person_id > 0)) {
+                ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
+            }
+            */
+            break;
+          default: throw new MessagingException("don't know how to restore " + getDataType(message));
         }
 
-        java.io.InputStream is = message.getBody().getInputStream();
-
-        if (is == null) {
-          throw new MessagingException("body.getInputStream() is null for " + message.getBody());
-        }
-
-        String body = IOUtils.toString(is);
-        final String address = getHeader(message, Headers.ADDRESS);
-
-        ContentValues values = new ContentValues();
-        values.put(SmsConsts.BODY, body);
-        values.put(SmsConsts.ADDRESS, address);
-        values.put(SmsConsts.TYPE, getHeader(message, Headers.TYPE));
-        values.put(SmsConsts.PROTOCOL, getHeader(message, Headers.PROTOCOL));
-        values.put(SmsConsts.SERVICE_CENTER, getHeader(message, Headers.SERVICE_CENTER));
-        values.put(SmsConsts.DATE, getHeader(message, Headers.DATE));
-        values.put(SmsConsts.STATUS, getHeader(message, Headers.STATUS));
-        values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(address));
-        values.put(SmsConsts.READ, PrefStore.getMarkAsReadOnRestore(mContext) ? "1" : getHeader(message, Headers.READ));
         return values;
     }
 
     public DataType getDataType(Message message) {
         final String dataTypeHeader = getHeader(message, Headers.DATATYPE);
         final String typeHeader = getHeader(message, Headers.TYPE);
-        final DataType dataType;
         //we have two possible header sets here
         //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
         //         contains either the string "mms" or an integer which is the internal type of the sms
@@ -226,16 +245,64 @@ public class CursorToMessage {
         //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
         //The current header set was introduced in version 1.2.00
         if (dataTypeHeader == null) {
-           dataType = MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
+           return MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
         } else {
            try {
-              dataType = DataType.valueOf(dataTypeHeader);
+              return DataType.valueOf(dataTypeHeader);
             } catch (IllegalArgumentException e) {
-              // whateva
-              return DataType.SMS;
+              return DataType.SMS; // whateva
             }
         }
-        return dataType;
+    }
+
+    public static String formattedDuration(int duration) {
+        return String.format("%02d:%02d:%02d",
+              duration / 3600,
+              duration % 3600 / 60,
+              duration % 3600 % 60);
+    }
+
+    public String callTypeString(int callType, String name) {
+        if (name == null) {
+          return mContext.getString(
+                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing :
+                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming :
+                    R.string.call_missed);
+        } else {
+          return mContext.getString(
+                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing_text :
+                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming_text :
+                    R.string.call_missed_text,
+                    name);
+        }
+    }
+
+    /* Look up a person */
+    public PersonRecord lookupPerson(final String address) {
+        if (!mPeopleCache.containsKey(address)) {
+            Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
+                                                 Phones.CONTENT_FILTER_URL, Uri.encode(address));
+
+            Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
+            final PersonRecord record = new PersonRecord();
+            if (c != null && c.moveToFirst()) {
+                record._id    = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
+                record.name   = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
+                record.number = sanitize(NEW_CONTACT_API ? address :
+                                                  c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
+                record.email  = getPrimaryEmail(record._id, record.number);
+            } else {
+                if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
+
+                record.number = sanitize(address);
+                record.email  = getUnknownEmail(address);
+                record.unknown = true;
+            }
+            mPeopleCache.put(address, record);
+
+            if (c != null) c.close();
+        }
+        return mPeopleCache.get(address);
     }
 
     private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
@@ -392,28 +459,6 @@ public class CursorToMessage {
        }
     }
 
-    public static String formattedDuration(int duration) {
-        return String.format("%02d:%02d:%02d",
-              duration / 3600,
-              duration % 3600 / 60,
-              duration % 3600 % 60);
-    }
-
-    public String callTypeString(int callType, String name) {
-        if (name == null) {
-          return mContext.getString(
-                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing :
-                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming :
-                    R.string.call_missed);
-        } else {
-          return mContext.getString(
-                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing_text :
-                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming_text :
-                    R.string.call_missed_text,
-                    name);
-        }
-    }
-
     private Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
         if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
@@ -560,36 +605,7 @@ public class CursorToMessage {
         throw new RuntimeException(e);
       }
     }
-
-    /* Look up a person */
-    public PersonRecord lookupPerson(final String address) {
-        if (!mPeopleCache.containsKey(address)) {
-            Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
-                                                 Phones.CONTENT_FILTER_URL, Uri.encode(address));
-
-            Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
-            final PersonRecord record = new PersonRecord();
-            if (c != null && c.moveToFirst()) {
-                record._id    = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
-                record.name   = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
-                record.number = sanitize(NEW_CONTACT_API ? address :
-                                                  c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
-                record.email  = getPrimaryEmail(record._id, record.number);
-            } else {
-                if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
-
-                record.number = sanitize(address);
-                record.email  = getUnknownEmail(address);
-                record.unknown = true;
-            }
-            mPeopleCache.put(address, record);
-
-            if (c != null) c.close();
-        }
-        return mPeopleCache.get(address);
-    }
-
-    public static String getHeader(Message msg, String header) {
+    private static String getHeader(Message msg, String header) {
         try {
             String[] hdrs = msg.getHeader(header);
             if (hdrs != null && hdrs.length > 0) {
