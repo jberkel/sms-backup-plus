@@ -41,10 +41,6 @@
             android:title="@string/ui_backup_calllog_settings_label"
             android:dependency="backup_calllog">
 
-            <PreferenceCategory android:title="@string/calllog_settings"
-              android:persistent="false"
-              android:key="calllog_settings">
-
               <EditTextPreference android:key="imap_folder_calllog"
                 android:dependency="backup_calllog"
                 android:title="@string/ui_imap_folder_calllog_label"
@@ -76,7 +72,6 @@
                 android:persistent="true"
                 android:defaultValue="-1"
                 android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
-            </PreferenceCategory>
           </PreferenceScreen>
         </PreferenceCategory>
 
