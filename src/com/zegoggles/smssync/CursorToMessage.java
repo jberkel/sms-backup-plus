@@ -33,6 +33,7 @@ import java.io.OutputStreamWriter;
 import java.security.MessageDigest;
 
 import android.content.Context;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -68,6 +69,7 @@ import com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.App.*;
 
 public class CursorToMessage {
+
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
     public static final Uri ECLAIR_CONTENT_URI =
       Uri.parse("content://com.android.contacts/data/emails");
@@ -97,6 +99,7 @@ public class CursorToMessage {
 
     private final Context mContext;
     private final Address mUserAddress;
+    private final ThreadHelper threadHelper = new ThreadHelper();
 
     // simple LRU cache
     private final Map<String, PersonRecord> mPeopleCache =
@@ -181,6 +184,58 @@ public class CursorToMessage {
         } while (result.messageList.size() < maxEntries && cursor.moveToNext());
 
        return result;
+    }
+
+    public ContentValues messageToContentValues(Message message)
+            throws IOException, MessagingException {
+
+        if (message == null || message.getBody() == null) {
+          throw new MessagingException("message/body is null");
+        }
+
+        java.io.InputStream is = message.getBody().getInputStream();
+
+        if (is == null) {
+          throw new MessagingException("body.getInputStream() is null for " + message.getBody());
+        }
+
+        String body = IOUtils.toString(is);
+        final String address = getHeader(message, Headers.ADDRESS);
+
+        ContentValues values = new ContentValues();
+        values.put(SmsConsts.BODY, body);
+        values.put(SmsConsts.ADDRESS, address);
+        values.put(SmsConsts.TYPE, getHeader(message, Headers.TYPE));
+        values.put(SmsConsts.PROTOCOL, getHeader(message, Headers.PROTOCOL));
+        values.put(SmsConsts.SERVICE_CENTER, getHeader(message, Headers.SERVICE_CENTER));
+        values.put(SmsConsts.DATE, getHeader(message, Headers.DATE));
+        values.put(SmsConsts.STATUS, getHeader(message, Headers.STATUS));
+        values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(address));
+        values.put(SmsConsts.READ, PrefStore.getMarkAsReadOnRestore(mContext) ? "1" : getHeader(message, Headers.READ));
+        return values;
+    }
+
+    public DataType getDataType(Message message) {
+        final String dataTypeHeader = getHeader(message, Headers.DATATYPE);
+        final String typeHeader = getHeader(message, Headers.TYPE);
+        final DataType dataType;
+        //we have two possible header sets here
+        //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
+        //         contains either the string "mms" or an integer which is the internal type of the sms
+        //current: there IS a Headers.DATATYPE containing a string representation of CursorToMessage.DataType
+        //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
+        //The current header set was introduced in version 1.2.00
+        if (dataTypeHeader == null) {
+           dataType = MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
+        } else {
+           try {
+              dataType = DataType.valueOf(dataTypeHeader);
+            } catch (IllegalArgumentException e) {
+              // whateva
+              return DataType.SMS;
+            }
+        }
+        return dataType;
     }
 
     private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
@@ -534,6 +589,18 @@ public class CursorToMessage {
         return mPeopleCache.get(address);
     }
 
+    public static String getHeader(Message msg, String header) {
+        try {
+            String[] hdrs = msg.getHeader(header);
+            if (hdrs != null && hdrs.length > 0) {
+                return hdrs[0];
+            }
+        } catch (MessagingException e) {
+        }
+        return null;
+    }
+
+
     private String getPrimaryEmail(final long personId, final String number) {
         if (personId <= 0) {
           return getUnknownEmail(number);
@@ -595,8 +662,11 @@ public class CursorToMessage {
 
     /** Returns whether the given e-mail address is a Gmail address or not. */
     private static boolean isGmailAddress(String email) {
-        return email.endsWith("gmail.com") || email.endsWith("googlemail.com");
+        if (email == null) return false;
+        return email.toLowerCase().endsWith("gmail.com") ||
+               email.toLowerCase().endsWith("googlemail.com");
     }
+
 
     private static String generateReferenceValue(String email) {
       StringBuilder sb = new StringBuilder();
@@ -606,7 +676,7 @@ public class CursorToMessage {
       return sb.toString();
     }
 
-    public class ConversionResult {
+    public static class ConversionResult {
         public final DataType type;
         public final List<Message> messageList = new ArrayList<Message>();
         public final List<Map<String,String>> mapList = new ArrayList<Map<String,String>>();
@@ -664,16 +734,14 @@ public class CursorToMessage {
         private Context mContext;
         private Uri mUri;
 
-        public MmsAttachmentBody(Uri uri, Context context)
-        {
+        public MmsAttachmentBody(Uri uri, Context context) {
             mContext = context;
             mUri = uri;
         }
 
         public InputStream getInputStream() throws MessagingException
         {
-            try
-            {
+            try {
                 return mContext.getContentResolver().openInputStream(mUri);
             }
             catch (FileNotFoundException fnfe)
@@ -686,16 +754,14 @@ public class CursorToMessage {
             }
         }
 
-        public void writeTo(OutputStream out) throws IOException, MessagingException
-        {
+        public void writeTo(OutputStream out) throws IOException, MessagingException {
             InputStream in = getInputStream();
             Base64OutputStream base64Out = new Base64OutputStream(out);
             IOUtils.copy(in, base64Out);
             base64Out.close();
         }
 
-        public Uri getContentUri()
-        {
+        public Uri getContentUri() {
             return mUri;
         }
     }

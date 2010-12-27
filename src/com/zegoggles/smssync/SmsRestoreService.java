@@ -10,24 +10,15 @@ import android.util.Log;
 import com.fsck.k9.mail.*;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.zegoggles.smssync.CursorToMessage.DataType;
-import com.zegoggles.smssync.CursorToMessage.Headers;
 
 import org.apache.commons.io.IOUtils;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.io.File;
+import java.io.IOException;
 import java.io.FilenameFilter;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.NoSuchMethodException;
-import java.lang.ClassNotFoundException;
-
-import static com.zegoggles.smssync.CursorToMessage.Headers.*;
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
-
 import static com.zegoggles.smssync.App.*;
 
 public class SmsRestoreService extends ServiceBase {
@@ -38,20 +29,6 @@ public class SmsRestoreService extends ServiceBase {
 
     private static boolean sIsRunning = false;
     private static boolean sCanceled = false;
-
-    private Class telephonyThreads;
-    private Method getOrCreateThreadId;
-    private boolean threadsAvailable = true;
-
-    private static final int MAX_THREAD_CACHE_SIZE = 500;
-    private Map<String, Long> mThreadIdCache =
-          new LinkedHashMap<String, Long>(MAX_THREAD_CACHE_SIZE+1, .75F, true) {
-          @Override
-          public boolean removeEldestEntry(Map.Entry eldest) {
-            return size() > MAX_THREAD_CACHE_SIZE;
-          }
-      };
-
 
     public static void cancel() {
         sCanceled = true;
@@ -72,8 +49,10 @@ public class SmsRestoreService extends ServiceBase {
     class RestoreTask extends AsyncTask<Integer, SmsSyncState, Integer> {
         private Set<String> insertedIds = new HashSet<String>();
         private Set<String> uids = new HashSet<String>();
-        private int max;
         private ImapStore.BackupFolder smsFolder, callFolder;
+        private int max;
+        private CursorToMessage converter = new CursorToMessage(SmsRestoreService.this,
+                                                PrefStore.getUserEmail(SmsRestoreService.this));
 
         protected java.lang.Integer doInBackground(Integer... params) {
             this.max = params.length > 0 ? params[0] : -1;
@@ -83,8 +62,6 @@ public class SmsRestoreService extends ServiceBase {
             try {
                 acquireLocks(false);
                 sIsRunning = true;
-
-                SmsRestoreService.this.mThreadIdCache.clear();
 
                 publishProgress(LOGIN);
                 smsFolder = getSMSBackupFolder();
@@ -194,30 +171,13 @@ public class SmsRestoreService extends ServiceBase {
                 if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
 
                 message.getFolder().fetch(new Message[] { message }, fp, null);
-
-                final String dataTypeHeader = getHeader(message, Headers.DATATYPE);
-                final String typeHeader = getHeader(message, Headers.TYPE);
-                final DataType dataType;
-                //we have two possible header sets here
-                //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
-                //         contains either the string "mms" or an integer which is the internal type of the sms
-                //current: there IS a Headers.DATATYPE containing a string representation of CursorToMessage.DataType
-                //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
-                //The current header set was introduced in version 1.2.00
-                if (dataTypeHeader == null) {
-                   dataType = MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
-                } else {
-                   dataType = DataType.valueOf(dataTypeHeader);
-                }
-
+                final DataType dataType = converter.getDataType(message);
                 //only restore sms+call log for now
                 switch (dataType) {
                     case CALLLOG: importCallLog(message); break;
                     case SMS:     importSms(message); break;
                     default: if (LOCAL_LOGV) Log.d(TAG, "ignoring restore of type: " + dataType);
                 }
-            } catch (IllegalArgumentException e) {
-                Log.e(TAG, "error", e); // might get thrown by DataType.valueOf
             } catch (MessagingException e) {
                 Log.e(TAG, "error", e);
             }
@@ -226,17 +186,16 @@ public class SmsRestoreService extends ServiceBase {
         private void importSms(final Message message) {
             if (LOCAL_LOGV) Log.v(TAG, "importSms("+message+")");
             try {
-                ContentValues values = messageToContentValues(message);
-                Integer type = values.getAsInteger(SmsConsts.TYPE);
+                final ContentValues values = converter.messageToContentValues(message);
+                final Integer type = values.getAsInteger(SmsConsts.TYPE);
 
                 // only restore inbox messages and sent messages - otherwise sms might get sent on restore
                 if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
                                      type == SmsConsts.MESSAGE_TYPE_SENT) &&
                                      !smsExists(values)) {
-                    Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
+                    final Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
                     if (uri != null) {
                       insertedIds.add(uri.getLastPathSegment());
-
                       Long timestamp = values.getAsLong(SmsConsts.DATE);
 
                       if (timestamp != null &&
@@ -314,87 +273,5 @@ public class SmsRestoreService extends ServiceBase {
           c.close();
         }
         return exists;
-    }
-
-    private ContentValues messageToContentValues(Message message)
-            throws java.io.IOException, MessagingException {
-
-        if (message == null || message.getBody() == null) {
-          throw new MessagingException("message/body is null");
-        }
-
-        java.io.InputStream is = message.getBody().getInputStream();
-
-        if (is == null) {
-          throw new MessagingException("body.getInputStream() is null for " + message.getBody());
-        }
-
-        String body = IOUtils.toString(is);
-
-        ContentValues values = new ContentValues();
-        values.put(SmsConsts.BODY, body);
-        values.put(SmsConsts.ADDRESS, getHeader(message, ADDRESS));
-        values.put(SmsConsts.TYPE, getHeader(message, TYPE));
-        values.put(SmsConsts.PROTOCOL, getHeader(message, PROTOCOL));
-        values.put(SmsConsts.SERVICE_CENTER, getHeader(message, SERVICE_CENTER));
-        values.put(SmsConsts.DATE, getHeader(message, DATE));
-        values.put(SmsConsts.STATUS, getHeader(message, STATUS));
-        values.put(SmsConsts.THREAD_ID, getThreadId(getHeader(message, ADDRESS)));
-        values.put(SmsConsts.READ, PrefStore.getMarkAsReadOnRestore(this) ? "1" : getHeader(message, READ));
-        return values;
-    }
-
-    private String lookupNumber(String address) {
-        return address;
-    }
-
-    private Long getThreadId(final String recipient) {
-      if (recipient == null || !threadsAvailable) return null;
-
-      if (mThreadIdCache.containsKey(recipient)) {
-        return mThreadIdCache.get(recipient);
-      }
-
-      if (getOrCreateThreadId == null) {
-        try {
-          telephonyThreads = Class.forName("android.provider.Telephony$Threads");
-          getOrCreateThreadId = telephonyThreads.getMethod("getOrCreateThreadId",
-                                                  new Class[] { Context.class, String.class });
-        } catch (NoSuchMethodException e) {
-          return noThreadsAvailable(e);
-        } catch (ClassNotFoundException e) {
-          return noThreadsAvailable(e);
-        }
-      }
-
-      try {
-        final Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
-                                                    new Object[] { this, lookupNumber(recipient)  });
-        if (LOCAL_LOGV) Log.v(TAG, "threadId for " + recipient + ": " + id);
-        if (id != null) mThreadIdCache.put(recipient, id);
-
-        return id;
-      } catch (InvocationTargetException e) {
-        return noThreadsAvailable(e);
-      } catch (IllegalAccessException e) {
-        return noThreadsAvailable(e);
-      }
-    }
-
-    private Long noThreadsAvailable(Throwable e) {
-        Log.e(TAG, "threadsNotAvailable", e);
-        threadsAvailable = false;
-        return null;
-    }
-
-    private String getHeader(Message msg, String header) {
-        try {
-            String[] hdrs = msg.getHeader(header);
-            if (hdrs != null && hdrs.length > 0) {
-                return hdrs[0];
-            }
-        } catch (MessagingException e) {
-        }
-        return null;
     }
 }
