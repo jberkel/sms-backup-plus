@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
 import java.io.FilenameFilter;
@@ -59,6 +60,9 @@ public class SmsRestoreService extends ServiceBase {
             this.max = params.length > 0 ? params[0] : -1;
             final boolean starredOnly = PrefStore.isRestoreStarredOnly(context);
             final boolean restoreCallLog = PrefStore.isRestoreCallLog(context);
+            final boolean restoreSms     = PrefStore.isRestoreSms(context);
+
+            if (!restoreSms && !restoreCallLog) return null;
 
             try {
                 acquireLocks(false);
@@ -70,7 +74,9 @@ public class SmsRestoreService extends ServiceBase {
 
                 publishProgress(CALC);
 
-                final List<Message> msgs = smsFolder.getMessages(max, starredOnly, null);
+                final List<Message> msgs = new ArrayList<Message>();
+
+                if (restoreSms) msgs.addAll(smsFolder.getMessages(max, starredOnly, null));
                 if (restoreCallLog) msgs.addAll(callFolder.getMessages(max, starredOnly, null));
 
                 sItemsToRestoreCount = max <= 0 ? msgs.size() : Math.min(msgs.size(), max);
