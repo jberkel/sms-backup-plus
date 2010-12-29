@@ -133,6 +133,7 @@
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
 
+  <string name="ui_backup_schedule_label">Schedule</string>
   <string name="auto_backup_settings">Auto backup</string>
   <string name="ui_auto_backup_schedule_label">Regular schedule</string>
   <string name="ui_auto_backup_schedule_desc">When to backup SMS</string>
@@ -141,7 +142,7 @@
   <string name="ui_auto_backup_incoming_schedule_desc">When to backup incoming SMS (after arrival)</string>
 
   <string name="ui_wifi_only_label">Require Wifi</string>
-  <string name="ui_wifi_only_desc">Only backup/restore when connected to Wifi</string>
+  <string name="ui_wifi_only_desc">Only backup when connected to Wifi</string>
 
   <string name="ui_notifications_label">Notifications</string>
   <string name="ui_notifications_desc">Background notifications</string>
@@ -265,14 +266,14 @@
   <string name="ui_backup_calllog_settings_label">Call log settings</string>
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
-  <string name="ui_backup_schedule_label">Schedule</string>
-  <string name="ui_backup_schedule_desc">When to start backups</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+  <string name="ui_auto_backup_settings_desc"></string>
 
   <string name="ui_restore_settings_label">Restore settings</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">Backup SMS</string>
-  <string name="ui_backup_sms_desc">Backup SMS</string>
+  <string name="ui_backup_sms_desc">Enable SMS backup</string>
 
   <string name="ui_restore_sms_label">Restore SMS</string>
   <string name="ui_restore_sms_desc">Restore SMS</string>

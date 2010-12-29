@@ -141,8 +141,7 @@ public class SmsRestoreService extends ServiceBase {
             sIsRunning = false;
         }
 
-        @Override
-        protected void onProgressUpdate(SmsSyncState... progress) {
+        @Override protected void onProgressUpdate(SmsSyncState... progress) {
           if (progress == null || progress.length == 0) return;
           if (smsSync != null) smsSync.statusPref.stateChanged(progress[0]);
           sState = progress[0];
@@ -155,8 +154,7 @@ public class SmsRestoreService extends ServiceBase {
 
             // execute in background, might take some time
             final Thread t = new Thread() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     Log.d(TAG, "updating threads");
                     getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
                     Log.d(TAG, "finished");
