@@ -124,6 +124,7 @@
 
   <string name="ui_mark_as_read_label">Mark as read (emails)</string>
   <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
+
   <string name="ui_mark_as_read_restore_label">Mark as read (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Whether to mark all restored SMS as read or not.</string>
 
@@ -134,7 +135,6 @@
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
 
   <string name="ui_backup_schedule_label">Schedule</string>
-  <string name="auto_backup_settings">Auto backup</string>
   <string name="ui_auto_backup_schedule_label">Regular schedule</string>
   <string name="ui_auto_backup_schedule_desc">When to backup SMS</string>
 
@@ -222,7 +222,8 @@
   <string name="calllog_settings">Call log settings</string>
 
   <string name="sms_with_field">SMS with %1$s</string>
-  <string name="mms_with_field">MMS with %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Call with %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contacts to backup</string>
@@ -266,8 +267,8 @@
   <string name="ui_backup_calllog_settings_label">Call log settings</string>
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
+  <string name="auto_backup_settings">Auto backup settings</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
-  <string name="ui_auto_backup_settings_desc"></string>
 
   <string name="ui_restore_settings_label">Restore settings</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->

@@ -12,6 +12,48 @@
       android:defaultValue="false"/>
 
     <PreferenceScreen
+      android:key="auto_backup_settings_screen"
+      android:title="@string/ui_auto_backup_settings_label">
+
+      <PreferenceCategory
+         android:title="@string/ui_backup_schedule_label"
+         android:dependency="enable_auto_sync"
+         android:persistent="false"
+         android:key="auto_backup_settings">
+
+          <ListPreference android:key="auto_backup_schedule"
+            android:title="@string/ui_auto_backup_schedule_label"
+            android:summary="@string/ui_auto_backup_schedule_desc"
+            android:entries="@array/auto_backup_schedule_entries"
+            android:entryValues="@array/auto_backup_schedule_values"
+            android:defaultValue="7200"
+            android:persistent="true"/>
+
+          <ListPreference android:key="auto_backup_incoming_schedule"
+            android:title="@string/ui_auto_backup_incoming_schedule_label"
+            android:summary="@string/ui_auto_backup_incoming_schedule_desc"
+            android:entries="@array/auto_backup_incoming_schedule_entries"
+            android:entryValues="@array/auto_backup_incoming_schedule_values"
+            android:defaultValue="180"
+            android:persistent="true"/>
+
+          <CheckBoxPreference android:key="wifi_only"
+            android:title="@string/ui_wifi_only_label"
+            android:summary="@string/ui_wifi_only_desc"
+            android:persistent="true"
+            android:defaultValue="false"/>
+      </PreferenceCategory>
+
+      <CheckBoxPreference android:key="third_party_integration"
+        android:title="@string/ui_third_party_integration_label"
+        android:summary="@string/ui_third_party_integration_desc"
+        android:persistent="true"
+        android:defaultValue="false"/>
+
+    </PreferenceScreen>
+
+
+    <PreferenceScreen
       android:title="@string/ui_settings_advanced_label"
       android:summary="@string/ui_settings_advanced_desc">
 
@@ -74,47 +116,6 @@
                 android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
           </PreferenceScreen>
         </PreferenceCategory>
-
-        <PreferenceScreen
-          android:title="@string/ui_auto_backup_settings_label"
-          android:summary="@string/ui_auto_backup_settings_desc">
-
-          <PreferenceCategory
-             android:title="@string/ui_backup_schedule_label"
-             android:dependency="enable_auto_sync"
-             android:persistent="false"
-             android:key="auto_backup_settings">
-
-              <ListPreference android:key="auto_backup_schedule"
-                android:title="@string/ui_auto_backup_schedule_label"
-                android:summary="@string/ui_auto_backup_schedule_desc"
-                android:entries="@array/auto_backup_schedule_entries"
-                android:entryValues="@array/auto_backup_schedule_values"
-                android:defaultValue="7200"
-                android:persistent="true"/>
-
-              <ListPreference android:key="auto_backup_incoming_schedule"
-                android:title="@string/ui_auto_backup_incoming_schedule_label"
-                android:summary="@string/ui_auto_backup_incoming_schedule_desc"
-                android:entries="@array/auto_backup_incoming_schedule_entries"
-                android:entryValues="@array/auto_backup_incoming_schedule_values"
-                android:defaultValue="180"
-                android:persistent="true"/>
-
-              <CheckBoxPreference android:key="wifi_only"
-                android:title="@string/ui_wifi_only_label"
-                android:summary="@string/ui_wifi_only_desc"
-                android:persistent="true"
-                android:defaultValue="false"/>
-          </PreferenceCategory>
-
-          <CheckBoxPreference android:key="third_party_integration"
-            android:title="@string/ui_third_party_integration_label"
-            android:summary="@string/ui_third_party_integration_desc"
-            android:persistent="true"
-            android:defaultValue="false"/>
-
-        </PreferenceScreen>
 
         <EditTextPreference android:key="imap_folder"
           android:title="@string/ui_imap_folder_label"

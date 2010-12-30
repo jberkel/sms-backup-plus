@@ -248,7 +248,7 @@ public class CursorToMessage {
            return MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
         } else {
            try {
-              return DataType.valueOf(dataTypeHeader);
+              return DataType.valueOf(dataTypeHeader.toUpperCase());
             } catch (IllegalArgumentException e) {
               return DataType.SMS; // whateva
             }
