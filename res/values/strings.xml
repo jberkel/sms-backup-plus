@@ -258,7 +258,7 @@
   <string name="none">None</string>
 
   <string name="ui_third_party_integration_label">3rd party integration</string>
-  <string name="ui_third_party_integration_desc">Allow other apps to trigger backups via intent broadcasts</string>
+  <string name="ui_third_party_integration_desc">Allow other apps to trigger backups via broadcast intents</string>
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Backup settings</string>
