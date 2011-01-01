@@ -274,6 +274,10 @@ public class PrefStore {
         }
     }
 
+    static boolean isSmsBackupEnabled(Context ctx) {
+      return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_SMS, true);
+    }
+
     static boolean isMmsBackupEnabled(Context ctx) {
       return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }

@@ -38,6 +38,7 @@ import android.app.PendingIntent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -143,6 +144,7 @@ public class SmsSync extends PreferenceActivity {
         initCalendarAndGroups();
 
         updateAutoBackupSummary();
+        updateAutoBackupEnabledSummary();
         updateBackupContactGroupLabelFromPref();
         updateCallLogCalendarLabelFromPref();
         updateImapFolderLabelFromPref();
@@ -178,6 +180,24 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
+    private void updateAutoBackupEnabledSummary() {
+       final Preference enableAutoBackup = findPreference("enable_auto_sync");
+       final List<String> enabled = new ArrayList();
+
+       if (PrefStore.isSmsBackupEnabled(this)) enabled.add("SMS");
+       if (PrefStore.isMmsBackupEnabled(this)) enabled.add("MMS");
+       if (PrefStore.isCallLogBackupEnabled(this)) enabled.add("Call log");
+
+       enableAutoBackup.setSummary(getString(R.string.ui_enable_auto_sync_summary,
+                                             TextUtils.join(", ", enabled)));
+
+       addSummaryListener(new Runnable() {
+            public void run() { updateAutoBackupEnabledSummary(); }
+           }, PrefStore.PREF_BACKUP_SMS,
+           PrefStore.PREF_BACKUP_MMS,
+           PrefStore.PREF_BACKUP_CALLLOG);
+    }
+
     private void updateAutoBackupSummary() {
         final Preference autoBackup = findPreference("auto_backup_settings_screen");
         final StringBuilder summary = new StringBuilder();
@@ -204,26 +224,28 @@ public class SmsSync extends PreferenceActivity {
 
         autoBackup.setSummary(summary.toString());
 
-        final String[] prefs = new String[] {
-            PrefStore.PREF_INCOMING_TIMEOUT_SECONDS,
-            PrefStore.PREF_REGULAR_TIMEOUT_SECONDS,
-            PrefStore.PREF_WIFI_ONLY
-        };
+        addSummaryListener(new Runnable() {
+            public void run() { updateAutoBackupSummary(); }
+           }, PrefStore.PREF_INCOMING_TIMEOUT_SECONDS,
+           PrefStore.PREF_REGULAR_TIMEOUT_SECONDS,
+           PrefStore.PREF_WIFI_ONLY);
+    }
 
-        for (String p : prefs) {
+    private void addSummaryListener(final Runnable r, String... prefs) {
+      for (String p : prefs) {
           findPreference(p).setOnPreferenceChangeListener(
             new OnPreferenceChangeListener() {
               public boolean onPreferenceChange(Preference preference, final Object newValue) {
                  new Handler().post(new Runnable() {
                    @Override public void run() {
-                      updateAutoBackupSummary();
+                      r.run();
                       onContentChanged();
                    }
                  });
                 return true;
-              }
-            });
-        }
+             }
+          });
+      }
     }
 
     private void updateUsernameLabel(String username) {
