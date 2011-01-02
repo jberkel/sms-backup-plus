@@ -725,9 +725,9 @@ public class SmsSync extends PreferenceActivity {
         connected.setEnabled(PrefStore.useXOAuth(this));
         connected.setChecked(PrefStore.hasOauthTokens(this));
 
-        String summary = connected.isChecked() ? getString(R.string.gmail_already_connected,
-                                                 PrefStore.getOauthUsername(this)) :
-                                                 getString(R.string.gmail_needs_connecting);
+        String summary = connected.isChecked() ?
+                          getString(R.string.gmail_already_connected, PrefStore.getOauthUsername(this)) :
+                          getString(R.string.gmail_needs_connecting);
         connected.setSummary(summary);
 
         return connected;

@@ -205,7 +205,7 @@
 
   <string name="gmail_connected_fail">Gmail authentication failure</string>
   <string name="gmail_needs_connecting">Tap to connect your Gmail account (required).</string>
-  <string name="gmail_already_connected">Connected as %1$s (tap to disconnect).</string>
+  <string name="gmail_already_connected">Connected as %1$s.</string>
 
   <string name="ui_connected_label">Connect</string>
   <string name="ui_connected_desc">Your account needs to be connected.</string>
