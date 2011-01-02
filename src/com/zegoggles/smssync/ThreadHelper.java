@@ -28,7 +28,7 @@ public class ThreadHelper {
           }
       };
 
-    public Long getThreadId(final String recipient) {
+    public Long getThreadId(final Context context, final String recipient) {
       if (recipient == null || !threadsAvailable) return null;
 
       if (mThreadIdCache.containsKey(recipient)) {
@@ -47,7 +47,7 @@ public class ThreadHelper {
 
       try {
         final Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
-                                                    new Object[] { this, recipient });
+                                                    new Object[] { context, recipient });
         if (LOCAL_LOGV) Log.v(TAG, "threadId for " + recipient + ": " + id);
         if (id != null) mThreadIdCache.put(recipient, id);
 

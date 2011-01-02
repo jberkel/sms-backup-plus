@@ -49,8 +49,9 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     class RestoreTask extends AsyncTask<Integer, SmsSyncState, Integer> {
-        private Set<String> insertedIds = new HashSet<String>();
-        private Set<String> uids = new HashSet<String>();
+        private Set<String> smsIds     = new HashSet<String>();
+        private Set<String> callLogIds = new HashSet<String>();
+        private Set<String> uids       = new HashSet<String>();
         private ImapStore.BackupFolder smsFolder, callFolder;
         private final Context context = SmsRestoreService.this;
         private CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
@@ -103,7 +104,7 @@ public class SmsRestoreService extends ServiceBase {
                 publishProgress(UPDATING_THREADS);
                 updateAllThreads(false);
 
-                return insertedIds.size();
+                return smsIds.size() + callLogIds.size();
             } catch (ConnectivityErrorException e) {
                 lastError = translateException(e);
                 publishProgress(CONNECTIVITY_ERROR);
@@ -204,7 +205,7 @@ public class SmsRestoreService extends ServiceBase {
                                  !smsExists(values)) {
                 final Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
                 if (uri != null) {
-                  insertedIds.add(uri.getLastPathSegment());
+                  smsIds.add(uri.getLastPathSegment());
                   Long timestamp = values.getAsLong(SmsConsts.DATE);
 
                   if (timestamp != null &&
@@ -222,7 +223,10 @@ public class SmsRestoreService extends ServiceBase {
             if (LOCAL_LOGV) Log.v(TAG, "importCallLog("+message+")");
             final ContentValues values = converter.messageToContentValues(message);
             if (!callLogExists(values)) {
-              getContentResolver().insert(CALLLOG_PROVIDER, values);
+              final Uri uri = getContentResolver().insert(CALLLOG_PROVIDER, values);
+              if (uri != null) callLogIds.add(uri.getLastPathSegment());
+            } else {
+              if (LOCAL_LOGV) Log.d(TAG, "ignoring call log");
             }
         }
     }
@@ -262,7 +266,6 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     private boolean callLogExists(ContentValues values) {
-        // TODO use managedQuery
         Cursor c = getContentResolver().query(CALLLOG_PROVIDER,
                 new String[] { "_id" },
                 "number = ? AND duration = ? AND type = ?",
@@ -280,7 +283,6 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     private boolean smsExists(ContentValues values) {
-        // TODO use managedQuery
         // just assume equality on date+address+type
         Cursor c = getContentResolver().query(SMS_PROVIDER,
                 new String[] { "_id" },

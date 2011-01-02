@@ -208,26 +208,16 @@ public class CursorToMessage {
             values.put(SmsConsts.SERVICE_CENTER, getHeader(message, Headers.SERVICE_CENTER));
             values.put(SmsConsts.DATE, getHeader(message, Headers.DATE));
             values.put(SmsConsts.STATUS, getHeader(message, Headers.STATUS));
-            values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(address));
-            values.put(SmsConsts.READ, PrefStore.getMarkAsReadOnRestore(mContext) ? "1" : getHeader(message, Headers.READ));
+            values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(mContext, address));
+            values.put(SmsConsts.READ,
+              PrefStore.getMarkAsReadOnRestore(mContext) ? "1" : getHeader(message, Headers.READ));
             break;
           case CALLLOG:
             values.put(CallLog.Calls.NUMBER, getHeader(message, Headers.ADDRESS));
             values.put(CallLog.Calls.TYPE, Integer.valueOf(getHeader(message, Headers.TYPE)));
-            values.put(CallLog.Calls.DATE, message.getSentDate().getDate());
+            values.put(CallLog.Calls.DATE, getHeader(message, Headers.DATE));
             values.put(CallLog.Calls.DURATION, Long.valueOf(getHeader(message, Headers.DURATION)));
             values.put(CallLog.Calls.NEW, Integer.valueOf(0));
-            /*
-            if (ci != null) {
-                values.put(CallLog.Calls.CACHED_NAME, ci.name);
-                values.put(CallLog.Calls.CACHED_NUMBER_TYPE, ci.numberType);
-                values.put(CallLog.Calls.CACHED_NUMBER_LABEL, ci.numberLabel);
-            }
-
-            if ((ci != null) && (ci.person_id > 0)) {
-                ContactsContract.Contacts.markAsContacted(resolver, ci.person_id);
-            }
-            */
             break;
           default: throw new MessagingException("don't know how to restore " + getDataType(message));
         }

@@ -102,12 +102,13 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
             final ImapSearcher searcher = new ImapSearcher() {
                 @Override public List<ImapResponse> search() throws IOException, MessagingException {
                     final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
-                        .append(" (").append(getQuery()).append(")")
-                        .append(" UNDELETED ");
+                        .append(' ')
+                        .append(getQuery())
+                        .append(" UNDELETED");
                     if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.format(since));
                     if (flagged) sb.append(" FLAGGED");
 
-                    return executeSimpleCommand(sb.toString());
+                    return executeSimpleCommand(sb.toString().trim());
                 }
             };
 
@@ -138,23 +139,23 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         }
 
         private String getQuery() {
-           switch(type) {
+           switch(this.type) {
             /* MMS/SMS are special cases since we need to support legacy backup headers */
             case SMS:
               return
-              String.format("OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\"))",
-                            Headers.DATATYPE, type,
-                            Headers.DATATYPE,
-                            Headers.TYPE, SmsConsts.MESSAGE_TYPE_INBOX,
-                            Headers.TYPE, SmsConsts.MESSAGE_TYPE_SENT);
+              String.format("(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
+                            Headers.DATATYPE.toUpperCase(), type,
+                            Headers.DATATYPE.toUpperCase(),
+                            Headers.TYPE.toUpperCase(), SmsConsts.MESSAGE_TYPE_INBOX,
+                            Headers.TYPE.toUpperCase(), SmsConsts.MESSAGE_TYPE_SENT);
             case MMS:
               return
-              String.format("OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\")",
-                            Headers.DATATYPE, type,
-                            Headers.DATATYPE,
-                            Headers.TYPE, MmsConsts.LEGACY_HEADER);
+              String.format("(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",
+                            Headers.DATATYPE.toUpperCase(), type,
+                            Headers.DATATYPE.toUpperCase(),
+                            Headers.TYPE.toUpperCase(), MmsConsts.LEGACY_HEADER);
 
-            default: return String.format("HEADER %s \"%s\"", Headers.DATATYPE, type);
+            default: return String.format("(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(), type);
            }
         }
     }
