@@ -126,6 +126,22 @@
                 android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
           </PreferenceScreen>
 
+        <ListPreference
+          android:key="max_items_per_sync"
+          android:title="@string/ui_max_items_per_sync_label"
+          android:summary="@string/ui_max_items_per_sync_desc"
+          android:entries="@array/max_items_per_sync_entries"
+          android:entryValues="@array/max_items_per_sync_values"
+          android:defaultValue="-1"
+          android:persistent="true"/>
+
+        <CheckBoxPreference
+          android:key="mark_as_read"
+          android:title="@string/ui_mark_as_read_label"
+          android:summary="@string/ui_mark_as_read_desc"
+          android:persistent="true"
+          android:defaultValue="true"/>
+
         <EditTextPreference
           android:key="imap_folder"
           android:title="@string/ui_imap_folder_label"
@@ -157,21 +173,6 @@
           android:defaultValue="false"
           android:summary="@string/ui_mail_subject_prefix_desc"/>
 
-        <ListPreference
-          android:key="max_items_per_sync"
-          android:title="@string/ui_max_items_per_sync_label"
-          android:summary="@string/ui_max_items_per_sync_desc"
-          android:entries="@array/max_items_per_sync_entries"
-          android:entryValues="@array/max_items_per_sync_values"
-          android:defaultValue="-1"
-          android:persistent="true"/>
-
-        <CheckBoxPreference
-          android:key="mark_as_read"
-          android:title="@string/ui_mark_as_read_label"
-          android:summary="@string/ui_mark_as_read_desc"
-          android:persistent="true"
-          android:defaultValue="true"/>
       </PreferenceScreen>
 
       <PreferenceScreen
