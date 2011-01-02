@@ -17,37 +17,30 @@
       android:key="auto_backup_settings_screen"
       android:title="@string/ui_auto_backup_settings_label">
 
-      <PreferenceCategory
-         android:title="@string/ui_backup_schedule_label"
-         android:dependency="enable_auto_sync"
-         android:persistent="false"
-         android:key="auto_backup_settings">
+      <ListPreference
+        android:key="auto_backup_schedule"
+        android:title="@string/ui_auto_backup_schedule_label"
+        android:summary="@string/ui_auto_backup_schedule_desc"
+        android:entries="@array/auto_backup_schedule_entries"
+        android:entryValues="@array/auto_backup_schedule_values"
+        android:defaultValue="7200"
+        android:persistent="true"/>
 
-          <ListPreference
-            android:key="auto_backup_schedule"
-            android:title="@string/ui_auto_backup_schedule_label"
-            android:summary="@string/ui_auto_backup_schedule_desc"
-            android:entries="@array/auto_backup_schedule_entries"
-            android:entryValues="@array/auto_backup_schedule_values"
-            android:defaultValue="7200"
-            android:persistent="true"/>
+      <ListPreference
+        android:key="auto_backup_incoming_schedule"
+        android:title="@string/ui_auto_backup_incoming_schedule_label"
+        android:summary="@string/ui_auto_backup_incoming_schedule_desc"
+        android:entries="@array/auto_backup_incoming_schedule_entries"
+        android:entryValues="@array/auto_backup_incoming_schedule_values"
+        android:defaultValue="180"
+        android:persistent="true"/>
 
-          <ListPreference
-            android:key="auto_backup_incoming_schedule"
-            android:title="@string/ui_auto_backup_incoming_schedule_label"
-            android:summary="@string/ui_auto_backup_incoming_schedule_desc"
-            android:entries="@array/auto_backup_incoming_schedule_entries"
-            android:entryValues="@array/auto_backup_incoming_schedule_values"
-            android:defaultValue="180"
-            android:persistent="true"/>
-
-          <CheckBoxPreference
-            android:key="wifi_only"
-            android:title="@string/ui_wifi_only_label"
-            android:summary="@string/ui_wifi_only_desc"
-            android:persistent="true"
-            android:defaultValue="false"/>
-      </PreferenceCategory>
+      <CheckBoxPreference
+        android:key="wifi_only"
+        android:title="@string/ui_wifi_only_label"
+        android:summary="@string/ui_wifi_only_desc"
+        android:persistent="true"
+        android:defaultValue="false"/>
 
       <CheckBoxPreference
         android:key="third_party_integration"

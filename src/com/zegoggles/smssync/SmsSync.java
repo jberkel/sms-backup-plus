@@ -157,7 +157,6 @@ public class SmsSync extends PreferenceActivity {
         statusPref.update();
 
         updateImapSettings(!PrefStore.useXOAuth(this));
-        updateAutoBackupSettings(PrefStore.isEnableAutoSync(this));
     }
 
     @Override
@@ -838,11 +837,6 @@ public class SmsSync extends PreferenceActivity {
       getPreferenceManager().findPreference("imap_settings").setEnabled(enabled);
     }
 
-    private void updateAutoBackupSettings(boolean enabled) {
-      getPreferenceManager().findPreference("auto_backup_settings").setEnabled(enabled);
-    }
-
-
     private void setPreferenceListeners(final PreferenceManager prefMgr) {
         prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -857,7 +851,6 @@ public class SmsSync extends PreferenceActivity {
                             PackageManager.DONT_KILL_APP);
 
                 if (!isEnabled) Alarms.cancel(SmsSync.this);
-                updateAutoBackupSettings(isEnabled);
                 return true;
              }
         });
