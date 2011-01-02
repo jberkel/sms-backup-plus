@@ -36,6 +36,7 @@ class Deduper:
   @classmethod
   def connect(cls, login, password):
     m = imaplib.IMAP4_SSL('imap.gmail.com', 993)
+    #m.debug = 4
     m.login(login, password)
     return m
 
