@@ -63,9 +63,7 @@
 
       <PreferenceScreen
         android:title="@string/ui_backup_settings_label">
-        <PreferenceCategory
-          android:title="@string/ui_backup_settings_type"
-          android:persistent="false">
+
           <CheckBoxPreference
             android:key="backup_sms"
             android:title="@string/ui_backup_sms_label"
@@ -127,7 +125,6 @@
                 android:defaultValue="-1"
                 android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
           </PreferenceScreen>
-        </PreferenceCategory>
 
         <EditTextPreference
           android:key="imap_folder"
@@ -180,20 +177,12 @@
       <PreferenceScreen
         android:title="@string/ui_restore_settings_label">
 
-        <PreferenceCategory android:title="@string/ui_restore_settings_type" android:persistent="false">
           <CheckBoxPreference
             android:key="restore_sms"
             android:title="@string/ui_restore_sms_label"
             android:summary="@string/ui_restore_sms_desc"
             android:persistent="true"
             android:defaultValue="true"/>
-
-          <CheckBoxPreference
-            android:key="restore_calllog"
-            android:title="@string/ui_restore_calllog_label"
-            android:summary="@string/ui_restore_calllog_desc"
-            android:persistent="true"
-            android:defaultValue="false"/>
 
           <CheckBoxPreference
             android:key="restore_mms"
@@ -204,12 +193,18 @@
             android:defaultValue="false"/>
 
           <CheckBoxPreference
+            android:key="restore_calllog"
+            android:title="@string/ui_restore_calllog_label"
+            android:summary="@string/ui_restore_calllog_desc"
+            android:persistent="true"
+            android:defaultValue="false"/>
+
+          <CheckBoxPreference
               android:key="restore_starred_only"
               android:title="@string/ui_restore_starred_only_label"
               android:summary="@string/ui_restore_starred_only_desc"
               android:persistent="true"
               android:defaultValue="false"/>
-        </PreferenceCategory>
 
         <ListPreference
           android:key="max_items_per_restore"

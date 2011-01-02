@@ -143,6 +143,7 @@ public class SmsSync extends PreferenceActivity {
 
         initCalendarAndGroups();
 
+        updateLastBackupTimes();
         updateAutoBackupSummary();
         updateAutoBackupEnabledSummary();
         updateBackupContactGroupLabelFromPref();
@@ -180,13 +181,22 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
+    private void updateLastBackupTimes() {
+      findPreference("backup_sms").setSummary(
+        statusPref.getLastSyncText(PrefStore.getMaxSyncedDateSms(this)));
+      findPreference("backup_mms").setSummary(
+        statusPref.getLastSyncText(PrefStore.getMaxSyncedDateMms(this)));
+      findPreference("backup_calllog").setSummary(
+        statusPref.getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
+    }
+
     private void updateAutoBackupEnabledSummary() {
        final Preference enableAutoBackup = findPreference("enable_auto_sync");
        final List<String> enabled = new ArrayList();
 
-       if (PrefStore.isSmsBackupEnabled(this)) enabled.add("SMS");
-       if (PrefStore.isMmsBackupEnabled(this)) enabled.add("MMS");
-       if (PrefStore.isCallLogBackupEnabled(this)) enabled.add("Call log");
+       if (PrefStore.isSmsBackupEnabled(this)) enabled.add(getString(R.string.sms));
+       if (PrefStore.isMmsBackupEnabled(this)) enabled.add(getString(R.string.mms));
+       if (PrefStore.isCallLogBackupEnabled(this)) enabled.add(getString(R.string.calllog));
 
        enableAutoBackup.setSummary(getString(R.string.ui_enable_auto_sync_summary,
                                              TextUtils.join(", ", enabled)));
@@ -401,15 +411,14 @@ public class SmsSync extends PreferenceActivity {
         }
 
         private void idle() {
-            String text;
-            final long lastSync = PrefStore.getMostRecentSyncedDate(SmsSync.this);
-            if (lastSync < 0) {
-                text = getString(R.string.status_idle_details_never);
-            } else {
-                text = new Date(lastSync).toLocaleString();
-            }
-            mSyncDetailsLabel.setText(getString(R.string.status_idle_details, text));
-            mStatusLabel.setText(R.string.status_idle);
+           mSyncDetailsLabel.setText(getLastSyncText(PrefStore.getMostRecentSyncedDate(SmsSync.this)));
+           mStatusLabel.setText(R.string.status_idle);
+        }
+
+        private String getLastSyncText(final long lastSync) {
+           return getString(R.string.status_idle_details,
+               lastSync < 0 ? getString(R.string.status_idle_details_never) :
+               new Date(lastSync).toLocaleString());
         }
 
         public void stateChanged(final SmsSyncState newState) {
