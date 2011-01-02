@@ -22,8 +22,7 @@ public class ThreadHelper {
 
     private Map<String, Long> mThreadIdCache =
           new LinkedHashMap<String, Long>(MAX_THREAD_CACHE_SIZE+1, .75F, true) {
-          @Override
-          public boolean removeEldestEntry(Map.Entry eldest) {
+          @Override public boolean removeEldestEntry(Map.Entry eldest) {
             return size() > MAX_THREAD_CACHE_SIZE;
           }
       };
