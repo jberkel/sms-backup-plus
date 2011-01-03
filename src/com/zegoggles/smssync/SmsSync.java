@@ -564,6 +564,22 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
+    final class JSInterface {
+      static final String THING_ID = "edabccdf3fac3cc0948200465f520378";
+      public void flattr() {
+        if (LOCAL_LOGV) Log.v(TAG, "flattr()");
+        new Handler().post(new Runnable() {
+          public void run() {
+            try {
+              com.flattr4android.sdk.FlattrSDK.displayThing(SmsSync.this, THING_ID);
+            } catch (com.flattr4android.sdk.FlattrSDKException e) {
+              Log.e(TAG, "error", e);
+            }
+          }
+        });
+      }
+    }
+
     @Override
     protected Dialog onCreateDialog(final int id) {
         String title, msg;
@@ -601,6 +617,7 @@ public class SmsSync extends PreferenceActivity {
                 View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
                 webView.getSettings().setJavaScriptEnabled(true);
+                webView.addJavascriptInterface(new JSInterface(), "activity");
                 webView.loadUrl("file:///android_asset/about.html");
 
                 return new AlertDialog.Builder(this)
