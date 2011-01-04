@@ -70,7 +70,7 @@ public class ContactAccessorPost20 implements ContactAccessor {
   public Map<Integer, Group> getGroups(Context context) {
     final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
 
-    map.put(new Integer(EVERYBODY_ID), new Group(EVERYBODY_ID, context.getString(R.string.everybody), 0));
+    map.put(Integer.valueOf(EVERYBODY_ID), new Group(EVERYBODY_ID, context.getString(R.string.everybody), 0));
 
     final Cursor c = context.getContentResolver().query(
               Groups.CONTENT_SUMMARY_URI,

@@ -43,7 +43,7 @@ public class PrefStore {
     static final String PREF_LOGIN_PASSWORD = "login_password";
 
     /** Preference key containing a UID used for the threading reference header. */
-    static final String PREF_REFERENECE_UID = "reference_uid";
+    static final String PREF_REFERENCE_UID = "reference_uid";
 
     /** Preference key containing the server address */
     static final String PREF_SERVER_ADDRESS = "server_address";
@@ -233,7 +233,7 @@ public class PrefStore {
     }
 
     static String getOauthUsername(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, getImapUsername(ctx) /* XXX remove */);
+        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, null);
     }
 
     static void setOauthUsername(Context ctx, String s) {
@@ -339,12 +339,12 @@ public class PrefStore {
     }
 
     static String getReferenceUid(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_REFERENECE_UID, null);
+        return getSharedPreferences(ctx).getString(PREF_REFERENCE_UID, null);
     }
 
     static void setReferenceUid(Context ctx, String referenceUid) {
         getSharedPreferences(ctx).edit()
-          .putString(PREF_REFERENECE_UID, referenceUid)
+          .putString(PREF_REFERENCE_UID, referenceUid)
           .commit();
     }
 
@@ -563,13 +563,6 @@ public class PrefStore {
         return true;
       } catch (android.content.pm.PackageManager.NameNotFoundException e) {
         return false;
-      }
-    }
-
-    static void upgradeOAuthUsername(Context ctx) {
-      if (useXOAuth(ctx) && getSharedPreferences(ctx).getString(PREF_OAUTH_USER, null) == null &&
-                            getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null) != null) {
-        setOauthUsername(ctx, getImapUsername(ctx));
       }
     }
 }

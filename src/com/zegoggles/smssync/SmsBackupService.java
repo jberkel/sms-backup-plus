@@ -91,7 +91,6 @@ public class SmsBackupService extends ServiceBase {
     /** BackupTask does all the work */
     class BackupTask extends AsyncTask<Intent, SmsSyncState, Integer>
     {
-        private Exception ex;
         private final Context context = SmsBackupService.this;
         private final int maxItemsPerSync = PrefStore.getMaxItemsPerSync(context);
         private final ContactGroup groupToBackup = PrefStore.getBackupContactGroup(context);
@@ -156,7 +155,6 @@ public class SmsBackupService extends ServiceBase {
               publish(AUTH_FAILED);
               return null;
             } catch (MessagingException e) {
-              this.ex = e;
               Log.e(TAG, "error during backup", e);
               lastError = translateException(e);
               publish(GENERAL_ERROR);
@@ -172,7 +170,10 @@ public class SmsBackupService extends ServiceBase {
                 if (smsItems != null) smsItems.close();
                 if (mmsItems != null) mmsItems.close();
                 if (callLogItems != null) callLogItems.close();
-              } catch (Exception e) { /* ignore */ }
+              } catch (Exception e) {
+                Log.e(TAG, "error", e);
+                /* ignore */
+              }
 
               stopSelf();
               Alarms.scheduleRegularSync(context);

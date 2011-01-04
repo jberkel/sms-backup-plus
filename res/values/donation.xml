@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="donation">Donation</string>
+  <string name="donate">Donate</string>
+  <string name="donation_item_name">Donation SMS Backup+</string>
+  <string name="donation_merchant_name">Jan Berkel</string>
+  <string name="donation_recipient">mercha_1294339541_biz@gmail.com</string>
+  <string name="donation_item_id">SMSBACKUP+</string>
+  <string name="donation_custom_id">N/A</string>
+  <string name="donation_paypal_app_id">APP-80W284485P519543T</string>
+  <string name="donation_flattr_thing_id">edabccdf3fac3cc0948200465f520378</string>
+
+  <string-array name="donation_currencies">
+    <item>EUR</item>
+    <item>USD</item>
+    <item>GBP</item>
+  </string-array>
+</resources>

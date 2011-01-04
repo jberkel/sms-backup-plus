@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Random;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -541,7 +542,7 @@ public class CursorToMessage {
         Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null);
 
         // _id, mid, seq, ct, name, chset, cd, fn, cid, cl, ctt_s, ctt_t, _data, text
-        while (curPart.moveToNext()) {
+        while (curPart != null && curPart.moveToNext()) {
           final String id = curPart.getString(curPart.getColumnIndex("_id"));
           final String contentType = curPart.getString(curPart.getColumnIndex("ct"));
           final String fileName = curPart.getString(curPart.getColumnIndex("cl"));
@@ -675,9 +676,10 @@ public class CursorToMessage {
 
 
     private static String generateReferenceValue(String email) {
-      StringBuilder sb = new StringBuilder();
+      final StringBuilder sb = new StringBuilder();
+      final Random random = new Random();
       for (int i = 0; i < 24; i++) {
-        sb.append(Integer.toString((int)(Math.random() * 35), 36));
+        sb.append(Integer.toString(random.nextInt(35), 36));
       }
       return sb.toString();
     }

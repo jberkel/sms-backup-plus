@@ -234,6 +234,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * [Felix Knecht](http://github.com/dicer) - Call log backup code
   * [k9mail](http://code.google.com/p/k9mail/) IMAP library, with some modifications ([k9mail/sms-backup-plus](http://github.com/jberkel/k9mail))
   * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
+  * Jeffrey F. Cole - [NumberPicker.java][]
   * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://ncrow.deviantart.com/) for the Gmail icons
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
   * [skolima](http://github.com/skolima) - Polish translation
@@ -274,3 +275,4 @@ This application is released under the terms of the [Apache License, Version 2.0
 [imapenableshot]: https://skitch.com/jberkel/ryk1c/google-mail-settings-jan.berkel-gmail.com#lightbox
 [showimap]: https://github.com/downloads/jberkel/sms-backup-plus/show_imap.png
 [Tasker]: http://tasker.dinglisch.net/
+[NumberPicker.java]: http://www.technologichron.net/?p=42

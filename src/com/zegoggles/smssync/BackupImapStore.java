@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Arrays;
+import com.fsck.k9.mail.store.ImapStore;
 import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
 import java.io.IOException;
 
@@ -35,10 +36,10 @@ import static com.zegoggles.smssync.App.*;
 import static com.zegoggles.smssync.CursorToMessage.Headers;
 import static com.zegoggles.smssync.CursorToMessage.DataType;
 
-public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
+public class BackupImapStore extends ImapStore {
     private Context context;
 
-    public ImapStore(final Context context) throws MessagingException {
+    public BackupImapStore(final Context context) throws MessagingException {
         super(new Account(context) {
             @Override public String getStoreUri() {
               return PrefStore.getStoreUri(context);
@@ -157,6 +158,9 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
             default: return String.format("(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(), type);
            }
         }
+
+        @Override public boolean equals(Object o) { return super.equals(o); }
+        @Override public int hashCode() { return super.hashCode(); }
     }
 
     static class MessageComparator implements Comparator<Message> {

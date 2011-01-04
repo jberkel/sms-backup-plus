@@ -1,0 +1,9 @@
+<FindBugsFilter>
+  <Match>
+    <Class name="~com\.zegoggles\.smssync\.R.*"/>
+  </Match>
+
+  <Match>
+    <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+  </Match>
+</FindBugsFilter>

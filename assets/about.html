@@ -16,20 +16,45 @@
     <h3>Information</h3>
     <p>Please visit the
       <a href="https://github.com/jberkel/sms-backup-plus#readme">SMS Backup+
-        github</a> page for more information. Please make sure to check the
+        github</a> page for more information. Also make sure to check the
       <a href="https://github.com/jberkel/sms-backup-plus#faq">FAQ</a> before
       sending me an email.
     </p>
-    <p>
-      If you find this app useful consider flattering it:
-      <a onClick="window.activity.flattr()">
-        <img src="button-compact-static-100x17.png"/>
-      </a>
-    </p>
+
+    <div id="donation">
+      <p>
+        This app will always be available for free in the market,
+        but if you find it useful consider donating:
+      </p>
+
+      <table>
+        <tr>
+          <td>Via PayPal</td>
+          <td>
+            <a onClick="window.activity.paypal()">
+              <img src="PayPal_mark_50x34.gif"/>
+            </a>
+          </td>
+        </tr>
+
+        <tr>
+          <td>...or </td>
+          <td>
+            <a onClick="window.activity.flattr()">
+             <img src="button-compact-static-100x17.png"/>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="donated" style="display: none">
+      Thank you for your donation!
+    </div>
 
     <h3>Recent release history</h3>
       <ul>
-        <li>1.4.0 Call log restore</li>
+        <li>1.4.0 Call log restore, MMS/SMS threading fixes, in-app donation</li>
         <li>1.3.6,7 Restore bug fixes</li>
         <li>1.3.5 IMAP timeout fixes, Swedish translation</li>
       </ul>

@@ -27,7 +27,7 @@ public class SmsRestoreService extends ServiceBase {
     private static int sCurrentRestoredItems;
     private static int sItemsToRestoreCount;
 
-    public static int sRestoredCount, sDuplicateCount;
+    static int sRestoredCount, sDuplicateCount;
 
     private static boolean sIsRunning = false;
     private static boolean sCanceled = false;
@@ -52,7 +52,7 @@ public class SmsRestoreService extends ServiceBase {
         private Set<String> smsIds     = new HashSet<String>();
         private Set<String> callLogIds = new HashSet<String>();
         private Set<String> uids       = new HashSet<String>();
-        private ImapStore.BackupFolder smsFolder, callFolder;
+        private BackupImapStore.BackupFolder smsFolder, callFolder;
         private final Context context = SmsRestoreService.this;
         private CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
         private int max;
@@ -261,7 +261,7 @@ public class SmsRestoreService extends ServiceBase {
           }
         })) {
           if (LOCAL_LOGV) Log.v(TAG, "deleting " + f);
-          f.delete();
+          if (!f.delete()) Log.w(TAG, "error deleting " + f);
         }
     }
 

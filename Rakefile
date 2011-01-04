@@ -58,6 +58,20 @@ apk = ant.properties['out.debug.package']
   end
 end
 
+task :jdb do
+  sh "adb -d shell am start -e debug true -a android.intent.action.MAIN -n #{package}/#{package}.SmsSync"
+  port = `adb jdwp | tail -1`.strip
+  sh "adb -d forward tcp:29882 jdwp:#{port}"
+  sh "jdb -attach localhost:29882 -sourcepath src"
+end
+
+task :findbugs => :compile do
+  findbugs_home = ENV['FINDBUGS_HOME']
+  android_jar = "#{ENV['ANDROID_SDK']}/platforms/android-8/android.jar"
+  auxcp = ([android_jar] + Dir['libs/*.jar']).join(':')
+  sh "java -jar #{findbugs_home}/lib/findbugs.jar -textui -auxclasspath #{auxcp} -exclude findbugs-exclude.xml bin/classes"
+end
+
 task :check_version do
   # make sure new version is propagated everywhere
   raise "CHANGES not updated" unless IO.read('CHANGES') =~ /#{version}/

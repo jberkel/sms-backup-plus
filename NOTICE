@@ -1,5 +1,5 @@
 Android SMS Backup+
-Copyright 2010 Jan Berkel <jan.berkel@gmail.com>
+Copyright 2010, 2011 Jan Berkel <jan.berkel@gmail.com>
 
 Portions of this software were developed by Google Inc. and The Creators of k9mail.
 http://code.google.com/p/k9mail/
@@ -17,3 +17,7 @@ http://source.android.com/download
 The status icons were designed by iTweek and ncrow:
 http://itweek.deviantart.com/
 http://ncrow.deviantart.com/
+
+NumberPicker.java:
+Copyright (c) 2010, Jeffrey F. Cole
+All rights reserved.

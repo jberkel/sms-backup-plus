@@ -57,6 +57,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -95,6 +96,7 @@ public class SmsSync extends PreferenceActivity {
 
     StatusPreference statusPref;
     private Uri mAuthorizeUri = null;
+    private Donations donations = new Donations(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,8 +124,6 @@ public class SmsSync extends PreferenceActivity {
           getPreferences(MODE_PRIVATE).edit().putBoolean("droidx_warning_displayed", true).commit();
           show(Dialogs.BROKEN_DROIDX);
         }
-
-        PrefStore.upgradeOAuthUsername(this);
     }
 
     @Override
@@ -564,22 +564,6 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
-    final class JSInterface {
-      static final String THING_ID = "edabccdf3fac3cc0948200465f520378";
-      public void flattr() {
-        if (LOCAL_LOGV) Log.v(TAG, "flattr()");
-        new Handler().post(new Runnable() {
-          public void run() {
-            try {
-              com.flattr4android.sdk.FlattrSDK.displayThing(SmsSync.this, THING_ID);
-            } catch (com.flattr4android.sdk.FlattrSDKException e) {
-              Log.e(TAG, "error", e);
-            }
-          }
-        });
-      }
-    }
-
     @Override
     protected Dialog onCreateDialog(final int id) {
         String title, msg;
@@ -617,7 +601,17 @@ public class SmsSync extends PreferenceActivity {
                 View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
                 webView.getSettings().setJavaScriptEnabled(true);
-                webView.addJavascriptInterface(new JSInterface(), "activity");
+                webView.addJavascriptInterface(donations, "activity");
+                webView.setWebViewClient(new WebViewClient() {
+                   @Override public void onPageFinished(WebView v, String url) {
+                    if (donations.hasUserDonated()) {
+                       v.loadUrl("javascript:(function() {" +
+                              "  document.getElementById('donation').style.display = 'none';" +
+                              "  document.getElementById('donated').style.display  = 'block';" +
+                              "})()");
+                     }
+                   }
+                });
                 webView.loadUrl("file:///android_asset/about.html");
 
                 return new AlertDialog.Builder(this)
@@ -838,11 +832,15 @@ public class SmsSync extends PreferenceActivity {
     }
 
 
-    private void show(Dialogs d) {
-        showDialog(d.ordinal());
+    public void show(Dialogs d)   { showDialog(d.ordinal()); }
+    public void remove(Dialogs d) {
+      try {
+        removeDialog(d.ordinal());
+      } catch (IllegalArgumentException e) {
+          // ignore
+      }
     }
-
-    private void dismiss(Dialogs d) {
+    public void dismiss(Dialogs d) {
         try {
             dismissDialog(d.ordinal());
         } catch (IllegalArgumentException e) {

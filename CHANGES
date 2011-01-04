@@ -1,7 +1,9 @@
 == 1.4.0 tbd
 
-  * Cleaned up preference menu structure
   * Call log restore
+  * Cleaned up preference menu structure
+  * Fix SMS/MMS threading
+  * In-app donation support: Flattr, PayPal
 
 == 1.3.6/1.3.7 12-22-2010
 

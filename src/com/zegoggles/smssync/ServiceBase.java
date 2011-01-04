@@ -40,10 +40,10 @@ import static com.zegoggles.smssync.App.*;
 
 public abstract class ServiceBase extends Service {
     // the activity
-    public static SmsSync smsSync;
+    static SmsSync smsSync;
 
     /** Field containing a description of the last error. */
-    public static String lastError;
+    static String lastError;
 
     enum SmsSyncState {
         IDLE, CALC, LOGIN, BACKUP, RESTORE,
@@ -53,7 +53,7 @@ public abstract class ServiceBase extends Service {
         UPDATING_THREADS
     }
 
-    protected static SmsSyncState sState = SmsSyncState.IDLE;
+    static SmsSyncState sState = SmsSyncState.IDLE;
     public static SmsSyncState getState() { return sState; }
 
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
@@ -74,12 +74,12 @@ public abstract class ServiceBase extends Service {
         return null;
     }
 
-    protected ImapStore.BackupFolder getSMSBackupFolder() throws MessagingException {
-      return new ImapStore(this).getSMSBackupFolder();
+    protected BackupImapStore.BackupFolder getSMSBackupFolder() throws MessagingException {
+      return new BackupImapStore(this).getSMSBackupFolder();
     }
 
-    protected ImapStore.BackupFolder getCallLogBackupFolder() throws MessagingException {
-        return new ImapStore(this).getCallLogBackupFolder();
+    protected BackupImapStore.BackupFolder getCallLogBackupFolder() throws MessagingException {
+        return new BackupImapStore(this).getCallLogBackupFolder();
     }
 
     /**
