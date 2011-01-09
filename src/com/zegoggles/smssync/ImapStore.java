@@ -37,6 +37,11 @@ import static com.zegoggles.smssync.CursorToMessage.DataType;
 public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
     private Context context;
 
+    static {
+      // increase read timeout a bit
+      com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 3;
+    }
+
     public ImapStore(final Context context) throws MessagingException {
         super(new Account(context) {
             @Override
