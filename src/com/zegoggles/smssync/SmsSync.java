@@ -73,6 +73,8 @@ import static com.zegoggles.smssync.App.*;
  */
 public class SmsSync extends PreferenceActivity {
     private static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
+    private static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
+
     enum Dialogs {
       MISSING_CREDENTIALS,
       FIRST_SYNC,
@@ -104,7 +106,6 @@ public class SmsSync extends PreferenceActivity {
 
         this.statusPref = new StatusPreference(this);
         getPreferenceScreen().addPreference(this.statusPref);
-        setPreferenceListeners(getPreferenceManager());
 
         int version = Integer.parseInt(Build.VERSION.SDK);
         if (version < MIN_VERSION_MMS) {
@@ -112,6 +113,8 @@ public class SmsSync extends PreferenceActivity {
           backupMms.setEnabled(false);
           backupMms.setSummary(R.string.ui_backup_mms_not_supported);
         }
+
+        setPreferenceListeners(getPreferenceManager(), version >= MIN_VERSION_BACKUP);
 
         if (PrefStore.showUpgradeMessage(this)) {
           show(Dialogs.UPGRADE);
@@ -766,7 +769,17 @@ public class SmsSync extends PreferenceActivity {
     }
 
 
-    private void setPreferenceListeners(final PreferenceManager prefMgr) {
+    private void setPreferenceListeners(final PreferenceManager prefMgr, boolean backup) {
+        if (backup) {
+          prefMgr.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+              public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                BackupManagerWrapper.dataChanged(SmsSync.this);
+              }
+            }
+          );
+        }
+
         prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 

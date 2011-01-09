@@ -160,7 +160,7 @@ public class PrefStore {
     // All sensitive information is stored in a separate prefs file so we can
     // backup the rest without exposing sensitive data
     static SharedPreferences getCredentials(Context ctx) {
-      return ctx.getSharedPreferences("credentials", Context.MODE_PRIVATE);
+        return ctx.getSharedPreferences("credentials", Context.MODE_PRIVATE);
     }
 
     static long getMostRecentSyncedDate(Context ctx) {
@@ -216,7 +216,7 @@ public class PrefStore {
     }
 
     static void setImapPassword(Context ctx, String s) {
-      getCredentials(ctx).edit().putString(PREF_LOGIN_PASSWORD, s).commit();
+        getCredentials(ctx).edit().putString(PREF_LOGIN_PASSWORD, s).commit();
     }
 
     static XOAuthConsumer getOAuthConsumer(Context ctx) {
