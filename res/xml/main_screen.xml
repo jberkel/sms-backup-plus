@@ -224,6 +224,13 @@
         android:persistent="true"
         android:defaultValue="false"/>
 
+      <CheckBoxPreference android:key="acra.enable"
+        android:title="@string/pref_disable_acra"
+        android:summaryOn="@string/pref_acra_enabled"
+        android:summaryOff="@string/pref_acra_disabled"
+        android:persistent="true"
+        android:defaultValue="true"/>
+
       <PreferenceScreen
         android:title="@string/ui_settings_advanced_server_label"
         android:summary="@string/ui_settings_advanced_server_desc">

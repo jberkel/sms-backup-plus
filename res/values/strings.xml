@@ -291,4 +291,9 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Call log</string>
+
+  <string name="pref_disable_acra">Crash error reporting</string>
+  <string name="pref_acra_enabled">SMS Backup+ will automatically send an error report after force closing.</string>
+  <string name="pref_acra_disabled">Disabled</string>
+
 </resources>
