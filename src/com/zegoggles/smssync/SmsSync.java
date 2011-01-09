@@ -98,6 +98,8 @@ public class SmsSync extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         ServiceBase.smsSync = this;
 
+        PrefStore.upgradeCredentials(this);
+
         addPreferencesFromResource(R.xml.main_screen);
 
         this.statusPref = new StatusPreference(this);
@@ -495,8 +497,9 @@ public class SmsSync extends PreferenceActivity {
         switch (Dialogs.values()[id]) {
             case MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
-                msg = PrefStore.useXOAuth(this) ? getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
-                                                  getString(R.string.ui_dialog_missing_credentials_msg_plain);
+                msg = PrefStore.useXOAuth(this) ?
+                    getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
+                    getString(R.string.ui_dialog_missing_credentials_msg_plain);
                 break;
             case INVALID_IMAP_FOLDER:
                 title = getString(R.string.ui_dialog_invalid_imap_folder_title);
@@ -615,11 +618,8 @@ public class SmsSync extends PreferenceActivity {
           .setTitle(title)
           .setMessage(msg)
           .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                  try {
-                    dismissDialog(id);
-                  } catch (java.lang.IllegalArgumentException e) { /* ignore */ }
+              @Override public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
               }
           })
           .create();
@@ -821,6 +821,14 @@ public class SmsSync extends PreferenceActivity {
             }
         });
 
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD)
+                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                PrefStore.setImapPassword(SmsSync.this, newValue.toString());
+                return true;
+            }
+        });
+
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 boolean newValue = (Boolean) change;
@@ -844,8 +852,7 @@ public class SmsSync extends PreferenceActivity {
                   return true;
               } else {
                   runOnUiThread(new Runnable() {
-                      @Override
-                      public void run() {
+                      @Override public void run() {
                           show(Dialogs.INVALID_IMAP_FOLDER);
                       }
                   });
@@ -864,8 +871,7 @@ public class SmsSync extends PreferenceActivity {
                 return true;
               } else {
                   runOnUiThread(new Runnable() {
-                      @Override
-                      public void run() {
+                      @Override public void run() {
                           show(Dialogs.INVALID_IMAP_FOLDER);
                       }
                   });

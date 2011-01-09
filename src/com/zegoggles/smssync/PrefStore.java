@@ -28,6 +28,7 @@ import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.App.*;
 
 public class PrefStore {
+
     /**
      * Preference key containing the maximum date of messages that were
      * successfully synced.
@@ -151,8 +152,15 @@ public class PrefStore {
     enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING }
     public enum AddressStyle { NAME, NAME_AND_NUMBER, NUMBER }
 
+
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
+    }
+
+    // All sensitive information is stored in a separate prefs file so we can
+    // backup the rest without exposing sensitive data
+    static SharedPreferences getCredentials(Context ctx) {
+      return ctx.getSharedPreferences("credentials", Context.MODE_PRIVATE);
     }
 
     static long getMostRecentSyncedDate(Context ctx) {
@@ -200,11 +208,15 @@ public class PrefStore {
     }
 
     static void setImapUsername(Context ctx, String s) {
-       getSharedPreferences(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
+        getSharedPreferences(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
     }
 
     static String getImapPassword(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_LOGIN_PASSWORD, null);
+        return getCredentials(ctx).getString(PREF_LOGIN_PASSWORD, null);
+    }
+
+    static void setImapPassword(Context ctx, String s) {
+      getCredentials(ctx).edit().putString(PREF_LOGIN_PASSWORD, s).commit();
     }
 
     static XOAuthConsumer getOAuthConsumer(Context ctx) {
@@ -215,11 +227,11 @@ public class PrefStore {
     }
 
     static String getOauthToken(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_TOKEN, null);
+        return getCredentials(ctx).getString(PREF_OAUTH_TOKEN, null);
     }
 
     static String getOauthTokenSecret(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_TOKEN_SECRET, null);
+        return getCredentials(ctx).getString(PREF_OAUTH_TOKEN_SECRET, null);
     }
 
     static boolean hasOauthTokens(Context ctx) {
@@ -236,7 +248,7 @@ public class PrefStore {
     }
 
     static void setOauthTokens(Context ctx, String token, String secret) {
-      getSharedPreferences(ctx).edit()
+      getCredentials(ctx).edit()
         .putString(PREF_OAUTH_TOKEN, token)
         .putString(PREF_OAUTH_TOKEN_SECRET, secret)
         .commit();
@@ -457,6 +469,9 @@ public class PrefStore {
     static void clearOauthData(Context ctx) {
         getSharedPreferences(ctx).edit()
           .remove(PREF_OAUTH_USER)
+          .commit();
+
+        getCredentials(ctx).edit()
           .remove(PREF_OAUTH_TOKEN)
           .remove(PREF_OAUTH_TOKEN_SECRET)
           .commit();
@@ -545,7 +560,42 @@ public class PrefStore {
       }
     }
 
-    static void upgradeOAuthUsername(Context ctx) {
+    // move credentials from default shared prefs to new separate prefs
+    static boolean upgradeCredentials(Context ctx) {
+      final String flag = "upgraded_credentials";
+      SharedPreferences prefs = getSharedPreferences(ctx);
+
+      boolean upgraded = prefs.getBoolean(flag, false);
+      if (!upgraded) {
+        Log.d(TAG, "Upgrading credentials");
+
+        SharedPreferences creds = getCredentials(ctx);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        SharedPreferences.Editor credsEditor = creds.edit();
+
+        for (String field : new String[] { PREF_OAUTH_TOKEN,
+                                           PREF_OAUTH_TOKEN_SECRET,
+                                           PREF_LOGIN_PASSWORD }) {
+
+          if (prefs.getString(field, null) != null &&
+              creds.getString(field, null) == null) {
+              if (LOCAL_LOGV) Log.v(TAG, "Moving credential " + field);
+              credsEditor.putString(field, prefs.getString(field, null));
+              prefsEditor.remove(field);
+          } else if (LOCAL_LOGV) Log.v(TAG, "Skipping field " + field);
+        }
+        boolean success = false;
+        if (credsEditor.commit()) {
+          prefsEditor.putBoolean(flag, true);
+          success = prefsEditor.commit();
+        }
+        return success;
+      } else {
+        return false;
+      }
+    }
+
+    static void upgradeOAuthUsername(Context ctx) {;
       if (useXOAuth(ctx) && getSharedPreferences(ctx).getString(PREF_OAUTH_USER, null) == null &&
                             getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null) != null) {
         setOauthUsername(ctx, getImapUsername(ctx));

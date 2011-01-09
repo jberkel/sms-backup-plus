@@ -212,7 +212,7 @@
                 android:singleLine="true"
                 android:password="true"
                 android:dialogMessage="@string/ui_password_dialog_msg"
-                android:persistent="true"/>
+                android:persistent="false"/>
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceScreen>
