@@ -11,7 +11,7 @@ import android.util.Log;
 
 import static com.zegoggles.smssync.App.*;
 
-public class BackupAgent extends BackupAgentHelper {
+public class PreferenceBackupAgent extends BackupAgentHelper {
     // A key to uniquely identify the set of backup data
     static final String PREFS_BACKUP_KEY = "prefs";
 
@@ -25,14 +25,14 @@ public class BackupAgent extends BackupAgentHelper {
     @Override public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data,
                                         ParcelFileDescriptor newState) throws IOException {
 
-      Log.d(TAG, "onBackup()");
+      if (LOCAL_LOGV) Log.v(TAG, "onBackup()");
       super.onBackup(oldState, data, newState);
     }
 
 
     @Override public void onRestore(BackupDataInput data, int appVersionCode,
                                     ParcelFileDescriptor newState) throws IOException {
-      Log.d(TAG, "onRestore()");
+      if (LOCAL_LOGV) Log.v(TAG, "onRestore()");
       super.onRestore(data, appVersionCode, newState);
     }
 }
