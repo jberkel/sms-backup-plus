@@ -283,5 +283,6 @@
               android:dialogMessage="@string/ui_password_dialog_msg"
               android:persistent="false"/>
            </PreferenceCategory>
+        </PreferenceScreen>
     </PreferenceScreen>
 </PreferenceScreen>

@@ -3,6 +3,9 @@
   * Call log restore
   * Cleaned up preference menu structure
   * Fix SMS/MMS threading
+  * Fix IO error during restore
+  * Automatic crash reporting (using ACRA)
+  * Android 2.2 Data Backup support (for preferences)
   * In-app donation support: Flattr, PayPal
 
 == 1.3.6/1.3.7 12-22-2010
