@@ -22,6 +22,10 @@ import com.fsck.k9.K9;
 
 import android.util.Config;
 
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
+
+@ReportsCrashes(formKey = "dFZOM3JNWng5bmZYLXNCWFJ0b1hPdHc6MQ")
 public class App extends Application {
     public static final boolean DEBUG = true;
     public static final boolean LOCAL_LOGV = App.DEBUG ? Config.LOGD : Config.LOGV;
@@ -31,6 +35,7 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+        ACRA.init(this);
         super.onCreate();
         K9.app = this;
         K9.DEBUG = DEBUG;
