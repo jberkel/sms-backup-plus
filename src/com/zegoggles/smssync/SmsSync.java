@@ -77,6 +77,8 @@ import static com.zegoggles.smssync.App.*;
  */
 public class SmsSync extends PreferenceActivity {
     private static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
+    private static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
+
     enum Dialogs {
       MISSING_CREDENTIALS,
       FIRST_SYNC,
@@ -103,11 +105,12 @@ public class SmsSync extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         ServiceBase.smsSync = this;
 
+        PrefStore.upgradeCredentials(this);
+
         addPreferencesFromResource(R.xml.main_screen);
 
         this.statusPref = new StatusPreference(this);
         getPreferenceScreen().addPreference(this.statusPref);
-        setPreferenceListeners(getPreferenceManager());
 
         int version = Integer.parseInt(Build.VERSION.SDK);
         if (version < MIN_VERSION_MMS) {
@@ -117,6 +120,8 @@ public class SmsSync extends PreferenceActivity {
         }
 
         if (PrefStore.showUpgradeMessage(this)) show(Dialogs.UPGRADE);
+        setPreferenceListeners(getPreferenceManager(), version >= MIN_VERSION_BACKUP);
+
         if ("DROIDX".equals(Build.MODEL) &&
             Integer.parseInt(Build.VERSION.SDK) == Build.VERSION_CODES.FROYO &&
             !getPreferences(MODE_PRIVATE).getBoolean("droidx_warning_displayed", false)) {
@@ -571,8 +576,9 @@ public class SmsSync extends PreferenceActivity {
         switch (Dialogs.values()[id]) {
             case MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
-                msg = PrefStore.useXOAuth(this) ? getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
-                                                  getString(R.string.ui_dialog_missing_credentials_msg_plain);
+                msg = PrefStore.useXOAuth(this) ?
+                    getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
+                    getString(R.string.ui_dialog_missing_credentials_msg_plain);
                 break;
             case INVALID_IMAP_FOLDER:
                 title = getString(R.string.ui_dialog_invalid_imap_folder_title);
@@ -702,11 +708,8 @@ public class SmsSync extends PreferenceActivity {
           .setTitle(title)
           .setMessage(msg)
           .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                  try {
-                    dismissDialog(id);
-                  } catch (java.lang.IllegalArgumentException e) { /* ignore */ }
+              @Override public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
               }
           })
           .create();
@@ -852,7 +855,17 @@ public class SmsSync extends PreferenceActivity {
       getPreferenceManager().findPreference("imap_settings").setEnabled(enabled);
     }
 
-    private void setPreferenceListeners(final PreferenceManager prefMgr) {
+    private void setPreferenceListeners(final PreferenceManager prefMgr, boolean backup) {
+        if (backup) {
+          prefMgr.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+              public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                BackupManagerWrapper.dataChanged(SmsSync.this);
+              }
+            }
+          );
+        }
+
         prefMgr.findPreference(PrefStore.PREF_ENABLE_AUTO_SYNC)
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -906,6 +919,14 @@ public class SmsSync extends PreferenceActivity {
             }
         });
 
+        prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD)
+                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                PrefStore.setImapPassword(SmsSync.this, newValue.toString());
+                return true;
+            }
+        });
+
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 boolean newValue = (Boolean) change;
@@ -929,8 +950,7 @@ public class SmsSync extends PreferenceActivity {
                   return true;
               } else {
                   runOnUiThread(new Runnable() {
-                      @Override
-                      public void run() {
+                      @Override public void run() {
                           show(Dialogs.INVALID_IMAP_FOLDER);
                       }
                   });
