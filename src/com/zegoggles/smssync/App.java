@@ -27,7 +27,7 @@ import org.acra.annotation.ReportsCrashes;
 
 @ReportsCrashes(formKey = "dFZOM3JNWng5bmZYLXNCWFJ0b1hPdHc6MQ")
 public class App extends Application {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static final boolean LOCAL_LOGV = App.DEBUG ? Config.LOGD : Config.LOGV;
     public static final String TAG = "SmsBackup+";
 
