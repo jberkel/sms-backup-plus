@@ -170,7 +170,10 @@ final class Donations implements PayPalResultDelegate, java.io.Serializable {
     if (LOCAL_LOGV) Log.v(TAG, "showPaypal()");
     mContext.runOnUiThread(new Runnable() {
       public void run() {
-        if (mDonateDialog != null) mDonateDialog.cancel();
+        if (mDonateDialog != null) {
+            mDonateDialog.cancel();
+            mDonateDialog = null;
+        }
 
         final BigDecimal amount = getDonationAmount();
         final PayPalPayment payment = new PayPalPayment();
