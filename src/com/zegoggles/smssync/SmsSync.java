@@ -122,7 +122,8 @@ public class SmsSync extends PreferenceActivity {
         if (PrefStore.showUpgradeMessage(this)) show(Dialogs.UPGRADE);
         setPreferenceListeners(getPreferenceManager(), version >= MIN_VERSION_BACKUP);
 
-        if ("DROIDX".equals(Build.MODEL) &&
+        if ("DROIDX".equals(Build.MODEL) ||
+            "DROID2".equals(Build.MODEL) &&
             Integer.parseInt(Build.VERSION.SDK) == Build.VERSION_CODES.FROYO &&
             !getPreferences(MODE_PRIVATE).getBoolean("droidx_warning_displayed", false)) {
 
