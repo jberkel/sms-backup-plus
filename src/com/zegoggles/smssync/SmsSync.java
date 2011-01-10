@@ -190,7 +190,7 @@ public class SmsSync extends PreferenceActivity {
       findPreference("backup_sms").setSummary(
         statusPref.getLastSyncText(PrefStore.getMaxSyncedDateSms(this)));
       findPreference("backup_mms").setSummary(
-        statusPref.getLastSyncText(PrefStore.getMaxSyncedDateMms(this)));
+        statusPref.getLastSyncText(PrefStore.getMaxSyncedDateMms(this) * 1000));
       findPreference("backup_calllog").setSummary(
         statusPref.getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
     }
