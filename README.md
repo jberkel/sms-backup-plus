@@ -192,6 +192,16 @@ In Gmail settings, set conversation view to `off`
 
 Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
+### <a name="faq-permissions">Why does it need so many permissions?</a>
+
+  * Read contacts - Needed to map phone numbers to names and email addresses
+  * Your messages (Read / write SMS) - Needed for backup+restore
+  * Prevent phone from sleeping - needed to keep network active during a backup
+  * Modify calendar events - neeed for the call log backup to GCal
+  * Send email to guests - this refers to calendar invitations
+  * Storage (modify/delete SD card contents) - this is needed for caching
+  * Your accounts (discover known accounts) - currently not used and will be removed in a future version
+
 ![Screenshot][showimap]
 
 ### <a name="faq-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
