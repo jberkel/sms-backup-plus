@@ -195,10 +195,10 @@ Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 ### <a name="faq-permissions">Why does it need so many permissions?</a>
 
   * Read contacts - Needed to map phone numbers to names and email addresses
-  * Your messages (Read / write SMS) - Needed for backup+restore
+  * Your messages (read / write SMS) - Needed for backup+restore
   * Prevent phone from sleeping - needed to keep network active during a backup
-  * Modify calendar events - neeed for the call log backup to GCal
-  * Send email to guests - this refers to calendar invitations
+  * Modify calendar events - needed for the call log backup to GCal
+  * Send email to guests - this refers to calendar invitations (which are not created by the app)
   * Storage (modify/delete SD card contents) - this is needed for caching
   * Your accounts (discover known accounts) - currently not used and will be removed in a future version
 
