@@ -10,8 +10,8 @@
 
    <com.zegoggles.smssync.NumberPicker
         android:id="@+id/amount"
-        smssync:initialValue="1.0"
-        smssync:minimumValue="1.0"
+        smssync:initialValue="1.5"
+        smssync:minimumValue="0.5"
         smssync:increment="0.5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
