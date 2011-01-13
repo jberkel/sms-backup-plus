@@ -291,7 +291,9 @@ public class PrefStore {
     }
 
     static boolean isMmsBackupEnabled(Context ctx) {
-      return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
+       final int version = Integer.parseInt(android.os.Build.VERSION.SDK);
+       return version < SmsSync.MIN_VERSION_MMS ? false :
+              getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
     static boolean isCallLogBackupEnabled(Context ctx) {

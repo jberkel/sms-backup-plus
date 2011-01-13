@@ -76,8 +76,8 @@ import static com.zegoggles.smssync.App.*;
  * providing controls to configure it.
  */
 public class SmsSync extends PreferenceActivity {
-    private static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
-    private static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
+    public static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
+    public static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
 
     enum Dialogs {
       MISSING_CREDENTIALS,
