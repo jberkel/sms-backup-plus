@@ -219,6 +219,12 @@ public class CursorToMessage {
             values.put(CallLog.Calls.DATE, getHeader(message, Headers.DATE));
             values.put(CallLog.Calls.DURATION, Long.valueOf(getHeader(message, Headers.DURATION)));
             values.put(CallLog.Calls.NEW, Integer.valueOf(0));
+
+            PersonRecord record = lookupPerson(getHeader(message, Headers.ADDRESS));
+            if (!record.unknown) {
+              values.put(CallLog.Calls.CACHED_NAME, record.name);
+            }
+
             break;
           default: throw new MessagingException("don't know how to restore " + getDataType(message));
         }
