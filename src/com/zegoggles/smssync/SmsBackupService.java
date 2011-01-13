@@ -277,30 +277,34 @@ public class SmsBackupService extends ServiceBase {
       private void syncCalendar(CursorToMessage converter, ConversionResult result) {
         if (result.type == DataType.CALLLOG) {
           for (Map<String, String> m : result.mapList) {
-            final int duration = Integer.parseInt(m.get(CallLog.Calls.DURATION));
-            final int callType = Integer.parseInt(m.get(CallLog.Calls.TYPE));
-            final String number= m.get(CallLog.Calls.NUMBER);
-            final Date then    = new Date(Long.valueOf(m.get(CallLog.Calls.DATE)));
-            final CursorToMessage.PersonRecord record = converter.lookupPerson(number);
+            try {
+              final int duration = Integer.parseInt(m.get(CallLog.Calls.DURATION));
+              final int callType = Integer.parseInt(m.get(CallLog.Calls.TYPE));
+              final String number= m.get(CallLog.Calls.NUMBER);
+              final Date then    = new Date(Long.valueOf(m.get(CallLog.Calls.DATE)));
+              final CursorToMessage.PersonRecord record = converter.lookupPerson(number);
 
-            StringBuilder description = new StringBuilder();
-            description.append(getString(R.string.call_number_field, record.getNumber()))
-                       .append(" (")
-                       .append(converter.callTypeString(callType, null))
-                       .append(" )")
-                       .append("\n");
+              StringBuilder description = new StringBuilder();
+              description.append(getString(R.string.call_number_field, record.getNumber()))
+                         .append(" (")
+                         .append(converter.callTypeString(callType, null))
+                         .append(" )")
+                         .append("\n");
 
-            if (callType != CallLog.Calls.MISSED_TYPE) {
-              description.append(getString(R.string.call_duration_field,
-                                           converter.formattedDuration(duration)));
+              if (callType != CallLog.Calls.MISSED_TYPE) {
+                description.append(getString(R.string.call_duration_field,
+                                             converter.formattedDuration(duration)));
+              }
+
+              // insert into calendar
+              CalendarApi.addEntry(context,
+                                   PrefStore.getCallLogCalendarId(context),
+                                   then, duration,
+                                   converter.callTypeString(callType, record.getName()),
+                                   description.toString());
+            } catch (NumberFormatException e) {
+              Log.w(TAG, "error", e);
             }
-
-            // insert into calendar
-            CalendarApi.addEntry(context,
-                                 PrefStore.getCallLogCalendarId(context),
-                                 then, duration,
-                                 converter.callTypeString(callType, record.getName()),
-                                 description.toString());
           }
         }
       }
