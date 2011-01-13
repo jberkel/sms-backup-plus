@@ -124,6 +124,7 @@
 
   <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
+
   <string name="ui_mark_as_read_restore_label">标记为已读 (短信)</string>
   <string name="ui_mark_as_read_restore_desc">是否将还原的短信标记为已读。</string>
 
@@ -132,8 +133,9 @@
 
   <string name="ui_enable_auto_sync_label">自动备份</string>
   <string name="ui_enable_auto_sync_desc">是否自动备份新短信。</string>
+  <string name="ui_enable_auto_sync_summary">自动备份 %1$s。如果此应用安装在 SD 卡上时，自动备份有可能无法可靠进行。</string>
 
-  <string name="auto_backup_settings">自动备份</string>
+  <string name="auto_backup_settings">备份计划</string>
   <string name="ui_auto_backup_schedule_label">定时备份计划</string>
   <string name="ui_auto_backup_schedule_desc">何时备份短信。</string>
 
@@ -221,6 +223,7 @@
   <string name="calllog_settings">通话记录设置</string>
 
   <string name="sms_with_field">与 %1$s 的短信记录</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">与 %1$s 的彩信记录</string>
   <string name="call_with_field">与 %1$s 的通话记录</string>
 
@@ -254,4 +257,50 @@
   <string name="tls_required">TLS (必需)</string>
   <string name="tls_optional">TLS (可选)</string>
   <string name="none">无</string>
+
+  <string name="ui_third_party_integration_label">第三方工具整合</string>
+  <string name="ui_third_party_integration_desc">允许其他应用利用广播 Intent 机制触发备份。</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">备份设置</string>
+  <!-- <string name="ui_backup_settings_desc">备份设置</string> -->
+
+  <string name="ui_backup_calllog_settings_label">通话记录设置</string>
+  <!-- <string name="ui_backup_calllog_settings_desc">通话记录设置</string> -->
+
+  <string name="auto_backup_settings">自动备份设置</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label">还原设置</string>
+  <!-- <string name="ui_restore_settings_desc">还原设置</string> -->
+
+  <string name="ui_backup_sms_label">备份短信</string>
+  <string name="ui_backup_sms_desc">启动短信备份</string>
+
+  <string name="ui_restore_sms_label">备份彩信</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">(功能暂不可用)</string>
+
+  <string name="ui_restore_mms_label">还原彩信</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label">还原通话记录</string>
+  <string name="ui_restore_calllog_desc"/>
+
+  <string name="sms">短信</string>
+  <string name="mms">彩信</string>
+  <string name="calllog">通话记录</string>
+
+  <string name="ui_dialog_donate_prepare_message">正在准备捐助，请稍候...</string>
+  <string name="ui_dialog_donate_message">请指定金额及币种:</string>
+  <string name="ui_donation_success_message">捐助成功，谢谢您！</string>
+  <string name="ui_donation_failure_message">捐助失败: %1$s</string>
+  <string name="ui_donation_canceled_message">已取消捐助</string>
+  <string name="ui_donation_prompt_currency">币种</string>
+  <string name="ui_donation_oh_noez_no_network">抱歉，您需要连接到网络才能进行捐助。</string>
+
+  <string name="pref_disable_acra">崩溃错误报告</string>
+  <string name="pref_acra_enabled">SMS Backup+ 将在被强行关闭后自动发送一份错误报告。</string>
+  <string name="pref_acra_disabled">禁用</string>
 </resources>
