@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Context;
 import android.app.Activity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -80,33 +82,49 @@ final class Donations implements PayPalResultDelegate, java.io.Serializable {
   public void paypal() {
     if (LOCAL_LOGV) Log.v(TAG, "paypal()");
 
-    if (PayPal.getInstance() == null || mDonateDialog == null) {
-      final Dialog progress = getProgressDialog();
+    NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
+    if (active != null && active.isConnectedOrConnecting()) {
+      if (PayPal.getInstance() == null || mDonateDialog == null) {
+        final Dialog progress = getProgressDialog();
 
-      mContext.runOnUiThread(new Runnable() {
-        public void run() { progress.show(); }
-      });
+        mContext.runOnUiThread(new Runnable() {
+          public void run() { progress.show(); }
+        });
 
-      new Thread() {
-        public void run() {
-          initLibrary();
+        new Thread() {
+          public void run() {
+            initLibrary();
 
-          mContext.runOnUiThread(new Runnable() {
-            public void run() {
-              progress.dismiss();
-              mDonateDialog = getDonateDialog();
-              mDonateDialog.show();
-            }
-          });
-        }
-      }.start();
+            mContext.runOnUiThread(new Runnable() {
+              public void run() {
+                progress.dismiss();
+                mDonateDialog = getDonateDialog();
+                mDonateDialog.show();
+              }
+            });
+          }
+        }.start();
+      } else {
+        if (LOCAL_LOGV) Log.v(TAG, "PayPal already initialised");
+
+        mContext.runOnUiThread(new Runnable() {
+          public void run() { mDonateDialog.show(); }
+        });
+      }
     } else {
-      if (LOCAL_LOGV) Log.v(TAG, "PayPal already initialised");
-
+      // oh noez, no network
       mContext.runOnUiThread(new Runnable() {
-        public void run() { mDonateDialog.show(); }
+        public void run() {
+          Toast.makeText(mContext,
+                   mContext.getString(R.string.ui_donation_oh_noez_no_network),
+                   Toast.LENGTH_LONG).show();
+        }
       });
     }
+  }
+
+  private ConnectivityManager getConnectivityManager() {
+    return (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
   }
 
   private Dialog getProgressDialog() {
