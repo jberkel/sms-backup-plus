@@ -28,10 +28,10 @@ Tested with Android 1.5 - 2.3.
 
 SMS Backup+ is available for free in the market, there will never be a pro / paid version.
 
-[![][FlattrButton]][FlattrLink] But if you like the app you can flattr it ([flattr it ??][WhatisFlattr]).
-There is also the possibility to donate via PayPal from within the application
-(Menu - About, then hit the PayPal button). Some people make money with my work by
-putting it as a paid app on the market, so I really appreciate your support.
+But if you like the app you can flattr it ([flattr it ??][WhatisFlattr]).
+[![][FlattrButton]][FlattrLink]
+
+You can also donate via PayPal from within the application (Menu - About, then hit the PayPal button).
 
 ## <a name="usage">Usage</a>
 
