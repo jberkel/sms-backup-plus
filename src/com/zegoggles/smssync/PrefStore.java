@@ -530,20 +530,24 @@ public class PrefStore {
         return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress(ctx));
     }
 
+    static String encode(String s) {
+      return s == null ? "" : URLEncoder.encode(s);
+    }
+
     static String getStoreUri(Context ctx) {
         if (useXOAuth(ctx)) {
           XOAuthConsumer consumer = getOAuthConsumer(ctx);
 
           return String.format(Consts.IMAP_URI,
                DEFAULT_SERVER_PROTOCOL,
-                "xoauth:" + URLEncoder.encode(consumer.getUsername()),
-               URLEncoder.encode(consumer.generateXOAuthString()),
+                "xoauth:" + encode(consumer.getUsername()),
+               encode(consumer.generateXOAuthString()),
                getServerAddress(ctx));
         } else {
             return String.format(Consts.IMAP_URI,
                getServerProtocol(ctx),
-               URLEncoder.encode(getImapUsername(ctx)),
-               URLEncoder.encode(getImapPassword(ctx)).replace("+", "%20"),
+               encode(getImapUsername(ctx)),
+               encode(getImapPassword(ctx)).replace("+", "%20"),
                getServerAddress(ctx));
         }
     }
