@@ -41,7 +41,7 @@ public class BackupImapStore extends ImapStore {
 
     static {
       // increase read timeout a bit
-      com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 3;
+      com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 5;
     }
 
     public BackupImapStore(final Context context) throws MessagingException {
