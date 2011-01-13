@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Random;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -33,6 +34,7 @@ import java.io.OutputStreamWriter;
 import java.security.MessageDigest;
 
 import android.content.Context;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -68,6 +70,7 @@ import com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.App.*;
 
 public class CursorToMessage {
+
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
     public static final Uri ECLAIR_CONTENT_URI =
       Uri.parse("content://com.android.contacts/data/emails");
@@ -97,6 +100,7 @@ public class CursorToMessage {
 
     private final Context mContext;
     private final Address mUserAddress;
+    private final ThreadHelper threadHelper = new ThreadHelper();
 
     // simple LRU cache
     private final Map<String, PersonRecord> mPeopleCache =
@@ -172,7 +176,7 @@ public class CursorToMessage {
             switch (dataType) {
               case SMS: m = messageFromMapSms(msgMap); break;
               case MMS: m = messageFromMapMms(msgMap); break;
-              case CALLLOG: m = messageFromMapCalllog(msgMap); break;
+              case CALLLOG: m = messageFromMapCallLog(msgMap); break;
             }
             if (m != null) {
               result.messageList.add(m);
@@ -181,6 +185,115 @@ public class CursorToMessage {
         } while (result.messageList.size() < maxEntries && cursor.moveToNext());
 
        return result;
+    }
+
+    public ContentValues messageToContentValues(final Message message)
+            throws IOException, MessagingException {
+        if (message == null) throw new MessagingException("message is null");
+
+        final ContentValues values = new ContentValues();
+        switch (getDataType(message)) {
+          case SMS:
+            if (message.getBody() == null) throw new MessagingException("body is null");
+
+            InputStream is = message.getBody().getInputStream();
+            if (is == null) {
+              throw new MessagingException("body.getInputStream() is null for " + message.getBody());
+            }
+            final String body = IOUtils.toString(is);
+            final String address = getHeader(message, Headers.ADDRESS);
+            values.put(SmsConsts.BODY, body);
+            values.put(SmsConsts.ADDRESS, address);
+            values.put(SmsConsts.TYPE, getHeader(message, Headers.TYPE));
+            values.put(SmsConsts.PROTOCOL, getHeader(message, Headers.PROTOCOL));
+            values.put(SmsConsts.SERVICE_CENTER, getHeader(message, Headers.SERVICE_CENTER));
+            values.put(SmsConsts.DATE, getHeader(message, Headers.DATE));
+            values.put(SmsConsts.STATUS, getHeader(message, Headers.STATUS));
+            values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(mContext, address));
+            values.put(SmsConsts.READ,
+              PrefStore.getMarkAsReadOnRestore(mContext) ? "1" : getHeader(message, Headers.READ));
+            break;
+          case CALLLOG:
+            values.put(CallLog.Calls.NUMBER, getHeader(message, Headers.ADDRESS));
+            values.put(CallLog.Calls.TYPE, Integer.valueOf(getHeader(message, Headers.TYPE)));
+            values.put(CallLog.Calls.DATE, getHeader(message, Headers.DATE));
+            values.put(CallLog.Calls.DURATION, Long.valueOf(getHeader(message, Headers.DURATION)));
+            values.put(CallLog.Calls.NEW, Integer.valueOf(0));
+            break;
+          default: throw new MessagingException("don't know how to restore " + getDataType(message));
+        }
+
+        return values;
+    }
+
+    public DataType getDataType(Message message) {
+        final String dataTypeHeader = getHeader(message, Headers.DATATYPE);
+        final String typeHeader = getHeader(message, Headers.TYPE);
+        //we have two possible header sets here
+        //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
+        //         contains either the string "mms" or an integer which is the internal type of the sms
+        //current: there IS a Headers.DATATYPE containing a string representation of CursorToMessage.DataType
+        //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
+        //The current header set was introduced in version 1.2.00
+        if (dataTypeHeader == null) {
+           return MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
+        } else {
+           try {
+              return DataType.valueOf(dataTypeHeader.toUpperCase());
+            } catch (IllegalArgumentException e) {
+              return DataType.SMS; // whateva
+            }
+        }
+    }
+
+    public static String formattedDuration(int duration) {
+        return String.format("%02d:%02d:%02d",
+              duration / 3600,
+              duration % 3600 / 60,
+              duration % 3600 % 60);
+    }
+
+    public String callTypeString(int callType, String name) {
+        if (name == null) {
+          return mContext.getString(
+                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing :
+                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming :
+                    R.string.call_missed);
+        } else {
+          return mContext.getString(
+                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing_text :
+                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming_text :
+                    R.string.call_missed_text,
+                    name);
+        }
+    }
+
+    /* Look up a person */
+    public PersonRecord lookupPerson(final String address) {
+        if (!mPeopleCache.containsKey(address)) {
+            Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
+                                                 Phones.CONTENT_FILTER_URL, Uri.encode(address));
+
+            Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
+            final PersonRecord record = new PersonRecord();
+            if (c != null && c.moveToFirst()) {
+                record._id    = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
+                record.name   = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
+                record.number = sanitize(NEW_CONTACT_API ? address :
+                                                  c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
+                record.email  = getPrimaryEmail(record._id, record.number);
+            } else {
+                if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
+
+                record.number = sanitize(address);
+                record.email  = getUnknownEmail(address);
+                record.unknown = true;
+            }
+            mPeopleCache.put(address, record);
+
+            if (c != null) c.close();
+        }
+        return mPeopleCache.get(address);
     }
 
     private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
@@ -235,12 +348,12 @@ public class CursorToMessage {
         return msg;
     }
 
-    private Message messageFromMapCalllog(Map<String, String> msgMap) throws MessagingException {
+    private Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
 
         if (address == null || address.trim().length() == 0 ||
-            !PrefStore.isCalllogTypeEnabled(mContext, callType)) {
+            !PrefStore.isCallLogTypeEnabled(mContext, callType)) {
 
           if (LOCAL_LOGV) Log.v(TAG, "ignoring call log entry: " + msgMap);
           return null;
@@ -331,32 +444,10 @@ public class CursorToMessage {
               mContext.getString(R.string.mms_with_field, record.getName());
           case CALLLOG:
             return mPrefix ?
-              String.format("[%s] %s", PrefStore.getCalllogFolder(mContext), record.getName()) :
+              String.format("[%s] %s", PrefStore.getCallLogFolder(mContext), record.getName()) :
               mContext.getString(R.string.call_with_field, record.getName());
           default: throw new RuntimeException("unknown type:" + type);
        }
-    }
-
-    public static String formattedDuration(int duration) {
-        return String.format("%02d:%02d:%02d",
-              duration / 3600,
-              duration % 3600 / 60,
-              duration % 3600 % 60);
-    }
-
-    public String callTypeString(int callType, String name) {
-        if (name == null) {
-          return mContext.getString(
-                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing :
-                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming :
-                    R.string.call_missed);
-        } else {
-          return mContext.getString(
-                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing_text :
-                    callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming_text :
-                    R.string.call_missed_text,
-                    name);
-        }
     }
 
     private Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
@@ -451,7 +542,7 @@ public class CursorToMessage {
         Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null);
 
         // _id, mid, seq, ct, name, chset, cd, fn, cid, cl, ctt_s, ctt_t, _data, text
-        while (curPart.moveToNext()) {
+        while (curPart != null && curPart.moveToNext()) {
           final String id = curPart.getString(curPart.getColumnIndex("_id"));
           final String contentType = curPart.getString(curPart.getColumnIndex("ct"));
           final String fileName = curPart.getString(curPart.getColumnIndex("cl"));
@@ -505,34 +596,17 @@ public class CursorToMessage {
         throw new RuntimeException(e);
       }
     }
-
-    /* Look up a person */
-    public PersonRecord lookupPerson(final String address) {
-        if (!mPeopleCache.containsKey(address)) {
-            Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
-                                                 Phones.CONTENT_FILTER_URL, Uri.encode(address));
-
-            Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
-            final PersonRecord record = new PersonRecord();
-            if (c != null && c.moveToFirst()) {
-                record._id    = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
-                record.name   = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
-                record.number = sanitize(NEW_CONTACT_API ? address :
-                                                  c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
-                record.email  = getPrimaryEmail(record._id, record.number);
-            } else {
-                if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
-
-                record.number = sanitize(address);
-                record.email  = getUnknownEmail(address);
-                record.unknown = true;
+    private static String getHeader(Message msg, String header) {
+        try {
+            String[] hdrs = msg.getHeader(header);
+            if (hdrs != null && hdrs.length > 0) {
+                return hdrs[0];
             }
-            mPeopleCache.put(address, record);
-
-            if (c != null) c.close();
+        } catch (MessagingException e) {
         }
-        return mPeopleCache.get(address);
+        return null;
     }
+
 
     private String getPrimaryEmail(final long personId, final String number) {
         if (personId <= 0) {
@@ -595,18 +669,22 @@ public class CursorToMessage {
 
     /** Returns whether the given e-mail address is a Gmail address or not. */
     private static boolean isGmailAddress(String email) {
-        return email.endsWith("gmail.com") || email.endsWith("googlemail.com");
+        if (email == null) return false;
+        return email.toLowerCase().endsWith("gmail.com") ||
+               email.toLowerCase().endsWith("googlemail.com");
     }
 
+
     private static String generateReferenceValue(String email) {
-      StringBuilder sb = new StringBuilder();
+      final StringBuilder sb = new StringBuilder();
+      final Random random = new Random();
       for (int i = 0; i < 24; i++) {
-        sb.append(Integer.toString((int)(Math.random() * 35), 36));
+        sb.append(Integer.toString(random.nextInt(35), 36));
       }
       return sb.toString();
     }
 
-    public class ConversionResult {
+    public static class ConversionResult {
         public final DataType type;
         public final List<Message> messageList = new ArrayList<Message>();
         public final List<Map<String,String>> mapList = new ArrayList<Map<String,String>>();
@@ -664,16 +742,14 @@ public class CursorToMessage {
         private Context mContext;
         private Uri mUri;
 
-        public MmsAttachmentBody(Uri uri, Context context)
-        {
+        public MmsAttachmentBody(Uri uri, Context context) {
             mContext = context;
             mUri = uri;
         }
 
         public InputStream getInputStream() throws MessagingException
         {
-            try
-            {
+            try {
                 return mContext.getContentResolver().openInputStream(mUri);
             }
             catch (FileNotFoundException fnfe)
@@ -686,16 +762,14 @@ public class CursorToMessage {
             }
         }
 
-        public void writeTo(OutputStream out) throws IOException, MessagingException
-        {
+        public void writeTo(OutputStream out) throws IOException, MessagingException {
             InputStream in = getInputStream();
             Base64OutputStream base64Out = new Base64OutputStream(out);
             IOUtils.copy(in, base64Out);
             base64Out.close();
         }
 
-        public Uri getContentUri()
-        {
+        public Uri getContentUri() {
             return mUri;
         }
     }

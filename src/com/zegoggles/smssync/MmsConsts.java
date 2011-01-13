@@ -15,29 +15,31 @@
  */
 package com.zegoggles.smssync;
 
-public class MmsConsts {
+public interface MmsConsts {
 
-  public static final String ID = "_id";
+   String ID = "_id";
 
-  public static final String MESSAGE_ID = "m_id";
+   String MESSAGE_ID = "m_id";
 
-  public static final String READ = "read";
+   String READ = "read";
 
-  public static final String SUBJECT = "sub";
+   String SUBJECT = "sub";
 
-  public static final String DATE = "date";
+   String DATE = "date";
 
-  public static final String THREAD_ID = "thread_id";
+   String THREAD_ID = "thread_id";
 
-  public static final String INSERT_ADDRESS_TOKEN = "insert-address-token";
+   String INSERT_ADDRESS_TOKEN = "insert-address-token";
 
-  public static final String TYPE = "m_type";
+   String TYPE = "m_type";
 
-  public static final String DELIVERY_REPORT = "134"; // 0x86
+   String DELIVERY_REPORT = "134"; // 0x86
 
-  public static final int MESSAGE_BOX_INBOX = 1;
-  public static final int MESSAGE_BOX_SENT  = 2;
+   int MESSAGE_BOX_INBOX = 1;
+   int MESSAGE_BOX_SENT  = 2;
 
-  public static final int TO                = 0x97;
-  public static final int FROM              = 0x89;
+   int TO                = 0x97;
+   int FROM              = 0x89;
+
+   String LEGACY_HEADER  = "mms";
 }

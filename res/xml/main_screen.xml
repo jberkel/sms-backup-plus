@@ -1,65 +1,126 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <CheckBoxPreference android:key="connected"
+    <CheckBoxPreference
+      android:key="connected"
       android:title="@string/ui_connected_label"
       android:summary="@string/ui_connected_desc"
       android:persistent="true"
       android:defaultValue="false"/>
 
-    <CheckBoxPreference android:key="enable_auto_sync"
+    <CheckBoxPreference
+      android:key="enable_auto_sync"
       android:title="@string/ui_enable_auto_sync_label"
       android:summary="@string/ui_enable_auto_sync_desc"
       android:persistent="true"
       android:defaultValue="false"/>
 
-    <CheckBoxPreference android:key="backup_mms"
-      android:title="@string/ui_backup_mms_label"
-      android:summary="@string/ui_backup_mms_desc"
-      android:persistent="true"
-      android:defaultValue="false"/>
+    <PreferenceScreen
+      android:key="auto_backup_settings_screen"
+      android:title="@string/ui_auto_backup_settings_label">
 
-    <CheckBoxPreference android:key="backup_calllog"
-      android:title="@string/ui_backup_calllog_label"
-      android:summary="@string/ui_backup_calllog_desc"
-      android:persistent="true"
-      android:defaultValue="false"/>
+      <ListPreference
+        android:key="auto_backup_schedule"
+        android:title="@string/ui_auto_backup_schedule_label"
+        android:summary="@string/ui_auto_backup_schedule_desc"
+        android:entries="@array/auto_backup_schedule_entries"
+        android:entryValues="@array/auto_backup_schedule_values"
+        android:defaultValue="7200"
+        android:persistent="true"/>
+
+      <ListPreference
+        android:key="auto_backup_incoming_schedule"
+        android:title="@string/ui_auto_backup_incoming_schedule_label"
+        android:summary="@string/ui_auto_backup_incoming_schedule_desc"
+        android:entries="@array/auto_backup_incoming_schedule_entries"
+        android:entryValues="@array/auto_backup_incoming_schedule_values"
+        android:defaultValue="180"
+        android:persistent="true"/>
+
+      <CheckBoxPreference
+        android:key="wifi_only"
+        android:title="@string/ui_wifi_only_label"
+        android:summary="@string/ui_wifi_only_desc"
+        android:persistent="true"
+        android:defaultValue="false"/>
+
+      <CheckBoxPreference
+        android:key="third_party_integration"
+        android:title="@string/ui_third_party_integration_label"
+        android:summary="@string/ui_third_party_integration_desc"
+        android:persistent="true"
+        android:defaultValue="false"/>
+    </PreferenceScreen>
 
     <PreferenceScreen
       android:title="@string/ui_settings_advanced_label"
       android:summary="@string/ui_settings_advanced_desc">
 
-        <CheckBoxPreference android:key="mark_as_read"
-          android:title="@string/ui_mark_as_read_label"
-          android:summary="@string/ui_mark_as_read_desc"
-          android:persistent="true"
-          android:defaultValue="true"/>
+      <PreferenceScreen
+        android:title="@string/ui_backup_settings_label">
 
-        <CheckBoxPreference android:key="mark_as_read_on_restore"
-          android:title="@string/ui_mark_as_read_restore_label"
-          android:summary="@string/ui_mark_as_read_restore_desc"
-          android:persistent="true"
-          android:defaultValue="true"/>
+          <CheckBoxPreference
+            android:key="backup_sms"
+            android:title="@string/ui_backup_sms_label"
+            android:summary="@string/ui_backup_sms_desc"
+            android:persistent="true"
+            android:defaultValue="true"/>
 
-        <EditTextPreference android:key="imap_folder"
-          android:title="@string/ui_imap_folder_label"
-          android:summary="@string/ui_imap_folder_desc"
-          android:singleLine="true"
-          android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
-          android:persistent="true"
-          android:defaultValue="SMS"/>
+          <CheckBoxPreference
+            android:key="backup_mms"
+            android:title="@string/ui_backup_mms_label"
+            android:summary="@string/ui_backup_mms_desc"
+            android:persistent="true"
+            android:defaultValue="true"/>
 
-        <ListPreference android:key="backup_contact_group"
-          android:title="@string/ui_backup_contact_group_label"
-          android:summary="@string/ui_backup_contact_group_desc"
-          android:persistent="true"/>
+          <CheckBoxPreference
+            android:key="backup_calllog"
+            android:title="@string/ui_backup_calllog_label"
+            android:summary="@string/ui_backup_calllog_desc"
+            android:persistent="true"
+            android:defaultValue="false"/>
 
-        <CheckBoxPreference android:key="mail_subject_prefix"
-          android:title="@string/ui_mail_subject_prefix_label"
-          android:persistent="true"
-          android:defaultValue="false"
-          android:summary="@string/ui_mail_subject_prefix_desc"/>
+          <PreferenceScreen
+            android:title="@string/ui_backup_calllog_settings_label"
+            android:dependency="backup_calllog">
 
-        <ListPreference android:key="max_items_per_sync"
+              <EditTextPreference
+                android:key="imap_folder_calllog"
+                android:dependency="backup_calllog"
+                android:title="@string/ui_imap_folder_calllog_label"
+                android:summary="@string/ui_imap_folder_calllog_desc"
+                android:singleLine="true"
+                android:dialogMessage="@string/ui_imap_folder_calllog_label_dialog_msg"
+                android:persistent="true"
+                android:defaultValue="Call log"/>
+
+              <ListPreference
+                android:key="backup_calllog_types"
+                android:dependency="backup_calllog"
+                android:title="@string/ui_backup_calllog_types_label"
+                android:persistent="true"
+                android:defaultValue="everything"
+                android:summary="@string/ui_backup_calllog_types_desc"
+                android:entries="@array/backup_calllog_types_entries"
+                android:entryValues="@array/backup_calllog_types_values"/>
+
+              <CheckBoxPreference
+                android:key="backup_calllog_sync_calendar_enabled"
+                android:dependency="backup_calllog"
+                android:title="@string/ui_backup_calllog_sync_calendar_enabled_label"
+                android:persistent="true"
+                android:defaultValue="false"
+                android:summary="@string/ui_backup_calllog_sync_calendar_enabled_desc"/>
+
+              <ListPreference
+                android:key="backup_calllog_sync_calendar"
+                android:dependency="backup_calllog_sync_calendar_enabled"
+                android:title="@string/ui_backup_calllog_sync_calendar_label"
+                android:persistent="true"
+                android:defaultValue="-1"
+                android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
+          </PreferenceScreen>
+
+        <ListPreference
+          android:key="max_items_per_sync"
           android:title="@string/ui_max_items_per_sync_label"
           android:summary="@string/ui_max_items_per_sync_desc"
           android:entries="@array/max_items_per_sync_entries"
@@ -67,21 +128,30 @@
           android:defaultValue="-1"
           android:persistent="true"/>
 
-        <ListPreference android:key="max_items_per_restore"
-          android:title="@string/ui_max_items_per_restore_label"
-          android:summary="@string/ui_max_items_per_restore_desc"
-          android:entries="@array/max_items_per_restore_entries"
-          android:entryValues="@array/max_items_per_restore_values"
-          android:defaultValue="-1"
+        <CheckBoxPreference
+          android:key="mark_as_read"
+          android:title="@string/ui_mark_as_read_label"
+          android:summary="@string/ui_mark_as_read_desc"
+          android:persistent="true"
+          android:defaultValue="true"/>
+
+        <EditTextPreference
+          android:key="imap_folder"
+          android:title="@string/ui_imap_folder_label"
+          android:summary="@string/ui_imap_folder_desc"
+          android:singleLine="true"
+          android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
+          android:persistent="true"
+          android:defaultValue="SMS"/>
+
+        <ListPreference
+          android:key="backup_contact_group"
+          android:title="@string/ui_backup_contact_group_label"
+          android:summary="@string/ui_backup_contact_group_desc"
           android:persistent="true"/>
 
-        <CheckBoxPreference android:key="restore_starred_only"
-            android:title="@string/ui_restore_starred_only_label"
-            android:summary="@string/ui_restore_starred_only_desc"
-            android:persistent="true"
-            android:defaultValue="false"/>
-
-        <ListPreference android:key="email_address_style"
+        <ListPreference
+          android:key="email_address_style"
           android:title="@string/ui_email_address_style_label"
           android:summary="@string/ui_email_address_style_desc"
           android:entries="@array/email_address_style_entries"
@@ -89,131 +159,130 @@
           android:defaultValue="name"
           android:persistent="true"/>
 
-        <PreferenceCategory android:title="@string/calllog_settings"
-          android:dependency="backup_calllog"
-          android:persistent="false"
-          android:key="calllog_settings">
-
-          <EditTextPreference android:key="imap_folder_calllog"
-            android:dependency="backup_calllog"
-            android:title="@string/ui_imap_folder_calllog_label"
-            android:summary="@string/ui_imap_folder_calllog_desc"
-            android:singleLine="true"
-            android:dialogMessage="@string/ui_imap_folder_calllog_label_dialog_msg"
-            android:persistent="true"
-            android:defaultValue="Call log"/>
-
-          <ListPreference android:key="backup_calllog_types"
-            android:dependency="backup_calllog"
-            android:title="@string/ui_backup_calllog_types_label"
-            android:persistent="true"
-            android:defaultValue="everything"
-            android:summary="@string/ui_backup_calllog_types_desc"
-            android:entries="@array/backup_calllog_types_entries"
-            android:entryValues="@array/backup_calllog_types_values"/>
-
-          <CheckBoxPreference android:key="backup_calllog_sync_calendar_enabled"
-            android:dependency="backup_calllog"
-            android:title="@string/ui_backup_calllog_sync_calendar_enabled_label"
-            android:persistent="true"
-            android:defaultValue="false"
-            android:summary="@string/ui_backup_calllog_sync_calendar_enabled_desc"/>
-
-          <ListPreference android:key="backup_calllog_sync_calendar"
-            android:dependency="backup_calllog_sync_calendar_enabled"
-            android:title="@string/ui_backup_calllog_sync_calendar_label"
-            android:persistent="true"
-            android:defaultValue="-1"
-            android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
-        </PreferenceCategory>
-
-        <PreferenceCategory android:title="@string/auto_backup_settings"
-           android:dependency="enable_auto_sync"
-           android:persistent="false"
-           android:key="auto_backup_settings">
-
-            <ListPreference android:key="auto_backup_schedule"
-              android:title="@string/ui_auto_backup_schedule_label"
-              android:summary="@string/ui_auto_backup_schedule_desc"
-              android:entries="@array/auto_backup_schedule_entries"
-              android:entryValues="@array/auto_backup_schedule_values"
-              android:defaultValue="7200"
-              android:persistent="true"/>
-
-            <ListPreference android:key="auto_backup_incoming_schedule"
-              android:title="@string/ui_auto_backup_incoming_schedule_label"
-              android:summary="@string/ui_auto_backup_incoming_schedule_desc"
-              android:entries="@array/auto_backup_incoming_schedule_entries"
-              android:entryValues="@array/auto_backup_incoming_schedule_values"
-              android:defaultValue="180"
-              android:persistent="true"/>
-
-            <CheckBoxPreference android:key="wifi_only"
-              android:title="@string/ui_wifi_only_label"
-              android:summary="@string/ui_wifi_only_desc"
-              android:persistent="true"
-              android:defaultValue="false"/>
-
-            <CheckBoxPreference android:key="notifications"
-              android:title="@string/ui_notifications_label"
-              android:summary="@string/ui_notifications_desc"
-              android:persistent="true"
-              android:defaultValue="false"/>
-        </PreferenceCategory>
-
-        <CheckBoxPreference android:key="third_party_integration"
-          android:title="@string/ui_third_party_integration_label"
-          android:summary="@string/ui_third_party_integration_desc"
+        <CheckBoxPreference
+          android:key="mail_subject_prefix"
+          android:title="@string/ui_mail_subject_prefix_label"
           android:persistent="true"
-          android:defaultValue="false"/>
+          android:defaultValue="false"
+          android:summary="@string/ui_mail_subject_prefix_desc"/>
 
-        <PreferenceScreen
-          android:title="@string/ui_settings_advanced_server_label"
-          android:summary="@string/ui_settings_advanced_server_desc">
+      </PreferenceScreen>
 
-            <ListPreference android:key="server_authentication"
-              android:title="@string/ui_authentication_label"
-              android:summary="@string/ui_authentication_desc"
-              android:entries="@array/server_authentication_entries"
-              android:entryValues="@array/server_authentication_values"
-              android:defaultValue="xoauth"
+      <PreferenceScreen
+        android:title="@string/ui_restore_settings_label">
+
+          <CheckBoxPreference
+            android:key="restore_sms"
+            android:title="@string/ui_restore_sms_label"
+            android:summary="@string/ui_restore_sms_desc"
+            android:persistent="true"
+            android:defaultValue="true"/>
+
+          <CheckBoxPreference
+            android:key="restore_mms"
+            android:title="@string/ui_restore_mms_label"
+            android:summary="@string/ui_restore_mms_desc"
+            android:persistent="true"
+            android:enabled="false"
+            android:defaultValue="false"/>
+
+          <CheckBoxPreference
+            android:key="restore_calllog"
+            android:title="@string/ui_restore_calllog_label"
+            android:summary="@string/ui_restore_calllog_desc"
+            android:persistent="true"
+            android:defaultValue="false"/>
+
+          <CheckBoxPreference
+              android:key="restore_starred_only"
+              android:title="@string/ui_restore_starred_only_label"
+              android:summary="@string/ui_restore_starred_only_desc"
+              android:persistent="true"
+              android:defaultValue="false"/>
+
+        <ListPreference
+          android:key="max_items_per_restore"
+          android:title="@string/ui_max_items_per_restore_label"
+          android:summary="@string/ui_max_items_per_restore_desc"
+          android:entries="@array/max_items_per_restore_entries"
+          android:entryValues="@array/max_items_per_restore_values"
+          android:defaultValue="-1"
+          android:persistent="true"/>
+
+        <CheckBoxPreference
+          android:key="mark_as_read_on_restore"
+          android:title="@string/ui_mark_as_read_restore_label"
+          android:summary="@string/ui_mark_as_read_restore_desc"
+          android:persistent="true"
+          android:defaultValue="true"/>
+      </PreferenceScreen>
+
+      <CheckBoxPreference
+        android:key="notifications"
+        android:title="@string/ui_notifications_label"
+        android:summary="@string/ui_notifications_desc"
+        android:persistent="true"
+        android:defaultValue="false"/>
+
+      <CheckBoxPreference android:key="acra.enable"
+        android:title="@string/pref_disable_acra"
+        android:summaryOn="@string/pref_acra_enabled"
+        android:summaryOff="@string/pref_acra_disabled"
+        android:persistent="true"
+        android:defaultValue="true"/>
+
+      <PreferenceScreen
+        android:title="@string/ui_settings_advanced_server_label"
+        android:summary="@string/ui_settings_advanced_server_desc">
+
+          <ListPreference
+            android:key="server_authentication"
+            android:title="@string/ui_authentication_label"
+            android:summary="@string/ui_authentication_desc"
+            android:entries="@array/server_authentication_entries"
+            android:entryValues="@array/server_authentication_values"
+            android:defaultValue="xoauth"
+            android:persistent="true"/>
+
+          <PreferenceCategory
+              android:key="imap_settings"
+              android:persistent="false"
+              android:title="@string/imap_settings">
+
+            <EditTextPreference
+              android:key="server_address"
+              android:title="@string/ui_server_label"
+              android:summary="@string/ui_server_desc"
+              android:singleLine="true"
+              android:dialogMessage="@string/ui_server_dialog_msg"
+              android:defaultValue="imap.gmail.com:993"
               android:persistent="true"/>
 
-            <PreferenceCategory android:key="imap_settings"
-                android:persistent="false"
-                android:title="@string/imap_settings">
+            <ListPreference
+              android:key="server_protocol"
+              android:title="@string/ui_protocol_label"
+              android:summary="@string/ui_protocol_desc"
+              android:entries="@array/server_protocol_entries"
+              android:entryValues="@array/server_protocol_entryValues"
+              android:defaultValue="+ssl+"
+              android:persistent="true"/>
 
-              <EditTextPreference android:key="server_address"
-                android:title="@string/ui_server_label"
-                android:summary="@string/ui_server_desc"
-                android:singleLine="true"
-                android:dialogMessage="@string/ui_server_dialog_msg"
-                android:defaultValue="imap.gmail.com:993"
-                android:persistent="true"/>
+            <EditTextPreference
+              android:key="login_user"
+              android:title="@string/ui_login_label"
+              android:summary="@string/ui_login_desc"
+              android:singleLine="true"
+              android:dialogMessage="@string/ui_login_dialog_msg"
+              android:persistent="true"/>
 
-              <ListPreference android:key="server_protocol"
-                android:title="@string/ui_protocol_label"
-                android:summary="@string/ui_protocol_desc"
-                android:entries="@array/server_protocol_entries"
-                android:entryValues="@array/server_protocol_entryValues"
-                android:defaultValue="+ssl+"
-                android:persistent="true"/>
-
-              <EditTextPreference android:key="login_user"
-                android:title="@string/ui_login_label"
-                android:summary="@string/ui_login_desc"
-                android:singleLine="true"
-                android:dialogMessage="@string/ui_login_dialog_msg"
-                android:persistent="true"/>
-
-              <EditTextPreference android:key="login_password"
-                android:title="@string/ui_password_label"
-                android:summary="@string/ui_password_desc"
-                android:singleLine="true"
-                android:password="true"
-                android:dialogMessage="@string/ui_password_dialog_msg"
-                android:persistent="true"/>
-            </PreferenceCategory>
+            <EditTextPreference android:key="login_password"
+              android:title="@string/ui_password_label"
+              android:summary="@string/ui_password_desc"
+              android:singleLine="true"
+              android:password="true"
+              android:dialogMessage="@string/ui_password_dialog_msg"
+              android:persistent="false"/>
+           </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceScreen>
 </PreferenceScreen>

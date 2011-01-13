@@ -24,9 +24,11 @@ import com.fsck.k9.mail.*;
 
 import android.util.Log;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Arrays;
+import com.fsck.k9.mail.store.ImapStore;
 import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
 import java.io.IOException;
 
@@ -34,7 +36,7 @@ import static com.zegoggles.smssync.App.*;
 import static com.zegoggles.smssync.CursorToMessage.Headers;
 import static com.zegoggles.smssync.CursorToMessage.DataType;
 
-public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
+public class BackupImapStore extends ImapStore {
     private Context context;
 
     static {
@@ -42,10 +44,9 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
       com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 3;
     }
 
-    public ImapStore(final Context context) throws MessagingException {
+    public BackupImapStore(final Context context) throws MessagingException {
         super(new Account(context) {
-            @Override
-            public String getStoreUri() {
+            @Override public String getStoreUri() {
               return PrefStore.getStoreUri(context);
             }
         });
@@ -55,21 +56,27 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
     public BackupFolder getSMSBackupFolder() throws MessagingException
     {
         String label = PrefStore.getImapFolder(context);
-        return getBackupFolder(label);
-    }
-    public BackupFolder getCalllogBackupFolder() throws MessagingException
-    {
-        String label = PrefStore.getCalllogFolder(context);
-        return getBackupFolder(label);
+        return getBackupFolder(label, DataType.SMS);
     }
 
-    private BackupFolder getBackupFolder(String label) throws MessagingException
+    public BackupFolder getMMSBackupFolder() throws MessagingException
     {
-        if (label == null)
-            throw new IllegalStateException("label is null");
+        String label = PrefStore.getImapFolder(context);
+        return getBackupFolder(label, DataType.MMS);
+    }
+
+    public BackupFolder getCallLogBackupFolder() throws MessagingException
+    {
+        String label = PrefStore.getCallLogFolder(context);
+        return getBackupFolder(label, DataType.CALLLOG);
+    }
+
+    private BackupFolder getBackupFolder(String label, DataType type) throws MessagingException
+    {
+        if (label == null) throw new IllegalStateException("label is null");
 
         try {
-          BackupFolder folder = new BackupFolder(this, label);
+          final BackupFolder folder = new BackupFolder(this, label, type);
 
           if (!folder.exists()) {
               folder.create(FolderType.HOLDS_MESSAGES);
@@ -84,29 +91,29 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
         }
     }
 
-
     public class BackupFolder extends ImapFolder {
+        private final DataType type;
 
-        public BackupFolder(ImapStore store, String name) {
+        public BackupFolder(ImapStore store, String name, DataType type) {
             super(store, name);
+            this.type = type;
         }
 
-        public Message[] getMessagesSince(final Date since, final int max, final boolean flagged)
-          throws MessagingException  {
-            if (LOCAL_LOGV) Log.v(TAG, String.format("getMessagesSince(%s, %d, %b)", since, max, flagged));
+        public List<Message> getMessages(final int max, final boolean flagged, final Date since)
+          throws MessagingException {
+            if (LOCAL_LOGV) Log.v(TAG, String.format("getMessages(%d, %b, %s)", max, flagged, since));
 
+            final List<Message> messages;
             final ImapSearcher searcher = new ImapSearcher() {
                 @Override public List<ImapResponse> search() throws IOException, MessagingException {
-                   final String HEADER_Q = String.format("OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\"))",
-                                                          Headers.DATATYPE, DataType.SMS,
-                                                          Headers.DATATYPE,
-                                                          Headers.TYPE, SmsConsts.MESSAGE_TYPE_INBOX,
-                                                          Headers.TYPE, SmsConsts.MESSAGE_TYPE_SENT);
-                    StringBuilder sb = new StringBuilder(String.format("UID SEARCH 1:* (%s) UNDELETED", HEADER_Q));
+                    final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
+                        .append(' ')
+                        .append(getQuery())
+                        .append(" UNDELETED");
                     if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.format(since));
                     if (flagged) sb.append(" FLAGGED");
 
-                    return executeSimpleCommand(sb.toString());
+                    return executeSimpleCommand(sb.toString().trim());
                 }
             };
 
@@ -126,13 +133,39 @@ public class ImapStore extends com.fsck.k9.mail.store.ImapStore {
                 //Debug.stopMethodTracing();
                 if (LOCAL_LOGV) Log.v(TAG, "Sorting done");
 
-                final Message[] recent = new Message[max];
-                System.arraycopy(msgs, 0, recent, 0, max);
-
-                return recent;
+                messages = new ArrayList<Message>(max);
+                for (int i=0; i<max; i++) messages.add(msgs[i]);
+            } else {
+              messages = new ArrayList<Message>(msgs.length);
+              for (Message m : msgs) messages.add(m);
             }
-            return msgs;
+
+            return messages;
         }
+
+        private String getQuery() {
+           switch(this.type) {
+            /* MMS/SMS are special cases since we need to support legacy backup headers */
+            case SMS:
+              return
+              String.format("(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
+                            Headers.DATATYPE.toUpperCase(), type,
+                            Headers.DATATYPE.toUpperCase(),
+                            Headers.TYPE.toUpperCase(), SmsConsts.MESSAGE_TYPE_INBOX,
+                            Headers.TYPE.toUpperCase(), SmsConsts.MESSAGE_TYPE_SENT);
+            case MMS:
+              return
+              String.format("(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",
+                            Headers.DATATYPE.toUpperCase(), type,
+                            Headers.DATATYPE.toUpperCase(),
+                            Headers.TYPE.toUpperCase(), MmsConsts.LEGACY_HEADER);
+
+            default: return String.format("(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(), type);
+           }
+        }
+
+        @Override public boolean equals(Object o) { return super.equals(o); }
+        @Override public int hashCode() { return super.hashCode(); }
     }
 
     static class MessageComparator implements Comparator<Message> {

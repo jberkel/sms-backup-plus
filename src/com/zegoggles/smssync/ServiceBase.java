@@ -40,10 +40,10 @@ import static com.zegoggles.smssync.App.*;
 
 public abstract class ServiceBase extends Service {
     // the activity
-    public static SmsSync smsSync;
+    static SmsSync smsSync;
 
     /** Field containing a description of the last error. */
-    public static String lastError;
+    static String lastError;
 
     enum SmsSyncState {
         IDLE, CALC, LOGIN, BACKUP, RESTORE,
@@ -53,7 +53,7 @@ public abstract class ServiceBase extends Service {
         UPDATING_THREADS
     }
 
-    protected static SmsSyncState sState = SmsSyncState.IDLE;
+    static SmsSyncState sState = SmsSyncState.IDLE;
     public static SmsSyncState getState() { return sState; }
 
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
@@ -74,12 +74,12 @@ public abstract class ServiceBase extends Service {
         return null;
     }
 
-    protected ImapStore.BackupFolder getSMSBackupFolder() throws MessagingException {
-      return new ImapStore(this).getSMSBackupFolder();
+    protected BackupImapStore.BackupFolder getSMSBackupFolder() throws MessagingException {
+      return new BackupImapStore(this).getSMSBackupFolder();
     }
 
-    protected ImapStore.BackupFolder getCalllogBackupFolder() throws MessagingException {
-        return new ImapStore(this).getCalllogBackupFolder();
+    protected BackupImapStore.BackupFolder getCallLogBackupFolder() throws MessagingException {
+        return new BackupImapStore(this).getCallLogBackupFolder();
     }
 
     /**
@@ -163,7 +163,7 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    protected long getMaxItemDateCalllog() {
+    protected long getMaxItemDateCallLog() {
         Cursor result = getContentResolver().query(CALLLOG_PROVIDER,
                 new String[] { CallLog.Calls.DATE }, null, null,
                 CallLog.Calls.DATE + " DESC LIMIT 1");
@@ -195,8 +195,8 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    protected void updateMaxSyncedDateCalllog(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDateCalllog(this, maxSyncedDate);
+    protected void updateMaxSyncedDateCallLog(long maxSyncedDate) {
+        PrefStore.setMaxSyncedDateCallLog(this, maxSyncedDate);
         if (LOCAL_LOGV) {
           Log.v(TAG, "Max synced date for call log set to: " + maxSyncedDate);
         }

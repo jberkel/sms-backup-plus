@@ -28,6 +28,7 @@ import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.App.*;
 
 public class PrefStore {
+
     /**
      * Preference key containing the maximum date of messages that were
      * successfully synced.
@@ -43,7 +44,7 @@ public class PrefStore {
     static final String PREF_LOGIN_PASSWORD = "login_password";
 
     /** Preference key containing a UID used for the threading reference header. */
-    static final String PREF_REFERENECE_UID = "reference_uid";
+    static final String PREF_REFERENCE_UID = "reference_uid";
 
     /** Preference key containing the server address */
     static final String PREF_SERVER_ADDRESS = "server_address";
@@ -92,9 +93,14 @@ public class PrefStore {
 
     static final String PREF_EMAIL_ADDRESS_STYLE = "email_address_style";
 
+    static final String PREF_BACKUP_SMS  = "backup_sms";
+    static final String PREF_RESTORE_SMS  = "restore_sms";
+
     static final String PREF_BACKUP_MMS  = "backup_mms";
+    static final String PREF_RESTORE_MMS  = "restore_mms";
 
     static final String PREF_BACKUP_CALLLOG  = "backup_calllog";
+    static final String PREF_RESTORE_CALLLOG  = "restore_calllog";
 
     static final String PREF_CALLLOG_SYNC_CALENDAR  = "backup_calllog_sync_calendar";
     static final String PREF_CALLLOG_SYNC_CALENDAR_ENABLED  = "backup_calllog_sync_calendar_enabled";
@@ -151,15 +157,22 @@ public class PrefStore {
     enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING }
     public enum AddressStyle { NAME, NAME_AND_NUMBER, NUMBER }
 
+
     static SharedPreferences getSharedPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
+    }
+
+    // All sensitive information is stored in a separate prefs file so we can
+    // backup the rest without exposing sensitive data
+    static SharedPreferences getCredentials(Context ctx) {
+        return ctx.getSharedPreferences("credentials", Context.MODE_PRIVATE);
     }
 
     static long getMostRecentSyncedDate(Context ctx) {
         return Math.max(Math.max(
             getMaxSyncedDateSms(ctx),
             getMaxSyncedDateMms(ctx) * 1000),
-            getMaxSyncedDateCalllog(ctx));
+            getMaxSyncedDateCallLog(ctx));
     }
 
     static long getMaxSyncedDateSms(Context ctx) {
@@ -170,7 +183,7 @@ public class PrefStore {
         return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_MMS, DEFAULT_MAX_SYNCED_DATE);
     }
 
-    static long getMaxSyncedDateCalllog(Context ctx) {
+    static long getMaxSyncedDateCallLog(Context ctx) {
         return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_CALLLOG, DEFAULT_MAX_SYNCED_DATE);
     }
 
@@ -190,7 +203,7 @@ public class PrefStore {
           .commit();
     }
 
-    static void setMaxSyncedDateCalllog(Context ctx, long maxSyncedDate) {
+    static void setMaxSyncedDateCallLog(Context ctx, long maxSyncedDate) {
         getSharedPreferences(ctx).edit()
           .putLong(PREF_MAX_SYNCED_DATE_CALLLOG, maxSyncedDate)
           .commit();
@@ -200,11 +213,15 @@ public class PrefStore {
     }
 
     static void setImapUsername(Context ctx, String s) {
-       getSharedPreferences(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
+        getSharedPreferences(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
     }
 
     static String getImapPassword(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_LOGIN_PASSWORD, null);
+        return getCredentials(ctx).getString(PREF_LOGIN_PASSWORD, null);
+    }
+
+    static void setImapPassword(Context ctx, String s) {
+        getCredentials(ctx).edit().putString(PREF_LOGIN_PASSWORD, s).commit();
     }
 
     static XOAuthConsumer getOAuthConsumer(Context ctx) {
@@ -215,11 +232,11 @@ public class PrefStore {
     }
 
     static String getOauthToken(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_TOKEN, null);
+        return getCredentials(ctx).getString(PREF_OAUTH_TOKEN, null);
     }
 
     static String getOauthTokenSecret(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_TOKEN_SECRET, null);
+        return getCredentials(ctx).getString(PREF_OAUTH_TOKEN_SECRET, null);
     }
 
     static boolean hasOauthTokens(Context ctx) {
@@ -228,7 +245,7 @@ public class PrefStore {
     }
 
     static String getOauthUsername(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, getImapUsername(ctx) /* XXX remove */);
+        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, null);
     }
 
     static void setOauthUsername(Context ctx, String s) {
@@ -236,7 +253,7 @@ public class PrefStore {
     }
 
     static void setOauthTokens(Context ctx, String token, String secret) {
-      getSharedPreferences(ctx).edit()
+      getCredentials(ctx).edit()
         .putString(PREF_OAUTH_TOKEN, token)
         .putString(PREF_OAUTH_TOKEN_SECRET, secret)
         .commit();
@@ -269,17 +286,21 @@ public class PrefStore {
         }
     }
 
+    static boolean isSmsBackupEnabled(Context ctx) {
+      return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_SMS, true);
+    }
+
     static boolean isMmsBackupEnabled(Context ctx) {
       return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
-    static boolean isCalllogBackupEnabled(Context ctx) {
+    static boolean isCallLogBackupEnabled(Context ctx) {
         return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_CALLLOG, false);
     }
 
-    static boolean isCalllogCalendarSyncEnabled(Context ctx) {
+    static boolean isCallLogCalendarSyncEnabled(Context ctx) {
         return
-          getCalllogCalendarId(ctx) >= 0 &&
+          getCallLogCalendarId(ctx) >= 0 &&
           getSharedPreferences(ctx).getBoolean(PREF_CALLLOG_SYNC_CALENDAR_ENABLED, false);
     }
 
@@ -294,12 +315,12 @@ public class PrefStore {
         }
     }
 
-    static CallLogTypes getCalllogType(Context ctx) {
+    static CallLogTypes getCallLogType(Context ctx) {
       return getDefaultType(ctx, PREF_CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
     }
 
-    static boolean isCalllogTypeEnabled(Context ctx, int type) {
-      switch (getCalllogType(ctx)) {
+    static boolean isCallLogTypeEnabled(Context ctx, int type) {
+      switch (getCallLogType(ctx)) {
         case OUTGOING: return type == CallLog.Calls.OUTGOING_TYPE;
         case INCOMING: return type == CallLog.Calls.INCOMING_TYPE;
         case MISSED:   return type == CallLog.Calls.MISSED_TYPE;
@@ -309,7 +330,7 @@ public class PrefStore {
       }
     }
 
-    static int getCalllogCalendarId(Context ctx) {
+    static int getCallLogCalendarId(Context ctx) {
         return getStringAsInt(ctx, PREF_CALLLOG_SYNC_CALENDAR, -1);
     }
 
@@ -317,13 +338,25 @@ public class PrefStore {
         return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_STARRED_ONLY, false);
     }
 
+    static boolean isRestoreSms(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_SMS, true);
+    }
+
+    static boolean isRestoreMms(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_MMS, false);
+    }
+
+    static boolean isRestoreCallLog(Context ctx) {
+        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_CALLLOG, true);
+    }
+
     static String getReferenceUid(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_REFERENECE_UID, null);
+        return getSharedPreferences(ctx).getString(PREF_REFERENCE_UID, null);
     }
 
     static void setReferenceUid(Context ctx, String referenceUid) {
         getSharedPreferences(ctx).edit()
-          .putString(PREF_REFERENECE_UID, referenceUid)
+          .putString(PREF_REFERENCE_UID, referenceUid)
           .commit();
     }
 
@@ -331,7 +364,7 @@ public class PrefStore {
         return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER, DEFAULT_IMAP_FOLDER);
     }
 
-    static String getCalllogFolder(Context ctx) {
+    static String getCallLogFolder(Context ctx) {
         return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER_CALLLOG, DEFAULT_IMAP_FOLDER_CALLLOG);
     }
 
@@ -343,7 +376,7 @@ public class PrefStore {
         return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER);
     }
 
-    static boolean isCalllogFolderSet(Context ctx) {
+    static boolean isCallLogFolderSet(Context ctx) {
         return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER_CALLLOG);
     }
 
@@ -457,6 +490,9 @@ public class PrefStore {
     static void clearOauthData(Context ctx) {
         getSharedPreferences(ctx).edit()
           .remove(PREF_OAUTH_USER)
+          .commit();
+
+        getCredentials(ctx).edit()
           .remove(PREF_OAUTH_TOKEN)
           .remove(PREF_OAUTH_TOKEN_SECRET)
           .commit();
@@ -545,10 +581,38 @@ public class PrefStore {
       }
     }
 
-    static void upgradeOAuthUsername(Context ctx) {
-      if (useXOAuth(ctx) && getSharedPreferences(ctx).getString(PREF_OAUTH_USER, null) == null &&
-                            getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null) != null) {
-        setOauthUsername(ctx, getImapUsername(ctx));
+    // move credentials from default shared prefs to new separate prefs
+    static boolean upgradeCredentials(Context ctx) {
+      final String flag = "upgraded_credentials";
+      SharedPreferences prefs = getSharedPreferences(ctx);
+
+      boolean upgraded = prefs.getBoolean(flag, false);
+      if (!upgraded) {
+        Log.d(TAG, "Upgrading credentials");
+
+        SharedPreferences creds = getCredentials(ctx);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        SharedPreferences.Editor credsEditor = creds.edit();
+
+        for (String field : new String[] { PREF_OAUTH_TOKEN,
+                                           PREF_OAUTH_TOKEN_SECRET,
+                                           PREF_LOGIN_PASSWORD }) {
+
+          if (prefs.getString(field, null) != null &&
+              creds.getString(field, null) == null) {
+              if (LOCAL_LOGV) Log.v(TAG, "Moving credential " + field);
+              credsEditor.putString(field, prefs.getString(field, null));
+              prefsEditor.remove(field);
+          } else if (LOCAL_LOGV) Log.v(TAG, "Skipping field " + field);
+        }
+        boolean success = false;
+        if (credsEditor.commit()) {
+          prefsEditor.putBoolean(flag, true);
+          success = prefsEditor.commit();
+        }
+        return success;
+      } else {
+        return false;
       }
     }
 }
