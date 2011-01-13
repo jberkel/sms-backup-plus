@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Gebruik Gmail om een backup te maken van je SMS, MMS en gespreksdetails. Dit is een verbeterde versie van de door Christoph Studer gemaakte applicatie "SMS Backup", die het mogelijk maakte om SMS berichten terug te plaatsen op je telefoon. Deze applicatie is volledig backwards compatibel met SMS Backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Backup maken</string>
+  <string name="ui_sync_button_label_done">Backup maken </string>
+  <string name="ui_sync_button_label_canceling">Afbreken</string>
+  <string name="ui_sync_button_label_error">Backup maken </string>
+  <string name="ui_sync_button_label_syncing">Stoppen</string>
+
+  <string name="ui_restore_button_label_idle">Terugplaatsen</string>
+  <string name="ui_restore_button_label_done">Terugplaatsen</string>
+  <string name="ui_restore_button_label_restoring">Stoppen</string>
+  <string name="ui_restore_button_label_error">Terugplaatsen</string>
+
+  <string name="status_idle">Inactief</string>
+  <string name="status_idle_details">Laatste item gebackupt: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">nooit</string>
+
+  <string name="status_working">Working</string>
+
+  <string name="status_backup">Backing up</string>
+  <string name="status_restore">Restoring</string>
+
+  <string name="status_backup_details">Backed up <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_restore_details">Terug geplaatst <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_login_details">Aan het inloggen\u2026</string>
+  <string name="status_updating_threads">Threads aan het updaten\u2026</string>
+  <string name="status_done">Done</string>
+  <string name="status_backup_done_details_max_per_sync">Het maximum van %1$d items per backup is bereikt. Herstart backup om door te gaan.</string>
+  <string name="status_backup_done_details_noitems">Er waren geen items om te backuppen.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one"><xliff:g id="total_items">%1$d</xliff:g> item succesvol gebackupped.</item>
+    <item quantity="other"><xliff:g id="total_items">%1$d</xliff:g> items succesvol gebackupped.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one"><xliff:g id="total_items">%1$d</xliff:g> item (%2$d duplicaten) succesvol teruggeplaatst.</item>
+    <item quantity="other"> <xliff:g id="total_items">%1$d</xliff:g> items (%2$d duplicaten) succesvol teruggeplaatst.</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d items succesvol teruggeplaatst.</string>
+
+  <string name="status_unknown_error">Fout</string>
+  <string name="notification_unknown_error">SMSBackup+ fout</string>
+
+  <string name="status_unknown_error_details">Fout gedurende backuppen/terugplaatsen:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Login fout</string>
+  <string name="notification_auth_failure">SMS Backup+ fout bij aanmelding</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth authorisatiefout. Zorg er aub voor dat u IMAP toegang verleend vanuit uw Gmail account settings.</string>
+  <string name="status_auth_failure_details_plain">IMAP authorisatiefout.
+  Zorg er aub voor dat login en paswoord correct zijn ingevoerd.</string>
+  <string name="status_calc_details">Berekenen\u2026</string>
+  <string name="status_canceled">Afgebroken</string>
+  <string name="status_canceled_details">%1$d/%2$d items successvol gebackupt.</string>
+  <string name="status_folder_error">Label fout</string>
+  <string name="status_folder_error_details">Kan label of folder niet creëren of hier toegang toe krijgen. </string>
+  <string name="status_gmail_temp_error">tijdelijke Gmail IMAP fout, probeer het later nog eens.</string>
+
+  <string name="ui_settings_label">Instellingen</string>
+  <string name="ui_settings_advanced_label">Geavanceerde instellingen</string>
+  <string name="ui_settings_advanced_desc">Geavanceerde instellingen aanpassen.</string>
+  <string name="ui_settings_advanced_server_label">IMAP server instellingen</string>
+  <string name="ui_settings_advanced_server_desc">Pas deze niet aan, tenzij je weet wat je doet!</string>
+
+  <string name="imap_settings">IMAP instellingen</string>
+  <string name="ui_login_label">Gebruikersnaam</string>
+  <string name="ui_login_desc">Je IMAP account/e-mail adres.</string>
+  <string name="ui_login_dialog_msg">PAS OP: Het aanpassen van de username kan de XOAuth autorisatie belemmeren!</string>
+  <string name="ui_password_label">Paswoord</string>
+  <string name="ui_password_desc">Je IMAP account paswoord. Alleen te gebruiken als XOAuth niet wordt gebruikt.</string>
+  <string name="ui_password_dialog_msg">Het paswoord wordt alleen opgeslagen op dit toestel en wordt alleen voor aanmelding gebruikt.</string>
+  <string name="ui_server_label">Server adres</string>
+  <string name="ui_server_desc">Het adres en de poort van de server waarmee je wil synchroniseren.</string>
+  <string name="ui_server_dialog_msg">Het standaard Gmail-adres is \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Beveiliging</string>
+  <string name="ui_protocol_desc">Het beveiligingsprotocol van de server. De standaard Gmail-beveiliging is \"SSL (Required)\"."</string>
+  <string name="ui_authentication_label">Authenticatie</string>
+  <string name="ui_authentication_desc">De authenticatie methode. Standaard voor Gmail is \"XOauth\".</string>
+  <string name="plain">Platte tekst</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Gmail label</string>
+  <string name="ui_imap_folder_desc">Gmail label toekennen aan SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Gebackupte SMS berichten zullen worden getagd met dit label in Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">Voorvoegsel in emailonderwerp</string>
+  <string name="ui_mail_subject_prefix_desc">Gebruik de IMAP folder naam als voorvoegsel in het emailonderwerp</string>
+
+  <string name="ui_max_items_per_sync_label">Items per backup</string>
+  <string name="ui_max_items_per_sync_desc">Maximum aantal items per backup.</string>
+  <string name="ui_max_items_per_restore_label">Items per terugplaatsing</string>
+  <string name="ui_max_items_per_restore_desc">Maximum aantal teruggeplaatste berichten.</string>
+
+  <string name="ui_restore_starred_only_label">íStarredí items</string>
+  <string name="ui_restore_starred_only_desc">Plaats alleen items terug van een ëstarí zijn voorzien.</string>
+
+  <string name="ui_backup_mms_label">Backup MMS</string>
+  <string name="ui_backup_mms_desc">Backup MMS aanzetten</string>
+  <string name="ui_backup_mms_not_supported">MMS backup wordt niet ondersteund op dit toestel.</string>
+
+  <string name="ui_backup_calllog_label">Backup gespreksdetails</string>
+  <string name="ui_backup_calllog_desc">Backup gespreksdetails aanzetten </string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Kalender synchronisatie</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Gespreksdetails toevoegen aan kalender</string>
+
+  <string name="ui_backup_calllog_types_label">Gesprekstypes</string>
+  <string name="ui_backup_calllog_types_desc">Gesprekstypes die worden gebackupt</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Geen</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Kalender gebruikt voor gespreksdetails</string>
+
+  <string name="ui_imap_folder_calllog_label">Label gespreksdetails</string>
+  <string name="ui_imap_folder_calllog_desc">Gmail label toegekend aan gespreksdetails.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Gebackupte gespreksdetails zullen worden getagd met dit label in Gmail.</string>
+
+  <string name="ui_mark_as_read_label">Markeren als gelezen (emails)</string>
+  <string name="ui_mark_as_read_desc">Of de gebackupte berichten in Gmail gemarkeerd dienen te worden als gelezen.</string>
+
+  <string name="ui_mark_as_read_restore_label">Markeren als gelezen (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Of alle teruggeplaatste SMS berichten gemarkeerd dienen te worden als gelezen.</string>
+
+  <string name="ui_email_address_style_label">Stijl email-addressering </string>
+  <string name="ui_email_address_style_desc">Formaat van verzendadres in gebackupte emails </string>
+
+  <string name="ui_enable_auto_sync_label">Automatische backup</string>
+  <string name="ui_enable_auto_sync_desc">Of nieuwe SMS automatisch gebackupt dient te worden.</string>
+  <string name="ui_enable_auto_sync_summary">Autmatisch backuppen van %1$s. De betrouwbaarheid van automatische backups kan minder zijn als de app is geÔnstalleerd op de SD kaart.</string>
+
+  <string name="ui_backup_schedule_label">Backup rooster</string>
+  <string name="ui_auto_backup_schedule_label">Standaard rooster</string>
+  <string name="ui_auto_backup_schedule_desc">Wanneer wordt SMS gebackupt</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Ontvangst rooster</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Wanneer na ontvangst dienen binnenkomende SMS berichten gebackupt te worden</string>
+
+  <string name="ui_wifi_only_label">Wifi vereist</string>
+  <string name="ui_wifi_only_desc">Alleen backuppen indien een Wifi connectie actief is</string>
+
+  <string name="ui_notifications_label">Notificaties</string>
+  <string name="ui_notifications_desc">Notificaties (op de achtergrond)</string>
+
+  <string name="error_wifi_only_no_connection">Geen Wifi connectie actief</string>
+  <string name="error_no_connection">Geen internet connectie actief</string>
+
+  <string name="ui_dialog_missing_credentials_title">Login informatie</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Je dient je eerst aan te melden met je Gmail account.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Je dient eerst je username en paswoord in te voeren.</string>
+
+  <string name="ui_dialog_sync_data_reset_title">Backup gegevens resetten </string>
+  <string name="ui_dialog_sync_data_reset_msg">
+      Backup gegevens zijn gereset. Meld je aub opnieuw aan met je account en voer een handmatige backup uit. Je zal de mogelijkheid hebben om te bepalen of de berichten op je toestel worden gebackupt of worden overgeslagen.
+  </string>
+  <string name="ui_dialog_invalid_imap_folder_title">Ongeldige labelnaam</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">De labelnaam mag geen spaties bevatten (in begin of aan eind).</string>
+  <string name="ui_dialog_first_sync_title">Eerste backup</string>
+  <string name="ui_dialog_first_sync_msg">Backuppen of overslaan van alle berichten op dit toestel?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Backuppen of overslaan van alle berichten op dit toestel?\n\nLet op: De backup wordt opgesplitst in delen van %1$d berichten.</string>
+  <string name="ui_dialog_need_first_manual_sync_title">Eerste backup</string>
+  <string name="ui_dialog_need_first_manual_sync_msg">De eerste backup dient handmatig geÔnitieerd te worden. Wil je nu een backup uitvoeren?</string>
+  <string name="ui_dialog_request_token_msg">Aanmelden bij Google...</string>
+  <string name="ui_dialog_access_token_msg">toegang vragen...</string>
+
+  <string name="ui_dialog_access_token_error_title">Authorisatie mislukt </string>
+  <string name="ui_dialog_access_token_error_msg">Kreeg geen ëaccess tokení. Zorg ervoor dat je \"Grant access\ selecteert".
+  </string>
+
+  <string name="ui_dialog_connect_msg">Een browser scherm zal worden geopend, dat je vraag om toegang te verlenen %1$s tot je email account.</string>
+  <string name="ui_dialog_connect_token_error">Kreeg geen ërequest tokení van Google. Zorg voor een werkende internetconnectie en dat de tijd / tijdzone juist is geconfigureerd.</string>
+  <string name="ui_dialog_disconnect_msg">Weet je het zeker? Je zal je opnieuw moeten authenticeren na afmelding en de lokale synchronisatiestatus zal worden gereset.</string>
+
+  <string name="ui_dialog_upgrade_title">Upgrade informatie</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ is volledig backwards compatible met de SMS Backup app van Christoph Studer. Let wel op dat \"Auto backup\" alleen is ingesteld in ÈÈn app, anders kunnen berichten dubbel worden opgeslagen of worden teruggezet op je toestel. Je zal ook berichten \"Overslaan\" moeten kiezen bij een eerste synchronisatie indien berichten al eens eerder zijn gebackupt.
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
+  <string name="ui_dialog_brokendroidx_msg">De Droid X heeft een bug die automatisch backupen van berichten bij binnenkomst onmogelijk maakt. Kijk hiertoe FAQ op de website voor meer informatie.</string>
+
+  <string name="ui_sync">Backup</string>
+  <string name="ui_skip">Overslaan</string>
+  <string name="err_could_not_create_folder">Kon label niet creÎren.</string>
+  <string name="err_first_sync_needs_skip_flag">Interne fout: Eerste backup zonder indicatie of berichten wel of niet moeten worden overgeslagen.</string>
+  <string name="err_sync_requires_login_info">Kan geen backup maken zonder login informatie.</string>
+  <string name="err_communication_error">Algemene communicatiefout.</string>
+  <string name="menu_info">Over...</string>
+  <string name="menu_reset">Reset</string>
+  <string name="ui_dialog_reset_title">Reset huidige synchronisatie status</string>
+  <string name="ui_dialog_reset_message">Wil je de huidige synchronisatiestatus resetten? Je kan op een later moment nog steeds kiezen om alle berichten over te slaan.</string>
+  <string name="all_messages">Alle</string>
+
+  <string name="gmail_connected_fail">Gmail authenticatiefout</string>
+  <string name="gmail_needs_connecting">Tik om met je Gmail-account aan te melden (vereist).</string>
+  <string name="gmail_already_connected">Aangemeld als %1$s.</string>
+
+  <string name="ui_connected_label">Aanmelden</string>
+  <string name="ui_connected_desc">Je account moet worden aangemeld.</string>
+
+  <string name="call_incoming">inkomende oproep</string>
+  <string name="call_outgoing">uitgaande oproep</string>
+  <string name="call_missed">gemiste oproep</string>
+
+  <string name="call_missed_text">Gemiste oproep van %1$s</string>
+  <string name="call_incoming_text">Oproep van %1$s</string>
+  <string name="call_outgoing_text">Oproep met %1$s</string>
+
+  <string name="call_number_field">Aantal: %1$s</string>
+  <string name="call_duration_field">Tijdsduur: %1$s</string>
+  <string name="calllog_settings">Instelling gespreksdetails</string>
+
+  <string name="sms_with_field">SMS met %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">Gesprek met %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Contactenfilter</string>
+  <string name="ui_backup_contact_group_desc">Backup alleen items van een bepaalde contactgroep</string>
+
+  <string name="everybody">Idereeen</string>
+
+  <string name="call_type_everything">Alles</string>
+  <string name="call_type_incoming">Alleen inkomende gesprekken</string>
+  <string name="call_type_outgoing">Alleen uitgaande gesprekken</string>
+  <string name="call_type_incoming_outgoing">Inkomend &amp; uitgaand</string>
+  <string name="call_type_missed">Alleen gemiste gesprekken</string>
+
+  <string name="email_address_style_name">Naam</string>
+  <string name="email_address_style_name_and_number">Naam (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 u</string>
+  <string name="_2h">2 u</string>
+  <string name="_6h">6 u</string>
+  <string name="_24h">24 u</string>
+  <string name="never">Nooit</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="ssl_required">SSL (Vereist)</string>
+  <string name="ssl_optional">SSL (Optioneel)</string>
+  <string name="tls_required">TLS (Vereist)</string>
+  <string name="tls_optional">TLS (Optioneel)</string>
+  <string name="none">Geen</string>
+
+  <string name="ui_third_party_integration_label">3rd party integratie</string>
+  <string name="ui_third_party_integration_desc">Andere apps mogen een backup triggeren via ëbroadcast intentsí</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label"> Instellingen Backup</string>
+  <!-- <string name="ui_backup_settings_desc">Backup instellingen </string> -->
+
+  <string name="ui_backup_calllog_settings_label">Instellingen gespreksdetails </string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+
+  <string name="auto_backup_settings">Instellingen Auto Backup</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label">Instellingen herstellen</string>
+  <!-- <string name="ui_restore_settings_desc"> Instellingen herstellen </string> -->
+
+  <string name="ui_backup_sms_label">Backup SMS</string>
+  <string name="ui_backup_sms_desc">Aanzetten SMS backup</string>
+
+  <string name="ui_restore_sms_label">Terugzetten SMS</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">(Optie nog niet beschikbaar)</string>
+
+  <string name="ui_restore_mms_label">Terugzetten MMS</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label">Terugzetten gespreksdetails</string>
+  <string name="ui_restore_calllog_desc"/>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">Gespreksdetails</string>
+
+  <string name="ui_dialog_donate_prepare_message">Voorbereiden donatie,even geduld aub...</string>
+  <string name="ui_dialog_donate_message">Bepaal bedrag en munteenheid:</string>
+  <string name="ui_donation_success_message">Donatie succesvol, dankjewel!</string>
+  <string name="ui_donation_failure_message">Donatie mislukt: %1$s</string>
+  <string name="ui_donation_canceled_message">Donatie geannuleerd</string>
+  <string name="ui_donation_prompt_currency">Munteenheid</string>
+  <string name="ui_donation_oh_noez_no_network">Sorry, je hebt een werkende internetconnectie nodig om een bedrag te doneren.</string>
+
+  <string name="pref_disable_acra">Crash foutrapportage</string>
+  <string name="pref_acra_enabled">SMS Backup+ zal automatisch een foutrapportage versturen na een ëForce Closeí.</string>
+  <string name="pref_acra_disabled">Uitgezet</string>
+</resources>
+
