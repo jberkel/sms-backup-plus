@@ -263,16 +263,13 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">備份設定</string>
-  <!-- <string name="ui_backup_settings_desc">備份設定</string> -->
 
   <string name="ui_backup_calllog_settings_label">通話記錄設定</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">通話記錄設定</string> -->
 
   <string name="auto_backup_settings">自動備份設定</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">還原設定</string>
-  <!-- <string name="ui_restore_settings_desc">還原設定</string> -->
 
   <string name="ui_backup_sms_label">備份簡訊</string>
   <string name="ui_backup_sms_desc">開啟簡訊備份</string>

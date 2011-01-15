@@ -263,16 +263,13 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">备份设置</string>
-  <string name="ui_backup_settings_desc"/>
 
   <string name="ui_backup_calllog_settings_label">通话记录设置</string>
-  <string name="ui_backup_calllog_settings_desc"/>
 
   <string name="auto_backup_settings">自动备份设置</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">还原设置</string>
-  <string name="ui_restore_settings_desc"/>
 
   <string name="ui_backup_sms_label">备份短信</string>
   <string name="ui_backup_sms_desc">启动短信备份</string>
