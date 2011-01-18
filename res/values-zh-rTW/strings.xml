@@ -197,7 +197,7 @@
   <string name="err_sync_requires_login_info">沒有登入訊息的情況下無法進行備份。</string>
   <string name="err_communication_error">一般通信錯誤。</string>
   <string name="menu_info">關於</string>
-  <string name="menu_reset">Reset</string>
+  <string name="menu_reset">重設</string>
   <string name="ui_dialog_reset_title">重設當前同步處理狀態</string>
   <string name="ui_dialog_reset_message">您是否要重設當前的同步處理
   狀態？您仍舊可以在之後選擇跳過所有訊息。</string>
