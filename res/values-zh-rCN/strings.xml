@@ -133,7 +133,7 @@
 
   <string name="ui_enable_auto_sync_label">自动备份</string>
   <string name="ui_enable_auto_sync_desc">是否自动备份新短信。</string>
-  <string name="ui_enable_auto_sync_summary">自动备份 %1$s。如果此应用安装在 SD 卡上时，自动备份有可能无法可靠进行。</string>
+  <string name="ui_enable_auto_sync_summary">自动备份 %1$s。当此应用安装在 SD 卡上时，自动备份有可能无法可靠进行。</string>
 
   <string name="ui_backup_schedule_label">备份计划</string>
   <string name="ui_auto_backup_schedule_label">定时备份计划</string>
@@ -274,7 +274,7 @@
   <string name="ui_backup_sms_label">备份短信</string>
   <string name="ui_backup_sms_desc">启动短信备份</string>
 
-  <string name="ui_restore_sms_label">备份彩信</string>
+  <string name="ui_restore_sms_label">还原短信</string>
   <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(功能暂不可用)</string>
