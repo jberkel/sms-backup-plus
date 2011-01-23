@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="_1h">1 godz.</string>
-    <string name="_1min">1 min</string>
+    <string name="_1min">1 min.</string>
     <string name="_24h">24 godz.</string>
     <string name="_2h">2 godz.</string>
-    <string name="_30mins">30 min</string>
-    <string name="_3mins">3 min</string>
-    <string name="_6h">6 godz</string>
+    <string name="_30mins">30 min.</string>
+    <string name="_3mins">3 min.</string>
+    <string name="_6h">6 godz.</string>
     <string name="all_messages">Wszystkie</string>
     <string name="app_description">Użyj Gmail do przechowywania kopii zapasowej swoich SMSów. Ta wersja programu SMS Backup została stworzona przez Christoph\'a Studer\'a i obsługuje przywracanie wiadomości.</string>
     <string name="app_name">SMS Backup+Restore</string>
@@ -26,6 +26,9 @@
     <string name="call_type_outgoing">Tylko połączenia wychodzące</string>
     <string name="call_with_field">Połączenie z %1$s</string>
     <string name="calllog_settings">Ustawienia historii połączeń</string>
+    <string name="calllog">Call log</string>
+    <string name="donate">Darowizna</string>
+    <string name="donation">Darowizna</string>
     <string name="email_address_style_name_and_number">Nazwa (+00 123456)</string>
     <string name="email_address_style_name">Nazwa</string>
     <string name="email_address_style_number">+00 123456</string>
@@ -48,7 +51,11 @@
     <string name="notification_auth_failure">SMSBackup+ błąd logowania</string>
     <string name="notification_unknown_error">SMSBackup+ błąd</string>
     <string name="plain">Zwykły tekst</string>
+    <string name="pref_acra_disabled">Wyłączone</string>
+    <string name="pref_acra_enabled">SMS Backup+ wyśle automatycznie raport o błędzie po wymuszonym zamknięciu.</string>
+    <string name="pref_disable_acra">Zgłaszanie błędu</string>
     <string name="sms_with_field">SMS od %1$s</string>
+    <string name="sms">SMS</string>
     <string name="ssl_optional">SSL (opcjonalne)</string>
     <string name="ssl_required">SSL (wymagane)</string>
     <string name="status_auth_failure_details_plain">Błąd autoryzacji IMAP. Upewnij się, że nazwa użytkownika i hasło zostały poprawnie wprowadzone.</string>
@@ -80,16 +87,17 @@
     <string name="tls_required">TLS (wymagane)</string>
     <string name="ui_authentication_desc">Metoda uwierzytelniania. Domyślnie dla gmail jest \"XOauth\".</string>
     <string name="ui_authentication_label">Uwierzytelnienie</string>
-    <string name="ui_auto_backup_incoming_schedule_desc">Kiedy wykonać kopię przychodzących SMSów (po dostarczeniu)</string>
+    <string name="ui_auto_backup_incoming_schedule_desc">Kiedy wykonać kopię przychodzących SMSów (po otrzymaniu)</string>
     <string name="ui_auto_backup_incoming_schedule_label">Harmonogram przychodzący</string>
     <string name="ui_auto_backup_schedule_desc">Kiedy wykonać kopię SMSów</string>
     <string name="ui_auto_backup_schedule_label">Harmonogram podstawowy</string>
     <string name="ui_backup_calllog_desc">Włącz kopię dla historii połączeń (beta)</string>
     <string name="ui_backup_calllog_label">Kopia zapasowa historii połączeń</string>
+    <string name="ui_backup_calllog_settings_label">Ustawienia historii połączeń</string>
     <string name="ui_backup_calllog_sync_calendar_desc">Użyj tego kalendarza dla historii połączeń</string>
     <string name="ui_backup_calllog_sync_calendar_enabled_desc">Dodaj historię połączeń do wpisów Kalendarza</string>
     <string name="ui_backup_calllog_sync_calendar_enabled_label">Synchronizuj z Kalendarzem</string>
-    <string name="ui_backup_calllog_sync_calendar_label">None</string>
+    <string name="ui_backup_calllog_sync_calendar_label">Nie</string>
     <string name="ui_backup_calllog_types_desc">Dla jakich typów połączeń tworzyć kopię zapasową.</string>
     <string name="ui_backup_calllog_types_label">Typy połączeń</string>
     <string name="ui_backup_contact_group_desc">Twórz kopię tylko dla wybranych grup</string>
@@ -97,6 +105,10 @@
     <string name="ui_backup_mms_desc">Włącz kopię zapasową dla MMS-ów</string>
     <string name="ui_backup_mms_label">Kopia zapasowa MMS-ów</string>
     <string name="ui_backup_mms_not_supported">Kopia zapasowa MMS-ów nie jest obsługiwana przez tą platformę.</string>
+    <string name="ui_backup_schedule_label">Harmonogram</string>
+    <string name="ui_backup_settings_label">Ustawienia kopii zapasowej</string>
+    <string name="ui_backup_sms_desc">Włącz kopię SMS-ów</string>
+    <string name="ui_backup_sms_label">Kopia zapasowa SMS-ów</string>
     <string name="ui_connected_desc">Twoje konto musi być uwierzytelnione.</string>
     <string name="ui_connected_label">Połącz</string>
     <string name="ui_dialog_access_token_error_msg">Nie można uzyskać żetonu dostępu. Upewnij się, że wybrano opcję \"Pozwól na dostęp\".</string>
@@ -107,6 +119,8 @@
     <string name="ui_dialog_connect_msg">Zostanie otwarte okno przeglądarki, w którym należy zalogować się do gmail i autoryzować ten program</string>
     <string name="ui_dialog_connect_token_error">Nie można uzyskać żetonu żądania od Google. Upewnij się, że telefon jest podłączony do Internetu.</string>
     <string name="ui_dialog_disconnect_msg">Na pewno? Trzeba będzie powtórzyć uwierzytelnianie po odłączenie tego konta</string>
+    <string name="ui_dialog_donate_message">Określ kwotę i walutę:</string>
+    <string name="ui_dialog_donate_prepare_message">Przygotowanie darowizny, proszę czekać...</string>
     <string name="ui_dialog_first_sync_msg_batched">Wykonać kopię zapasową czy pominąć wszystkie wiadomości aktualnie przechowywane na tym urządzeniu?\n\nUwaga: kopia zapasowa będzie wykonana w partiach po %1$d wiadomości.</string>
     <string name="ui_dialog_first_sync_msg">Wykonać kopię zapasową czy pominąć wszystkie wiadomości aktualnie przechowywane na tym urządzeniu?</string>
     <string name="ui_dialog_first_sync_title">Pierwsza kopia zapasowa</string>
@@ -124,10 +138,17 @@
     <string name="ui_dialog_sync_data_reset_title">Reset danych kopii zapasowej</string>
     <string name="ui_dialog_upgrade_msg">SMS Backup+ jest całkowicie zgodny wstecz z SMS Backup. Należy jednak upewnić się, że \"Automatyczne wykonywanie kopii zapasowej\" jest włączone tylko w jednym programie, w przeciwnym razie powstaną duplikaty wiadomości. Należy również wybrać \"Pomiń\" przy pierwszej synchronizacji, jeśli wcześniej została już utworzona kopia zapasowa.</string>
     <string name="ui_dialog_upgrade_title">Informacje o aktualizacji</string>
+    <string name="ui_donation_canceled_message">Darowizna anulowana</string>
+    <string name="ui_donation_failure_message">Darowizna nieudana: %1$s</string>
+    <string name="ui_donation_oh_noez_no_network">Musisz mieć dostęp do Internetu aby dokonać darowizny.</string>
+    <string name="ui_donation_prompt_currency">Waluta</string>
+    <string name="ui_donation_success_message">Darowizna dokonana. Dziekuję bardzo!</string>
     <string name="ui_email_address_style_desc">Format adresów email</string>
     <string name="ui_email_address_style_label">Styl adresu email</string>
     <string name="ui_enable_auto_sync_desc">Czy automatycznie tworzyć kopię zapasową nowych SMSów.</string>
     <string name="ui_enable_auto_sync_label">Automatyczne wykonywanie kopii zapasowej</string>
+    <string name="ui_enable_auto_sync_summary">Automatyczna kopia %1$s. Może nie działać prawidłowo gdy aplikacja jest zainstalowana na karcie SD.</string>
+    <string name="ui_feature_not_available_yet">(Opcja jeszcze niedostępna)</string>
     <string name="ui_imap_folder_calllog_desc">Etykieta Gmail przypisana dla historii połączeń.</string>
     <string name="ui_imap_folder_calllog_label_dialog_msg">Kopia historii połączeń będzie oznaczana w Gmailu tą etykietą.</string>
     <string name="ui_imap_folder_calllog_label">Etykieta historii połączeń</string>
@@ -158,6 +179,12 @@
     <string name="ui_restore_button_label_error">Przywracanie</string>
     <string name="ui_restore_button_label_idle">Przywróć</string>
     <string name="ui_restore_button_label_restoring">Zatrzymaj</string>
+    <string name="ui_restore_calllog_desc" />
+    <string name="ui_restore_calllog_label">Przywróć historię połączeń</string>
+    <string name="ui_restore_mms_label">Przywróć MMS-y</string>
+    <string name="ui_restore_settings_label">Ustawienia przywracania</string>
+    <string name="ui_restore_sms_desc" />
+    <string name="ui_restore_sms_label">Przywróć SMS-y</string>
     <string name="ui_restore_starred_only_desc">Przywróć tylko wiadomości z gwiazdką.</string>
     <string name="ui_restore_starred_only_label">SMS z gwiazdką</string>
     <string name="ui_server_desc">Adres serwera z którym chcesz się połączyć, łącznie z portem.</string>
@@ -180,4 +207,14 @@
     <string name="ui_wifi_only_desc">Wykonuj kopię tylko gdy jesteś połączony przez Wifi</string>
     <string name="ui_wifi_only_label">Wymagaj połączenia Wifi</string>
     <string name="xoauth">XOAuth</string>
+
+    <plurals name="status_backup_done_details">
+        <item quantity="other">Utworzono kopię %1$d elementów.</item>
+        <item quantity="one">Utworzono kopię %1$d elementów.</item>
+    </plurals>
+    <plurals name="status_restore_done_details">
+        <item quantity="other">Przywrócono %1$d elementów (%2$d duplikatów).</item>
+        <item quantity="one">Przywrócono %1$d elementów (%2$d duplikatów).</item>
+    </plurals>
+
 </resources>
