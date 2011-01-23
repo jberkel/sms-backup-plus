@@ -782,6 +782,7 @@ public class SmsSync extends PreferenceActivity {
     }
 
     class OAuthCallbackTask extends AsyncTask<Intent, Void, XOAuthConsumer> {
+        private final Context mContext = SmsSync.this;
 
         @Override
         protected void onPreExecute() {
@@ -793,8 +794,8 @@ public class SmsSync extends PreferenceActivity {
             Uri uri = callbackIntent[0].getData();
             if (LOCAL_LOGV) Log.v(TAG, "oauth callback: " + uri);
 
-            XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
-            CommonsHttpOAuthProvider provider = consumer.getProvider(SmsSync.this);
+            XOAuthConsumer consumer = PrefStore.getOAuthConsumer(mContext);
+            CommonsHttpOAuthProvider provider = consumer.getProvider(mContext);
             String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
             try {
                 provider.retrieveAccessToken(consumer, verifier);
@@ -818,15 +819,18 @@ public class SmsSync extends PreferenceActivity {
 
         @Override
         protected void onPostExecute(XOAuthConsumer consumer) {
+            if (LOCAL_LOGV)
+              Log.v(TAG, String.format("%s#onPostExecute(%s)", getClass().getName(), consumer));
+
             dismiss(Dialogs.ACCESS_TOKEN);
             if (consumer != null) {
-                PrefStore.setOauthUsername(SmsSync.this, consumer.getUsername());
-                PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
+                PrefStore.setOauthUsername(mContext, consumer.getUsername());
+                PrefStore.setOauthTokens(mContext, consumer.getToken(), consumer.getTokenSecret());
 
                 updateConnected();
 
                 // Invite use to perform a backup, but only once
-                if (PrefStore.isFirstUse(SmsSync.this)) {
+                if (PrefStore.isFirstUse(mContext)) {
                     show(Dialogs.FIRST_SYNC);
                 }
             } else {

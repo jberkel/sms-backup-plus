@@ -240,7 +240,8 @@ public class PrefStore {
     }
 
     static boolean hasOauthTokens(Context ctx) {
-        return getOauthToken(ctx) != null &&
+        return getOauthUsername(ctx) != null &&
+               getOauthToken(ctx) != null &&
                getOauthTokenSecret(ctx) != null;
     }
 
