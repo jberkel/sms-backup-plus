@@ -37,6 +37,7 @@ apk = ant.properties['out.debug.package']
       end
     end
 
+
     namespace :parts do
       task :pull do
         sh "adb #{flag} pull /data/data/com.android.providers.telephony/app_parts/ app_parts"
@@ -50,9 +51,11 @@ apk = ant.properties['out.debug.package']
     namespace :prefs do
       task :pull do
         sh "adb #{flag} pull /data/data/#{package}/shared_prefs/#{package}_preferences.xml ."
+        sh "adb #{flag} pull /data/data/#{package}/shared_prefs/credentials.xml ."
       end
       task :push do
         sh "adb #{flag} push #{package}_preferences.xml /data/data/#{package}/shared_prefs/#{package}_preferences.xml"
+        sh "adb #{flag} push credentials.xml /data/data/#{package}/shared_prefs/credentials.xml"
       end
     end
   end
