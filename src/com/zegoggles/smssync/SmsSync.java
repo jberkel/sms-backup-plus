@@ -114,8 +114,9 @@ public class SmsSync extends PreferenceActivity {
 
         int version = Integer.parseInt(Build.VERSION.SDK);
         if (version < MIN_VERSION_MMS) {
-          Preference backupMms = findPreference("backup_mms");
+          CheckBoxPreference backupMms =  (CheckBoxPreference) findPreference(PrefStore.PREF_BACKUP_MMS);
           backupMms.setEnabled(false);
+          backupMms.setChecked(false);
           backupMms.setSummary(R.string.ui_backup_mms_not_supported);
         }
 
