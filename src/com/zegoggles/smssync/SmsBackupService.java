@@ -112,17 +112,21 @@ public class SmsBackupService extends ServiceBase {
             Cursor smsItems = null;
             Cursor mmsItems = null;
             Cursor callLogItems = null;
+            final int smsCount, mmsCount, callLogCount;
             try {
               acquireLocks(background);
               smsItems = getSmsItemsToSync(maxItemsPerSync, groupToBackup);
-              mmsItems = getMmsItemsToSync(maxItemsPerSync - smsItems.getCount(), groupToBackup);
-              callLogItems = getCallLogItemsToSync(maxItemsPerSync - smsItems.getCount() -
-                                                   mmsItems.getCount());
+              smsCount = smsItems != null ? smsItems.getCount() : 0;
+              mmsCount = mmsItems != null ? mmsItems.getCount() : 0;
+
+              mmsItems = getMmsItemsToSync(maxItemsPerSync - smsCount, groupToBackup);
+              callLogItems = getCallLogItemsToSync(maxItemsPerSync - smsCount - mmsCount);
+              callLogCount = callLogItems != null ? callLogItems.getCount() : 0;
 
               sCurrentSyncedItems = 0;
-              sItemsToSyncSms = smsItems.getCount();
-              sItemsToSyncMms = mmsItems.getCount();
-              sItemsToSyncCallLog = callLogItems.getCount();
+              sItemsToSyncSms = smsCount;
+              sItemsToSyncMms = mmsCount;
+              sItemsToSyncCallLog = callLogCount;
               sItemsToSync = sItemsToSyncSms + sItemsToSyncMms + sItemsToSyncCallLog;
 
               if (LOCAL_LOGV) {
@@ -220,13 +224,13 @@ public class SmsBackupService extends ServiceBase {
            DataType dataType = null;
            publish(CALC);
            while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
-                if (smsItems.moveToNext()) {
+                if (smsItems != null && smsItems.moveToNext()) {
                   dataType = DataType.SMS;
                   curCursor = smsItems;
-                } else if (mmsItems.moveToNext()) {
+                } else if (mmsItems != null && mmsItems.moveToNext()) {
                   dataType = DataType.MMS;
                   curCursor = mmsItems;
-                } else if (callLogItems.moveToNext()) {
+                } else if (callLogItems != null && callLogItems.moveToNext()) {
                   dataType = DataType.CALLLOG;
                   curCursor = callLogItems;
                 } else break;
