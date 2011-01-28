@@ -131,7 +131,9 @@
 
   <string name="ui_enable_auto_sync_label">Automatische backup</string>
   <string name="ui_enable_auto_sync_desc">Of nieuwe SMS automatisch gebackupt dient te worden.</string>
-  <string name="ui_enable_auto_sync_summary">Automatisch backuppen van %1$s. Auto backups kunnen minder betrouwbaar zijn als app op SD kaart is geïnstalleerd.</string>
+  <string name="ui_enable_auto_sync_summary">Automatisch backuppen van %1$s.</string>
+
+  <string name="sd_card_disclaimer">Auto backups kunnen minder betrouwbaar zijn als app op SD kaart is geïnstalleerd.</string>
 
   <string name="ui_backup_schedule_label">Backup rooster</string>
   <string name="ui_auto_backup_schedule_label">Standaard rooster</string>

@@ -38,6 +38,7 @@ import android.app.PendingIntent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.ConnectivityManager;
 import android.text.TextUtils;
 import android.os.Build;
 import android.os.Bundle;
@@ -196,6 +197,10 @@ public class SmsSync extends PreferenceActivity {
         statusPref.getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
     }
 
+    private ConnectivityManager getConnectivityManager() {
+      return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
     private void updateAutoBackupEnabledSummary() {
        final Preference enableAutoBackup = findPreference("enable_auto_sync");
        final List<String> enabled = new ArrayList();
@@ -204,8 +209,17 @@ public class SmsSync extends PreferenceActivity {
        if (PrefStore.isMmsBackupEnabled(this)) enabled.add(getString(R.string.mms));
        if (PrefStore.isCallLogBackupEnabled(this)) enabled.add(getString(R.string.calllog));
 
-       enableAutoBackup.setSummary(getString(R.string.ui_enable_auto_sync_summary,
-                                             TextUtils.join(", ", enabled)));
+       StringBuilder summary = new StringBuilder(
+        getString(R.string.ui_enable_auto_sync_summary, TextUtils.join(", ", enabled))
+       );
+
+       if (!getConnectivityManager().getBackgroundDataSetting())
+         summary.append(' ').append(getString(R.string.ui_enable_auto_sync_bg_data));
+
+       if (PrefStore.isInstalledOnSDCard(this))
+         summary.append(' ').append(getString(R.string.sd_card_disclaimer));
+
+       enableAutoBackup.setSummary(summary.toString());
 
        addSummaryListener(new Runnable() {
             public void run() { updateAutoBackupEnabledSummary(); }

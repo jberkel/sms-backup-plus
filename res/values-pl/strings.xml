@@ -147,7 +147,9 @@
     <string name="ui_email_address_style_label">Styl adresu email</string>
     <string name="ui_enable_auto_sync_desc">Czy automatycznie tworzyć kopię zapasową nowych SMSów.</string>
     <string name="ui_enable_auto_sync_label">Automatyczne wykonywanie kopii zapasowej</string>
-    <string name="ui_enable_auto_sync_summary">Automatyczna kopia %1$s. Może nie działać prawidłowo gdy aplikacja jest zainstalowana na karcie SD.</string>
+    <string name="ui_enable_auto_sync_summary">Automatyczna kopia %1$s.</string>
+
+    <string name="sd_card_disclaimer">Może nie działać prawidłowo gdy aplikacja jest zainstalowana na karcie SD.</string>
     <string name="ui_feature_not_available_yet">(Opcja jeszcze niedostępna)</string>
     <string name="ui_imap_folder_calllog_desc">Etykieta Gmail przypisana dla historii połączeń.</string>
     <string name="ui_imap_folder_calllog_label_dialog_msg">Kopia historii połączeń będzie oznaczana w Gmailu tą etykietą.</string>
