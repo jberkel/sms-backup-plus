@@ -254,6 +254,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * Harun Sahin - Turkish translation
   * [Lukas Pribyl](http://www.lukaspribyl.eu) - Czech translation
   * João Pedro Ferreira - Portugese translation
+  * Martijn Brouns - Dutch translation
 
 ##<a name="screenhots">Screenshots</a>
 
