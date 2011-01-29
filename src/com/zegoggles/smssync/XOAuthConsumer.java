@@ -69,6 +69,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   }
 
   public String generateXOAuthString(final String username) {
+     if (username == null) throw new IllegalArgumentException("username is null");
 
       try {
         final URI uri = new URI(String.format("https://mail.google.com/mail/b/%s/imap/",
