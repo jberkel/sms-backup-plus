@@ -11,6 +11,12 @@ public.
 Take a look at `acra-analyis.html` and change the Spreadsheet link to your own
 spreadsheet, it should just work.
 
+## Screenshot
+
+![Screenshot][]
+
+## Live demo
+
 [Demo][]
 
 ## License
@@ -19,5 +25,6 @@ The code is licensed under the same conditions as [SMS Backup+][License].
 
 [ACRA]: http://code.google.com/p/acra/
 [Google Visualization API]: http://code.google.com/apis/visualization/documentation/
+[Screenshot]: https://github.com/downloads/jberkel/sms-backup-plus/acra-analysis-screenshot.png
 [Demo]: http://jberkel.github.com/sms-backup-plus/acra-analysis
 [License]: https://github.com/jberkel/sms-backup-plus#license
