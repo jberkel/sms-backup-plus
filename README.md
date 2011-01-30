@@ -5,8 +5,8 @@ If you use [ACRA][] to monitor crashes in your
 Android app you can easily create reports using the [Google Visualization
 API][].
 
-However you'll need to set the sharing settings to "Anyone with the link" or
-public.
+However you'll need to set the sharing settings of the spreadsheet to "Anyone
+with the link" or public.
 
 Take a look at `acra-analyis.html` and change the Spreadsheet link to your own
 spreadsheet, it should just work.

@@ -5,6 +5,15 @@
     <title>
       SMS Backup+ error report
     </title>
+
+    <style type="text/css">
+      A:link {text-decoration: none }
+      body {
+         font-family: Arial;
+         border: 0 none;
+      }
+    </style>
+
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1', {packages: ['corechart', 'table']});
@@ -77,21 +86,23 @@
     </script>
   </head>
 
-  <body style="font-family: Arial;border: 0 none;">
-    <h1>SMS Backup+ error reports</h1>
+  <body>
+   <h1><a href="http://github.com/jberkel/sms-backup-plus#readme">SMS Backup+</a> error reports</h1>
+
+   <p>
+     <a href="https://github.com/jberkel/sms-backup-plus/tree/gh-pages#readme">What is this?<a>
+    </p>
+
     <a id="spreadsheet"
        href="https://spreadsheets.google.com/ccc?key=0At-v8_qu4q4VdFZOM3JNWng5bmZYLXNCWFJ0b1hPdHc&authkey=CMKWmssL">
       Spreadsheet
     </a>
 
-    <div id="spinner">
-      Loading...
-    </div>
+    <span id="spinner">
+      loading...
+    </span>
 
-    <div id="errors">
-    </div>
-
-    <div id="reports">
-    </div>
+    <div id="errors"/>
+    <div id="reports"/>
   </body>
 </html>
