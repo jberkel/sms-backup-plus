@@ -61,7 +61,7 @@
                 piechart.draw(view, {legend: 'bottom',
                                      pieSliceText: 'label',
                                      height: 500,
-                                     title: analysis['title'] + ': ' + version});
+                                     title: analysis['title'] + ': App version ' + version});
               }
             }
           }
@@ -76,7 +76,7 @@
             {
               id: 'crash-by-version',
               query: 'SELECT F, COUNT(A) GROUP BY F PIVOT B',
-              title: 'Number of crashes by Android version'
+              title: 'Number of crashes by Version of Android'
             },
             {
               id: 'crash-by-model',
