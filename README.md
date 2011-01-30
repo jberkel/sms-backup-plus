@@ -8,7 +8,7 @@ API][].
 However you'll need to set the sharing settings of the spreadsheet to "Anyone
 with the link" or public.
 
-Take a look at `acra-analyis.html` and change the Spreadsheet link to your own
+Take a look at [acra-analysis.html][] and change the Spreadsheet link to your own
 spreadsheet, it should just work.
 
 ## Screenshot
@@ -24,6 +24,7 @@ spreadsheet, it should just work.
 The code is licensed under the same conditions as [SMS Backup+][License].
 
 [ACRA]: http://code.google.com/p/acra/
+[acra-analysis.html]: https://github.com/jberkel/sms-backup-plus/blob/gh-pages/acra-analysis.html
 [Google Visualization API]: http://code.google.com/apis/visualization/documentation/
 [Screenshot]: https://github.com/downloads/jberkel/sms-backup-plus/acra-analysis-screenshot.png
 [Demo]: http://jberkel.github.com/sms-backup-plus/acra-analysis
