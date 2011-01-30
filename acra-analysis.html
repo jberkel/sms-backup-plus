@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>
+      SMS Backup+ error report
+    </title>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', {packages: ['piechart']});
+    </script>
+    <script type="text/javascript">
+    var visualization;
+
+    function drawVisualization(elementId) {
+      var query = new google.visualization.Query(
+          'https://spreadsheets.google.com/ccc?key=0At-v8_qu4q4VdFZOM3JNWng5bmZYLXNCWFJ0b1hPdHc&hl=en_GB&authkey=CMKWmssL');
+
+      // N = model, B = version, F = android_version
+      query.setQuery('SELECT F, COUNT(B) GROUP BY F ORDER BY COUNT(B) ' +
+                     'DESC LIMIT 10');
+
+      query.send(function(response) {
+        if (response.isError()) {
+          alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+        } else {
+          var data = response.getDataTable();
+          visualization = new google.visualization.PieChart(document.getElementById(elementId));
+          visualization.draw(data, {legend: 'bottom', title: 'Crashes by Android version'});
+        }
+      });
+    }
+
+
+    google.setOnLoadCallback(function() {
+      drawVisualization('visualization');
+    });
+    </script>
+  </head>
+  <body style="font-family: Arial;border: 0 none;">
+    <div id="visualization" style="height: 400px; width: 400px;"></div>
+  </body>
+</html>
