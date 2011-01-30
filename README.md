@@ -11,6 +11,8 @@ public.
 Take a look at `acra-analyis.html` and change the Spreadsheet link to your own
 spreadsheet, it should just work.
 
+[Demo][]
 
 [ACRA]: http://code.google.com/p/acra/
 [Google Visualization API]: http://code.google.com/apis/visualization/documentation/
+[Demo]: http://jberkel.github.com/sms-backup-plus/acra-analysis
