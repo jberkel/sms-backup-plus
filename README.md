@@ -13,6 +13,11 @@ spreadsheet, it should just work.
 
 [Demo][]
 
+## License
+
+The code is licensed under the same conditions as [SMS Backup+][License].
+
 [ACRA]: http://code.google.com/p/acra/
 [Google Visualization API]: http://code.google.com/apis/visualization/documentation/
 [Demo]: http://jberkel.github.com/sms-backup-plus/acra-analysis
+[License]: https://github.com/jberkel/sms-backup-plus#license
