@@ -2,7 +2,7 @@
 #Analysing ACRA error reports with the Google visualisation API
 
 If you use [ACRA][] to monitor crashes in your
-Android app you can easily create reports using the [Google Visualization
+Android app you can easily create realtime error reports using the [Google Visualization
 API][].
 
 However you'll need to set the sharing settings of the spreadsheet to "Anyone

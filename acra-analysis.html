@@ -19,13 +19,15 @@
       google.load('visualization', '1', {packages: ['corechart', 'table']});
     </script>
     <script type="text/javascript">
-      function show(spreadsheet, analysis) {
+      function show(spreadsheet, analysis, analysisContainer) {
         var q = new google.visualization.Query(spreadsheet);
         q.setQuery(analysis['query']);
 
         q.send(function(response) {
           var spinner = document.getElementById('spinner');
-          spinner.style.display = "none";
+          var toc = document.getElementById('toc-' + analysis['id']);
+          if (toc) toc.style.display = '';
+          if (spinner) spinner.style.display = "none";
 
           if (response.isError()) {
             var errors  = document.getElementById('errors');
@@ -33,9 +35,11 @@
                                ' ' + response.getDetailedMessage();
           } else {
             var data = response.getDataTable();
+            var id = analysis['id'];
 
             var container = document.createElement('div');
-            document.getElementById('reports').appendChild(container);
+            container.setAttribute('id', id + '-' + 'table');
+            analysisContainer.appendChild(container);
 
             var table = new google.visualization.Table(container);
             table.draw(data, {title: analysis['title']});
@@ -50,7 +54,8 @@
               var version = view.getColumnLabel(1);
               if (version && !(version === "")) {
                 var container = document.createElement('div');
-                document.getElementById('reports').appendChild(container);
+                container.setAttribute("id", id + '-' + version);
+                analysisContainer.appendChild(container);
 
                 var piechart = new google.visualization.PieChart(container);
                 piechart.draw(view, {legend: 'bottom',
@@ -67,19 +72,42 @@
         var sheet = document.getElementById('spreadsheet');
         if (sheet) {
           // N = model, B = version, F = android_version
-          var queries = [
+          var reports = [
             {
-              query: 'SELECT N, COUNT(A) GROUP BY N PIVOT B',
-              title: 'Crash by model',
-            },
-            {
+              id: 'crash-by-version',
               query: 'SELECT F, COUNT(A) GROUP BY F PIVOT B',
               title: 'Crash by version'
+            },
+            {
+              id: 'crash-by-model',
+              query: 'SELECT N, COUNT(A) GROUP BY N PIVOT B',
+              title: 'Crash by model',
             }
           ];
 
-          for (var i=0; i<queries.length;i++) {
-            show(sheet.href, queries[i]);
+          for (var i=0; i<reports.length;i++) {
+            var q = reports[i];
+
+            var li = document.createElement('li');
+            li.setAttribute('id', 'toc-' + q['id']);
+            li.style.display = 'none';
+            document.getElementById('toc').appendChild(li);
+            var a = document.createElement("a");
+            a.href = '#' + q['id'];
+            a.innerHTML = q['title'];
+            li.appendChild(a);
+
+            var analysisContainer = document.createElement('div');
+            analysisContainer.setAttribute('id', q['id']);
+
+            var anchor = document.createElement('a');
+            anchor.setAttribute('name', q['id']);
+            anchor.innerHTML = q['title'];
+            analysisContainer.appendChild(anchor);
+
+            document.getElementById('reports').appendChild(analysisContainer);
+
+            show(sheet.href, q, analysisContainer);
           }
         }
       });
@@ -87,9 +115,9 @@
   </head>
 
   <body>
-   <h1><a href="http://github.com/jberkel/sms-backup-plus#readme">SMS Backup+</a> error reports</h1>
+    <h1><a href="http://github.com/jberkel/sms-backup-plus#readme">SMS Backup+</a> error reports</h1>
 
-   <p>
+    <p>
      <a href="https://github.com/jberkel/sms-backup-plus/tree/gh-pages#readme">What is this?<a>
     </p>
 
@@ -99,10 +127,14 @@
     </a>
 
     <span id="spinner">
-      loading...
+      loading, please wait...
     </span>
 
     <div id="errors"/>
+    <div>
+      <ul id="toc">
+      </ul>
+    </div>
     <div id="reports"/>
   </body>
 </html>
