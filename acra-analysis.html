@@ -42,13 +42,27 @@
             analysisContainer.appendChild(container);
 
             var table = new google.visualization.Table(container);
-            table.draw(data, {title: analysis['title']});
-
             var view = new google.visualization.DataView(data);
-            var columns = view.getViewColumns();
 
+            // reverse columns - most recent version first
+            var columns = [0].concat(view.getViewColumns().slice(1, view.getViewColumns().length).reverse());
+
+            columns.push({
+              calc: function(table, rowNum) {
+                var sum = 0;
+                for (var i=1; i<columns.length-1; i++) sum += table.getValue(rowNum, i);
+                return sum;
+              },
+              type: 'number',
+              label: 'Total'
+            });
+
+            view.setColumns(columns);
+            table.draw(view, {title: analysis['title']});
+
+            var columns = view.getViewColumns();
             // produce one piechart per pivot point
-            for (var i=1; i<columns.length; i++) {
+            for (var i=1; i < columns.length; i++) {
               view.setColumns([0, columns[i]]);
 
               var version = view.getColumnLabel(1);
