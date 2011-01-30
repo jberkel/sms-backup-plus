@@ -7,37 +7,91 @@
     </title>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
-      google.load('visualization', '1', {packages: ['piechart']});
+      google.load('visualization', '1', {packages: ['corechart', 'table']});
     </script>
     <script type="text/javascript">
-    var visualization;
+      function show(spreadsheet, analysis) {
+        var q = new google.visualization.Query(spreadsheet);
+        q.setQuery(analysis['query']);
 
-    function drawVisualization(elementId) {
-      var query = new google.visualization.Query(
-          'https://spreadsheets.google.com/ccc?key=0At-v8_qu4q4VdFZOM3JNWng5bmZYLXNCWFJ0b1hPdHc&hl=en_GB&authkey=CMKWmssL');
+        q.send(function(response) {
+          var spinner = document.getElementById('spinner');
+          spinner.style.display = "none";
 
-      // N = model, B = version, F = android_version
-      query.setQuery('SELECT F, COUNT(B) GROUP BY F ORDER BY COUNT(B) ' +
-                     'DESC LIMIT 10');
+          if (response.isError()) {
+            var errors  = document.getElementById('errors');
+            errors.innerHTML = 'Error in query: ' + response.getMessage() +
+                               ' ' + response.getDetailedMessage();
+          } else {
+            var data = response.getDataTable();
 
-      query.send(function(response) {
-        if (response.isError()) {
-          alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-        } else {
-          var data = response.getDataTable();
-          visualization = new google.visualization.PieChart(document.getElementById(elementId));
-          visualization.draw(data, {legend: 'bottom', title: 'Crashes by Android version'});
+            var container = document.createElement('div');
+            document.getElementById('reports').appendChild(container);
+
+            var table = new google.visualization.Table(container);
+            table.draw(data, {title: analysis['title']});
+
+            var view = new google.visualization.DataView(data);
+            var columns = view.getViewColumns();
+
+            // produce one piechart per pivot point
+            for (var i=1; i<columns.length; i++) {
+              view.setColumns([0, columns[i]]);
+
+              var version = view.getColumnLabel(1);
+              if (version && !(version === "")) {
+                var container = document.createElement('div');
+                document.getElementById('reports').appendChild(container);
+
+                var piechart = new google.visualization.PieChart(container);
+                piechart.draw(view, {legend: 'bottom',
+                                     pieSliceText: 'label',
+                                     height: 500,
+                                     title: analysis['title'] + ': ' + version});
+              }
+            }
+          }
+        });
+      }
+
+      google.setOnLoadCallback(function() {
+        var sheet = document.getElementById('spreadsheet');
+        if (sheet) {
+          // N = model, B = version, F = android_version
+          var queries = [
+            {
+              query: 'SELECT N, COUNT(A) GROUP BY N PIVOT B',
+              title: 'Crash by model',
+            },
+            {
+              query: 'SELECT F, COUNT(A) GROUP BY F PIVOT B',
+              title: 'Crash by version'
+            }
+          ];
+
+          for (var i=0; i<queries.length;i++) {
+            show(sheet.href, queries[i]);
+          }
         }
       });
-    }
-
-
-    google.setOnLoadCallback(function() {
-      drawVisualization('visualization');
-    });
     </script>
   </head>
+
   <body style="font-family: Arial;border: 0 none;">
-    <div id="visualization" style="height: 400px; width: 400px;"></div>
+    <h1>SMS Backup+ error reports</h1>
+    <a id="spreadsheet"
+       href="https://spreadsheets.google.com/ccc?key=0At-v8_qu4q4VdFZOM3JNWng5bmZYLXNCWFJ0b1hPdHc&authkey=CMKWmssL">
+      Spreadsheet
+    </a>
+
+    <div id="spinner">
+      Loading...
+    </div>
+
+    <div id="errors">
+    </div>
+
+    <div id="reports">
+    </div>
   </body>
 </html>
