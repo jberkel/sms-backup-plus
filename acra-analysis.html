@@ -60,19 +60,21 @@
             view.setColumns(columns);
             table.draw(view, {title: analysis['title']});
 
-            var columns = view.getViewColumns();
+            var view2 = new google.visualization.DataView(data);
+            view2.setColumns(columns);
+            var columns = view2.getViewColumns();
             // produce one piechart per pivot point
             for (var i=1; i < columns.length; i++) {
-              view.setColumns([0, columns[i]]);
+              view2.setColumns([0, columns[i]]);
 
-              var version = view.getColumnLabel(1);
+              var version = view2.getColumnLabel(1);
               if (version && !(version === "")) {
                 var container = document.createElement('div');
                 container.setAttribute("id", id + '-' + version);
                 analysisContainer.appendChild(container);
 
                 var piechart = new google.visualization.PieChart(container);
-                piechart.draw(view, {legend: 'bottom',
+                piechart.draw(view2, {legend: 'bottom',
                                      pieSliceText: 'label',
                                      height: 500,
                                      title: analysis['title'] + ': App version ' + version});
