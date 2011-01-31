@@ -25,6 +25,13 @@ To use this for your own application take a look at [acra-analysis.html][] and
 change the Spreadsheet link.  You will also need to set the sharing settings of the
 spreadsheet to 'Anyone with the link' or 'public'.
 
+## Rant
+
+These analytic features should really be part of the Google Android dev console -
+they own all the pieces to build it but then leave it to somebody else to
+do it. The fact that an open source project (ACRA) is superior to the
+built-in crash monitoring (which arrived really late) says it all.
+
 ## Live demo
 
 [Demo][]
