@@ -29,7 +29,7 @@
 
 
           if (response.isError()) {
-            var i = response.getReasons().length;
+            var i = response.getReasons().length,
                 timeout = false;
             while (i--) if (response.getReasons()[i] === 'timeout') timeout = true;
 
