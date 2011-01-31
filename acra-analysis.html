@@ -34,7 +34,7 @@
             while (i--) if (response.getReasons()[i] === 'timeout') timeout = true;
 
             if (timeout) {
-              if (spinner) spinner.innerHTML = "Timeout, retrying...";
+              if (spinner) spinner.innerHTML = "request timed out, retrying...";
               show(spreadsheet, analysis, analysisContainer);
             } else {
               errors.innerHTML = 'Error in query: ' + response.getMessage() +
@@ -104,7 +104,7 @@
             {
               id: 'crash-by-version',
               query: 'SELECT F, COUNT(A) GROUP BY F PIVOT B',
-              title: 'Number of crashes by Version of Android'
+              title: 'Number of crashes by Android version'
             },
             {
               id: 'crash-by-model',
