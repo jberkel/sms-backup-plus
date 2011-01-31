@@ -27,13 +27,13 @@ spreadsheet to "Anyone with the link" or public.
 To use this for your own application take a look at [acra-analysis.html][] and
 change the Spreadsheet link.
 
-## Screenshot
-
-![Screenshot][]
-
 ## Live demo
 
 [Demo][]
+
+## Screenshot
+
+[![Screenshot][]
 
 ## License
 
