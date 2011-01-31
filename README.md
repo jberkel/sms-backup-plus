@@ -132,7 +132,7 @@ disabled.
 ## <a name="faq">FAQ</a>
 
 <a name="browser-bug"/>
-### <a name="faq-browser">When connecting, I get the message "You do do not have permission to open this page"</a>
+### <a name="faq-browser">After granting access I get the message "You do do not have permission to open this page"</a>
 
 Some browsers / handsets which ship with non-standard browsers are
 currently not fully supported, there appears to be a problem which breaks
@@ -147,7 +147,7 @@ Some possible workarounds:
   * Use plain text authentication (Advanced Settings - Server Settings), use
   your gmail address as username and supply your password
 
-### <a name="faq-browser">After connecting, the Messaging app opens.</a>
+### <a name="faq-browser">After granting access, the Messaging app opens.</a>
 
 See the answer to the previous question, it's the same problem.
 
