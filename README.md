@@ -21,11 +21,9 @@ different application versions, grouped by device models is very easy:
 
 The results can now directly be used to create a new dynamic table or chart.
 
-However, for this to work you'll need to set the sharing settings of the
-spreadsheet to "Anyone with the link" or public.
-
 To use this for your own application take a look at [acra-analysis.html][] and
-change the Spreadsheet link.
+change the Spreadsheet link.  You will also need to set the sharing settings of the
+spreadsheet to 'Anyone with the link' or 'public'.
 
 ## Live demo
 
