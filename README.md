@@ -33,7 +33,7 @@ change the Spreadsheet link.
 
 ## Screenshot
 
-[![Screenshot][]
+![Screenshot][]
 
 ## License
 
