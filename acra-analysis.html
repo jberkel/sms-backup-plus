@@ -24,16 +24,28 @@
         q.setQuery(analysis['query']);
 
         q.send(function(response) {
-          var spinner = document.getElementById('spinner');
-          var toc = document.getElementById('toc-' + analysis['id']);
-          if (toc) toc.style.display = '';
-          if (spinner) spinner.style.display = "none";
+          var spinner = document.getElementById('spinner'),
+              errors  = document.getElementById('errors');
+
 
           if (response.isError()) {
-            var errors  = document.getElementById('errors');
-            errors.innerHTML = 'Error in query: ' + response.getMessage() +
-                               ' ' + response.getDetailedMessage();
+            var i = response.getReasons().length;
+                timeout = false;
+            while (i--) if (response.getReasons()[i] === 'timeout') timeout = true;
+
+            if (timeout) {
+              if (spinner) spinner.innerHTML = "Timeout, retrying...";
+              show(spreadsheet, analysis, analysisContainer);
+            } else {
+              errors.innerHTML = 'Error in query: ' + response.getMessage() +
+                                 ' ' + response.getDetailedMessage();
+            }
           } else {
+            if (spinner) spinner.style.display = "none";
+
+            var toc = document.getElementById('toc-' + analysis['id']);
+            if (toc) toc.style.display = '';
+
             var data = response.getDataTable();
             var id = analysis['id'];
 
@@ -41,8 +53,8 @@
             container.setAttribute('id', id + '-' + 'table');
             analysisContainer.appendChild(container);
 
-            var table = new google.visualization.Table(container);
-            var view = new google.visualization.DataView(data);
+            var table = new google.visualization.Table(container),
+                view  = new google.visualization.DataView(data);
 
             // reverse columns - most recent version first
             var columns = [0].concat(view.getViewColumns().slice(1, view.getViewColumns().length).reverse());
