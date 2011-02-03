@@ -117,9 +117,10 @@ public class SmsBackupService extends ServiceBase {
               acquireLocks(background);
               smsItems = getSmsItemsToSync(maxItemsPerSync, groupToBackup);
               smsCount = smsItems != null ? smsItems.getCount() : 0;
-              mmsCount = mmsItems != null ? mmsItems.getCount() : 0;
 
               mmsItems = getMmsItemsToSync(maxItemsPerSync - smsCount, groupToBackup);
+              mmsCount = mmsItems != null ? mmsItems.getCount() : 0;
+
               callLogItems = getCallLogItemsToSync(maxItemsPerSync - smsCount - mmsCount);
               callLogCount = callLogItems != null ? callLogItems.getCount() : 0;
 
