@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.Provider;
 import java.util.Date;
 import java.util.Map;
 import java.util.List;
@@ -94,7 +95,8 @@ public class SmsSync extends PreferenceActivity {
       CONNECT,
       CONNECT_TOKEN_ERROR,
       UPGRADE,
-      BROKEN_DROIDX
+      BROKEN_DROIDX,
+      VIEW_LOG
     }
 
     StatusPreference statusPref;
@@ -183,7 +185,10 @@ public class SmsSync extends PreferenceActivity {
             case R.id.menu_reset:
                 show(Dialogs.RESET);
                 return true;
-             default:
+            case R.id.menu_view_log:
+                show(Dialogs.VIEW_LOG);
+
+            default:
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -194,7 +199,7 @@ public class SmsSync extends PreferenceActivity {
       findPreference("backup_mms").setSummary(
         statusPref.getLastSyncText(PrefStore.getMaxSyncedDateMms(this) * 1000));
       findPreference("backup_calllog").setSummary(
-        statusPref.getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
+              statusPref.getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
     }
 
     private ConnectivityManager getConnectivityManager() {
@@ -255,10 +260,12 @@ public class SmsSync extends PreferenceActivity {
         autoBackup.setSummary(summary.toString());
 
         addSummaryListener(new Runnable() {
-            public void run() { updateAutoBackupSummary(); }
-           }, PrefStore.PREF_INCOMING_TIMEOUT_SECONDS,
-           PrefStore.PREF_REGULAR_TIMEOUT_SECONDS,
-           PrefStore.PREF_WIFI_ONLY);
+            public void run() {
+                updateAutoBackupSummary();
+            }
+        }, PrefStore.PREF_INCOMING_TIMEOUT_SECONDS,
+                PrefStore.PREF_REGULAR_TIMEOUT_SECONDS,
+                PrefStore.PREF_WIFI_ONLY);
     }
 
     private void addSummaryListener(final Runnable r, String... prefs) {
@@ -586,9 +593,16 @@ public class SmsSync extends PreferenceActivity {
     }
 
     @Override
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        super.onPrepareDialog(id, dialog);
+        switch (Dialogs.values()[id]) {
+            case VIEW_LOG: AppLog.readLogIntoView(App.LOG, dialog.findViewById(AppLog.ID));
+        }
+    }
+
+    @Override
     protected Dialog onCreateDialog(final int id) {
         String title, msg;
-        Builder builder;
         switch (Dialogs.values()[id]) {
             case MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
@@ -641,6 +655,10 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(android.R.string.ok, null)
                     .setView(contentView)
                     .create();
+
+           case VIEW_LOG:
+               return AppLog.displayAsDialog(App.LOG, this);
+
            case RESET:
                 return new AlertDialog.Builder(this)
                     .setTitle(R.string.ui_dialog_reset_title)

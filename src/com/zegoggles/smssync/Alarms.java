@@ -24,42 +24,41 @@ import android.util.Log;
 
 import static com.zegoggles.smssync.App.*;
 
+
 public class Alarms {
 
-    /**
-     * Schedule a sync right after an SMS arrived.
-     */
-    static void scheduleIncomingSync(Context ctx) {
-        scheduleSync(ctx, PrefStore.getIncomingTimeoutSecs(ctx), false);
+    static final int BROADCAST_INTENT = 0;
+    static final int INCOMING = 1;
+    static final int REGULAR  = 2;
+    static final int UNKNOWN  = 3;
+
+    static long scheduleIncomingSync(Context ctx) {
+        return scheduleSync(ctx, PrefStore.getIncomingTimeoutSecs(ctx), INCOMING, false);
     }
 
-    /**
-     * Schedule a sync at default rate for syncing outgoing SMS.
-     */
-    static void scheduleRegularSync(Context ctx) {
-        scheduleSync(ctx, PrefStore.getRegularTimeoutSecs(ctx), false);
+    static long scheduleRegularSync(Context ctx) {
+        return scheduleSync(ctx, PrefStore.getRegularTimeoutSecs(ctx), REGULAR, false);
     }
 
-    /**
-     * Schedule a sync ASAP
-     */
-    static void scheduleImmediateSync(Context ctx) {
-        scheduleSync(ctx, -1, true);
+    static long scheduleImmediateSync(Context ctx) {
+        return scheduleSync(ctx, -1, BROADCAST_INTENT, true);
     }
 
     static void cancel(Context ctx) {
-        getAlarmManager(ctx).cancel(createPendingIntent(ctx));
+        getAlarmManager(ctx).cancel(createPendingIntent(ctx, UNKNOWN));
     }
 
-    private static void scheduleSync(Context ctx, int inSeconds, boolean force) {
-        if (LOCAL_LOGV) Log.v(TAG, "scheduleSync("+ctx+", "+inSeconds+")");
+    private static long scheduleSync(Context ctx, int inSeconds, int source, boolean force) {
+        if (LOCAL_LOGV) Log.v(TAG, "scheduleSync("+ctx+", "+inSeconds+", "+source+", "+force+")");
 
-        if ((PrefStore.isEnableAutoSync(ctx) && inSeconds > 0) || force) {
-          final long atTime = System.currentTimeMillis() + inSeconds * 1000l;
-          getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx));
-          Log.d(TAG, "Scheduled sync due " + (inSeconds > 0 ? "in "+ inSeconds + " seconds" : "now"));
+        if (force || (PrefStore.isEnableAutoSync(ctx) && inSeconds > 0)) {
+          final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
+          getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx, source));
+          if (LOCAL_LOGV) Log.v(TAG, "Scheduled sync due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
+          return atTime;
         } else {
-          Log.d(TAG, "Not scheduling sync because auto sync is disabled.");
+          if (LOCAL_LOGV) Log.v(TAG, "Not scheduling sync because auto sync is disabled.");
+          return -1;
         }
     }
 
@@ -67,9 +66,10 @@ public class Alarms {
       return (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
     }
 
-    private static PendingIntent createPendingIntent(Context ctx) {
-        Intent serviceIntent = new Intent(ctx, SmsBackupService.class);
-        serviceIntent.putExtra(Consts.KEY_NUM_RETRIES, Consts.NUM_AUTO_RETRIES);
-        return PendingIntent.getService(ctx, 0, serviceIntent, 0);
+    private static PendingIntent createPendingIntent(Context ctx, int source) {
+        Intent intent = (new Intent(ctx, SmsBackupService.class))
+              .putExtra(Consts.KEY_NUM_RETRIES, Consts.NUM_AUTO_RETRIES)
+              .putExtra(Consts.SOURCE, source);
+        return PendingIntent.getService(ctx, 0, intent, 0);
     }
 }

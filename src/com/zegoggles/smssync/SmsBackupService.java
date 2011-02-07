@@ -16,12 +16,11 @@
 
 package com.zegoggles.smssync;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.os.Process;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.os.AsyncTask;
 import android.provider.CallLog;
@@ -33,14 +32,11 @@ import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.zegoggles.smssync.CursorToMessage.ConversionResult;
 import com.zegoggles.smssync.CursorToMessage.DataType;
-import com.zegoggles.smssync.ServiceBase.SmsSyncState;
-import com.zegoggles.smssync.R;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Date;
-import java.io.IOException;
 
 import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
@@ -70,20 +66,37 @@ public class SmsBackupService extends ServiceBase {
       return intent.hasExtra(Consts.KEY_NUM_RETRIES);
     }
 
+    private String getSource(final Intent intent) {
+        switch (intent.getIntExtra(Consts.SOURCE, -1)) {
+            case Alarms.INCOMING:           return "incoming";
+            case Alarms.REGULAR:            return "regular";
+            case Alarms.BROADCAST_INTENT:   return "3rd party";
+            case -1:                        return "manual";
+            default:                        return "unknown";
+        }
+    }
+
     @Override protected void handleIntent(final Intent intent) {
-        if (LOCAL_LOGV) Log.v(TAG, "handleIntent("+intent+")");
         if (intent == null) return; // NB: should not happen with START_NOT_STICKY
+        if (LOCAL_LOGV) Log.v(TAG, "handleIntent("+intent+
+                ", "+(intent.getExtras() == null ?  "null" : intent.getExtras().keySet())+")");
+
+        appLog(R.string.app_log_backup_requested, getSource(intent));
 
         if (isBackground(intent) && !getConnectivityManager().getBackgroundDataSetting()) {
-            Log.d(TAG, "background data disabled");
+            appLog(R.string.app_log_skip_backup_background_data);
+
             stopSelf();
         } else {
           synchronized(ServiceBase.class) {
             // Only start a sync if there's no other sync / restore going on at this time.
-            if (!sIsRunning && !SmsRestoreService.isWorking()) {
-              sIsRunning = true;
-              new BackupTask().execute(intent);
-            }
+            if (!sIsRunning)
+              if (!SmsRestoreService.isWorking()) {
+                sIsRunning = true;
+                new BackupTask().execute(intent);
+              } else {
+                appLog(R.string.app_log_skip_backup_already_running);
+              }
           }
         }
     }
@@ -106,8 +119,11 @@ public class SmsBackupService extends ServiceBase {
             this.background = isBackground(intent);
 
             if (intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false)) {
+               appLog(R.string.app_log_skip_backup_skip_messages);
                return skip();
             }
+
+            appLog(R.string.app_log_start_backup, getSource(intent));
 
             Cursor smsItems = null;
             Cursor mmsItems = null;
@@ -130,41 +146,43 @@ public class SmsBackupService extends ServiceBase {
               sItemsToSyncCallLog = callLogCount;
               sItemsToSync = sItemsToSyncSms + sItemsToSyncMms + sItemsToSyncCallLog;
 
-              if (LOCAL_LOGV) {
-                Log.v(TAG, String.format("items to backup:  %d SMS, %d MMS, %d calls, %d total",
-                                         sItemsToSyncSms, sItemsToSyncMms, sItemsToSyncCallLog,
-                                         sItemsToSync));
-              }
+              if (sItemsToSync > 0) {
+                  appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
 
-              if (sItemsToSync <= 0) {
+                  /*
+                  if (!PrefStore.isLoginInformationSet(context)) {
+                     lastError = getString(R.string.err_sync_requires_login_info);
+                     publish(GENERAL_ERROR);
+                     return null;
+                  }
+                  */
+
+                  return backup(smsItems, mmsItems, callLogItems);
+              } else {
+                  appLog(R.string.app_log_skip_backup_no_items);
+
                   if (PrefStore.isFirstSync(context)) {
                       // If this is the first backup we need to write something to PREF_MAX_SYNCED_DATE
                       // such that we know that we've performed a backup before.
                       PrefStore.setMaxSyncedDateSms(context, PrefStore.DEFAULT_MAX_SYNCED_DATE);
                       PrefStore.setMaxSyncedDateMms(context, PrefStore.DEFAULT_MAX_SYNCED_DATE);
+                      // XXX skip call log?
                   }
+
                   Log.i(TAG, "Nothing to do.");
                   return 0;
-              } else {
-
-                if (!PrefStore.isLoginInformationSet(context)) {
-                   lastError = getString(R.string.err_sync_requires_login_info);
-                   publish(GENERAL_ERROR);
-                   return null;
-                } else {
-                   return backup(smsItems, mmsItems, callLogItems);
-                }
               }
             } catch (AuthenticationFailedException e) {
-              Log.e(TAG, "authentication failed", e);
+              appLog(R.string.app_log_backup_failed_authentication, translateException(e));
               publish(AUTH_FAILED);
               return null;
             } catch (MessagingException e) {
-              Log.e(TAG, "error during backup", e);
+              appLog(R.string.app_log_backup_failed_messaging, translateException(e));
               lastError = translateException(e);
               publish(GENERAL_ERROR);
               return null;
             } catch (ConnectivityErrorException e) {
+              appLog(R.string.app_log_backup_failed_connectivity, translateException(e));
               lastError = translateException(e);
               publish(CONNECTIVITY_ERROR);
               return null;
@@ -180,8 +198,14 @@ public class SmsBackupService extends ServiceBase {
                 /* ignore */
               }
 
+              final long nextSync = Alarms.scheduleRegularSync(context);
+              if (nextSync >= 0) {
+                appLog(R.string.app_log_scheduled_next_sync, new Date(nextSync));
+              } else {
+                appLog(R.string.app_log_no_next_sync);
+              }
+
               stopSelf();
-              Alarms.scheduleRegularSync(context);
            }
         }
 
@@ -194,9 +218,10 @@ public class SmsBackupService extends ServiceBase {
         @Override
         protected void onPostExecute(Integer result) {
            if (sCanceled) {
-              Log.i(TAG, "backup canceled by user");
+              appLog(R.string.app_log_backup_canceled, result);
               publish(CANCELED_BACKUP);
            } else if (result != null) {
+              appLog(R.string.app_log_backup_finished, result);
               Log.i(TAG, result + " items backed up");
               publish(FINISHED_BACKUP);
            }
@@ -211,6 +236,7 @@ public class SmsBackupService extends ServiceBase {
       private int backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems)
         throws MessagingException {
           Log.i(TAG, String.format("Starting backup (%d messages)", sItemsToSync));
+
           final CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
 
           publish(LOGIN);

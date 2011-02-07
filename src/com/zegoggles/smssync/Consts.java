@@ -20,28 +20,39 @@ package com.zegoggles.smssync;
  * Class containing application wide constants.
  */
 public interface Consts {
-    /** Gmail IMAP URI. */
-     String IMAP_URI = "imap%s://%s:%s@%s";
+    /**
+     * Gmail IMAP URI.
+     */
+    String IMAP_URI = "imap%s://%s:%s@%s";
 
-    /** Number of times a failed sync attempt should be retried when initiated by an alarm. */
-     int NUM_AUTO_RETRIES = 2;
+    /**
+     * Number of times a failed sync attempt should be retried when initiated by an alarm.
+     */
+    int NUM_AUTO_RETRIES = 2;
 
     /**
      * Key in the intent extras for indication whether all unsynced messages should
      * be skipped or not.
      */
-     String KEY_SKIP_MESSAGES = "skip_messages";
+    String KEY_SKIP_MESSAGES = "com.zegoggles.smssync.SkipMessages";
 
     /**
      * Key in the intent extras for the number of retries when getting an exception
      * during sync.
      */
-     String KEY_NUM_RETRIES = "num_retries";
+    String KEY_NUM_RETRIES = "com.zegoggles.smssync.NumRetries";
 
-    /** OAuth callback */
-     String CALLBACK_URL = "smssync://gmail";
+
+    // source of the backup intent
+    String SOURCE = "com.zegoggles.smssync.Source";
+
+    /**
+     * OAuth callback
+     */
+    String CALLBACK_URL = "smssync://gmail";
 
     // Scopes as defined in http://code.google.com/apis/accounts/docs/OAuth.html#prepScope
-     String GMAIL_SCOPE  = "https://mail.google.com/";
-     String CONTACTS_SCOPE  = "https://www.google.com/m8/feeds/";
+    String GMAIL_SCOPE = "https://mail.google.com/";
+    String CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
+
 }

@@ -45,7 +45,12 @@ apk = ant.properties['out.debug.package']
       task :push do
         sh "adb #{flag} push app_parts /data/data/com.android.providers.telephony/app_parts/"
       end
+    end
 
+    namespace :log do
+      task :pull do
+        sh "adb #{flag} pull /sdcard/sms_backup_plus.log ."
+      end
     end
 
     namespace :prefs do
@@ -58,6 +63,7 @@ apk = ant.properties['out.debug.package']
         sh "adb #{flag} push credentials.xml /data/data/#{package}/shared_prefs/credentials.xml"
       end
     end
+
   end
 end
 

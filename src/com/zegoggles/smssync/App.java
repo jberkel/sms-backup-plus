@@ -33,6 +33,8 @@ public class App extends Application {
 
     private static ContactAccessor sAccessor = null;
 
+    public static final String LOG = "sms_backup_plus.log";
+
     @Override
     public void onCreate() {
         ACRA.init(this);

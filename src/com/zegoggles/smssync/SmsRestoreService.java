@@ -244,7 +244,7 @@ public class SmsRestoreService extends ServiceBase {
         }
     }
 
-    private synchronized void asyncClearCache() {
+   private synchronized void asyncClearCache() {
        new Thread("clearCache") {
           @Override public void run() { clearCache(); }
        }.start();

@@ -17,7 +17,6 @@ package com.zegoggles.smssync;
 
 import android.app.Service;
 import android.content.Context;
-import android.content.ContentResolver;
 import android.database.Cursor;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,9 +31,9 @@ import android.app.NotificationManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 
-import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.AuthenticationFailedException;
+
+import java.util.Date;
 
 import static com.zegoggles.smssync.App.*;
 
@@ -69,9 +68,28 @@ public abstract class ServiceBase extends Service {
      */
     protected WifiManager.WifiLock sWifiLock;
 
+    protected AppLog appLog;
+
     @Override
     public IBinder onBind(Intent arg0) {
         return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        new Thread() {
+            @Override
+            public void run() {
+                ServiceBase.this.appLog = new AppLog(LOG, ServiceBase.this);
+            }
+        }.start();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (appLog != null) appLog.close();
     }
 
     protected BackupImapStore.BackupFolder getSMSBackupFolder() throws MessagingException {
@@ -89,7 +107,7 @@ public abstract class ServiceBase extends Service {
     protected void acquireLocks(boolean background) throws ConnectivityErrorException {
         if (sWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SmsBackup+");
+            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
         }
         sWakeLock.acquire();
 
@@ -100,7 +118,7 @@ public abstract class ServiceBase extends Service {
 
           // we have Wifi, lock it
           if (sWifiLock == null) {
-            sWifiLock = wMgr.createWifiLock("SMS Backup+");
+            sWifiLock = wMgr.createWifiLock(TAG);
           }
           sWifiLock.acquire();
         } else if (background && PrefStore.isWifiOnly(this)) {
@@ -215,11 +233,22 @@ public abstract class ServiceBase extends Service {
         getNotifier().notify(0, n);
     }
 
+    protected void appLog(int id, Object... args) {
+        if (appLog != null) {
+            if (args != null) {
+                for (int i=0; i<args.length;i++) {
+                    if (args[i] instanceof Date) args[i] = appLog.format((Date) args[i]);
+                }
+            }
+            appLog.append(getString(id, args));
+        }
+    }
+
     protected NotificationManager getNotifier() {
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
-    public ConnectivityManager getConnectivityManager() {
+    protected ConnectivityManager getConnectivityManager() {
         return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
