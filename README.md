@@ -1,5 +1,7 @@
 ## SMS Backup+
 
+[![][Icon]][IconLink]
+
 This is a fork of the Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms), where development has
 stopped a while ago. It uses Gmail to perform SMS, MMS and call log backups over
@@ -290,3 +292,5 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Tasker]: http://tasker.dinglisch.net/
 [NumberPicker.java]: http://www.technologichron.net/?p=42
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
+[Icon]: https://github.com/downloads/jberkel/sms-backup-plus/smsbackup72.png
+[IconLink]: https://market.android.com/details?id=com.zegoggles.smssync
