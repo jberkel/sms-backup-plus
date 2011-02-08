@@ -247,7 +247,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * [acra](http://code.google.com/p/acra) ACRA - Application Crash Report for Android
   * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
   * Jeffrey F. Cole - [NumberPicker.java][]
-  * [iTweek](http://itweek.deviantart.com/) and [ncrow](http://ncrow.deviantart.com/) for the Gmail icons
+  * Shimon Simon (new icon designs)
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
   * [skolima](http://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
