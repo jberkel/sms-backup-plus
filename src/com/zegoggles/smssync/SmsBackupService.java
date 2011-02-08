@@ -211,8 +211,10 @@ public class SmsBackupService extends ServiceBase {
 
         @Override
         protected void onProgressUpdate(SmsSyncState... progress) {
-          smsSync.statusPref.stateChanged(progress[0]);
-          sState = progress[0];
+          if (progress != null && progress.length > 0) {
+            if (smsSync != null) smsSync.statusPref.stateChanged(progress[0]);
+            sState = progress[0];
+          }
         }
 
         @Override
