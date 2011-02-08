@@ -1,6 +1,6 @@
 ## SMS Backup+
 
-[![][Icon]][IconLink]
+[![][Icon]][MarketLink]
 
 This is a fork of the Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms), where development has
@@ -39,7 +39,8 @@ You can also donate via PayPal from within the application (Menu - About, then h
 
 ### Installation
 
-![MarketQRCode][] Install via the Android market QR code link or directly from [github downloads][].
+![MarketQRCode][] Install via the Android market QR code link, [Android
+Market][MarketLink] or directly from [github downloads][].
 
 ### First steps
 
@@ -293,4 +294,4 @@ This application is released under the terms of the [Apache License, Version 2.0
 [NumberPicker.java]: http://www.technologichron.net/?p=42
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
 [Icon]: https://github.com/downloads/jberkel/sms-backup-plus/smsbackup72.png
-[IconLink]: https://market.android.com/details?id=com.zegoggles.smssync
+[MarketLink]: https://market.android.com/details?id=com.zegoggles.smssync
