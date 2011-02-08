@@ -330,4 +330,10 @@
   <string name="pref_app_log">Sync log</string>
   <string name="pref_app_log_enabled">Enabled</string>
   <string name="pref_app_log_disabled">Disabled</string>
+
+  <string name="source_incoming">incoming</string>
+  <string name="source_regular">regular</string>
+  <string name="source_3rd_party">3rd party</string>
+  <string name="source_manual">manual</string>
+  <string name="source_unknown">unknown</string>
 </resources>
