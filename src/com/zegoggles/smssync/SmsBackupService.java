@@ -147,16 +147,15 @@ public class SmsBackupService extends ServiceBase {
               sItemsToSync = sItemsToSyncSms + sItemsToSyncMms + sItemsToSyncCallLog;
 
               if (sItemsToSync > 0) {
-                  appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
-
-                  /*
                   if (!PrefStore.isLoginInformationSet(context)) {
+                     appLog(R.string.app_log_missing_credentials);
+
                      lastError = getString(R.string.err_sync_requires_login_info);
                      publish(GENERAL_ERROR);
                      return null;
                   }
-                  */
 
+                  appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
                   return backup(smsItems, mmsItems, callLogItems);
               } else {
                   appLog(R.string.app_log_skip_backup_no_items);

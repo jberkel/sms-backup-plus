@@ -18,6 +18,7 @@ package com.zegoggles.smssync;
 
 import java.net.URLEncoder;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -290,10 +291,11 @@ public class PrefStore {
     }
 
     static boolean isLoginInformationSet(Context ctx) {
-        if (getAuthMode(ctx) == AuthMode.PLAIN) {
-            return getImapPassword(ctx) != null && getImapUsername(ctx) != null;
-        } else {
-            return hasOauthTokens(ctx) && getOauthUsername(ctx) != null;
+        switch (getAuthMode(ctx)) {
+            case PLAIN:  return !TextUtils.isEmpty(getImapPassword(ctx)) &&
+                                !TextUtils.isEmpty(getImapUsername(ctx));
+            case XOAUTH: return hasOauthTokens(ctx);
+            default: return false;
         }
     }
 
