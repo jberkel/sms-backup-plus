@@ -200,7 +200,8 @@ public class SmsBackupService extends ServiceBase {
 
               final long nextSync = Alarms.scheduleRegularSync(context);
               if (nextSync >= 0) {
-                appLog(R.string.app_log_scheduled_next_sync, new Date(nextSync));
+                appLog(R.string.app_log_scheduled_next_sync,
+                       DateFormat.format("kk:mm", new Date(nextSync)));
               } else {
                 appLog(R.string.app_log_no_next_sync);
               }

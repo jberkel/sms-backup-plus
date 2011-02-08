@@ -116,6 +116,8 @@ public class PrefStore {
 
     static final String PREF_THIRD_PARTY_INTEGRATION  = "third_party_integration";
 
+    static final String PREF_APP_LOG = "app_log";
+
     /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE_SMS}. */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
 
@@ -156,12 +158,17 @@ public class PrefStore {
     /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
     static final String DEFAULT_SERVER_PROTOCOL = "+ssl+";
 
+
+    public static boolean isAppLogEnabled(Context ctx) {
+        return getPrefs(ctx).getBoolean(PREF_APP_LOG, false);
+    }
+
     enum AuthMode            { PLAIN, XOAUTH }
     enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING }
     public enum AddressStyle { NAME, NAME_AND_NUMBER, NUMBER }
 
 
-    static SharedPreferences getSharedPreferences(Context ctx) {
+    static SharedPreferences getPrefs(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
@@ -179,44 +186,44 @@ public class PrefStore {
     }
 
     static long getMaxSyncedDateSms(Context ctx) {
-        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_SMS, DEFAULT_MAX_SYNCED_DATE);
+        return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_SMS, DEFAULT_MAX_SYNCED_DATE);
     }
 
     static long getMaxSyncedDateMms(Context ctx) {
-        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_MMS, DEFAULT_MAX_SYNCED_DATE);
+        return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_MMS, DEFAULT_MAX_SYNCED_DATE);
     }
 
     static long getMaxSyncedDateCallLog(Context ctx) {
-        return getSharedPreferences(ctx).getLong(PREF_MAX_SYNCED_DATE_CALLLOG, DEFAULT_MAX_SYNCED_DATE);
+        return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_CALLLOG, DEFAULT_MAX_SYNCED_DATE);
     }
 
     static boolean isMaxSyncedDateSet(Context ctx) {
-        return getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
+        return getPrefs(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
     }
 
     static void setMaxSyncedDateSms(Context ctx, long maxSyncedDate) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .putLong(PREF_MAX_SYNCED_DATE_SMS, maxSyncedDate)
           .commit();
     }
 
     static void setMaxSyncedDateMms(Context ctx, long maxSyncedDate) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .putLong(PREF_MAX_SYNCED_DATE_MMS, maxSyncedDate)
           .commit();
     }
 
     static void setMaxSyncedDateCallLog(Context ctx, long maxSyncedDate) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .putLong(PREF_MAX_SYNCED_DATE_CALLLOG, maxSyncedDate)
           .commit();
     }
     static String getImapUsername(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_LOGIN_USER, null);
+        return getPrefs(ctx).getString(PREF_LOGIN_USER, null);
     }
 
     static void setImapUsername(Context ctx, String s) {
-        getSharedPreferences(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
+        getPrefs(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
     }
 
     static String getImapPassword(Context ctx) {
@@ -249,11 +256,11 @@ public class PrefStore {
     }
 
     static String getOauthUsername(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_OAUTH_USER, null);
+        return getPrefs(ctx).getString(PREF_OAUTH_USER, null);
     }
 
     static void setOauthUsername(Context ctx, String s) {
-        getSharedPreferences(ctx).edit().putString(PREF_OAUTH_USER, s).commit();
+        getPrefs(ctx).edit().putString(PREF_OAUTH_USER, s).commit();
     }
 
     static void setOauthTokens(Context ctx, String token, String secret) {
@@ -291,29 +298,29 @@ public class PrefStore {
     }
 
     static boolean isSmsBackupEnabled(Context ctx) {
-      return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_SMS, true);
+      return getPrefs(ctx).getBoolean(PREF_BACKUP_SMS, true);
     }
 
     static boolean isMmsBackupEnabled(Context ctx) {
        final int version = Integer.parseInt(android.os.Build.VERSION.SDK);
        return version < SmsSync.MIN_VERSION_MMS ? false :
-              getSharedPreferences(ctx).getBoolean(PREF_BACKUP_MMS, false);
+              getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
     static boolean isCallLogBackupEnabled(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_BACKUP_CALLLOG, false);
+        return getPrefs(ctx).getBoolean(PREF_BACKUP_CALLLOG, false);
     }
 
     static boolean isCallLogCalendarSyncEnabled(Context ctx) {
         return
           getCallLogCalendarId(ctx) >= 0 &&
-          getSharedPreferences(ctx).getBoolean(PREF_CALLLOG_SYNC_CALENDAR_ENABLED, false);
+          getPrefs(ctx).getBoolean(PREF_CALLLOG_SYNC_CALENDAR_ENABLED, false);
     }
 
     static <T extends Enum<T>> T getDefaultType(Context ctx, String pref, Class<T> tClazz,
                                                 T defaultType) {
         try {
-          final String s = getSharedPreferences(ctx).getString(pref, null);
+          final String s = getPrefs(ctx).getString(pref, null);
           return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase());
         } catch (IllegalArgumentException e) {
           Log.e(TAG, "getDefaultType("+pref+")", e);
@@ -341,49 +348,49 @@ public class PrefStore {
     }
 
     static boolean isRestoreStarredOnly(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_STARRED_ONLY, false);
+        return getPrefs(ctx).getBoolean(PREF_RESTORE_STARRED_ONLY, false);
     }
 
     static boolean isRestoreSms(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_SMS, true);
+        return getPrefs(ctx).getBoolean(PREF_RESTORE_SMS, true);
     }
 
     static boolean isRestoreMms(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_MMS, false);
+        return getPrefs(ctx).getBoolean(PREF_RESTORE_MMS, false);
     }
 
     static boolean isRestoreCallLog(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_RESTORE_CALLLOG, true);
+        return getPrefs(ctx).getBoolean(PREF_RESTORE_CALLLOG, true);
     }
 
     static String getReferenceUid(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_REFERENCE_UID, null);
+        return getPrefs(ctx).getString(PREF_REFERENCE_UID, null);
     }
 
     static void setReferenceUid(Context ctx, String referenceUid) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .putString(PREF_REFERENCE_UID, referenceUid)
           .commit();
     }
 
     static String getImapFolder(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER, DEFAULT_IMAP_FOLDER);
+        return getPrefs(ctx).getString(PREF_IMAP_FOLDER, DEFAULT_IMAP_FOLDER);
     }
 
     static String getCallLogFolder(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_IMAP_FOLDER_CALLLOG, DEFAULT_IMAP_FOLDER_CALLLOG);
+        return getPrefs(ctx).getString(PREF_IMAP_FOLDER_CALLLOG, DEFAULT_IMAP_FOLDER_CALLLOG);
     }
 
     static boolean getMailSubjectPrefix(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_MAIL_SUBJECT_PREFIX, DEFAULT_MAIL_SUBJECT_PREFIX);
+        return getPrefs(ctx).getBoolean(PREF_MAIL_SUBJECT_PREFIX, DEFAULT_MAIL_SUBJECT_PREFIX);
     }
 
     static boolean isImapFolderSet(Context ctx) {
-        return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER);
+        return getPrefs(ctx).contains(PREF_IMAP_FOLDER);
     }
 
     static boolean isCallLogFolderSet(Context ctx) {
-        return getSharedPreferences(ctx).contains(PREF_IMAP_FOLDER_CALLLOG);
+        return getPrefs(ctx).contains(PREF_IMAP_FOLDER_CALLLOG);
     }
 
     static int getMaxItemsPerSync(Context ctx) {
@@ -399,16 +406,16 @@ public class PrefStore {
     }
 
     static boolean isWifiOnly(Context ctx) {
-      return (getSharedPreferences(ctx).getBoolean(PREF_WIFI_ONLY, false));
+      return (getPrefs(ctx).getBoolean(PREF_WIFI_ONLY, false));
     }
 
     static boolean isAllow3rdPartyIntegration(Context ctx) {
-      return (getSharedPreferences(ctx).getBoolean(PREF_THIRD_PARTY_INTEGRATION, false));
+      return (getPrefs(ctx).getBoolean(PREF_THIRD_PARTY_INTEGRATION, false));
     }
 
     private static int getStringAsInt(Context ctx, String key, int def) {
         try {
-          String s = getSharedPreferences(ctx).getString(key, null);
+          String s = getPrefs(ctx).getString(key, null);
           if (s == null) return def;
 
           return Integer.valueOf(s);
@@ -429,22 +436,22 @@ public class PrefStore {
     }
 
     static void setImapFolder(Context ctx, String imapFolder) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .putString(PREF_IMAP_FOLDER, imapFolder)
           .commit();
     }
 
     static boolean isEnableAutoSync(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_ENABLE_AUTO_SYNC,
+        return getPrefs(ctx).getBoolean(PREF_ENABLE_AUTO_SYNC,
                 DEFAULT_ENABLE_AUTO_SYNC);
     }
 
     static boolean isEnableAutoSyncSet(Context ctx) {
-        return getSharedPreferences(ctx).contains(PREF_ENABLE_AUTO_SYNC);
+        return getPrefs(ctx).contains(PREF_ENABLE_AUTO_SYNC);
     }
 
     static void setEnableAutoSync(Context ctx, boolean enableAutoSync) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .putBoolean(PREF_ENABLE_AUTO_SYNC, enableAutoSync)
           .commit();
     }
@@ -458,35 +465,35 @@ public class PrefStore {
     }
 
     static boolean getMarkAsRead(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_MARK_AS_READ, DEFAULT_MARK_AS_READ);
+        return getPrefs(ctx).getBoolean(PREF_MARK_AS_READ, DEFAULT_MARK_AS_READ);
     }
 
     static void setMarkAsRead(Context ctx, boolean markAsRead) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .putBoolean(PREF_MARK_AS_READ, markAsRead)
           .commit();
     }
 
     static boolean getMarkAsReadOnRestore(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean(PREF_MARK_AS_READ_ON_RESTORE, DEFAULT_MARK_AS_READ_ON_RESTORE);
+        return getPrefs(ctx).getBoolean(PREF_MARK_AS_READ_ON_RESTORE, DEFAULT_MARK_AS_READ_ON_RESTORE);
     }
 
     static void setMarkAsReadOnRestore(Context ctx, boolean markAsRead) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .putBoolean(PREF_MARK_AS_READ_ON_RESTORE, markAsRead)
           .commit();
     }
 
     static boolean isFirstSync(Context ctx) {
-        return !getSharedPreferences(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
+        return !getPrefs(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
     }
 
     static boolean isFirstUse(Context ctx) {
         final String key = "first_use";
 
         if (isFirstSync(ctx) &&
-            !getSharedPreferences(ctx).contains(key)) {
-            getSharedPreferences(ctx).edit().putBoolean(key, false).commit();
+            !getPrefs(ctx).contains(key)) {
+            getPrefs(ctx).edit().putBoolean(key, false).commit();
             return true;
         } else {
             return false;
@@ -494,7 +501,7 @@ public class PrefStore {
     }
 
     static void clearOauthData(Context ctx) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .remove(PREF_OAUTH_USER)
           .commit();
 
@@ -505,7 +512,7 @@ public class PrefStore {
     }
 
     static void clearLastSyncData(Context ctx) {
-        getSharedPreferences(ctx).edit()
+        getPrefs(ctx).edit()
           .remove(PREF_MAX_SYNCED_DATE_SMS)
           .remove(PREF_MAX_SYNCED_DATE_MMS)
           .remove(PREF_MAX_SYNCED_DATE_CALLLOG)
@@ -513,21 +520,21 @@ public class PrefStore {
     }
 
     static boolean isNotificationEnabled(Context ctx) {
-        return getSharedPreferences(ctx).getBoolean("notifications", false);
+        return getPrefs(ctx).getBoolean("notifications", false);
     }
 
     static String getServerAddress(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
+        return getPrefs(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
     }
 
     static void setServerAddress(Context ctx, String serverAddress) {
-         getSharedPreferences(ctx).edit()
+         getPrefs(ctx).edit()
            .putString(PREF_SERVER_ADDRESS, serverAddress)
            .commit();
      }
 
      static String getServerProtocol(Context ctx) {
-        return getSharedPreferences(ctx).getString(PREF_SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
+        return getPrefs(ctx).getString(PREF_SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
     }
 
     static boolean isGmail(Context ctx) {
@@ -585,9 +592,9 @@ public class PrefStore {
 
     static boolean showUpgradeMessage(Context ctx) {
       final String key = "upgrade_message_seen";
-      boolean seen = getSharedPreferences(ctx).getBoolean(key, false);
+      boolean seen = getPrefs(ctx).getBoolean(key, false);
       if (!seen && isOldSmsBackupInstalled(ctx)) {
-        getSharedPreferences(ctx).edit().putBoolean(key, true).commit();
+        getPrefs(ctx).edit().putBoolean(key, true).commit();
         return true;
       } else {
         return false;
@@ -608,7 +615,7 @@ public class PrefStore {
     // move credentials from default shared prefs to new separate prefs
     static boolean upgradeCredentials(Context ctx) {
       final String flag = "upgraded_credentials";
-      SharedPreferences prefs = getSharedPreferences(ctx);
+      SharedPreferences prefs = getPrefs(ctx);
 
       boolean upgraded = prefs.getBoolean(flag, false);
       if (!upgraded) {

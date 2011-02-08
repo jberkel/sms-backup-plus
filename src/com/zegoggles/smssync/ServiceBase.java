@@ -26,6 +26,7 @@ import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.CallLog;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.app.NotificationManager;
 import android.app.Notification;
@@ -41,7 +42,9 @@ public abstract class ServiceBase extends Service {
     // the activity
     static SmsSync smsSync;
 
-    /** Field containing a description of the last error. */
+    /**
+     * Field containing a description of the last error.
+     */
     static String lastError;
 
     enum SmsSyncState {
@@ -53,7 +56,10 @@ public abstract class ServiceBase extends Service {
     }
 
     static SmsSyncState sState = SmsSyncState.IDLE;
-    public static SmsSyncState getState() { return sState; }
+
+    public static SmsSyncState getState() {
+        return sState;
+    }
 
     public static final Uri SMS_PROVIDER = Uri.parse("content://sms");
     public static final Uri MMS_PROVIDER = Uri.parse("content://mms");
@@ -78,12 +84,9 @@ public abstract class ServiceBase extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        new Thread() {
-            @Override
-            public void run() {
-                ServiceBase.this.appLog = new AppLog(LOG, ServiceBase.this);
-            }
-        }.start();
+        if (PrefStore.isAppLogEnabled(this)) {
+            this.appLog = new AppLog(LOG,  DateFormat.getDateFormatOrder(this));
+        }
     }
 
     @Override
@@ -93,7 +96,7 @@ public abstract class ServiceBase extends Service {
     }
 
     protected BackupImapStore.BackupFolder getSMSBackupFolder() throws MessagingException {
-      return new BackupImapStore(this).getSMSBackupFolder();
+        return new BackupImapStore(this).getSMSBackupFolder();
     }
 
     protected BackupImapStore.BackupFolder getCallLogBackupFolder() throws MessagingException {
@@ -102,6 +105,7 @@ public abstract class ServiceBase extends Service {
 
     /**
      * Acquire locks
+     *
      * @params background if service is running in background (no UI)
      */
     protected void acquireLocks(boolean background) throws ConnectivityErrorException {
@@ -113,22 +117,22 @@ public abstract class ServiceBase extends Service {
 
         WifiManager wMgr = (WifiManager) getSystemService(WIFI_SERVICE);
         if (wMgr.isWifiEnabled() &&
-            getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null &&
-            getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
+                getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null &&
+                getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
 
-          // we have Wifi, lock it
-          if (sWifiLock == null) {
-            sWifiLock = wMgr.createWifiLock(TAG);
-          }
-          sWifiLock.acquire();
+            // we have Wifi, lock it
+            if (sWifiLock == null) {
+                sWifiLock = wMgr.createWifiLock(TAG);
+            }
+            sWifiLock.acquire();
         } else if (background && PrefStore.isWifiOnly(this)) {
-          throw new ConnectivityErrorException(getString(R.string.error_wifi_only_no_connection));
+            throw new ConnectivityErrorException(getString(R.string.error_wifi_only_no_connection));
         }
 
         NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
 
         if (active == null || !active.isConnectedOrConnecting()) {
-          throw new ConnectivityErrorException(getString(R.string.error_no_connection));
+            throw new ConnectivityErrorException(getString(R.string.error_no_connection));
         }
     }
 
@@ -140,12 +144,14 @@ public abstract class ServiceBase extends Service {
     protected abstract void handleIntent(final Intent intent);
 
     // Android api level < 5
-    @Override public void onStart(final Intent intent, int startId) {
+    @Override
+    public void onStart(final Intent intent, int startId) {
         handleIntent(intent);
     }
 
     // Android api level >= 5
-    @Override public int onStartCommand(final Intent intent, int flags, int startId) {
+    @Override
+    public int onStartCommand(final Intent intent, int flags, int startId) {
         handleIntent(intent);
         return START_NOT_STICKY;
     }
@@ -155,15 +161,15 @@ public abstract class ServiceBase extends Service {
      */
     protected long getMaxItemDateSms() {
         Cursor result = getContentResolver().query(SMS_PROVIDER,
-                new String[] { SmsConsts.DATE },
+                new String[]{SmsConsts.DATE},
                 SmsConsts.TYPE + " <> ?",
-                new String[] { String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT) },
+                new String[]{String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)},
                 SmsConsts.DATE + " DESC LIMIT 1");
 
         try {
-           return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
+            return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
         } finally {
-          if (result != null) result.close();
+            if (result != null) result.close();
         }
     }
 
@@ -172,7 +178,7 @@ public abstract class ServiceBase extends Service {
      */
     protected long getMaxItemDateMms() {
         Cursor result = getContentResolver().query(MMS_PROVIDER,
-                new String[] { MmsConsts.DATE }, null, null,
+                new String[]{MmsConsts.DATE}, null, null,
                 MmsConsts.DATE + " DESC LIMIT 1");
         try {
             return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
@@ -183,7 +189,7 @@ public abstract class ServiceBase extends Service {
 
     protected long getMaxItemDateCallLog() {
         Cursor result = getContentResolver().query(CALLLOG_PROVIDER,
-                new String[] { CallLog.Calls.DATE }, null, null,
+                new String[]{CallLog.Calls.DATE}, null, null,
                 CallLog.Calls.DATE + " DESC LIMIT 1");
         try {
             return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
@@ -202,21 +208,21 @@ public abstract class ServiceBase extends Service {
     protected void updateMaxSyncedDateSms(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateSms(this, maxSyncedDate);
         if (LOCAL_LOGV) {
-          Log.v(TAG, "Max synced date for sms set to: " + maxSyncedDate);
+            Log.v(TAG, "Max synced date for sms set to: " + maxSyncedDate);
         }
     }
 
     protected void updateMaxSyncedDateMms(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateMms(this, maxSyncedDate);
         if (LOCAL_LOGV) {
-          Log.v(TAG, "Max synced date for mms set to: " + maxSyncedDate);
+            Log.v(TAG, "Max synced date for mms set to: " + maxSyncedDate);
         }
     }
 
     protected void updateMaxSyncedDateCallLog(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateCallLog(this, maxSyncedDate);
         if (LOCAL_LOGV) {
-          Log.v(TAG, "Max synced date for call log set to: " + maxSyncedDate);
+            Log.v(TAG, "Max synced date for call log set to: " + maxSyncedDate);
         }
     }
 
@@ -226,22 +232,15 @@ public abstract class ServiceBase extends Service {
         final Intent intent = new Intent(this, SmsSync.class);
 
         n.setLatestEventInfo(this,
-            title,
-            text,
-            PendingIntent.getActivity(this, 0, intent,  0));
+                title,
+                text,
+                PendingIntent.getActivity(this, 0, intent, 0));
 
         getNotifier().notify(0, n);
     }
 
     protected void appLog(int id, Object... args) {
-        if (appLog != null) {
-            if (args != null) {
-                for (int i=0; i<args.length;i++) {
-                    if (args[i] instanceof Date) args[i] = appLog.format((Date) args[i]);
-                }
-            }
-            appLog.append(getString(id, args));
-        }
+        if (appLog != null) appLog.append(getString(id, args));
     }
 
     protected NotificationManager getNotifier() {
@@ -253,12 +252,12 @@ public abstract class ServiceBase extends Service {
     }
 
     protected String translateException(Exception e) {
-       if (e instanceof MessagingException &&
-           "Unable to get IMAP prefix".equals(e.getMessage())) {
-        return getString(R.string.status_gmail_temp_error);
-      } else {
-        return e.getLocalizedMessage();
-      }
+        if (e instanceof MessagingException &&
+                "Unable to get IMAP prefix".equals(e.getMessage())) {
+            return getString(R.string.status_gmail_temp_error);
+        } else {
+            return e.getLocalizedMessage();
+        }
     }
 
     /**

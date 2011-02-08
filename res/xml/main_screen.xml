@@ -231,6 +231,13 @@
         android:persistent="true"
         android:defaultValue="true"/>
 
+      <CheckBoxPreference android:key="app_log"
+        android:title="@string/pref_app_log"
+        android:summaryOn="@string/pref_app_log_enabled"
+        android:summaryOff="@string/pref_app_log_disabled"
+        android:persistent="true"
+        android:defaultValue="false"/>
+
       <PreferenceScreen
         android:title="@string/ui_settings_advanced_server_label"
         android:summary="@string/ui_settings_advanced_server_desc">

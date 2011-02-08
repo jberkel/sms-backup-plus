@@ -16,26 +16,17 @@
 
 package com.zegoggles.smssync;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.Provider;
 import java.util.Date;
-import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Dialog;
-import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.app.PendingIntent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -48,7 +39,6 @@ import android.os.AsyncTask;
 import android.preference.Preference;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
 import android.preference.PreferenceManager;
 import android.preference.ListPreference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -68,7 +58,6 @@ import android.widget.TextView;
 import oauth.signpost.OAuth;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 
-import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.ServiceBase.SmsSyncState;
 
 import static com.zegoggles.smssync.App.*;
@@ -596,7 +585,8 @@ public class SmsSync extends PreferenceActivity {
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog(id, dialog);
         switch (Dialogs.values()[id]) {
-            case VIEW_LOG: AppLog.readLogIntoView(App.LOG, dialog.findViewById(AppLog.ID));
+            case VIEW_LOG:
+                AppLog.readLog(App.LOG, dialog.findViewById(AppLog.ID));
         }
     }
 

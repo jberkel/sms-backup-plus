@@ -323,7 +323,11 @@
   <string name="app_log_backup_failed_connectivity">Backup skipped, no connectivity</string>
   <string name="app_log_scheduled_next_sync">Next backup scheduled for: %1$s</string>
   <string name="app_log_no_next_sync">No new backup scheduled</string>
-  <string name="app_log_empty">(Log empty)</string>
 
   <string name="menu_view_log">View log</string>
+  <string name="app_log_empty">Log is empty. Enable it in \"Advanced settings\".</string>
+
+  <string name="pref_app_log">Sync log</string>
+  <string name="pref_app_log_enabled">Enabled</string>
+  <string name="pref_app_log_disabled">Disabled</string>
 </resources>

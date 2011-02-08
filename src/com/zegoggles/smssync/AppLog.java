@@ -23,21 +23,24 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class AppLog {
-    // keep max 64k worth of logs
-    static int MAX_SIZE = 64 * 1024;
+    // keep max 32k worth of logs
+    static int MAX_SIZE = 32 * 1024;
     static int ID = 1;
 
     private PrintWriter writer;
     private String dateFormat;
-    private String empty;
 
-    public AppLog(String name, Context context) {
-        for (char c : DateFormat.getDateFormatOrder(context)) {
-            if (c == DateFormat.MONTH) { dateFormat = "MM-dd hh:mm"; break; }
-            if (c == DateFormat.DATE)  { dateFormat = "dd-MM hh:mm"; break; }
+    public AppLog(String name, char[] format) {
+        for (char c : format) {
+            if (c == DateFormat.MONTH) {
+                dateFormat = "MM-dd kk:mm";
+                break;
+            }
+            if (c == DateFormat.DATE) {
+                dateFormat = "dd-MM kk:mm";
+                break;
+            }
         }
-
-        empty = context.getString(R.string.app_log_empty);
 
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             final File logFile = getFile(name);
@@ -52,12 +55,12 @@ public class AppLog {
     }
 
     public void append(String s) {
-        if (LOCAL_LOGV) Log.v(TAG, "[AppLog]:" + s);
         if (writer != null) {
             StringBuilder sb = new StringBuilder();
             sb.append(format(new Date()))
-              .append(": ").append(s);
+              .append(" ").append(s);
             writer.println(sb);
+            if (LOCAL_LOGV) Log.v(TAG, "[AppLog]: " + sb);
         }
     }
 
@@ -70,53 +73,55 @@ public class AppLog {
         return DateFormat.format(dateFormat, d);
     }
 
-    private boolean rotate(File logFile) {
+    private void rotate(final File logFile) {
         if (logFile.length() > MAX_SIZE) {
-
             if (LOCAL_LOGV) Log.v(TAG, "rotating logfile " + logFile);
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        LineNumberReader r = new LineNumberReader(new FileReader(logFile));
 
-            try {
-                LineNumberReader r = new LineNumberReader(new FileReader(logFile));
+                        while (r.readLine() != null) ;
+                        r.close();
 
-                while (r.readLine() != null) ;
-                r.close();
+                        int keep = Math.round(r.getLineNumber() * 0.3f);
+                        if (keep > 0) {
+                            r = new LineNumberReader(new FileReader(logFile));
 
-                int keep = Math.round(r.getLineNumber() * 0.3f);
-                if (keep > 0) {
-                    r = new LineNumberReader(new FileReader(logFile));
+                            while (r.readLine() != null && r.getLineNumber() < keep) ;
 
-                    while (r.readLine() != null && r.getLineNumber() < keep) ;
+                            File newFile = new File(logFile.getAbsolutePath() + ".new");
+                            PrintWriter pw = new PrintWriter(new FileWriter(newFile));
+                            String line;
+                            while ((line = r.readLine()) != null) pw.println(line);
 
-                    File newFile = new File(logFile.getAbsolutePath() + ".new");
-                    PrintWriter pw = new PrintWriter(new FileWriter(newFile));
-                    String line;
-                    while ((line = r.readLine()) != null) pw.println(line);
+                            pw.close();
+                            r.close();
 
-                    pw.close();
-                    r.close();
-
-                    return newFile.renameTo(logFile);
-                } else {
-                    return false;
+                            if (newFile.renameTo(logFile) && LOCAL_LOGV) {
+                                Log.v(TAG, "rotated file, new size = " + logFile.length());
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "error rotating file " + logFile, e);
+                    }
                 }
-            } catch (IOException e) {
-                Log.e(TAG, "error rotating file " + logFile, e);
-                return false;
-            }
-        } else {
-            return false;
+            }.start();
         }
     }
 
     public static Dialog displayAsDialog(String name, Context context) {
+        final int PAD = 5;
         final TextView view = new TextView(context);
         view.setId(ID);
 
-        readLogIntoView(name, view);
+        readLog(name, view);
 
         final ScrollView sView = new ScrollView(context) {
             {
                 addView(view);
+                setPadding(PAD, PAD, PAD, PAD);
             }
 
             @Override
@@ -133,11 +138,11 @@ public class AppLog {
                 .create();
     }
 
-    public static void readLogIntoView(String name, View view) {
-        readLogIntoView(getFile(name), view);
+    public static boolean readLog(String name, View view) {
+        return readLog(getFile(name), view);
     }
 
-    public static void readLogIntoView(File f, View view) {
+    public static boolean readLog(File f, View view) {
         StringBuilder text = new StringBuilder();
         if (f.exists() && view instanceof TextView) {
             BufferedReader br = null;
@@ -159,7 +164,10 @@ public class AppLog {
                 }
             }
         }
-        ((TextView)view).setText(text.length() == 0 ? "Empty" : text);
+        ((TextView) view).setText(text.length() > 0 ? text :
+                view.getContext().getString(R.string.app_log_empty));
+
+        return text.length() > 0;
     }
 
     static File getFile(String name) {
