@@ -3,10 +3,9 @@
   <string name="app_name">SMS Backup+</string>
 
   <string name="app_description">
-	
-     Use Gmail to back up your SMS. This is an improved version of the application "SMS Backup" by
-     Christoph Studer which supports restoring SMS back to the phone. It is
-     fully backwards compatible with SMS Backup.
+	 Benutzen Sie Gmail um Ihre SMS zu sichern. Dies ist eine verbesserte Version der "SMS Backup"
+	 Applikation von Christoph Studer welche die Wiederherstellung von SMS auf das Handy unterstützt.
+	 Sie ist vollständig abwärtskompatibel zu SMS Backup.
   </string>
 
   <string name="ui_sync_button_label_idle">Sicherung</string>
