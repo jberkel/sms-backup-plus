@@ -20,7 +20,7 @@
   <string name="ui_restore_button_label_error">Wiederherstellung</string>
 
   <string name="status_idle">Inaktiv</string>
-  <string name="status_idle_details">Letzter Eintrag gesichert: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details">Letzte Sicherung: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">niemals</string>
 
   <string name="status_working">Beschäftigt</string>
@@ -114,17 +114,17 @@
   <string name="ui_backup_calllog_types_label">Art des Anrufs</string>
   <string name="ui_backup_calllog_types_desc">Zu sicherende Anrufarten</string>
 
-  <string name="ui_backup_calllog_sync_calendar_label">Keine</string>
+  <string name="ui_backup_calllog_sync_calendar_label">Kalender</string>
   <string name="ui_backup_calllog_sync_calendar_desc">Kalender für das Anrufprotokoll</string>
 
   <string name="ui_imap_folder_calllog_label">Anrufprotokoll Label</string>
   <string name="ui_imap_folder_calllog_desc">Gmail-Label für Anrufe.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Gesicherte Protokoll-Einträge werden in Gmail mit diesem Label gekennzeichnet.</string>
 
-  <string name="ui_mark_as_read_label">Als gelesen markieren (E-Mails)</string>
+  <string name="ui_mark_as_read_label">Gelesen markieren (E-Mails)</string>
   <string name="ui_mark_as_read_desc">Ob Nachrichten in Gmail als gelesen markiert werden sollen oder nicht.</string>
   
-  <string name="ui_mark_as_read_restore_label">Als gelesen markieren (SMS)</string>
+  <string name="ui_mark_as_read_restore_label">Gelesen markieren (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Ob alle wiederhergestellten SMS als gelesen markiert werden sollen oder nicht.</string>
 
   <string name="ui_email_address_style_label">E-Mail Adress-Stil</string>
@@ -231,7 +231,7 @@
   <string name="ui_backup_contact_group_label">Zu sichernde Kontakte</string>
   <string name="ui_backup_contact_group_desc">Nur Einträger einer bestimmten Gruppe sichern</string>
 
-  <string name="everybody">Jeder</string>
+  <string name="everybody">Alle</string>
 
   <string name="call_type_everything">Alles</string>
   <string name="call_type_incoming">Nur eingehende Anrufe</string>
@@ -286,7 +286,7 @@
   <string name="ui_restore_mms_label">MMS Wiederherstellung</string>
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
-  <string name="ui_restore_calllog_label">Anrufprotokoll Wiederherstellung</string>
+  <string name="ui_restore_calllog_label">Anrufliste Wiederherstellung</string>
   <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
@@ -301,8 +301,8 @@
   <string name="ui_donation_prompt_currency">Währung</string>
   <string name="ui_donation_oh_noez_no_network">Entschuldigung, Sie müssen mit dem Internet verbunden sein um eine Spende zu tätigen.</string>
 
-  <string name="pref_disable_acra">Fehler Report</string>
-  <string name="pref_acra_enabled">SMS Backup+ wird automatisch einen Fehler Report nach dem Absturz senden.</string>
+  <string name="pref_disable_acra">Fehlerreport</string>
+  <string name="pref_acra_enabled">SMS Backup+ wird automatisch einen Fehlerreport nach dem Absturz senden.</string>
   <string name="pref_acra_disabled">Deaktiviert</string>
 
   <string name="app_log_skip_backup_background_data">Übersprungen weil Hintergrunddaten deaktiviert sind.</string>
@@ -325,7 +325,7 @@
   <string name="menu_view_log">Protokoll ansehen</string>
   <string name="app_log_empty">Protokoll ist leer. Sie können es in den \"Erweiterten Einstellungen\" aktivieren.</string>
 
-  <string name="pref_app_log">Synchronisations-Protokoll</string>
+  <string name="pref_app_log">Sync-Protokoll</string>
   <string name="pref_app_log_enabled">Protokoll wird als \"sms_backup_plus.log\" auf der SD-Karte gespeichert.</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
