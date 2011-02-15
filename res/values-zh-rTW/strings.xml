@@ -133,20 +133,24 @@
 
   <string name="ui_enable_auto_sync_label">自動備份</string>
   <string name="ui_enable_auto_sync_desc">是否自動備份新簡訊。</string>
-  <string name="ui_enable_auto_sync_summary">自動備份 %1$s。當此程式安裝在 SD 卡中時，自動備份可能會無法有效運作。</string>
+  <string name="ui_enable_auto_sync_summary">自動備份 %1$s。</string>
+
+  <string name="sd_card_disclaimer">當此程式安裝在 SD 卡中時，自動備份可能會無法有效運作。</string>
+
+  <string name="ui_enable_auto_sync_bg_data">您將同時需要開啟後台數據。</string>
 
   <string name="ui_backup_schedule_label">备份調度</string>
-  <string name="ui_auto_backup_schedule_label">定時調度</string>
-  <string name="ui_auto_backup_schedule_desc">何時備份簡訊</string>
+  <string name="ui_auto_backup_schedule_label">定時調度計畫</string>
+  <string name="ui_auto_backup_schedule_desc">定時備份簡訊</string>
 
-  <string name="ui_auto_backup_incoming_schedule_label">新簡訊調度</string>
-  <string name="ui_auto_backup_incoming_schedule_desc">何時備份新簡訊 (在接收後)</string>
+  <string name="ui_auto_backup_incoming_schedule_label">新訊息調度計畫</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">在接收到新訊息後一段時間進行備份</string>
 
   <string name="ui_wifi_only_label">需要 Wifi</string>
   <string name="ui_wifi_only_desc">僅在連接到 Wifi 網絡時才進行備份</string>
 
   <string name="ui_notifications_label">通知</string>
-  <string name="ui_notifications_desc">背景通知</string>
+  <string name="ui_notifications_desc">後台通知</string>
 
   <string name="error_wifi_only_no_connection">沒有 Wifi 網絡</string>
   <string name="error_no_connection">沒有互聯網連接</string>
@@ -264,12 +268,15 @@
   <!-- new ui -->
   <string name="ui_backup_settings_label">備份設定</string>
 
+
   <string name="ui_backup_calllog_settings_label">通話記錄設定</string>
+
 
   <string name="auto_backup_settings">自動備份設定</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">還原設定</string>
+
 
   <string name="ui_backup_sms_label">備份簡訊</string>
   <string name="ui_backup_sms_desc">開啟簡訊備份</string>
@@ -300,4 +307,34 @@
   <string name="pref_disable_acra">崩潰錯誤回報</string>
   <string name="pref_acra_enabled">SMS Backup+ 將在被強制退出後自動傳送一份錯誤報告。</string>
   <string name="pref_acra_disabled">停用</string>
+
+  <string name="app_log_skip_backup_background_data">已跳過，由於背景數據被停用</string>
+  <string name="app_log_skip_backup_already_running">已跳過，由於備份已在進行中</string>
+  <string name="app_log_skip_backup_skip_messages">跳過所有訊息</string>
+  <string name="app_log_skip_backup_no_items">已跳過 (沒有找到項目)</string>
+  <string name="app_log_missing_credentials">已跳過 (授權丟失)</string>
+  <string name="app_log_backup_requested">備份請求 (%1$s)</string>
+  <string name="app_log_start_backup">正在開始備份 (%1$s)</string>
+  <string name="app_log_backup_messages">正在備份 (%1$d 條簡訊, %2$d 條 MMS, %3$d 個通話記錄)</string>
+  <string name="app_log_backup_canceled">備份已取消</string>
+  <string name="app_log_backup_finished">備份結束</string>
+
+  <string name="app_log_backup_failed_authentication">認證錯誤: %1$s</string>
+  <string name="app_log_backup_failed_messaging">一般錯誤: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">備份已跳過，無網絡連接</string>
+  <string name="app_log_scheduled_next_sync">下次備份調度開始於: %1$s</string>
+  <string name="app_log_no_next_sync">沒有新的備份調度</string>
+
+  <string name="menu_view_log">查看日誌</string>
+  <string name="app_log_empty">日誌為空。請在“進階設定”中開啟同步處理日誌功能。</string>
+
+  <string name="pref_app_log">同步處理日誌</string>
+  <string name="pref_app_log_enabled">日誌會被保存在 SD 卡上，命名為“sms_backup_plus.log”。</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="source_incoming">接收到新訊息</string>
+  <string name="source_regular">定時</string>
+  <string name="source_3rd_party">第三方</string>
+  <string name="source_manual">手動</string>
+  <string name="source_unknown">未知</string>
 </resources>

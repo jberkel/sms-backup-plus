@@ -46,7 +46,7 @@
     <item quantity="other">成功还原了 <xliff:g id="total_items">%1$d</xliff:g> 条信息 (%2$d 条重复)。</item>
   </plurals>
 
-  <string name="status_restore_canceled_details">成功还原了 %1$d/%2$d 条短信。</string>
+  <string name="status_restore_canceled_details">成功还原了 %1$d/%2$d 条信息。</string>
 
   <string name="status_unknown_error">错误</string>
   <string name="notification_unknown_error">SMS Backup+ 出错</string>
@@ -133,17 +133,21 @@
 
   <string name="ui_enable_auto_sync_label">自动备份</string>
   <string name="ui_enable_auto_sync_desc">是否自动备份新短信。</string>
-  <string name="ui_enable_auto_sync_summary">自动备份 %1$s。当此应用安装在 SD 卡上时，自动备份有可能无法可靠进行。</string>
+  <string name="ui_enable_auto_sync_summary">自动备份 %1$s。</string>
+
+  <string name="sd_card_disclaimer">当此应用安装在 SD 卡上时，自动备份有可能无法可靠进行。</string>
+
+  <string name="ui_enable_auto_sync_bg_data">您将同时需要开启后台数据。</string>
 
   <string name="ui_backup_schedule_label">备份计划</string>
   <string name="ui_auto_backup_schedule_label">定时备份计划</string>
-  <string name="ui_auto_backup_schedule_desc">何时备份短信。</string>
+  <string name="ui_auto_backup_schedule_desc">按时备份短信。</string>
 
-  <string name="ui_auto_backup_incoming_schedule_label">新短信备份计划</string>
-  <string name="ui_auto_backup_incoming_schedule_desc">何时备份新短信 (在收到后)。</string>
+  <string name="ui_auto_backup_incoming_schedule_label">新信息备份计划</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">在接收到新信息后一段时间进行备份。</string>
 
   <string name="ui_wifi_only_label">强制使用 Wifi</string>
-  <string name="ui_wifi_only_desc">仅在连接到 Wifi 网络时才备份/还原。</string>
+  <string name="ui_wifi_only_desc">仅在连接到 Wifi 网络时才会备份/还原。</string>
 
   <string name="ui_notifications_label">通知</string>
   <string name="ui_notifications_desc">后台通知。</string>
@@ -264,12 +268,15 @@
   <!-- new ui -->
   <string name="ui_backup_settings_label">备份设置</string>
 
+
   <string name="ui_backup_calllog_settings_label">通话记录设置</string>
+
 
   <string name="auto_backup_settings">自动备份设置</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">还原设置</string>
+
 
   <string name="ui_backup_sms_label">备份短信</string>
   <string name="ui_backup_sms_desc">启动短信备份</string>
@@ -300,4 +307,34 @@
   <string name="pref_disable_acra">崩溃错误报告</string>
   <string name="pref_acra_enabled">SMS Backup+ 将在被强行关闭后自动发送一份错误报告。</string>
   <string name="pref_acra_disabled">禁用</string>
+
+  <string name="app_log_skip_backup_background_data">已跳过，因为后台数据被禁用</string>
+  <string name="app_log_skip_backup_already_running">已跳过，因为备份已在运行中</string>
+  <string name="app_log_skip_backup_skip_messages">跳过所有消息</string>
+  <string name="app_log_skip_backup_no_items">已跳过 (没有找到条目)</string>
+  <string name="app_log_missing_credentials">已跳过 (授权丢失)</string>
+  <string name="app_log_backup_requested">备份请求 (%1$s)</string>
+  <string name="app_log_start_backup">正在开始备份 (%1$s)</string>
+  <string name="app_log_backup_messages">正在备份 (%1$d 条短信, %2$d 条彩信, %3$d 个通话记录)</string>
+  <string name="app_log_backup_canceled">备份已取消</string>
+  <string name="app_log_backup_finished">备份结束</string>
+
+  <string name="app_log_backup_failed_authentication">认证错误: %1$s</string>
+  <string name="app_log_backup_failed_messaging">一般错误: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">备份已跳过，无网络连接</string>
+  <string name="app_log_scheduled_next_sync">下次备份计划于: %1$s</string>
+  <string name="app_log_no_next_sync">没有新备份计划</string>
+
+  <string name="menu_view_log">查看日志</string>
+  <string name="app_log_empty">日志为空。请在“高级设置”中启用同步日志功能。</string>
+
+  <string name="pref_app_log">同步日志</string>
+  <string name="pref_app_log_enabled">日志会保存在 SD 卡上，命名为“sms_backup_plus.log”。</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="source_incoming">接收到新信息</string>
+  <string name="source_regular">定时</string>
+  <string name="source_3rd_party">第三方</string>
+  <string name="source_manual">手动</string>
+  <string name="source_unknown">未知</string>
 </resources>
