@@ -76,7 +76,7 @@
             android:title="@string/ui_backup_calllog_label"
             android:summary="@string/ui_backup_calllog_desc"
             android:persistent="true"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
 
           <PreferenceScreen
             android:title="@string/ui_backup_calllog_settings_label"
