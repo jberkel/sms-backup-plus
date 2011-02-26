@@ -132,6 +132,17 @@ in Advanced Settings and send the broadcast intent
 `com.zegoggles.smssync.BACKUP`. This will work even when Auto Backup is
 disabled.
 
+### Usage without Gmail (IMAP)
+
+You don't have to use Gmail to backup your text messages - change
+Authentication to Plain text in "Advanced Settings - IMAP server settings",
+then change the server address / username and password accordingly. Make sure
+to set security to "SSL (Optional)" if the IMAP server you're connecting to has
+a self-signed certificate ("Unknown certificate" error during backup).
+
+Also note that Gmail labels correspond to IMAP folders, which will
+automatically be created the first time you're performing a backup.
+
 ## <a name="faq">FAQ</a>
 
 <a name="browser-bug"/>
