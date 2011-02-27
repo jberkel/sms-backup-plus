@@ -130,7 +130,7 @@ in Advanced Settings and send the broadcast intent
 `com.zegoggles.smssync.BACKUP`. This will work even when Auto Backup is
 disabled.
 
-### Usage with Google 2-step verification
+### <a name="2step">Usage with Google 2-step verification</a>
 
 XOAuth might not work when you are signed up for 2-step verification (see
 [Getting started with 2-step verification][] for more information).
