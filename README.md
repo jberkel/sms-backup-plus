@@ -48,9 +48,7 @@ You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
 account or look at this [screenshot][imapenableshot]. If you use Google Apps
 make sure you select "Sign in with a Google Apps Account"
-([screenshot](http://skitch.com/jberkel/ditwx/5554-emu-2.2)).  Also note that
-it does not work when two-step authentication is enabled for a Google Apps
-account login.
+([screenshot](http://skitch.com/jberkel/ditwx/5554-emu-2.2)).
 
 After starting SMS Backup+, tap on the "Connect" check box to start the
 authorization process. A browser window will open where Gmail either prompts
@@ -131,6 +129,15 @@ If you want to trigger backups from another app, enable `3rd party integration`
 in Advanced Settings and send the broadcast intent
 `com.zegoggles.smssync.BACKUP`. This will work even when Auto Backup is
 disabled.
+
+### Usage with Google 2-step verification
+
+XOAuth might not work when you are signed up for 2-step verification (see
+[Getting started with 2-step verification][] for more information).
+In this case you need to create an application-specific
+password ([Authorized Access to your Google Account][]) and enable plain text
+authentication in "Advanced Settings - IMAP server settings".  Provide the
+username and password you created in the previous step.
 
 ### Usage without Gmail (IMAP)
 
@@ -306,3 +313,5 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
 [Icon]: https://github.com/downloads/jberkel/sms-backup-plus/smsbackup72.png
 [MarketLink]: https://market.android.com/details?id=com.zegoggles.smssync
+[Getting started with 2-step verification]: http://www.google.com/support/accounts/bin/static.py?page=guide.cs&guide=1056283&topic=1056284
+[Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
