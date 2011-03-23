@@ -54,6 +54,8 @@ apk = ant.properties['out.debug.package']
     end
 
     namespace :prefs do
+
+      desc "get prefs from #{t}"
       task :pull do
         sh "adb #{flag} pull /data/data/#{package}/shared_prefs/#{package}_preferences.xml ."
         sh "adb #{flag} pull /data/data/#{package}/shared_prefs/credentials.xml ."
