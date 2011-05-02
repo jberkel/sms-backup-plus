@@ -186,7 +186,7 @@ means that the device will try to backup all messages every 2 hours.
 Fewer updates performed by the app means less energy consumed, so there's
 a trade-off data protection vs. battery life.
 
-### <a name="faq-scheduling>">I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
+### <a name="faq-scheduling>I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
 
 If you require more control over the backup schedule than what SMS Backup+ already
 provides you can use a 3rd party app to trigger the backup. [Tasker][] for
