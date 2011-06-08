@@ -237,16 +237,16 @@ together.
 A way around this is to do a full backup 100 SMS at a time (see `Advanced
 settings`).
 
-### <a name="faq-partial-restore">How do I restore the last N weeks / N messages</a>
+### <a name="faq-partial-restore">How do I restore the last N weeks / N messages?</a>
 
 If you have a lot of messages backed up (let's say over 5000) restoring can be
 very slow, especially if you're only interested in the most recent messages.
 
 A workaround is to use the gmail web interface (or an IMAP email client) to
 move the bulk of the messages to another label in gmail (e.g. SMSARCHIVED), and
-only keep a few hundres messages in the SMS label.
+only keep a few hundred or so messages in the SMS label.
 
-Next time you restore it will only restore these messages and it will be a lot
+Next time you restore it will only restore those messages and it will be a lot
 faster.
 
 ## <a name="contributing">Contributing</a>
