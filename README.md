@@ -249,6 +249,11 @@ only keep a few hundred or so messages in the SMS label.
 Next time you restore it will only restore those messages and it will be a lot
 faster.
 
+### <a name="faq-does-it-sync">When I delete a text locally, will it delete the saved copy on gmail?</a>
+
+No. SMS Backup+ does not do a "real" sync, once the text has been transferred
+to Gmail it won't get modified or deleted by the app.
+
 ## <a name="contributing">Contributing</a>
 
 ### Installation from source
