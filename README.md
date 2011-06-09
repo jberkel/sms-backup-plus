@@ -254,6 +254,11 @@ faster.
 No. SMS Backup+ does not do a "real" sync, once the text has been transferred
 to Gmail it won't get modified or deleted by the app.
 
+### <a name="faq-reset">How can I make the app think that it has to do the backup again?</a>
+
+Select "Reset" from the menu, and confirm that you want to reset the current
+sync state. All messages on the phone will be backed up on the next run.
+
 ## <a name="contributing">Contributing</a>
 
 ### Installation from source
