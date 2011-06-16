@@ -294,7 +294,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
   * [skolima](http://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
-  * Gabriele Ravanetti - Italian translation
+  * Gabriele Ravanetti / [Patryk Rzucidlo](http://www.ptkdev.it/) - Italian translation
   * Harun Sahin - Turkish translation
   * [Lukas Pribyl](http://www.lukaspribyl.eu) - Czech translation
   * João Pedro Ferreira - Portugese translation
