@@ -254,5 +254,81 @@
   <string name="tls_required">TLS (Richiesto)</string>
   <string name="tls_optional">TLS (Opzionale)</string>
   <string name="none">Nessuno</string>
+  
+  <string name="ui_third_party_integration_label">Accesso da terze parti</string>
+  <string name="ui_third_party_integration_desc">Permetti alle applicazioni esterne di eseguire backup</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">Impostazioni Di Backup</string>
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+
+  <string name="ui_backup_calllog_settings_label">Impostazioni Registro Chiamate</string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+
+  <string name="auto_backup_settings">Auto-Backup delle impostazioni</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label">Recupera impostazioni</string>
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+
+  <string name="ui_backup_sms_label">Backup SMS</string>
+  <string name="ui_backup_sms_desc">Abilita il backup degli SMS</string>
+
+  <string name="ui_restore_sms_label">Recupera SMS</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">(Caratteristica non disponibile)</string>
+
+  <string name="ui_restore_mms_label">Recupera MMS</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label">Recupera il Registro chiamate</string>
+  <string name="ui_restore_calllog_desc"/>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">Registro chiamate</string>
+
+  <string name="ui_dialog_donate_prepare_message">Caricamento in corso delle donazioni, attendere...</string>
+  <string name="ui_dialog_donate_message">Si prega di specificare la valuta:</string>
+  <string name="ui_donation_success_message">Donazione avvenuta con successo, grazie!</string>
+  <string name="ui_donation_failure_message">Donazione fallita: %1$s</string>
+  <string name="ui_donation_canceled_message">Donazione cancellata</string>
+  <string name="ui_donation_prompt_currency">Valuta</string>
+  <string name="ui_donation_oh_noez_no_network">Ci dispiace, è necessario essere connessi ad Internet al fine di fare una donazione</string>
+
+  <string name="pref_disable_acra">Rapporto sul Crash</string>
+  <string name="pref_acra_enabled">SMS Backup+ invia automaticamente gli errori durante la chiusura forzata.</string>
+  <string name="pref_acra_disabled">Disattivato</string>
+
+  <string name="app_log_skip_backup_background_data">Omesso perchè la connessione dati è disattivata</string>
+  <string name="app_log_skip_backup_already_running">Omesso perchè il backup è in corso</string>
+  <string name="app_log_skip_backup_skip_messages">Omessi tutti i messaggi</string>
+  <string name="app_log_skip_backup_no_items">Fallito (nessun oggetto trovato)</string>
+  <string name="app_log_missing_credentials">Fallito (Credenziali non presenti)</string>
+  <string name="app_log_backup_requested">Backup richiesto (%1$s)</string>
+  <string name="app_log_start_backup">Avvio del backup in corso (%1$s)</string>
+  <string name="app_log_backup_messages">Backup fatto (%1$d SMS, %2$d MMS, %3$d Registro Chiamate)</string>
+  <string name="app_log_backup_canceled">Backup cancellato</string>
+  <string name="app_log_backup_finished">Backup finito</string>
+
+  <string name="app_log_backup_failed_authentication">Errore di autenticazione: %1$s</string>
+  <string name="app_log_backup_failed_messaging">Errore Generale: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Backup fallito, assenza di connessione</string>
+  <string name="app_log_scheduled_next_sync">Il prossimo backup sarà avviato tra: %1$s</string>
+  <string name="app_log_no_next_sync">Nessun backup presente</string>
+
+  <string name="menu_view_log">guarda log</string>
+  <string name="app_log_empty">I log sono vuoti. Abilitali in \"Impostazioni Avanzate\".</string>
+
+  <string name="pref_app_log">Sincronizzazione dei log</string>
+  <string name="pref_app_log_enabled">I log sono salvati nella memoria SD \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="source_incoming">in corso</string>
+  <string name="source_regular">regolare</string>
+  <string name="source_3rd_party">di terze parti</string>
+  <string name="source_manual">manuale</string>
+  <string name="source_unknown">sconosciuto</string>
 
 </resources>
