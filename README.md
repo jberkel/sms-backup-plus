@@ -299,6 +299,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * [Lukas Pribyl](http://www.lukaspribyl.eu) - Czech translation
   * João Pedro Ferreira - Portugese translation
   * Martijn Brouns - Dutch translation
+  * [Tobeon](http://tobeon.net) - Norwegian translation
 
 ##<a name="screenhots">Screenshots</a>
 
