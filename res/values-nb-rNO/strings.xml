@@ -97,7 +97,8 @@
   <string name="ui_max_items_per_sync_label">Deler per sikkerhetskopiering</string>
   <string name="ui_max_items_per_sync_desc">Maksimalt antall deler per sikkerhetskopiering.</string>
   <string name="ui_max_items_per_restore_label">Deler per gjenoppretting</string>
-  <string name="ui_max_items_per_restore_desc">Maksimalt antall deler per gjenoppretting.</string>
+  <string name="ui_max_items_per_restore_desc">Maksimalt antall deler per gjenoppretting.</string>  
+
   <string name="ui_restore_starred_only_label">Stjernemerkede meldinger</string>
   <string name="ui_restore_starred_only_desc">Kun gjenopprett stjernemerkede meldinger.</string>
 
@@ -123,6 +124,7 @@
 
   <string name="ui_mark_as_read_label">Marker som lest (epost)</string>
   <string name="ui_mark_as_read_desc">Om meldinger skal merkes som lest eller ikke i Gmail.</string>
+
   <string name="ui_mark_as_read_restore_label">Marker som lest (meldinger)</string>
   <string name="ui_mark_as_read_restore_desc">Om meldinger som gjenopprettes skal merkes som lest eller ikke.</string>
 
@@ -131,8 +133,13 @@
 
   <string name="ui_enable_auto_sync_label">Auto sikkerhetskopiering</string>
   <string name="ui_enable_auto_sync_desc">Om nye meldinger automatisk skal sikkerhetskopieres.</string>
+  <string name="ui_enable_auto_sync_summary">Automatisk sikkerhetskopier %1$s.</string>
 
-  <string name="auto_backup_settings">Auto sikkerhetskopiering</string>
+  <string name="sd_card_disclaimer">Automatisk sikkerhetskopiering virker kanskje ikke om appen er installert på SD-kortet.</string>
+
+  <string name="ui_enable_auto_sync_bg_data">Du må også aktivere bakgrunnsdata.</string>
+
+  <string name="ui_backup_schedule_label">Tidsplan</string>
   <string name="ui_auto_backup_schedule_label">Vanlig tidsplan</string>
   <string name="ui_auto_backup_schedule_desc">Når meldinger skal sikkerhetskopieres.</string>
 
@@ -140,7 +147,7 @@
   <string name="ui_auto_backup_incoming_schedule_desc">Når innkommende meldinger skal sikkerhetskopieres (etter ankomst).</string>
 
   <string name="ui_wifi_only_label">Kun ved trådløst nett</string>
-  <string name="ui_wifi_only_desc">Kun sikkerhetskopier/gjenopprett når koblet til trådløst nett.</string>
+  <string name="ui_wifi_only_desc">Kun sikkerhetskopier når koblet til trådløst nett.</string>
 
   <string name="ui_notifications_label">Varsler</string>
   <string name="ui_notifications_desc">Bakgrunnsvarsler</string>
@@ -151,7 +158,8 @@
   <string name="ui_dialog_missing_credentials_title">Innloggingsinformasjon</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">Du må koble til en Gmail konto først.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Du må angi brukernavn og passord først.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Du må angi 
+  brukernavn og passord først.</string>
 
   <string name="ui_dialog_sync_data_reset_title">Tilbakestill data om sikkerhetskopiering</string>
   <string name="ui_dialog_sync_data_reset_msg">
@@ -182,7 +190,9 @@
   </string>
 
   <string name="ui_dialog_brokendroidx_title">DROID X SMS feil</string>
-  <string name="ui_dialog_brokendroidx_msg">Det er en feil i Droid X som forhindrer denne applikasjonen fra å sikkerhetskopiere innkommende meldinger. Se FAQ på nettsiden for mer informasjon.</string>
+  <string name="ui_dialog_brokendroidx_msg">Det er en feil i Droid X som 
+  forhindrer denne applikasjonen fra å sikkerhetskopiere innkommende 
+  meldinger. Se FAQ på nettsiden for mer informasjon.</string>
 
   <string name="ui_sync">Sikkerhetskopier</string>
   <string name="ui_skip">Hopp over</string>
@@ -193,12 +203,13 @@
   <string name="menu_info">Om</string>
   <string name="menu_reset">Tilbakestill</string>
   <string name="ui_dialog_reset_title">Tilbakestill nåværende synkroniserings-status</string>
-  <string name="ui_dialog_reset_message">Vil du tilbakestille synkroniserings-status? Du kan velge å hoppe over alle meldinger senere.</string>
+  <string name="ui_dialog_reset_message">Vil du tilbakestille synkroniserings-status? Du kan velge 
+  å hoppe over alle meldinger senere.</string>
   <string name="all_messages">Alle</string>
 
   <string name="gmail_connected_fail">Gmail autorisasjons feil</string>
   <string name="gmail_needs_connecting">Velg for å koble til Gmail konto (påkrevd).</string>
-  <string name="gmail_already_connected">Koblet til som %1$s (velg for å koble fra).</string>
+  <string name="gmail_already_connected">Koblet til som %1$s.</string>
 
   <string name="ui_connected_label">Koble til</string>
   <string name="ui_connected_desc">Din konto må kobles til.</string>
@@ -213,10 +224,11 @@
 
   <string name="call_number_field">Nummer: %1$s</string>
   <string name="call_duration_field">Lengde: %1$s</string>
-  <string name="calllog_settings">Samtalelogg innstillinger</string>
+  <string name="calllog_settings">Anropslogg innstillinger</string>
 
   <string name="sms_with_field">Melding med %1$s</string>
-  <string name="mms_with_field">Melding med %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Samtale med %1$s</string>
 
   <string name="ui_backup_contact_group_label">Kontakter å sikkerhetskopiere</string>
@@ -253,3 +265,4 @@
   <string name="ui_third_party_integration_label">Tredjeparts integrasjon</string>
   <string name="ui_third_party_integration_desc">Tillat andre applikasjon å starte sikkerhetskopiering ved valgt kringkasting.</string>
 </resources>
+<!-- new ui -->
