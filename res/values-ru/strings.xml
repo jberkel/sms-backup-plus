@@ -94,7 +94,7 @@
   <string name="ui_mail_subject_prefix_label">Заголовок Email</string>
   <string name="ui_mail_subject_prefix_desc">Использовать имя IMAP папки как заголовок email</string>
 
-   <string name="ui_max_items_per_sync_label">Количество SMS для сохранения</string>
+  <string name="ui_max_items_per_sync_label">Количество SMS для сохранения</string>
   <string name="ui_max_items_per_sync_desc">Максимальное количество SMS для сохранения.</string>
   <string name="ui_max_items_per_restore_label">Количество SMS для восстановления</string>
   <string name="ui_max_items_per_restore_desc">Максимальное количество SMS для восстановления.</string>
@@ -119,7 +119,7 @@
   <string name="ui_backup_calllog_sync_calendar_label">Нет</string>
   <string name="ui_backup_calllog_sync_calendar_desc">Какой календарь использовать</string>
 
-   <string name="ui_imap_folder_calllog_label">Ярлык для Журнала Вызовов </string>
+  <string name="ui_imap_folder_calllog_label">Ярлык для Журнала Вызовов </string>
   <string name="ui_imap_folder_calllog_desc">Ярлык Gmail для Журнала Вызовов.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Сохраненным звонкам будет присвоен этот ярлык  Gmail.</string>
 
@@ -129,17 +129,22 @@
   <string name="ui_mark_as_read_restore_label">Помечать прочитанными (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Помечать прочитанными восстановленные SMS?.</string>
 
- <string name="ui_email_address_style_label">Стиль адреса Email </string>
+  <string name="ui_email_address_style_label">Стиль адреса Email </string>
   <string name="ui_email_address_style_desc">Формат адреса Email</string>
 
   <string name="ui_enable_auto_sync_label">Автосохранение</string>
   <string name="ui_enable_auto_sync_desc">Включить авто сохранение новых SMS?</string>
+  <string name="ui_enable_auto_sync_summary">Автоматически сохранять %1$s.</string>
 
-  <string name="auto_backup_settings">Автосохранение</string>
+  <string name="sd_card_disclaimer">Автосохранение может работать ненадёжно, если приложение установленно на карту памяти.</string>
+
+  <string name="ui_enable_auto_sync_bg_data">Вы так же должны включить фоновую передачу данных.</string>
+
+  <string name="ui_backup_schedule_label">Расписание</string>
   <string name="ui_auto_backup_schedule_label">Расписание</string>
   <string name="ui_auto_backup_schedule_desc">Когда сохранять SMS</string>
 
-   <string name="ui_auto_backup_incoming_schedule_label">Расписание для входящих SMS</string>
+  <string name="ui_auto_backup_incoming_schedule_label">Расписание для входящих SMS</string>
   <string name="ui_auto_backup_incoming_schedule_desc">Когда сохранять входящие (после получения)</string>
 
   <string name="ui_wifi_only_label">Только по Wifi</string>
@@ -151,7 +156,7 @@
   <string name="error_wifi_only_no_connection">Нет подключения по Wifi</string>
   <string name="error_no_connection">Нет подключения к интернету</string>
 
-    <string name="ui_dialog_missing_credentials_title">Информация о подключении</string>
+  <string name="ui_dialog_missing_credentials_title">Информация о подключении</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">Вы должны быть подключены к своей учетной записи.</string>
   <string name="ui_dialog_missing_credentials_msg_plain">Введите логин и пароль</string>
@@ -160,7 +165,7 @@
   <string name="ui_dialog_sync_data_reset_msg">
       Произведен сброс настроек синхронизации. Пожалуйста переподключитесь к Gmail и выполните ручное сохранение. Вы сможете выбрать сохранить или пропустить все сообщения сохраненные в телефоне
   </string>
-   <string name="ui_dialog_invalid_imap_folder_title">Недопустимое имя ярлыка</string>
+  <string name="ui_dialog_invalid_imap_folder_title">Недопустимое имя ярлыка</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Ярлык может содержать только  (А-Я, а-я,A-Z, a-z, 0-9), \'/\', \'.\' и пробелы (не первым и не последним).</string>
   <string name="ui_dialog_first_sync_title">Первое сохранение</string>
   <string name="ui_dialog_first_sync_msg">Сохранить или пропустить все сообщения сохраненные в телефоне?</string>
@@ -170,7 +175,7 @@
   <string name="ui_dialog_request_token_msg">Соединение с  Google...</string>
   <string name="ui_dialog_access_token_msg">Запрашиваю доступ...</string>
 
-   <string name="ui_dialog_access_token_error_title">Ошибка авторизации</string>
+  <string name="ui_dialog_access_token_error_title">Ошибка авторизации</string>
   <string name="ui_dialog_access_token_error_msg">Не могу получить доступ. Убедитесь что вы выбрали  \"Grant access\".
   </string>
 
@@ -178,7 +183,7 @@
   <string name="ui_dialog_connect_token_error">Не могу соединится со службой  Google. Убедитесьь что вы подкулючены к сети и правильно указали настройки времени/временной зоны.</string>
   <string name="ui_dialog_disconnect_msg">Вы уверены?  Вам будет необходимо заново подтвердить разрешение на доступ к вашему ящику. Текущее состояние сохранения будет сброшено.</string>
 
- <string name="ui_dialog_upgrade_title">Информация о совместимости</string>
+  <string name="ui_dialog_upgrade_title">Информация о совместимости</string>
   <string name="ui_dialog_upgrade_msg">
    SMS Backup+ полность совместим с SMS Backup. Однако, если включить "Автосохранение" в обоих версиях , могут появится дубликаты SMS. Так же вам следует выбрать "Пропуск" во время первой синхронизации, в случае если вы уже делали сохрание ранее.
   </string>
@@ -198,7 +203,7 @@
   <string name="ui_dialog_reset_message">Выполнить сброс состояния синхронизации? Все сообщения будут сохранены заново. Вы можете пропустить сохранение позже.</string>
   <string name="all_messages">Все</string>
 
-   <string name="gmail_connected_fail">Ошибка входа в Gmail</string>
+  <string name="gmail_connected_fail">Ошибка входа в Gmail</string>
   <string name="gmail_needs_connecting">Коснитесь для входа в учетную запись Gmail (обязательно).</string>
   <string name="gmail_already_connected">Подключен как: %1$s (коснитесь для выхода).</string>
 
@@ -217,6 +222,15 @@
   <string name="call_duration_field">Продолжительность: %1$s</string>
   <string name="calllog_settings">Настройки журнала вызовов</string>
 
+  <string name="sms_with_field">SMS с %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">Звонки с %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Группы контактов</string>
+  <string name="ui_backup_contact_group_desc">Сохранять только от определённой группы контактов</string>
+
+  <string name="everybody">Все контакты</string>
   <string name="call_type_everything">Все</string>
   <string name="call_type_incoming">Только входящие звонки</string>
   <string name="call_type_outgoing">Только исходящие звонки</string>
@@ -242,4 +256,79 @@
   <string name="tls_required">TLS (Required)</string>
   <string name="tls_optional">TLS (Optional)</string>
   <string name="none">None</string>
+  <string name="ui_third_party_integration_label">Интеграция с третьими сторонами</string>
+  <string name="ui_third_party_integration_desc">Разрешить другим приложениям выполнять сохранение с помощью запросов</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">Настройки сохранения</string>
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+
+  <string name="ui_backup_calllog_settings_label">Настройки списка вызовов</string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+
+  <string name="auto_backup_settings">Настройки автосохранения</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label">Настройки восстановления</string>
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+
+  <string name="ui_backup_sms_label">Сохранение SMS</string>
+  <string name="ui_backup_sms_desc">Включить сохранение SMS</string>
+
+  <string name="ui_restore_sms_label">Восстановление SMS</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">(Возможность пока недоступна)</string>
+
+  <string name="ui_restore_mms_label">Восстановление MMS</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label">Восстановление списка вызовов</string>
+  <string name="ui_restore_calllog_desc"/>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">Список вызовов</string>
+
+  <string name="ui_dialog_donate_prepare_message">Подготовка пожертвования, пожалуйста, подождите...</string>
+  <string name="ui_dialog_donate_message">Пожалуйста, выберите сумму и валюту:</string>
+  <string name="ui_donation_success_message">Пожертвование произведено успешно, спасибо!</string>
+  <string name="ui_donation_failure_message">Пожертвование не удалось: %1$s</string>
+  <string name="ui_donation_canceled_message">Пожертвование отменено</string>
+  <string name="ui_donation_prompt_currency">Валюта</string>
+  <string name="ui_donation_oh_noez_no_network">Извините, вы должны быть подключены к интернету, что бы сделать пожертвование.</string>
+
+  <string name="pref_disable_acra">Отправка отчётов об ошибках</string>
+  <string name="pref_acra_enabled">SMS Backup+ будет автоматически отсылать отчёты об ошибках и аварийных закрытиях.</string>
+  <string name="pref_acra_disabled">Отключено</string>
+
+  <string name="app_log_skip_backup_background_data">Пропущено, потому что фоновая передача данных отключена.</string>
+  <string name="app_log_skip_backup_already_running">Пропущено, потому что схранение уже запущенно</string>
+  <string name="app_log_skip_backup_skip_messages">Пропустить все сообщения</string>
+  <string name="app_log_skip_backup_no_items">Пропущенно (не найдено объектов)</string>
+  <string name="app_log_missing_credentials">Пропущенно (недостаточно разрешений)</string>
+  <string name="app_log_backup_requested">Запрос на сохранение (%1$s)</string>
+  <string name="app_log_start_backup">Начинается сохранение (%1$s)</string>
+  <string name="app_log_backup_messages">Сохраняется (%1$d SMS, %2$d MMS, %3$d call log)</string>
+  <string name="app_log_backup_canceled">Сохранение отменено</string>
+  <string name="app_log_backup_finished">Сохранение окончено</string>
+
+  <string name="app_log_backup_failed_authentication">Ошибка аутентификации: %1$s</string>
+  <string name="app_log_backup_failed_messaging">Глобальная ошибка: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Сохранение отменено, нет соединения</string>
+  <string name="app_log_scheduled_next_sync">Следующее сохранение запланировано на: %1$s</string>
+  <string name="app_log_no_next_sync">Нет запланированных сохранений</string>
+
+  <string name="menu_view_log">Посмотреть журнал</string>
+  <string name="app_log_empty">Журнал пуст. Включите его в \"Расширенных настройках\".</string>
+
+  <string name="pref_app_log">Журнал сохранения</string>
+  <string name="pref_app_log_enabled">Журнал находится на карте памяти в \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="source_incoming">входящий</string>
+  <string name="source_regular">обычный</string>
+  <string name="source_3rd_party">третья сторона</string>
+  <string name="source_manual">вручную</string>
+  <string name="source_unknown">неизвестно</string>
 </resources>
