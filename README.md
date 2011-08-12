@@ -300,6 +300,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * João Pedro Ferreira - Portugese translation
   * Martijn Brouns - Dutch translation
   * [Tobeon](http://tobeon.net) - Norwegian translation
+  * Nemanja Bračko - Serbian translation
 
 ##<a name="screenhots">Screenshots</a>
 
