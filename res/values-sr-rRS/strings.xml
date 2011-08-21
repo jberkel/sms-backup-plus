@@ -272,7 +272,7 @@
   <string name="ui_backup_calllog_settings_label">Подешавање евиденције позива</string>
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
-  <string name="auto_backup_settings">Подешавање аутом. копирања</string>
+  <string name="auto_backup_settings">Подеш. аутом. копирања</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Подешавање враћања</string>
@@ -304,7 +304,7 @@
   <string name="ui_donation_prompt_currency">Валута</string>
   <string name="ui_donation_oh_noez_no_network">Жао нам је, потребно је да будете повезани са Интернетом како бисте извршили донацију.</string>
 
-  <string name="pref_disable_acra">Извештај о критичној грешци</string>
+  <string name="pref_disable_acra">Извештај о грешци</string>
   <string name="pref_acra_enabled">SMS Backup+ ће аутоматски послати извештај о грешци након принудног затварања.</string>
   <string name="pref_acra_disabled">Онемогућено</string>
 
