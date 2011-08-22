@@ -34,7 +34,7 @@
   <string name="status_updating_threads">Ажурирање преписки\u2026</string>
   <string name="status_done">Завршено</string>
   <string name="status_backup_done_details_max_per_sync">Достигнут је максимум од %1$d ставки по резервној копији. Поново покрените прављење резервне копије за наставак.</string>
-  <string name="status_backup_done_details_noitems">Није било ставки за прављење рез. копије.</string>
+  <string name="status_backup_done_details_noitems">Није било ставки за прављење резервне копије.</string>
 
   <plurals name="status_backup_done_details">
     <item quantity="one">Успешно је копирана <xliff:g id="total_items">%1$d</xliff:g> ставка.</item>
@@ -91,7 +91,7 @@
   <string name="ui_imap_folder_label">Gmail натпис</string>
   <string name="ui_imap_folder_desc">Gmail натпис који се додељује SMS порукама.</string>
   <string name="ui_imap_folder_label_dialog_msg">Копиране SMS поруке ће бити обележене са овим натписом у Gmail сандучету.</string>
-  <string name="ui_mail_subject_prefix_label">Префикс наслову е-поште</string>
+  <string name="ui_mail_subject_prefix_label">Префикс у наслову</string>
   <string name="ui_mail_subject_prefix_desc">Користи име IMAP фасцикле као префикс у наслову е-поште</string>
 
   <string name="ui_max_items_per_sync_label">Ставки по копирању</string>
@@ -106,7 +106,7 @@
   <string name="ui_backup_mms_desc">Омогући копирање MMS порука</string>
   <string name="ui_backup_mms_not_supported">Прављење резервне копије MMS порука није подржано на овој платформи.</string>
 
-  <string name="ui_backup_calllog_label">Копирај евиденцију позива</string>
+  <string name="ui_backup_calllog_label">Копирај евид. позива</string>
   <string name="ui_backup_calllog_desc">Омогући копирање евиденције позива</string>
 
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Синхронизуј календар</string>
@@ -122,10 +122,10 @@
   <string name="ui_imap_folder_calllog_desc">Gmail натпис који се додељује евиденцији позива.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Копирана евиденција позива биће обележена са овим натписом у Gmail сандучету.</string>
 
-  <string name="ui_mark_as_read_label">Обележи као прочитано (е-пошту)</string>
+  <string name="ui_mark_as_read_label">Пошта као прочитана</string>
   <string name="ui_mark_as_read_desc">Да ли обележити поруке у Gmail сандучету као прочитане или не?</string>
 
-  <string name="ui_mark_as_read_restore_label">Обележи као прочитано (SMS)</string>
+  <string name="ui_mark_as_read_restore_label">SMS као прочитан</string>
   <string name="ui_mark_as_read_restore_desc">Да ли обележити све враћене SMS поруке као прочитане или не?</string>
 
   <string name="ui_email_address_style_label">Стил адресе е-поште</string>
@@ -242,7 +242,7 @@
   <string name="call_type_incoming_outgoing">Долазне и одлазне позиве</string>
   <string name="call_type_missed">Само пропуштене позиве</string>
 
-  <string name="email_address_style_name">Ине</string>
+  <string name="email_address_style_name">Име</string>
   <string name="email_address_style_name_and_number">Име (+381 123456)</string>
   <string name="email_address_style_number">+381 123456</string>
 
@@ -289,7 +289,7 @@
   <string name="ui_restore_mms_label">Врати MMS</string>
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
-  <string name="ui_restore_calllog_label">Врати евиденцију позива</string>
+  <string name="ui_restore_calllog_label">Врати евид. позива</string>
   <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
