@@ -34,7 +34,6 @@ import android.app.PendingIntent;
 
 import com.fsck.k9.mail.MessagingException;
 
-import java.util.Date;
 
 import static com.zegoggles.smssync.App.*;
 
@@ -106,7 +105,8 @@ public abstract class ServiceBase extends Service {
     /**
      * Acquire locks
      *
-     * @params background if service is running in background (no UI)
+     * @param background if service is running in background (no UI)
+     * @throws com.zegoggles.smssync.ServiceBase.ConnectivityErrorException when unable to connect
      */
     protected void acquireLocks(boolean background) throws ConnectivityErrorException {
         if (sWakeLock == null) {
@@ -156,9 +156,7 @@ public abstract class ServiceBase extends Service {
         return START_NOT_STICKY;
     }
 
-    /**
-     * Returns the maximum date of all SMS messages (except for drafts).
-     */
+    // Returns the maximum date of all SMS messages (except for drafts).
     protected long getMaxItemDateSms() {
         Cursor result = getContentResolver().query(SMS_PROVIDER,
                 new String[]{SmsConsts.DATE},
@@ -173,9 +171,7 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    /**
-     * Returns the maximum date of all MMS messages
-     */
+     // Returns the maximum date of all MMS messages
     protected long getMaxItemDateMms() {
         Cursor result = getContentResolver().query(MMS_PROVIDER,
                 new String[]{MmsConsts.DATE}, null, null,
@@ -198,13 +194,6 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    /**
-     * Persists the provided ID so it can later on be retrieved using
-     * {@link #getMaxSyncedDateSms()}. This should be called when after each
-     * successful sync request to a server.
-     *
-     * @param maxSyncedId
-     */
     protected void updateMaxSyncedDateSms(long maxSyncedDate) {
         PrefStore.setMaxSyncedDateSms(this, maxSyncedDate);
         if (LOCAL_LOGV) {

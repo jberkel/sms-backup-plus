@@ -17,12 +17,13 @@ package com.zegoggles.smssync;
 
 import android.content.Context;
 import com.fsck.k9.Account;
-import com.fsck.k9.Preferences;
 import com.fsck.k9.mail.Folder.FolderType;
 import com.fsck.k9.mail.Folder.OpenMode;
 import com.fsck.k9.mail.*;
 
 import android.util.Log;
+
+import java.util.Collections;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,12 +58,6 @@ public class BackupImapStore extends ImapStore {
     {
         String label = PrefStore.getImapFolder(context);
         return getBackupFolder(label, DataType.SMS);
-    }
-
-    public BackupFolder getMMSBackupFolder() throws MessagingException
-    {
-        String label = PrefStore.getImapFolder(context);
-        return getBackupFolder(label, DataType.MMS);
     }
 
     public BackupFolder getCallLogBackupFolder() throws MessagingException
@@ -134,10 +129,10 @@ public class BackupImapStore extends ImapStore {
                 if (LOCAL_LOGV) Log.v(TAG, "Sorting done");
 
                 messages = new ArrayList<Message>(max);
-                for (int i=0; i<max; i++) messages.add(msgs[i]);
+                messages.addAll(Arrays.asList(msgs).subList(0, max));
             } else {
-              messages = new ArrayList<Message>(msgs.length);
-              for (Message m : msgs) messages.add(m);
+                messages = new ArrayList<Message>(msgs.length);
+                Collections.addAll(messages, msgs);
             }
 
             return messages;

@@ -36,7 +36,7 @@ public class ThreadHelper {
         try {
           telephonyThreads = Class.forName("android.provider.Telephony$Threads");
           getOrCreateThreadId = telephonyThreads.getMethod("getOrCreateThreadId",
-                                                  new Class[] { Context.class, String.class });
+                  Context.class, String.class);
         } catch (NoSuchMethodException e) {
           return noThreadsAvailable(e);
         } catch (ClassNotFoundException e) {
@@ -46,7 +46,7 @@ public class ThreadHelper {
 
       try {
         final Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
-                                                    new Object[] { context, recipient });
+                context, recipient);
         if (LOCAL_LOGV) Log.v(TAG, "threadId for " + recipient + ": " + id);
         if (id != null) mThreadIdCache.put(recipient, id);
 

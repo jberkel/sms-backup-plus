@@ -15,6 +15,7 @@
  */
 package com.zegoggles.smssync;
 
+/** @noinspection UnusedDeclaration*/
 public interface MmsConsts {
 
    String ID = "_id";

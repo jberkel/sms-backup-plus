@@ -101,7 +101,6 @@ public class PrefStore {
     static final String PREF_RESTORE_SMS  = "restore_sms";
 
     static final String PREF_BACKUP_MMS  = "backup_mms";
-    static final String PREF_RESTORE_MMS  = "restore_mms";
 
     static final String PREF_BACKUP_CALLLOG  = "backup_calllog";
     static final String PREF_RESTORE_CALLLOG  = "restore_calllog";
@@ -139,9 +138,6 @@ public class PrefStore {
 
     /** Default value for {@link PrefStore#PREF_REGULAR_TIMEOUT_SECONDS}. */
     static final int DEFAULT_REGULAR_TIMEOUT_SECONDS = 2 * 60 * 60; // 2h
-
-    /** Default value for {@link #PREF_LAST_SYNC}. */
-    static final long DEFAULT_LAST_SYNC = -1;
 
     /** Default value for {@link #PREF_MAX_ITEMS_PER_SYNC}. */
     static final int DEFAULT_MAX_ITEMS_PER_SYNC = -1;
@@ -198,10 +194,6 @@ public class PrefStore {
         return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_CALLLOG, DEFAULT_MAX_SYNCED_DATE);
     }
 
-    static boolean isMaxSyncedDateSet(Context ctx) {
-        return getPrefs(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
-    }
-
     static void setMaxSyncedDateSms(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
           .putLong(PREF_MAX_SYNCED_DATE_SMS, maxSyncedDate)
@@ -221,10 +213,6 @@ public class PrefStore {
     }
     static String getImapUsername(Context ctx) {
         return getPrefs(ctx).getString(PREF_LOGIN_USER, null);
-    }
-
-    static void setImapUsername(Context ctx, String s) {
-        getPrefs(ctx).edit().putString(PREF_LOGIN_USER, s).commit();
     }
 
     static String getImapPassword(Context ctx) {
@@ -305,8 +293,7 @@ public class PrefStore {
 
     static boolean isMmsBackupEnabled(Context ctx) {
        final int version = Integer.parseInt(android.os.Build.VERSION.SDK);
-       return version < SmsSync.MIN_VERSION_MMS ? false :
-              getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
+       return version >= SmsSync.MIN_VERSION_MMS && getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
     static boolean isCallLogBackupEnabled(Context ctx) {
@@ -357,10 +344,6 @@ public class PrefStore {
         return getPrefs(ctx).getBoolean(PREF_RESTORE_SMS, true);
     }
 
-    static boolean isRestoreMms(Context ctx) {
-        return getPrefs(ctx).getBoolean(PREF_RESTORE_MMS, false);
-    }
-
     static boolean isRestoreCallLog(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_RESTORE_CALLLOG, true);
     }
@@ -385,14 +368,6 @@ public class PrefStore {
 
     static boolean getMailSubjectPrefix(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_MAIL_SUBJECT_PREFIX, DEFAULT_MAIL_SUBJECT_PREFIX);
-    }
-
-    static boolean isImapFolderSet(Context ctx) {
-        return getPrefs(ctx).contains(PREF_IMAP_FOLDER);
-    }
-
-    static boolean isCallLogFolderSet(Context ctx) {
-        return getPrefs(ctx).contains(PREF_IMAP_FOLDER_CALLLOG);
     }
 
     static int getMaxItemsPerSync(Context ctx) {
@@ -427,35 +402,18 @@ public class PrefStore {
       }
 
     /**
-     * Returns whether an IMAP folder is valid.
+     * @param imapFolder the folder
+     * @return whether an IMAP folder is valid.
      */
     static boolean isValidImapFolder(String imapFolder) {
-      if (imapFolder == null || imapFolder.length() == 0) return false;
-      if (imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ')
-          return false;
+        return !(imapFolder == null || imapFolder.length() == 0) &&
+               !(imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ');
 
-       return true;
-    }
-
-    static void setImapFolder(Context ctx, String imapFolder) {
-        getPrefs(ctx).edit()
-          .putString(PREF_IMAP_FOLDER, imapFolder)
-          .commit();
     }
 
     static boolean isEnableAutoSync(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_ENABLE_AUTO_SYNC,
                 DEFAULT_ENABLE_AUTO_SYNC);
-    }
-
-    static boolean isEnableAutoSyncSet(Context ctx) {
-        return getPrefs(ctx).contains(PREF_ENABLE_AUTO_SYNC);
-    }
-
-    static void setEnableAutoSync(Context ctx, boolean enableAutoSync) {
-        getPrefs(ctx).edit()
-          .putBoolean(PREF_ENABLE_AUTO_SYNC, enableAutoSync)
-          .commit();
     }
 
     static int getIncomingTimeoutSecs(Context ctx) {
@@ -470,20 +428,8 @@ public class PrefStore {
         return getPrefs(ctx).getBoolean(PREF_MARK_AS_READ, DEFAULT_MARK_AS_READ);
     }
 
-    static void setMarkAsRead(Context ctx, boolean markAsRead) {
-        getPrefs(ctx).edit()
-          .putBoolean(PREF_MARK_AS_READ, markAsRead)
-          .commit();
-    }
-
     static boolean getMarkAsReadOnRestore(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_MARK_AS_READ_ON_RESTORE, DEFAULT_MARK_AS_READ_ON_RESTORE);
-    }
-
-    static void setMarkAsReadOnRestore(Context ctx, boolean markAsRead) {
-        getPrefs(ctx).edit()
-          .putBoolean(PREF_MARK_AS_READ_ON_RESTORE, markAsRead)
-          .commit();
     }
 
     static boolean isFirstSync(Context ctx) {
@@ -529,13 +475,7 @@ public class PrefStore {
         return getPrefs(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
     }
 
-    static void setServerAddress(Context ctx, String serverAddress) {
-         getPrefs(ctx).edit()
-           .putString(PREF_SERVER_ADDRESS, serverAddress)
-           .commit();
-     }
-
-     static String getServerProtocol(Context ctx) {
+    static String getServerProtocol(Context ctx) {
         return getPrefs(ctx).getString(PREF_SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
     }
 
@@ -566,7 +506,7 @@ public class PrefStore {
     }
 
     static String getVersion(Context context, boolean code) {
-      android.content.pm.PackageInfo pInfo = null;
+      android.content.pm.PackageInfo pInfo;
       try {
         pInfo = context.getPackageManager().getPackageInfo(
                 SmsSync.class.getPackage().getName(),
@@ -579,7 +519,7 @@ public class PrefStore {
     }
 
     static boolean isInstalledOnSDCard(Context context) {
-      android.content.pm.PackageInfo pInfo = null;
+      android.content.pm.PackageInfo pInfo;
       try {
         pInfo = context.getPackageManager().getPackageInfo(
                 SmsSync.class.getPackage().getName(),

@@ -15,26 +15,18 @@
  */
 package com.zegoggles.smssync;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.provider.ContactsContract.Contacts;
-import android.provider.ContactsContract.Groups;
-import android.provider.ContactsContract.Data;
-import android.provider.ContactsContract.CommonDataKinds;
+import android.content.Context;
+import android.database.Cursor;
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
-import android.util.Log;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.HashMap;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.Groups;
+
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 
-import static com.zegoggles.smssync.App.*;
-
+/** @noinspection UnusedDeclaration*/
 public class ContactAccessorPost20 implements ContactAccessor {
   public String getOwnerEmail(Context context) {
       AccountManager mgr = AccountManager.get(context);
@@ -70,7 +62,7 @@ public class ContactAccessorPost20 implements ContactAccessor {
   public Map<Integer, Group> getGroups(Context context) {
     final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
 
-    map.put(Integer.valueOf(EVERYBODY_ID), new Group(EVERYBODY_ID, context.getString(R.string.everybody), 0));
+    map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, context.getString(R.string.everybody), 0));
 
     final Cursor c = context.getContentResolver().query(
               Groups.CONTENT_SUMMARY_URI,

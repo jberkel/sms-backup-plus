@@ -19,6 +19,7 @@ package com.zegoggles.smssync;
 /**
  * Contains SMS content provider constants. These values are copied from
  * com.android.provider.telephony.*
+ * @noinspection UnusedDeclaration
  */
 public interface SmsConsts {
 

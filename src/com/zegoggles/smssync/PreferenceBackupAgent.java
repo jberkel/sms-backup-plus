@@ -11,6 +11,7 @@ import android.util.Log;
 
 import static com.zegoggles.smssync.App.*;
 
+/** @noinspection UnusedDeclaration*/
 public class PreferenceBackupAgent extends BackupAgentHelper {
     // A key to uniquely identify the set of backup data
     static final String PREFS_BACKUP_KEY = "prefs";

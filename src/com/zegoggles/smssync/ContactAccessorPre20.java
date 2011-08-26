@@ -24,6 +24,7 @@ import java.util.Collections;
 
 import android.content.Context;
 
+/** @noinspection UnusedDeclaration*/
 public class ContactAccessorPre20 implements ContactAccessor {
   public String getOwnerEmail(Context context) {
     return null;

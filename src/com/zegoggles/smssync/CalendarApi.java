@@ -24,7 +24,6 @@ import android.net.Uri;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import static com.zegoggles.smssync.App.*;
@@ -43,6 +42,7 @@ public class CalendarApi {
     }
   }
 
+  /** @noinspection UnusedDeclaration*/
   interface Consts {
     String TITLE = "title";
     String DESCRIPTION = "description";

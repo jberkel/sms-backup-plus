@@ -18,7 +18,6 @@ package com.zegoggles.smssync;
 import android.content.Context;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 
 public interface ContactAccessor {
@@ -54,12 +53,24 @@ public interface ContactAccessor {
     }
   }
 
-  /** Returns the email address of the Android phone owner, or null if not known */
-  String getOwnerEmail(Context context);
+    /**
+     * @param context the context
+     * @return the email address of the Android phone owner, or null if not known
+     */
+    String getOwnerEmail(Context context);
 
-  /** All contacts from a group */
+    /**
+     * @param context the context
+     * @param group the group
+     * @return All contacts from a group
+     */
   GroupContactIds getGroupContactIds(Context context, ContactGroup group);
 
-  /** All groups a user has */
+  /**
+   * All groups a user has
+   *
+   * @param ctxt the context
+   * @return the ids and groups
+   */
   Map<Integer, Group> getGroups(Context ctxt);
 }

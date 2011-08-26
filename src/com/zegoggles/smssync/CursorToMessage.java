@@ -20,17 +20,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Random;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.security.MessageDigest;
 
 import android.content.Context;
@@ -60,13 +57,12 @@ import com.fsck.k9.mail.internet.MimeHeader;
 import com.fsck.k9.mail.internet.MimeMessage;
 import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.TextBody;
-import com.fsck.k9.mail.store.LocalStore.LocalAttachmentBody;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
 
 import com.zegoggles.smssync.PrefStore.AddressStyle;
-import com.zegoggles.smssync.ContactAccessor.ContactGroup;
+
 import static com.zegoggles.smssync.App.*;
 
 public class CursorToMessage {
@@ -93,7 +89,6 @@ public class CursorToMessage {
 
     private static final String UNKNOWN_NUMBER = "unknown.number";
     private static final String UNKNOWN_EMAIL  = "unknown.email";
-    private static final String UNKNOWN_PERSON = "unknown.person";
 
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
     private final AddressStyle mStyle;
@@ -144,7 +139,7 @@ public class CursorToMessage {
         mStyle          = PrefStore.getEmailAddressStyle(ctx);
 
         if (mReferenceValue == null) {
-          mReferenceValue = generateReferenceValue(userEmail);
+          mReferenceValue = generateReferenceValue();
           PrefStore.setReferenceUid(ctx, mReferenceValue);
         }
 
@@ -218,7 +213,7 @@ public class CursorToMessage {
             values.put(CallLog.Calls.TYPE, Integer.valueOf(getHeader(message, Headers.TYPE)));
             values.put(CallLog.Calls.DATE, getHeader(message, Headers.DATE));
             values.put(CallLog.Calls.DURATION, Long.valueOf(getHeader(message, Headers.DURATION)));
-            values.put(CallLog.Calls.NEW, Integer.valueOf(0));
+            values.put(CallLog.Calls.NEW, 0);
 
             PersonRecord record = lookupPerson(getHeader(message, Headers.ADDRESS));
             if (!record.unknown) {
@@ -583,7 +578,11 @@ public class CursorToMessage {
     /**
       * Create a message-id based on message date, phone number and message
       * type.
-      */
+     * @param sent email send date
+     * @param address the email address
+     * @param type the type
+     * @return the message-id
+     */
     private String createMessageId(Date sent, String address, int type) {
       try {
         final MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
@@ -609,7 +608,7 @@ public class CursorToMessage {
             if (hdrs != null && hdrs.length > 0) {
                 return hdrs[0];
             }
-        } catch (MessagingException e) {
+        } catch (MessagingException ignored) {
         }
         return null;
     }
@@ -665,24 +664,19 @@ public class CursorToMessage {
       return (s != null ? EncoderUtil.encodeAddressLocalPart(sanitize(s)) : null);
     }
 
-    private static String encodeDisplayName(String s) {
-      return (s != null ? EncoderUtil.encodeAddressDisplayName(sanitize(s)) : null);
-    }
-
     private static String getUnknownEmail(String number) {
       final String no = (number == null || "-1".equals(number)) ? UNKNOWN_NUMBER : number;
       return encodeLocal(no.trim()) + "@" + UNKNOWN_EMAIL;
     }
 
-    /** Returns whether the given e-mail address is a Gmail address or not. */
+    // Returns whether the given e-mail address is a Gmail address or not.
     private static boolean isGmailAddress(String email) {
-        if (email == null) return false;
-        return email.toLowerCase().endsWith("gmail.com") ||
-               email.toLowerCase().endsWith("googlemail.com");
+        return email != null &&
+                (email.toLowerCase().endsWith("gmail.com") ||
+                 email.toLowerCase().endsWith("googlemail.com"));
     }
 
-
-    private static String generateReferenceValue(String email) {
+    private static String generateReferenceValue() {
       final StringBuilder sb = new StringBuilder();
       final Random random = new Random();
       for (int i = 0; i < 24; i++) {
@@ -774,10 +768,6 @@ public class CursorToMessage {
             Base64OutputStream base64Out = new Base64OutputStream(out);
             IOUtils.copy(in, base64Out);
             base64Out.close();
-        }
-
-        public Uri getContentUri() {
-            return mUri;
         }
     }
 }

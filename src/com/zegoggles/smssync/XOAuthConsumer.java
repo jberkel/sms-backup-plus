@@ -131,7 +131,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
     return this.mUsername;
   }
 
-  /** Retrieves the google email account address using the contacts API */
+  // Retrieves the google email account address using the contacts API
   protected String getUsernameFromContacts() {
 
     final HttpClient httpClient = new DefaultHttpClient();

@@ -167,7 +167,7 @@ public class NumberPicker extends LinearLayout {
 
   private void initValueEditText( Context context, float initialValue){
 
-    value = Float.valueOf( initialValue );
+    value = initialValue;
 
     valueText = new EditText( context );
     valueText.setTextSize(mTextSize);
@@ -262,6 +262,7 @@ public class NumberPicker extends LinearLayout {
     return value;
   }
 
+  /** @noinspection UnusedDeclaration*/
   public void setValue( float value ){
     if( value > mMaximum ) value = mMaximum;
     if( value >= 0 ){
