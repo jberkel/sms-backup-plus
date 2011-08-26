@@ -25,7 +25,7 @@ import android.util.Config;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
-@ReportsCrashes(formKey = "dFZOM3JNWng5bmZYLXNCWFJ0b1hPdHc6MQ")
+@ReportsCrashes(formUri = "https://bugsense.appspot.com/api/acra?api_key=a2603e16", formKey = "",  checkReportSender = true)
 public class App extends Application {
     public static final boolean DEBUG = false;
     public static final boolean LOCAL_LOGV = App.DEBUG ? Config.LOGD : Config.LOGV;
