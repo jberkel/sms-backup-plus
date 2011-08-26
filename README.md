@@ -259,6 +259,12 @@ to Gmail it won't get modified or deleted by the app.
 Select "Reset" from the menu, and confirm that you want to reset the current
 sync state. All messages on the phone will be backed up on the next run.
 
+### <a name="faq-revoke-access">How can I revoke SMS Backup+ access</a>
+
+Go to [Authorized Access to your Google Account][] and select "Revoke Access"
+next to "SMS Backup+".
+
+
 ## <a name="contributing">Contributing</a>
 
 ### Installation from source
