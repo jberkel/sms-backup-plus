@@ -24,8 +24,8 @@ import static com.zegoggles.smssync.App.TAG;
 
 public class AppLog {
     // keep max 32k worth of logs
-    static int MAX_SIZE = 32 * 1024;
-    static int ID = 1;
+    static final int MAX_SIZE = 32 * 1024;
+    static final int ID = 1;
 
     private PrintWriter writer;
     private String dateFormat;
