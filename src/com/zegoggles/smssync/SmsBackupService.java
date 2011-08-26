@@ -51,7 +51,7 @@ public class SmsBackupService extends ServiceBase {
     private static boolean sIsRunning = false;
 
     /** Number of messages that currently need a sync. */
-    private static int sItemsToSync, sItemsToSyncSms, sItemsToSyncMms, sItemsToSyncCallLog;
+    private static int sItemsToSync;
 
     /** Number of messages already synced during this cycle.  */
     private static int sCurrentSyncedItems;
@@ -141,10 +141,7 @@ public class SmsBackupService extends ServiceBase {
               callLogCount = callLogItems != null ? callLogItems.getCount() : 0;
 
               sCurrentSyncedItems = 0;
-              sItemsToSyncSms = smsCount;
-              sItemsToSyncMms = mmsCount;
-              sItemsToSyncCallLog = callLogCount;
-              sItemsToSync = sItemsToSyncSms + sItemsToSyncMms + sItemsToSyncCallLog;
+              sItemsToSync = smsCount + mmsCount + callLogCount;
 
               if (sItemsToSync > 0) {
                   if (!PrefStore.isLoginInformationSet(context)) {
@@ -231,10 +228,6 @@ public class SmsBackupService extends ServiceBase {
            sCanceled = false;
         }
 
-      /**
-       * @param callLogItems
-       * @throws MessagingException Thrown when there was an error accessing or creating the folder
-       */
       private int backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems)
         throws MessagingException {
           Log.i(TAG, String.format("Starting backup (%d messages)", sItemsToSync));
@@ -249,8 +242,8 @@ public class SmsBackupService extends ServiceBase {
           }
 
           try {
-           Cursor curCursor = null;
-           DataType dataType = null;
+           Cursor curCursor;
+           DataType dataType;
            publish(CALC);
            while (!sCanceled && (sCurrentSyncedItems < sItemsToSync)) {
                 if (smsItems != null && smsItems.moveToNext()) {
@@ -294,9 +287,6 @@ public class SmsBackupService extends ServiceBase {
 
                 sCurrentSyncedItems += messages.size();
                 publish(BACKUP);
-
-                result = null;
-                messages = null;
             }
 
             return sCurrentSyncedItems;
@@ -326,7 +316,7 @@ public class SmsBackupService extends ServiceBase {
 
               if (callType != CallLog.Calls.MISSED_TYPE) {
                 description.append(getString(R.string.call_duration_field,
-                                             converter.formattedDuration(duration)));
+                                             CursorToMessage.formattedDuration(duration)));
               }
 
               // insert into calendar
@@ -342,11 +332,6 @@ public class SmsBackupService extends ServiceBase {
         }
       }
 
-      /**
-       * Returns a cursor of SMS messages that have not yet been synced with the
-       * server. This includes all messages with
-       * <code>date &lt; {@link #getMaxSyncedDateSms()}</code> which are not drafts.
-       */
       private Cursor getSmsItemsToSync(int max, ContactGroup group) {
          if (LOCAL_LOGV) {
             Log.v(TAG, String.format("getSmsItemToSync(max=%d),  maxSyncedDate=%d", max,
@@ -363,11 +348,6 @@ public class SmsBackupService extends ServiceBase {
                 sortOrder);
       }
 
-      /**
-       * Returns a cursor of MMS messages that have not yet been synced with the
-       * server. This includes all messages with
-       * <code>date &lt; {@link #getMaxSyncedDateSms()}</code> which are not drafts.
-       */
       private Cursor getMmsItemsToSync(int max, ContactGroup group) {
           if (LOCAL_LOGV) Log.v(TAG, "getMmsItemsToSync(max=" + max+")");
 
@@ -387,11 +367,6 @@ public class SmsBackupService extends ServiceBase {
                 sortOrder);
       }
 
-      /**
-       * Returns a cursor of call log entries that have not yet been synced with the
-       * server. This includes all entries with
-       * <code>date &lt; {@link #getMaxSyncedDateCallLog()}</code>.
-       */
       private Cursor getCallLogItemsToSync(int max) {
           if (LOCAL_LOGV) Log.v(TAG, "getCallLogItemsToSync(max=" + max+")");
 
@@ -468,25 +443,14 @@ public class SmsBackupService extends ServiceBase {
         }
     }
 
-    /**
-     * Returns whether there is currently a backup going on or not.
-     *
-     */
     static boolean isWorking() {
         return sIsRunning;
     }
 
-    /**
-     * Returns the number of messages that require sync during the current
-     * cycle.
-     */
     static int getItemsToSyncCount() {
         return sItemsToSync;
     }
 
-    /**
-     * Returns the number of already synced messages during the current cycle.
-     */
     static int getCurrentSyncedItems() {
         return sCurrentSyncedItems;
     }

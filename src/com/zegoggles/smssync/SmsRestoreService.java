@@ -12,7 +12,6 @@ import com.fsck.k9.mail.*;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.zegoggles.smssync.CursorToMessage.DataType;
 
-import org.apache.commons.io.IOUtils;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -164,7 +163,7 @@ public class SmsRestoreService extends ServiceBase {
             t.start();
             try {
               if (!async) t.join();
-            } catch (InterruptedException e) { }
+            } catch (InterruptedException ignored) { }
         }
 
         private void importMessage(Message message) {
