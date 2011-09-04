@@ -264,6 +264,10 @@ sync state. All messages on the phone will be backed up on the next run.
 Go to [Authorized Access to your Google Account][] and select "Revoke Access"
 next to "SMS Backup+".
 
+### <a name="faq-delete">When I delete messages on my phone, will they get deleted on gmail?</a>
+
+No. SMS Backup+ is a backup tool, so there is no 2-way syncing supported. It
+will only ever append to your mailbox.
 
 ## <a name="contributing">Contributing</a>
 
