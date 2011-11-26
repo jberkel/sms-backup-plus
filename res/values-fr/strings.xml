@@ -31,7 +31,7 @@
   <string name="status_backup_details">Sauvegarde élément <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>\u2026</string>
   <string name="status_restore_details">Restauration élément <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>\u2026</string>
   <string name="status_login_details">Identification :\u2026</string>
-  <string name="status_updating_threads">Mise a jour\u2026</string> 
+  <string name="status_updating_threads">Mise à jour\u2026</string> 
   <string name="status_done">Identifié avec succès</string>
   <string name="status_backup_done_details_max_per_sync">Le maximum de %1$d d\'éléments par sauvegarde a été atteint. Relancez la sauvegarde pour continuer.</string>
   <string name="status_backup_done_details_noitems">Il n\'y a pas d\'éléments à sauvegarder.</string>
