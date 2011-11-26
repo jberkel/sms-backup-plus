@@ -17,7 +17,8 @@ object General {
   val androidProjectSettings =
     androidSettings ++
     AndroidProject.androidSettings ++
-    PlainJavaProject.settings
+    PlainJavaProject.settings ++
+    AndroidMarketPublish.settings
 }
 
 object AndroidBuild extends Build {
