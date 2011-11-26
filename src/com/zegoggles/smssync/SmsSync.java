@@ -637,6 +637,12 @@ public class SmsSync extends PreferenceActivity {
                               "})()");
                      }
                    }
+
+                   @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                       startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)));
+                       return true;
+
+                   }
                 });
                 webView.loadUrl("file:///android_asset/about.html");
 
