@@ -20,7 +20,7 @@
   <string name="ui_restore_button_label_error">Restaurer</string>
 
   <string name="status_idle">Inactif</string>
-  <string name="status_idle_details">Dernier SMS sauvegardé à : <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details">Dernière sauvegarde effectuée le : <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">Jamais</string>
 
   <string name="status_working">En état de marche</string>
@@ -28,25 +28,25 @@
   <string name="status_backup">Sauvegarde en cours</string>
   <string name="status_restore">Restauration en cours</string>
 
-  <string name="status_backup_details">Sauvegardé <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
-  <string name="status_restore_details">Restauré <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_backup_details">Sauvegarde élément <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>\u2026</string>
+  <string name="status_restore_details">Restauration élément <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>\u2026</string>
   <string name="status_login_details">Identification :\u2026</string>
   <string name="status_updating_threads">Mise a jour\u2026</string> 
   <string name="status_done">Identifié avec succès</string>
-  <string name="status_backup_done_details_max_per_sync">Le maximum de %1$d objets par sauvegarde a été atteint. Relancez la sauvegarde pour continuer.</string>
-  <string name="status_backup_done_details_noitems">Il n\'y a pas d\'objets à sauvegarder.</string>
+  <string name="status_backup_done_details_max_per_sync">Le maximum de %1$d d\'éléments par sauvegarde a été atteint. Relancez la sauvegarde pour continuer.</string>
+  <string name="status_backup_done_details_noitems">Il n\'y a pas d\'éléments à sauvegarder.</string>
 
   <plurals name="status_backup_done_details">
-    <item quantity="one">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> objet.</item>
-    <item quantity="other">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> objets.</item>
+    <item quantity="one">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments.</item>
+    <item quantity="other">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments.</item>
   </plurals>
 
   <plurals name="status_restore_done_details">
-    <item quantity="one">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> objet (%2$d dups).</item>
-    <item quantity="other">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> objets (%2$d dups).</item>
+    <item quantity="one">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> élément (%2$d dups).</item>
+    <item quantity="other">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments (%2$d dups).</item>
   </plurals>
 
-  <string name="status_restore_canceled_details">%1$d/%2$d objets restaurés avec succès.</string>
+  <string name="status_restore_canceled_details">%1$d/%2$d éléments restaurés avec succès.</string>
 
   <string name="status_unknown_error">Erreur</string>
   <string name="notification_unknown_error">Erreur SMSBackup+</string>
@@ -60,7 +60,7 @@
   Veuillez vérifier que vos identifiants soient bien saisis.</string>
   <string name="status_calc_details">Calcul en cours\u2026</string>
   <string name="status_canceled">Annulé</string>
-  <string name="status_canceled_details">%1$d/%2$d objets sauvgardés avec succès.</string>
+  <string name="status_canceled_details">%1$d/%2$d éléments sauvgardés avec succès.</string>
   <string name="status_folder_error">Erreur de libellé</string>
   <string name="status_folder_error_details">L\'application n\'a pu accéder et/ou créer le libellé/dossier.</string>
   <string name="status_gmail_temp_error">Erreur IMAP de GMail, veuillez réessayer plus tard.</string>
@@ -94,9 +94,9 @@
   <string name="ui_mail_subject_prefix_label">Préfixe utilisé dans le sujet de l\'email</string>
   <string name="ui_mail_subject_prefix_desc">Utiliser le nom du dossier IMAP comme préfixe dans le sujet de l\'email</string>
 
-  <string name="ui_max_items_per_sync_label">Objets par sauvegarde</string>
-  <string name="ui_max_items_per_sync_desc">Nombre maximum d\'objets par sauvegarde.</string>
-  <string name="ui_max_items_per_restore_label">Objets par restauration</string>
+  <string name="ui_max_items_per_sync_label">Éléments par sauvegarde</string>
+  <string name="ui_max_items_per_sync_desc">Nombre maximum d\'éléments par sauvegarde.</string>
+  <string name="ui_max_items_per_restore_label">Éléments par restauration</string>
   <string name="ui_max_items_per_restore_desc">Nombre maximum de messages à restaurer.</string>
 
   <string name="ui_restore_starred_only_label">SMS favoris</string>
