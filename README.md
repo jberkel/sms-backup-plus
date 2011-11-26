@@ -311,6 +311,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * Martijn Brouns - Dutch translation
   * [Tobeon](http://tobeon.net) - Norwegian translation
   * Nemanja Bračko - Serbian translation
+  * Markus Osanger - German translation
 
 ##<a name="screenhots">Screenshots</a>
 
