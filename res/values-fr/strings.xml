@@ -33,17 +33,17 @@
   <string name="status_login_details">Identification :\u2026</string>
   <string name="status_updating_threads">Mise à jour\u2026</string> 
   <string name="status_done">Identifié avec succès</string>
-  <string name="status_backup_done_details_max_per_sync">Le maximum de %1$d d\'éléments par sauvegarde a été atteint. Relancez la sauvegarde pour continuer.</string>
+  <string name="status_backup_done_details_max_per_sync">Le maximum de %1$d éléments par sauvegarde a été atteint. Relancez la sauvegarde pour continuer.</string>
   <string name="status_backup_done_details_noitems">Il n\'y a pas d\'éléments à sauvegarder.</string>
 
   <plurals name="status_backup_done_details">
-    <item quantity="one">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments.</item>
+    <item quantity="one">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> élément.</item>
     <item quantity="other">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments.</item>
   </plurals>
 
   <plurals name="status_restore_done_details">
-    <item quantity="one">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> élément (%2$d dups).</item>
-    <item quantity="other">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments (%2$d dups).</item>
+    <item quantity="one">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> élément (%2$d éléments identiques).</item>
+    <item quantity="other">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments (%2$d éléments identiques).</item>
   </plurals>
 
   <string name="status_restore_canceled_details">%1$d/%2$d éléments restaurés avec succès.</string>
