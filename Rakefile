@@ -90,6 +90,7 @@ task :check_version do
   raise "about not updated" unless IO.read('assets/about.html') =~ /SMS Backup\+ #{version}/
 end
 
+desc "tag the current version"
 task :tag => [:check_version] do
   unless `git branch` =~ /^\* master$/
     puts "You must be on the master branch to release!"
