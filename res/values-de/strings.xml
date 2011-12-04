@@ -130,7 +130,7 @@
   <string name="ui_email_address_style_label">E-Mail Adress-Stil</string>
   <string name="ui_email_address_style_desc">Format der E-Mail-Adressen</string>
 
-  <string name="ui_enable_auto_sync_label">Atomatische Sicherung</string>
+  <string name="ui_enable_auto_sync_label">Automatische Sicherung</string>
   <string name="ui_enable_auto_sync_desc">Ob neue SMS automatisch gesichert werden sollen.</string>
   <string name="ui_enable_auto_sync_summary">Automatische Sicherung von %1$s.</string>
 
@@ -275,7 +275,7 @@
   <string name="ui_restore_settings_label">Wiederherstellungseinstellungen</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
-  <string name="ui_backup_sms_label">SMS Sicherung</string>
+  <string name="ui_backup_sms_label">SMS sichern</string>
   <string name="ui_backup_sms_desc">SMS Sicherung aktivieren</string>
 
   <string name="ui_restore_sms_label">SMS Wiederherstellung</string>
