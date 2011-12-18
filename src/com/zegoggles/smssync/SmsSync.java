@@ -197,7 +197,7 @@ public class SmsSync extends PreferenceActivity {
 
     private void updateAutoBackupEnabledSummary() {
        final Preference enableAutoBackup = findPreference("enable_auto_sync");
-       final List<String> enabled = new ArrayList();
+       final List<String> enabled = new ArrayList<String>();
 
        if (PrefStore.isSmsBackupEnabled(this)) enabled.add(getString(R.string.sms));
        if (PrefStore.isMmsBackupEnabled(this)) enabled.add(getString(R.string.mms));
