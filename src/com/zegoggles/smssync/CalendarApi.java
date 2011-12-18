@@ -100,7 +100,7 @@ public class CalendarApi {
   public static Map<String, String> getCalendars(Context context) {
     final Map<String, String> map = new LinkedHashMap<String, String>();
 
-    if ( Build.VERSION.SDK_INT >= 14) {
+    if ( Integer.parseInt(Build.VERSION.SDK) >= 14) {
         Log.d(TAG, "calendar sync disabled in ICS for now");
         return map;
     }
