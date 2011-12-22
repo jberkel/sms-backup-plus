@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
 
 import static com.zegoggles.smssync.App.*;
 
-public class CalendarApi {
+public class UndocumentedCalendarApi implements ICalendarApi {
 
   private static final Uri CALENDAR_URI     = Uri.parse("content://calendar");
   private static final Uri CALENDAR_URI_2_2 = Uri.parse("content://com.android.calendar");
@@ -74,7 +74,8 @@ public class CalendarApi {
     int STATUS_CANCELED = 2;
   }
 
-  public static void addEntry(Context context, int calId, Date when, int duration,
+  @Override
+  public void addEntry(Context context, int calId, Date when, int duration,
                               String title, String description) {
     if (LOCAL_LOGV) {
       Log.v(TAG, String.format("addEntry(%d, %s, %d, %s, %s)",
@@ -97,7 +98,8 @@ public class CalendarApi {
     }
   }
 
-  public static Map<String, String> getCalendars(Context context) {
+  @Override
+  public Map<String, String> getCalendars(Context context) {
     final Map<String, String> map = new LinkedHashMap<String, String>();
 
     if ( Build.VERSION.SDK_INT >= 14) {

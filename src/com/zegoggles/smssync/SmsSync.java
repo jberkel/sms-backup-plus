@@ -312,13 +312,15 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private void initCalendarAndGroups() {
-       final ListPreference calendarPref = (ListPreference)
-             findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
+    	final ListPreference calendarPref = (ListPreference)
+    			findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
 
-        Utils.initListPreference(calendarPref, CalendarApi.getCalendars(this), false);
-        findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
-        Utils.initListPreference((ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP),
-                                 App.contacts().getGroups(this), false);
+    	CalendarHelper.Initialize(this);
+
+    	Utils.initListPreference(calendarPref, CalendarHelper.getCalendars(this), false);
+    	findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
+    	Utils.initListPreference((ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP),
+    			App.contacts().getGroups(this), false);
     }
 
     private void initiateRestore() {
