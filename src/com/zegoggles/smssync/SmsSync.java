@@ -315,8 +315,6 @@ public class SmsSync extends PreferenceActivity {
     	final ListPreference calendarPref = (ListPreference)
     			findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
 
-    	CalendarHelper.Initialize(this);
-
     	Utils.initListPreference(calendarPref, CalendarHelper.getCalendars(this), false);
     	findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
     	Utils.initListPreference((ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP),

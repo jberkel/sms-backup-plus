@@ -7,14 +7,10 @@ import android.content.Context;
 import android.os.Build;
 
 public class CalendarHelper {
-	public static ICalendarApi CalendarApi = null;
+	public static ICalendarApi CalendarApi = getCalendarApiImplementation();
 	
-	public static void Initialize(Context context){
-		CalendarApi = getCalendarApiImplementation(context);
-	}
-	
-	public static ICalendarApi getCalendarApiImplementation(Context context){
-		if ( Build.VERSION.SDK_INT >= 14) {
+	public static ICalendarApi getCalendarApiImplementation(){
+		if (Build.VERSION.SDK_INT >= 14) {
 			return new ICSCalendarApi();
 		}else{
 			return new UndocumentedCalendarApi();
