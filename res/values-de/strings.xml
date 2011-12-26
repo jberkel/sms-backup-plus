@@ -213,7 +213,7 @@
 
   <string name="call_incoming">Eingehender Anruf</string>
   <string name="call_outgoing">Ausgehender Anruf</string>
-  <string name="call_missed">Vermisster Anruf</string>
+  <string name="call_missed">Entgangener Anruf</string>
 
   <string name="call_missed_text">Verpasster Anruf von %1$s</string>
   <string name="call_incoming_text">Anruf von %1$s</string>
