@@ -197,7 +197,7 @@ public class SmsSync extends PreferenceActivity {
 
     private void updateAutoBackupEnabledSummary() {
        final Preference enableAutoBackup = findPreference("enable_auto_sync");
-       final List<String> enabled = new ArrayList();
+       final List<String> enabled = new ArrayList<String>();
 
        if (PrefStore.isSmsBackupEnabled(this)) enabled.add(getString(R.string.sms));
        if (PrefStore.isMmsBackupEnabled(this)) enabled.add(getString(R.string.mms));
@@ -315,10 +315,10 @@ public class SmsSync extends PreferenceActivity {
        final ListPreference calendarPref = (ListPreference)
              findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR);
 
-        Utils.initListPreference(calendarPref, CalendarApi.getCalendars(this), false);
+        Utils.initListPreference(calendarPref, App.calendarAccessor().getCalendars(this), false);
         findPreference(PrefStore.PREF_CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
         Utils.initListPreference((ListPreference) findPreference(PrefStore.PREF_BACKUP_CONTACT_GROUP),
-                                 App.contacts().getGroups(this), false);
+                                 App.contactAccessor().getGroups(this), false);
     }
 
     private void initiateRestore() {
@@ -891,7 +891,7 @@ public class SmsSync extends PreferenceActivity {
 
     private void setPreferenceListeners(final PreferenceManager prefMgr, boolean backup) {
         if (backup) {
-          prefMgr.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(
+          PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(
             new SharedPreferences.OnSharedPreferenceChangeListener() {
               public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 BackupManagerWrapper.dataChanged(SmsSync.this);

@@ -15,21 +15,21 @@
  */
 package com.zegoggles.smssync;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.content.ContentValues;
-import android.util.Log;
-import android.os.Build;
-import android.net.Uri;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
-import static com.zegoggles.smssync.App.*;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.util.Log;
 
-public class CalendarApi {
-
+public class CalendarAccessorPre40 implements CalendarAccessor {
   private static final Uri CALENDAR_URI     = Uri.parse("content://calendar");
   private static final Uri CALENDAR_URI_2_2 = Uri.parse("content://com.android.calendar");
   private static final Uri CALENDAR;
@@ -74,50 +74,47 @@ public class CalendarApi {
     int STATUS_CANCELED = 2;
   }
 
-  public static void addEntry(Context context, int calId, Date when, int duration,
-                              String title, String description) {
+  public void addEntry(Context context, int calendarId, Date when, int duration,
+      String title, String description) {
     if (LOCAL_LOGV) {
       Log.v(TAG, String.format("addEntry(%d, %s, %d, %s, %s)",
-            calId, when.toString(), duration, title, description));
+                               calendarId, when.toString(), duration, title, description));
     }
 
-    final ContentValues v = new ContentValues();
-    v.put(Consts.TITLE, title);
-    v.put(Consts.DESCRIPTION, description);
-    v.put(Consts.DTSTART, when.getTime());
-    v.put(Consts.DTEND, when.getTime() + duration * 1000);
-    v.put(Consts.VISIBILITY, Consts.VISIBILITY_DEFAULT);
-    v.put(Consts.STATUS, Consts.STATUS_CONFIRMED);
-    v.put(Consts.CALENDAR_ID, calId);
+    final ContentValues contentValues = new ContentValues();
+    contentValues.put(Consts.TITLE, title);
+    contentValues.put(Consts.DESCRIPTION, description);
+    contentValues.put(Consts.DTSTART, when.getTime());
+    contentValues.put(Consts.DTEND, when.getTime() + duration * 1000);
+    contentValues.put(Consts.VISIBILITY, Consts.VISIBILITY_DEFAULT);
+    contentValues.put(Consts.STATUS, Consts.STATUS_CONFIRMED);
+    contentValues.put(Consts.CALENDAR_ID, calendarId);
 
     try {
-      context.getContentResolver().insert(Uri.withAppendedPath(CALENDAR, "events"), v);
+      context.getContentResolver().insert(Uri.withAppendedPath(CALENDAR, "events"), contentValues);
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "could not add calendar entry", e);
     }
   }
 
-  public static Map<String, String> getCalendars(Context context) {
+  public Map<String, String> getCalendars(Context context) {
     final Map<String, String> map = new LinkedHashMap<String, String>();
 
-    if ( Build.VERSION.SDK_INT >= 14) {
-        Log.d(TAG, "calendar sync disabled in ICS for now");
-        return map;
-    }
-
-    Cursor c = null;
+    Cursor cursor = null;
     try {
-      c = context.getContentResolver().query(Uri.withAppendedPath(CALENDAR, "calendars"),
-                       new String[]{ "_id", "displayname" },
-                       null, null, "displayname ASC");
+      cursor = context.getContentResolver().query(Uri.withAppendedPath(CALENDAR, "calendars"),
+                                                  new String[]{ "_id", "displayname" },
+                                                  null, null, "displayname ASC");
 
-      while (c != null && c.moveToNext()) {
-        map.put(c.getString(0), c.getString(1));
+      while (cursor != null && cursor.moveToNext()) {
+        map.put(cursor.getString(0), cursor.getString(1));
       }
     } catch (IllegalArgumentException e) {
-       Log.e(TAG, "calendars not available", e);
+      Log.e(TAG, "calendars not available", e);
     } finally {
-       if (c != null) c.close();
+      if (cursor != null) {
+        cursor.close();
+      }
     }
     return map;
   }

@@ -320,11 +320,11 @@ public class SmsBackupService extends ServiceBase {
               }
 
               // insert into calendar
-              CalendarApi.addEntry(context,
-                                   PrefStore.getCallLogCalendarId(context),
-                                   then, duration,
-                                   converter.callTypeString(callType, record.getName()),
-                                   description.toString());
+              App.calendarAccessor().addEntry(context,
+                                              PrefStore.getCallLogCalendarId(context),
+                                              then, duration,
+                                              converter.callTypeString(callType, record.getName()),
+                                              description.toString());
             } catch (NumberFormatException e) {
               Log.w(TAG, "error", e);
             }
@@ -387,7 +387,7 @@ public class SmsBackupService extends ServiceBase {
          /* MMS group selection not supported at the moment */
          if (type != DataType.SMS || group.type == ContactGroup.Type.EVERYBODY) return "";
 
-         final Set<Long> ids = App.contacts().getGroupContactIds(context, group).rawIds;
+         final Set<Long> ids = App.contactAccessor().getGroupContactIds(context, group).rawIds;
          if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
          return String.format(" AND (%s = %d OR %s IN (%s))",
                           SmsConsts.TYPE,
