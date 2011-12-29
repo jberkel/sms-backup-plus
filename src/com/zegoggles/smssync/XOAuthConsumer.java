@@ -49,6 +49,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import static com.zegoggles.smssync.App.*;
 
+@SuppressWarnings("serial")
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
   private String mUsername;
   private static final String MAC_NAME = "HmacSHA1";
