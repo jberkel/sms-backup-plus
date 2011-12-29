@@ -38,7 +38,7 @@ public class Utils {
         if (pref.getEntryValues() != null) ev.addAll(Arrays.asList(pref.getEntryValues()));
       }
 
-      for (Map.Entry entry : fields.entrySet()) {
+      for (Map.Entry<?, ?> entry : fields.entrySet()) {
         if (entry.getValue() != null && entry.getKey() != null) {
           e.add(entry.getValue().toString());
           ev.add(entry.getKey().toString());

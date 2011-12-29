@@ -252,6 +252,7 @@ public abstract class ServiceBase extends Service {
     /**
      * Exception connecting.
      */
+    @SuppressWarnings("serial")
     public static class ConnectivityErrorException extends Exception {
         public ConnectivityErrorException(String msg) {
             super(msg);
