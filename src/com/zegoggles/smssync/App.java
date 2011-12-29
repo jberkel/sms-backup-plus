@@ -31,38 +31,49 @@ public class App extends Application {
     public static final boolean LOCAL_LOGV = App.DEBUG ? Config.LOGD : Config.LOGV;
     public static final String TAG = "SmsBackup+";
 
-    private static ContactAccessor sAccessor = null;
+    private static ContactAccessor sContactAccessor = null;
+    private static CalendarAccessor sCalendarAccessor = null;
 
     public static final String LOG = "sms_backup_plus.log";
 
     @Override
     public void onCreate() {
-        ACRA.init(this);
-        super.onCreate();
-        K9.app = this;
-        K9.DEBUG = DEBUG;
-        K9.DEBUG_PROTOCOL_IMAP = DEBUG;
+      ACRA.init(this);
+      super.onCreate();
+      K9.app = this;
+      K9.DEBUG = DEBUG;
+      K9.DEBUG_PROTOCOL_IMAP = DEBUG;
     }
 
-    public static ContactAccessor contacts() {
-       if (sAccessor == null) {
-            String className;
-            int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
-            if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
-                className = "ContactAccessorPre20";
-            } else {
-                className = "ContactAccessorPost20";
-            }
-            try {
-                Class<? extends ContactAccessor> clazz =
-                   Class.forName(ContactAccessor.class.getPackage().getName() + "." + className)
-                        .asSubclass(ContactAccessor.class);
-
-                sAccessor = clazz.newInstance();
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
-            }
+    public static ContactAccessor contactAccessor() {
+      int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+      if (sContactAccessor == null) {
+        try {
+          if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
+            sContactAccessor = new ContactAccessorPre20();
+          } else {
+            sContactAccessor = new ContactAccessorPost20();
+          }
+        } catch (Exception e) {
+          throw new IllegalStateException(e);
         }
-        return sAccessor;
+      }
+      return sContactAccessor;
+    }
+
+    public static CalendarAccessor calendarAccessor() {
+      int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+      if (sCalendarAccessor == null) {
+        try {
+          if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            sCalendarAccessor = new CalendarAccessorPre40();
+          } else {
+            sCalendarAccessor = new CalendarAccessorPost40();
+          }
+        } catch (Exception e) {
+          throw new IllegalStateException(e);
+        }
+      }
+      return sCalendarAccessor;
     }
 }

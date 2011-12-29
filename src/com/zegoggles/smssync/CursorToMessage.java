@@ -146,7 +146,7 @@ public class CursorToMessage {
         switch (PrefStore.getBackupContactGroup(ctx).type) {
           case EVERYBODY: allowedIds = null; break;
           default:
-            allowedIds = App.contacts().getGroupContactIds(ctx, PrefStore.getBackupContactGroup(ctx));
+            allowedIds = App.contactAccessor().getGroupContactIds(ctx, PrefStore.getBackupContactGroup(ctx));
             if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
         }
 
