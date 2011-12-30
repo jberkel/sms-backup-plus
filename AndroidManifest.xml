@@ -77,7 +77,7 @@
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
 
     <uses-sdk android:minSdkVersion="3"
-              android:targetSdkVersion="8"/>
+              android:targetSdkVersion="14"/>
 
     <supports-screens android:smallScreens="true"/>
 </manifest>

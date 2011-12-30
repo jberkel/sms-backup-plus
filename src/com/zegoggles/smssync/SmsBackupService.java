@@ -320,7 +320,7 @@ public class SmsBackupService extends ServiceBase {
               }
 
               // insert into calendar
-              CalendarApi.addEntry(context,
+              CalendarHelper.addEntry(context,
                                    PrefStore.getCallLogCalendarId(context),
                                    then, duration,
                                    converter.callTypeString(callType, record.getName()),
