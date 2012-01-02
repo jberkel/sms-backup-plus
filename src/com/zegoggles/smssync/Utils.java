@@ -60,8 +60,7 @@ public class Utils {
       }
     });
 
-    if (pref.getEntries() == null || pref.getEntries().length == 0) {
-      pref.setEnabled(false);
-    }
+    pref.setEnabled(pref.getEntries() != null &&
+                    pref.getEntries().length > 0);
   }
 }
