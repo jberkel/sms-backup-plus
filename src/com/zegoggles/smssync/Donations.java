@@ -230,7 +230,7 @@ final class Donations implements PayPalResultDelegate, java.io.Serializable {
           final long start = System.currentTimeMillis();
 
           pp = PayPal.initWithAppID(sContext, sContext.getString(R.string.donation_paypal_app_id),
-                                    PayPal.ENV_SANDBOX);
+                                    PayPal.ENV_LIVE);
           pp.setFeesPayer(PayPal.FEEPAYER_EACHRECEIVER);
           pp.setShippingEnabled(false);
           pp.setDynamicAmountCalculationEnabled(false);
