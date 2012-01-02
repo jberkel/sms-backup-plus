@@ -83,6 +83,7 @@ task :findbugs => :compile do
   sh "java -jar #{findbugs_home}/lib/findbugs.jar -textui -auxclasspath #{auxcp} -exclude findbugs-exclude.xml bin/classes"
 end
 
+desc "check release"
 task :check_version do
   # make sure new version is propagated everywhere
   raise "CHANGES not updated" unless IO.read('CHANGES') =~ /#{version}/

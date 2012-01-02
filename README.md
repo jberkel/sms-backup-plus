@@ -296,6 +296,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * [Christoph Studer](http://studer.tv/) Original author of SMS Backup
   * [Ben Dodson](http://github.com/bjdodson) - Contacts 2.0 / MMS support
   * [Felix Knecht](http://github.com/dicer) - Call log backup code
+  * [Michael Scharfstein](http://github.com/smike) - Call log calendar ICS support
   * [k9mail](http://code.google.com/p/k9mail/) IMAP library, with some modifications ([k9mail/sms-backup-plus](http://github.com/jberkel/k9mail))
   * [acra](http://code.google.com/p/acra) ACRA - Application Crash Report for Android
   * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
@@ -327,7 +328,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
-[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.4.4.apk/qr_code
+[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.4.5.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_4.png
 [gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png

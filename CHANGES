@@ -1,3 +1,7 @@
+== 1.4.5 01-02-2012
+
+  * Added call log calendar support on ICS (github.com/smike)
+
 == 1.4.4 11-26-2011
 
   * Compatible w/ ICS (Android 4.0)
