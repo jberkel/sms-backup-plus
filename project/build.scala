@@ -11,7 +11,7 @@ object General {
   val androidSettings =
     settings ++
     Seq(
-      platformName := "android-10"
+      platformName := "android-14"
     )
 
   val androidProjectSettings =
