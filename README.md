@@ -269,6 +269,12 @@ next to "SMS Backup+".
 No. SMS Backup+ is a backup tool, so there is no 2-way syncing supported. It
 will only ever append to your mailbox.
 
+### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>
+
+This is probably related to Gmail's automatic priority inbox filing. See
+[GH-164](https://github.com/jberkel/sms-backup-plus/issues/164) for a
+discussion.
+
 ## <a name="contributing">Contributing</a>
 
 ### Installation from source
