@@ -185,6 +185,12 @@ If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
 
+### <a name="faq-package-not-signed">When updating the app I get 'Package file was not signed correctly'</a>
+
+Try uninstalling the app, then installing the new version. Make sure to select
+"Skip" when doing the first backup, otherwise messages will get backed up
+twice.
+
 ### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>
 
 This is probably related to Gmail's automatic priority inbox filing. See
