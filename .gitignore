@@ -17,3 +17,4 @@ app_parts
 target
 out
 build.xml
+proguard.cfg
