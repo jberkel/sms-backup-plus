@@ -281,7 +281,7 @@ discussion.
 
     $ git clone git://github.com/jberkel/sms-backup-plus.git
     $ cd sms-backup-plus
-    $ echo "sdk.dir=/path/to/android-sdk" > local.properties
+    $ android update project -p . -n sms-backup-plus
     $ ant debug
     $ adb install bin/sms-backup-plus-debug.apk
 
