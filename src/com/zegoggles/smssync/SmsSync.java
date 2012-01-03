@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -693,8 +694,7 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                           if (mAuthorizeUri != null) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, mAuthorizeUri)
-                                .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                              tryOpenStockBrowser(mAuthorizeUri);
                           }
                           dismissDialog(id);
                         }
@@ -731,6 +731,24 @@ public class SmsSync extends PreferenceActivity {
                 return null;
         }
         return createMessageDialog(id, title, msg);
+    }
+
+    private void tryOpenStockBrowser(final Uri uri) {
+        final Intent stockBrowser = new Intent()
+            .setComponent(new ComponentName("com.android.browser",
+                            "com.android.browser.BrowserActivity"))
+            .setData(uri)
+            .setAction(Intent.ACTION_VIEW)
+            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+        // try the stock browser first, fall back to implicit intent if not found
+        try {
+            startActivity(stockBrowser);
+        } catch (ActivityNotFoundException e) {
+            Log.w(TAG, "default browser not found, falling back");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+        }
     }
 
     private Dialog createMessageDialog(final int id, String title, String msg) {
