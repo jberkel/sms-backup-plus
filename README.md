@@ -172,25 +172,12 @@ Some possible workarounds:
 
 See the answer to the previous question, it's the same problem.
 
-### <a name="faq-schedule">What's the difference between regular and incoming backup schedule?</a>
+### <a name="droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
 
-Incoming backup schedule is used for incoming messages. 3 minutes here means
-that any incoming SMS will trigger a backup after 3 minutes. It is a full
-backup (including any sent messages). You should set the incoming schedule to a
-low value if you want to make sure that incoming SMS show up in
-Gmail shortly after arrival.
+It's a known SMS bug in the latest OTA 2.2 update ([details][droidbug]). As a workaround
+you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and activate the "Last Resort" option
+([screenshot][smstimefixshot]).
 
-Regular schedule is used to perform backups in specific intervals. 2 hours here
-means that the device will try to backup all messages every 2 hours.
-
-Fewer updates performed by the app means less energy consumed, so there's
-a trade-off data protection vs. battery life.
-
-### <a name="faq-scheduling">I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
-
-If you require more control over the backup schedule than what SMS Backup+ already
-provides you can use a 3rd party app to trigger the backup. [Tasker][] for
-example supports SMS Backup+ since version 1.0.14.
 
 ### <a name="faq-request-token">When connecting, I get 'Could not obtain request token...'</a>
 
@@ -198,33 +185,17 @@ If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
 
-### <a name="droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
+### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>
 
-It's a known SMS bug in the latest OTA 2.2 update ([details][droidbug]). As a workaround
-you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and activate the "Last Resort" option
-([screenshot][smstimefixshot]).
-
-### <a name="faq-threading">In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.</a>
-
-It's a Gmail feature, but you can disable it.
-In Gmail settings, set conversation view to `off`
-([screenshot][converationviewoff]).
+This is probably related to Gmail's automatic priority inbox filing. See
+[GH-164](https://github.com/jberkel/sms-backup-plus/issues/164) for a
+discussion.
 
 ### <a name="faq-show-imap">I get the following Error during backup/restore: Command: SELECT "SMS"; response: #6# [NO, Unknown, Mailbox; SMS, [Failure]]</a>
 
 Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
 ![Screenshot][showimap]
-
-### <a name="faq-permissions">Why does it need so many permissions?</a>
-
-  * Read contacts - Needed to map phone numbers to names and email addresses
-  * Your messages (read / write SMS) - Needed for backup+restore
-  * Prevent phone from sleeping - needed to keep network active during a backup
-  * Modify calendar events - needed for the call log backup to GCal
-  * Send email to guests - this refers to calendar invitations (which are not created by the app)
-  * Storage (modify/delete SD card contents) - this is needed for caching
-  * Your accounts (discover known accounts) - currently not used and will be removed in a future version
 
 ### <a name="faq-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
 
@@ -236,6 +207,22 @@ together.
 
 A way around this is to do a full backup 100 SMS at a time (see `Advanced
 settings`).
+
+### <a name="faq-threading">In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.</a>
+
+It's a Gmail feature, but you can disable it.
+In Gmail settings, set conversation view to `off`
+([screenshot][converationviewoff]).
+
+### <a name="faq-permissions">Why does it need so many permissions?</a>
+
+  * Read contacts - Needed to map phone numbers to names and email addresses
+  * Your messages (read / write SMS) - Needed for backup+restore
+  * Prevent phone from sleeping - needed to keep network active during a backup
+  * Modify calendar events - needed for the call log backup to GCal
+  * Send email to guests - this refers to calendar invitations (which are not created by the app)
+  * Storage (modify/delete SD card contents) - this is needed for caching
+  * Your accounts (discover known accounts) - currently not used and will be removed in a future version
 
 ### <a name="faq-partial-restore">How do I restore the last N weeks / N messages?</a>
 
@@ -269,11 +256,25 @@ next to "SMS Backup+".
 No. SMS Backup+ is a backup tool, so there is no 2-way syncing supported. It
 will only ever append to your mailbox.
 
-### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>
+### <a name="faq-schedule">What's the difference between regular and incoming backup schedule?</a>
 
-This is probably related to Gmail's automatic priority inbox filing. See
-[GH-164](https://github.com/jberkel/sms-backup-plus/issues/164) for a
-discussion.
+Incoming backup schedule is used for incoming messages. 3 minutes here means
+that any incoming SMS will trigger a backup after 3 minutes. It is a full
+backup (including any sent messages). You should set the incoming schedule to a
+low value if you want to make sure that incoming SMS show up in
+Gmail shortly after arrival.
+
+Regular schedule is used to perform backups in specific intervals. 2 hours here
+means that the device will try to backup all messages every 2 hours.
+
+Fewer updates performed by the app means less energy consumed, so there's
+a trade-off data protection vs. battery life.
+
+### <a name="faq-scheduling">I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
+
+If you require more control over the backup schedule than what SMS Backup+ already
+provides you can use a 3rd party app to trigger the backup. [Tasker][] for
+example supports SMS Backup+ since version 1.0.14.
 
 ## <a name="contributing">Contributing</a>
 
