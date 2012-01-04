@@ -203,6 +203,9 @@ Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
 ![Screenshot][showimap]
 
+If this is the case make sure that the label name is set correctly (capitalization
+matters!).
+
 ### <a name="faq-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
 
 This seems to be a limitation of Gmail. After the first hundred or so SMS being
