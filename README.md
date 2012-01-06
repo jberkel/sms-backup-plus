@@ -193,9 +193,12 @@ twice.
 
 ### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>
 
-This is probably related to Gmail's automatic priority inbox filing. See
-[GH-164](https://github.com/jberkel/sms-backup-plus/issues/164) for a
-discussion.
+This is probably related to Gmail's automatic priority inbox filing.
+A workaround is to set up a filter with "subject: SMS with", let the filter
+mark it as not important.
+
+![](https://img.skitch.com/20120106-tymk3rn4i5apshhr6e1hbd17qn.jpg)
+![](https://img.skitch.com/20120106-rsg7912rnus5gwe3e572rxwbae.jpg)
 
 ### <a name="faq-show-imap">I get the following Error during backup/restore: Command: SELECT "SMS"; response: #6# [NO, Unknown, Mailbox; SMS, [Failure]]</a>
 
