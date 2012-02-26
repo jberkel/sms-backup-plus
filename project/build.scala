@@ -4,8 +4,6 @@ import AndroidKeys._
 
 object General {
   val settings = Defaults.defaultSettings ++ Seq(
-    version := "1.4.5-SNAPSHOT",
-    versionCode in Android := 1406,
     organization := "com.zegoggles"
   )
 
