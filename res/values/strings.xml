@@ -84,7 +84,7 @@
   <string name="ui_protocol_label">Security</string>
   <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL (Required)\"."</string>
   <string name="ui_authentication_label">Authentication</string>
-  <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOauth\".</string>
+  <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOAuth\".</string>
   <string name="plain">Plain text</string>
   <string name="xoauth">XOAuth</string>
 
@@ -166,7 +166,7 @@
       Backup data has been reset. Please reconnect your account and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.
   </string>
   <string name="ui_dialog_invalid_imap_folder_title">Invalid label name</string>
-  <string name="ui_dialog_invalid_imap_folder_msg">The label name may not spaces (at the beginning or end).</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">The label name may not contain spaces (at the beginning or end).</string>
   <string name="ui_dialog_first_sync_title">First backup</string>
   <string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?</string>
   <string name="ui_dialog_first_sync_msg_batched">Backup or skip all messages currently stored on this device?\n\nNote: The backup will be split into batches of %1$d messages.</string>
