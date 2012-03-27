@@ -175,8 +175,8 @@ See the answer to the previous question, it's the same problem.
 ### <a name="droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
 
 It's a known SMS bug in the latest OTA 2.2 update ([details][droidbug]). As a workaround
-you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and activate the "Last Resort" option
-([screenshot][smstimefixshot]).
+you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and set "Adjustment Method" to "Use Phone's Time"
+([screenshot1][smstimefixshot1], [screenshot2][smstimefixshot2]).
 
 
 ### <a name="faq-request-token">When connecting, I get 'Could not obtain request token...'</a>
@@ -359,8 +359,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 [SMS Time fix]: http://www.appbrain.com/app/sms-time-fix/com.mattprecious.smsfix
 [converationviewoff]: https://skitch.com/jberkel/ryk8y/soundcloud.com-mail-settings-jan-soundcloud.com
 [smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
-
-[smstimefixshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_time_fix.png
+[smstimefixshot1]: https://github.com/downloads/jberkel/sms-backup-plus/sms_time_fix_new_1.png
+[smstimefixshot2]: https://github.com/downloads/jberkel/sms-backup-plus/sms_time_fix_new_2.png
 [imapenableshot]: https://skitch.com/jberkel/ryk1c/google-mail-settings-jan.berkel-gmail.com#lightbox
 [showimap]: https://github.com/downloads/jberkel/sms-backup-plus/show_imap.png
 [Tasker]: http://tasker.dinglisch.net/
