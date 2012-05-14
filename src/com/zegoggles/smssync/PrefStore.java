@@ -470,6 +470,10 @@ public class PrefStore {
     static boolean isNotificationEnabled(Context ctx) {
         return getPrefs(ctx).getBoolean("notifications", false);
     }
+    
+    static boolean confirmAction(Context ctx) {
+    	return getPrefs(ctx).getBoolean("confirm_action", false);
+    }
 
     static String getServerAddress(Context ctx) {
         return getPrefs(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
