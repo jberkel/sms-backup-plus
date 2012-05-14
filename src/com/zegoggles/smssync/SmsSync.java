@@ -93,7 +93,7 @@ public class SmsSync extends PreferenceActivity {
     private Uri mAuthorizeUri = null;
     private Donations donations = new Donations(this);
 
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ServiceBase.smsSync = this;
@@ -105,7 +105,7 @@ public class SmsSync extends PreferenceActivity {
         this.statusPref = new StatusPreference(this);
         getPreferenceScreen().addPreference(this.statusPref);
 
-        int version = Integer.parseInt(Build.VERSION.SDK);
+        int version = Build.VERSION.SDK_INT;
         if (version < MIN_VERSION_MMS) {
           CheckBoxPreference backupMms =  (CheckBoxPreference) findPreference(PrefStore.PREF_BACKUP_MMS);
           backupMms.setEnabled(false);
@@ -118,7 +118,7 @@ public class SmsSync extends PreferenceActivity {
 
         if ("DROIDX".equals(Build.MODEL) ||
             "DROID2".equals(Build.MODEL) &&
-            Integer.parseInt(Build.VERSION.SDK) == Build.VERSION_CODES.FROYO &&
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.FROYO &&
             !getPreferences(MODE_PRIVATE).getBoolean("droidx_warning_displayed", false)) {
 
           getPreferences(MODE_PRIVATE).edit().putBoolean("droidx_warning_displayed", true).commit();
