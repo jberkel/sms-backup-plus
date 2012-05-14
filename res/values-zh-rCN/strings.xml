@@ -333,4 +333,9 @@
   <string name="source_3rd_party">第三方</string>
   <string name="source_manual">手动</string>
   <string name="source_unknown">未知</string>
+  
+  <string name="ui_confirm_action_label">确认操作</string>
+  <string name="ui_confirm_action_desc">执行备件和还原时需要确认,不影响自动备份</string>
+  <string name="ui_dialog_confirm_action_title">确认操作</string>
+  <string name="ui_dialog_confirm_action_msg">您确认要执行此操作吗？</string>
 </resources>
