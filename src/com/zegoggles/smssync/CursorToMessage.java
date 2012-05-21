@@ -273,7 +273,14 @@ public class CursorToMessage {
 
     /* Look up a person */
     public PersonRecord lookupPerson(final String address) {
-        if (!mPeopleCache.containsKey(address)) {
+        if (TextUtils.isEmpty(address)) {
+            final PersonRecord record = new PersonRecord();
+            record.number = "-1";
+            record.email = getUnknownEmail(null);
+            record.unknown = true;
+            return record;
+        }
+        else if (!mPeopleCache.containsKey(address)) {
             Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
                                                  Phones.CONTENT_FILTER_URL, Uri.encode(address));
 
