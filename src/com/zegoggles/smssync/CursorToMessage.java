@@ -80,7 +80,7 @@ public class CursorToMessage {
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
 
-    private static final boolean NEW_CONTACT_API = Integer.parseInt(Build.VERSION.SDK) >=
+    private static final boolean NEW_CONTACT_API = Build.VERSION.SDK_INT >=
                                                    Build.VERSION_CODES.ECLAIR;
 
     private static final String[] PHONE_PROJECTION = NEW_CONTACT_API  ?
@@ -299,7 +299,7 @@ public class CursorToMessage {
         return mPeopleCache.get(address);
     }
 
-    private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
+	private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(SmsConsts.ADDRESS);
         if (address == null || address.trim().length() == 0) {
            return null;

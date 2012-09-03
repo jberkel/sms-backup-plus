@@ -86,14 +86,21 @@ public class SmsSync extends PreferenceActivity {
       CONNECT_TOKEN_ERROR,
       UPGRADE,
       BROKEN_DROIDX,
-      VIEW_LOG
+      VIEW_LOG,
+      CONFIRM_ACTION
     }
+    
+    enum Actions {
+    	Backup,
+    	Restore
+    }
+    private Actions mActions = null;
 
     StatusPreference statusPref;
     private Uri mAuthorizeUri = null;
     private Donations donations = new Donations(this);
 
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ServiceBase.smsSync = this;
@@ -105,7 +112,7 @@ public class SmsSync extends PreferenceActivity {
         this.statusPref = new StatusPreference(this);
         getPreferenceScreen().addPreference(this.statusPref);
 
-        int version = Integer.parseInt(Build.VERSION.SDK);
+        int version = Build.VERSION.SDK_INT;
         if (version < MIN_VERSION_MMS) {
           CheckBoxPreference backupMms =  (CheckBoxPreference) findPreference(PrefStore.PREF_BACKUP_MMS);
           backupMms.setEnabled(false);
@@ -118,7 +125,7 @@ public class SmsSync extends PreferenceActivity {
 
         if ("DROIDX".equals(Build.MODEL) ||
             "DROID2".equals(Build.MODEL) &&
-            Integer.parseInt(Build.VERSION.SDK) == Build.VERSION_CODES.FROYO &&
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.FROYO &&
             !getPreferences(MODE_PRIVATE).getBoolean("droidx_warning_displayed", false)) {
 
           getPreferences(MODE_PRIVATE).edit().putBoolean("droidx_warning_displayed", true).commit();
@@ -346,6 +353,23 @@ public class SmsSync extends PreferenceActivity {
             return true;
         }
     }
+    
+    private void performAction(Actions act) {
+    	this.performAction(act, PrefStore.confirmAction(this));
+    }
+    
+    private void performAction(Actions act, boolean needConfirm) {
+    	if (needConfirm) {
+        	this.mActions = act;
+        	show(Dialogs.CONFIRM_ACTION);
+    	} else {
+    		if (Actions.Backup.equals(act)) {
+    			initiateSync();
+    		} else if (Actions.Restore.equals(act)) {
+				initiateRestore();
+			}
+    	}
+	}
 
     private void startSync(boolean skip) {
         Intent intent = new Intent(this, SmsBackupService.class);
@@ -542,7 +566,7 @@ public class SmsSync extends PreferenceActivity {
             if (v == mSyncButton) {
                 if (!SmsBackupService.isWorking()) {
                     if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
-                    initiateSync();
+                    performAction(Actions.Backup);
                 } else {
                     if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
                     // Sync button will be restored on next status update.
@@ -553,7 +577,7 @@ public class SmsSync extends PreferenceActivity {
             } else if (v == mRestoreButton) {
                 if (LOCAL_LOGV) Log.v(TAG, "restore");
                 if (!SmsRestoreService.isWorking()) {
-                    initiateRestore();
+                    performAction(Actions.Restore);
                 } else {
                     mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
                     mRestoreButton.setEnabled(false);
@@ -727,6 +751,20 @@ public class SmsSync extends PreferenceActivity {
                 title = getString(R.string.ui_dialog_brokendroidx_title);
                 msg   = getString(R.string.ui_dialog_brokendroidx_msg);
                 break;
+           case CONFIRM_ACTION:
+                return new AlertDialog.Builder(this)
+                    .setTitle(R.string.ui_dialog_confirm_action_title)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    	public void onClick(DialogInterface dialog, int which) {
+                			if (SmsSync.this.mActions != null)
+                			{
+                				performAction(SmsSync.this.mActions, false);
+                			}
+                    	}})
+                    .setMessage(R.string.ui_dialog_confirm_action_msg)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create();
+
             default:
                 return null;
         }
