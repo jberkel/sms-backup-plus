@@ -35,7 +35,7 @@ public class CalendarAccessorPre40 implements CalendarAccessor {
   private static final Uri CALENDAR;
 
   static {
-    if (Integer.parseInt(Build.VERSION.SDK) >= Build.VERSION_CODES.FROYO) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
       CALENDAR = CALENDAR_URI_2_2;
     } else {
       CALENDAR = CALENDAR_URI;

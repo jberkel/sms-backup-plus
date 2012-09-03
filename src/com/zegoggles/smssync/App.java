@@ -16,19 +16,18 @@
 
 package com.zegoggles.smssync;
 
-import android.os.Build;
-import android.app.Application;
-import com.fsck.k9.K9;
-
-import android.util.Config;
-
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
+
+import android.app.Application;
+import android.os.Build;
+
+import com.fsck.k9.K9;
 
 @ReportsCrashes(formUri = "https://bugsense.appspot.com/api/acra?api_key=a2603e16", formKey = "")
 public class App extends Application {
     public static final boolean DEBUG = false;
-    public static final boolean LOCAL_LOGV = App.DEBUG ? Config.LOGD : Config.LOGV;
+    public static final boolean LOCAL_LOGV = App.DEBUG;
     public static final String TAG = "SmsBackup+";
 
     private static ContactAccessor sContactAccessor = null;
@@ -46,7 +45,7 @@ public class App extends Application {
     }
 
     public static ContactAccessor contactAccessor() {
-      int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+      int sdkVersion = Build.VERSION.SDK_INT;
       if (sContactAccessor == null) {
         try {
           if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
@@ -62,7 +61,7 @@ public class App extends Application {
     }
 
     public static CalendarAccessor calendarAccessor() {
-      int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
+        int sdkVersion = Build.VERSION.SDK_INT;
       if (sCalendarAccessor == null) {
         try {
           if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {

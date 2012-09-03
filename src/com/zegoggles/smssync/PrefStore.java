@@ -292,7 +292,7 @@ public class PrefStore {
     }
 
     static boolean isMmsBackupEnabled(Context ctx) {
-       final int version = Integer.parseInt(android.os.Build.VERSION.SDK);
+       final int version = android.os.Build.VERSION.SDK_INT;
        return version >= SmsSync.MIN_VERSION_MMS && getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
@@ -470,6 +470,10 @@ public class PrefStore {
     static boolean isNotificationEnabled(Context ctx) {
         return getPrefs(ctx).getBoolean("notifications", false);
     }
+    
+    static boolean confirmAction(Context ctx) {
+    	return getPrefs(ctx).getBoolean("confirm_action", false);
+    }
 
     static String getServerAddress(Context ctx) {
         return getPrefs(ctx).getString(PREF_SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
@@ -483,7 +487,7 @@ public class PrefStore {
         return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress(ctx));
     }
 
-    static String encode(String s) {
+	static String encode(String s) {
       return s == null ? "" : URLEncoder.encode(s);
     }
 
