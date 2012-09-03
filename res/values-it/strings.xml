@@ -119,8 +119,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Calendario usato per il registro chiamate</string>
 
   <string name="ui_imap_folder_calllog_label">Etichetta registro chiamate</string>
-  <string name="ui_imap_folder_calllog_desc">Etichetta Gmail assegnata al registro chiamate.</string>
-  <string name="ui_imap_folder_calllog_label_dialog_msg">Le voci del registro chiamate salvate saranno contrassegnate su Gmail con questa etichetta.</string>
 
   <string name="ui_mark_as_read_label">Segna come letto (email)</string>
   <string name="ui_mark_as_read_desc">Scegliere se segnare come letti i messaggi in Gmail.</string>
@@ -135,7 +133,7 @@
   <string name="ui_enable_auto_sync_desc">Scegliere se salvare automaticamente i nuovi SMS.</string>
   <string name="ui_enable_auto_sync_summary">Salvare automaticamente %1$s.</string>
   
-  <string name="sd_card_disclaimer">Il salvataggio automatico potrebbe rivelarsi non affidabile se l'applicazione viene installata su una memoria SD.</string>
+  <string name="sd_card_disclaimer">Il salvataggio automatico potrebbe rivelarsi non affidabile se l\'applicazione viene installata su una memoria SD.</string>
 
   <string name="ui_enable_auto_sync_bg_data">Sarà necessario inoltre abilitare i dati in background.</string>
   
