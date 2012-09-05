@@ -215,7 +215,7 @@
           android:summary="@string/ui_mark_as_read_restore_desc"
           android:persistent="true"
           android:defaultValue="true"/>
-        
+
       </PreferenceScreen>
 
       <CheckBoxPreference
@@ -224,7 +224,7 @@
         android:summary="@string/ui_notifications_desc"
         android:persistent="true"
         android:defaultValue="false"/>
-      
+
       <CheckBoxPreference android:title="@string/ui_confirm_action_label"
 		android:persistent="true"
 		android:key="confirm_action"
@@ -297,6 +297,6 @@
               android:dialogMessage="@string/ui_password_dialog_msg"
               android:persistent="false"/></PreferenceCategory>
         </PreferenceScreen>
-      
+
     </PreferenceScreen>
 </PreferenceScreen>
