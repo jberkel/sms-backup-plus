@@ -1,3 +1,13 @@
+== 1.4.6 09-06-2012
+
+  * Fixes for ICS / Jelly Bean
+  * Added Hungarian translation (László Gárdonyi)
+  * Added Slovak translation (https://github.com/Matrix44)
+  * Translation fixes (Italian: Chiara De Liberato, Chinese: https://github.com/CzBiX)
+  * Optionally confirm actions (https://github.com/CzBiX)
+  * Try opening stock browser first
+  * Schedule regular backup after BOOT_COMPLETE (https://github.com/jberkel/sms-backup-plus/pull/215)
+
 == 1.4.5 01-02-2012
 
   * Added call log calendar support on ICS (github.com/smike)
