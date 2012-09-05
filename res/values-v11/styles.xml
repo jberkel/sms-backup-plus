@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.SmsBackupPlus" parent="android:Theme.Holo"/>
+</resources>
