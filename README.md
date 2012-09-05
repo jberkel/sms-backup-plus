@@ -26,7 +26,7 @@ Main differences / improvements:
 
   * Works with any IMAP server (but defaults to Gmail).
 
-Tested with Android 1.5 - 4.0.x.
+Tested with Android 1.5 - 4.1.x.
 
 SMS Backup+ is available for free in the market, there will never be a pro / paid version.
 
