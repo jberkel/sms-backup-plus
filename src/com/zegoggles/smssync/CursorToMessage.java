@@ -734,7 +734,7 @@ public class CursorToMessage {
         }
 
         public String getNumber() {
-          return sanitize("-1".equals(number) ? "Unknown" : number);
+          return sanitize("-1".equals(number) || "-2".equals(number) ? "Unknown" : number);
         }
 
         public String getName() {
