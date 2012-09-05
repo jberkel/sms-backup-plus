@@ -89,11 +89,12 @@ public class SmsSync extends PreferenceActivity {
       VIEW_LOG,
       CONFIRM_ACTION
     }
-    
+
     enum Actions {
-    	Backup,
-    	Restore
+        Backup,
+        Restore
     }
+
     private Actions mActions = null;
 
     StatusPreference statusPref;
@@ -353,23 +354,23 @@ public class SmsSync extends PreferenceActivity {
             return true;
         }
     }
-    
+
     private void performAction(Actions act) {
     	this.performAction(act, PrefStore.confirmAction(this));
     }
-    
+
     private void performAction(Actions act, boolean needConfirm) {
-    	if (needConfirm) {
-        	this.mActions = act;
-        	show(Dialogs.CONFIRM_ACTION);
-    	} else {
-    		if (Actions.Backup.equals(act)) {
-    			initiateSync();
-    		} else if (Actions.Restore.equals(act)) {
-				initiateRestore();
-			}
-    	}
-	}
+        if (needConfirm) {
+            this.mActions = act;
+            show(Dialogs.CONFIRM_ACTION);
+        } else {
+            if (Actions.Backup.equals(act)) {
+                initiateSync();
+            } else if (Actions.Restore.equals(act)) {
+                initiateRestore();
+            }
+        }
+    }
 
     private void startSync(boolean skip) {
         Intent intent = new Intent(this, SmsBackupService.class);
@@ -751,19 +752,19 @@ public class SmsSync extends PreferenceActivity {
                 title = getString(R.string.ui_dialog_brokendroidx_title);
                 msg   = getString(R.string.ui_dialog_brokendroidx_msg);
                 break;
-           case CONFIRM_ACTION:
+            case CONFIRM_ACTION:
                 return new AlertDialog.Builder(this)
-                    .setTitle(R.string.ui_dialog_confirm_action_title)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    	public void onClick(DialogInterface dialog, int which) {
-                			if (SmsSync.this.mActions != null)
-                			{
-                				performAction(SmsSync.this.mActions, false);
-                			}
-                    	}})
-                    .setMessage(R.string.ui_dialog_confirm_action_msg)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
+                        .setTitle(R.string.ui_dialog_confirm_action_title)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (SmsSync.this.mActions != null) {
+                                    performAction(SmsSync.this.mActions, false);
+                                }
+                            }
+                        })
+                        .setMessage(R.string.ui_dialog_confirm_action_msg)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create();
 
             default:
                 return null;

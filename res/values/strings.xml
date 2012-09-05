@@ -337,9 +337,9 @@
   <string name="source_3rd_party">3rd party</string>
   <string name="source_manual">manual</string>
   <string name="source_unknown">unknown</string>
-  
-  <string name="ui_confirm_action_label">Confirm action</string>
-  <string name="ui_confirm_action_desc">Ask before perform backup or restore, don\'t effect auto backup</string>
+
+  <string name="ui_confirm_action_label">Confirm actions</string>
+  <string name="ui_confirm_action_desc">Ask before performing backup or restore</string>
   <string name="ui_dialog_confirm_action_title">Confirm Action</string>
-  <string name="ui_dialog_confirm_action_msg">Are you sure want to preform the action?</string>
+  <string name="ui_dialog_confirm_action_msg">Are you sure want to perform the action?</string>
 </resources>
