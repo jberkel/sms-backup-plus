@@ -46,6 +46,7 @@ object AndroidBuild extends Build {
     settings = General.androidProjectSettings ++ Seq (
       keyalias in Android := "jberkel",
       libraryDependencies ++= coreDependencies ++ providedDependencies ++ testDependencies,
+      unmanagedBase      <<= baseDirectory / "libs",
       resolvers ++= repos
     ) ++ AndroidInstall.settings
   )
