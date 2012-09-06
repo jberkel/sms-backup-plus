@@ -323,4 +323,7 @@
   <string name="ui_confirm_action_desc">Ask before performing backup or restore</string>
   <string name="ui_dialog_confirm_action_title">Confirm Action</string>
   <string name="ui_dialog_confirm_action_msg">Are you sure want to perform the action?</string>
+
+  <string name="loading">Loading…</string>
+  <string name="ssl_error">SSL error</string>
 </resources>

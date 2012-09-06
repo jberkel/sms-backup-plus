@@ -26,8 +26,8 @@ import com.fsck.k9.K9;
 
 @ReportsCrashes(formUri = "https://bugsense.appspot.com/api/acra?api_key=a2603e16", formKey = "")
 public class App extends Application {
-    public static final boolean DEBUG = false;
-    public static final boolean LOCAL_LOGV = App.DEBUG;
+    public static final boolean DEBUG = BuildConfig.DEBUG;
+    public static final boolean LOCAL_LOGV = DEBUG;
     public static final String TAG = "SmsBackup+";
 
     private static ContactAccessor sContactAccessor = null;

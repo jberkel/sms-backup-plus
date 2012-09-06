@@ -719,7 +719,9 @@ public class SmsSync extends PreferenceActivity {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                           if (mAuthorizeUri != null) {
-                              tryOpenStockBrowser(mAuthorizeUri);
+                              if (!openUriForAuthorization(mAuthorizeUri)) {
+                                  Log.w(TAG, "could not open uri "+mAuthorizeUri);
+                              }
                           }
                           dismissDialog(id);
                         }
@@ -772,23 +774,57 @@ public class SmsSync extends PreferenceActivity {
         return createMessageDialog(id, title, msg);
     }
 
-    private void tryOpenStockBrowser(final Uri uri) {
-        final Intent stockBrowser = new Intent()
-            .setComponent(new ComponentName("com.android.browser",
-                            "com.android.browser.BrowserActivity"))
-            .setData(uri)
-            .setAction(Intent.ACTION_VIEW)
-            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+    static interface UrlOpener {
+        boolean open(Uri uri);
+    }
 
-        // try the stock browser first, fall back to implicit intent if not found
-        try {
-            startActivity(stockBrowser);
-        } catch (ActivityNotFoundException e) {
-            Log.w(TAG, "default browser not found, falling back");
+    private boolean openUriForAuthorization(final Uri uri) {
+        if (LOCAL_LOGV) {
+            Log.d(TAG, "openUrlForAutorization("+uri+")");
+
+        }
+        for (UrlOpener opener : new UrlOpener[] { webViewOpener, stockBrowser, standardViewOpener }) {
+            if (opener.open(uri)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private final UrlOpener webViewOpener = new UrlOpener() {
+        @Override public boolean open(Uri uri) {
+            startActivity(new Intent(SmsSync.this, AuthActivity.class)
+                    .setData(uri)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+            return true;
+        }
+    };
+
+    private final UrlOpener standardViewOpener = new UrlOpener() {
+        @Override public boolean open(Uri uri) {
             startActivity(new Intent(Intent.ACTION_VIEW, uri)
                     .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+            return true;
         }
-    }
+    };
+
+    private final UrlOpener stockBrowser = new UrlOpener() {
+        @Override public boolean open(Uri uri) {
+            final Intent stockBrowser = new Intent()
+                    .setComponent(new ComponentName("com.android.browser",
+                            "com.android.browser.BrowserActivity"))
+                    .setData(uri)
+                    .setAction(Intent.ACTION_VIEW)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            try {
+                startActivity(stockBrowser);
+                return true;
+            } catch (ActivityNotFoundException e) {
+                Log.w(TAG, "default browser not found, falling back");
+                return false;
+            }
+        }
+    };
 
     private Dialog createMessageDialog(final int id, String title, String msg) {
         return new AlertDialog.Builder(this)

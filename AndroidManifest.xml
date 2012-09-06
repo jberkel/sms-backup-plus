@@ -28,7 +28,7 @@
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
 
-    <uses-sdk android:minSdkVersion="3"
+    <uses-sdk android:minSdkVersion="4"
               android:targetSdkVersion="10"/>
 
     <supports-screens android:smallScreens="true"/>
@@ -60,6 +60,8 @@
         <activity android:name="com.paypal.android.MEP.PayPalActivity"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar"
                   android:configChanges="keyboardHidden|orientation"/>
+
+        <activity android:name=".AuthActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <service android:name="SmsBackupService" android:exported="false"/>
         <service android:name="SmsRestoreService" android:exported="false"/>

@@ -9,6 +9,7 @@
   * Try opening stock browser first
   * Schedule regular backup after BOOT_COMPLETE (https://github.com/jberkel/sms-backup-plus/pull/215)
   * Fix crash on some Samsung devices running 4.0.4 (https://github.com/jberkel/sms-backup-plus/issues/253)
+  * Handle authentication in a WebView to avoid compatibility problems
 
 == 1.4.5 01-02-2012
 
