@@ -377,7 +377,8 @@ public class SmsBackupService extends ServiceBase {
           String sortOrder = SmsConsts.DATE;
           if (max > 0) sortOrder += " LIMIT " + max;
 
-          return getContentResolver().query(CALLLOG_PROVIDER, null,
+          return getContentResolver().query(CALLLOG_PROVIDER,
+                CursorToMessage.CALLLOG_PROJECTION,
                 String.format("%s > ?", CallLog.Calls.DATE),
                 new String[] { String.valueOf(PrefStore.getMaxSyncedDateCallLog(context)) },
                 sortOrder);

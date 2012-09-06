@@ -1,12 +1,14 @@
 == 1.4.6 09-06-2012
 
-  * Fixes for ICS / Jelly Bean
+  * Fixes for ICS / Jelly Bean (missing permissions)
+  * Enable holo theme for API level >= 11
   * Added Hungarian translation (László Gárdonyi)
   * Added Slovak translation (https://github.com/Matrix44)
   * Translation fixes (Italian: Chiara De Liberato, Chinese: https://github.com/CzBiX)
   * Optionally confirm actions (https://github.com/CzBiX)
   * Try opening stock browser first
   * Schedule regular backup after BOOT_COMPLETE (https://github.com/jberkel/sms-backup-plus/pull/215)
+  * Fix crash on some Samsung devices running 4.0.4 (https://github.com/jberkel/sms-backup-plus/issues/253)
 
 == 1.4.5 01-02-2012
 
