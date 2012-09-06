@@ -3,7 +3,7 @@
   <string name="app_name">SMS Backup+</string>
 
   <string name="app_description">
-     Készíts biztonsági mentést az SMS-eidről a Gmail fiókodba.
+     Készítsen biztonsági mentést az SMS-eidről a Gmail fiókjába.
      Ez az alkalmazás a Christoph Studer által készített "SMS Backup"
      továbbfejlesztett változata, amely vissza is tudja állítani az
      SMS-eket a telefonra, egyúttal visszafelé teljesen kompatibilis
@@ -315,4 +315,12 @@
   <string name="source_3rd_party">külső</string>
   <string name="source_manual">kézi</string>
   <string name="source_unknown">ismeretlen</string>
+
+  <string name="ui_confirm_action_label">Megerősítés</string>
+  <string name="ui_confirm_action_desc">Megerősítés kérése mentés vagy visszaállítás előtt</string>
+  <string name="ui_dialog_confirm_action_title">Művelet megerősítése</string>
+  <string name="ui_dialog_confirm_action_msg">Biztosan végrehajtja a kért műveletet?</string>
+
+  <string name="loading">Betöltés…</string>
+  <string name="ssl_error">SSL hiba</string>
 </resources>
