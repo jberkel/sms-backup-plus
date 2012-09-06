@@ -4,20 +4,16 @@
 
   <string name="app_description">
      Gmail vasıtasıyla SMS\'lerinizi yedekleyin. Bu program Christoph Studer tarafından yazılan "SMS Backup"
-	 programının yedeklediğiniz SMS\'leri tekrar telefonunuza yüklemenize de olanak sağlayan geliştirilmiş 
+	 programının yedeklediğiniz SMS\'leri tekrar telefonunuza yüklemenize de olanak sağlayan geliştirilmiş
 	 versiyonudur. SMS Backup programıyla geriye dönük olarak tamamen uyumludur.
   </string>
 
   <string name="ui_sync_button_label_idle">Yedekle</string>
-  <string name="ui_sync_button_label_done">Yedekle</string>
   <string name="ui_sync_button_label_canceling">Durduruluyor</string>
-  <string name="ui_sync_button_label_error">Yedekle</string>
   <string name="ui_sync_button_label_syncing">Dur</string>
 
   <string name="ui_restore_button_label_idle">Geri Yükle</string>
-  <string name="ui_restore_button_label_done">Geri Yükle</string>
   <string name="ui_restore_button_label_restoring">Dur</string>
-  <string name="ui_restore_button_label_error">Geri Yükle</string>
 
   <string name="status_idle">Boşta</string>
   <string name="status_idle_details">Son yedekleme tarihi: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -61,10 +57,7 @@
   <string name="status_calc_details">Hesaplanıyor\u2026</string>
   <string name="status_canceled">Vazgeçildi</string>
   <string name="status_canceled_details">%1$d/%2$d öğe başarıyla yedeklendi.</string>
-  <string name="status_folder_error">Etiket hatası</string>
-  <string name="status_folder_error_details">Etiket/klasör erişilemez veya oluşturulamaz.</string>
 
-  <string name="ui_settings_label">Ayarlar</string>
   <string name="ui_settings_advanced_label">Gelişmiş ayarlar</string>
   <string name="ui_settings_advanced_desc">Gelişmiş tercihleri ayarlayın.</string>
   <string name="ui_settings_advanced_server_label">Sunucu ayarları</string>
@@ -137,22 +130,16 @@
   <string name="ui_dialog_missing_credentials_msg_xoauth">Öncelikle Gmail hesabınıza bağlanmanız gerekiyor.</string>
   <string name="ui_dialog_missing_credentials_msg_plain">Kullanıcı adı ve şifrenizi girmelisiniz.</string>
 
-  <string name="ui_dialog_sync_data_reset_title">Yedekleme bilgisini sıfırla</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      Yedekleme bilgisi sıfırlandı. Lütfen elle yedekleme yapmak için hesabınıza tekrar bağlanın. Bu cihazdaki mesajları yedekleyebilir yada bu kısmı atlayabilirsiniz.
-  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Hatalı etiket adı</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Etiket adı sadece harfler, rakamlar (A-Z, a-z, 0-9), \'/\', \'.\' ve boşluk içerebilir (başında ve sonunda olmamak şartıyla).</string>
   <string name="ui_dialog_first_sync_title">İlk yedek</string>
   <string name="ui_dialog_first_sync_msg">Telefondaki tüm mesajlar yedeklensin mi yoksa bu işlem atlansın mı?</string>
   <string name="ui_dialog_first_sync_msg_batched">Telefondaki tüm mesajlar yedeklensin mi yoksa bu işlem atlansın mı?\n\nNot: Yedek %1$d mesajdan oluşan yığınla birleştirilecek.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">İlk yedek</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">İlk yedekleme işlemi elle başlatılmalı. Şimdi yedekleme yapmak ister misiniz?</string>
   <string name="ui_dialog_request_token_msg">Google\'a bağlanılıyor...</string>
   <string name="ui_dialog_access_token_msg">Erişim isteği yollanıyor...</string>
 
   <string name="ui_dialog_access_token_error_title">Kimlik doğrulama başarısız</string>
-  <string name="ui_dialog_access_token_error_msg">Hesabınıza erişilemedi. \"Erişim izni\" 
+  <string name="ui_dialog_access_token_error_msg">Hesabınıza erişilemedi. \"Erişim izni\"
   verdiğinizden emin olun.
   </string>
 
@@ -166,24 +153,20 @@
   </string>
 
   <string name="ui_dialog_brokendroidx_title">DROID X SMS Hatası</string>
-  <string name="ui_dialog_brokendroidx_msg">Droid X\'te yedekleme işlemi sırasında mesaj almayı 
+  <string name="ui_dialog_brokendroidx_msg">Droid X\'te yedekleme işlemi sırasında mesaj almayı
   engelleyen bir hata var. Daha fazla bilgi için
   websitemizdeki SSS bölümüne göz atın.</string>
 
   <string name="ui_sync">Yedekle</string>
   <string name="ui_skip">Atla</string>
-  <string name="err_could_not_create_folder">Etiket oluşturulamadı.</string>
-  <string name="err_first_sync_needs_skip_flag">Dahili hata: Mesajları yedeklemeyi atlamayı veya atlamamayı ilk yedekleme işleminde belirtmelisiniz.</string>
   <string name="err_sync_requires_login_info">Giriş bilgileri olmadan yedek alınamaz.</string>
-  <string name="err_communication_error">Genel iletişim hatası.</string>
   <string name="menu_info">Hakkında</string>
   <string name="menu_reset">Sıfırla</string>
   <string name="ui_dialog_reset_title">Mevcut senkron durumunu sıfırla</string>
-  <string name="ui_dialog_reset_message">Mevcut senkron durumunu sıfırlamak istiyor musunuz? 
+  <string name="ui_dialog_reset_message">Mevcut senkron durumunu sıfırlamak istiyor musunuz?
   Daha sonra tüm mesajları atlamayı seçebilirsiniz.</string>
   <string name="all_messages">Hepsi</string>
 
-  <string name="gmail_connected_fail">Gmail kimlik doğrulama başarısız</string>
   <string name="gmail_needs_connecting">Gmail hesabınıza bağlanmak için hafifçe dokunun (önerilir).</string>
   <string name="gmail_already_connected">%1$s hesabına bağlanıldı (bağlantıyı kesmek için dokunun).</string>
 

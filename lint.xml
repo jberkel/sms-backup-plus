@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="MissingTranslation">
+        <ignore path="res/values/arrays.xml" />
+        <ignore path="res/values/donation.xml" />
+        <ignore path="res/values/styles.xml" />
+        <ignore path="res/values/colors.xml" />
+    </issue>
+
+    <issue id="TypographyEllipsis" severity="ignore"/>
+    <issue id="TypographyDashes" severity="ignore"/>
+    <issue id="Typos" severity="ignore"/>
+    <issue id="IconMissingDensityFolder" severity="ignore"/>
+
+    <issue id="MissingTranslation" severity="ignore"/>
+
+    <issue id="ContentDescription" severity="ignore"/>
+    <issue id="NewApi" severity="ignore"/>
+
+    <issue id="UselessParent">
+      <ignore path="res/layout/status.xml"/>
+    </issue>
+
+    <issue id="ExportedReceiver" severity="ignore"/>
+</lint>

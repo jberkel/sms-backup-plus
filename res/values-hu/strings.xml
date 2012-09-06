@@ -11,15 +11,11 @@
   </string>
 
   <string name="ui_sync_button_label_idle">Mentés</string>
-  <string name="ui_sync_button_label_done">Mentés</string>
   <string name="ui_sync_button_label_canceling">Leállítás</string>
-  <string name="ui_sync_button_label_error">Mentés</string>
   <string name="ui_sync_button_label_syncing">Megszakítás</string>
 
   <string name="ui_restore_button_label_idle">Visszaállítás</string>
-  <string name="ui_restore_button_label_done">Visszaállítás</string>
   <string name="ui_restore_button_label_restoring">Megszakítás</string>
-  <string name="ui_restore_button_label_error">Visszaállít</string>
 
   <string name="status_idle">Várakozás</string>
   <string name="status_idle_details">Utolsó mentés: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -62,11 +58,8 @@
   <string name="status_calc_details">Számítás\u2026</string>
   <string name="status_canceled">Megszakítva</string>
   <string name="status_canceled_details">%1$d/%2$d elem mentése sikeres volt.</string>
-  <string name="status_folder_error">Címke hiba</string>
-  <string name="status_folder_error_details">Nem sikerült hozzáférni vagy létrehozni a címkét/mappát.</string>
   <string name="status_gmail_temp_error">Ideiglenes Gmail IMAP hiba, próbálja újra később.</string>
 
-  <string name="ui_settings_label">Beállítások</string>
   <string name="ui_settings_advanced_label">Haladó beállítások</string>
   <string name="ui_settings_advanced_desc">Haladó beállítások módosítása.</string>
   <string name="ui_settings_advanced_server_label">IMAP kiszolgáló beállítások</string>
@@ -140,7 +133,6 @@
 
   <string name="ui_enable_auto_sync_bg_data">Engedélyeznie kell az adatkapcsolatot a háttérben.</string>
 
-  <string name="ui_backup_schedule_label">Ütemezés</string>
   <string name="ui_auto_backup_schedule_label">Rendszeres ütemezés</string>
   <string name="ui_auto_backup_schedule_desc">Mentés rendszeres ütemezése</string>
 
@@ -161,17 +153,11 @@
   <string name="ui_dialog_missing_credentials_msg_xoauth">Először kapcsolódnia kell a Gmail fiókjához.</string>
   <string name="ui_dialog_missing_credentials_msg_plain">Először meg kell adnia a felhasználói nevét és jelszavát.</string>
 
-  <string name="ui_dialog_sync_data_reset_title">Mentési adatok alaphelyzetben</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      A mentési adatok alaphelyzetbe lettek állítva. Kérem újra kapcsolja össze a fiókját és indítson egy kézi mentés. Megadhatja, hogy menti vagy átugorja azokat az üzeneteket, amelyek készüleken megtalálhatóak.
-  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Érvénytelen címke név</string>
   <string name="ui_dialog_invalid_imap_folder_msg">A címke neve nem tartalmazhat szóközt (az elején vagy a végén).</string>
   <string name="ui_dialog_first_sync_title">Első mentés</string>
   <string name="ui_dialog_first_sync_msg">Menti vagy kihagyja a készüléken tárolt üzeneteket?</string>
   <string name="ui_dialog_first_sync_msg_batched">Menti vagy kihagyja a készüléken tárolt üzeneteket?\n\nMegjegyzés: A mentés %1$d üzenetenként kötegelve fog történni.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">Első mentés</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">Az első mentést kézzel kell elindítani. Szeretné most elindítani a mentést?</string>
   <string name="ui_dialog_request_token_msg">Kapcsolat felvétele a Google-lal\u2026</string>
   <string name="ui_dialog_access_token_msg">Hozzáférés kérése\u2026</string>
 
@@ -194,17 +180,13 @@
 
   <string name="ui_sync">Mentés</string>
   <string name="ui_skip">Kihagyás</string>
-  <string name="err_could_not_create_folder">Nem sikerült a címke létrehozása.</string>
-  <string name="err_first_sync_needs_skip_flag">Belső hiba: első mentés a meglévő üzenetek kihagyásának jelzése nélkül.</string>
   <string name="err_sync_requires_login_info">Nem lehet menteni bejelentkezési információk nélkül.</string>
-  <string name="err_communication_error">Általános kommunikációs hiba.</string>
   <string name="menu_info">Névjegy</string>
   <string name="menu_reset">Alaphelyzet</string>
   <string name="ui_dialog_reset_title">Alaphelyzetbe állítás</string>
   <string name="ui_dialog_reset_message">Biztosan alaphelyzetbe állítja a jelenleg szinkronizált állapotot? Később még mindig választhatja a készüléken tárolt üzenetek kihagyását.</string>
   <string name="all_messages">Mind</string>
 
-  <string name="gmail_connected_fail">Gmail hitelesítés sikertelen</string>
   <string name="gmail_needs_connecting">Érintse meg, hogy bejelentkezzen a Gmail fiókjával (kötelező).</string>
   <string name="gmail_already_connected">%1$s néven bejelentkezve.</string>
 
@@ -221,7 +203,6 @@
 
   <string name="call_number_field">Telefonszám: %1$s</string>
   <string name="call_duration_field">Hossz: %1$s</string>
-  <string name="calllog_settings">Hívásnapló beállítások</string>
 
   <string name="sms_with_field">SMS: %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->

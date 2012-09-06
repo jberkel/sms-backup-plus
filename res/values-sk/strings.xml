@@ -7,19 +7,14 @@
     <string name="donation_merchant_name">Jan Berkel</string>
     <string name="donation_recipient">jan.berkel+paypal@gmail.com</string>
     <string name="donation_item_id">SMSBACKUP+</string>
-    <string name="donation_custom_id">Nedostupné</string>
     <string name="donation_paypal_app_id">APP-5W503984EF8322449</string>
     <string name="donation_flattr_thing_id">edabccdf3fac3cc0948200465f520378</string>
     <string name="app_description">Použite GMail účet pre zálohovanie SMS správ. Toto je vylepšená verzia aplikácie SMS Backup od Christopha Studera ktorá podporuje obnovenie SMS späť do telefónu. Je plne spätne kompatibilná s aplikáciou SMS backup.</string>
     <string name="ui_sync_button_label_idle">Zálohovať</string>
-    <string name="ui_sync_button_label_done">Zálohovať</string>
     <string name="ui_sync_button_label_canceling">Zastavujem</string>
-    <string name="ui_sync_button_label_error">Zálohovať</string>
     <string name="ui_sync_button_label_syncing">Zastaviť</string>
     <string name="ui_restore_button_label_idle">Obnoviť</string>
-    <string name="ui_restore_button_label_done">Obnoviť</string>
     <string name="ui_restore_button_label_restoring">Zastaviť</string>
-    <string name="ui_restore_button_label_error">Obnoviť</string>
     <string name="status_idle">Nečinný</string>
     <string name="status_idle_details">Posledná zálohovaná položka: %1$s</string>
     <string name="status_idle_details_never">Nikdy</string>
@@ -45,10 +40,7 @@
     <string name="status_calc_details">Počítam...</string>
     <string name="status_canceled">Zrušené</string>
     <string name="status_canceled_details">%1$d/%2$d položiek úspešne odzálohovaných</string>
-    <string name="status_folder_error">Problém zložky</string>
-    <string name="status_folder_error_details">Nieje možné čítať alebo vytvoriť zložku</string>
     <string name="status_gmail_temp_error">Dočasná chyba Gmail IMAP, opakujte neskôr</string>
-    <string name="ui_settings_label">Nastavenia</string>
     <string name="ui_settings_advanced_label">Pokročilé nastavenia</string>
     <string name="ui_settings_advanced_desc">Nastaviť pokročilé možnosti</string>
     <string name="ui_settings_advanced_server_label">Nastavenia servera</string>
@@ -105,7 +97,6 @@
     <string name="ui_enable_auto_sync_summary">Automatické zálohovanie %1$s</string>
     <string name="sd_card_disclaimer">Automatické zálohovanie nemusí fungovať spoľahlivo, ak je aplikácia nainštalovaná na SD kartu</string>
     <string name="ui_enable_auto_sync_bg_data">Budete musieť povoliť prenos údajov na pozadí</string>
-    <string name="ui_backup_schedule_label">Plán</string>
     <string name="ui_auto_backup_schedule_label">Podľa plánu</string>
     <string name="ui_auto_backup_schedule_desc">Kedy zálohovať SMS</string>
     <string name="ui_auto_backup_incoming_schedule_label">Príchodzie správy</string>
@@ -119,8 +110,6 @@
     <string name="ui_dialog_missing_credentials_title">Prihlasovacie informácie</string>
     <string name="ui_dialog_missing_credentials_msg_xoauth">Najskôr sa musíte pripojiť k GMail účtu</string>
     <string name="ui_dialog_missing_credentials_msg_plain">Najskôr musíte vložiť meno a heslo</string>
-    <string name="ui_dialog_sync_data_reset_title">Vymazať zálohované údaje</string>
-    <string name="ui_dialog_sync_data_reset_msg">Zálohované údaje boli vymazané. Je nutné znovu sa pripojiť k svojmu a urobiť manuálnu zálohu. Bude možné sa rozhodnúť pre zálohu alebo preskočenie správ v tomto telefóne</string>
     <string name="ui_dialog_invalid_imap_folder_title">Neplatný názov zložky</string>
     <string name="ui_dialog_invalid_imap_folder_msg">Názov zložky nesmie mať medzery (na začiatku alebo na konci)</string>
     <string name="ui_dialog_first_sync_title">Prvá záloha</string>
@@ -128,8 +117,6 @@
     <string name="ui_dialog_first_sync_msg_batched">"Zálohovať alebo preskočiť všetky správy v tomto telefóne?
 
 Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
-    <string name="ui_dialog_need_first_manual_sync_title">Prvá záloha</string>
-    <string name="ui_dialog_need_first_manual_sync_msg">Prvá záloha musí byť spustená manuálne. Chcete urobiť zálohu teraz?</string>
     <string name="ui_dialog_request_token_msg">Pripojovanie ku Google...</string>
     <string name="ui_dialog_access_token_msg">Vyžadovanie prístupu...</string>
     <string name="ui_dialog_access_token_error_title">Chyba autentifikácie</string>
@@ -143,16 +130,12 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="ui_dialog_brokendroidx_msg">V Droid X je chyba ktorá zabraňuje tejto aplikácii v zálohe prichádzajúcich správ. Viac informácií nájdete v sekcii FAQ na webovej stránke</string>
     <string name="ui_sync">Zálohovať</string>
     <string name="ui_skip">Preskočiť</string>
-    <string name="err_could_not_create_folder">Nie je možné vytvoriť zložku</string>
-    <string name="err_first_sync_needs_skip_flag">Interná chyba: Prvá záloha bez označenia, či treba preskočiť správy alebo nie</string>
     <string name="err_sync_requires_login_info">Nie je možné zálohovať bez prihlásenia</string>
-    <string name="err_communication_error">Všeobecná chyba v komunikácií</string>
     <string name="menu_info">O programe</string>
     <string name="menu_reset">Resetovať</string>
     <string name="ui_dialog_reset_title">Vymazať súčasný stav synchronizácie</string>
     <string name="ui_dialog_reset_message">Chcete vymazať súčasný stav synchronizácie? Stále je možné neskôr zvoliť preskočenie všetkých správ</string>
     <string name="all_messages">Všetko</string>
-    <string name="gmail_connected_fail">Chyba prihlásenia do GMailu</string>
     <string name="gmail_needs_connecting">Stlačte pre pripojenie do GMailu (vyžadované)</string>
     <string name="gmail_already_connected">Pripojené ako %1$s (stlačte pre odpojenie)</string>
     <string name="ui_connected_label">Pripojiť</string>
@@ -165,7 +148,6 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="call_outgoing_text">Volané %1$s</string>
     <string name="call_number_field">Číslo: %1$s</string>
     <string name="call_duration_field">Trvanie: %1$s</string>
-    <string name="calllog_settings">Nastavenie zoznamu hovorov</string>
     <string name="sms_with_field">SMS od %1$s</string>
     <string name="mms_with_field">@string/sms_with_field</string>
     <string name="call_with_field">Volania od %1$s</string>

@@ -9,15 +9,11 @@
   </string>
 
   <string name="ui_sync_button_label_idle">Sauvegarder</string>
-  <string name="ui_sync_button_label_done">Sauvegarder</string>
   <string name="ui_sync_button_label_canceling">Arrêt</string>
-  <string name="ui_sync_button_label_error">Sauvegarder</string>
   <string name="ui_sync_button_label_syncing">Annuler</string>
 
   <string name="ui_restore_button_label_idle">Restaurer</string>
-  <string name="ui_restore_button_label_done">Restaurer</string>
   <string name="ui_restore_button_label_restoring">Annuler</string>
-  <string name="ui_restore_button_label_error">Restaurer</string>
 
   <string name="status_idle">Inactif</string>
   <string name="status_idle_details">Dernière sauvegarde effectuée le : <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -31,7 +27,7 @@
   <string name="status_backup_details">Sauvegarde élément <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>\u2026</string>
   <string name="status_restore_details">Restauration élément <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>\u2026</string>
   <string name="status_login_details">Identification :\u2026</string>
-  <string name="status_updating_threads">Mise à jour\u2026</string> 
+  <string name="status_updating_threads">Mise à jour\u2026</string>
   <string name="status_done">Identifié avec succès</string>
   <string name="status_backup_done_details_max_per_sync">Le maximum de %1$d éléments par sauvegarde a été atteint. Relancez la sauvegarde pour continuer.</string>
   <string name="status_backup_done_details_noitems">Il n\'y a pas d\'éléments à sauvegarder.</string>
@@ -61,11 +57,8 @@
   <string name="status_calc_details">Calcul en cours\u2026</string>
   <string name="status_canceled">Annulé</string>
   <string name="status_canceled_details">%1$d/%2$d éléments sauvgardés avec succès.</string>
-  <string name="status_folder_error">Erreur de libellé</string>
-  <string name="status_folder_error_details">L\'application n\'a pu accéder et/ou créer le libellé/dossier.</string>
   <string name="status_gmail_temp_error">Erreur IMAP de GMail, veuillez réessayer plus tard.</string>
 
-  <string name="ui_settings_label">Paramètres</string>
   <string name="ui_settings_advanced_label">Paramètres avancés</string>
   <string name="ui_settings_advanced_desc">Définir les réglages avancés</string>
   <string name="ui_settings_advanced_server_label">Paramètres de serveur</string>
@@ -121,7 +114,7 @@
   <string name="ui_imap_folder_calllog_label">Label du journal d\'appels</string>
   <string name="ui_imap_folder_calllog_desc">Label Gmail pour les journaux.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Les entrées sauvegardées sur Gmail auront ce label.</string>
- 
+
   <string name="ui_mark_as_read_label">Marquer comme lus (e-mails)</string>
   <string name="ui_mark_as_read_desc">Définir si les messages (dans Gmail) seront inscrits comme étant lus ou non.</string>
   <string name="ui_mark_as_read_restore_label">Marquer comme lus (SMS)</string>
@@ -138,7 +131,6 @@
 
   <string name="ui_enable_auto_sync_bg_data">Vous avez également besoin d\'activer les données d\'arrière plan.</string>
 
-  <string name="ui_backup_schedule_label">Planification</string>
   <string name="ui_auto_backup_schedule_label">Intervalle</string>
   <string name="ui_auto_backup_schedule_desc">Définir à quelle fréquence les SMS seront sauvegardés.</string>
 
@@ -158,18 +150,11 @@
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">Vous devez d\'abord vous connecter à votre compte Gmail.</string>
   <string name="ui_dialog_missing_credentials_msg_plain">Vous devez d\'abord définir vos identifiants.</string>
-
-  <string name="ui_dialog_sync_data_reset_title">Réinitialiser les données de sauvegarde</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      Les données de sauvgarde ont été réinitialisées. Veuillez vous reconnecter à votre compte et effectuer une sauvegarde manuelle. Vous aurez ensuite le choix de sauvegarder ou non les messages stockés sur cet appareil.
-  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Nom du libellé invalide</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Le nom du libellé ne peut contenir que des lettres non accentuées et des chiffres (A-Z, a-z, 0-9), \'/\'.</string>
   <string name="ui_dialog_first_sync_title">Première sauvegarde</string>
   <string name="ui_dialog_first_sync_msg">Sauvegarder ou non les messages stockés actuellement sur cet appareil ?</string>
   <string name="ui_dialog_first_sync_msg_batched">Sauvegarder ou non les messages actuellement stockés sur cet appareil ?\n\nA savoir : la sauvegarde se fera par tranche de %1$d messages.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">Première sauvegarde</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">La première sauvegarde nécessite d\'être initialisé de façon manuelle. Voulez-vous lancer la sauvegarde maintenant ?</string>
   <string name="ui_dialog_request_token_msg">Connexion à Google…</string>
   <string name="ui_dialog_access_token_msg">Demande d\'accès…</string>
 
@@ -187,23 +172,19 @@
   </string>
 
   <string name="ui_dialog_brokendroidx_title">Bug SMS DROID X</string>
-  <string name="ui_dialog_brokendroidx_msg">Il y a un bug avec le Droid X qui 
+  <string name="ui_dialog_brokendroidx_msg">Il y a un bug avec le Droid X qui
   empêche cette application de sauvegarder les message entrants. Plus d\'informations dans FAQ
   disponible sur le site.</string>
 
   <string name="ui_sync">Sauvegarder</string>
   <string name="ui_skip">Ignorer</string>
-  <string name="err_could_not_create_folder">Impossible de créer le libellé</string>
-  <string name="err_first_sync_needs_skip_flag">Erreur interne : première sauvegarde sans indication de l\'état de sauvegarde des messages existants.</string>
   <string name="err_sync_requires_login_info">La sauvegarde ne peut être effectuée sans les informations de connexion.</string>
-  <string name="err_communication_error">Erreur générale de communication.</string>
   <string name="menu_info">À propos de</string>
   <string name="menu_reset">Réinitialiser</string>
   <string name="ui_dialog_reset_title">Réinitialiser l\'état actuel de synchronisation</string>
   <string name="ui_dialog_reset_message">Voulez-vous réinitialiser l\'état de synchronisation actuelle ? Vous pourrez choisir d\'ignorer les messages ou non, plus tard.</string>
   <string name="all_messages">Tout</string>
 
-  <string name="gmail_connected_fail">Échec de l\'identification Gmail</string>
   <string name="gmail_needs_connecting">Appuyez ici pour vous connecter à votre compte Gmail (requis).</string>
   <string name="gmail_already_connected">Connecté à %1$s.</string>
 
@@ -220,7 +201,6 @@
 
   <string name="call_number_field">Numéro : %1$s</string>
   <string name="call_duration_field">Durée : %1$s</string>
-  <string name="calllog_settings">Paramètres de sauvegarde du journal d\'appel</string>
 
   <string name="sms_with_field">SMS avec %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->

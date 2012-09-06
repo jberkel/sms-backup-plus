@@ -9,15 +9,11 @@
   </string>
 
   <string name="ui_sync_button_label_idle">Backup</string>
-  <string name="ui_sync_button_label_done">Backup</string>
   <string name="ui_sync_button_label_canceling">Interruzione in corso</string>
-  <string name="ui_sync_button_label_error">Backup</string>
   <string name="ui_sync_button_label_syncing">Interrompi</string>
 
   <string name="ui_restore_button_label_idle">Ripristino</string>
-  <string name="ui_restore_button_label_done">Ripristino</string>
   <string name="ui_restore_button_label_restoring">Interrompi</string>
-  <string name="ui_restore_button_label_error">Ripristino</string>
 
   <string name="status_idle">Inattivo</string>
   <string name="status_idle_details">Utimo SMS salvato: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -60,11 +56,8 @@
   <string name="status_calc_details">Calcolo in corso\u2026</string>
   <string name="status_canceled">Cancellato</string>
   <string name="status_canceled_details">%1$d/%2$d elementi salvati con successo.</string>
-  <string name="status_folder_error">Errore etichetta</string>
-  <string name="status_folder_error_details">Non è possibile accedere o creare l\'etichetta/cartella.</string>
    <string name="status_gmail_temp_error">Errore IMAP Gmail temporaneo, riprovare più tardi.</string>
 
-  <string name="ui_settings_label">Impostazioni</string>
   <string name="ui_settings_advanced_label">Impostazioni avanzate</string>
   <string name="ui_settings_advanced_desc">Imposta preferenze avanzate.</string>
   <string name="ui_settings_advanced_server_label">Impostazioni server IMAP</string>
@@ -97,21 +90,21 @@
   <string name="ui_max_items_per_sync_desc">Numero massimo di elementi per backup.</string>
   <string name="ui_max_items_per_restore_label">Elementi per ogni ripristino</string>
   <string name="ui_max_items_per_restore_desc">Numero massimo di messaggi ripristinati.</string>
-  
+
   <string name="ui_restore_starred_only_label">SMS Preferiti</string>
   <string name="ui_restore_starred_only_desc">Ripristina solo messaggi preferiti.</string>
 
   <string name="ui_backup_mms_label">Backup MMS</string>
   <string name="ui_backup_mms_desc">Abilita backup MMS</string>
   <string name="ui_backup_mms_not_supported">Il backup MMS non è supportato su questa piattaforma.</string>
-  
+
   <string name="ui_backup_calllog_label">Backup registro chiamate</string>
   <string name="ui_imap_folder_calllog_desc">Etichetta Gmail assegnata al registro chiamate.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Gli elementi del registro chiamate salvati verranno contrassegnati su Gmail con questa etichetta.</string>
-  
+
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Sincronizza calendario</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Aggiungi elementi del registro chiamate sul calendario</string>
-  
+
   <string name="ui_backup_calllog_types_label">Tipi chiamate</string>
   <string name="ui_backup_calllog_types_desc">Tipi di chiamate da salvare</string>
 
@@ -122,7 +115,7 @@
 
   <string name="ui_mark_as_read_label">Segna come letto (email)</string>
   <string name="ui_mark_as_read_desc">Scegliere se segnare come letti i messaggi in Gmail.</string>
-  
+
   <string name="ui_mark_as_read_restore_label">Segna come letto (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Scegliere se segnare come letti tutti i messaggi SMS ripristinati.</string>
 
@@ -132,12 +125,11 @@
   <string name="ui_enable_auto_sync_label">Backup automatico</string>
   <string name="ui_enable_auto_sync_desc">Scegliere se salvare automaticamente i nuovi SMS.</string>
   <string name="ui_enable_auto_sync_summary">Salvare automaticamente %1$s.</string>
-  
+
   <string name="sd_card_disclaimer">Il salvataggio automatico potrebbe rivelarsi non affidabile se l\'applicazione viene installata su una memoria SD.</string>
 
   <string name="ui_enable_auto_sync_bg_data">Sarà necessario inoltre abilitare i dati in background.</string>
-  
-  <string name="ui_backup_schedule_label">Azioni pianificate</string>
+
   <string name="ui_auto_backup_schedule_label">Intervalli regolari</string>
   <string name="ui_auto_backup_schedule_desc">Quando salvare gli SMS</string>
 
@@ -159,17 +151,11 @@
   <string name="ui_dialog_missing_credentials_msg_plain">E\' necessario impostare prima
   username e password.</string>
 
-  <string name="ui_dialog_sync_data_reset_title">Reset dati backup</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      I dati del backup sono stati resettati. Si prega di riconnetere il proprio account ed effettuare un backup manuale. Si potrà decidere se effettuare il backup o saltare la memorizzazione dei messaggi su questo dispositivo.
-  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Nome etichetta non valido</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Il nome dell\'etichetta deve contenere solo lettere non accentate e numeri (A-Z, a-z, 0-9), \'/\', \'.\' e spazi (ma non all\'inizio e alla fine).</string>
   <string name="ui_dialog_first_sync_title">Primo backup</string>
   <string name="ui_dialog_first_sync_msg">Salva o ignora tutti i messaggi attualmente memorizzati su questo dispositivo?</string>
   <string name="ui_dialog_first_sync_msg_batched">Salva o ignora tutti i messaggi attualmente memorizzati su questo dispositivo?\n\nNota: Il backup potrebbe essere diviso in gruppi da %1$d messaggi.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">Primo backup</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">Il primo backup deve essere avviato manualmente. Vuoi eseguire un backup adesso?</string>
   <string name="ui_dialog_request_token_msg">Connessione a Google...</string>
   <string name="ui_dialog_access_token_msg">Richiesta accesso...</string>
 
@@ -184,9 +170,9 @@
 
   <string name="ui_dialog_upgrade_title">Aggiorna informazioni</string>
   <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ è compatibile al 100% con SMS Backup. Tuttavia assicurati che \"Backup automatico\" sia abilitato solo su una delle due applicazioni, altrimenti si potrebbero ottenere dei duplicati. Inoltre è necessario selezionare \"Ignora\" messaggi per la tua prima sincronizzazione se i messaggi sul telefono sono già stati salvati precedentemente.
+   SMS Backup+ è compatibile al 100%% con SMS Backup. Tuttavia assicurati che \"Backup automatico\" sia abilitato solo su una delle due applicazioni, altrimenti si potrebbero ottenere dei duplicati. Inoltre è necessario selezionare \"Ignora\" messaggi per la tua prima sincronizzazione se i messaggi sul telefono sono già stati salvati precedentemente.
   </string>
-  
+
   <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
   <string name="ui_dialog_brokendroidx_msg">Questo è un bug del Droid X che
   impedisce all\' applicazione di effettuare il backup dei messaggi arrivati. Guarda le FAQ
@@ -194,10 +180,7 @@
 
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Ignora</string>
-  <string name="err_could_not_create_folder">Impossibile creare l\'etichetta.</string>
-  <string name="err_first_sync_needs_skip_flag">Errore interno: non è stato indicato se ignorare o meno i messaggi.</string>
   <string name="err_sync_requires_login_info">Impossibile effettuare il backup senza le informazioni per il login.</string>
-  <string name="err_communication_error">Errore generale comunicazione.</string>
   <string name="menu_info">Informazioni</string>
   <string name="menu_reset">Resetta</string>
   <string name="ui_dialog_reset_title">Resetta stato sincronizzazione attuale</string>
@@ -205,13 +188,12 @@
   attuale? E\'possibile scegliere di ignorare tutti i messaggi in seguito.</string>
   <string name="all_messages">Tutti</string>
 
-  <string name="gmail_connected_fail">Autenticazione Gmail non riuscita</string>
   <string name="gmail_needs_connecting">Premere per connettersi al proprio account (necessario).</string>
   <string name="gmail_already_connected">Connesso come %1$s (premere per disconnettersi).</string>
 
   <string name="ui_connected_label">Connessione</string>
   <string name="ui_connected_desc">Il proprio account deve essere connesso.</string>
-  
+
   <string name="call_incoming">Chiamata in arrivo</string>
   <string name="call_outgoing">Chiamata in uscita</string>
   <string name="call_missed">Chiamata senza risposta</string>
@@ -222,7 +204,6 @@
 
   <string name="call_number_field">Numero: %1$s</string>
   <string name="call_duration_field">Durata: %1$s</string>
-  <string name="calllog_settings">Impostazioni registro chiamate</string>
 
   <string name="sms_with_field">SMS con %1$s</string>
   <string name="mms_with_field">SMS con %1$s</string>
@@ -258,7 +239,7 @@
   <string name="tls_required">TLS (Necessario)</string>
   <string name="tls_optional">TLS (Facoltativo)</string>
   <string name="none">Nessuno</string>
-  
+
   <string name="ui_third_party_integration_label">Accesso da terze parti</string>
   <string name="ui_third_party_integration_desc">Permetti alle applicazioni esterne di eseguire backup</string>
 

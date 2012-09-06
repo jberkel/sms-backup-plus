@@ -9,15 +9,11 @@
   </string>
 
   <string name="ui_sync_button_label_idle">Резервирование</string>
-  <string name="ui_sync_button_label_done">Резервирование</string>
   <string name="ui_sync_button_label_canceling">Остановка</string>
-  <string name="ui_sync_button_label_error">Резервирование</string>
   <string name="ui_sync_button_label_syncing">Стоп</string>
 
   <string name="ui_restore_button_label_idle">Восстановление</string>
-  <string name="ui_restore_button_label_done">Восстановление</string>
   <string name="ui_restore_button_label_restoring">Стоп</string>
-  <string name="ui_restore_button_label_error">Восстановление</string>
 
   <string name="status_idle">Ожидаю</string>
   <string name="status_idle_details">Последнее сохранение: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -60,11 +56,8 @@
   <string name="status_calc_details">Обработка\u2026</string>
   <string name="status_canceled">Отменено</string>
   <string name="status_canceled_details">%1$d/%2$d объектов успешно сохранено.</string>
-  <string name="status_folder_error">Ошибка ярлыка</string>
-  <string name="status_folder_error_details">Не могу создать или получить доступ к ярлыку.</string>
   <string name="status_gmail_temp_error">Временная ошибка Gmail IMAP, попробуйте повторить позже.</string>
 
-  <string name="ui_settings_label">Настройки</string>
   <string name="ui_settings_advanced_label">Расширенные настройки</string>
   <string name="ui_settings_advanced_desc">Настройки расписания, уведомлений и пр.</string>
   <string name="ui_settings_advanced_server_label">Настройки сервера</string>
@@ -156,17 +149,11 @@
   <string name="ui_dialog_missing_credentials_msg_xoauth">Вы должны быть подключены к своей учетной записи.</string>
   <string name="ui_dialog_missing_credentials_msg_plain">Введите логин и пароль</string>
 
-  <string name="ui_dialog_sync_data_reset_title">Сброс настроек синхронизации</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      Произведен сброс настроек синхронизации. Пожалуйста переподключитесь к Gmail и выполните ручное сохранение. Вы сможете выбрать сохранение или пропустить все сообщения, ранее сохраненные в телефоне
-  </string>
    <string name="ui_dialog_invalid_imap_folder_title">Недопустимое имя ярлыка</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Ярлык может содержать только русские и латинские буквы, цифры, а также точку и пробел (кроме крайних символов).</string>
   <string name="ui_dialog_first_sync_title">Первое сохранение</string>
   <string name="ui_dialog_first_sync_msg">Сохранить или пропустить все ранее сохраненные сообщения в телефоне?</string>
   <string name="ui_dialog_first_sync_msg_batched">Сохранить или пропустить все ранее сохраненные сообщения в телефоне?\n\nЗамечание: Сообщения будут разбиты на %1$d группы.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">Первое сохранение</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">Первое сохранение должно быть запущено вручную. Запустить сохранение сейчас?</string>
   <string name="ui_dialog_request_token_msg">Соединение с Google...</string>
   <string name="ui_dialog_access_token_msg">Запрашиваю доступ...</string>
 
@@ -188,17 +175,13 @@
 
   <string name="ui_sync">Резервирование</string>
   <string name="ui_skip">Пропустить</string>
-  <string name="err_could_not_create_folder">Не могу создать ярлык.</string>
-  <string name="err_first_sync_needs_skip_flag">Внутренняя ошибка: первое сохранение запущено без указания пропускать сообщения или нет.</string>
   <string name="err_sync_requires_login_info">Не могу выполнить сохранение без ввода логина/пароля.</string>
-  <string name="err_communication_error">Общая ошибка.</string>
   <string name="menu_info">О программе</string>
   <string name="menu_reset">Сброс</string>
   <string name="ui_dialog_reset_title">Сброс синхронизации</string>
   <string name="ui_dialog_reset_message">Выполнить сброс состояния синхронизации? Все сообщения будут сохранены заново. Вы можете пропустить сохранение позже.</string>
   <string name="all_messages">Все</string>
 
-   <string name="gmail_connected_fail">Ошибка входа в Gmail</string>
   <string name="gmail_needs_connecting">Нажмите, для входа в учетную запись Gmail (обязательно).</string>
   <string name="gmail_already_connected">Подключен как %1$s (нажмите для выхода).</string>
 
@@ -215,7 +198,6 @@
 
   <string name="call_number_field">Номер %1$s</string>
   <string name="call_duration_field">Продолжительность %1$s</string>
-  <string name="calllog_settings">Настройки журнала вызовов</string>
 
   <string name="call_type_everything">Все</string>
   <string name="call_type_incoming">Только входящие звонки</string>

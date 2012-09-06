@@ -9,15 +9,11 @@
   </string>
 
   <string name="ui_sync_button_label_idle">Копирај</string>
-  <string name="ui_sync_button_label_done">Копирај</string>
   <string name="ui_sync_button_label_canceling">Заустављање</string>
-  <string name="ui_sync_button_label_error">Копирај</string>
   <string name="ui_sync_button_label_syncing">Заустави</string>
 
   <string name="ui_restore_button_label_idle">Врати</string>
-  <string name="ui_restore_button_label_done">Врати</string>
   <string name="ui_restore_button_label_restoring">Заустави</string>
-  <string name="ui_restore_button_label_error">Врати</string>
 
   <string name="status_idle">Стање мировања</string>
   <string name="status_idle_details">Последња ставка копирана: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -61,11 +57,8 @@
   <string name="status_calc_details">Рачунање\u2026</string>
   <string name="status_canceled">Отказано</string>
   <string name="status_canceled_details">Успешно је направљена резервна копија за %1$d/%2$d ставки.</string>
-  <string name="status_folder_error">Грешка натписа</string>
-  <string name="status_folder_error_details">Није могуће приступити или направити натпис/фасциклу.</string>
   <string name="status_gmail_temp_error">Привремена Gmail IMAP грешка, покушајте касније.</string>
 
-  <string name="ui_settings_label">Подешавања</string>
   <string name="ui_settings_advanced_label">Напредна подешавања</string>
   <string name="ui_settings_advanced_desc">Скуп напредних подешавања.</string>
   <string name="ui_settings_advanced_server_label">Подешавања IMAP сервера</string>
@@ -139,7 +132,6 @@
 
   <string name="ui_enable_auto_sync_bg_data">Такође је потребно да омогућите размену података у позадини.</string>
 
-  <string name="ui_backup_schedule_label">Распоред</string>
   <string name="ui_auto_backup_schedule_label">Редован распоред</string>
   <string name="ui_auto_backup_schedule_desc">Када копирати SMS поруке</string>
 
@@ -161,17 +153,11 @@
   <string name="ui_dialog_missing_credentials_msg_plain">Потребно је да поставите
   ваше корисничко име и лозинку.</string>
 
-  <string name="ui_dialog_sync_data_reset_title">Поништавање копирања података</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      Копирање података је поништено. Молимо вас да се поново повежете са вашим налогом и обавите ручно копирање. Бићете у могућности да одредите које поруке желите да копирате, а које да прескочите приликом чувања на овај уређај.
-  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Име натписа није исправно</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Име натписа не сме да садржи размак (на почетку или на крају).</string>
   <string name="ui_dialog_first_sync_title">Прво копирање</string>
   <string name="ui_dialog_first_sync_msg">Копирати или прескочити све поруке које су тренутно сачуване на овом уређају?</string>
   <string name="ui_dialog_first_sync_msg_batched">Копирати или прескочити све поруке које су тренутно сачуване на овом уређају?\n\nНапомена: Резервна копија ће се поделити у гране са по %1$d порука.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">Прво копирање</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">Прво копирање треба да се започне ручно. Желите ли одмах да обавите копирање?</string>
   <string name="ui_dialog_request_token_msg">Контактира се Google...</string>
   <string name="ui_dialog_access_token_msg">Захтевање приступа...</string>
 
@@ -196,10 +182,7 @@
 
   <string name="ui_sync">Копирај</string>
   <string name="ui_skip">Прескочи</string>
-  <string name="err_could_not_create_folder">Није било могуће направити натпис.</string>
-  <string name="err_first_sync_needs_skip_flag">Интерна грешка: Прво копирање без индикације да ли треба прескочити поруке или не.</string>
   <string name="err_sync_requires_login_info">Није могуће направити резервну копију без података о пријави.</string>
-  <string name="err_communication_error">Општа грешка у комуникацији.</string>
   <string name="menu_info">О програму</string>
   <string name="menu_reset">Поништи</string>
   <string name="ui_dialog_reset_title">Поништавање трен. стања синхрон.</string>
@@ -207,7 +190,6 @@
   синхронизације? И даље касније можете да изаберете да прескочите све поруке.</string>
   <string name="all_messages">Све</string>
 
-  <string name="gmail_connected_fail">Грешка у Gmail аутентификацији</string>
   <string name="gmail_needs_connecting">Додирните да бисте се повезали са вашим Gmail налогом (потребно је).</string>
   <string name="gmail_already_connected">Повезан као %1$s.</string>
 
@@ -224,7 +206,6 @@
 
   <string name="call_number_field">Број: %1$s</string>
   <string name="call_duration_field">Трајање: %1$s</string>
-  <string name="calllog_settings">Подешавање евиденције позива</string>
 
   <string name="sms_with_field">SMS са %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
