@@ -28,7 +28,7 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 4.1.x.
 
-SMS Backup+ is available for free in the market, there will never be a pro / paid version.
+SMS Backup+ is available for free in the Play Store, there will never be a pro / paid version.
 
 But if you like the app you can flattr it ([flattr it ??][WhatisFlattr]).
 [![][FlattrButton]][FlattrLink]
@@ -39,8 +39,8 @@ You can also donate via PayPal from within the application (Menu - About, then h
 
 ### Installation
 
-![MarketQRCode][] Install via the Android market QR code link, [Android
-Market][MarketLink] or directly from [github downloads][].
+![MarketQRCode][] Install via the Android QR code link, [Google
+Play][MarketLink] or directly from [github downloads][].
 
 ### First steps
 
@@ -343,7 +343,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 
 [original issue list]: http://code.google.com/p/android-sms/issues/list
 [github issues]: http://github.com/jberkel/sms-backup-plus/issues
-[MarketQRCode]: http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=http://cyrket.com/qr/144601
+[MarketQRCode]: http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=https://play.google.com/store/apps/details?id=com.zegoggles.smssync
+[MarketLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
@@ -367,6 +368,5 @@ This application is released under the terms of the [Apache License, Version 2.0
 [NumberPicker.java]: http://www.technologichron.net/?p=42
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
 [Icon]: https://github.com/downloads/jberkel/sms-backup-plus/smsbackup72.png
-[MarketLink]: https://market.android.com/details?id=com.zegoggles.smssync
 [Getting started with 2-step verification]: http://www.google.com/support/accounts/bin/static.py?page=guide.cs&guide=1056283&topic=1056284
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
