@@ -307,7 +307,7 @@
   <string name="app_log_empty">A napló üres. A naplózást bekapcsolhatja a \"Haladó beállítások\" alatt.</string>
 
   <string name="pref_app_log">Szinkronizálás naplózása</string>
-  <string name="pref_app_log_enabled">A napló az SD-kártyán az \"sms_backup_plus.log\" nevű fájlban.</string>
+  <string name="pref_app_log_enabled">A napló az SD-kártyán az \"sms_backup_plus.log\" nevű fájlban van.</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
   <string name="source_incoming">bejövő</string>
@@ -318,7 +318,7 @@
 
   <string name="ui_confirm_action_label">Megerősítés</string>
   <string name="ui_confirm_action_desc">Megerősítés kérése mentés vagy visszaállítás előtt</string>
-  <string name="ui_dialog_confirm_action_title">Művelet megerősítése</string>
+  <string name="ui_dialog_confirm_action_title">Megerősítés</string>
   <string name="ui_dialog_confirm_action_msg">Biztosan végrehajtja a kért műveletet?</string>
 
   <string name="loading">Betöltés…</string>
