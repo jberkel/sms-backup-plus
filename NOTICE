@@ -1,5 +1,8 @@
 Android SMS Backup+
-Copyright 2010, 2011 Jan Berkel <jan.berkel@gmail.com>
+Copyright 2010, 2011, 2012 Jan Berkel <jan.berkel@gmail.com>
+
+Original SMS Backup code
+Copyright 2009 Christoph Studer <chstuder@gmail.com>
 
 Portions of this software were developed by Google Inc. and The Creators of k9mail.
 http://code.google.com/p/k9mail/
@@ -7,9 +10,6 @@ http://code.google.com/p/k9mail/
 Contains code from the oauth-signpost project
 http://code.google.com/p/oauth-signpost/
 Copyright 2010 Matthias Käppler <m.kaeppler@gmail.com>
-
-Original SMS Backup code
-Copyright 2009 Christoph Studer <chstuder@gmail.com>
 
 Parts of this software were created by The Android Open Source Project.
 http://source.android.com/download
