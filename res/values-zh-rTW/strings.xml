@@ -15,8 +15,8 @@
   <string name="ui_restore_button_label_idle">還原</string>
   <string name="ui_restore_button_label_restoring">停止</string>
 
-  <string name="status_idle">空閒</string>
-  <string name="status_idle_details">上一次備份於: </string>
+  <string name="status_idle">閒置</string>
+  <string name="status_idle_details">上一次備份於: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">從未備份</string>
 
   <string name="status_working">正在進行</string>
@@ -48,11 +48,11 @@
   <string name="notification_unknown_error">SMSBackup+ 出錯</string>
 
   <string name="status_unknown_error_details">備份/還原時出錯：\n</string>
-  <string name="status_auth_failure">登入錯誤</string>
-  <string name="notification_auth_failure">SMSBackup+ 登入出錯</string>
+  <string name="status_auth_failure">登入出錯</string>
+  <string name="notification_auth_failure">SMS Backup+ 登入出錯</string>
 
-  <string name="status_auth_failure_details_xoauth">XOAuth 認證出錯。請確認您已經在 Gmail 賬戶設定中開啟 IMAP。</string>
-  <string name="status_auth_failure_details_plain">IMAP 認證出錯。
+  <string name="status_auth_failure_details_xoauth">XOAuth 驗證出錯。請確認您已經在 Gmail 賬戶設定中開啟 IMAP。</string>
+  <string name="status_auth_failure_details_plain">IMAP 驗證出錯。
   請確認您的登入名稱和密碼填寫正確。</string>
   <string name="status_calc_details">正在計算\u2026</string>
   <string name="status_canceled">已取消</string>
@@ -60,9 +60,9 @@
   <string name="status_gmail_temp_error">Gmail IMAP 臨時性錯誤，請稍候再試。</string>
 
   <string name="ui_settings_advanced_label">進階設定</string>
-  <string name="ui_settings_advanced_desc">設定進階選項。</string>
+  <string name="ui_settings_advanced_desc">設定進階參數。</string>
   <string name="ui_settings_advanced_server_label">IMAP 伺服器設定</string>
-  <string name="ui_settings_advanced_server_desc">除非你知道該怎麼做，否則請勿變更！</string>
+  <string name="ui_settings_advanced_server_desc">除非你知道該怎麼做，否則請勿變更這些設定！</string>
 
   <string name="imap_settings">IMAP 設定</string>
   <string name="ui_login_label">登入名稱</string>
@@ -130,19 +130,19 @@
 
   <string name="sd_card_disclaimer">當此程式安裝在 SD 卡中時，自動備份可能會無法有效運作。</string>
 
-  <string name="ui_enable_auto_sync_bg_data">您將同時需要開啟後台數據。</string>
+  <string name="ui_enable_auto_sync_bg_data">您將同時需要開啟背景資料。</string>
 
-  <string name="ui_auto_backup_schedule_label">定時調度計畫</string>
-  <string name="ui_auto_backup_schedule_desc">定時備份簡訊</string>
+  <string name="ui_auto_backup_schedule_label">定時調度計劃</string>
+  <string name="ui_auto_backup_schedule_desc">何時備份簡訊</string>
 
-  <string name="ui_auto_backup_incoming_schedule_label">新訊息調度計畫</string>
+  <string name="ui_auto_backup_incoming_schedule_label">新訊息調度計劃</string>
   <string name="ui_auto_backup_incoming_schedule_desc">在接收到新訊息後一段時間進行備份</string>
 
   <string name="ui_wifi_only_label">需要 Wifi</string>
-  <string name="ui_wifi_only_desc">僅在連接到 Wifi 網絡時才進行備份</string>
+  <string name="ui_wifi_only_desc">僅在連接到 Wifi 網路時才進行備份</string>
 
   <string name="ui_notifications_label">通知</string>
-  <string name="ui_notifications_desc">後台通知</string>
+  <string name="ui_notifications_desc">背景通知</string>
 
   <string name="error_wifi_only_no_connection">沒有 Wifi 網絡</string>
   <string name="error_no_connection">沒有互聯網連接</string>
@@ -161,7 +161,7 @@
   <string name="ui_dialog_request_token_msg">正在聯絡 Google...</string>
   <string name="ui_dialog_access_token_msg">正在請求存取...</string>
 
-  <string name="ui_dialog_access_token_error_title">認證失敗</string>
+  <string name="ui_dialog_access_token_error_title">驗證失敗</string>
   <string name="ui_dialog_access_token_error_msg">無法取得存取權限。請確認您選擇了
     \"授予存取權限\"。
   </string>
@@ -175,7 +175,7 @@
    SMS Backup+ 與 SMS Backup 程式完全向下兼容。但是請確定您只在其中一款程式中開啟“自動備份”，否則將會出現重複備份。如果您已經對設備中的簡訊進行過備份，首次備份時應該選取“跳過”訊息。
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X 簡訊 Bug</string>
+  <string name="ui_dialog_brokendroidx_title">DROID X 簡訊缺陷</string>
   <string name="ui_dialog_brokendroidx_msg">在 Droid X 中存在一個
   缺陷，其會阻止本程式備份新接收到的簡訊。請從網站上查看 FAQ
   瞭解更多訊息。</string>
@@ -190,7 +190,7 @@
   狀態？您仍舊可以在之後選擇跳過所有訊息。</string>
   <string name="all_messages">全部</string>
 
-  <string name="gmail_needs_connecting">輕觸即可連接到您的 Gmail 帳戶 (必需)。</string>
+  <string name="gmail_needs_connecting">輕觸以連接到您的 Gmail 帳戶 (必需)。</string>
   <string name="gmail_already_connected">已經作為 %1$s 連接。</string>
 
   <string name="ui_connected_label">連接</string>
@@ -209,7 +209,7 @@
 
   <string name="sms_with_field">與 %1$s 的簡訊記錄</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="mms_with_field">與 %1$s 的 MMS 記錄</string>
+  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">與 %1$s 的通話記錄</string>
 
   <string name="ui_backup_contact_group_label">需要備份的聯絡人</string>
@@ -248,16 +248,16 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">備份設定</string>
-
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
 
   <string name="ui_backup_calllog_settings_label">通話記錄設定</string>
-
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">自動備份設定</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">還原設定</string>
-
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">備份簡訊</string>
   <string name="ui_backup_sms_desc">開啟簡訊備份</string>
@@ -300,17 +300,17 @@
   <string name="app_log_backup_canceled">備份已取消</string>
   <string name="app_log_backup_finished">備份結束</string>
 
-  <string name="app_log_backup_failed_authentication">認證錯誤: %1$s</string>
+  <string name="app_log_backup_failed_authentication">驗證錯誤: %1$s</string>
   <string name="app_log_backup_failed_messaging">一般錯誤: %1$s</string>
   <string name="app_log_backup_failed_connectivity">備份已跳過，無網絡連接</string>
   <string name="app_log_scheduled_next_sync">下次備份調度開始於: %1$s</string>
-  <string name="app_log_no_next_sync">沒有新的備份調度</string>
+  <string name="app_log_no_next_sync">沒有新的備份計劃</string>
 
-  <string name="menu_view_log">查看日誌</string>
-  <string name="app_log_empty">日誌為空。請在“進階設定”中開啟同步處理日誌功能。</string>
+  <string name="menu_view_log">查看記錄</string>
+  <string name="app_log_empty">記錄為空。請在“進階設定”中開啟此功能。</string>
 
-  <string name="pref_app_log">同步處理日誌</string>
-  <string name="pref_app_log_enabled">日誌會被保存在 SD 卡上，命名為“sms_backup_plus.log”。</string>
+  <string name="pref_app_log">同步處理記錄</string>
+  <string name="pref_app_log_enabled">記錄會被保存在 SD 卡上，命名為“sms_backup_plus.log”。</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
   <string name="source_incoming">接收到新訊息</string>
@@ -318,4 +318,12 @@
   <string name="source_3rd_party">第三方</string>
   <string name="source_manual">手動</string>
   <string name="source_unknown">未知</string>
+
+  <string name="ui_confirm_action_label">確認操作</string>
+  <string name="ui_confirm_action_desc">進行備份/還原操作前進行詢問</string>
+  <string name="ui_dialog_confirm_action_title">確認操作</string>
+  <string name="ui_dialog_confirm_action_msg">您確認要執行此操作麼？</string>
+
+  <string name="loading">正在加載...</string>
+  <string name="ssl_error">SSL 出錯</string>
 </resources>
