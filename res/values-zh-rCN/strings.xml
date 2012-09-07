@@ -319,4 +319,7 @@
   <string name="ui_confirm_action_desc">执行备件和还原时需要确认,不影响自动备份</string>
   <string name="ui_dialog_confirm_action_title">确认操作</string>
   <string name="ui_dialog_confirm_action_msg">您确认要执行此操作吗？</string>
+  
+  <string name="loading">载入中...</string>
+  <string name="ssl_error">SSL 错误</string>
 </resources>
