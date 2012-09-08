@@ -16,13 +16,8 @@
   <string name="ui_restore_button_label_restoring">停止</string>
 
   <string name="status_idle">空闲</string>
-<<<<<<< HEAD
-  <string name="status_idle_details">最近一次备份在 <xliff:g id="last_backup_date">%1$s</xliff:g></string>
-  <string name="status_idle_details_never">尚未备份</string>
-=======
   <string name="status_idle_details">最近一次备份于: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
   <string name="status_idle_details_never">从未备份</string>
->>>>>>> 3e53a349f6343ac87a03b63c6edaac0d3b043a87
 
   <string name="status_working">正在进行</string>
 
@@ -328,7 +323,7 @@
   <string name="ui_confirm_action_desc">执行备份或还原前进行询问</string>
   <string name="ui_dialog_confirm_action_title">确认操作</string>
   <string name="ui_dialog_confirm_action_msg">您确认要执行此操作吗？</string>
-  <string name="loading">载入中...</string>
+
   <string name="loading">正在载入...</string>
   <string name="ssl_error">SSL 错误</string>
 </resources>
