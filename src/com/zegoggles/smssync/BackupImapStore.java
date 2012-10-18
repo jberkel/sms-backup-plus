@@ -135,6 +135,8 @@ public class BackupImapStore extends ImapStore {
                 Collections.addAll(messages, msgs);
             }
 
+            Collections.reverse(messages);
+            
             return messages;
         }
 
