@@ -94,7 +94,6 @@ public class AuthActivity extends Activity {
                 setTitle(getString(R.string.status_unknown_error)).
                 setIcon(android.R.drawable.ic_dialog_alert).
                 setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
