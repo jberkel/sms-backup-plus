@@ -50,7 +50,6 @@ public class Utils {
     }
 
     pref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-      @Override
       public boolean onPreferenceChange(Preference preference, final Object newValue) {
           pref.setTitle(
             pref.getEntries()[

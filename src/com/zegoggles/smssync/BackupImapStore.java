@@ -100,7 +100,7 @@ public class BackupImapStore extends ImapStore {
 
             final List<Message> messages;
             final ImapSearcher searcher = new ImapSearcher() {
-                @Override public List<ImapResponse> search() throws IOException, MessagingException {
+                public List<ImapResponse> search() throws IOException, MessagingException {
                     final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
                         .append(' ')
                         .append(getQuery())
