@@ -106,7 +106,7 @@
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Ajouter les entrées du journal d\'appel au calendrier</string>
 
   <string name="ui_backup_calllog_types_label">Types d\'appels</string>
-  <string name="ui_backup_calllog_types_desc">Types d\'appels à sauvergarder</string>
+  <string name="ui_backup_calllog_types_desc">Types d\'appels à sauvegarder</string>
 
   <string name="ui_backup_calllog_sync_calendar_label">Aucun</string>
   <string name="ui_backup_calllog_sync_calendar_desc">Calendrier utilisé pour le journal d\'appels.</string>
