@@ -99,7 +99,6 @@ public class AccountManagerAuthActivity extends Activity {
     }
 
     private void useToken(Account account, String token) {
-        Log.d(TAG, "useToken("+account+", "+token+")");
         startActivity(new Intent(this, SmsSync.class)
             .setAction(ACTION)
             .putExtra(EXTRA_ACCOUNT, account.name)
