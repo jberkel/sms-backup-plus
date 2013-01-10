@@ -277,14 +277,6 @@
   <string name="mms">MMS</string>
   <string name="calllog">Call log</string>
 
-  <string name="ui_dialog_donate_prepare_message">Preparing donation, please wait...</string>
-  <string name="ui_dialog_donate_message">Please specify amount and currency:</string>
-  <string name="ui_donation_success_message">Donation successful, thank you!</string>
-  <string name="ui_donation_failure_message">Donation failed: %1$s</string>
-  <string name="ui_donation_canceled_message">Donation canceled</string>
-  <string name="ui_donation_prompt_currency">Currency</string>
-  <string name="ui_donation_oh_noez_no_network">Sorry, you need to be connected to the internet in order to make a donation.</string>
-
   <string name="pref_disable_acra">Crash error reporting</string>
   <string name="pref_acra_enabled">SMS Backup+ will automatically send an error report after force closing.</string>
   <string name="pref_acra_disabled">Disabled</string>

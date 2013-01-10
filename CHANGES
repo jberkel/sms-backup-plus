@@ -2,6 +2,7 @@
 
   * Added AccountManager support
   * Translation updates (fr/cn)
+  * Removed donation via paypal, added donation via in-app billing V3
 
 == 1.4.6 09-06-2012
 

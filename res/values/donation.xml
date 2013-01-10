@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="donation">Donation</string>
-  <string name="donate">Donate</string>
-  <string name="donation_item_name">Donation SMS Backup+</string>
-  <string name="donation_merchant_name">Jan Berkel</string>
-  <string name="donation_recipient">jan.berkel+paypal@gmail.com</string>
-  <string name="donation_item_id">SMSBACKUP+</string>
-  <string name="donation_paypal_app_id">APP-5W503984EF8322449</string>
-  <string name="donation_flattr_thing_id">edabccdf3fac3cc0948200465f520378</string>
+    <string name="donation">Donation</string>
+    <string name="donate">Donate</string>
 
-  <string-array name="donation_currencies">
-    <item>EUR</item>
-    <item>USD</item>
-    <item>GBP</item>
-  </string-array>
+    <string name="donation_pick_title">Donate</string>
+
+    <string name="ui_dialog_donate_message">Please specify amount:</string>
+    <string name="ui_donation_success_message">Donation successful, thank you!</string>
+    <string name="ui_donation_failure_message">Donation failed: %1$s</string>
+    <string name="ui_donation_canceled_message">Donation canceled</string>
+    <string name="ui_donation_oh_noez_no_network">Sorry, you need to be connected to the internet in order to make a donation.</string>
+
+    <!-- purchase errors -->
+    <string name="donation_error_iab_unavailable">In-app billing is not available</string>
+    <string name="donation_error_unavailable">not available</string>
+    <string name="donation_error_canceled">canceled</string>
+    <string name="donation_error_already_owned">you have already donated</string>
 </resources>

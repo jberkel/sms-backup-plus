@@ -1,3 +1,4 @@
 <resources>
     <style name="Theme.SmsBackupPlus" parent="android:Theme.Holo"/>
+    <style name="Theme.Donation" parent="android:Theme.Holo.Dialog"/>
 </resources>

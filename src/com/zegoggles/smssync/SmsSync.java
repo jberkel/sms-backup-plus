@@ -16,13 +16,17 @@
 
 package com.zegoggles.smssync;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
+
+import com.zegoggles.smssync.ServiceBase.SmsSyncState;
+import oauth.signpost.OAuth;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import org.acra.ACRA;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,25 +34,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.net.ConnectivityManager;
-import android.text.TextUtils;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.AsyncTask;
-import android.preference.Preference;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.preference.ListPreference;
-import android.preference.Preference.OnPreferenceChangeListener;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -56,12 +60,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import oauth.signpost.OAuth;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-
-import com.zegoggles.smssync.ServiceBase.SmsSyncState;
-
-import static com.zegoggles.smssync.App.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -100,7 +101,6 @@ public class SmsSync extends PreferenceActivity {
 
     StatusPreference statusPref;
     private Uri mAuthorizeUri = null;
-    private Donations donations = new Donations(this);
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +168,7 @@ public class SmsSync extends PreferenceActivity {
         statusPref.update();
 
         updateImapSettings(!PrefStore.useXOAuth(this));
+        checkUserDonationStatus();
     }
 
     @Override
@@ -677,17 +678,7 @@ public class SmsSync extends PreferenceActivity {
            case ABOUT:
                 View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
                 WebView webView = (WebView) contentView.findViewById(R.id.about_content);
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.addJavascriptInterface(donations, "activity");
                 webView.setWebViewClient(new WebViewClient() {
-                   @Override public void onPageFinished(WebView v, String url) {
-                    if (donations.hasUserDonated()) {
-                       v.loadUrl("javascript:(function() {" +
-                              "  document.getElementById('donation').style.display = 'none';" +
-                              "  document.getElementById('donated').style.display  = 'block';" +
-                              "})()");
-                     }
-                   }
 
                    @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
                        startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)));
@@ -903,8 +894,9 @@ public class SmsSync extends PreferenceActivity {
         connected.setEnabled(PrefStore.useXOAuth(this));
         connected.setChecked(PrefStore.hasOauthTokens(this) || PrefStore.hasOAuth2Tokens(this));
 
-        String summary = connected.isChecked() ?
-                          getString(R.string.gmail_already_connected, PrefStore.getUsername(this)) :
+        final String username = PrefStore.getUsername(this);
+        String summary = connected.isChecked() && !TextUtils.isEmpty(username) ?
+                          getString(R.string.gmail_already_connected, username) :
                           getString(R.string.gmail_needs_connecting);
         connected.setSummary(summary);
 
@@ -1147,5 +1139,24 @@ public class SmsSync extends PreferenceActivity {
               }
             }
         });
+    }
+
+    private void checkUserDonationStatus() {
+        try {
+            DonationActivity.checkUserHasDonated(this, new DonationActivity.DonationStatusListener() {
+                @Override
+                public void userDonationState(State s) {
+                    if (s == State.DONATED) {
+                        Preference donate = getPreferenceScreen().findPreference("donate");
+                        if (donate != null) {
+                            getPreferenceScreen().removePreference(donate);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.w(TAG, e);
+            ACRA.getErrorReporter().handleSilentException(e);
+        }
     }
 }

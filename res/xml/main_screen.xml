@@ -1,4 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <CheckBoxPreference
       android:key="connected"
       android:title="@string/ui_connected_label"
@@ -299,4 +300,13 @@
         </PreferenceScreen>
 
     </PreferenceScreen>
+
+    <Preference
+            android:key="donate"
+            android:title="@string/donate"
+            >
+
+        <intent android:targetClass="com.zegoggles.smssync.DonationActivity"
+                android:targetPackage="com.zegoggles.smssync"/>
+    </Preference>
 </PreferenceScreen>

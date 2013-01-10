@@ -51,7 +51,13 @@ make sure you select "Sign in with a Google Apps Account"
 ([screenshot](http://skitch.com/jberkel/ditwx/5554-emu-2.2)).
 
 After starting SMS Backup+, tap on the "Connect" check box to start the
-authorization process. A browser window will open where Gmail either prompts
+authorization process.
+
+On newer Android devices you'll be presented with a list of gmail accounts to
+be used for the backup. You'll need to give SMSBackup+ the permission to access your
+emails.
+
+On older devices a browser window will open where Gmail either prompts
 you to log in *or* (if you were already logged in) a screen asking you to give
 SMS Backup+ permission to access your emails.
 
