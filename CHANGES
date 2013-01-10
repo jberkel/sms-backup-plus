@@ -1,3 +1,8 @@
+== 1.4.7 01-xx-2013
+
+  * Added AccountManager support
+  * Translation updates (fr/cn)
+
 == 1.4.6 09-06-2012
 
   * Fixes for ICS / Jelly Bean (missing permissions)
