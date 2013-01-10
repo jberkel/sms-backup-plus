@@ -326,4 +326,8 @@
 
   <string name="loading">Loading…</string>
   <string name="ssl_error">SSL error</string>
+  <string name="ui_dialog_account_manager_token_error">
+      Could not get token from system. Do you want to try the browser authentication method?
+  </string>
+  <string name="select_google_account">Select a Google account</string>
 </resources>

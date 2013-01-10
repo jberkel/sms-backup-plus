@@ -84,6 +84,7 @@ public class SmsSync extends PreferenceActivity {
       REQUEST_TOKEN_ERROR,
       CONNECT,
       CONNECT_TOKEN_ERROR,
+      ACCOUNTMANAGER_TOKEN_ERROR,
       UPGRADE,
       BROKEN_DROIDX,
       VIEW_LOG,
@@ -141,6 +142,8 @@ public class SmsSync extends PreferenceActivity {
         if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL) &&
            (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
             new OAuthCallbackTask().execute(intent);
+        } else if (AccountManagerAuthActivity.ACTION.equals(intent.getAction())) {
+            handleAccountManagerAuth(intent);
         }
     }
 
@@ -188,6 +191,28 @@ public class SmsSync extends PreferenceActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void handleAccountManagerAuth(Intent data) {
+        String token = data.getStringExtra(AccountManagerAuthActivity.EXTRA_TOKEN);
+        String account = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ACCOUNT);
+        if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
+            PrefStore.setOauth2Token(this, account, token);
+            onAuthenticated();
+        } else {
+            String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
+            if (!TextUtils.isEmpty(error)) {
+                show(Dialogs.ACCOUNTMANAGER_TOKEN_ERROR);
+            }
+        }
+    }
+
+    private void onAuthenticated() {
+        updateConnected();
+        // Invite use to perform a backup, but only once
+        if (PrefStore.isFirstUse(this)) {
+            show(Dialogs.FIRST_SYNC);
         }
     }
 
@@ -734,6 +759,22 @@ public class SmsSync extends PreferenceActivity {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     }).create();
+
+            case ACCOUNTMANAGER_TOKEN_ERROR:
+                return new AlertDialog.Builder(this)
+                        .setCustomTitle(null)
+                        .setMessage(R.string.ui_dialog_account_manager_token_error)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create();
             case DISCONNECT:
                 return new AlertDialog.Builder(this)
                     .setCustomTitle(null)
@@ -860,10 +901,10 @@ public class SmsSync extends PreferenceActivity {
               .findPreference(PrefStore.PREF_CONNECTED);
 
         connected.setEnabled(PrefStore.useXOAuth(this));
-        connected.setChecked(PrefStore.hasOauthTokens(this));
+        connected.setChecked(PrefStore.hasOauthTokens(this) || PrefStore.hasOAuth2Tokens(this));
 
         String summary = connected.isChecked() ?
-                          getString(R.string.gmail_already_connected, PrefStore.getOauthUsername(this)) :
+                          getString(R.string.gmail_already_connected, PrefStore.getUsername(this)) :
                           getString(R.string.gmail_needs_connecting);
         connected.setSummary(summary);
 
@@ -871,6 +912,12 @@ public class SmsSync extends PreferenceActivity {
     }
 
     class RequestTokenTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            show(Dialogs.REQUEST_TOKEN);
+        }
+
         public String doInBackground(String... callback) {
             synchronized(XOAuthConsumer.class) {
                 XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
@@ -948,19 +995,12 @@ public class SmsSync extends PreferenceActivity {
             if (consumer != null) {
                 PrefStore.setOauthUsername(mContext, consumer.getUsername());
                 PrefStore.setOauthTokens(mContext, consumer.getToken(), consumer.getTokenSecret());
-
-                updateConnected();
-
-                // Invite use to perform a backup, but only once
-                if (PrefStore.isFirstUse(mContext)) {
-                    show(Dialogs.FIRST_SYNC);
-                }
+                onAuthenticated();
             } else {
               show(Dialogs.ACCESS_TOKEN_ERROR);
             }
         }
     }
-
 
     public void show(Dialogs d)   { showDialog(d.ordinal()); }
     public void remove(Dialogs d) {
@@ -1058,8 +1098,13 @@ public class SmsSync extends PreferenceActivity {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 boolean newValue = (Boolean) change;
                 if (newValue) {
-                  show(Dialogs.REQUEST_TOKEN);
-                  new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                  if (Integer.parseInt(Build.VERSION.SDK) >= 5) {
+                      // use account manager on newer phones
+                      startActivity(new Intent(SmsSync.this, AccountManagerAuthActivity.class));
+                  } else {
+                      // fall back to webview on older ones
+                      new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                  }
                 } else {
                   show(Dialogs.DISCONNECT);
                 }

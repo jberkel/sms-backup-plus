@@ -16,6 +16,7 @@
 
 package com.zegoggles.smssync;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import android.text.TextUtils;
@@ -30,6 +31,8 @@ import android.content.pm.PackageManager;
 
 import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
 import static com.zegoggles.smssync.App.*;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class PrefStore {
 
@@ -59,8 +62,10 @@ public class PrefStore {
     static final String PREF_SERVER_AUTHENTICATION = "server_authentication";
 
     static final String PREF_OAUTH_TOKEN = "oauth_token";
+    static final String PREF_OAUTH2_TOKEN = "oauth2_token";
     static final String PREF_OAUTH_TOKEN_SECRET = "oauth_token_secret";
     static final String PREF_OAUTH_USER = "oauth_user";
+    static final String PREF_OAUTH2_USER = "oauth2_user";
 
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
@@ -160,6 +165,7 @@ public class PrefStore {
         return getPrefs(ctx).getBoolean(PREF_APP_LOG, false);
     }
 
+
     enum AuthMode            { PLAIN, XOAUTH }
     enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING }
     public enum AddressStyle { NAME, NAME_AND_NUMBER, NUMBER }
@@ -234,6 +240,10 @@ public class PrefStore {
         return getCredentials(ctx).getString(PREF_OAUTH_TOKEN, null);
     }
 
+    static String getOauth2Token(Context ctx) {
+        return getCredentials(ctx).getString(PREF_OAUTH2_TOKEN, null);
+    }
+
     static String getOauthTokenSecret(Context ctx) {
         return getCredentials(ctx).getString(PREF_OAUTH_TOKEN_SECRET, null);
     }
@@ -244,8 +254,21 @@ public class PrefStore {
                getOauthTokenSecret(ctx) != null;
     }
 
+    static boolean hasOAuth2Tokens(Context ctx) {
+        return getOauth2Username(ctx) != null &&
+               getOauth2Token(ctx) != null;
+    }
+
     static String getOauthUsername(Context ctx) {
         return getPrefs(ctx).getString(PREF_OAUTH_USER, null);
+    }
+
+    static String getOauth2Username(Context ctx) {
+        return getPrefs(ctx).getString(PREF_OAUTH2_USER, null);
+    }
+
+    public static String getUsername(Context ctx) {
+        return getPrefs(ctx).getString(PREF_OAUTH_USER, getOauth2Username(ctx));
     }
 
     static void setOauthUsername(Context ctx, String s) {
@@ -258,6 +281,17 @@ public class PrefStore {
         .putString(PREF_OAUTH_TOKEN_SECRET, secret)
         .commit();
     }
+
+    static void setOauth2Token(Context ctx, String username, String token) {
+        getPrefs(ctx).edit()
+                .putString(PREF_OAUTH2_USER, username)
+                .commit();
+
+        getCredentials(ctx).edit()
+                .putString(PREF_OAUTH2_TOKEN, token)
+                .commit();
+    }
+
 
     static AuthMode getAuthMode(Context ctx) {
         return getDefaultType(ctx, PREF_SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
@@ -282,7 +316,7 @@ public class PrefStore {
         switch (getAuthMode(ctx)) {
             case PLAIN:  return !TextUtils.isEmpty(getImapPassword(ctx)) &&
                                 !TextUtils.isEmpty(getImapUsername(ctx));
-            case XOAUTH: return hasOauthTokens(ctx);
+            case XOAUTH: return hasOauthTokens(ctx) || hasOAuth2Tokens(ctx);
             default: return false;
         }
     }
@@ -451,11 +485,13 @@ public class PrefStore {
     static void clearOauthData(Context ctx) {
         getPrefs(ctx).edit()
           .remove(PREF_OAUTH_USER)
+          .remove(PREF_OAUTH2_USER)
           .commit();
 
         getCredentials(ctx).edit()
           .remove(PREF_OAUTH_TOKEN)
           .remove(PREF_OAUTH_TOKEN_SECRET)
+          .remove(PREF_OAUTH2_TOKEN)
           .commit();
     }
 
@@ -470,7 +506,7 @@ public class PrefStore {
     static boolean isNotificationEnabled(Context ctx) {
         return getPrefs(ctx).getBoolean("notifications", false);
     }
-    
+
     static boolean confirmAction(Context ctx) {
     	return getPrefs(ctx).getBoolean("confirm_action", false);
     }
@@ -493,19 +529,56 @@ public class PrefStore {
 
     static String getStoreUri(Context ctx) {
         if (useXOAuth(ctx)) {
-          XOAuthConsumer consumer = getOAuthConsumer(ctx);
 
-          return String.format(Consts.IMAP_URI,
-               DEFAULT_SERVER_PROTOCOL,
-                "xoauth:" + encode(consumer.getUsername()),
-               encode(consumer.generateXOAuthString()),
-               getServerAddress(ctx));
+          if (hasOauthTokens(ctx)) {
+              XOAuthConsumer consumer = getOAuthConsumer(ctx);
+              return String.format(Consts.IMAP_URI,
+                   DEFAULT_SERVER_PROTOCOL,
+                    "xoauth:" + encode(consumer.getUsername()),
+                   encode(consumer.generateXOAuthString()),
+                   getServerAddress(ctx));
+          } else if (hasOAuth2Tokens(ctx)) {
+                return String.format(Consts.IMAP_URI,
+                    DEFAULT_SERVER_PROTOCOL,
+                    "xoauth2:" + encode(getOauthUsername(ctx)),
+                    encode(generateXOAuth2Token(ctx)),
+                    getServerAddress(ctx));
+          } else {
+              Log.w(TAG, "No valid xoauth1/2 tokens");
+              return null;
+          }
+
         } else {
             return String.format(Consts.IMAP_URI,
                getServerProtocol(ctx),
                encode(getImapUsername(ctx)),
                encode(getImapPassword(ctx)).replace("+", "%20"),
                getServerAddress(ctx));
+        }
+    }
+
+    /**
+     * <p>
+     * The SASL XOAUTH2 initial client response has the following format:
+     * </p>
+     *  <code>base64("user="{User}"^Aauth=Bearer "{Access Token}"^A^A")</code>
+     * <p>
+     *  For example, before base64-encoding, the initial client response might look like this:
+     *  </p>
+     * <code>user=someuser@example.com^Aauth=Bearer vF9dft4qmTc2Nvb3RlckBhdHRhdmlzdGEuY29tCg==^A^A</code>
+     * <p/>
+     * <em>Note:</em> ^A represents a Control+A (\001).
+     * @see <a href="https://developers.google.com/google-apps/gmail/xoauth2_protocol#the_sasl_xoauth2_mechanism">
+     *     The SASL XOAUTH2 Mechanism</a>
+     */
+    private static String generateXOAuth2Token(Context context) {
+        final String username = getOauth2Username(context);
+        final String token = getOauth2Token(context);
+        final String formatted = "user="+username+"\001auth=Bearer "+token+"\001\001";
+        try {
+            return new String(Base64.encodeBase64(formatted.getBytes("UTF-8")), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 

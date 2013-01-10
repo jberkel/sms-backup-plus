@@ -72,6 +72,7 @@ public class AuthActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(final WebView view, String url) {
                 if (url.startsWith(Consts.CALLBACK_URL)) {
+                    // should really use setResult + finish, but SmsSync is singleInstance (for some reason)
                     Intent intent = new Intent().setData(Uri.parse(url));
                     startActivity(intent);
                     finish();
