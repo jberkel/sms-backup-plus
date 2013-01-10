@@ -10,6 +10,7 @@ import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -104,5 +105,9 @@ public class AccountManagerAuthActivity extends Activity {
             .putExtra(EXTRA_ACCOUNT, account.name)
             .putExtra(EXTRA_TOKEN, token));
         finish();
+    }
+
+    public static void invalidateToken(Context ctx, String token) {
+        AccountManager.get(ctx).invalidateAuthToken("com.google", token);
     }
 }

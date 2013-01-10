@@ -19,6 +19,7 @@ package com.zegoggles.smssync;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.content.Context;
@@ -483,6 +484,8 @@ public class PrefStore {
     }
 
     static void clearOauthData(Context ctx) {
+        final String oauth2token = getOauth2Token(ctx);
+
         getPrefs(ctx).edit()
           .remove(PREF_OAUTH_USER)
           .remove(PREF_OAUTH2_USER)
@@ -493,6 +496,10 @@ public class PrefStore {
           .remove(PREF_OAUTH_TOKEN_SECRET)
           .remove(PREF_OAUTH2_TOKEN)
           .commit();
+
+        if (!TextUtils.isEmpty(oauth2token) && Integer.parseInt(Build.VERSION.SDK) >= 5) {
+            AccountManagerAuthActivity.invalidateToken(ctx, oauth2token);
+        }
     }
 
     static void clearLastSyncData(Context ctx) {
