@@ -260,11 +260,11 @@ public class PrefStore {
                getOauth2Token(ctx) != null;
     }
 
-    static String getOauthUsername(Context ctx) {
+    private static String getOauthUsername(Context ctx) {
         return getPrefs(ctx).getString(PREF_OAUTH_USER, null);
     }
 
-    static String getOauth2Username(Context ctx) {
+    private static String getOauth2Username(Context ctx) {
         return getPrefs(ctx).getString(PREF_OAUTH2_USER, null);
     }
 
@@ -308,7 +308,7 @@ public class PrefStore {
 
     static String getUserEmail(Context ctx) {
       switch(getAuthMode(ctx)) {
-        case XOAUTH: return getOauthUsername(ctx);
+        case XOAUTH: return getUsername(ctx);
         default:     return getImapUsername(ctx);
       }
     }
@@ -547,7 +547,7 @@ public class PrefStore {
           } else if (hasOAuth2Tokens(ctx)) {
                 return String.format(Consts.IMAP_URI,
                     DEFAULT_SERVER_PROTOCOL,
-                    "xoauth2:" + encode(getOauthUsername(ctx)),
+                    "xoauth2:" + encode(getOauth2Username(ctx)),
                     encode(generateXOAuth2Token(ctx)),
                     getServerAddress(ctx));
           } else {
