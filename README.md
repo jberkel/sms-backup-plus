@@ -28,19 +28,16 @@ Main differences / improvements:
 
 Tested with Android 1.5 - 4.2.x.
 
-SMS Backup+ is available for free in the Play Store, there will never be a pro / paid version.
+SMS Backup+ is available for free in the Google Play Store, there will never be a pro / paid version.
 
-But if you like the app you can flattr it ([flattr it ??][WhatisFlattr]).
-[![][FlattrButton]][FlattrLink]
-
-You can also donate via PayPal from within the application (Menu - About, then hit the PayPal button).
+But if you find the app useful you can make a donation from within the app itself, using the secure
+Play Store payment mechanism.
 
 ## <a name="usage">Usage</a>
 
 ### Installation
 
-![MarketQRCode][] Install via the Android QR code link, [Google
-Play][MarketLink] or directly from [github downloads][].
+![MarketQRCode][] Install via the Android QR code link, [Google Play][MarketLink].
 
 ### First steps
 
@@ -354,7 +351,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
 [FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
-[github downloads]: https://github.com/jberkel/sms-backup-plus/sms-backup-plus-v1.4.6.apk/qr_code
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_4.png
 [gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
