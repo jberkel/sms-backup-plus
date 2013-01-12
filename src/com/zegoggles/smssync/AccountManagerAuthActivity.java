@@ -19,23 +19,34 @@ import android.util.Log;
 public class AccountManagerAuthActivity extends Activity {
     private static final int DIALOG_ACCOUNTS = 0;
     private static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
-    public static final String EXTRA_TOKEN = "token";
-    public static final String EXTRA_ERROR = "error";
-    public static final String EXTRA_DENIED = "denied";
+    public static final String EXTRA_TOKEN   = "token";
+    public static final String EXTRA_ERROR   = "error";
+    public static final String EXTRA_DENIED  = "denied";
     public static final String EXTRA_ACCOUNT = "account";
-    public static final String ACTION = "addAccount";
+
+    public static final String ACTION_ADD_ACCOUNT  = "addAccount";
+    public static final String ACTION_FALLBACKAUTH = "fallBackAuth";
 
     private AccountManager accountManager;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accountManager = AccountManager.get(this);
+
+        Account[] accounts = accountManager.getAccountsByType("com.google");
+        if (accounts == null || accounts.length == 0) {
+            Log.d(TAG, "no google accounts found on this device, using standard auth");
+            startActivity(new Intent(this, SmsSync.class).setAction(ACTION_FALLBACKAUTH));
+            finish();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        showDialog(DIALOG_ACCOUNTS);
+        if (!isFinishing()) {
+            showDialog(DIALOG_ACCOUNTS);
+        }
     }
 
     @Override
@@ -53,6 +64,7 @@ public class AccountManagerAuthActivity extends Activity {
                 builder.setItems(names, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         onAccountSelected(accounts[which]);
+                        dialog.dismiss();
                     }
                 });
 
@@ -85,7 +97,7 @@ public class AccountManagerAuthActivity extends Activity {
     // should really use setResult + finish for all callbacks, but SmsSync is singleInstance (for some reason)
     private void onAccessDenied() {
         startActivity(new Intent(this, SmsSync.class)
-            .setAction(ACTION)
+            .setAction(ACTION_ADD_ACCOUNT)
             .putExtra(EXTRA_DENIED, true));
         finish();
     }
@@ -93,7 +105,7 @@ public class AccountManagerAuthActivity extends Activity {
     private void handleException(Exception e) {
         Log.w(TAG, e);
         startActivity(new Intent(this, SmsSync.class)
-            .setAction(ACTION)
+            .setAction(ACTION_ADD_ACCOUNT)
             .putExtra(EXTRA_ERROR, e.getMessage()));
 
         finish();
@@ -101,7 +113,7 @@ public class AccountManagerAuthActivity extends Activity {
 
     private void useToken(Account account, String token) {
         startActivity(new Intent(this, SmsSync.class)
-            .setAction(ACTION)
+            .setAction(ACTION_ADD_ACCOUNT)
             .putExtra(EXTRA_ACCOUNT, account.name)
             .putExtra(EXTRA_TOKEN, token));
         finish();

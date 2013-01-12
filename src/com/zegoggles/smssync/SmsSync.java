@@ -142,8 +142,10 @@ public class SmsSync extends PreferenceActivity {
         if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL) &&
            (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
             new OAuthCallbackTask().execute(intent);
-        } else if (AccountManagerAuthActivity.ACTION.equals(intent.getAction())) {
+        } else if (AccountManagerAuthActivity.ACTION_ADD_ACCOUNT.equals(intent.getAction())) {
             handleAccountManagerAuth(intent);
+        } else if (AccountManagerAuthActivity.ACTION_FALLBACKAUTH.equals(intent.getAction())) {
+            handleFallbackAuth();
         }
     }
 
@@ -207,6 +209,10 @@ public class SmsSync extends PreferenceActivity {
                 show(Dialogs.ACCOUNTMANAGER_TOKEN_ERROR);
             }
         }
+    }
+
+    private void handleFallbackAuth() {
+        new RequestTokenTask().execute(Consts.CALLBACK_URL);
     }
 
     private void onAuthenticated() {
@@ -757,7 +763,7 @@ public class SmsSync extends PreferenceActivity {
                         .setMessage(R.string.ui_dialog_account_manager_token_error)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                                handleFallbackAuth();
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -1095,7 +1101,7 @@ public class SmsSync extends PreferenceActivity {
                       startActivity(new Intent(SmsSync.this, AccountManagerAuthActivity.class));
                   } else {
                       // fall back to webview on older ones
-                      new RequestTokenTask().execute(Consts.CALLBACK_URL);
+                      handleFallbackAuth();
                   }
                 } else {
                   show(Dialogs.DISCONNECT);
