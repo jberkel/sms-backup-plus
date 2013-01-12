@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">SMS Backup+</string>
-    <string name="donation">Podpora</string>
     <string name="donate">Podporiť</string>
-    <string name="donation_item_name">Podpora SMS Backup+</string>
     <string name="app_description">Použite GMail účet pre zálohovanie SMS správ. Toto je vylepšená verzia aplikácie SMS Backup od Christopha Studera ktorá podporuje obnovenie SMS späť do telefónu. Je plne spätne kompatibilná s aplikáciou SMS backup.</string>
     <string name="ui_sync_button_label_idle">Zálohovať</string>
     <string name="ui_sync_button_label_canceling">Zastavujem</string>

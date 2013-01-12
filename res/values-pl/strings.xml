@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="donation">Darowizna</string>
     <string name="donate">Darowizna</string>
     <string name="app_name">SMS Backup+Restore</string>
     <string name="app_description">Użyj Gmail do przechowywania kopii zapasowej swoich SMSów. Ta wersja programu SMS Backup została stworzona przez Christoph\'a Studer\'a i obsługuje przywracanie wiadomości.</string>
