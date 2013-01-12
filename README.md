@@ -228,7 +228,10 @@ In Gmail settings, set conversation view to `off`
   * Modify calendar events - needed for the call log backup to GCal
   * Send email to guests - this refers to calendar invitations (which are not created by the app)
   * Storage (modify/delete SD card contents) - this is needed for caching
-  * Your accounts (discover known accounts) - currently not used and will be removed in a future version
+  * Find accounts on the device - used for authentication
+  * Use accounts on the device - used for authentication
+  * Google Play billing service - used for in-app donations
+  * Run at startup - used to enable automatic backups after reboot
 
 ### <a name="faq-partial-restore">How do I restore the last N weeks / N messages?</a>
 
