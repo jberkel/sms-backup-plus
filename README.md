@@ -133,15 +133,6 @@ in Advanced Settings and send the broadcast intent
 `com.zegoggles.smssync.BACKUP`. This will work even when Auto Backup is
 disabled.
 
-### <a name="2step">Usage with Google 2-step verification</a>
-
-XOAuth might not work when you are signed up for 2-step verification (see
-[Getting started with 2-step verification][] for more information).
-In this case you need to create an application-specific
-password ([Authorized Access to your Google Account][]) and enable plain text
-authentication in "Advanced Settings - IMAP server settings".  Provide the
-username and password you created in the previous step.
-
 ### Usage without Gmail (IMAP)
 
 You don't have to use Gmail to backup your text messages - change
@@ -355,7 +346,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [smsbackupshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_4.png
 [gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
 [gcalshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gcal_screenshot.png
-[crowdin project page]: http://crowdin.net/project/sms-backup-plus/invite
 [showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
 [source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
 [droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/
