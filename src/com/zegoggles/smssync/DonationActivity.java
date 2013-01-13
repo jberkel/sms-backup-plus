@@ -89,7 +89,7 @@ public class DonationActivity extends Activity implements
             }
         }
 
-        if (!userHasDonated(inventory)) {
+        if (!isFinishing() && !userHasDonated(inventory)) {
             showSelectDialog(skuDetailsList);
         } else {
             finish();
