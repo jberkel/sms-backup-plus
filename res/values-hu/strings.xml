@@ -260,7 +260,7 @@
   <string name="ui_backup_sms_desc">Engedélyezi az SMS-ek mentését</string>
 
   <string name="ui_restore_sms_label">SMS-ek visszaállítása</string>
-  <string name="ui_restore_sms_desc">Engedélyezi az SMS-ek visszaállítását</string>
+  <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(A funkció még nem elérhető)</string>
 
@@ -273,14 +273,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">hívásnapló</string>
-
-  <string name="ui_dialog_donate_prepare_message">Adományozás előkészítése, kérem várjon...</string>
-  <string name="ui_dialog_donate_message">Kérem adja meg az összeget és a pénznemet:</string>
-  <string name="ui_donation_success_message">Az adományozás sikeres volt, köszönjük!</string>
-  <string name="ui_donation_failure_message">Az adományozás sikertelen: %1$s</string>
-  <string name="ui_donation_canceled_message">Adományozás megszakítva</string>
-  <string name="ui_donation_prompt_currency">Pénznem</string>
-  <string name="ui_donation_oh_noez_no_network">Sajnálom, élő internet-kapcsolat szükséges az adományozáshoz.</string>
 
   <string name="pref_disable_acra">Hibajelentés küldése</string>
   <string name="pref_acra_enabled">Az SMS Backup+ automatikusan hibajelentést küld kényszerbezárás esetén.</string>
@@ -323,4 +315,22 @@
 
   <string name="loading">Betöltés…</string>
   <string name="ssl_error">SSL hiba</string>
+  <string name="ui_dialog_account_manager_token_error">Nem sikerült hitelesíteni az előre beállított fiókkal. Szeretné megpróbálni a böngészős bejelentkezést?</string>
+  <string name="select_google_account">Válasszon Google-fiókot</string>
+
+  <!-- donation related -->
+  <string name="donate">Adományozás</string>
+  <string name="donate_summary">Biztonságosan Google Play Áruház rendszerén keresztül.</string>
+
+  <string name="ui_dialog_donate_message">Adja meg az összeget:</string>
+  <string name="ui_donation_success_message">Az adományozás sikeres volt, köszönjük!</string>
+  <string name="ui_donation_failure_message">Az adományozás sikertelen: %1$s</string>
+  <string name="ui_donation_canceled_message">Adományozás megszakítva</string>
+  <string name="ui_donation_oh_noez_no_network">Sajnálom, de az adományozáshoz csatlakoznia kell az internethez.</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">Az alkalmazáson belüli számlázás nem elérhető</string>
+  <string name="donation_error_unavailable">nem elérhető</string>
+  <string name="donation_error_canceled">megszakítva</string>
+  <string name="donation_error_already_owned">Ön már adományozott</string>
 </resources>
