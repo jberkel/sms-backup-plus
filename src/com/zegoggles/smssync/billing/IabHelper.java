@@ -229,6 +229,10 @@ public class IabHelper {
                     }
                     logDebug("In-app billing version 3 supported for " + packageName);
                     mSetupDone = true;
+
+                    if (listener != null) {
+                        listener.onIabSetupFinished(new IabResult(BILLING_RESPONSE_RESULT_OK, "Setup successful."));
+                    }
                 }
                 catch (RemoteException e) {
                     if (listener != null) {
@@ -236,10 +240,6 @@ public class IabHelper {
                                                     "RemoteException while setting up in-app billing."));
                     }
                     e.printStackTrace();
-                }
-
-                if (listener != null) {
-                    listener.onIabSetupFinished(new IabResult(BILLING_RESPONSE_RESULT_OK, "Setup successful."));
                 }
             }
         };
