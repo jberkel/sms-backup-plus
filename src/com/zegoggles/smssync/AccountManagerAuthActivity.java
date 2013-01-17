@@ -6,6 +6,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,7 +15,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+
+import java.io.IOException;
 
 public class AccountManagerAuthActivity extends Activity {
     private static final int DIALOG_ACCOUNTS = 0;
@@ -121,5 +125,37 @@ public class AccountManagerAuthActivity extends Activity {
 
     public static void invalidateToken(Context ctx, String token) {
         AccountManager.get(ctx).invalidateAuthToken("com.google", token);
+    }
+
+    public static boolean refreshOAuth2Token(Context ctx) {
+        String token = PrefStore.getOauth2Token(ctx);
+        String name  = PrefStore.getUsername(ctx);
+        if (!TextUtils.isEmpty(token)) {
+            invalidateToken(ctx, token);
+            try {
+                String newToken = AccountManager.get(ctx).getAuthToken(new Account(name, "com.google"),
+                        AUTH_TOKEN_TYPE, true, null, null).getResult().getString(AccountManager.KEY_AUTHTOKEN);
+
+                if (!TextUtils.isEmpty(newToken)) {
+                    PrefStore.setOauth2Token(ctx, name, newToken);
+                    return true;
+                } else {
+                    Log.w(TAG, "no new token obtained");
+                    return false;
+                }
+            } catch (OperationCanceledException e) {
+                Log.w(TAG, e);
+                return false;
+            } catch (IOException e) {
+                Log.w(TAG, e);
+                return false;
+            } catch (AuthenticatorException e) {
+                Log.w(TAG, e);
+                return false;
+            }
+        } else {
+            Log.w(TAG, "no current token set");
+            return false;
+        }
     }
 }

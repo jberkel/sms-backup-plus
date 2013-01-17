@@ -25,6 +25,7 @@ import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.zegoggles.smssync.CursorToMessage.ConversionResult;
 import com.zegoggles.smssync.CursorToMessage.DataType;
 
@@ -184,6 +185,25 @@ public class SmsBackupService extends ServiceBase {
                     Log.i(TAG, "Nothing to do.");
                     return 0;
                 }
+            } catch (XOAuth2AuthenticationFailedException e) {
+                if (e.getStatus() == 400) {
+                    Log.d(TAG, "need to perform xoauth2 token refresh");
+                    if (!intent.hasExtra("refresh_retried") &&
+                        AccountManagerAuthActivity.refreshOAuth2Token(SmsBackupService.this)) {
+
+                        // we got a new token, let's retry one more time
+                        intent.putExtra("refresh_retried", true);
+                        return doInBackground(intent);
+                    } else {
+                        Log.w(TAG, "no new token obtained, giving up");
+                    }
+                } else {
+                    Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
+                }
+                appLog(R.string.app_log_backup_failed_authentication, translateException(e));
+                publish(AUTH_FAILED);
+                return null;
+
             } catch (AuthenticationFailedException e) {
                 appLog(R.string.app_log_backup_failed_authentication, translateException(e));
                 publish(AUTH_FAILED);
