@@ -1,3 +1,7 @@
+== 1.4.8 01-18-2013
+
+  * Fixed XOAuth2 token refresh
+
 == 1.4.7 01-12-2013
 
   * Added AccountManager support
