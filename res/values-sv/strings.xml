@@ -197,7 +197,7 @@
 
   <string name="call_incoming">Inkommande samtal</string>
   <string name="call_outgoing">Utgående samtal</string>
-  <string name="call_missed">Missage samtal</string>
+  <string name="call_missed">Missade samtal</string>
 
   <string name="call_missed_text">Missat samtal från %1$s</string>
   <string name="call_incoming_text">Samtal från %1$s</string>
