@@ -115,7 +115,7 @@
   <string name="ui_imap_folder_calllog_desc">应用到通话记录的 Gmail 标签</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">备份的通话记录将在 Gmail 中以此标签标记。</string>
 
-  <string name="ui_mark_as_read_label">标记为已读(邮件)</string>
+  <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
 
   <string name="ui_mark_as_read_restore_label">标记为已读 (短信)</string>
@@ -277,14 +277,6 @@
   <string name="mms">彩信</string>
   <string name="calllog">通话记录</string>
 
-  <string name="ui_dialog_donate_prepare_message">正在准备捐助，请稍候...</string>
-  <string name="ui_dialog_donate_message">请指定金额及币种：</string>
-  <string name="ui_donation_success_message">捐助成功，谢谢您！</string>
-  <string name="ui_donation_failure_message">捐助失败：%1$s</string>
-  <string name="ui_donation_canceled_message">捐助已取消</string>
-  <string name="ui_donation_prompt_currency">币种</string>
-  <string name="ui_donation_oh_noez_no_network">抱歉，您需要连接到网络才能进行捐助。</string>
-
   <string name="pref_disable_acra">崩溃报告</string>
   <string name="pref_acra_enabled">SMS Backup+ 将在强制退出后自动发送错误报告给作者, 以便修正问题。</string>
   <string name="pref_acra_disabled">已禁用</string>
@@ -326,4 +318,24 @@
 
   <string name="loading">正在载入...</string>
   <string name="ssl_error">SSL 错误</string>
+  <string name="ui_dialog_account_manager_token_error">
+      无法从系统获取令牌。您是否想要尝试一下浏览器验证方式？
+  </string>
+  <string name="select_google_account">选择一个 Google 账户</string>
+
+  <!-- donation related -->
+  <string name="donate">捐赠</string>
+  <string name="donate_summary">使用安全的 Google Play 商店应用内付款。</string>
+
+  <string name="ui_dialog_donate_message">请指定金额：</string>
+  <string name="ui_donation_success_message">捐赠成功，谢谢您！</string>
+  <string name="ui_donation_failure_message">捐赠失败：%1$s</string>
+  <string name="ui_donation_canceled_message">捐赠已取消</string>
+  <string name="ui_donation_oh_noez_no_network">抱歉，您需要连接到网络才能进行捐赠。</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">应用内付费功能不可用</string>
+  <string name="donation_error_unavailable">不可用</string>
+  <string name="donation_error_canceled">已取消</string>
+  <string name="donation_error_already_owned">您已经捐赠过了</string>
 </resources>
