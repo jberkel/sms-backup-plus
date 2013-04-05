@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.zegoggles</groupId>
+    <artifactId>smsbackup-plus</artifactId>
+    <version>1.4.9-SNAPSHOT</version>
+    <packaging>apk</packaging>
+
+    <properties>
+        <platform.version>4.0.1.2</platform.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>oauth.signpost</groupId>
+            <artifactId>signpost-commonshttp4</artifactId>
+            <version>1.2.1.2</version>
+            <exclusions>
+                <!-- already shipping with android -->
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zegoggles</groupId>
+            <artifactId>k9-imapstore</artifactId>
+            <version>0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.acra</groupId>
+            <artifactId>acra</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <version>3.5.2</version>
+                <configuration>
+                  <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
+                  <assetsDirectory>${project.basedir}/assets</assetsDirectory>
+                  <resourceDirectory>${project.basedir}/res</resourceDirectory>
+                  <sdk>
+                     <platform>12</platform>
+                  </sdk>
+                  <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                </configuration>
+                <extensions>true</extensions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>zegoggles-releases</id>
+            <name>zeggogles snapshots</name>
+            <url>http://zegoggl.es:8081/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+</project>
