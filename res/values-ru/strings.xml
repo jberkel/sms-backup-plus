@@ -128,7 +128,6 @@
   <string name="ui_enable_auto_sync_label">Автосохранение</string>
   <string name="ui_enable_auto_sync_desc">Включить автосохранение новых SMS</string>
 
-  <string name="auto_backup_settings">Автосохранение</string>
   <string name="ui_auto_backup_schedule_label">Расписание</string>
   <string name="ui_auto_backup_schedule_desc">Когда сохранять SMS</string>
 
