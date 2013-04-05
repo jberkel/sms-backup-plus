@@ -61,7 +61,7 @@
                   <assetsDirectory>${project.basedir}/assets</assetsDirectory>
                   <resourceDirectory>${project.basedir}/res</resourceDirectory>
                   <sdk>
-                     <platform>12</platform>
+                     <platform>14</platform>
                   </sdk>
                   <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
