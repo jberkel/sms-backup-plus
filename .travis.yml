@@ -1,11 +1,11 @@
 language: java
 before_install:
   # download the latest android sdk and unzip
-  - sudo apt-get install -qq ia32-libs-multiarch
+  # - sudo apt-get install -qq ia32-libs-multiarch
   - wget http://dl.google.com/android/android-sdk_r21.1-linux.tgz
   - tar -zxf android-sdk_r21.1-linux.tgz
   - export ANDROID_HOME=`pwd`/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
   - android update sdk --filter tools,platform-tools,android-14 --no-ui --force
-  - find .  -name 'aapt' | xargs ls -l
+  - aapt help
 install: mvn install -DskipTests=true -e -X
