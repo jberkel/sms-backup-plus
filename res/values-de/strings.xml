@@ -274,12 +274,10 @@
   <string name="mms">MMS</string>
   <string name="calllog">Anrufprotokoll</string>
 
-  <string name="ui_dialog_donate_prepare_message">Bereite Spende vor, bitte warten...</string>
   <string name="ui_dialog_donate_message">Bitte geben Sie Betrag und Währung an:</string>
   <string name="ui_donation_success_message">Spende erfolgreich, Vielen Dank!</string>
   <string name="ui_donation_failure_message">Spende fehlgeschlagen: %1$s</string>
   <string name="ui_donation_canceled_message">Spende abgebrochen</string>
-  <string name="ui_donation_prompt_currency">Währung</string>
   <string name="ui_donation_oh_noez_no_network">Entschuldigung, Sie müssen mit dem Internet verbunden sein um eine Spende zu tätigen.</string>
 
   <string name="pref_disable_acra">Fehlerreport</string>

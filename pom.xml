@@ -64,6 +64,11 @@
                      <platform>14</platform>
                   </sdk>
                   <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                  <lint>
+                    <skip>false</skip>
+                     <failOnError>true</failOnError>
+                     <enableHtml>true</enableHtml>
+                  </lint>
                 </configuration>
                 <extensions>true</extensions>
             </plugin>

@@ -272,12 +272,10 @@
   <string name="mms">MMS</string>
   <string name="calllog">Journal d\'appel</string>
 
-  <string name="ui_dialog_donate_prepare_message">Préparation du, veuillez attendre…</string>
   <string name="ui_dialog_donate_message">Veuillez spécifier le montant ainsi que la devise :</string>
   <string name="ui_donation_success_message">Don effectué, merci !</string>
   <string name="ui_donation_failure_message">Erreur lors du don : %1$s</string>
   <string name="ui_donation_canceled_message">Don annulé</string>
-  <string name="ui_donation_prompt_currency">Devise</string>
   <string name="ui_donation_oh_noez_no_network">Désolé, mais vous devez être connecté à Internet afin d\'effectuer un don.</string>
 
   <string name="pref_disable_acra">Rapporter les crashs</string>

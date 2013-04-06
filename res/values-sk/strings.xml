@@ -187,12 +187,10 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="sms">SMS</string>
     <string name="mms">MMS</string>
     <string name="calllog">Denník hovorov</string>
-    <string name="ui_dialog_donate_prepare_message">Príprava darcovstva, počkajte, prosím...</string>
     <string name="ui_dialog_donate_message">Uveďte sumu a menu:</string>
     <string name="ui_donation_success_message">Darovanie bolo úspešné. Ďakujeme</string>
     <string name="ui_donation_failure_message">Darovanie bolo neúspešné: %1$s</string>
     <string name="ui_donation_canceled_message">Darovanie bolo prerušené</string>
-    <string name="ui_donation_prompt_currency">Mena</string>
     <string name="ui_donation_oh_noez_no_network">Prepáčte, musíte byť pripojení na internet, ak chcete niečo darovať</string>
     <string name="pref_disable_acra">Výpis o chybách</string>
     <string name="pref_acra_enabled">SMS Backup+ automaticky odošle správu o chybách po zatvorení</string>
