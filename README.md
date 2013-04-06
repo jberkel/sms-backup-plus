@@ -1,6 +1,7 @@
 ## SMS Backup+
 
 [![][Icon]][MarketLink]
+[![Build Status](https://secure.travis-ci.org/jberkel/sms-backup-plus.png?branch=master)](http://travis-ci.org/jberkel/sms-backup-plus)
 
 This is a fork of the Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms), where development has
