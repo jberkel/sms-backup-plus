@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Random;
@@ -161,7 +162,7 @@ public class CursorToMessage {
             if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
         }
 
-        Log.d(TAG, String.format("using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
+        Log.d(TAG, String.format(Locale.ENGLISH, "using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
 
     public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries,
@@ -252,7 +253,7 @@ public class CursorToMessage {
            return MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
         } else {
            try {
-              return DataType.valueOf(dataTypeHeader.toUpperCase());
+              return DataType.valueOf(dataTypeHeader.toUpperCase(Locale.ENGLISH));
             } catch (IllegalArgumentException e) {
               return DataType.SMS; // whateva
             }
@@ -260,7 +261,7 @@ public class CursorToMessage {
     }
 
     public static String formattedDuration(int duration) {
-        return String.format("%02d:%02d:%02d",
+        return String.format(Locale.ENGLISH, "%02d:%02d:%02d",
               duration / 3600,
               duration % 3600 / 60,
               duration % 3600 % 60);
@@ -429,7 +430,7 @@ public class CursorToMessage {
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
         msg.setHeader("References",
-                      String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
+                      String.format(Locale.ENGLISH, REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
         msg.setHeader(Headers.ID, msgMap.get(CallLog.Calls._ID));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
         msg.setHeader(Headers.DATATYPE, DataType.CALLLOG.toString());
@@ -456,15 +457,15 @@ public class CursorToMessage {
        switch (type) {
           case SMS:
             return mPrefix ?
-              String.format("[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
+              String.format(Locale.ENGLISH, "[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
               mContext.getString(R.string.sms_with_field, record.getName());
           case MMS:
             return mPrefix ?
-              String.format("[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
+              String.format(Locale.ENGLISH, "[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
               mContext.getString(R.string.mms_with_field, record.getName());
           case CALLLOG:
             return mPrefix ?
-              String.format("[%s] %s", PrefStore.getCallLogFolder(mContext), record.getName()) :
+              String.format(Locale.ENGLISH, "[%s] %s", PrefStore.getCallLogFolder(mContext), record.getName()) :
               mContext.getString(R.string.call_with_field, record.getName());
           default: throw new RuntimeException("unknown type:" + type);
        }
@@ -535,7 +536,7 @@ public class CursorToMessage {
         }
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
-        msg.setHeader("References", String.format(REFERENCE_UID_TEMPLATE, mReferenceValue,
+        msg.setHeader("References", String.format(Locale.ENGLISH, REFERENCE_UID_TEMPLATE, mReferenceValue,
                                                   sanitize(records[0].getId())));
         msg.setHeader(Headers.ID, msgMap.get(MmsConsts.ID));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
@@ -568,7 +569,7 @@ public class CursorToMessage {
           final String fileName = curPart.getString(curPart.getColumnIndex("cl"));
           final String text = curPart.getString(curPart.getColumnIndex("text"));
 
-          if (LOCAL_LOGV) Log.v(TAG, String.format("processing part %s, name=%s (%s)", id,
+          if (LOCAL_LOGV) Log.v(TAG, String.format(Locale.ENGLISH, "processing part %s, name=%s (%s)", id,
                                                    fileName, contentType));
 
           if (contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
@@ -581,7 +582,7 @@ public class CursorToMessage {
             final Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
             BodyPart part = new MimeBodyPart(new MmsAttachmentBody(partUri, mContext), contentType);
             part.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
-                  String.format("%s;\n name=\"%s\"", contentType, fileName != null ? fileName : "attachment"));
+                  String.format(Locale.ENGLISH, "%s;\n name=\"%s\"", contentType, fileName != null ? fileName : "attachment"));
             part.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
             part.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,       "attachment");
 
@@ -611,9 +612,9 @@ public class CursorToMessage {
 
         final StringBuilder sb = new StringBuilder();
         for (byte b : digest.digest()) {
-          sb.append(String.format("%02x", b));
+          sb.append(String.format(Locale.ENGLISH, "%02x", b));
         }
-        return String.format(MSG_ID_TEMPLATE, sb.toString());
+        return String.format(Locale.ENGLISH, MSG_ID_TEMPLATE, sb.toString());
       } catch (java.io.UnsupportedEncodingException e) {
         throw new RuntimeException(e);
       } catch (java.security.NoSuchAlgorithmException e) {
@@ -690,8 +691,8 @@ public class CursorToMessage {
     // Returns whether the given e-mail address is a Gmail address or not.
     private static boolean isGmailAddress(String email) {
         return email != null &&
-                (email.toLowerCase().endsWith("gmail.com") ||
-                 email.toLowerCase().endsWith("googlemail.com"));
+                (email.toLowerCase(Locale.ENGLISH).endsWith("gmail.com") ||
+                 email.toLowerCase(Locale.ENGLISH).endsWith("googlemail.com"));
     }
 
     private static String generateReferenceValue() {
@@ -727,7 +728,7 @@ public class CursorToMessage {
               case NAME_AND_NUMBER:
                   mAddress = new Address(email,
                                          name == null ? getNumber() :
-                                         String.format("%s (%s)", getName(), getNumber()));
+                                         String.format(Locale.ENGLISH, "%s (%s)", getName(), getNumber()));
                   break;
               case NAME:
                   mAddress = new Address(email, getName());
@@ -752,7 +753,7 @@ public class CursorToMessage {
         }
 
         public String toString() {
-          return String.format("[name=%s email=%s id=%d]", getName(), email, _id);
+          return String.format(Locale.ENGLISH, "[name=%s email=%s id=%d]", getName(), email, _id);
         }
     }
 

@@ -18,6 +18,7 @@ package com.zegoggles.smssync;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Locale;
 
 import android.os.Build;
 import android.text.TextUtils;
@@ -345,7 +346,7 @@ public class PrefStore {
                                                 T defaultType) {
         try {
           final String s = getPrefs(ctx).getString(pref, null);
-          return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase());
+          return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase(Locale.ENGLISH));
         } catch (IllegalArgumentException e) {
           Log.e(TAG, "getDefaultType("+pref+")", e);
           return defaultType;

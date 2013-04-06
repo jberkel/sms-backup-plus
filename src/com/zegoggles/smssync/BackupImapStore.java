@@ -32,6 +32,7 @@ import java.util.Arrays;
 import com.fsck.k9.mail.store.ImapStore;
 import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
 import java.io.IOException;
+import java.util.Locale;
 
 import static com.zegoggles.smssync.App.*;
 import static com.zegoggles.smssync.CursorToMessage.Headers;
@@ -96,7 +97,7 @@ public class BackupImapStore extends ImapStore {
 
         public List<Message> getMessages(final int max, final boolean flagged, final Date since)
           throws MessagingException {
-            if (LOCAL_LOGV) Log.v(TAG, String.format("getMessages(%d, %b, %s)", max, flagged, since));
+            if (LOCAL_LOGV) Log.v(TAG, String.format(Locale.ENGLISH, "getMessages(%d, %b, %s)", max, flagged, since));
 
             final List<Message> messages;
             final ImapSearcher searcher = new ImapSearcher() {
@@ -145,19 +146,19 @@ public class BackupImapStore extends ImapStore {
             /* MMS/SMS are special cases since we need to support legacy backup headers */
             case SMS:
               return
-              String.format("(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
-                            Headers.DATATYPE.toUpperCase(), type,
-                            Headers.DATATYPE.toUpperCase(),
-                            Headers.TYPE.toUpperCase(), SmsConsts.MESSAGE_TYPE_INBOX,
-                            Headers.TYPE.toUpperCase(), SmsConsts.MESSAGE_TYPE_SENT);
+              String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
+                            Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
+                            Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
+                            Headers.TYPE.toUpperCase(Locale.ENGLISH), SmsConsts.MESSAGE_TYPE_INBOX,
+                            Headers.TYPE.toUpperCase(Locale.ENGLISH), SmsConsts.MESSAGE_TYPE_SENT);
             case MMS:
               return
-              String.format("(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",
-                            Headers.DATATYPE.toUpperCase(), type,
-                            Headers.DATATYPE.toUpperCase(),
-                            Headers.TYPE.toUpperCase(), MmsConsts.LEGACY_HEADER);
+              String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",
+                            Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
+                            Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
+                            Headers.TYPE.toUpperCase(Locale.ENGLISH), MmsConsts.LEGACY_HEADER);
 
-            default: return String.format("(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(), type);
+            default: return String.format(Locale.ENGLISH, "(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type);
            }
         }
 

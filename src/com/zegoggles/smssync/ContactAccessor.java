@@ -16,6 +16,8 @@
 package com.zegoggles.smssync;
 
 import android.content.Context;
+
+import java.util.Locale;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
@@ -42,7 +44,7 @@ public interface ContactAccessor {
     public Group(int id, String title, int count) {
       this._id = id; this.title = title; this.count = count;
     }
-    public String toString() { return count > 0 ? String.format("%s (%d)", title, count) : title; }
+    public String toString() { return count > 0 ? String.format(Locale.ENGLISH, "%s (%d)", title, count) : title; }
   }
 
   static class GroupContactIds {

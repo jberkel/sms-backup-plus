@@ -63,6 +63,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -1052,7 +1053,7 @@ public class SmsSync extends PreferenceActivity {
                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 final boolean plain = (PrefStore.AuthMode.PLAIN) ==
-                  PrefStore.AuthMode.valueOf(newValue.toString().toUpperCase());
+                  PrefStore.AuthMode.valueOf(newValue.toString().toUpperCase(Locale.ENGLISH));
 
                updateConnected().setEnabled(!plain);
                updateImapSettings(plain);

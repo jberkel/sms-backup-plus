@@ -41,6 +41,7 @@ import android.util.Log;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -266,7 +267,7 @@ public class SmsBackupService extends ServiceBase {
 
         private int backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems)
                 throws MessagingException {
-            Log.i(TAG, String.format("Starting backup (%d messages)", sItemsToSync));
+            Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", sItemsToSync));
 
             final CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
 
@@ -298,7 +299,7 @@ public class SmsBackupService extends ServiceBase {
                             dataType);
                     List<Message> messages = result.messageList;
                     if (!messages.isEmpty()) {
-                        if (LOCAL_LOGV) Log.v(TAG, String.format("sending %d %s message(s) to server.",
+                        if (LOCAL_LOGV) Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
                                 messages.size(), dataType));
                         switch (dataType) {
                             case MMS:
@@ -377,7 +378,7 @@ public class SmsBackupService extends ServiceBase {
             if (max > 0) sortOrder += " LIMIT " + max;
 
             return getContentResolver().query(SMS_PROVIDER, null,
-                    String.format("%s > ? AND %s <> ? %s", SmsConsts.DATE, SmsConsts.TYPE,
+                    String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s", SmsConsts.DATE, SmsConsts.TYPE,
                             groupSelection(DataType.SMS, group)),
                     new String[]{String.valueOf(PrefStore.getMaxSyncedDateSms(context)),
                             String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)},
@@ -396,7 +397,7 @@ public class SmsBackupService extends ServiceBase {
             if (max > 0) sortOrder += " LIMIT " + max;
 
             return getContentResolver().query(MMS_PROVIDER, null,
-                    String.format("%s > ? AND %s <> ? %s", SmsConsts.DATE, MmsConsts.TYPE,
+                    String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s", SmsConsts.DATE, MmsConsts.TYPE,
                             groupSelection(DataType.MMS, group)),
                     new String[]{String.valueOf(PrefStore.getMaxSyncedDateMms(context)),
                             MmsConsts.DELIVERY_REPORT},
@@ -415,7 +416,7 @@ public class SmsBackupService extends ServiceBase {
 
             return getContentResolver().query(CALLLOG_PROVIDER,
                     CursorToMessage.CALLLOG_PROJECTION,
-                    String.format("%s > ?", CallLog.Calls.DATE),
+                    String.format(Locale.ENGLISH, "%s > ?", CallLog.Calls.DATE),
                     new String[]{String.valueOf(PrefStore.getMaxSyncedDateCallLog(context))},
                     sortOrder);
         }
@@ -426,7 +427,7 @@ public class SmsBackupService extends ServiceBase {
 
             final Set<Long> ids = App.contactAccessor().getGroupContactIds(context, group).rawIds;
             if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
-            return String.format(" AND (%s = %d OR %s IN (%s))",
+            return String.format(Locale.ENGLISH, " AND (%s = %d OR %s IN (%s))",
                     SmsConsts.TYPE,
                     SmsConsts.MESSAGE_TYPE_SENT,
                     SmsConsts.PERSON,
