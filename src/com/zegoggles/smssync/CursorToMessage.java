@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -84,9 +85,14 @@ public class CursorToMessage {
     private static final boolean NEW_CONTACT_API = Build.VERSION.SDK_INT >=
                                                    Build.VERSION_CODES.ECLAIR;
 
-    private static final String[] PHONE_PROJECTION = NEW_CONTACT_API  ?
-          new String[] { Contacts._ID, Contacts.DISPLAY_NAME } :
-          new String[] { Phones.PERSON_ID, People.NAME, Phones.NUMBER };
+    private static final String[] PHONE_PROJECTION = getPhoneProjection();
+
+    @TargetApi(Build.VERSION_CODES.ECLAIR)
+    private static String[] getPhoneProjection() {
+        return NEW_CONTACT_API  ?
+              new String[] { Contacts._ID, Contacts.DISPLAY_NAME } :
+              new String[] { Phones.PERSON_ID, People.NAME, Phones.NUMBER };
+    }
 
     // only query for needed fields
     // http://stackoverflow.com/questions/12033234/get-calls-provider-internal-structure
@@ -633,6 +639,7 @@ public class CursorToMessage {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.ECLAIR)
     private String getPrimaryEmail(final long personId, final String number) {
         if (personId <= 0) {
           return getUnknownEmail(number);

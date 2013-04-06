@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -603,6 +604,7 @@ public class PrefStore {
       }
     }
 
+    @TargetApi(8)
     static boolean isInstalledOnSDCard(Context context) {
       android.content.pm.PackageInfo pInfo;
       try {

@@ -280,8 +280,6 @@
   <string name="ui_dialog_donate_message">Молимо вас да одредите количину и валуту:</string>
   <string name="ui_donation_success_message">Донација је успешна, хвала вам!</string>
   <string name="ui_donation_failure_message">Донација није успела: %1$s</string>
-  <string name="ui_donation_canceled_message">Донација отказана</string>
-  <string name="ui_donation_oh_noez_no_network">Жао нам је, потребно је да будете повезани са Интернетом како бисте извршили донацију.</string>
 
   <string name="pref_disable_acra">Извештај о грешци</string>
   <string name="pref_acra_enabled">SMS Backup+ ће аутоматски послати извештај о грешци након принудног затварања.</string>

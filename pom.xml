@@ -20,6 +20,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>annotations</artifactId>
+            <version>4.1.1.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>oauth.signpost</groupId>
             <artifactId>signpost-commonshttp4</artifactId>
             <version>1.2.1.2</version>
@@ -68,6 +75,7 @@
                     <skip>false</skip>
                      <failOnError>true</failOnError>
                      <enableHtml>true</enableHtml>
+                     <warningsAsErrors>true</warningsAsErrors>
                   </lint>
                 </configuration>
                 <extensions>true</extensions>

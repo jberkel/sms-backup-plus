@@ -2,6 +2,7 @@ package com.zegoggles.smssync;
 
 import java.io.IOException;
 
+import android.annotation.TargetApi;
 import android.os.ParcelFileDescriptor;
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
@@ -12,6 +13,7 @@ import android.util.Log;
 import static com.zegoggles.smssync.App.*;
 
 /** @noinspection UnusedDeclaration*/
+@TargetApi(8)
 public class PreferenceBackupAgent extends BackupAgentHelper {
     // A key to uniquely identify the set of backup data
     static final String PREFS_BACKUP_KEY = "prefs";

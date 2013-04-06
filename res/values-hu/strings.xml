@@ -325,8 +325,6 @@
   <string name="ui_dialog_donate_message">Adja meg az összeget:</string>
   <string name="ui_donation_success_message">Az adományozás sikeres volt, köszönjük!</string>
   <string name="ui_donation_failure_message">Az adományozás sikertelen: %1$s</string>
-  <string name="ui_donation_canceled_message">Adományozás megszakítva</string>
-  <string name="ui_donation_oh_noez_no_network">Sajnálom, de az adományozáshoz csatlakoznia kell az internethez.</string>
 
   <!-- purchase errors -->
   <string name="donation_error_iab_unavailable">Az alkalmazáson belüli számlázás nem elérhető</string>

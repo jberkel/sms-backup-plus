@@ -7,13 +7,16 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.provider.CalendarContract;
 import android.text.format.Time;
 import android.util.Log;
 
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class CalendarAccessorPost40 implements CalendarAccessor {
 
   @Override

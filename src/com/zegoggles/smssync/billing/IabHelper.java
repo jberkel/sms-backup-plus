@@ -15,6 +15,7 @@
 
 package com.zegoggles.smssync.billing;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -84,6 +85,7 @@ import java.util.List;
  * @author Bruno Oliveira (Google)
  *
  */
+@TargetApi(5)
 public class IabHelper {
     // Is debug logging enabled?
     boolean mDebugLog = false;

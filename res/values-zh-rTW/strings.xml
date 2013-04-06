@@ -330,8 +330,6 @@
   <string name="ui_dialog_donate_message">請指定金額：</string>
   <string name="ui_donation_success_message">捐贈成功，謝謝您！</string>
   <string name="ui_donation_failure_message">捐贈失敗：%1$s</string>
-  <string name="ui_donation_canceled_message">捐贈已取消</string>
-  <string name="ui_donation_oh_noez_no_network">抱歉，您只有在連接到互聯網的情況下才能進行捐贈。</string>
 
   <!-- purchase errors -->
   <string name="donation_error_iab_unavailable">應用內付費功能不可用</string>

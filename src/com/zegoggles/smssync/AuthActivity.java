@@ -1,5 +1,6 @@
 package com.zegoggles.smssync;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -45,12 +46,13 @@ public class AuthActivity extends Activity {
             }
 
             @Override
+            @TargetApi(Build.VERSION_CODES.FROYO)
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 Log.w(App.TAG, "onReceiveSslError(" + error + ")");
                 // pre-froyo devices don't trust the cert used by google
                 // see https://knowledge.verisign.com/support/mpki-for-ssl-support/index?page=content&id=SO17511&actp=AGENT_REFERAL
-                if (error.getPrimaryError() == SslError.SSL_IDMISMATCH
-                        && Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO &&
+                    error.getPrimaryError() == SslError.SSL_IDMISMATCH) {
                     handler.proceed();
                 } else {
                     handler.cancel();

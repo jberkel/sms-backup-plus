@@ -8,6 +8,7 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -20,6 +21,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
+@TargetApi(5)
 public class AccountManagerAuthActivity extends Activity {
     private static final int DIALOG_ACCOUNTS = 0;
     private static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
