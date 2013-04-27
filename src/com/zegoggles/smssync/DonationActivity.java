@@ -2,15 +2,14 @@ package com.zegoggles.smssync;
 
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.DonationActivity.DonationStatusListener.State;
-import static com.zegoggles.smssync.billing.BillingConsts.*;
-import static com.zegoggles.smssync.billing.IabHelper.*;
+import static com.zegoggles.smssync.BillingConsts.*;
+import static com.github.jberkel.payme.IabHelper.*;
 
-import com.zegoggles.smssync.billing.BillingConsts;
-import com.zegoggles.smssync.billing.IabHelper;
-import com.zegoggles.smssync.billing.IabResult;
-import com.zegoggles.smssync.billing.Inventory;
-import com.zegoggles.smssync.billing.Purchase;
-import com.zegoggles.smssync.billing.SkuDetails;
+import com.github.jberkel.payme.IabHelper;
+import com.github.jberkel.payme.IabResult;
+import com.github.jberkel.payme.Inventory;
+import com.github.jberkel.payme.Purchase;
+import com.github.jberkel.payme.SkuDetails;
 
 import android.app.Activity;
 import android.app.AlertDialog;

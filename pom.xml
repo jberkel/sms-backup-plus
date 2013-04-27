@@ -50,6 +50,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.jberkel</groupId>
+            <artifactId>payme</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>apklib</type>
+        </dependency>
+
+        <dependency>
             <groupId>ch.acra</groupId>
             <artifactId>acra</artifactId>
             <version>4.3.0</version>
