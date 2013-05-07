@@ -1,16 +1,5 @@
 package com.zegoggles.smssync;
 
-import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.DonationActivity.DonationStatusListener.State;
-import static com.zegoggles.smssync.BillingConsts.*;
-import static com.github.jberkel.payme.IabHelper.*;
-
-import com.github.jberkel.payme.IabHelper;
-import com.github.jberkel.payme.IabResult;
-import com.github.jberkel.payme.Inventory;
-import com.github.jberkel.payme.Purchase;
-import com.github.jberkel.payme.SkuDetails;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,15 +9,28 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+import com.github.jberkel.payme.IabHelper;
+import com.github.jberkel.payme.IabResult;
+import com.github.jberkel.payme.Inventory;
+import com.github.jberkel.payme.OnIabPurchaseFinishedListener;
+import com.github.jberkel.payme.OnIabSetupFinishedListener;
+import com.github.jberkel.payme.Purchase;
+import com.github.jberkel.payme.QueryInventoryFinishedListener;
+import com.github.jberkel.payme.SkuDetails;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.github.jberkel.payme.IabConsts.*;
+import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.BillingConsts.*;
+import static com.zegoggles.smssync.DonationActivity.DonationStatusListener.State;
+
 public class DonationActivity extends Activity implements
-        IabHelper.QueryInventoryFinishedListener,
-        IabHelper.OnIabPurchaseFinishedListener {
+        QueryInventoryFinishedListener,
+        OnIabPurchaseFinishedListener {
 
     private static boolean DEBUG_IAB = BuildConfig.DEBUG;
     private static final int PURCHASE_REQUEST = 1;
@@ -40,7 +42,7 @@ public class DonationActivity extends Activity implements
         mIabHelper = new IabHelper(this, BillingConsts.PUBLIC_KEY);
         mIabHelper.enableDebugLogging(DEBUG_IAB);
 
-        mIabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+        mIabHelper.startSetup(new OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     String message;
@@ -103,10 +105,10 @@ public class DonationActivity extends Activity implements
         Collections.sort(skus, SkuComparator.INSTANCE);
         //noinspection ConstantConditions
         if (DEBUG_IAB) {
-            skus.add(new SkuDetails(SKU_ANDROID_TEST_PURCHASED, null ,null,   "Test (purchased)", null));
-            skus.add(new SkuDetails(SKU_ANDROID_TEST_CANCELED, null ,null,    "Test (canceled)", null));
-            skus.add(new SkuDetails(SKU_ANDROID_TEST_UNAVAILABLE, null ,null, "Test (unvailable)", null));
-            skus.add(new SkuDetails(SKU_ANDROID_TEST_REFUNDED, null ,null,    "Test (refunded)", null));
+            skus.add(new SkuDetails(ITEM_TYPE_INAPP, BillingConsts.SKU_ANDROID_TEST_PURCHASED, null ,null,   "Test (purchased)", null));
+            skus.add(new SkuDetails(ITEM_TYPE_INAPP, BillingConsts.SKU_ANDROID_TEST_CANCELED, null ,null,    "Test (canceled)", null));
+            skus.add(new SkuDetails(ITEM_TYPE_INAPP, BillingConsts.SKU_ANDROID_TEST_UNAVAILABLE, null ,null, "Test (unvailable)", null));
+            skus.add(new SkuDetails(ITEM_TYPE_INAPP, BillingConsts.SKU_ANDROID_TEST_REFUNDED, null ,null,    "Test (refunded)", null));
         }
         String[] items = new String[skus.size()];
         for (int i = 0; i<skus.size(); i++) {
@@ -213,11 +215,11 @@ public class DonationActivity extends Activity implements
 
     public static void checkUserHasDonated(Context c, final DonationStatusListener l) {
         final IabHelper helper = new IabHelper(c, PUBLIC_KEY);
-        helper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+        helper.startSetup(new OnIabSetupFinishedListener() {
             @Override
             public void onIabSetupFinished(IabResult result) {
                 if (result.isSuccess()) {
-                    helper.queryInventoryAsync(new IabHelper.QueryInventoryFinishedListener() {
+                    helper.queryInventoryAsync(new QueryInventoryFinishedListener() {
                         @Override
                         public void onQueryInventoryFinished(IabResult result, Inventory inv) {
                             try {
