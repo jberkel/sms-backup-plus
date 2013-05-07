@@ -39,7 +39,7 @@ public class DonationActivity extends Activity implements
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mIabHelper = new IabHelper(this, BillingConsts.PUBLIC_KEY);
+        mIabHelper = new IabHelper(this);
         mIabHelper.enableDebugLogging(DEBUG_IAB);
 
         mIabHelper.startSetup(new OnIabSetupFinishedListener() {
@@ -214,7 +214,7 @@ public class DonationActivity extends Activity implements
     }
 
     public static void checkUserHasDonated(Context c, final DonationStatusListener l) {
-        final IabHelper helper = new IabHelper(c, PUBLIC_KEY);
+        final IabHelper helper = new IabHelper(c);
         helper.startSetup(new OnIabSetupFinishedListener() {
             @Override
             public void onIabSetupFinished(IabResult result) {
