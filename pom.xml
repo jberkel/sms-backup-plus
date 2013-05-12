@@ -102,8 +102,13 @@
     <repositories>
         <repository>
             <id>zegoggles-releases</id>
-            <name>zeggogles snapshots</name>
+            <name>zeggogles releases</name>
             <url>http://zegoggl.es:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>zegoggles-releases</id>
+            <name>zeggogles snapshots</name>
+            <url>http://zegoggl.es:8081/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 </project>
