@@ -23,4 +23,10 @@
     <issue id="ExportedReceiver" severity="ignore"/>
     <issue id="SetJavaScriptEnabled" severity="ignore"/>
     <issue id="IconDensities" severity="ignore"/>
+
+    <issue id="NewApi">
+        <ignore path="target/classes/com/github/jberkel/payme/security/DefaultSignatureValidator.class"/>
+        <ignore path="target/classes/com/github/jberkel/payme/IabHelper.class"/>
+    </issue>
+
 </lint>

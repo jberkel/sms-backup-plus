@@ -19,3 +19,4 @@ out
 build.xml
 proguard.cfg
 proguard-project.txt
+gen-external-apklibs/

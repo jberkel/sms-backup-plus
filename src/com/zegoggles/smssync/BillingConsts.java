@@ -1,4 +1,4 @@
-package com.zegoggles.smssync.billing;
+package com.zegoggles.smssync;
 
 public class BillingConsts {
     public static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCNglCUwSijU3RAODpyY" +
