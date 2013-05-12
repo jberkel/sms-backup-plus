@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -217,6 +218,11 @@ public class DonationActivity extends Activity implements
     }
 
     public static void checkUserHasDonated(Context c, final DonationStatusListener l) {
+        if (Build.VERSION.SDK_INT < 8) {
+            l.userDonationState(State.NOT_AVAILABLE);
+            return;
+        }
+
         final IabHelper helper = new IabHelper(c, PUBLIC_KEY);
         helper.startSetup(new OnIabSetupFinishedListener() {
             @Override
