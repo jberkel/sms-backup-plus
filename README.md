@@ -292,9 +292,8 @@ example supports SMS Backup+ since version 1.0.14.
 
     $ git clone git://github.com/jberkel/sms-backup-plus.git
     $ cd sms-backup-plus
-    $ android update project -p . -n sms-backup-plus
-    $ ant debug
-    $ adb install bin/sms-backup-plus-debug.apk
+    $ mvn install
+    $ adb install target/smsbackup-plus-1.x.y-SNAPSHOT.apk
 
 I've imported some relevant issues from the [original issue list][] to [github issues][].
 
