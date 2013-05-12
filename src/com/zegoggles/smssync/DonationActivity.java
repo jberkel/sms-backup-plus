@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 import com.github.jberkel.payme.IabHelper;
 import com.github.jberkel.payme.IabResult;
+import com.github.jberkel.payme.listener.OnConsumeFinishedListener;
 import com.github.jberkel.payme.listener.OnIabPurchaseFinishedListener;
 import com.github.jberkel.payme.listener.OnIabSetupFinishedListener;
 import com.github.jberkel.payme.listener.QueryInventoryFinishedListener;
@@ -79,7 +80,7 @@ public class DonationActivity extends Activity implements
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-        log("onQueryInventoryFinished(" + result + ", " + inventory);
+        log("onQueryInventoryFinished(" + result + ", " + inventory+")");
         if (result.isFailure()) {
             Log.w(TAG, "failed to query inventory: " + result);
             return;
@@ -89,6 +90,17 @@ public class DonationActivity extends Activity implements
         for (SkuDetails d : inventory.getSkuDetails()) {
             if (d.getSku().startsWith(DONATION_PREFIX)) {
                 skuDetailsList.add(d);
+            }
+        }
+        if (DEBUG_IAB) {
+            Purchase testPurchase = inventory.getPurchase(SKU_ANDROID_TEST_PURCHASED);
+            if (testPurchase != null) {
+                mIabHelper.consumeAsync(testPurchase, new OnConsumeFinishedListener() {
+                    @Override
+                    public void onConsumeFinished(Purchase purchase, IabResult result) {
+                        Log.d(TAG, "onConsumeFinished:"+purchase +", "+ result);
+                    }
+                });
             }
         }
 
