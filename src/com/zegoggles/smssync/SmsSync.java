@@ -16,14 +16,6 @@
 
 package com.zegoggles.smssync;
 
-import static com.zegoggles.smssync.App.LOCAL_LOGV;
-import static com.zegoggles.smssync.App.TAG;
-
-import com.zegoggles.smssync.ServiceBase.SmsSyncState;
-import oauth.signpost.OAuth;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-import org.acra.ACRA;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -59,11 +51,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.zegoggles.smssync.ServiceBase.SmsSyncState;
+import oauth.signpost.OAuth;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import org.acra.ACRA;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -1153,11 +1152,13 @@ public class SmsSync extends PreferenceActivity {
             DonationActivity.checkUserHasDonated(this, new DonationActivity.DonationStatusListener() {
                 @Override
                 public void userDonationState(State s) {
-                    if (s == State.DONATED) {
-                        Preference donate = getPreferenceScreen().findPreference("donate");
-                        if (donate != null) {
-                            getPreferenceScreen().removePreference(donate);
-                        }
+                    switch (s) {
+                        case NOT_AVAILABLE:
+                        case DONATED:
+                            Preference donate = getPreferenceScreen().findPreference("donate");
+                            if (donate != null) {
+                                getPreferenceScreen().removePreference(donate);
+                            }
                     }
                 }
             });

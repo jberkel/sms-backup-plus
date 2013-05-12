@@ -50,6 +50,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.jberkel.payme</groupId>
+            <artifactId>library</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>apklib</type>
+        </dependency>
+
+        <dependency>
             <groupId>ch.acra</groupId>
             <artifactId>acra</artifactId>
             <version>4.3.0</version>
@@ -62,7 +69,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.5.2</version>
+                <version>3.5.3</version>
                 <configuration>
                   <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
                   <assetsDirectory>${project.basedir}/assets</assetsDirectory>
@@ -92,11 +99,89 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <properties>
+                <keystore.alias>jberkel</keystore.alias>
+                <release.type>market</release.type>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>signing</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <inherited>true</inherited>
+                                <configuration>
+                                    <archiveDirectory />
+                                    <includes>
+                                        <include>target/*.apk</include>
+                                    </includes>
+                                    <keystore>${keystore.location}</keystore>
+                                    <storepass>${keystore.password}</storepass>
+                                    <keypass>${keystore.keypass}</keypass>
+                                    <alias>${keystore.alias}</alias>
+                                    <arguments>
+                                        <argument>-sigalg</argument>
+                                        <argument>MD5withRSA</argument>
+                                        <argument>-digestalg</argument>
+                                        <argument>SHA1</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <sign>
+                                <debug>false</debug>
+                            </sign>
+
+                            <zipalign>
+                                <skip>false</skip>
+                                <outputApk>${project.build.directory}/${project.artifactId}-${project.version}-${release.type}.apk</outputApk>
+                            </zipalign>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>alignApk</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>zipalign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>zegoggles-releases</id>
-            <name>zeggogles snapshots</name>
+            <name>zeggogles releases</name>
             <url>http://zegoggl.es:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>zegoggles-snapshots</id>
+            <name>zeggogles snapshots</name>
+            <url>http://zegoggl.es:8081/nexus/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 </project>
