@@ -25,8 +25,8 @@
     <issue id="IconDensities" severity="ignore"/>
 
     <issue id="NewApi">
-        <ignore path="target/classes/com/github/jberkel/payme/security/DefaultSignatureValidator.class"/>
-        <ignore path="target/classes/com/github/jberkel/payme/IabHelper.class"/>
+        <ignore path="target/classes/com/github/jberkel/pay/me/security/DefaultSignatureValidator.class"/>
+        <ignore path="target/classes/com/github/jberkel/pay/me/IabHelper.class"/>
     </issue>
 
 </lint>
