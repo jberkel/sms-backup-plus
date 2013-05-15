@@ -10,23 +10,24 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-import com.github.jberkel.payme.IabHelper;
-import com.github.jberkel.payme.IabResult;
-import com.github.jberkel.payme.listener.OnConsumeFinishedListener;
-import com.github.jberkel.payme.listener.OnIabPurchaseFinishedListener;
-import com.github.jberkel.payme.listener.OnIabSetupFinishedListener;
-import com.github.jberkel.payme.listener.QueryInventoryFinishedListener;
-import com.github.jberkel.payme.model.Inventory;
-import com.github.jberkel.payme.model.ItemType;
-import com.github.jberkel.payme.model.Purchase;
-import com.github.jberkel.payme.model.SkuDetails;
+import com.github.jberkel.pay.me.model.Purchase;
+import com.github.jberkel.pay.me.model.SkuDetails;
+import com.github.jberkel.pay.me.model.TestSkus;
+import com.github.jberkel.pay.me.IabHelper;
+import com.github.jberkel.pay.me.IabResult;
+import com.github.jberkel.pay.me.listener.OnConsumeFinishedListener;
+import com.github.jberkel.pay.me.listener.OnIabPurchaseFinishedListener;
+import com.github.jberkel.pay.me.listener.OnIabSetupFinishedListener;
+import com.github.jberkel.pay.me.listener.QueryInventoryFinishedListener;
+import com.github.jberkel.pay.me.model.Inventory;
+import com.github.jberkel.pay.me.model.ItemType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.github.jberkel.payme.Response.BILLING_UNAVAILABLE;
+import static com.github.jberkel.pay.me.Response.BILLING_UNAVAILABLE;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.BillingConsts.*;
 import static com.zegoggles.smssync.DonationActivity.DonationStatusListener.State;
@@ -93,7 +94,7 @@ public class DonationActivity extends Activity implements
             }
         }
         if (DEBUG_IAB) {
-            Purchase testPurchase = inventory.getPurchase(SKU_ANDROID_TEST_PURCHASED);
+            Purchase testPurchase = inventory.getPurchase(TestSkus.PURCHASED.getSku());
             if (testPurchase != null) {
                 mIabHelper.consumeAsync(testPurchase, new OnConsumeFinishedListener() {
                     @Override
@@ -119,10 +120,10 @@ public class DonationActivity extends Activity implements
         Collections.sort(skus, SkuComparator.INSTANCE);
         //noinspection ConstantConditions
         if (DEBUG_IAB) {
-            skus.add(new SkuDetails(ItemType.INAPP, BillingConsts.SKU_ANDROID_TEST_PURCHASED, null ,null,   "Test (purchased)", null));
-            skus.add(new SkuDetails(ItemType.INAPP, BillingConsts.SKU_ANDROID_TEST_CANCELED, null ,null,    "Test (canceled)", null));
-            skus.add(new SkuDetails(ItemType.INAPP, BillingConsts.SKU_ANDROID_TEST_UNAVAILABLE, null ,null, "Test (unvailable)", null));
-            skus.add(new SkuDetails(ItemType.INAPP, BillingConsts.SKU_ANDROID_TEST_REFUNDED, null ,null,    "Test (refunded)", null));
+            skus.add(TestSkus.PURCHASED);
+            skus.add(TestSkus.CANCELED);
+            skus.add(TestSkus.UNAVAILABLE);
+            skus.add(TestSkus.REFUNDED);
         }
         String[] items = new String[skus.size()];
         for (int i = 0; i<skus.size(); i++) {
