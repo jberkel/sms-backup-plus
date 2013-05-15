@@ -50,7 +50,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.jberkel.payme</groupId>
+            <groupId>com.github.jberkel.pay.me</groupId>
             <artifactId>library</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <type>apklib</type>
