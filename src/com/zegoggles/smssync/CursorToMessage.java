@@ -16,56 +16,55 @@
  */
 package com.zegoggles.smssync;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.Random;
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.MessageDigest;
-
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
-import android.provider.ContactsContract;
 import android.provider.Contacts.ContactMethods;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
+import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
-import android.util.Log;
 import android.text.TextUtils;
-
+import android.util.Log;
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.BodyPart;
 import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.Message;
-import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.Message.RecipientType;
+import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.filter.Base64OutputStream;
 import com.fsck.k9.mail.internet.MimeBodyPart;
 import com.fsck.k9.mail.internet.MimeHeader;
 import com.fsck.k9.mail.internet.MimeMessage;
 import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.TextBody;
-
+import com.github.jberkel.whassup.model.WhatsAppMessage;
+import com.zegoggles.smssync.PrefStore.AddressStyle;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
 
-import com.zegoggles.smssync.PrefStore.AddressStyle;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
-import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 
 public class CursorToMessage {
 
@@ -77,7 +76,7 @@ public class CursorToMessage {
     public static final Uri ECLAIR_CONTENT_FILTER_URI =
       Uri.parse("content://com.android.contacts/phone_lookup");
 
-    public enum DataType { MMS, SMS, CALLLOG }
+    public enum DataType { MMS, SMS, CALLLOG, WHATSAPP }
 
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
@@ -176,10 +175,6 @@ public class CursorToMessage {
         final String[] columns = cursor.getColumnNames();
         final ConversionResult result = new ConversionResult(dataType);
         do {
-            final long date = cursor.getLong(cursor.getColumnIndex(SmsConsts.DATE));
-            if (date > result.maxDate) {
-              result.maxDate = date;
-            }
             final Map<String, String> msgMap = new HashMap<String, String>(columns.length);
             for (int i = 0; i < columns.length; i++) {
                 msgMap.put(columns[i], cursor.getString(i));
@@ -190,10 +185,19 @@ public class CursorToMessage {
               case SMS: m = messageFromMapSms(msgMap); break;
               case MMS: m = messageFromMapMms(msgMap); break;
               case CALLLOG: m = messageFromMapCallLog(msgMap); break;
+              case WHATSAPP: m = messageFromMapWhatsApp(cursor); break;
             }
             if (m != null) {
               result.messageList.add(m);
               result.mapList.add(msgMap);
+
+                String dateHeader = getHeader(m, Headers.DATE);
+                if (dateHeader != null) {
+                    final long date = Long.parseLong(dateHeader);
+                    if (date > result.maxDate) {
+                        result.maxDate = date;
+                    }
+                }
             }
         } while (result.messageList.size() < maxEntries && cursor.moveToNext());
 
@@ -375,6 +379,51 @@ public class CursorToMessage {
         return msg;
     }
 
+
+    private Message messageFromMapWhatsApp(Cursor cursor) throws MessagingException {
+        WhatsAppMessage message = new WhatsAppMessage(cursor);
+        final String address = message.getNumber();
+
+        if (address == null || address.trim().length() == 0) {
+            return null;
+        }
+        PersonRecord record = lookupPerson(address);
+        if (!backupPerson(record, DataType.WHATSAPP)) return null;
+
+        final Message msg = new MimeMessage();
+        msg.setSubject(getSubject(DataType.WHATSAPP, record));
+        msg.setBody(new TextBody(message.getText()));
+
+        if (message.isReceived()) {
+            // Received message
+            msg.setFrom(record.getAddress());
+            msg.setRecipient(RecipientType.TO, mUserAddress);
+        } else {
+            // Sent message
+            msg.setRecipient(RecipientType.TO, record.getAddress());
+            msg.setFrom(mUserAddress);
+        }
+
+        final Date then = message.getTimestamp();
+        msg.setSentDate(then);
+        msg.setInternalDate(then);
+        msg.setHeader("Message-ID", createMessageId(then, address, message.getStatus()));
+
+        // Threading by person ID, not by thread ID. I think this value is more stable.
+        msg.setHeader("References",
+                String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
+        msg.setHeader(Headers.ID, String.valueOf(message.getId()));
+        msg.setHeader(Headers.ADDRESS, sanitize(address));
+        msg.setHeader(Headers.DATATYPE, DataType.WHATSAPP.toString());
+        msg.setHeader(Headers.DATE, String.valueOf(then.getTime()));
+        msg.setHeader(Headers.TYPE, String.valueOf(message.getStatus()));
+        msg.setHeader(Headers.STATUS, String.valueOf(message.getStatus()));
+        msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
+        msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
+        msg.setFlag(Flag.SEEN, mMarkAsRead);
+        return msg;
+    }
+
     private Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
@@ -473,7 +522,13 @@ public class CursorToMessage {
             return mPrefix ?
               String.format(Locale.ENGLISH, "[%s] %s", PrefStore.getCallLogFolder(mContext), record.getName()) :
               mContext.getString(R.string.call_with_field, record.getName());
-          default: throw new RuntimeException("unknown type:" + type);
+          case WHATSAPP:
+            return mPrefix ?
+                    String.format(Locale.ENGLISH, "[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
+                    mContext.getString(R.string.whatsapp_with_field, record.getName());
+
+
+           default: throw new RuntimeException("unknown type:" + type);
        }
     }
 
@@ -627,6 +682,8 @@ public class CursorToMessage {
         throw new RuntimeException(e);
       }
     }
+
+
     private static String getHeader(Message msg, String header) {
         try {
             String[] hdrs = msg.getHeader(header);

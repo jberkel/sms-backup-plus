@@ -24,6 +24,8 @@
     <issue id="SetJavaScriptEnabled" severity="ignore"/>
     <issue id="IconDensities" severity="ignore"/>
 
+    <issue id="MissingQuantity" severity="ignore"/>
+
     <issue id="NewApi">
         <ignore path="target/classes/com/github/jberkel/pay/me/validator/DefaultSignatureValidator.class"/>
         <ignore path="target/classes/com/github/jberkel/pay/me/IabHelper.class"/>

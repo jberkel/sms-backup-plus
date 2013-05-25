@@ -16,19 +16,6 @@
 
 package com.zegoggles.smssync;
 
-import static com.zegoggles.smssync.App.LOCAL_LOGV;
-import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
-import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
-
-import com.fsck.k9.mail.AuthenticationFailedException;
-import com.fsck.k9.mail.Folder;
-import com.fsck.k9.mail.Message;
-import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
-import com.zegoggles.smssync.CursorToMessage.ConversionResult;
-import com.zegoggles.smssync.CursorToMessage.DataType;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,12 +25,25 @@ import android.provider.CallLog;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import com.fsck.k9.mail.AuthenticationFailedException;
+import com.fsck.k9.mail.Folder;
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
+import com.github.jberkel.whassup.Whassup;
+import com.zegoggles.smssync.CursorToMessage.ConversionResult;
+import com.zegoggles.smssync.CursorToMessage.DataType;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
+import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
 
 public class SmsBackupService extends ServiceBase {
     /** Number of messages sent per sync request. */
@@ -146,7 +146,8 @@ public class SmsBackupService extends ServiceBase {
             Cursor smsItems = null;
             Cursor mmsItems = null;
             Cursor callLogItems = null;
-            final int smsCount, mmsCount, callLogCount;
+            Cursor whatsAppItems = null;
+            final int smsCount, mmsCount, callLogCount, whatsAppItemsCount;
             try {
                 acquireLocks(background);
                 smsItems = getSmsItemsToSync(maxItemsPerSync, groupToBackup);
@@ -158,8 +159,11 @@ public class SmsBackupService extends ServiceBase {
                 callLogItems = getCallLogItemsToSync(maxItemsPerSync - smsCount - mmsCount);
                 callLogCount = callLogItems != null ? callLogItems.getCount() : 0;
 
+                whatsAppItems = getWhatsAppItemsToSync(maxItemsPerSync - smsCount - mmsCount - callLogCount);
+                whatsAppItemsCount = whatsAppItems != null ? whatsAppItems.getCount() : 0;
+
                 sCurrentSyncedItems = 0;
-                sItemsToSync = smsCount + mmsCount + callLogCount;
+                sItemsToSync = smsCount + mmsCount + callLogCount + whatsAppItemsCount;
 
                 if (sItemsToSync > 0) {
                     if (!PrefStore.isLoginInformationSet(context)) {
@@ -171,7 +175,7 @@ public class SmsBackupService extends ServiceBase {
                     }
 
                     appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
-                    return backup(smsItems, mmsItems, callLogItems);
+                    return backup(smsItems, mmsItems, callLogItems, whatsAppItems);
                 } else {
                     appLog(R.string.app_log_skip_backup_no_items);
 
@@ -226,6 +230,7 @@ public class SmsBackupService extends ServiceBase {
                     if (smsItems != null) smsItems.close();
                     if (mmsItems != null) mmsItems.close();
                     if (callLogItems != null) callLogItems.close();
+                    if (whatsAppItems != null) whatsAppItems.close();
                 } catch (Exception e) {
                     Log.e(TAG, "error", e);
                 /* ignore */
@@ -265,7 +270,7 @@ public class SmsBackupService extends ServiceBase {
             sCanceled = false;
         }
 
-        private int backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems)
+        private int backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems, Cursor whatsAppItems)
                 throws MessagingException {
             Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", sItemsToSync));
 
@@ -273,9 +278,13 @@ public class SmsBackupService extends ServiceBase {
 
             publish(LOGIN);
             Folder smsmmsfolder = getSMSBackupFolder();
-            Folder callLogfolder = null;
+            Folder callLogfolder  = null;
+            Folder whatsAppFolder = null;
             if (PrefStore.isCallLogBackupEnabled(context)) {
                 callLogfolder = getCallLogBackupFolder();
+            }
+            if (PrefStore.isWhatsAppBackupEnabled(context)) {
+                whatsAppFolder = getWhatsAppBackupFolder();
             }
 
             try {
@@ -292,11 +301,13 @@ public class SmsBackupService extends ServiceBase {
                     } else if (callLogItems != null && callLogItems.moveToNext()) {
                         dataType = DataType.CALLLOG;
                         curCursor = callLogItems;
+                    } else if (whatsAppItems != null && whatsAppItems.moveToNext()) {
+                        dataType = DataType.WHATSAPP;
+                        curCursor = whatsAppItems;
                     } else break;
 
                     if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
-                    ConversionResult result = converter.cursorToMessages(curCursor, MAX_MSG_PER_REQUEST,
-                            dataType);
+                    ConversionResult result = converter.cursorToMessages(curCursor, MAX_MSG_PER_REQUEST, dataType);
                     List<Message> messages = result.messageList;
                     if (!messages.isEmpty()) {
                         if (LOCAL_LOGV) Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
@@ -317,6 +328,12 @@ public class SmsBackupService extends ServiceBase {
                                 }
                                 if (PrefStore.isCallLogCalendarSyncEnabled(context)) {
                                     syncCalendar(converter, result);
+                                }
+                                break;
+                            case WHATSAPP:
+                                updateMaxSyncedDateWhatsApp(result.maxDate);
+                                if (whatsAppFolder != null) {
+                                    whatsAppFolder.appendMessages(messages.toArray(new Message[messages.size()]));
                                 }
                                 break;
                         }
@@ -374,6 +391,12 @@ public class SmsBackupService extends ServiceBase {
                 Log.v(TAG, String.format("getSmsItemToSync(max=%d),  maxSyncedDate=%d", max,
                         PrefStore.getMaxSyncedDateSms(context)));
             }
+
+            if (!PrefStore.isSmsBackupEnabled(context)) {
+                if (LOCAL_LOGV) Log.v(TAG, "SMS backup disabled, returning empty cursor");
+                return new MatrixCursor(new String[0], 0);
+            }
+
             String sortOrder = SmsConsts.DATE;
             if (max > 0) sortOrder += " LIMIT " + max;
 
@@ -419,6 +442,28 @@ public class SmsBackupService extends ServiceBase {
                     String.format(Locale.ENGLISH, "%s > ?", CallLog.Calls.DATE),
                     new String[]{String.valueOf(PrefStore.getMaxSyncedDateCallLog(context))},
                     sortOrder);
+        }
+
+        private Cursor getWhatsAppItemsToSync(int max) {
+            if (LOCAL_LOGV) Log.v(TAG, "getWhatsAppItemsToSync(max=" + max + ")");
+
+            if (!PrefStore.isWhatsAppBackupEnabled(context)) {
+                if (LOCAL_LOGV) Log.v(TAG, "WhatsApp backup disabled, returning empty");
+                return null;
+            }
+
+            Whassup whassup = new Whassup();
+            if (!whassup.hasBackupDB()) {
+                if (LOCAL_LOGV) Log.v(TAG, "No whatsapp backup DB found, returning empty");
+                return null;
+            }
+
+            try {
+                return whassup.queryMessages(PrefStore.getMaxSyncedDateWhatsApp(context), max);
+            } catch (IOException e) {
+                Log.w(LOG, "error fetching whatsapp messages", e);
+                return null;
+            }
         }
 
         private String groupSelection(DataType type, ContactGroup group) {
