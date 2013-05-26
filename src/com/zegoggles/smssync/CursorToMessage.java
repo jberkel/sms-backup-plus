@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
@@ -177,7 +178,15 @@ public class CursorToMessage {
         do {
             final Map<String, String> msgMap = new HashMap<String, String>(columns.length);
             for (int i = 0; i < columns.length; i++) {
-                msgMap.put(columns[i], cursor.getString(i));
+                String value;
+                try {
+                    value = cursor.getString(i);
+                } catch (SQLiteException ignored) {
+                    // this can happen in case of BLOBS in the DB
+                    // column type checking is API level >= 11
+                    value = "[BLOB]";
+                }
+                msgMap.put(columns[i], value);
             }
 
             Message m = null;
