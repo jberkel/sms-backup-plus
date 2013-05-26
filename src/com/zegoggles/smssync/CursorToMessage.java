@@ -32,15 +32,12 @@ import android.provider.ContactsContract.Contacts;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.Address;
-import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.BodyPart;
 import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.Message.RecipientType;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.filter.Base64OutputStream;
 import com.fsck.k9.mail.internet.MimeBodyPart;
-import com.fsck.k9.mail.internet.MimeHeader;
 import com.fsck.k9.mail.internet.MimeMessage;
 import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.TextBody;
@@ -49,11 +46,8 @@ import com.zegoggles.smssync.PrefStore.AddressStyle;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,6 +60,8 @@ import java.util.Random;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.Attachment.createPartFromUri;
+import static com.zegoggles.smssync.Attachment.createTextPart;
 
 public class CursorToMessage {
 
@@ -390,8 +386,8 @@ public class CursorToMessage {
 
 
     private Message messageFromMapWhatsApp(Cursor cursor) throws MessagingException {
-        WhatsAppMessage message = new WhatsAppMessage(cursor);
-        final String address = message.getNumber();
+        WhatsAppMessage whatsapp = new WhatsAppMessage(cursor);
+        final String address = whatsapp.getNumber();
 
         if (address == null || address.trim().length() == 0) {
             return null;
@@ -400,10 +396,23 @@ public class CursorToMessage {
         if (!backupPerson(record, DataType.WHATSAPP)) return null;
 
         final Message msg = new MimeMessage();
-        msg.setSubject(getSubject(DataType.WHATSAPP, record));
-        msg.setBody(new TextBody(message.getText()));
 
-        if (message.isReceived()) {
+        if (whatsapp.hasMediaAttached()) {
+            MimeMultipart body = new MimeMultipart();
+            if (whatsapp.hasText()) {
+                body.addBodyPart(createTextPart(whatsapp.getText()));
+            }
+            body.addBodyPart(Attachment.createPartFromFile(whatsapp.getMedia().getFile(), whatsapp.getMedia().getMimeType()));
+            msg.setBody(body);
+        } else if (whatsapp.hasText()) {
+            msg.setBody(new TextBody(whatsapp.getText()));
+        } else {
+            // no media / no text, pointless
+            return null;
+        }
+        msg.setSubject(getSubject(DataType.WHATSAPP, record));
+
+        if (whatsapp.isReceived()) {
             // Received message
             msg.setFrom(record.getAddress());
             msg.setRecipient(RecipientType.TO, mUserAddress);
@@ -413,20 +422,20 @@ public class CursorToMessage {
             msg.setFrom(mUserAddress);
         }
 
-        final Date then = message.getTimestamp();
+        final Date then = whatsapp.getTimestamp();
         msg.setSentDate(then);
         msg.setInternalDate(then);
-        msg.setHeader("Message-ID", createMessageId(then, address, message.getStatus()));
+        msg.setHeader("Message-ID", createMessageId(then, address, whatsapp.getStatus()));
 
         // Threading by person ID, not by thread ID. I think this value is more stable.
         msg.setHeader("References",
                 String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
-        msg.setHeader(Headers.ID, String.valueOf(message.getId()));
+        msg.setHeader(Headers.ID, String.valueOf(whatsapp.getId()));
         msg.setHeader(Headers.ADDRESS, sanitize(address));
         msg.setHeader(Headers.DATATYPE, DataType.WHATSAPP.toString());
         msg.setHeader(Headers.DATE, String.valueOf(then.getTime()));
-        msg.setHeader(Headers.TYPE, String.valueOf(message.getStatus()));
-        msg.setHeader(Headers.STATUS, String.valueOf(message.getStatus()));
+        msg.setHeader(Headers.TYPE, String.valueOf(whatsapp.getStatus()));
+        msg.setHeader(Headers.STATUS, String.valueOf(whatsapp.getStatus()));
         msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
         msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
         msg.setFlag(Flag.SEEN, mMarkAsRead);
@@ -650,13 +659,7 @@ public class CursorToMessage {
           } else {
             // attach everything else
             final Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
-            BodyPart part = new MimeBodyPart(new MmsAttachmentBody(partUri, mContext), contentType);
-            part.setHeader(MimeHeader.HEADER_CONTENT_TYPE,
-                  String.format(Locale.ENGLISH, "%s;\n name=\"%s\"", contentType, fileName != null ? fileName : "attachment"));
-            part.setHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING, "base64");
-            part.setHeader(MimeHeader.HEADER_CONTENT_DISPOSITION,       "attachment");
-
-            parts.add(part);
+            parts.add(createPartFromUri(mContext.getContentResolver(), partUri, fileName, contentType));
           }
         }
 
@@ -827,39 +830,6 @@ public class CursorToMessage {
 
         public String toString() {
           return String.format(Locale.ENGLISH, "[name=%s email=%s id=%d]", getName(), email, _id);
-        }
-    }
-
-    public static class MmsAttachmentBody implements Body
-    {
-        private Context mContext;
-        private Uri mUri;
-
-        public MmsAttachmentBody(Uri uri, Context context) {
-            mContext = context;
-            mUri = uri;
-        }
-
-        public InputStream getInputStream() throws MessagingException
-        {
-            try {
-                return mContext.getContentResolver().openInputStream(mUri);
-            }
-            catch (FileNotFoundException fnfe)
-            {
-                /*
-                 * Since it's completely normal for us to try to serve up attachments that
-                 * have been blown away, we just return an empty stream.
-                 */
-                return new ByteArrayInputStream(new byte[0]);
-            }
-        }
-
-        public void writeTo(OutputStream out) throws IOException, MessagingException {
-            InputStream in = getInputStream();
-            Base64OutputStream base64Out = new Base64OutputStream(out);
-            IOUtils.copy(in, base64Out);
-            base64Out.close();
         }
     }
 }
