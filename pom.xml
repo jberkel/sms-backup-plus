@@ -8,6 +8,8 @@
     <packaging>apk</packaging>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <platform.version>4.0.1.2</platform.version>
     </properties>
 
@@ -110,6 +112,7 @@
         <profile>
             <id>release</id>
             <properties>
+                <android.release>true</android.release>
                 <keystore.alias>jberkel</keystore.alias>
                 <release.type>market</release.type>
             </properties>
