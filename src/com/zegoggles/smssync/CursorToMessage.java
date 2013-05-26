@@ -524,8 +524,8 @@ public class CursorToMessage {
               mContext.getString(R.string.call_with_field, record.getName());
           case WHATSAPP:
             return mPrefix ?
-                    String.format(Locale.ENGLISH, "[%s] %s", PrefStore.getImapFolder(mContext), record.getName()) :
-                    mContext.getString(R.string.whatsapp_with_field, record.getName());
+                String.format(Locale.ENGLISH, "[%s] %s", PrefStore.getWhatsAppFolder(mContext), record.getName()) :
+                mContext.getString(R.string.whatsapp_with_field, record.getName());
 
 
            default: throw new RuntimeException("unknown type:" + type);
