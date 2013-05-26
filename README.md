@@ -36,6 +36,8 @@ SMS Backup+ is available for free in the Google Play Store, there will never be 
 But if you find the app useful you can make a donation from within the app itself, using the secure
 Play Store payment mechanism.
 
+To get updates and participate in the beta programme join the [community][] on Google+.
+
 ## <a name="usage">Usage</a>
 
 ### Installation
@@ -380,3 +382,4 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Icon]: https://github.com/downloads/jberkel/sms-backup-plus/smsbackup72.png
 [Getting started with 2-step verification]: http://www.google.com/support/accounts/bin/static.py?page=guide.cs&guide=1056283&topic=1056284
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
+[community]: https://plus.google.com/communities/113290889178902750997
