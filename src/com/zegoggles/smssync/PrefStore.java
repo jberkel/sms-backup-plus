@@ -16,26 +16,25 @@
 
 package com.zegoggles.smssync;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.preference.PreferenceManager;
+import android.provider.CallLog;
+import android.text.TextUtils;
+import android.util.Log;
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
 
-import android.annotation.TargetApi;
-import android.os.Build;
-import android.text.TextUtils;
-import android.util.Log;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.provider.CallLog;
-
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.ContactAccessor.ContactGroup;
-import static com.zegoggles.smssync.App.*;
-
-import org.apache.commons.codec.binary.Base64;
 
 public class PrefStore {
 
@@ -46,6 +45,7 @@ public class PrefStore {
     static final String PREF_MAX_SYNCED_DATE_SMS = "max_synced_date";
     static final String PREF_MAX_SYNCED_DATE_MMS = "max_synced_date_mms";
     static final String PREF_MAX_SYNCED_DATE_CALLLOG = "max_synced_date_calllog";
+    static final String PREF_MAX_SYNCED_DATE_WHATSAPP = "max_synced_date_whatsapp";
 
     /** Preference key containing the Google account username. */
     static final String PREF_LOGIN_USER = "login_user";
@@ -73,8 +73,11 @@ public class PrefStore {
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_IMAP_FOLDER = "imap_folder";
 
-    /** Preference key containing the IMAP folder name where SMS should be backed up to. */
+    /** Preference key containing the IMAP folder name where call logs should be backed up to. */
     static final String PREF_IMAP_FOLDER_CALLLOG = "imap_folder_calllog";
+
+    /** Preference key containing the IMAP folder name where WhatsApp messages should be backed up to. */
+    static final String PREF_IMAP_FOLDER_WHATSAPP = "imap_folder_whatsapp";
 
     /** Preference key containing the IMAP folder name where SMS should be backed up to. */
     static final String PREF_MAIL_SUBJECT_PREFIX = "mail_subject_prefix";
@@ -109,6 +112,7 @@ public class PrefStore {
     static final String PREF_RESTORE_SMS  = "restore_sms";
 
     static final String PREF_BACKUP_MMS  = "backup_mms";
+    static final String PREF_BACKUP_WHATSAPP  = "backup_whatsapp";
 
     static final String PREF_BACKUP_CALLLOG  = "backup_calllog";
     static final String PREF_RESTORE_CALLLOG  = "restore_calllog";
@@ -134,6 +138,9 @@ public class PrefStore {
 
     /** Default value for {@link PrefStore#PREF_IMAP_FOLDER_CALLLOG}. */
     static final String DEFAULT_IMAP_FOLDER_CALLLOG = "Call log";
+
+    /** Default value for {@link PrefStore#PREF_IMAP_FOLDER_WHATSAPP}. */
+    static final String DEFAULT_IMAP_FOLDER_WHATSAPP = "WhatsApp";
 
     /** Default value for {@link PrefStore#PREF_MAIL_SUBJECT_PREFIX}. */
     static final boolean DEFAULT_MAIL_SUBJECT_PREFIX = false;
@@ -203,6 +210,11 @@ public class PrefStore {
         return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_CALLLOG, DEFAULT_MAX_SYNCED_DATE);
     }
 
+    static long getMaxSyncedDateWhatsApp(Context ctx) {
+        return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_WHATSAPP, DEFAULT_MAX_SYNCED_DATE);
+    }
+
+
     static void setMaxSyncedDateSms(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
           .putLong(PREF_MAX_SYNCED_DATE_SMS, maxSyncedDate)
@@ -220,6 +232,13 @@ public class PrefStore {
           .putLong(PREF_MAX_SYNCED_DATE_CALLLOG, maxSyncedDate)
           .commit();
     }
+
+    static void setMaxSyncedDateWhatsApp(Context ctx, long maxSyncedDate) {
+        getPrefs(ctx).edit()
+                .putLong(PREF_MAX_SYNCED_DATE_WHATSAPP, maxSyncedDate)
+                .commit();
+    }
+
     static String getImapUsername(Context ctx) {
         return getPrefs(ctx).getString(PREF_LOGIN_USER, null);
     }
@@ -333,6 +352,10 @@ public class PrefStore {
        return version >= SmsSync.MIN_VERSION_MMS && getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
+    static boolean isWhatsAppBackupEnabled(Context ctx) {
+        return getPrefs(ctx).getBoolean(PREF_BACKUP_WHATSAPP, true);
+    }
+
     static boolean isCallLogBackupEnabled(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_BACKUP_CALLLOG, false);
     }
@@ -401,6 +424,10 @@ public class PrefStore {
 
     static String getCallLogFolder(Context ctx) {
         return getPrefs(ctx).getString(PREF_IMAP_FOLDER_CALLLOG, DEFAULT_IMAP_FOLDER_CALLLOG);
+    }
+
+    static String getWhatsAppFolder(Context ctx) {
+        return getPrefs(ctx).getString(PREF_IMAP_FOLDER_WHATSAPP, DEFAULT_IMAP_FOLDER_WHATSAPP);
     }
 
     static boolean getMailSubjectPrefix(Context ctx) {
@@ -509,6 +536,7 @@ public class PrefStore {
           .remove(PREF_MAX_SYNCED_DATE_SMS)
           .remove(PREF_MAX_SYNCED_DATE_MMS)
           .remove(PREF_MAX_SYNCED_DATE_CALLLOG)
+          .remove(PREF_MAX_SYNCED_DATE_WHATSAPP)
           .commit();
     }
 

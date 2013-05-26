@@ -57,6 +57,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.jberkel.whassup</groupId>
+            <artifactId>library</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>apklib</type>
+        </dependency>
+
+        <dependency>
             <groupId>ch.acra</groupId>
             <artifactId>acra</artifactId>
             <version>4.3.0</version>
@@ -69,7 +76,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.6.1-SNAPSHOT</version>
                 <configuration>
                   <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
                   <assetsDirectory>${project.basedir}/assets</assetsDirectory>
@@ -184,4 +191,17 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <!-- remove when 3.6.1 has been released -->
+    <!-- https://github.com/jayway/maven-android-plugin/pull/216 -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>zegoggles-snapshots</id>
+            <name>zeggogles snapshots</name>
+            <url>http://zegoggl.es:8081/nexus/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
