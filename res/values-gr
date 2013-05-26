@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Χρήση του Gmail για αποθήκευση των SMS σας. Αυτή είναι μία βελτιωμένη έκδοση της εφαρμογής "SMS Backup" του
+     Christoph Studer η οποία υποσηρίζει την αποκατάσταση των SMS πίσω στο τηλέφωνό σας. Είναι πλήρως συμβατό με το SMS Backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Αποθήκευση</string>
+  <string name="ui_sync_button_label_canceling">Ακύρωση</string>
+  <string name="ui_sync_button_label_syncing">Παύση</string>
+
+  <string name="ui_restore_button_label_idle">Αποκατάσταση (στο κινητό)</string>
+  <string name="ui_restore_button_label_restoring">Παύση</string>
+
+  <string name="status_idle">Κενό</string>
+  <string name="status_idle_details">Τελευταίο αντικείμενο που αποθηκεύτηκε/τελευταία αποθήκευση: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">ποτέ</string>
+
+  <string name="status_working">Εν ενεργεία</string>
+
+  <string name="status_backup">Αποθηκεύει</string>
+  <string name="status_restore">Αποκαθιστά</string>
+
+  <string name="status_backup_details">Αποθηκεύτηκαν <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_restore_details">Αποκαταστάθηκαν <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_login_details">Συνδέεται σε\u2026</string>
+  <string name="status_updating_threads">Ενημέρωση threads\u2026</string>
+  <string name="status_done">Ολοκληρώθηκε</string>
+  <string name="status_backup_done_details_max_per_sync">Μέγιστο από %1$d αντικείμενα ανα αποθήκευση επιτεύχθηκε. Επανεκκινήστε για να συνεχίσετε.</string>
+  <string name="status_backup_done_details_noitems">Κανένα αντικείμενο προς αποθήκευση</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Επιτυχής αποθήκευση <xliff:g id="total_items">%1$d</xliff:g> αντικειμένου.</item>
+    <item quantity="other"> Επιτυχής αποθήκευση <xliff:g id="total_items">%1$d</xliff:g> αντικειμένου.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Επιτυχής αποκατάσταση <xliff:g id="total_items">%1$d</xliff:g> αντικειμένου (%2$d dups).</item>
+    <item quantity="other"> Επιτυχής αποκατάσταση <xliff:g id="total_items">%1$d</xliff:g> αντικειμένου (%2$d dups).</item>
+  </plurals>
+ 
+  <string name="status_restore_canceled_details">%1$d/%2$d αντικείμενα επαναφέρθηκαν επιτυχώς.</string>
+
+  <string name="status_unknown_error">Error</string>
+  <string name="notification_unknown_error"> σφάλμα SMSBackup+</string>
+
+  <string name="status_unknown_error_details">Σφάλμα κατα την αποθήκευση/αποκατάσταση:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Σφάλμα σύνδεσης</string>
+  <string name="notification_auth_failure">SMSBackup+ Σφάλμα σύνδεσης </string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth σφάλμα πιστοποίησης. Παρακαλώ βεβαιωθείτε οτι ενεργοποιήσατε το IMAP στις ρυθμίσεις του Gmail λογαριασμού σας.</string>
+  <string name="status_auth_failure_details_plain">IMAP σφάλμα πιστοποίησης.
+Βεβαιωθείτε οτι το username και password έχουν εισαχθεί σωστά.</string>
+  <string name="status_calc_details">υπολογισμός\u2026</string>
+  <string name="status_canceled">Ακυρώθηκε</string>
+  <string name="status_canceled_details">%1$d/%2$d αντικείμενα αποθηκεύτηκαν επιτυχώς.</string>
+  <string name="status_gmail_temp_error">Προσωρινό σφάλμα Gmail IMAP, προσπαθήστε ξανά.</string>
+
+  <string name="ui_settings_advanced_label">Ρυθμίσεις για προχωρημένους</string>
+  <string name="ui_settings_advanced_desc">Ορισμός ρυθμίσεων για προχωρημένους.</string>
+  <string name="ui_settings_advanced_server_label"> Ρυθμίσεις IMAP server </string>
+  <string name="ui_settings_advanced_server_desc">Μην κάνετε αλλαγές αν δεν γνωρίζετε τι κάνετε!</string>
+
+  <string name="imap_settings">Ρυθμίσεις IMAP</string>
+  <string name="ui_login_label">Username</string>
+  <string name="ui_login_desc">Η IMAP account/e-mail διεύθυνσή σας.</string>
+  <string name="ui_login_dialog_msg">ΠΡΟΣΟΧΗ: Αλλάζοντας το username μπορεί να αλλοιωθούν πράγματα όταν χρησιμοποιείτε XOAuth.</string>
+  <string name="ui_password_label">Password</string>
+  <string name="ui_password_desc">Ο κωδικός για τον IMAP λογαριασμό σας. Χρησιμοποιείται όταν το XOAuth είναι αποσυνδεδεμένο.</string>
+  <string name="ui_password_dialog_msg">Το password εισήχθει σε αυτή τη συσκευή και χρησιμοποιείται μόνο για login.</string>
+  <string name="ui_server_label"> Διεύθυνση Server </string>
+  <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
+  <string name="ui_server_dialog_msg">Default for gmail is \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Ασφάλεια</string>
+  <string name="ui_protocol_desc">Το πρωτόκολλο ασφαλείας του server. Default for gmail is \"SSL (Required)\"."</string>
+  <string name="ui_authentication_label">Πιστοποίηση</string>
+  <string name="ui_authentication_desc">Μέθοδος πιστοποίησης. Default for gmail is \"XOAuth\".</string>
+  <string name="plain">Απλό κείμενο</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label"> Ετικέτα Gmail</string>
+  <string name="ui_imap_folder_desc"> Η ετικέτα Gmail που ανατέθηκε σε SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg"> Τα αποθηκευμένα μηνύματα SMS θα έχουν αυτή την ετικέτα στο Gmail.</string>
+  <string name="ui_mail_subject_prefix_label"> Πρόθεμα θέματος Email </string>
+  <string name="ui_mail_subject_prefix_desc">Χρησιμοποιείτε το όνομα του φάκελο IMAP ως πρόθεμα στο θέμα του email</string>
+
+  <string name="ui_max_items_per_sync_label">Αντικείμενα ανα αποθήκευση</string>
+  <string name="ui_max_items_per_sync_desc">Μέγιστος αρθμός αντικειμένων ανα αποθήκευση.</string>
+  <string name="ui_max_items_per_restore_label">Αντικείμενα ανα αποκατάσταση</string>
+  <string name="ui_max_items_per_restore_desc">Μέγιστος αριθμός αποκαταστημένων μηνυμάτων.</string>
+
+  <string name="ui_restore_starred_only_label">Αντικείμενα με αστερίσκο</string>
+  <string name="ui_restore_starred_only_desc">Αποκατάσταση μόνο αντικειμένων με αστερίσκο.</string>
+
+  <string name="ui_backup_mms_label">Αποθήκευση MMS</string>
+  <string name="ui_backup_mms_desc">Ενέργοποίηση Αποθήκευσης MMS</string>
+  <string name="ui_backup_mms_not_supported">Η αποθήκευση MMS δεν υποστηρίζεται από αυτή την πλατφόρμα.</string>
+
+  <string name="ui_backup_calllog_label">Αποθήκευση κλήσεων</string>
+  <string name="ui_backup_calllog_desc">Ενεργοποίηση Αποθήκευσης κλήσεων</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Συγχρονισμός με το Ημερολόγιο</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Εισαγωγή κλήσεων στο Ημερολόγιο</string>
+
+  <string name="ui_backup_calllog_types_label">Τύποι κλήσεων</string>
+  <string name="ui_backup_calllog_types_desc">Ποιοί είναι οι τύποι κλήσεων προς αποθήκευση</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Κανείς</string>
+  <string name="ui_backup_calllog_sync_calendar_desc"> Ημερολόγιο που χρησιμοποιείται για τις κλήσεις</string>
+
+  <string name="ui_imap_folder_calllog_label">Ετικέτα κλήσης</string>
+  <string name="ui_imap_folder_calllog_desc"> Η ετικέτα Gmail που ανατέθηκε σε κλήση.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg"> Οι αποθηκευμένες κλήσεις θα έχουν αυτή την ετικέτα στο Gmail.</string>
+
+  <string name="ui_mark_as_read_label">Ορισμός ως αναγνωσμένου (email)</string>
+  <string name="ui_mark_as_read_desc">Εαν ορίζετε μηνύματα στο Gmail ως αναγνωσμένα ή όχι.</string>
+
+  <string name="ui_mark_as_read_restore_label"> Ορισμός ως αναγνωσμένου (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc"> Εαν ορίζετε όλα τα αποκατεστημένα SMS μηνύματα ως αναγνωσμένα ή όχι.</string>
+
+  <string name="ui_email_address_style_label"> Στυλ Email διεύθυνσης </string>
+  <string name="ui_email_address_style_desc">Μορφή των διευθύνσεων email</string>
+
+  <string name="ui_enable_auto_sync_label">Αυτόματη αποθήκευση</string>
+  <string name="ui_enable_auto_sync_desc">Εαν αποθηκεύεται αυτόματα ένα νέο SMS ή όχι.</string>
+  <string name="ui_enable_auto_sync_summary">Αποθηκεύονται αυτόματα %1$s.</string>
+
+  <string name="sd_card_disclaimer">Η αυτόματη αποθήκευση ίσως δεν λειτουργεί αξιόπιστα όταν η εφαρμογή είναι εγκατεστημένη σε κάρτα SD.</string>
+
+  <string name="ui_enable_auto_sync_bg_data">Θα χρειαστεί να ενεργοποιήσεις background δεδομένα.</string>
+
+  <string name="ui_auto_backup_schedule_label">Κανονικό πρόγραμμα</string>
+  <string name="ui_auto_backup_schedule_desc">Πότε να γίνει αποθήκευση SMS</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Πρόγραμμα εισερχομένων</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Πότε να κάνεις αποθήκευση εισερχομένων SMS (μετά την άφιξη)</string>
+
+  <string name="ui_wifi_only_label">Απαιτεί Wifi</string>
+  <string name="ui_wifi_only_desc">Πραγματοποίηση αποθήκευσης μόνο όταν είναι συνδεδεμένο με Wifi</string>
+
+  <string name="ui_notifications_label">Ειδοποιήσεις</string>
+  <string name="ui_notifications_desc">Background Ειδοποιήσεις</string>
+
+  <string name="error_wifi_only_no_connection">Δεν υπάρχει σύνδεση Wifi</string>
+  <string name="error_no_connection">Δεν υπάρχει σύνδεση στο internet</string>
+
+  <string name="ui_dialog_missing_credentials_title">Πληροφορίες Login</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Πρώτα πρέπει να συνδεθείτε στο Gmail λογαριασμό σας.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Πρώτα πρέπει να ορίσετε το username και password σας.</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">Μη έγκυρο όνομα ετικέτας</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Το όνομα ετικέτας ίσως δεν περιλαμβάνει κενά (στην αρχή ή στο τέλος).</string>
+  <string name="ui_dialog_first_sync_title">Πρώτη αποθήκευση</string>
+  <string name="ui_dialog_first_sync_msg">Αποθήκευση ή παράληψη όλων των πρόσφατων μηνυμάτων της συσκεύης;</string>
+  <string name="ui_dialog_first_sync_msg_batched"> Αποθήκευση ή παράληψη όλων των πρόσφατων μηνυμάτων της συσκεύης;\n\nNote: Η αποθήκευση θα χωριστεί σε πακέτα των %1$d μηνυμάτων.</string>
+  <string name="ui_dialog_request_token_msg">Συνδέεται με Google…</string>
+  <string name="ui_dialog_access_token_msg">Αίτηση πρόσβασης…</string>
+
+  <string name="ui_dialog_access_token_error_title">Σφάλμα πιστοποίησης </string>
+<string name="ui_dialog_access_token_error_msg"> Δεν θα μπορούσε να αποκτήσει διακριτικό πρόσβασης. Βεβαιωθείτε ότι έχετε επιλέξει
+    \" Παραχώρηση πρόσβασης \".
+  </string>
+
+  <string name="ui_dialog_connect_msg"> Θα ανοίξει παράθυρο φυλομετρητή έτσι ώστε να    συνδεθείτε στο Gmail και  %1$s να σας δώσει πρόσβαση στα email σας .</string>
+  <string name="ui_dialog_connect_token_error"> Δεν θα μπορούσε να αποκτήσει διακριτικό αίτημα από το Google. Βεβαιωθείτε ότι η σύνδεση δικτύου είναι ενεργή και χρόνου / ζώνη ώρας σας έχει ρυθμιστεί σωστά.</string>
+  <string name="ui_dialog_disconnect_msg"> Είσαι σίγουρος; Θα πρέπει να επιτραπούν εκ νέου το λογαριασμό σας μετά την αποσύνδεση και την τοπική κατάσταση συγχρονισμού θα πρέπει να επαναφέρετε.</string>
+
+  <string name="ui_dialog_upgrade_title">Πληροφορίες Αναβάθμισεις</string>
+  <string name="ui_dialog_upgrade_msg">
+Η δημιουργία αντιγράφων ασφαλείας με το SMS + είναι πλήρως συμβατή με το αντίγραφο ασφαλείας SMS. Ωστόσο, θα πρέπει να  βεβαιωθείτε ότι \ "αυτόματη δημιουργία αντιγράφων ασφαλείας \" είναι ενεργοποιημένη μόνο σε μια εφαρμογή, αλλιώς μπορεί να έχετε διπλότυπα. Επίσης, θα πρέπει να επιλέξετε \ " Παράλειψη \" μηνύματα για το πρώτο συγχρονισμό σας εαν τα μηνύματα στο τηλέφωνο ήδη το προηγούμενο backup.  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
+  <string name="ui_dialog_brokendroidx_msg"> Υπάρχει ένα σφάλμα στο Droid X το οποίο
+   αποτρέπει αυτήν την εφαρμογή από τη δημιουργία αντιγράφων ασφαλείας των εισερχόμενων μηνυμάτων. Δείτε το FAQ
+   σχετικά με την ιστοσελίδα για περισσότερες πληροφορίες.</string>
+
+  <string name="ui_sync"> Δημιουργία αντιγράφων ασφαλείας </string>
+  <string name="ui_skip"> Μετάβαση </string>
+  <string name="err_sync_requires_login_info"> Δεν είναι δυνατή η δημιουργία αντιγράφων ασφαλείας χωρίς στοιχεία σύνδεσης.</string>
+  <string name="menu_info">Σχετικά </string>
+  <string name="menu_reset">Επαναφορά</string>
+  <string name="ui_dialog_reset_title"> Επαναφορά τρέχουσα κατάσταση συγχρονισμού </string>
+  <string name="ui_dialog_reset_message"> Θέλετε να επαναφέρετε το τρέχον συγχρονισμό ; Μπορείτε ακόμα να επιλέξετε να παρακάμψετε όλα τα μηνύματα αργότερα.</string>
+  <string name="all_messages">Όλα</string>
+
+  <string name="gmail_needs_connecting"> Πατήστε για να συνδεθείτε στο Gmail λογαριασμό σας (required).</string>
+  <string name="gmail_already_connected"> Συνδεδεμένος ως %1$s.</string>
+
+  <string name="ui_connected_label">Σύνδεση</string>
+  <string name="ui_connected_desc"> Ο λογαριασμός σας πρέπει να συνδεθεί.</string>
+
+  <string name="call_incoming">Εισερχόμενη κλήση</string>
+  <string name="call_outgoing"> Εξερχόμενη κλήση </string>
+  <string name="call_missed">Αναπάντητη κλήση </string>
+
+  <string name="call_missed_text"> Αναπάντητη κλήση από %1$s</string>
+  <string name="call_incoming_text"> Κλήση από %1$s</string>
+  <string name="call_outgoing_text">Κάλεσε %1$s</string>
+
+  <string name="call_number_field">Τηλέφωνο: %1$s</string>
+  <string name="call_duration_field">Διάρκεια:  %1$s</string>
+
+  <string name="sms_with_field">SMS με %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">Κάλεσε με %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Επαφές για backup</string>
+  <string name="ui_backup_contact_group_desc"> Μόνο αντιγράφων ασφαλείας αντικείμενα από μια συγκεκριμένη ομάδα </string>
+
+  <string name="everybody">v</string>
+
+  <string name="call_type_everything">Tα πάντα </string>
+  <string name="call_type_incoming">Μόνο εισερχόμενες κλήσεις </string>
+  <string name="call_type_outgoing"> Μόνο εξερχόμενες κλήσεις </string>
+  <string name="call_type_incoming_outgoing">Εισερχόμενη &amp; Εξερχομενη</string>
+  <string name="call_type_missed">Αναπάντητες κλήσεις μόνο</string>
+
+  <string name="email_address_style_name">Όνομα</string>
+  <string name="email_address_style_name_and_number">Όνομα (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 ώρα</string>
+  <string name="_2h">2 ώρες</string>
+  <string name="_6h">6 ώρες </string>
+  <string name="_24h">24 ώρες </string>
+  <string name="never">Ποτέ</string>
+
+  <string name="_1min">1 λεπτό</string>
+  <string name="_3mins">3 λεπτό </string>
+  <string name="_30mins">30 λεπτό </string>
+
+  <string name="ssl_required">SSL (Υποχρεωτικό)</string>
+  <string name="ssl_optional">SSL (Προαιρετικό)</string>
+  <string name="tls_required">TLS (Υποχρεωτικό)</string>
+  <string name="tls_optional">TLS (Προαιρετικό)</string>
+  <string name="none">None</string>
+
+  <string name="ui_third_party_integration_label"> Ολοκλήρωση 3ου προσώπου </string>
+  <string name="ui_third_party_integration_desc"> Επιτρέψτε άλλες εφαρμογές να δημιουργήσουν αντίγραφα ασφαλείας   </string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label"> Δημιουργία αντιγράφων ασφαλείας των ρυθμίσεων </string>
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+
+  <string name="ui_backup_calllog_settings_label"> Ρυθμίσεις μητρώου κλήσεων </string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+
+  <string name="auto_backup_settings"> Ρυθμίσεις αυτόματης δημιουργίας αντιγράφων ασφαλείας </string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label"> Επαναφορά ρυθμίσεων </string>
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+
+  <string name="ui_backup_sms_label"> Δημιουργία αντιγράφων ασφαλείας SMS </string>
+  <string name="ui_backup_sms_desc"> Ενεργοποίηση SMS αντιγράφων ασφαλείας </string>
+
+  <string name="ui_restore_sms_label"> Επαναφορά SMS</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">( Χαρακτηριστικό που δεν διατίθεται ακόμη)</string>
+
+  <string name="ui_restore_mms_label"> Επαναφορά MMS</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label"> Επαναφορά μητρώου κλήσεων </string>
+  <string name="ui_restore_calllog_desc"/>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog"> Μητρώο κλήσεων </string>
+
+  <string name="pref_disable_acra"> Αναφορά σφάλματος</string>
+  <string name="pref_acra_enabled">SMS Backup+ θα στείλει αυτόματα αναφορά σφάλματος μετά το κλείσιμο του.</string>
+  <string name="pref_acra_disabled">Απενεργοποιημένο</string>
+
+  <string name="app_log_skip_backup_background_data"> Παραλείφθηκαν  επειδή τα δεδομένα στο παρασκήνιο είναι απενεργοποιημένα </string>
+  <string name="app_log_skip_backup_already_running"> Παραλείφθηκαν λόγω παράλληλης εκτέλεσης αντιγράφων ασφαλείας  </string>
+  <string name="app_log_skip_backup_skip_messages"> Μεταφορά όλων των μηνυμάτων </string>
+  <string name="app_log_skip_backup_no_items"> Παραλείφθηκαν διότι τα συγκεκριμένα είδη δεν βρέθηκαν</string>
+  <string name="app_log_missing_credentials">Παραλείφθηκαν (λείπουν τα διαπιστευτήριά)</string>
+  <string name="app_log_backup_requested">Ζητήθηκε Αντίγραφο ασφαλείας (%1$s)</string>
+  <string name="app_log_start_backup">Αντίγραφο Ασφαλείας Ξεκίνησε (%1$s)</string>
+  <string name="app_log_backup_messages">Αντίγραφο Ασφαλείας  (%1$d SMS, %2$d MMS, %3$d call log)</string>
+  <string name="app_log_backup_canceled">Ακύρωση Αντιγράφων Ασφαλείας</string>
+  <string name="app_log_backup_finished">Τέλος δημιουργίας Αντιγράφων Ασφαλείας</string>
+
+  <string name="app_log_backup_failed_authentication"> Σφάλμα ελέγχου ταυτότητας :%1$s</string>
+  <string name="app_log_backup_failed_messaging">Γενικό Σφάλμα: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Σφάλμα Συνδεσιμότητας</string>
+  <string name="app_log_scheduled_next_sync"> Επόμενη προγραμματισμένη δημιουργία αντιγράφων ασφαλείας για: %1$s</string>
+  <string name="app_log_no_next_sync"> Δεν υπάρχουν νέες προγραμματισμένη δημιουργία αντιγράφων ασφαλείας </string>
+
+  <string name="menu_view_log">Προβολή μητρώου</string>
+  <string name="app_log_empty">Το μητρώο είναι άδειο. Ενεργοποιήστε το \" ρυθμίσεις για προχωρημένους \".</string>
+
+  <string name="pref_app_log">Συγχρονισμός μητρώου</string>
+  <string name="pref_app_log_enabled">Το μητρώο είναι υποθηκευμένο στην SD κάρτα σας ως : \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="source_incoming">Εισερχόμενη</string>
+  <string name="source_regular">Ορθρό </string>
+  <string name="source_3rd_party">3rd party</string>
+  <string name="source_manual">manual</string>
+  <string name="source_unknown">άγνωστο</string>
+
+  <string name="ui_confirm_action_label"> Επιβεβαίωση ενεργειών </string>
+  <string name="ui_confirm_action_desc"> Ρωτήσε πριν από την εκτέλεση αντιγράφων ασφαλείας ή την επαναφορά </string>
+  <string name="ui_dialog_confirm_action_title">Επιβεβαίωση Ενεργειών</string>
+  <string name="ui_dialog_confirm_action_msg"> Είστε βέβαιοι ότι θέλετε να εκτελέσετε την ενέργεια;</string>
+
+  <string name="loading"> Φόρτωση …</string>
+  <string name="ssl_error">SSL σφάλμα</string>
+  <string name="ui_dialog_account_manager_token_error">
+      Δεν μπόρεσα να πάρω δείγμα από το σύστημα. Θέλετε να δοκιμάσετε τη μέθοδο ελέγχου ταυτότητας του προγράμματος περιήγησης;
+  </string>
+  <string name="select_google_account"> Επιλέξτε ένα λογαριασμό Google </string>
+
+  <!-- donation related -->
+  <string name="donate"> Δωρεά </string>
+  <string name="donate_summary"> Χρήση ασφαλούς Google Play store συστήματος  πληρωμών.</string>
+
+  <string name="ui_dialog_donate_message"> Παρακαλούμε να προσδιορίσετε το ποσό:</string>
+  <string name="ui_donation_success_message"> Επιτυχής Δωρεά, σας ευχαριστούμε !</string>
+  <string name="ui_donation_failure_message">Η δωρεά απέτυχε: %1$s</string>
+  <string name="ui_donation_canceled_message">Η δωρεά ακυρώθηκε</string>
+  <string name="ui_donation_oh_noez_no_network"> Δυστυχώς, θα πρέπει να συνδεθεί με το διαδίκτυο, ώστε να κάνετε μια δωρεά.</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">In-app τιμολόγηση δεν είναι διαθέσιμη </string>
+  <string name="donation_error_unavailable">μη διαθέσιμη</string>
+  <string name="donation_error_canceled">ακυρώθηκε</string>
+  <string name="donation_error_already_owned">έχετε ήδη πραγματοποιήσει δωρεά </string>
+</resources>
