@@ -1,3 +1,9 @@
+== 1.5.0 05-26-2013
+
+  * Added WhatsApp support (experimental)
+  * Translation updates (French/Russian)
+  * Moved IAB code to external apklib
+
 == 1.4.8 01-18-2013
 
   * Fixed XOAuth2 token refresh

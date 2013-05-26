@@ -23,6 +23,8 @@ Main differences / improvements:
   * Call log backup (since `1.2`), with Google Calendar integration (since
   `1.3.`) and restore (since `1.4`).
 
+  * <a href="#whatsapp-support">WhatsApp message backup</a> (since `1.5`)
+
   * Batch size limits removed.
 
   * Works with any IMAP server (but defaults to Gmail).
@@ -126,6 +128,18 @@ sync` in Advanced settings, and make sure you have selected a calendar to sync
 with.
 
 If you only want to backup specific call types you can do so as well.
+
+### <a name="whatsapp-support">WhatsApp support</a>
+
+SMS Backup+ can also transfer your WhatsApp messages to your gmail account.
+In order for this to work you need to make sure to have "Backup conversations"
+enabled in WhatsApp (Settings - Chat Settings, see [screenshot][whatsapp-screenshot]).
+
+To enable the backup in SMS Backup+, go to "Advanced Settings",
+then "Backup Settings" and tick the "Backup WhatsApp" checkbox.
+
+The messages will be backed up to the "WhatsApp" label in gmail.
+Note that WhatsApp messages are backup only, there is no way to restore them.
 
 ### <a name="3rdparty">3rd party app integration</a>
 
@@ -349,6 +363,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [smsbackupshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_backup_plus_screen_1_4.png
 [gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
 [gcalshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gcal_screenshot.png
+[whatsapp-screenshot]: https://www.evernote.com/shard/s1/sh/79d6ab92-778d-4308-9025-5306bda7beaf/500b42c3484688f3b4a1d2b1894baba0
 [showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
 [source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
 [droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/

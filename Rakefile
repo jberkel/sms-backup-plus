@@ -48,7 +48,6 @@ desc "check release"
 task :check_version do
   # make sure new version is propagated everywhere
   raise "CHANGES not updated" unless IO.read('CHANGES') =~ /#{version}/
-  raise "README.md not updated" unless IO.read('README.md') =~ /#{version}\.apk/
   raise "about not updated" unless IO.read('assets/about.html') =~ /SMS Backup\+ #{version}/
 end
 
