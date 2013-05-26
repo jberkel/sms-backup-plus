@@ -102,6 +102,10 @@ public abstract class ServiceBase extends Service {
         return new BackupImapStore(this).getCallLogBackupFolder();
     }
 
+    protected BackupImapStore.BackupFolder getWhatsAppBackupFolder() throws MessagingException {
+        return new BackupImapStore(this).getWhatsAppBackupFolder();
+    }
+
     /**
      * Acquire locks
      *
@@ -212,6 +216,13 @@ public abstract class ServiceBase extends Service {
         PrefStore.setMaxSyncedDateCallLog(this, maxSyncedDate);
         if (LOCAL_LOGV) {
             Log.v(TAG, "Max synced date for call log set to: " + maxSyncedDate);
+        }
+    }
+
+    protected void updateMaxSyncedDateWhatsApp(long maxSyncedDate) {
+        PrefStore.setMaxSyncedDateWhatsApp(this, maxSyncedDate);
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "Max synced date for whats app set to: " + maxSyncedDate);
         }
     }
 

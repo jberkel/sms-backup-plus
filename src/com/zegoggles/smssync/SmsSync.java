@@ -243,6 +243,7 @@ public class SmsSync extends PreferenceActivity {
        if (PrefStore.isSmsBackupEnabled(this)) enabled.add(getString(R.string.sms));
        if (PrefStore.isMmsBackupEnabled(this)) enabled.add(getString(R.string.mms));
        if (PrefStore.isCallLogBackupEnabled(this)) enabled.add(getString(R.string.calllog));
+       if (PrefStore.isWhatsAppBackupEnabled(this)) enabled.add(getString(R.string.whatsapp));
 
        StringBuilder summary = new StringBuilder(
         getString(R.string.ui_enable_auto_sync_summary, TextUtils.join(", ", enabled))

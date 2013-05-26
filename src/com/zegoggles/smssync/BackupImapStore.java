@@ -16,27 +16,29 @@
 package com.zegoggles.smssync;
 
 import android.content.Context;
+import android.util.Log;
 import com.fsck.k9.Account;
+import com.fsck.k9.mail.FetchProfile;
 import com.fsck.k9.mail.Folder.FolderType;
 import com.fsck.k9.mail.Folder.OpenMode;
-import com.fsck.k9.mail.*;
-
-import android.util.Log;
-
-import java.util.Collections;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Comparator;
-import java.util.Arrays;
-import com.fsck.k9.mail.store.ImapStore;
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
+import com.fsck.k9.mail.store.ImapStore;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-import static com.zegoggles.smssync.App.*;
-import static com.zegoggles.smssync.CursorToMessage.Headers;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.CursorToMessage.DataType;
+import static com.zegoggles.smssync.CursorToMessage.Headers;
 
 public class BackupImapStore extends ImapStore {
     private Context context;
@@ -66,6 +68,13 @@ public class BackupImapStore extends ImapStore {
         String label = PrefStore.getCallLogFolder(context);
         return getBackupFolder(label, DataType.CALLLOG);
     }
+
+    public BackupFolder getWhatsAppBackupFolder() throws MessagingException
+    {
+        String label = PrefStore.getWhatsAppFolder(context);
+        return getBackupFolder(label, DataType.WHATSAPP);
+    }
+
 
     private BackupFolder getBackupFolder(String label, DataType type) throws MessagingException
     {

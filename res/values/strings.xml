@@ -102,7 +102,10 @@
   <string name="ui_backup_calllog_label">Backup Call log</string>
   <string name="ui_backup_calllog_desc">Enable Call log backup</string>
 
-  <string name="ui_backup_calllog_sync_calendar_enabled_label">Calendar sync</string>
+  <string name="ui_backup_whatsapp_label">Backup Whatsapp</string>
+  <string name="ui_backup_whatsapp_desc">Enable Whatsapp backup</string>
+
+    <string name="ui_backup_calllog_sync_calendar_enabled_label">Calendar sync</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Add call log entries to calendar</string>
 
   <string name="ui_backup_calllog_types_label">Call types</string>
@@ -113,7 +116,11 @@
 
   <string name="ui_imap_folder_calllog_label">Call log label</string>
   <string name="ui_imap_folder_calllog_desc">Gmail label assigned to call log.</string>
-  <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
+   <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
+
+  <string name="ui_imap_folder_whatsapp_label">WhatsApp label</string>
+  <string name="ui_imap_folder_whatsapp_desc">Gmail label assigned to WhatsApp.</string>
+  <string name="ui_imap_folder_whatsapp_label_dialog_msg">Backed up WhatsApp messages will be tagged with this label in Gmail.</string>
 
   <string name="ui_mark_as_read_label">Mark as read (emails)</string>
   <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
@@ -208,6 +215,7 @@
   <string name="call_duration_field">Duration: %1$s</string>
 
   <string name="sms_with_field">SMS with %1$s</string>
+  <string name="whatsapp_with_field">WhatsApp with %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Call with %1$s</string>
@@ -276,6 +284,7 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Call log</string>
+  <string name="whatsapp">WhatsApp</string>
 
   <string name="pref_disable_acra">Crash error reporting</string>
   <string name="pref_acra_enabled">SMS Backup+ will automatically send an error report after force closing.</string>
