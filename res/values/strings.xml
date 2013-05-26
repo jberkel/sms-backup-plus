@@ -102,8 +102,8 @@
   <string name="ui_backup_calllog_label">Backup Call log</string>
   <string name="ui_backup_calllog_desc">Enable Call log backup</string>
 
-  <string name="ui_backup_whatsapp_label">Backup Whatsapp</string>
-  <string name="ui_backup_whatsapp_desc">Enable Whatsapp backup</string>
+  <string name="ui_backup_whatsapp_label">Backup WhatsApp</string>
+  <string name="ui_backup_whatsapp_desc">Enable WhatsApp backup</string>
 
     <string name="ui_backup_calllog_sync_calendar_enabled_label">Calendar sync</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Add call log entries to calendar</string>
