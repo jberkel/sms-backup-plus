@@ -60,6 +60,7 @@ import java.util.Random;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.Attachment.createPartFromFile;
 import static com.zegoggles.smssync.Attachment.createPartFromUri;
 import static com.zegoggles.smssync.Attachment.createTextPart;
 
@@ -402,7 +403,7 @@ public class CursorToMessage {
             if (whatsapp.hasText()) {
                 body.addBodyPart(createTextPart(whatsapp.getText()));
             }
-            body.addBodyPart(Attachment.createPartFromFile(whatsapp.getMedia().getFile(), whatsapp.getMedia().getMimeType()));
+            body.addBodyPart(createPartFromFile(whatsapp.getMedia().getFile(), whatsapp.getMedia().getMimeType()));
             msg.setBody(body);
         } else if (whatsapp.hasText()) {
             msg.setBody(new TextBody(whatsapp.getText()));
