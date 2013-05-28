@@ -388,9 +388,11 @@ public class CursorToMessage {
 
     private Message messageFromMapWhatsApp(Cursor cursor) throws MessagingException {
         WhatsAppMessage whatsapp = new WhatsAppMessage(cursor);
-        final String address = whatsapp.getNumber();
+        // we don't deal with group messages (yet)
 
-        if (address == null || address.trim().length() == 0) {
+        if (whatsapp.isGroupMessage()) return null;
+        final String address = whatsapp.getNumber();
+        if (TextUtils.isEmpty(address)) {
             return null;
         }
         PersonRecord record = lookupPerson(address);
@@ -401,12 +403,12 @@ public class CursorToMessage {
         if (whatsapp.hasMediaAttached()) {
             MimeMultipart body = new MimeMultipart();
             if (whatsapp.hasText()) {
-                body.addBodyPart(createTextPart(whatsapp.getText()));
+                body.addBodyPart(createTextPart(whatsapp.getFilteredText()));
             }
             body.addBodyPart(createPartFromFile(whatsapp.getMedia().getFile(), whatsapp.getMedia().getMimeType()));
             msg.setBody(body);
         } else if (whatsapp.hasText()) {
-            msg.setBody(new TextBody(whatsapp.getText()));
+            msg.setBody(new TextBody(whatsapp.getFilteredText()));
         } else {
             // no media / no text, pointless
             return null;
