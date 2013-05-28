@@ -61,8 +61,7 @@
         <dependency>
             <groupId>com.github.jberkel.whassup</groupId>
             <artifactId>library</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
-            <type>jar</type>
+            <version>0.0.2</version>
         </dependency>
 
         <dependency>
