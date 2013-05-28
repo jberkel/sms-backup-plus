@@ -62,7 +62,7 @@
             <groupId>com.github.jberkel.whassup</groupId>
             <artifactId>library</artifactId>
             <version>0.0.2-SNAPSHOT</version>
-            <type>apklib</type>
+            <type>jar</type>
         </dependency>
 
         <dependency>
