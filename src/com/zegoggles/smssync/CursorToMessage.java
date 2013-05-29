@@ -654,10 +654,10 @@ public class CursorToMessage {
           if (LOCAL_LOGV) Log.v(TAG, String.format(Locale.ENGLISH, "processing part %s, name=%s (%s)", id,
                                                    fileName, contentType));
 
-          if (contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
+          if (!TextUtils.isEmpty(contentType) && contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
             // text
             parts.add(new MimeBodyPart(new TextBody(text), contentType));
-          } else if (contentType.equalsIgnoreCase("application/smil")) {
+          } else if ("application/smil".equalsIgnoreCase(contentType)) {
             // silently ignore SMIL stuff
           } else {
             // attach everything else
