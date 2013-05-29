@@ -61,11 +61,11 @@ public class DonationActivity extends Activity implements
                     Toast.makeText(DonationActivity.this, message, Toast.LENGTH_LONG).show();
                     Log.w(TAG, "Problem setting up in-app billing: " + result);
                     finish();
-                    return;
+                } else if (mIabHelper != null) {
+                    List<String> moreSkus = new ArrayList<String>();
+                    Collections.addAll(moreSkus, BillingConsts.ALL_SKUS);
+                    mIabHelper.queryInventoryAsync(true, moreSkus, null, DonationActivity.this);
                 }
-                List<String> moreSkus = new ArrayList<String>();
-                Collections.addAll(moreSkus, BillingConsts.ALL_SKUS);
-                mIabHelper.queryInventoryAsync(true, moreSkus, null, DonationActivity.this);
             }
         });
     }
