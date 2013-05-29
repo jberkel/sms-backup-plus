@@ -1,8 +1,9 @@
-== 1.5.0 05-26-2013
+== 1.5.0 05-29-2013
 
-  * Added WhatsApp support (experimental)
+  * Added WhatsApp support
   * Translation updates (French/Russian)
   * Moved IAB code to external apklib
+  * Greek translation (https://github.com/jberkel/sms-backup-plus/pull/315)
 
 == 1.4.8 01-18-2013
 

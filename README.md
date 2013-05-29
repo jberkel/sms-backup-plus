@@ -23,7 +23,7 @@ Main differences / improvements:
   * Call log backup (since `1.2`), with Google Calendar integration (since
   `1.3.`) and restore (since `1.4`).
 
-  * <a href="#whatsapp-support">WhatsApp message backup</a> (since `1.5`)
+  * <a href="#whatsapp-support">WhatsApp message backup</a> (since `1.5.0`)
 
   * Batch size limits removed.
 
@@ -345,6 +345,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * [Tobeon](http://tobeon.net) - Norwegian translation
   * Nemanja Bračko - Serbian translation
   * Markus Osanger - German translation
+  * Dimitris / Mazin Hussein - Greek translation
 
 ##<a name="screenhots">Screenshots</a>
 
