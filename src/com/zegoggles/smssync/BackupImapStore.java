@@ -48,10 +48,10 @@ public class BackupImapStore extends ImapStore {
       com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 5;
     }
 
-    public BackupImapStore(final Context context) throws MessagingException {
+    public BackupImapStore(final Context context, final String uri) throws MessagingException {
         super(new Account(context) {
             @Override public String getStoreUri() {
-              return PrefStore.getStoreUri(context);
+              return uri;
             }
         });
         this.context = context;

@@ -273,21 +273,21 @@ public class SmsBackupService extends ServiceBase {
         private int backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems, Cursor whatsAppItems)
                 throws MessagingException {
             Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", sItemsToSync));
-
-            final CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
+            BackupImapStore store = getBackupImapStore(PrefStore.getStoreUri(SmsBackupService.this));
 
             publish(LOGIN);
-            Folder smsmmsfolder = getSMSBackupFolder();
+            Folder smsmmsfolder = store.getSMSBackupFolder();
             Folder callLogfolder  = null;
             Folder whatsAppFolder = null;
             if (PrefStore.isCallLogBackupEnabled(context)) {
-                callLogfolder = getCallLogBackupFolder();
+                callLogfolder = store.getCallLogBackupFolder();
             }
             if (PrefStore.isWhatsAppBackupEnabled(context)) {
-                whatsAppFolder = getWhatsAppBackupFolder();
+                whatsAppFolder = store.getWhatsAppBackupFolder();
             }
 
             try {
+                final CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
                 Cursor curCursor;
                 DataType dataType;
                 publish(CALC);

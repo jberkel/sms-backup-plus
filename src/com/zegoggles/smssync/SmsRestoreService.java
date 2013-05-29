@@ -68,9 +68,11 @@ public class SmsRestoreService extends ServiceBase {
                 acquireLocks(false);
                 sIsRunning = true;
 
+                BackupImapStore store = getBackupImapStore(PrefStore.getStoreUri(SmsRestoreService.this));
+
                 publishProgress(LOGIN);
-                smsFolder = getSMSBackupFolder();
-                if (restoreCallLog) callFolder = getCallLogBackupFolder();
+                smsFolder = store.getSMSBackupFolder();
+                if (restoreCallLog) callFolder = store.getCallLogBackupFolder();
 
                 publishProgress(CALC);
 

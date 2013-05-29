@@ -94,16 +94,9 @@ public abstract class ServiceBase extends Service {
         if (appLog != null) appLog.close();
     }
 
-    protected BackupImapStore.BackupFolder getSMSBackupFolder() throws MessagingException {
-        return new BackupImapStore(this).getSMSBackupFolder();
-    }
-
-    protected BackupImapStore.BackupFolder getCallLogBackupFolder() throws MessagingException {
-        return new BackupImapStore(this).getCallLogBackupFolder();
-    }
-
-    protected BackupImapStore.BackupFolder getWhatsAppBackupFolder() throws MessagingException {
-        return new BackupImapStore(this).getWhatsAppBackupFolder();
+    protected BackupImapStore getBackupImapStore(String uri) throws MessagingException {
+        if (uri == null) throw new MessagingException("No valid token");
+        return new BackupImapStore(this, uri);
     }
 
     /**
