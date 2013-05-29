@@ -215,7 +215,7 @@
   <string name="call_duration_field">Duration: %1$s</string>
 
   <string name="sms_with_field">SMS with %1$s</string>
-  <string name="whatsapp_with_field">WhatsApp with %1$s</string>
+  <string name="whatsapp_with_field">WhatsApp chat with %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Call with %1$s</string>
