@@ -1,7 +1,5 @@
 package com.zegoggles.smssync;
 
-import static com.zegoggles.smssync.App.TAG;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
@@ -21,16 +19,18 @@ import android.util.Log;
 
 import java.io.IOException;
 
+import static com.zegoggles.smssync.App.TAG;
+
 @TargetApi(5)
 public class AccountManagerAuthActivity extends Activity {
     private static final int DIALOG_ACCOUNTS = 0;
     private static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
-    public static final String EXTRA_TOKEN   = "token";
-    public static final String EXTRA_ERROR   = "error";
-    public static final String EXTRA_DENIED  = "denied";
+    public static final String EXTRA_TOKEN = "token";
+    public static final String EXTRA_ERROR = "error";
+    public static final String EXTRA_DENIED = "denied";
     public static final String EXTRA_ACCOUNT = "account";
 
-    public static final String ACTION_ADD_ACCOUNT  = "addAccount";
+    public static final String ACTION_ADD_ACCOUNT = "addAccount";
     public static final String ACTION_FALLBACKAUTH = "fallBackAuth";
 
     private AccountManager accountManager;
@@ -103,25 +103,25 @@ public class AccountManagerAuthActivity extends Activity {
     // should really use setResult + finish for all callbacks, but SmsSync is singleInstance (for some reason)
     private void onAccessDenied() {
         startActivity(new Intent(this, SmsSync.class)
-            .setAction(ACTION_ADD_ACCOUNT)
-            .putExtra(EXTRA_DENIED, true));
+                .setAction(ACTION_ADD_ACCOUNT)
+                .putExtra(EXTRA_DENIED, true));
         finish();
     }
 
     private void handleException(Exception e) {
         Log.w(TAG, e);
         startActivity(new Intent(this, SmsSync.class)
-            .setAction(ACTION_ADD_ACCOUNT)
-            .putExtra(EXTRA_ERROR, e.getMessage()));
+                .setAction(ACTION_ADD_ACCOUNT)
+                .putExtra(EXTRA_ERROR, e.getMessage()));
 
         finish();
     }
 
     private void useToken(Account account, String token) {
         startActivity(new Intent(this, SmsSync.class)
-            .setAction(ACTION_ADD_ACCOUNT)
-            .putExtra(EXTRA_ACCOUNT, account.name)
-            .putExtra(EXTRA_TOKEN, token));
+                .setAction(ACTION_ADD_ACCOUNT)
+                .putExtra(EXTRA_ACCOUNT, account.name)
+                .putExtra(EXTRA_TOKEN, token));
         finish();
     }
 
@@ -131,7 +131,7 @@ public class AccountManagerAuthActivity extends Activity {
 
     public static boolean refreshOAuth2Token(Context ctx) {
         String token = PrefStore.getOauth2Token(ctx);
-        String name  = PrefStore.getUsername(ctx);
+        String name = PrefStore.getUsername(ctx);
         if (!TextUtils.isEmpty(token)) {
             invalidateToken(ctx, token);
             try {

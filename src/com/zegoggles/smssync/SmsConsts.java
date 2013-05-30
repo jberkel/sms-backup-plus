@@ -19,43 +19,44 @@ package com.zegoggles.smssync;
 /**
  * Contains SMS content provider constants. These values are copied from
  * com.android.provider.telephony.*
+ *
  * @noinspection UnusedDeclaration
  */
 public interface SmsConsts {
 
-     String ID = "_id";
+    String ID = "_id";
 
-     String BODY = "body";
+    String BODY = "body";
 
-     String DATE = "date";
+    String DATE = "date";
 
-     String THREAD_ID = "thread_id";
+    String THREAD_ID = "thread_id";
 
-     String ADDRESS = "address";
+    String ADDRESS = "address";
 
-     String TYPE = "type";
+    String TYPE = "type";
 
-     String READ = "read";
+    String READ = "read";
 
-     String STATUS = "status";
+    String STATUS = "status";
 
-     String SERVICE_CENTER = "service_center";
+    String SERVICE_CENTER = "service_center";
 
-     String PROTOCOL = "protocol";
+    String PROTOCOL = "protocol";
 
-     String PERSON = "person";
+    String PERSON = "person";
 
-     int MESSAGE_TYPE_ALL = 0;
+    int MESSAGE_TYPE_ALL = 0;
 
-     int MESSAGE_TYPE_INBOX = 1;
+    int MESSAGE_TYPE_INBOX = 1;
 
-     int MESSAGE_TYPE_SENT = 2;
+    int MESSAGE_TYPE_SENT = 2;
 
-     int MESSAGE_TYPE_DRAFT = 3;
+    int MESSAGE_TYPE_DRAFT = 3;
 
-     int MESSAGE_TYPE_OUTBOX = 4;
+    int MESSAGE_TYPE_OUTBOX = 4;
 
-     int MESSAGE_TYPE_FAILED = 5; // for failed outgoing messages
+    int MESSAGE_TYPE_FAILED = 5; // for failed outgoing messages
 
-     int MESSAGE_TYPE_QUEUED = 6; // for messages to send later
+    int MESSAGE_TYPE_QUEUED = 6; // for messages to send later
 }

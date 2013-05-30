@@ -15,22 +15,24 @@
  */
 package com.zegoggles.smssync;
 
+import android.content.Context;
+
 import java.util.Collections;
 import java.util.Map;
 
-import android.content.Context;
-
-/** @noinspection UnusedDeclaration*/
+/**
+ * @noinspection UnusedDeclaration
+ */
 public class ContactAccessorPre20 implements ContactAccessor {
-  public String getOwnerEmail(Context context) {
-    return null;
-  }
+    public String getOwnerEmail(Context context) {
+        return null;
+    }
 
-  public GroupContactIds getGroupContactIds(Context context, ContactGroup group) {
-    return new GroupContactIds();
-  }
+    public GroupContactIds getGroupContactIds(Context context, ContactGroup group) {
+        return new GroupContactIds();
+    }
 
-  public Map<Integer,Group> getGroups(Context context) {
-    return Collections.emptyMap();
-  }
+    public Map<Integer, Group> getGroups(Context context) {
+        return Collections.emptyMap();
+    }
 }

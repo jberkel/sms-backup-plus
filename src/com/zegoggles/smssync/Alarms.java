@@ -22,15 +22,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 
 
 public class Alarms {
 
     static final int BROADCAST_INTENT = 0;
     static final int INCOMING = 1;
-    static final int REGULAR  = 2;
-    static final int UNKNOWN  = 3;
+    static final int REGULAR = 2;
+    static final int UNKNOWN = 3;
 
     static long scheduleIncomingSync(Context ctx) {
         return scheduleSync(ctx, PrefStore.getIncomingTimeoutSecs(ctx), INCOMING, false);
@@ -49,27 +50,29 @@ public class Alarms {
     }
 
     private static long scheduleSync(Context ctx, int inSeconds, int source, boolean force) {
-        if (LOCAL_LOGV) Log.v(TAG, "scheduleSync("+ctx+", "+inSeconds+", "+source+", "+force+")");
+        if (LOCAL_LOGV)
+            Log.v(TAG, "scheduleSync(" + ctx + ", " + inSeconds + ", " + source + ", " + force + ")");
 
         if (force || (PrefStore.isEnableAutoSync(ctx) && inSeconds > 0)) {
-          final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
-          getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx, source));
-          if (LOCAL_LOGV) Log.v(TAG, "Scheduled sync due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
-          return atTime;
+            final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
+            getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx, source));
+            if (LOCAL_LOGV)
+                Log.v(TAG, "Scheduled sync due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
+            return atTime;
         } else {
-          if (LOCAL_LOGV) Log.v(TAG, "Not scheduling sync because auto sync is disabled.");
-          return -1;
+            if (LOCAL_LOGV) Log.v(TAG, "Not scheduling sync because auto sync is disabled.");
+            return -1;
         }
     }
 
     private static AlarmManager getAlarmManager(Context ctx) {
-      return (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        return (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
     }
 
     private static PendingIntent createPendingIntent(Context ctx, int source) {
         Intent intent = (new Intent(ctx, SmsBackupService.class))
-              .putExtra(Consts.KEY_NUM_RETRIES, Consts.NUM_AUTO_RETRIES)
-              .putExtra(Consts.SOURCE, source);
+                .putExtra(Consts.KEY_NUM_RETRIES, Consts.NUM_AUTO_RETRIES)
+                .putExtra(Consts.SOURCE, source);
         return PendingIntent.getService(ctx, 0, intent, 0);
     }
 }

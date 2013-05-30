@@ -58,7 +58,7 @@ public class AppLog {
         if (writer != null) {
             StringBuilder sb = new StringBuilder();
             sb.append(format(new Date()))
-              .append(" ").append(s);
+                    .append(" ").append(s);
             writer.println(sb);
             if (LOCAL_LOGV) Log.v(TAG, "[AppLog]: " + sb);
         }

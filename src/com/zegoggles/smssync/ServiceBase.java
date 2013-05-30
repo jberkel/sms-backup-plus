@@ -15,25 +15,23 @@
  */
 package com.zegoggles.smssync;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
-import android.database.Cursor;
 import android.content.Intent;
-import android.net.Uri;
-import android.net.wifi.WifiManager;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.CallLog;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.app.NotificationManager;
-import android.app.Notification;
-import android.app.PendingIntent;
-
 import com.fsck.k9.mail.MessagingException;
-
 
 import static com.zegoggles.smssync.App.*;
 
@@ -84,7 +82,7 @@ public abstract class ServiceBase extends Service {
     public void onCreate() {
         super.onCreate();
         if (PrefStore.isAppLogEnabled(this)) {
-            this.appLog = new AppLog(LOG,  DateFormat.getDateFormatOrder(this));
+            this.appLog = new AppLog(LOG, DateFormat.getDateFormatOrder(this));
         }
     }
 
@@ -103,7 +101,8 @@ public abstract class ServiceBase extends Service {
      * Acquire locks
      *
      * @param background if service is running in background (no UI)
-     * @throws com.zegoggles.smssync.ServiceBase.ConnectivityErrorException when unable to connect
+     * @throws com.zegoggles.smssync.ServiceBase.ConnectivityErrorException
+     *          when unable to connect
      */
     protected void acquireLocks(boolean background) throws ConnectivityErrorException {
         if (sWakeLock == null) {
@@ -168,7 +167,7 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-     // Returns the maximum date of all MMS messages
+    // Returns the maximum date of all MMS messages
     protected long getMaxItemDateMms() {
         Cursor result = getContentResolver().query(MMS_PROVIDER,
                 new String[]{MmsConsts.DATE}, null, null,

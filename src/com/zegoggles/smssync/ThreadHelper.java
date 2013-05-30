@@ -1,16 +1,15 @@
 package com.zegoggles.smssync;
 
-import android.util.Log;
 import android.content.Context;
+import android.util.Log;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.NoSuchMethodException;
-import java.lang.ClassNotFoundException;
-import java.util.Map;
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
-import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 
 public class ThreadHelper {
 
@@ -22,41 +21,42 @@ public class ThreadHelper {
 
     @SuppressWarnings("serial")
     private Map<String, Long> mThreadIdCache =
-          new LinkedHashMap<String, Long>(MAX_THREAD_CACHE_SIZE+1, .75F, true) {
-          @Override public boolean removeEldestEntry(Map.Entry<String, Long> eldest) {
-            return size() > MAX_THREAD_CACHE_SIZE;
-          }
-      };
+            new LinkedHashMap<String, Long>(MAX_THREAD_CACHE_SIZE + 1, .75F, true) {
+                @Override
+                public boolean removeEldestEntry(Map.Entry<String, Long> eldest) {
+                    return size() > MAX_THREAD_CACHE_SIZE;
+                }
+            };
 
     public Long getThreadId(final Context context, final String recipient) {
-      if (recipient == null || !threadsAvailable) return null;
+        if (recipient == null || !threadsAvailable) return null;
 
-      if (mThreadIdCache.containsKey(recipient)) {
-        return mThreadIdCache.get(recipient);
-      } else if (getOrCreateThreadId == null) {
-        try {
-          telephonyThreads = Class.forName("android.provider.Telephony$Threads");
-          getOrCreateThreadId = telephonyThreads.getMethod("getOrCreateThreadId",
-                  Context.class, String.class);
-        } catch (NoSuchMethodException e) {
-          return noThreadsAvailable(e);
-        } catch (ClassNotFoundException e) {
-          return noThreadsAvailable(e);
+        if (mThreadIdCache.containsKey(recipient)) {
+            return mThreadIdCache.get(recipient);
+        } else if (getOrCreateThreadId == null) {
+            try {
+                telephonyThreads = Class.forName("android.provider.Telephony$Threads");
+                getOrCreateThreadId = telephonyThreads.getMethod("getOrCreateThreadId",
+                        Context.class, String.class);
+            } catch (NoSuchMethodException e) {
+                return noThreadsAvailable(e);
+            } catch (ClassNotFoundException e) {
+                return noThreadsAvailable(e);
+            }
         }
-      }
 
-      try {
-        final Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
-                context, recipient);
-        if (LOCAL_LOGV) Log.v(TAG, "threadId for " + recipient + ": " + id);
-        if (id != null) mThreadIdCache.put(recipient, id);
+        try {
+            final Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
+                    context, recipient);
+            if (LOCAL_LOGV) Log.v(TAG, "threadId for " + recipient + ": " + id);
+            if (id != null) mThreadIdCache.put(recipient, id);
 
-        return id;
-      } catch (InvocationTargetException e) {
-        return noThreadsAvailable(e);
-      } catch (IllegalAccessException e) {
-        return noThreadsAvailable(e);
-      }
+            return id;
+        } catch (InvocationTargetException e) {
+            return noThreadsAvailable(e);
+        } catch (IllegalAccessException e) {
+            return noThreadsAvailable(e);
+        }
     }
 
     private Long noThreadsAvailable(Throwable e) {

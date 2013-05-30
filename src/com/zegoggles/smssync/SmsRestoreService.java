@@ -1,26 +1,31 @@
 package com.zegoggles.smssync;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.content.Context;
-import android.util.Log;
 import android.provider.CallLog;
-import com.fsck.k9.mail.*;
+import android.util.Log;
+import com.fsck.k9.mail.AuthenticationFailedException;
+import com.fsck.k9.mail.FetchProfile;
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.zegoggles.smssync.CursorToMessage.DataType;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.File;
-import java.io.IOException;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.ServiceBase.SmsSyncState.*;
-import static com.zegoggles.smssync.App.*;
 
 public class SmsRestoreService extends ServiceBase {
     private static int sCurrentRestoredItems;
@@ -48,9 +53,9 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     class RestoreTask extends AsyncTask<Integer, SmsSyncState, Integer> {
-        private Set<String> smsIds     = new HashSet<String>();
+        private Set<String> smsIds = new HashSet<String>();
         private Set<String> callLogIds = new HashSet<String>();
-        private Set<String> uids       = new HashSet<String>();
+        private Set<String> uids = new HashSet<String>();
         private BackupImapStore.BackupFolder smsFolder, callFolder;
         private final Context context = SmsRestoreService.this;
         private CursorToMessage converter = new CursorToMessage(context, PrefStore.getUserEmail(context));
@@ -60,7 +65,7 @@ public class SmsRestoreService extends ServiceBase {
             this.max = params.length > 0 ? params[0] : -1;
             final boolean starredOnly = PrefStore.isRestoreStarredOnly(context);
             final boolean restoreCallLog = PrefStore.isRestoreCallLog(context);
-            final boolean restoreSms     = PrefStore.isRestoreSms(context);
+            final boolean restoreSms = PrefStore.isRestoreSms(context);
 
             if (!restoreSms && !restoreCallLog) return null;
 
@@ -98,8 +103,8 @@ public class SmsRestoreService extends ServiceBase {
                     }
 
                     if (i % 50 == 0) {
-                      //clear cache periodically otherwise SD card fills up
-                      clearCache();
+                        //clear cache periodically otherwise SD card fills up
+                        clearCache();
                     }
                 }
                 publishProgress(UPDATING_THREADS);
@@ -125,7 +130,7 @@ public class SmsRestoreService extends ServiceBase {
                 return null;
             } finally {
                 releaseLocks();
-           }
+            }
         }
 
         @Override
@@ -143,10 +148,11 @@ public class SmsRestoreService extends ServiceBase {
             sIsRunning = false;
         }
 
-        @Override protected void onProgressUpdate(SmsSyncState... progress) {
-          if (progress == null || progress.length == 0) return;
-          if (smsSync != null) smsSync.statusPref.stateChanged(progress[0]);
-          sState = progress[0];
+        @Override
+        protected void onProgressUpdate(SmsSyncState... progress) {
+            if (progress == null || progress.length == 0) return;
+            if (smsSync != null) smsSync.statusPref.stateChanged(progress[0]);
+            sState = progress[0];
         }
 
         private void updateAllThreads(final boolean async) {
@@ -156,7 +162,8 @@ public class SmsRestoreService extends ServiceBase {
 
             // execute in background, might take some time
             final Thread t = new Thread() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     Log.d(TAG, "updating threads");
                     getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
                     Log.d(TAG, "finished");
@@ -164,8 +171,9 @@ public class SmsRestoreService extends ServiceBase {
             };
             t.start();
             try {
-              if (!async) t.join();
-            } catch (InterruptedException ignored) { }
+                if (!async) t.join();
+            } catch (InterruptedException ignored) {
+            }
         }
 
         private void importMessage(Message message) {
@@ -177,13 +185,18 @@ public class SmsRestoreService extends ServiceBase {
             try {
                 if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
 
-                message.getFolder().fetch(new Message[] { message }, fp, null);
+                message.getFolder().fetch(new Message[]{message}, fp, null);
                 final DataType dataType = converter.getDataType(message);
                 //only restore sms+call log for now
                 switch (dataType) {
-                    case CALLLOG: importCallLog(message); break;
-                    case SMS:     importSms(message); break;
-                    default: if (LOCAL_LOGV) Log.d(TAG, "ignoring restore of type: " + dataType);
+                    case CALLLOG:
+                        importCallLog(message);
+                        break;
+                    case SMS:
+                        importSms(message);
+                        break;
+                    default:
+                        if (LOCAL_LOGV) Log.d(TAG, "ignoring restore of type: " + dataType);
                 }
             } catch (MessagingException e) {
                 Log.e(TAG, "error", e);
@@ -196,24 +209,24 @@ public class SmsRestoreService extends ServiceBase {
         }
 
         private void importSms(final Message message) throws IOException, MessagingException {
-            if (LOCAL_LOGV) Log.v(TAG, "importSms("+message+")");
+            if (LOCAL_LOGV) Log.v(TAG, "importSms(" + message + ")");
             final ContentValues values = converter.messageToContentValues(message);
             final Integer type = values.getAsInteger(SmsConsts.TYPE);
 
             // only restore inbox messages and sent messages - otherwise sms might get sent on restore
             if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
-                                 type == SmsConsts.MESSAGE_TYPE_SENT) &&
-                                 !smsExists(values)) {
+                    type == SmsConsts.MESSAGE_TYPE_SENT) &&
+                    !smsExists(values)) {
                 final Uri uri = getContentResolver().insert(SMS_PROVIDER, values);
                 if (uri != null) {
-                  smsIds.add(uri.getLastPathSegment());
-                  Long timestamp = values.getAsLong(SmsConsts.DATE);
+                    smsIds.add(uri.getLastPathSegment());
+                    Long timestamp = values.getAsLong(SmsConsts.DATE);
 
-                  if (timestamp != null &&
-                      PrefStore.getMaxSyncedDateSms(context) < timestamp) {
-                      updateMaxSyncedDateSms(timestamp);
-                  }
-                  if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
+                    if (timestamp != null &&
+                            PrefStore.getMaxSyncedDateSms(context) < timestamp) {
+                        updateMaxSyncedDateSms(timestamp);
+                    }
+                    if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
                 }
             } else {
                 if (LOCAL_LOGV) Log.d(TAG, "ignoring sms");
@@ -221,23 +234,25 @@ public class SmsRestoreService extends ServiceBase {
         }
 
         private void importCallLog(final Message message) throws MessagingException, IOException {
-            if (LOCAL_LOGV) Log.v(TAG, "importCallLog("+message+")");
+            if (LOCAL_LOGV) Log.v(TAG, "importCallLog(" + message + ")");
             final ContentValues values = converter.messageToContentValues(message);
             if (!callLogExists(values)) {
-              final Uri uri = getContentResolver().insert(CALLLOG_PROVIDER, values);
-              if (uri != null) callLogIds.add(uri.getLastPathSegment());
+                final Uri uri = getContentResolver().insert(CALLLOG_PROVIDER, values);
+                if (uri != null) callLogIds.add(uri.getLastPathSegment());
             } else {
-              if (LOCAL_LOGV) Log.d(TAG, "ignoring call log");
+                if (LOCAL_LOGV) Log.d(TAG, "ignoring call log");
             }
         }
     }
 
-    @Override public void onCreate() {
-       asyncClearCache();
-       BinaryTempFileBody.setTempDirectory(getCacheDir());
+    @Override
+    public void onCreate() {
+        asyncClearCache();
+        BinaryTempFileBody.setTempDirectory(getCacheDir());
     }
 
-    @Override protected void handleIntent(final Intent intent) {
+    @Override
+    protected void handleIntent(final Intent intent) {
         synchronized (ServiceBase.class) {
             if (!sIsRunning) {
                 new RestoreTask().execute(PrefStore.getMaxItemsPerRestore(this));
@@ -245,10 +260,13 @@ public class SmsRestoreService extends ServiceBase {
         }
     }
 
-   private synchronized void asyncClearCache() {
-       new Thread("clearCache") {
-          @Override public void run() { clearCache(); }
-       }.start();
+    private synchronized void asyncClearCache() {
+        new Thread("clearCache") {
+            @Override
+            public void run() {
+                clearCache();
+            }
+        }.start();
     }
 
     private void clearCache() {
@@ -257,28 +275,28 @@ public class SmsRestoreService extends ServiceBase {
 
         Log.d(TAG, "clearing cache in " + tmp);
         for (File f : tmp.listFiles(new FilenameFilter() {
-          public boolean accept(File dir, String name) {
-            return name.startsWith("body");
-          }
+            public boolean accept(File dir, String name) {
+                return name.startsWith("body");
+            }
         })) {
-          if (LOCAL_LOGV) Log.v(TAG, "deleting " + f);
-          if (!f.delete()) Log.w(TAG, "error deleting " + f);
+            if (LOCAL_LOGV) Log.v(TAG, "deleting " + f);
+            if (!f.delete()) Log.w(TAG, "error deleting " + f);
         }
     }
 
     private boolean callLogExists(ContentValues values) {
         Cursor c = getContentResolver().query(CALLLOG_PROVIDER,
-                new String[] { "_id" },
+                new String[]{"_id"},
                 "number = ? AND duration = ? AND type = ?",
-                new String[] { values.getAsString(CallLog.Calls.NUMBER),
-                               values.getAsString(CallLog.Calls.DURATION),
-                               values.getAsString(CallLog.Calls.TYPE) },
-                               null
+                new String[]{values.getAsString(CallLog.Calls.NUMBER),
+                        values.getAsString(CallLog.Calls.DURATION),
+                        values.getAsString(CallLog.Calls.TYPE)},
+                null
         );
         boolean exists = false;
         if (c != null) {
-          exists = c.getCount() > 0;
-          c.close();
+            exists = c.getCount() > 0;
+            c.close();
         }
         return exists;
     }
@@ -286,18 +304,18 @@ public class SmsRestoreService extends ServiceBase {
     private boolean smsExists(ContentValues values) {
         // just assume equality on date+address+type
         Cursor c = getContentResolver().query(SMS_PROVIDER,
-                new String[] { "_id" },
+                new String[]{"_id"},
                 "date = ? AND address = ? AND type = ?",
-                new String[] { values.getAsString(SmsConsts.DATE),
-                               values.getAsString(SmsConsts.ADDRESS),
-                               values.getAsString(SmsConsts.TYPE)},
-                               null
+                new String[]{values.getAsString(SmsConsts.DATE),
+                        values.getAsString(SmsConsts.ADDRESS),
+                        values.getAsString(SmsConsts.TYPE)},
+                null
         );
 
         boolean exists = false;
         if (c != null) {
-          exists = c.getCount() > 0;
-          c.close();
+            exists = c.getCount() > 0;
+            c.close();
         }
         return exists;
     }

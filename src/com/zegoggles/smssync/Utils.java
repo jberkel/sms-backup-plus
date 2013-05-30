@@ -15,52 +15,53 @@
  */
 package com.zegoggles.smssync;
 
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.ListPreference;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class Utils {
-  private Utils() {}
-
-  public static void initListPreference(final ListPreference pref,
-                                        final Map<?, ?> fields, boolean keepExisting) {
-    if (fields.size() > 0) {
-      final List<CharSequence> e   = new ArrayList<CharSequence>();
-      final List<CharSequence> ev  = new ArrayList<CharSequence>();
-
-      if (keepExisting) {
-        if (pref.getEntries() != null)     e.addAll(Arrays.asList(pref.getEntries()));
-        if (pref.getEntryValues() != null) ev.addAll(Arrays.asList(pref.getEntryValues()));
-      }
-
-      for (Map.Entry<?, ?> entry : fields.entrySet()) {
-        if (entry.getValue() != null && entry.getKey() != null) {
-          e.add(entry.getValue().toString());
-          ev.add(entry.getKey().toString());
-        }
-      }
-
-      pref.setEntries(e.toArray(new CharSequence[e.size()]));
-      pref.setEntryValues(ev.toArray(new CharSequence[ev.size()]));
+    private Utils() {
     }
 
-    pref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-      @Override
-      public boolean onPreferenceChange(Preference preference, final Object newValue) {
-          pref.setTitle(
-            pref.getEntries()[
-              pref.findIndexOfValue(newValue.toString())
-            ]);
-          return true;
-      }
-    });
+    public static void initListPreference(final ListPreference pref,
+                                          final Map<?, ?> fields, boolean keepExisting) {
+        if (fields.size() > 0) {
+            final List<CharSequence> e = new ArrayList<CharSequence>();
+            final List<CharSequence> ev = new ArrayList<CharSequence>();
 
-    pref.setEnabled(pref.getEntries() != null &&
-                    pref.getEntries().length > 0);
-  }
+            if (keepExisting) {
+                if (pref.getEntries() != null) e.addAll(Arrays.asList(pref.getEntries()));
+                if (pref.getEntryValues() != null) ev.addAll(Arrays.asList(pref.getEntryValues()));
+            }
+
+            for (Map.Entry<?, ?> entry : fields.entrySet()) {
+                if (entry.getValue() != null && entry.getKey() != null) {
+                    e.add(entry.getValue().toString());
+                    ev.add(entry.getKey().toString());
+                }
+            }
+
+            pref.setEntries(e.toArray(new CharSequence[e.size()]));
+            pref.setEntryValues(ev.toArray(new CharSequence[ev.size()]));
+        }
+
+        pref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, final Object newValue) {
+                pref.setTitle(
+                        pref.getEntries()[
+                                pref.findIndexOfValue(newValue.toString())
+                                ]);
+                return true;
+            }
+        });
+
+        pref.setEnabled(pref.getEntries() != null &&
+                pref.getEntries().length > 0);
+    }
 }

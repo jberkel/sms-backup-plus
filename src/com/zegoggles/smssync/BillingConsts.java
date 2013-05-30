@@ -11,9 +11,9 @@ public class BillingConsts {
     public static final String SKU_DONATION_2 = "donation.2";
     public static final String SKU_DONATION_3 = "donation.3";
 
-    public static final String[] ALL_SKUS = new String[] {
-        SKU_DONATION_1,
-        SKU_DONATION_2,
-        SKU_DONATION_3,
+    public static final String[] ALL_SKUS = new String[]{
+            SKU_DONATION_1,
+            SKU_DONATION_2,
+            SKU_DONATION_3,
     };
 }

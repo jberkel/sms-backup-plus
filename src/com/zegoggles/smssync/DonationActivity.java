@@ -10,9 +10,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-import com.github.jberkel.pay.me.model.Purchase;
-import com.github.jberkel.pay.me.model.SkuDetails;
-import com.github.jberkel.pay.me.model.TestSkus;
 import com.github.jberkel.pay.me.IabHelper;
 import com.github.jberkel.pay.me.IabResult;
 import com.github.jberkel.pay.me.listener.OnConsumeFinishedListener;
@@ -21,6 +18,9 @@ import com.github.jberkel.pay.me.listener.OnIabSetupFinishedListener;
 import com.github.jberkel.pay.me.listener.QueryInventoryFinishedListener;
 import com.github.jberkel.pay.me.model.Inventory;
 import com.github.jberkel.pay.me.model.ItemType;
+import com.github.jberkel.pay.me.model.Purchase;
+import com.github.jberkel.pay.me.model.SkuDetails;
+import com.github.jberkel.pay.me.model.TestSkus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,7 +81,7 @@ public class DonationActivity extends Activity implements
 
     @Override
     public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-        log("onQueryInventoryFinished(" + result + ", " + inventory+")");
+        log("onQueryInventoryFinished(" + result + ", " + inventory + ")");
         if (result.isFailure()) {
             Log.w(TAG, "failed to query inventory: " + result);
             return;
@@ -99,7 +99,7 @@ public class DonationActivity extends Activity implements
                 mIabHelper.consumeAsync(testPurchase, new OnConsumeFinishedListener() {
                     @Override
                     public void onConsumeFinished(Purchase purchase, IabResult result) {
-                        Log.d(TAG, "onConsumeFinished:"+purchase +", "+ result);
+                        Log.d(TAG, "onConsumeFinished:" + purchase + ", " + result);
                     }
                 });
             }
@@ -126,7 +126,7 @@ public class DonationActivity extends Activity implements
             skus.add(TestSkus.REFUNDED);
         }
         String[] items = new String[skus.size()];
-        for (int i = 0; i<skus.size(); i++) {
+        for (int i = 0; i < skus.size(); i++) {
             final SkuDetails sku = skus.get(i);
 
             String item = sku.getTitle();
@@ -139,12 +139,12 @@ public class DonationActivity extends Activity implements
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-            mIabHelper.launchPurchaseFlow(DonationActivity.this,
-                skus.get(which).getSku(),
-                ItemType.INAPP,
-                PURCHASE_REQUEST,
-                DonationActivity.this,
-                null);
+                mIabHelper.launchPurchaseFlow(DonationActivity.this,
+                        skus.get(which).getSku(),
+                        ItemType.INAPP,
+                        PURCHASE_REQUEST,
+                        DonationActivity.this,
+                        null);
             }
         });
         builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -162,12 +162,12 @@ public class DonationActivity extends Activity implements
         });
 
         builder.setTitle(R.string.ui_dialog_donate_message)
-            .show();
+                .show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        log( "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+        log("onActivityResult(" + requestCode + "," + resultCode + "," + data);
         if (!mIabHelper.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         } else {
@@ -227,6 +227,7 @@ public class DonationActivity extends Activity implements
             UNKNOWN,
             NOT_AVAILABLE
         }
+
         void userDonationState(State s);
     }
 
@@ -266,6 +267,7 @@ public class DonationActivity extends Activity implements
 
     private static class SkuComparator implements Comparator<SkuDetails> {
         static final SkuComparator INSTANCE = new SkuComparator();
+
         @Override
         public int compare(SkuDetails lhs, SkuDetails rhs) {
             if (lhs.getPrice() != null && rhs.getPrice() != null) {

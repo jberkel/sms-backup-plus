@@ -15,32 +15,34 @@
  */
 package com.zegoggles.smssync;
 
-/** @noinspection UnusedDeclaration*/
+/**
+ * @noinspection UnusedDeclaration
+ */
 public interface MmsConsts {
 
-   String ID = "_id";
+    String ID = "_id";
 
-   String MESSAGE_ID = "m_id";
+    String MESSAGE_ID = "m_id";
 
-   String READ = "read";
+    String READ = "read";
 
-   String SUBJECT = "sub";
+    String SUBJECT = "sub";
 
-   String DATE = "date";
+    String DATE = "date";
 
-   String THREAD_ID = "thread_id";
+    String THREAD_ID = "thread_id";
 
-   String INSERT_ADDRESS_TOKEN = "insert-address-token";
+    String INSERT_ADDRESS_TOKEN = "insert-address-token";
 
-   String TYPE = "m_type";
+    String TYPE = "m_type";
 
-   String DELIVERY_REPORT = "134"; // 0x86
+    String DELIVERY_REPORT = "134"; // 0x86
 
-   int MESSAGE_BOX_INBOX = 1;
-   int MESSAGE_BOX_SENT  = 2;
+    int MESSAGE_BOX_INBOX = 1;
+    int MESSAGE_BOX_SENT = 2;
 
-   int TO                = 0x97;
-   int FROM              = 0x89;
+    int TO = 0x97;
+    int FROM = 0x89;
 
-   String LEGACY_HEADER  = "mms";
+    String LEGACY_HEADER = "mms";
 }

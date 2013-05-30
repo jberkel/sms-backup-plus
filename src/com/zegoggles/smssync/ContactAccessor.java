@@ -17,43 +17,49 @@ package com.zegoggles.smssync;
 
 import android.content.Context;
 
-import java.util.Locale;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public interface ContactAccessor {
-  int EVERYBODY_ID = -1;
+    int EVERYBODY_ID = -1;
 
-  static class ContactGroup {
-    public final long _id;
-    public final Type type;
+    static class ContactGroup {
+        public final long _id;
+        public final Type type;
 
-    enum Type { EVERYBODY, GROUP }
+        enum Type {EVERYBODY, GROUP}
 
-    public ContactGroup(final long id) {
-      this._id  = id;
-      this.type = (id == EVERYBODY_ID ? Type.EVERYBODY : Type.GROUP);
+        public ContactGroup(final long id) {
+            this._id = id;
+            this.type = (id == EVERYBODY_ID ? Type.EVERYBODY : Type.GROUP);
+        }
     }
-  }
 
-  static class Group {
-    String title;
-    int _id, count;
+    static class Group {
+        String title;
+        int _id, count;
 
-    public Group(int id, String title, int count) {
-      this._id = id; this.title = title; this.count = count;
+        public Group(int id, String title, int count) {
+            this._id = id;
+            this.title = title;
+            this.count = count;
+        }
+
+        public String toString() {
+            return count > 0 ? String.format(Locale.ENGLISH, "%s (%d)", title, count) : title;
+        }
     }
-    public String toString() { return count > 0 ? String.format(Locale.ENGLISH, "%s (%d)", title, count) : title; }
-  }
 
-  static class GroupContactIds {
-    public Set<Long> ids    = new HashSet<Long>();
-    public Set<Long> rawIds = new HashSet<Long>();
-    public String toString() {
-      return getClass().getSimpleName() + "[ids: " + ids + " rawIds: " + rawIds + "]";
+    static class GroupContactIds {
+        public Set<Long> ids = new HashSet<Long>();
+        public Set<Long> rawIds = new HashSet<Long>();
+
+        public String toString() {
+            return getClass().getSimpleName() + "[ids: " + ids + " rawIds: " + rawIds + "]";
+        }
     }
-  }
 
     /**
      * @param context the context
@@ -63,16 +69,16 @@ public interface ContactAccessor {
 
     /**
      * @param context the context
-     * @param group the group
+     * @param group   the group
      * @return All contacts from a group
      */
-  GroupContactIds getGroupContactIds(Context context, ContactGroup group);
+    GroupContactIds getGroupContactIds(Context context, ContactGroup group);
 
-  /**
-   * All groups a user has
-   *
-   * @param ctxt the context
-   * @return the ids and groups
-   */
-  Map<Integer, Group> getGroups(Context ctxt);
+    /**
+     * All groups a user has
+     *
+     * @param ctxt the context
+     * @return the ids and groups
+     */
+    Map<Integer, Group> getGroups(Context ctxt);
 }

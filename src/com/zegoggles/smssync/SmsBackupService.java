@@ -194,7 +194,7 @@ public class SmsBackupService extends ServiceBase {
                 if (e.getStatus() == 400) {
                     Log.d(TAG, "need to perform xoauth2 token refresh");
                     if (!intent.hasExtra("refresh_retried") &&
-                        AccountManagerAuthActivity.refreshOAuth2Token(SmsBackupService.this)) {
+                            AccountManagerAuthActivity.refreshOAuth2Token(SmsBackupService.this)) {
 
                         // we got a new token, let's retry one more time
                         intent.putExtra("refresh_retried", true);
@@ -277,7 +277,7 @@ public class SmsBackupService extends ServiceBase {
 
             publish(LOGIN);
             Folder smsmmsfolder = store.getSMSBackupFolder();
-            Folder callLogfolder  = null;
+            Folder callLogfolder = null;
             Folder whatsAppFolder = null;
             if (PrefStore.isCallLogBackupEnabled(context)) {
                 callLogfolder = store.getCallLogBackupFolder();
@@ -310,8 +310,9 @@ public class SmsBackupService extends ServiceBase {
                     ConversionResult result = converter.cursorToMessages(curCursor, MAX_MSG_PER_REQUEST, dataType);
                     List<Message> messages = result.messageList;
                     if (!messages.isEmpty()) {
-                        if (LOCAL_LOGV) Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
-                                messages.size(), dataType));
+                        if (LOCAL_LOGV)
+                            Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
+                                    messages.size(), dataType));
                         switch (dataType) {
                             case MMS:
                                 updateMaxSyncedDateMms(result.maxDate);

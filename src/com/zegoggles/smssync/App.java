@@ -16,13 +16,11 @@
 
 package com.zegoggles.smssync;
 
-import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
-
 import android.app.Application;
 import android.os.Build;
-
 import com.fsck.k9.K9;
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
 
 @ReportsCrashes(formUri = "https://bugsense.appspot.com/api/acra?api_key=a2603e16", formKey = "")
 public class App extends Application {
@@ -37,42 +35,42 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-      ACRA.init(this);
-      super.onCreate();
-      K9.app = this;
-      K9.DEBUG = DEBUG;
-      K9.DEBUG_PROTOCOL_IMAP = DEBUG;
+        ACRA.init(this);
+        super.onCreate();
+        K9.app = this;
+        K9.DEBUG = DEBUG;
+        K9.DEBUG_PROTOCOL_IMAP = DEBUG;
     }
 
     public static ContactAccessor contactAccessor() {
-      int sdkVersion = Build.VERSION.SDK_INT;
-      if (sContactAccessor == null) {
-        try {
-          if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
-            sContactAccessor = new ContactAccessorPre20();
-          } else {
-            sContactAccessor = new ContactAccessorPost20();
-          }
-        } catch (Exception e) {
-          throw new IllegalStateException(e);
+        int sdkVersion = Build.VERSION.SDK_INT;
+        if (sContactAccessor == null) {
+            try {
+                if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
+                    sContactAccessor = new ContactAccessorPre20();
+                } else {
+                    sContactAccessor = new ContactAccessorPost20();
+                }
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
         }
-      }
-      return sContactAccessor;
+        return sContactAccessor;
     }
 
     public static CalendarAccessor calendarAccessor() {
         int sdkVersion = Build.VERSION.SDK_INT;
-      if (sCalendarAccessor == null) {
-        try {
-          if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            sCalendarAccessor = new CalendarAccessorPre40();
-          } else {
-            sCalendarAccessor = new CalendarAccessorPost40();
-          }
-        } catch (Exception e) {
-          throw new IllegalStateException(e);
+        if (sCalendarAccessor == null) {
+            try {
+                if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    sCalendarAccessor = new CalendarAccessorPre40();
+                } else {
+                    sCalendarAccessor = new CalendarAccessorPost40();
+                }
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
         }
-      }
-      return sCalendarAccessor;
+        return sCalendarAccessor;
     }
 }

@@ -27,57 +27,59 @@ import android.provider.ContactsContract.Groups;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** @noinspection UnusedDeclaration*/
+/**
+ * @noinspection UnusedDeclaration
+ */
 @TargetApi(5)
 public class ContactAccessorPost20 implements ContactAccessor {
-  public String getOwnerEmail(Context context) {
-      AccountManager mgr = AccountManager.get(context);
-      for (Account acc : mgr.getAccountsByType("com.google")) {
-        return acc.name;
-      }
-      return null;
-  }
-
-  public GroupContactIds getGroupContactIds(Context context, ContactGroup group) {
-      final GroupContactIds contactIds = new GroupContactIds();
-      Cursor c = null;
-      switch (group.type) {
-       case GROUP:
-           c = context.getContentResolver().query(
-              Data.CONTENT_URI,
-              new String[] { GroupMembership.CONTACT_ID, GroupMembership.RAW_CONTACT_ID,
-                             GroupMembership.GROUP_ROW_ID },
-              GroupMembership.GROUP_ROW_ID + " = ? AND " + GroupMembership.MIMETYPE + " = ?",
-              new String[] { String.valueOf(group._id), GroupMembership.CONTENT_ITEM_TYPE },
-              null);
-           break;
-      }
-      while (c != null && c.moveToNext()) {
-        contactIds.ids.add(c.getLong(0));
-        contactIds.rawIds.add(c.getLong(1));
-      }
-
-      if (c!=null) c.close();
-      return contactIds;
-  }
-
-  public Map<Integer, Group> getGroups(Context context) {
-    final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
-
-    map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, context.getString(R.string.everybody), 0));
-
-    final Cursor c = context.getContentResolver().query(
-              Groups.CONTENT_SUMMARY_URI,
-              new String[] { Groups._ID, Groups.TITLE, Groups.SUMMARY_COUNT },
-              null,
-              null,
-              Groups.TITLE + " ASC");
-
-    while (c != null && c.moveToNext()) {
-      map.put(c.getInt(0), new Group(c.getInt(0), c.getString(1), c.getInt(2)));
+    public String getOwnerEmail(Context context) {
+        AccountManager mgr = AccountManager.get(context);
+        for (Account acc : mgr.getAccountsByType("com.google")) {
+            return acc.name;
+        }
+        return null;
     }
 
-    if (c != null) c.close();
-    return map;
-  }
+    public GroupContactIds getGroupContactIds(Context context, ContactGroup group) {
+        final GroupContactIds contactIds = new GroupContactIds();
+        Cursor c = null;
+        switch (group.type) {
+            case GROUP:
+                c = context.getContentResolver().query(
+                        Data.CONTENT_URI,
+                        new String[]{GroupMembership.CONTACT_ID, GroupMembership.RAW_CONTACT_ID,
+                                GroupMembership.GROUP_ROW_ID},
+                        GroupMembership.GROUP_ROW_ID + " = ? AND " + GroupMembership.MIMETYPE + " = ?",
+                        new String[]{String.valueOf(group._id), GroupMembership.CONTENT_ITEM_TYPE},
+                        null);
+                break;
+        }
+        while (c != null && c.moveToNext()) {
+            contactIds.ids.add(c.getLong(0));
+            contactIds.rawIds.add(c.getLong(1));
+        }
+
+        if (c != null) c.close();
+        return contactIds;
+    }
+
+    public Map<Integer, Group> getGroups(Context context) {
+        final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
+
+        map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, context.getString(R.string.everybody), 0));
+
+        final Cursor c = context.getContentResolver().query(
+                Groups.CONTENT_SUMMARY_URI,
+                new String[]{Groups._ID, Groups.TITLE, Groups.SUMMARY_COUNT},
+                null,
+                null,
+                Groups.TITLE + " ASC");
+
+        while (c != null && c.moveToNext()) {
+            map.put(c.getInt(0), new Group(c.getInt(0), c.getString(1), c.getInt(2)));
+        }
+
+        if (c != null) c.close();
+        return map;
+    }
 }

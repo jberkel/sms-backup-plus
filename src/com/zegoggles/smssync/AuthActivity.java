@@ -52,7 +52,7 @@ public class AuthActivity extends Activity {
                 // pre-froyo devices don't trust the cert used by google
                 // see https://knowledge.verisign.com/support/mpki-for-ssl-support/index?page=content&id=SO17511&actp=AGENT_REFERAL
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO &&
-                    error.getPrimaryError() == SslError.SSL_IDMISMATCH) {
+                        error.getPrimaryError() == SslError.SSL_IDMISMATCH) {
                     handler.proceed();
                 } else {
                     handler.cancel();
@@ -62,7 +62,7 @@ public class AuthActivity extends Activity {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                if (App.LOCAL_LOGV) Log.d(App.TAG, "onPageStarted("+url+")");
+                if (App.LOCAL_LOGV) Log.d(App.TAG, "onPageStarted(" + url + ")");
                 if (!isFinishing()) mProgress.show();
             }
 

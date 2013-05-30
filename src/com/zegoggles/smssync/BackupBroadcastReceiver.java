@@ -19,26 +19,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 
 public class BackupBroadcastReceiver extends BroadcastReceiver {
     public static final String BACKUP_ACTION = "com.zegoggles.smssync.BACKUP";
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
-        if (LOCAL_LOGV) Log.v(TAG, "onReceive("+ctx+","+intent+")");
+        if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + ctx + "," + intent + ")");
 
         if (intent.getAction().equals(BACKUP_ACTION)) {
-          backupRequested(ctx, intent);
+            backupRequested(ctx, intent);
         }
     }
 
     private void backupRequested(Context ctx, Intent intent) {
         if (PrefStore.isAllow3rdPartyIntegration(ctx)) {
-          Log.d(TAG, "backup requested via broadcast intent");
-          Alarms.scheduleImmediateSync(ctx);
+            Log.d(TAG, "backup requested via broadcast intent");
+            Alarms.scheduleImmediateSync(ctx);
         } else {
-          Log.d(TAG, "backup requested via broadcast intent but ignored");
+            Log.d(TAG, "backup requested via broadcast intent but ignored");
         }
     }
 }

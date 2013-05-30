@@ -20,37 +20,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 
 public class SmsBroadcastReceiver extends BroadcastReceiver {
     public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
-        if (LOCAL_LOGV) Log.v(TAG, "onReceive("+ctx+","+intent+")");
+        if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + ctx + "," + intent + ")");
 
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-          bootup(ctx);
+            bootup(ctx);
         } else if (intent.getAction().equals(SMS_RECEIVED)) {
-          incomingSMS(ctx);
+            incomingSMS(ctx);
         }
     }
 
     private void bootup(Context ctx) {
-		if (PrefStore.isEnableAutoSync(ctx) &&
-		    PrefStore.isLoginInformationSet(ctx) &&
-		    !PrefStore.isFirstSync(ctx)) {
-		
-		    Alarms.scheduleRegularSync(ctx);
-	    } else {
-		        Log.i(TAG, "Received bootup but not set up to sync.");
-		}
+        if (PrefStore.isEnableAutoSync(ctx) &&
+                PrefStore.isLoginInformationSet(ctx) &&
+                !PrefStore.isFirstSync(ctx)) {
+
+            Alarms.scheduleRegularSync(ctx);
+        } else {
+            Log.i(TAG, "Received bootup but not set up to sync.");
+        }
     }
 
     private void incomingSMS(Context ctx) {
         if (PrefStore.isEnableAutoSync(ctx) &&
-            PrefStore.isLoginInformationSet(ctx) &&
-            !PrefStore.isFirstSync(ctx)) {
+                PrefStore.isLoginInformationSet(ctx) &&
+                !PrefStore.isFirstSync(ctx)) {
 
             Alarms.scheduleIncomingSync(ctx);
         } else {

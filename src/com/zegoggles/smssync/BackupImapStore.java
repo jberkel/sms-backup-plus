@@ -44,55 +44,52 @@ public class BackupImapStore extends ImapStore {
     private Context context;
 
     static {
-      // increase read timeout a bit
-      com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 5;
+        // increase read timeout a bit
+        com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 5;
     }
 
     public BackupImapStore(final Context context, final String uri) throws MessagingException {
         super(new Account(context) {
-            @Override public String getStoreUri() {
-              return uri;
+            @Override
+            public String getStoreUri() {
+                return uri;
             }
         });
         this.context = context;
     }
 
-    public BackupFolder getSMSBackupFolder() throws MessagingException
-    {
+    public BackupFolder getSMSBackupFolder() throws MessagingException {
         String label = PrefStore.getImapFolder(context);
         return getBackupFolder(label, DataType.SMS);
     }
 
-    public BackupFolder getCallLogBackupFolder() throws MessagingException
-    {
+    public BackupFolder getCallLogBackupFolder() throws MessagingException {
         String label = PrefStore.getCallLogFolder(context);
         return getBackupFolder(label, DataType.CALLLOG);
     }
 
-    public BackupFolder getWhatsAppBackupFolder() throws MessagingException
-    {
+    public BackupFolder getWhatsAppBackupFolder() throws MessagingException {
         String label = PrefStore.getWhatsAppFolder(context);
         return getBackupFolder(label, DataType.WHATSAPP);
     }
 
 
-    private BackupFolder getBackupFolder(String label, DataType type) throws MessagingException
-    {
+    private BackupFolder getBackupFolder(String label, DataType type) throws MessagingException {
         if (label == null) throw new IllegalStateException("label is null");
 
         try {
-          final BackupFolder folder = new BackupFolder(this, label, type);
+            final BackupFolder folder = new BackupFolder(this, label, type);
 
-          if (!folder.exists()) {
-              folder.create(FolderType.HOLDS_MESSAGES);
-              Log.i(TAG, "Label '" + label + "' does not exist yet. Creating.");
-          }
-          folder.open(OpenMode.READ_WRITE);
-          return folder;
+            if (!folder.exists()) {
+                folder.create(FolderType.HOLDS_MESSAGES);
+                Log.i(TAG, "Label '" + label + "' does not exist yet. Creating.");
+            }
+            folder.open(OpenMode.READ_WRITE);
+            return folder;
         } catch (java.lang.NumberFormatException e) {
-          // thrown inside K9
-          Log.e(TAG, "K9 error", e);
-          throw new MessagingException(e.getMessage());
+            // thrown inside K9
+            Log.e(TAG, "K9 error", e);
+            throw new MessagingException(e.getMessage());
         }
     }
 
@@ -105,16 +102,18 @@ public class BackupImapStore extends ImapStore {
         }
 
         public List<Message> getMessages(final int max, final boolean flagged, final Date since)
-          throws MessagingException {
-            if (LOCAL_LOGV) Log.v(TAG, String.format(Locale.ENGLISH, "getMessages(%d, %b, %s)", max, flagged, since));
+                throws MessagingException {
+            if (LOCAL_LOGV)
+                Log.v(TAG, String.format(Locale.ENGLISH, "getMessages(%d, %b, %s)", max, flagged, since));
 
             final List<Message> messages;
             final ImapSearcher searcher = new ImapSearcher() {
-                @Override public List<ImapResponse> search() throws IOException, MessagingException {
+                @Override
+                public List<ImapResponse> search() throws IOException, MessagingException {
                     final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
-                        .append(' ')
-                        .append(getQuery())
-                        .append(" UNDELETED");
+                            .append(' ')
+                            .append(getQuery())
+                            .append(" UNDELETED");
                     if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.format(since));
                     if (flagged) sb.append(" FLAGGED");
 
@@ -146,43 +145,51 @@ public class BackupImapStore extends ImapStore {
             }
 
             Collections.reverse(messages);
-            
+
             return messages;
         }
 
         private String getQuery() {
-           switch(this.type) {
+            switch (this.type) {
             /* MMS/SMS are special cases since we need to support legacy backup headers */
-            case SMS:
-              return
-              String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
-                            Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
-                            Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
-                            Headers.TYPE.toUpperCase(Locale.ENGLISH), SmsConsts.MESSAGE_TYPE_INBOX,
-                            Headers.TYPE.toUpperCase(Locale.ENGLISH), SmsConsts.MESSAGE_TYPE_SENT);
-            case MMS:
-              return
-              String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",
-                            Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
-                            Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
-                            Headers.TYPE.toUpperCase(Locale.ENGLISH), MmsConsts.LEGACY_HEADER);
+                case SMS:
+                    return
+                            String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
+                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
+                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
+                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), SmsConsts.MESSAGE_TYPE_INBOX,
+                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), SmsConsts.MESSAGE_TYPE_SENT);
+                case MMS:
+                    return
+                            String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",
+                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
+                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
+                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), MmsConsts.LEGACY_HEADER);
 
-            default: return String.format(Locale.ENGLISH, "(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type);
-           }
+                default:
+                    return String.format(Locale.ENGLISH, "(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type);
+            }
         }
 
-        @Override public boolean equals(Object o) { return super.equals(o); }
-        @Override public int hashCode() { return super.hashCode(); }
+        @Override
+        public boolean equals(Object o) {
+            return super.equals(o);
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
     }
 
     static class MessageComparator implements Comparator<Message> {
-      static final MessageComparator INSTANCE = new MessageComparator();
-      static final Date EARLY = new Date(0);
+        static final MessageComparator INSTANCE = new MessageComparator();
+        static final Date EARLY = new Date(0);
 
-      public int compare(final Message m1, final Message m2) {
-          final Date d1 = m1 == null ? EARLY : m1.getSentDate() != null ? m1.getSentDate() : EARLY;
-          final Date d2 = m2 == null ? EARLY : m2.getSentDate() != null ? m2.getSentDate() : EARLY;
-          return d2.compareTo(d1);
-      }
+        public int compare(final Message m1, final Message m2) {
+            final Date d1 = m1 == null ? EARLY : m1.getSentDate() != null ? m1.getSentDate() : EARLY;
+            final Date d2 = m2 == null ? EARLY : m2.getSentDate() != null ? m2.getSentDate() : EARLY;
+            return d2.compareTo(d1);
+        }
     }
 }

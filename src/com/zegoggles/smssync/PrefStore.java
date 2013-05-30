@@ -47,19 +47,29 @@ public class PrefStore {
     static final String PREF_MAX_SYNCED_DATE_CALLLOG = "max_synced_date_calllog";
     static final String PREF_MAX_SYNCED_DATE_WHATSAPP = "max_synced_date_whatsapp";
 
-    /** Preference key containing the Google account username. */
+    /**
+     * Preference key containing the Google account username.
+     */
     static final String PREF_LOGIN_USER = "login_user";
 
-    /** Preference key containing the Google account password. */
+    /**
+     * Preference key containing the Google account password.
+     */
     static final String PREF_LOGIN_PASSWORD = "login_password";
 
-    /** Preference key containing a UID used for the threading reference header. */
+    /**
+     * Preference key containing a UID used for the threading reference header.
+     */
     static final String PREF_REFERENCE_UID = "reference_uid";
 
-    /** Preference key containing the server address */
+    /**
+     * Preference key containing the server address
+     */
     static final String PREF_SERVER_ADDRESS = "server_address";
 
-    /** Preference key containing the server protocol */
+    /**
+     * Preference key containing the server protocol
+     */
     static final String PREF_SERVER_PROTOCOL = "server_protocol";
 
     static final String PREF_SERVER_AUTHENTICATION = "server_authentication";
@@ -70,104 +80,152 @@ public class PrefStore {
     static final String PREF_OAUTH_USER = "oauth_user";
     static final String PREF_OAUTH2_USER = "oauth2_user";
 
-    /** Preference key containing the IMAP folder name where SMS should be backed up to. */
+    /**
+     * Preference key containing the IMAP folder name where SMS should be backed up to.
+     */
     static final String PREF_IMAP_FOLDER = "imap_folder";
 
-    /** Preference key containing the IMAP folder name where call logs should be backed up to. */
+    /**
+     * Preference key containing the IMAP folder name where call logs should be backed up to.
+     */
     static final String PREF_IMAP_FOLDER_CALLLOG = "imap_folder_calllog";
 
-    /** Preference key containing the IMAP folder name where WhatsApp messages should be backed up to. */
+    /**
+     * Preference key containing the IMAP folder name where WhatsApp messages should be backed up to.
+     */
     static final String PREF_IMAP_FOLDER_WHATSAPP = "imap_folder_whatsapp";
 
-    /** Preference key containing the IMAP folder name where SMS should be backed up to. */
+    /**
+     * Preference key containing the IMAP folder name where SMS should be backed up to.
+     */
     static final String PREF_MAIL_SUBJECT_PREFIX = "mail_subject_prefix";
 
-    /** Preference key for storing whether to enable auto sync or not. */
+    /**
+     * Preference key for storing whether to enable auto sync or not.
+     */
     static final String PREF_ENABLE_AUTO_SYNC = "enable_auto_sync";
 
-    /** Preference key for the timeout between an SMS is received and the scheduled sync. */
+    /**
+     * Preference key for the timeout between an SMS is received and the scheduled sync.
+     */
     static final String PREF_INCOMING_TIMEOUT_SECONDS = "auto_backup_incoming_schedule";
 
-    /** Preference key for the interval between backup of outgoing SMS. */
+    /**
+     * Preference key for the interval between backup of outgoing SMS.
+     */
     static final String PREF_REGULAR_TIMEOUT_SECONDS = "auto_backup_schedule";
 
-    /** Preference for storing the maximum items per sync. */
+    /**
+     * Preference for storing the maximum items per sync.
+     */
     static final String PREF_MAX_ITEMS_PER_SYNC = "max_items_per_sync";
 
-    /** Preference for storing the maximum items per restore. */
+    /**
+     * Preference for storing the maximum items per restore.
+     */
     static final String PREF_MAX_ITEMS_PER_RESTORE = "max_items_per_restore";
 
-    /** Preference for storing the maximum items per restore. */
+    /**
+     * Preference for storing the maximum items per restore.
+     */
     static final String PREF_RESTORE_STARRED_ONLY = "restore_starred_only";
 
-    /** Preference for storing whether backed up messages should be marked as read on Gmail. */
+    /**
+     * Preference for storing whether backed up messages should be marked as read on Gmail.
+     */
     static final String PREF_MARK_AS_READ = "mark_as_read";
 
-    /** Preference for storing whether restored messages should be marked as read. */
+    /**
+     * Preference for storing whether restored messages should be marked as read.
+     */
     static final String PREF_MARK_AS_READ_ON_RESTORE = "mark_as_read_on_restore";
 
     static final String PREF_EMAIL_ADDRESS_STYLE = "email_address_style";
 
-    static final String PREF_BACKUP_SMS  = "backup_sms";
-    static final String PREF_RESTORE_SMS  = "restore_sms";
+    static final String PREF_BACKUP_SMS = "backup_sms";
+    static final String PREF_RESTORE_SMS = "restore_sms";
 
-    static final String PREF_BACKUP_MMS  = "backup_mms";
-    static final String PREF_BACKUP_WHATSAPP  = "backup_whatsapp";
+    static final String PREF_BACKUP_MMS = "backup_mms";
+    static final String PREF_BACKUP_WHATSAPP = "backup_whatsapp";
 
-    static final String PREF_BACKUP_CALLLOG  = "backup_calllog";
-    static final String PREF_RESTORE_CALLLOG  = "restore_calllog";
+    static final String PREF_BACKUP_CALLLOG = "backup_calllog";
+    static final String PREF_RESTORE_CALLLOG = "restore_calllog";
 
-    static final String PREF_CALLLOG_SYNC_CALENDAR  = "backup_calllog_sync_calendar";
-    static final String PREF_CALLLOG_SYNC_CALENDAR_ENABLED  = "backup_calllog_sync_calendar_enabled";
+    static final String PREF_CALLLOG_SYNC_CALENDAR = "backup_calllog_sync_calendar";
+    static final String PREF_CALLLOG_SYNC_CALENDAR_ENABLED = "backup_calllog_sync_calendar_enabled";
 
-    static final String PREF_CALLLOG_TYPES  = "backup_calllog_types";
-    static final String PREF_BACKUP_CONTACT_GROUP  = "backup_contact_group";
+    static final String PREF_CALLLOG_TYPES = "backup_calllog_types";
+    static final String PREF_BACKUP_CONTACT_GROUP = "backup_contact_group";
 
-    static final String PREF_CONNECTED  = "connected";
-    static final String PREF_WIFI_ONLY  = "wifi_only";
+    static final String PREF_CONNECTED = "connected";
+    static final String PREF_WIFI_ONLY = "wifi_only";
 
-    static final String PREF_THIRD_PARTY_INTEGRATION  = "third_party_integration";
+    static final String PREF_THIRD_PARTY_INTEGRATION = "third_party_integration";
 
     static final String PREF_APP_LOG = "app_log";
 
-    /** Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE_SMS}. */
+    /**
+     * Default value for {@link PrefStore#PREF_MAX_SYNCED_DATE_SMS}.
+     */
     static final long DEFAULT_MAX_SYNCED_DATE = -1;
 
-    /** Default value for {@link PrefStore#PREF_IMAP_FOLDER}. */
+    /**
+     * Default value for {@link PrefStore#PREF_IMAP_FOLDER}.
+     */
     static final String DEFAULT_IMAP_FOLDER = "SMS";
 
-    /** Default value for {@link PrefStore#PREF_IMAP_FOLDER_CALLLOG}. */
+    /**
+     * Default value for {@link PrefStore#PREF_IMAP_FOLDER_CALLLOG}.
+     */
     static final String DEFAULT_IMAP_FOLDER_CALLLOG = "Call log";
 
-    /** Default value for {@link PrefStore#PREF_IMAP_FOLDER_WHATSAPP}. */
+    /**
+     * Default value for {@link PrefStore#PREF_IMAP_FOLDER_WHATSAPP}.
+     */
     static final String DEFAULT_IMAP_FOLDER_WHATSAPP = "WhatsApp";
 
-    /** Default value for {@link PrefStore#PREF_MAIL_SUBJECT_PREFIX}. */
+    /**
+     * Default value for {@link PrefStore#PREF_MAIL_SUBJECT_PREFIX}.
+     */
     static final boolean DEFAULT_MAIL_SUBJECT_PREFIX = false;
 
-    /** Default value for {@link PrefStore#PREF_ENABLE_AUTO_SYNC}. */
+    /**
+     * Default value for {@link PrefStore#PREF_ENABLE_AUTO_SYNC}.
+     */
     static final boolean DEFAULT_ENABLE_AUTO_SYNC = false;
 
-    /** Default value for {@link PrefStore#PREF_INCOMING_TIMEOUT_SECONDS}. */
+    /**
+     * Default value for {@link PrefStore#PREF_INCOMING_TIMEOUT_SECONDS}.
+     */
     static final int DEFAULT_INCOMING_TIMEOUT_SECONDS = 60 * 3;
 
-    /** Default value for {@link PrefStore#PREF_REGULAR_TIMEOUT_SECONDS}. */
+    /**
+     * Default value for {@link PrefStore#PREF_REGULAR_TIMEOUT_SECONDS}.
+     */
     static final int DEFAULT_REGULAR_TIMEOUT_SECONDS = 2 * 60 * 60; // 2h
 
-    /** Default value for {@link #PREF_MAX_ITEMS_PER_SYNC}. */
+    /**
+     * Default value for {@link #PREF_MAX_ITEMS_PER_SYNC}.
+     */
     static final int DEFAULT_MAX_ITEMS_PER_SYNC = -1;
 
     static final int DEFAULT_MAX_ITEMS_PER_RESTORE = -1;
 
-    /** Default value for {@link #PREF_MARK_AS_READ}. */
+    /**
+     * Default value for {@link #PREF_MARK_AS_READ}.
+     */
     static final boolean DEFAULT_MARK_AS_READ = true;
 
     static final boolean DEFAULT_MARK_AS_READ_ON_RESTORE = true;
 
-    /** Default value for {@link #PREF_SERVER_ADDRESS}. */
+    /**
+     * Default value for {@link #PREF_SERVER_ADDRESS}.
+     */
     static final String DEFAULT_SERVER_ADDRESS = "imap.gmail.com:993";
 
-    /** Default value for {@link #PREF_SERVER_PROTOCOL}. */
+    /**
+     * Default value for {@link #PREF_SERVER_PROTOCOL}.
+     */
     static final String DEFAULT_SERVER_PROTOCOL = "+ssl+";
 
 
@@ -176,9 +234,11 @@ public class PrefStore {
     }
 
 
-    enum AuthMode            { PLAIN, XOAUTH }
-    enum CallLogTypes        { EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING }
-    public enum AddressStyle { NAME, NAME_AND_NUMBER, NUMBER }
+    enum AuthMode {PLAIN, XOAUTH}
+
+    enum CallLogTypes {EVERYTHING, MISSED, INCOMING, OUTGOING, INCOMING_OUTGOING}
+
+    public enum AddressStyle {NAME, NAME_AND_NUMBER, NUMBER}
 
 
     static SharedPreferences getPrefs(Context ctx) {
@@ -193,9 +253,9 @@ public class PrefStore {
 
     static long getMostRecentSyncedDate(Context ctx) {
         return Math.max(Math.max(
-            getMaxSyncedDateSms(ctx),
-            getMaxSyncedDateMms(ctx) * 1000),
-            getMaxSyncedDateCallLog(ctx));
+                getMaxSyncedDateSms(ctx),
+                getMaxSyncedDateMms(ctx) * 1000),
+                getMaxSyncedDateCallLog(ctx));
     }
 
     static long getMaxSyncedDateSms(Context ctx) {
@@ -217,20 +277,20 @@ public class PrefStore {
 
     static void setMaxSyncedDateSms(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
-          .putLong(PREF_MAX_SYNCED_DATE_SMS, maxSyncedDate)
-          .commit();
+                .putLong(PREF_MAX_SYNCED_DATE_SMS, maxSyncedDate)
+                .commit();
     }
 
     static void setMaxSyncedDateMms(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
-          .putLong(PREF_MAX_SYNCED_DATE_MMS, maxSyncedDate)
-          .commit();
+                .putLong(PREF_MAX_SYNCED_DATE_MMS, maxSyncedDate)
+                .commit();
     }
 
     static void setMaxSyncedDateCallLog(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
-          .putLong(PREF_MAX_SYNCED_DATE_CALLLOG, maxSyncedDate)
-          .commit();
+                .putLong(PREF_MAX_SYNCED_DATE_CALLLOG, maxSyncedDate)
+                .commit();
     }
 
     static void setMaxSyncedDateWhatsApp(Context ctx, long maxSyncedDate) {
@@ -253,9 +313,9 @@ public class PrefStore {
 
     static XOAuthConsumer getOAuthConsumer(Context ctx) {
         return new XOAuthConsumer(
-            getOauthUsername(ctx),
-            getOauthToken(ctx),
-            getOauthTokenSecret(ctx));
+                getOauthUsername(ctx),
+                getOauthToken(ctx),
+                getOauthTokenSecret(ctx));
     }
 
     static String getOauthToken(Context ctx) {
@@ -272,13 +332,13 @@ public class PrefStore {
 
     static boolean hasOauthTokens(Context ctx) {
         return getOauthUsername(ctx) != null &&
-               getOauthToken(ctx) != null &&
-               getOauthTokenSecret(ctx) != null;
+                getOauthToken(ctx) != null &&
+                getOauthTokenSecret(ctx) != null;
     }
 
     static boolean hasOAuth2Tokens(Context ctx) {
         return getOauth2Username(ctx) != null &&
-               getOauth2Token(ctx) != null;
+                getOauth2Token(ctx) != null;
     }
 
     private static String getOauthUsername(Context ctx) {
@@ -298,10 +358,10 @@ public class PrefStore {
     }
 
     static void setOauthTokens(Context ctx, String token, String secret) {
-      getCredentials(ctx).edit()
-        .putString(PREF_OAUTH_TOKEN, token)
-        .putString(PREF_OAUTH_TOKEN_SECRET, secret)
-        .commit();
+        getCredentials(ctx).edit()
+                .putString(PREF_OAUTH_TOKEN, token)
+                .putString(PREF_OAUTH_TOKEN_SECRET, secret)
+                .commit();
     }
 
     static void setOauth2Token(Context ctx, String username, String token) {
@@ -328,28 +388,33 @@ public class PrefStore {
     }
 
     static String getUserEmail(Context ctx) {
-      switch(getAuthMode(ctx)) {
-        case XOAUTH: return getUsername(ctx);
-        default:     return getImapUsername(ctx);
-      }
+        switch (getAuthMode(ctx)) {
+            case XOAUTH:
+                return getUsername(ctx);
+            default:
+                return getImapUsername(ctx);
+        }
     }
 
     static boolean isLoginInformationSet(Context ctx) {
         switch (getAuthMode(ctx)) {
-            case PLAIN:  return !TextUtils.isEmpty(getImapPassword(ctx)) &&
-                                !TextUtils.isEmpty(getImapUsername(ctx));
-            case XOAUTH: return hasOauthTokens(ctx) || hasOAuth2Tokens(ctx);
-            default: return false;
+            case PLAIN:
+                return !TextUtils.isEmpty(getImapPassword(ctx)) &&
+                        !TextUtils.isEmpty(getImapUsername(ctx));
+            case XOAUTH:
+                return hasOauthTokens(ctx) || hasOAuth2Tokens(ctx);
+            default:
+                return false;
         }
     }
 
     static boolean isSmsBackupEnabled(Context ctx) {
-      return getPrefs(ctx).getBoolean(PREF_BACKUP_SMS, true);
+        return getPrefs(ctx).getBoolean(PREF_BACKUP_SMS, true);
     }
 
     static boolean isMmsBackupEnabled(Context ctx) {
-       final int version = android.os.Build.VERSION.SDK_INT;
-       return version >= SmsSync.MIN_VERSION_MMS && getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
+        final int version = android.os.Build.VERSION.SDK_INT;
+        return version >= SmsSync.MIN_VERSION_MMS && getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
     static boolean isWhatsAppBackupEnabled(Context ctx) {
@@ -362,34 +427,39 @@ public class PrefStore {
 
     static boolean isCallLogCalendarSyncEnabled(Context ctx) {
         return
-          getCallLogCalendarId(ctx) >= 0 &&
-          getPrefs(ctx).getBoolean(PREF_CALLLOG_SYNC_CALENDAR_ENABLED, false);
+                getCallLogCalendarId(ctx) >= 0 &&
+                        getPrefs(ctx).getBoolean(PREF_CALLLOG_SYNC_CALENDAR_ENABLED, false);
     }
 
     static <T extends Enum<T>> T getDefaultType(Context ctx, String pref, Class<T> tClazz,
                                                 T defaultType) {
         try {
-          final String s = getPrefs(ctx).getString(pref, null);
-          return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase(Locale.ENGLISH));
+            final String s = getPrefs(ctx).getString(pref, null);
+            return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase(Locale.ENGLISH));
         } catch (IllegalArgumentException e) {
-          Log.e(TAG, "getDefaultType("+pref+")", e);
-          return defaultType;
+            Log.e(TAG, "getDefaultType(" + pref + ")", e);
+            return defaultType;
         }
     }
 
     static CallLogTypes getCallLogType(Context ctx) {
-      return getDefaultType(ctx, PREF_CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
+        return getDefaultType(ctx, PREF_CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
     }
 
     static boolean isCallLogTypeEnabled(Context ctx, int type) {
-      switch (getCallLogType(ctx)) {
-        case OUTGOING: return type == CallLog.Calls.OUTGOING_TYPE;
-        case INCOMING: return type == CallLog.Calls.INCOMING_TYPE;
-        case MISSED:   return type == CallLog.Calls.MISSED_TYPE;
-        case INCOMING_OUTGOING: return type != CallLog.Calls.MISSED_TYPE;
+        switch (getCallLogType(ctx)) {
+            case OUTGOING:
+                return type == CallLog.Calls.OUTGOING_TYPE;
+            case INCOMING:
+                return type == CallLog.Calls.INCOMING_TYPE;
+            case MISSED:
+                return type == CallLog.Calls.MISSED_TYPE;
+            case INCOMING_OUTGOING:
+                return type != CallLog.Calls.MISSED_TYPE;
 
-        default: return true;
-      }
+            default:
+                return true;
+        }
     }
 
     static int getCallLogCalendarId(Context ctx) {
@@ -414,8 +484,8 @@ public class PrefStore {
 
     static void setReferenceUid(Context ctx, String referenceUid) {
         getPrefs(ctx).edit()
-          .putString(PREF_REFERENCE_UID, referenceUid)
-          .commit();
+                .putString(PREF_REFERENCE_UID, referenceUid)
+                .commit();
     }
 
     static String getImapFolder(Context ctx) {
@@ -435,35 +505,35 @@ public class PrefStore {
     }
 
     static int getMaxItemsPerSync(Context ctx) {
-      return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_SYNC, DEFAULT_MAX_ITEMS_PER_SYNC);
+        return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_SYNC, DEFAULT_MAX_ITEMS_PER_SYNC);
     }
 
     static int getMaxItemsPerRestore(Context ctx) {
-      return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_RESTORE, DEFAULT_MAX_ITEMS_PER_RESTORE);
+        return getStringAsInt(ctx, PREF_MAX_ITEMS_PER_RESTORE, DEFAULT_MAX_ITEMS_PER_RESTORE);
     }
 
     static AddressStyle getEmailAddressStyle(Context ctx) {
-      return getDefaultType(ctx, PREF_EMAIL_ADDRESS_STYLE, AddressStyle.class, AddressStyle.NAME);
+        return getDefaultType(ctx, PREF_EMAIL_ADDRESS_STYLE, AddressStyle.class, AddressStyle.NAME);
     }
 
     static boolean isWifiOnly(Context ctx) {
-      return (getPrefs(ctx).getBoolean(PREF_WIFI_ONLY, false));
+        return (getPrefs(ctx).getBoolean(PREF_WIFI_ONLY, false));
     }
 
     static boolean isAllow3rdPartyIntegration(Context ctx) {
-      return (getPrefs(ctx).getBoolean(PREF_THIRD_PARTY_INTEGRATION, false));
+        return (getPrefs(ctx).getBoolean(PREF_THIRD_PARTY_INTEGRATION, false));
     }
 
     private static int getStringAsInt(Context ctx, String key, int def) {
         try {
-          String s = getPrefs(ctx).getString(key, null);
-          if (s == null) return def;
+            String s = getPrefs(ctx).getString(key, null);
+            if (s == null) return def;
 
-          return Integer.valueOf(s);
+            return Integer.valueOf(s);
         } catch (NumberFormatException e) {
-          return def;
+            return def;
         }
-      }
+    }
 
     /**
      * @param imapFolder the folder
@@ -471,7 +541,7 @@ public class PrefStore {
      */
     static boolean isValidImapFolder(String imapFolder) {
         return !(imapFolder == null || imapFolder.length() == 0) &&
-               !(imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ');
+                !(imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ');
 
     }
 
@@ -481,7 +551,7 @@ public class PrefStore {
     }
 
     static int getIncomingTimeoutSecs(Context ctx) {
-       return getStringAsInt(ctx, PREF_INCOMING_TIMEOUT_SECONDS, DEFAULT_INCOMING_TIMEOUT_SECONDS);
+        return getStringAsInt(ctx, PREF_INCOMING_TIMEOUT_SECONDS, DEFAULT_INCOMING_TIMEOUT_SECONDS);
     }
 
     static int getRegularTimeoutSecs(Context ctx) {
@@ -504,7 +574,7 @@ public class PrefStore {
         final String key = "first_use";
 
         if (isFirstSync(ctx) &&
-            !getPrefs(ctx).contains(key)) {
+                !getPrefs(ctx).contains(key)) {
             getPrefs(ctx).edit().putBoolean(key, false).commit();
             return true;
         } else {
@@ -516,15 +586,15 @@ public class PrefStore {
         final String oauth2token = getOauth2Token(ctx);
 
         getPrefs(ctx).edit()
-          .remove(PREF_OAUTH_USER)
-          .remove(PREF_OAUTH2_USER)
-          .commit();
+                .remove(PREF_OAUTH_USER)
+                .remove(PREF_OAUTH2_USER)
+                .commit();
 
         getCredentials(ctx).edit()
-          .remove(PREF_OAUTH_TOKEN)
-          .remove(PREF_OAUTH_TOKEN_SECRET)
-          .remove(PREF_OAUTH2_TOKEN)
-          .commit();
+                .remove(PREF_OAUTH_TOKEN)
+                .remove(PREF_OAUTH_TOKEN_SECRET)
+                .remove(PREF_OAUTH2_TOKEN)
+                .commit();
 
         if (!TextUtils.isEmpty(oauth2token) && Integer.parseInt(Build.VERSION.SDK) >= 5) {
             AccountManagerAuthActivity.invalidateToken(ctx, oauth2token);
@@ -533,11 +603,11 @@ public class PrefStore {
 
     static void clearLastSyncData(Context ctx) {
         getPrefs(ctx).edit()
-          .remove(PREF_MAX_SYNCED_DATE_SMS)
-          .remove(PREF_MAX_SYNCED_DATE_MMS)
-          .remove(PREF_MAX_SYNCED_DATE_CALLLOG)
-          .remove(PREF_MAX_SYNCED_DATE_WHATSAPP)
-          .commit();
+                .remove(PREF_MAX_SYNCED_DATE_SMS)
+                .remove(PREF_MAX_SYNCED_DATE_MMS)
+                .remove(PREF_MAX_SYNCED_DATE_CALLLOG)
+                .remove(PREF_MAX_SYNCED_DATE_WHATSAPP)
+                .commit();
     }
 
     static boolean isNotificationEnabled(Context ctx) {
@@ -545,7 +615,7 @@ public class PrefStore {
     }
 
     static boolean confirmAction(Context ctx) {
-    	return getPrefs(ctx).getBoolean("confirm_action", false);
+        return getPrefs(ctx).getBoolean("confirm_action", false);
     }
 
     static String getServerAddress(Context ctx) {
@@ -560,37 +630,37 @@ public class PrefStore {
         return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress(ctx));
     }
 
-	static String encode(String s) {
-      return s == null ? "" : URLEncoder.encode(s);
+    static String encode(String s) {
+        return s == null ? "" : URLEncoder.encode(s);
     }
 
     static String getStoreUri(Context ctx) {
         if (useXOAuth(ctx)) {
 
-          if (hasOauthTokens(ctx)) {
-              XOAuthConsumer consumer = getOAuthConsumer(ctx);
-              return String.format(Consts.IMAP_URI,
-                   DEFAULT_SERVER_PROTOCOL,
-                    "xoauth:" + encode(consumer.getUsername()),
-                   encode(consumer.generateXOAuthString()),
-                   getServerAddress(ctx));
-          } else if (hasOAuth2Tokens(ctx)) {
+            if (hasOauthTokens(ctx)) {
+                XOAuthConsumer consumer = getOAuthConsumer(ctx);
                 return String.format(Consts.IMAP_URI,
-                    DEFAULT_SERVER_PROTOCOL,
-                    "xoauth2:" + encode(getOauth2Username(ctx)),
-                    encode(generateXOAuth2Token(ctx)),
-                    getServerAddress(ctx));
-          } else {
-              Log.w(TAG, "No valid xoauth1/2 tokens");
-              return null;
-          }
+                        DEFAULT_SERVER_PROTOCOL,
+                        "xoauth:" + encode(consumer.getUsername()),
+                        encode(consumer.generateXOAuthString()),
+                        getServerAddress(ctx));
+            } else if (hasOAuth2Tokens(ctx)) {
+                return String.format(Consts.IMAP_URI,
+                        DEFAULT_SERVER_PROTOCOL,
+                        "xoauth2:" + encode(getOauth2Username(ctx)),
+                        encode(generateXOAuth2Token(ctx)),
+                        getServerAddress(ctx));
+            } else {
+                Log.w(TAG, "No valid xoauth1/2 tokens");
+                return null;
+            }
 
         } else {
             return String.format(Consts.IMAP_URI,
-               getServerProtocol(ctx),
-               encode(getImapUsername(ctx)),
-               encode(getImapPassword(ctx)).replace("+", "%20"),
-               getServerAddress(ctx));
+                    getServerProtocol(ctx),
+                    encode(getImapUsername(ctx)),
+                    encode(getImapPassword(ctx)).replace("+", "%20"),
+                    getServerAddress(ctx));
         }
     }
 
@@ -598,20 +668,21 @@ public class PrefStore {
      * <p>
      * The SASL XOAUTH2 initial client response has the following format:
      * </p>
-     *  <code>base64("user="{User}"^Aauth=Bearer "{Access Token}"^A^A")</code>
+     * <code>base64("user="{User}"^Aauth=Bearer "{Access Token}"^A^A")</code>
      * <p>
-     *  For example, before base64-encoding, the initial client response might look like this:
-     *  </p>
+     * For example, before base64-encoding, the initial client response might look like this:
+     * </p>
      * <code>user=someuser@example.com^Aauth=Bearer vF9dft4qmTc2Nvb3RlckBhdHRhdmlzdGEuY29tCg==^A^A</code>
      * <p/>
      * <em>Note:</em> ^A represents a Control+A (\001).
+     *
      * @see <a href="https://developers.google.com/google-apps/gmail/xoauth2_protocol#the_sasl_xoauth2_mechanism">
-     *     The SASL XOAUTH2 Mechanism</a>
+     *      The SASL XOAUTH2 Mechanism</a>
      */
     private static String generateXOAuth2Token(Context context) {
         final String username = getOauth2Username(context);
         final String token = getOauth2Token(context);
-        final String formatted = "user="+username+"\001auth=Bearer "+token+"\001\001";
+        final String formatted = "user=" + username + "\001auth=Bearer " + token + "\001\001";
         try {
             return new String(Base64.encodeBase64(formatted.getBytes("UTF-8")), "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -620,87 +691,87 @@ public class PrefStore {
     }
 
     static String getVersion(Context context, boolean code) {
-      android.content.pm.PackageInfo pInfo;
-      try {
-        pInfo = context.getPackageManager().getPackageInfo(
-                SmsSync.class.getPackage().getName(),
-                PackageManager.GET_META_DATA);
-        return ""+ (code ? pInfo.versionCode : pInfo.versionName);
-      } catch (PackageManager.NameNotFoundException e) {
-        Log.e(TAG, "error", e);
-        return null;
-      }
+        android.content.pm.PackageInfo pInfo;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(
+                    SmsSync.class.getPackage().getName(),
+                    PackageManager.GET_META_DATA);
+            return "" + (code ? pInfo.versionCode : pInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "error", e);
+            return null;
+        }
     }
 
     @TargetApi(8)
     static boolean isInstalledOnSDCard(Context context) {
-      android.content.pm.PackageInfo pInfo;
-      try {
-        pInfo = context.getPackageManager().getPackageInfo(
-                SmsSync.class.getPackage().getName(),
-                PackageManager.GET_META_DATA);
+        android.content.pm.PackageInfo pInfo;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(
+                    SmsSync.class.getPackage().getName(),
+                    PackageManager.GET_META_DATA);
 
-        return (pInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
-      } catch (PackageManager.NameNotFoundException e) {
-        Log.e(TAG, "error", e);
-        return false;
-      }
+            return (pInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "error", e);
+            return false;
+        }
     }
 
     static boolean showUpgradeMessage(Context ctx) {
-      final String key = "upgrade_message_seen";
-      boolean seen = getPrefs(ctx).getBoolean(key, false);
-      if (!seen && isOldSmsBackupInstalled(ctx)) {
-        getPrefs(ctx).edit().putBoolean(key, true).commit();
-        return true;
-      } else {
-        return false;
-      }
+        final String key = "upgrade_message_seen";
+        boolean seen = getPrefs(ctx).getBoolean(key, false);
+        if (!seen && isOldSmsBackupInstalled(ctx)) {
+            getPrefs(ctx).edit().putBoolean(key, true).commit();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     static boolean isOldSmsBackupInstalled(Context context) {
-      try {
-        context.getPackageManager().getPackageInfo(
-            "tv.studer.smssync",
-            android.content.pm.PackageManager.GET_META_DATA);
-        return true;
-      } catch (android.content.pm.PackageManager.NameNotFoundException e) {
-        return false;
-      }
+        try {
+            context.getPackageManager().getPackageInfo(
+                    "tv.studer.smssync",
+                    android.content.pm.PackageManager.GET_META_DATA);
+            return true;
+        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     // move credentials from default shared prefs to new separate prefs
     static boolean upgradeCredentials(Context ctx) {
-      final String flag = "upgraded_credentials";
-      SharedPreferences prefs = getPrefs(ctx);
+        final String flag = "upgraded_credentials";
+        SharedPreferences prefs = getPrefs(ctx);
 
-      boolean upgraded = prefs.getBoolean(flag, false);
-      if (!upgraded) {
-        Log.d(TAG, "Upgrading credentials");
+        boolean upgraded = prefs.getBoolean(flag, false);
+        if (!upgraded) {
+            Log.d(TAG, "Upgrading credentials");
 
-        SharedPreferences creds = getCredentials(ctx);
-        SharedPreferences.Editor prefsEditor = prefs.edit();
-        SharedPreferences.Editor credsEditor = creds.edit();
+            SharedPreferences creds = getCredentials(ctx);
+            SharedPreferences.Editor prefsEditor = prefs.edit();
+            SharedPreferences.Editor credsEditor = creds.edit();
 
-        for (String field : new String[] { PREF_OAUTH_TOKEN,
-                                           PREF_OAUTH_TOKEN_SECRET,
-                                           PREF_LOGIN_PASSWORD }) {
+            for (String field : new String[]{PREF_OAUTH_TOKEN,
+                    PREF_OAUTH_TOKEN_SECRET,
+                    PREF_LOGIN_PASSWORD}) {
 
-          if (prefs.getString(field, null) != null &&
-              creds.getString(field, null) == null) {
-              if (LOCAL_LOGV) Log.v(TAG, "Moving credential " + field);
-              credsEditor.putString(field, prefs.getString(field, null));
-              prefsEditor.remove(field);
-          } else if (LOCAL_LOGV) Log.v(TAG, "Skipping field " + field);
+                if (prefs.getString(field, null) != null &&
+                        creds.getString(field, null) == null) {
+                    if (LOCAL_LOGV) Log.v(TAG, "Moving credential " + field);
+                    credsEditor.putString(field, prefs.getString(field, null));
+                    prefsEditor.remove(field);
+                } else if (LOCAL_LOGV) Log.v(TAG, "Skipping field " + field);
+            }
+            boolean success = false;
+            if (credsEditor.commit()) {
+                prefsEditor.putBoolean(flag, true);
+                success = prefsEditor.commit();
+            }
+            return success;
+        } else {
+            return false;
         }
-        boolean success = false;
-        if (credsEditor.commit()) {
-          prefsEditor.putBoolean(flag, true);
-          success = prefsEditor.commit();
-        }
-        return success;
-      } else {
-        return false;
-      }
     }
 }
