@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -228,6 +229,7 @@ public class PrefStore {
      */
     static final String DEFAULT_SERVER_PROTOCOL = "+ssl+";
 
+    static final String LAST_VERSION_CODE = "last_version_code";
 
     public static boolean isAppLogEnabled(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_APP_LOG, false);
@@ -691,7 +693,7 @@ public class PrefStore {
     }
 
     static String getVersion(Context context, boolean code) {
-        android.content.pm.PackageInfo pInfo;
+        PackageInfo pInfo;
         try {
             pInfo = context.getPackageManager().getPackageInfo(
                     SmsSync.class.getPackage().getName(),
@@ -705,7 +707,7 @@ public class PrefStore {
 
     @TargetApi(8)
     static boolean isInstalledOnSDCard(Context context) {
-        android.content.pm.PackageInfo pInfo;
+        PackageInfo pInfo;
         try {
             pInfo = context.getPackageManager().getPackageInfo(
                     SmsSync.class.getPackage().getName(),
@@ -723,6 +725,27 @@ public class PrefStore {
         boolean seen = getPrefs(ctx).getBoolean(key, false);
         if (!seen && isOldSmsBackupInstalled(ctx)) {
             getPrefs(ctx).edit().putBoolean(key, true).commit();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static boolean showAboutDialog(Context ctx) {
+        int code;
+        try {
+            PackageInfo pInfo = ctx.getPackageManager().getPackageInfo(
+                    SmsSync.class.getPackage().getName(),
+                    PackageManager.GET_META_DATA);
+            code = pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "error", e);
+            code = -1;
+        }
+
+        int lastSeenCode = getPrefs(ctx).getInt(LAST_VERSION_CODE, -1);
+        if (lastSeenCode < code) {
+            getPrefs(ctx).edit().putInt(LAST_VERSION_CODE, code).commit();
             return true;
         } else {
             return false;

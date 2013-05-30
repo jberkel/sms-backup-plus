@@ -134,7 +134,9 @@ public class SmsSync extends PreferenceActivity {
             show(Dialogs.BROKEN_DROIDX);
         }
 
-
+        if (PrefStore.showAboutDialog(this)) {
+            show(Dialogs.ABOUT);
+        }
     }
 
     @Override
