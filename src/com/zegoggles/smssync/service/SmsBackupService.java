@@ -87,14 +87,14 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private String getSource(final Intent intent) {
-        switch (intent.getIntExtra(Consts.SOURCE, -1)) {
-            case Alarms.INCOMING:
+        switch (Alarms.Source.fromIntent(intent)) {
+            case INCOMING:
                 return getResources().getString(R.string.source_incoming);
-            case Alarms.REGULAR:
+            case REGULAR:
                 return getResources().getString(R.string.source_regular);
-            case Alarms.BROADCAST_INTENT:
+            case BROADCAST_INTENT:
                 return getResources().getString(R.string.source_3rd_party);
-            case -1:
+            case MANUAL:
                 return getResources().getString(R.string.source_manual);
             default:
                 return getResources().getString(R.string.source_unknown);

@@ -32,9 +32,9 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context ctx, Intent intent) {
         if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + ctx + "," + intent + ")");
 
-        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             bootup(ctx);
-        } else if (intent.getAction().equals(SMS_RECEIVED)) {
+        } else if (SMS_RECEIVED.equals(intent.getAction())) {
             incomingSMS(ctx);
         }
     }

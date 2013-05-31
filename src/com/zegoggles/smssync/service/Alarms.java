@@ -26,14 +26,25 @@ import com.zegoggles.smssync.preferences.PrefStore;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.service.Alarms.Source.*;
 
 
 public class Alarms {
+    public enum Source {
+        BROADCAST_INTENT,
+        INCOMING,
+        REGULAR,
+        UNKNOWN,
+        MANUAL;
 
-    public static final int BROADCAST_INTENT = 0;
-    public static final int INCOMING = 1;
-    public static final int REGULAR = 2;
-    public static final int UNKNOWN = 3;
+        public static Source fromIntent(Intent intent) {
+            if (intent.hasExtra(Consts.SOURCE)) {
+                return (Alarms.Source) intent.getSerializableExtra(Consts.SOURCE);
+            } else {
+                return MANUAL;
+            }
+        }
+    }
 
     public static long scheduleIncomingSync(Context ctx) {
         return scheduleSync(ctx, PrefStore.getIncomingTimeoutSecs(ctx), INCOMING, false);
@@ -51,7 +62,7 @@ public class Alarms {
         getAlarmManager(ctx).cancel(createPendingIntent(ctx, UNKNOWN));
     }
 
-    private static long scheduleSync(Context ctx, int inSeconds, int source, boolean force) {
+    private static long scheduleSync(Context ctx, int inSeconds, Source source, boolean force) {
         if (LOCAL_LOGV)
             Log.v(TAG, "scheduleSync(" + ctx + ", " + inSeconds + ", " + source + ", " + force + ")");
 
@@ -71,7 +82,7 @@ public class Alarms {
         return (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
     }
 
-    private static PendingIntent createPendingIntent(Context ctx, int source) {
+    private static PendingIntent createPendingIntent(Context ctx, Source source) {
         Intent intent = (new Intent(ctx, SmsBackupService.class))
                 .putExtra(Consts.KEY_NUM_RETRIES, Consts.NUM_AUTO_RETRIES)
                 .putExtra(Consts.SOURCE, source);
