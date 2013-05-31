@@ -19,8 +19,6 @@ package com.zegoggles.smssync;
 /**
  * Contains SMS content provider constants. These values are copied from
  * com.android.provider.telephony.*
- *
- * @noinspection UnusedDeclaration
  */
 public interface SmsConsts {
 
@@ -46,6 +44,7 @@ public interface SmsConsts {
 
     String PERSON = "person";
 
+    @SuppressWarnings("UnusedDeclaration")
     int MESSAGE_TYPE_ALL = 0;
 
     int MESSAGE_TYPE_INBOX = 1;
@@ -54,9 +53,12 @@ public interface SmsConsts {
 
     int MESSAGE_TYPE_DRAFT = 3;
 
+    @SuppressWarnings("UnusedDeclaration")
     int MESSAGE_TYPE_OUTBOX = 4;
 
+    @SuppressWarnings("UnusedDeclaration")
     int MESSAGE_TYPE_FAILED = 5; // for failed outgoing messages
 
+    @SuppressWarnings("UnusedDeclaration")
     int MESSAGE_TYPE_QUEUED = 6; // for messages to send later
 }

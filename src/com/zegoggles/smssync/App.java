@@ -17,7 +17,6 @@
 package com.zegoggles.smssync;
 
 import android.app.Application;
-import android.os.Build;
 import com.fsck.k9.K9;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -27,10 +26,6 @@ public class App extends Application {
     public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final boolean LOCAL_LOGV = DEBUG;
     public static final String TAG = "SmsBackup+";
-
-    private static ContactAccessor sContactAccessor = null;
-    private static CalendarAccessor sCalendarAccessor = null;
-
     public static final String LOG = "sms_backup_plus.log";
 
     @Override
@@ -40,37 +35,5 @@ public class App extends Application {
         K9.app = this;
         K9.DEBUG = DEBUG;
         K9.DEBUG_PROTOCOL_IMAP = DEBUG;
-    }
-
-    public static ContactAccessor contactAccessor() {
-        int sdkVersion = Build.VERSION.SDK_INT;
-        if (sContactAccessor == null) {
-            try {
-                if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
-                    sContactAccessor = new ContactAccessorPre20();
-                } else {
-                    sContactAccessor = new ContactAccessorPost20();
-                }
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
-            }
-        }
-        return sContactAccessor;
-    }
-
-    public static CalendarAccessor calendarAccessor() {
-        int sdkVersion = Build.VERSION.SDK_INT;
-        if (sCalendarAccessor == null) {
-            try {
-                if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    sCalendarAccessor = new CalendarAccessorPre40();
-                } else {
-                    sCalendarAccessor = new CalendarAccessorPost40();
-                }
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
-            }
-        }
-        return sCalendarAccessor;
     }
 }

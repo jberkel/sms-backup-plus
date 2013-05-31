@@ -324,7 +324,7 @@
             android:summary="@string/donate_summary"
             >
 
-        <intent android:targetClass="com.zegoggles.smssync.DonationActivity"
+        <intent android:targetClass="com.zegoggles.smssync.activity.donation.DonationActivity"
                 android:targetPackage="com.zegoggles.smssync"/>
     </Preference>
 </PreferenceScreen>

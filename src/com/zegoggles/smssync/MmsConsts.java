@@ -15,17 +15,21 @@
  */
 package com.zegoggles.smssync;
 
+
 /**
- * @noinspection UnusedDeclaration
+ * Contains MMS content provider constants. These values are copied from
+ * com.android.provider.telephony.*
  */
 public interface MmsConsts {
 
     String ID = "_id";
 
+    @SuppressWarnings("UnusedDeclaration")
     String MESSAGE_ID = "m_id";
 
     String READ = "read";
 
+    @SuppressWarnings("UnusedDeclaration")
     String SUBJECT = "sub";
 
     String DATE = "date";
@@ -38,10 +42,14 @@ public interface MmsConsts {
 
     String DELIVERY_REPORT = "134"; // 0x86
 
+    @SuppressWarnings("UnusedDeclaration")
     int MESSAGE_BOX_INBOX = 1;
+    @SuppressWarnings("UnusedDeclaration")
     int MESSAGE_BOX_SENT = 2;
 
+    @SuppressWarnings("UnusedDeclaration")
     int TO = 0x97;
+    @SuppressWarnings("UnusedDeclaration")
     int FROM = 0x89;
 
     String LEGACY_HEADER = "mms";
