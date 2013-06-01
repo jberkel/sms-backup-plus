@@ -29,6 +29,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.squareup</groupId>
+            <artifactId>otto</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+
+        <dependency>
             <groupId>oauth.signpost</groupId>
             <artifactId>signpost-commonshttp4</artifactId>
             <version>1.2.1.2</version>
@@ -68,6 +74,13 @@
             <groupId>ch.acra</groupId>
             <artifactId>acra</artifactId>
             <version>4.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>annotations</artifactId>
+            <version>9.0.4</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

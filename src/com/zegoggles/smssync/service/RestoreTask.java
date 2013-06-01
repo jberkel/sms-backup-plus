@@ -1,0 +1,289 @@
+package com.zegoggles.smssync.service;
+
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.CallLog;
+import android.util.Log;
+import com.fsck.k9.mail.AuthenticationFailedException;
+import com.fsck.k9.mail.FetchProfile;
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
+import com.squareup.otto.Subscribe;
+import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.Consts;
+import com.zegoggles.smssync.SmsConsts;
+import com.zegoggles.smssync.mail.BackupImapStore;
+import com.zegoggles.smssync.mail.CursorToMessage;
+import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.service.state.RestoreStateChanged;
+import com.zegoggles.smssync.service.state.SmsSyncState;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.service.state.SmsSyncState.*;
+
+class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateChanged> {
+    private Set<String> smsIds = new HashSet<String>();
+    private Set<String> callLogIds = new HashSet<String>();
+    private Set<String> uids = new HashSet<String>();
+    private BackupImapStore.BackupFolder callFolder;
+    private final SmsRestoreService service;
+    private final ContentResolver resolver;
+    private final CursorToMessage converter;
+    private final BackupImapStore imapStore;
+    private final boolean restoreSms, restoreCallLog, restoreOnlyStarred;
+
+    public RestoreTask(SmsRestoreService service,
+                       BackupImapStore imapStore,
+                       CursorToMessage converter,
+                       boolean restoreSms, boolean restoreCalllog, boolean restoreOnlyStarred) {
+        this.service = service;
+        this.imapStore = imapStore;
+        this.converter = converter;
+        this.restoreSms = restoreSms;
+        this.restoreCallLog = restoreCalllog;
+        this.restoreOnlyStarred = restoreOnlyStarred;
+        resolver = service.getContentResolver();
+    }
+
+    @Override
+    protected void onPreExecute() {
+        App.bus.register(this);
+    }
+
+    @Subscribe public void userCanceled(UserCanceled canceled) {
+        cancel(false);
+    }
+
+    @NotNull protected RestoreStateChanged doInBackground(Integer... params) {
+        int max = params.length > 0 ? params[0] : -1;
+
+        if (!restoreSms && !restoreCallLog) {
+            return new RestoreStateChanged(FINISHED_RESTORE, 0, 0, 0, 0, null);
+        }
+
+        try {
+            service.acquireLocks(false);
+
+            publishProgress(LOGIN);
+            BackupImapStore.BackupFolder smsFolder = imapStore.getSMSBackupFolder();
+            if (restoreCallLog) callFolder = imapStore.getCallLogBackupFolder();
+
+            publishProgress(CALC);
+
+            final List<Message> msgs = new ArrayList<Message>();
+
+            if (restoreSms) msgs.addAll(smsFolder.getMessages(max, restoreOnlyStarred, null));
+            if (restoreCallLog) msgs.addAll(callFolder.getMessages(max, restoreOnlyStarred, null));
+
+            int itemsToRestoreCount = max <= 0 ? msgs.size() : Math.min(msgs.size(), max);
+            int currentRestoredItem = 0;
+            for (int i = 0; i < itemsToRestoreCount && !isCancelled(); i++) {
+                importMessage(msgs.get(i));
+                currentRestoredItem = i;
+
+                msgs.set(i, null); // help gc
+                publishProgress(new RestoreStateChanged(RESTORE, currentRestoredItem, itemsToRestoreCount, 0, 0, null));
+
+                if (i % 50 == 0) {
+                    //clear cache periodically otherwise SD card fills up
+                    service.clearCache();
+                }
+            }
+
+            publishProgress(UPDATING_THREADS);
+            updateAllThreads(false);
+
+            int restoredCount = smsIds.size() + callLogIds.size();
+            return new RestoreStateChanged(FINISHED_RESTORE,
+                    currentRestoredItem,
+                    itemsToRestoreCount,
+                    restoredCount,
+                    uids.size() - restoredCount, null);
+        } catch (ConnectivityErrorException e) {
+            return transition(ERROR, e);
+        } catch (AuthenticationFailedException e) {
+            return transition(ERROR, e);
+        } catch (MessagingException e) {
+            Log.e(TAG, "error", e);
+            return transition(ERROR, e);
+        } catch (IllegalStateException e) {
+            // usually memory problems (Couldn't init cursor window)
+            return transition(ERROR, e);
+        } finally {
+            service.releaseLocks();
+        }
+    }
+
+    private void publishProgress(SmsSyncState smsSyncState) {
+        publishProgress(smsSyncState, null);
+    }
+
+    private void publishProgress(SmsSyncState smsSyncState, Exception exception) {
+        publishProgress(transition(smsSyncState, exception));
+    }
+
+    private RestoreStateChanged transition(SmsSyncState smsSyncState, Exception exception) {
+        return service.getState().transition(smsSyncState, exception);
+    }
+
+    @Override
+    protected void onPostExecute(RestoreStateChanged result) {
+        if (result != null) {
+            Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
+            post(result);
+        }
+        App.bus.unregister(this);
+    }
+
+    @Override
+    protected void onCancelled() {
+        Log.d(TAG, "restore canceled by user");
+        post(transition(CANCELED_RESTORE, null));
+        App.bus.unregister(this);
+    }
+
+    @Override
+    protected void onProgressUpdate(RestoreStateChanged... progress) {
+        if (progress == null || progress.length == 0) return;
+        // TODO: don't publish too often or we get ANRs
+        post(progress[0]);
+    }
+
+    private void post(RestoreStateChanged changed) {
+        App.bus.post(changed);
+    }
+
+    private void importMessage(Message message) {
+        uids.add(message.getUid());
+
+        FetchProfile fp = new FetchProfile();
+        fp.add(FetchProfile.Item.BODY);
+
+        try {
+            if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
+
+            message.getFolder().fetch(new Message[]{message}, fp, null);
+            final CursorToMessage.DataType dataType = converter.getDataType(message);
+            //only restore sms+call log for now
+            switch (dataType) {
+                case CALLLOG:
+                    importCallLog(message);
+                    break;
+                case SMS:
+                    importSms(message);
+                    break;
+                default:
+                    if (LOCAL_LOGV) Log.d(TAG, "ignoring restore of type: " + dataType);
+            }
+        } catch (MessagingException e) {
+            Log.e(TAG, "error", e);
+        } catch (IllegalArgumentException e) {
+            // http://code.google.com/p/android/issues/detail?id=2916
+            Log.e(TAG, "error", e);
+        } catch (java.io.IOException e) {
+            Log.e(TAG, "error", e);
+        }
+    }
+
+    private void importSms(final Message message) throws IOException, MessagingException {
+        if (LOCAL_LOGV) Log.v(TAG, "importSms(" + message + ")");
+        final ContentValues values = converter.messageToContentValues(message);
+        final Integer type = values.getAsInteger(SmsConsts.TYPE);
+
+        // only restore inbox messages and sent messages - otherwise sms might get sent on restore
+        if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
+                type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
+            final Uri uri = resolver.insert(Consts.SMS_PROVIDER, values);
+            if (uri != null) {
+                smsIds.add(uri.getLastPathSegment());
+                Long timestamp = values.getAsLong(SmsConsts.DATE);
+
+                if (timestamp != null && PrefStore.getMaxSyncedDateSms(service) < timestamp) {
+                    service.updateMaxSyncedDateSms(timestamp);
+                }
+                if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
+            }
+        } else {
+            if (LOCAL_LOGV) Log.d(TAG, "ignoring sms");
+        }
+    }
+
+    private void importCallLog(final Message message) throws MessagingException, IOException {
+        if (LOCAL_LOGV) Log.v(TAG, "importCallLog(" + message + ")");
+        final ContentValues values = converter.messageToContentValues(message);
+        if (!callLogExists(values)) {
+            final Uri uri = resolver.insert(Consts.CALLLOG_PROVIDER, values);
+            if (uri != null) callLogIds.add(uri.getLastPathSegment());
+        } else {
+            if (LOCAL_LOGV) Log.d(TAG, "ignoring call log");
+        }
+    }
+
+    private boolean callLogExists(ContentValues values) {
+        Cursor c = resolver.query(Consts.CALLLOG_PROVIDER,
+                new String[]{"_id"},
+                "number = ? AND duration = ? AND type = ?",
+                new String[]{values.getAsString(CallLog.Calls.NUMBER),
+                        values.getAsString(CallLog.Calls.DURATION),
+                        values.getAsString(CallLog.Calls.TYPE)},
+                null
+        );
+        boolean exists = false;
+        if (c != null) {
+            exists = c.getCount() > 0;
+            c.close();
+        }
+        return exists;
+    }
+
+    private boolean smsExists(ContentValues values) {
+        // just assume equality on date+address+type
+        Cursor c = resolver.query(Consts.SMS_PROVIDER,
+                new String[]{"_id"},
+                "date = ? AND address = ? AND type = ?",
+                new String[]{values.getAsString(SmsConsts.DATE),
+                        values.getAsString(SmsConsts.ADDRESS),
+                        values.getAsString(SmsConsts.TYPE)},
+                null
+        );
+
+        boolean exists = false;
+        if (c != null) {
+            exists = c.getCount() > 0;
+            c.close();
+        }
+        return exists;
+    }
+
+    private void updateAllThreads(final boolean async) {
+        // thread dates + states might be wrong, we need to force a full update
+        // unfortunately there's no direct way to do that in the SDK, but passing a
+        // negative conversation id to delete should to the trick
+
+        // execute in background, might take some time
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                Log.d(TAG, "updating threads");
+                resolver.delete(Uri.parse("content://sms/conversations/-1"), null, null);
+                Log.d(TAG, "finished");
+            }
+        };
+        t.start();
+        try {
+            if (!async) t.join();
+        } catch (InterruptedException ignored) {
+        }
+    }
+}

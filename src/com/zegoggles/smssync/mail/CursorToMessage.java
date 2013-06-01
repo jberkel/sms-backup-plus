@@ -42,16 +42,17 @@ import com.fsck.k9.mail.internet.MimeMessage;
 import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.TextBody;
 import com.github.jberkel.whassup.model.WhatsAppMessage;
+import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.PrefStore;
-import com.zegoggles.smssync.service.ServiceBase;
 import com.zegoggles.smssync.utils.ThreadHelper;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.mime4j.codec.EncoderUtil;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -352,7 +353,7 @@ public class CursorToMessage {
         return mPeopleCache.get(address);
     }
 
-    private Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
+    private @Nullable Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(SmsConsts.ADDRESS);
         if (address == null || address.trim().length() == 0) {
             return null;
@@ -405,7 +406,7 @@ public class CursorToMessage {
     }
 
 
-    private Message messageFromMapWhatsApp(Cursor cursor) throws MessagingException {
+    private @Nullable Message messageFromMapWhatsApp(Cursor cursor) throws MessagingException {
         WhatsAppMessage whatsapp = new WhatsAppMessage(cursor);
         // we don't deal with group messages (yet)
 
@@ -464,7 +465,7 @@ public class CursorToMessage {
         return msg;
     }
 
-    private Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
+    private @Nullable Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
 
@@ -573,10 +574,10 @@ public class CursorToMessage {
         }
     }
 
-    private Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
+    private @Nullable Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
         if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
-        final Uri msgRef = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
+        final Uri msgRef = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
         Cursor curAddr = mContext.getContentResolver().query(Uri.withAppendedPath(msgRef, "addr"),
                 null, null, null, null);
 
@@ -677,11 +678,12 @@ public class CursorToMessage {
             if (!TextUtils.isEmpty(contentType) && contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
                 // text
                 parts.add(new MimeBodyPart(new TextBody(text), contentType));
-            } else if ("application/smil".equalsIgnoreCase(contentType)) {
+            } else //noinspection StatementWithEmptyBody
+                if ("application/smil".equalsIgnoreCase(contentType)) {
                 // silently ignore SMIL stuff
             } else {
                 // attach everything else
-                final Uri partUri = Uri.withAppendedPath(ServiceBase.MMS_PROVIDER, "part/" + id);
+                final Uri partUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, "part/" + id);
                 parts.add(createPartFromUri(mContext.getContentResolver(), partUri, fileName, contentType));
             }
         }

@@ -39,7 +39,7 @@ public class BackupBroadcastReceiver extends BroadcastReceiver {
     private void backupRequested(Context ctx, Intent intent) {
         if (PrefStore.isAllow3rdPartyIntegration(ctx)) {
             Log.d(TAG, "backup requested via broadcast intent");
-            Alarms.scheduleImmediateSync(ctx);
+            Alarms.scheduleImmediateBackup(ctx);
         } else {
             Log.d(TAG, "backup requested via broadcast intent but ignored");
         }

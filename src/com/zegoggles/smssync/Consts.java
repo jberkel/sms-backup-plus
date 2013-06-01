@@ -16,44 +16,39 @@
 
 package com.zegoggles.smssync;
 
+import android.net.Uri;
+import android.provider.CallLog;
+
 /**
  * Class containing application wide constants.
  */
-public interface Consts {
+public final class Consts {
     /**
      * Gmail IMAP URI.
      */
-    String IMAP_URI = "imap%s://%s:%s@%s";
-
-    /**
-     * Number of times a failed sync attempt should be retried when initiated by an alarm.
-     */
-    int NUM_AUTO_RETRIES = 2;
+    public static final String IMAP_URI = "imap%s://%s:%s@%s";
 
     /**
      * Key in the intent extras for indication whether all unsynced messages should
      * be skipped or not.
      */
-    String KEY_SKIP_MESSAGES = "com.zegoggles.smssync.SkipMessages";
+    public static final String KEY_SKIP_MESSAGES = "com.zegoggles.smssync.SkipMessages";
 
-    /**
-     * Key in the intent extras for the number of retries when getting an exception
-     * during sync.
-     */
-    String KEY_NUM_RETRIES = "com.zegoggles.smssync.NumRetries";
-
-
-    // source of the backup intent
-    String SOURCE = "com.zegoggles.smssync.Source";
+    // type the backup intent
+    public static final String BACKUP_TYPE = "com.zegoggles.smssync.BackupType";
 
     /**
      * OAuth callback
      */
-    String CALLBACK_URL = "smssync://gmail";
+    public static final String CALLBACK_URL = "smssync://gmail";
 
     // Scopes as defined in http://code.google.com/apis/accounts/docs/OAuth.html#prepScope
-    String GMAIL_SCOPE = "https://mail.google.com/";
-    String CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
+    public static final String GMAIL_SCOPE = "https://mail.google.com/";
+    public static final String CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
+
+    public static final Uri MMS_PROVIDER     = Uri.parse("content://mms");
+    public static final Uri SMS_PROVIDER     = Uri.parse("content://sms");
+    public static final Uri CALLLOG_PROVIDER = CallLog.Calls.CONTENT_URI;
 
     public static class Billing {
         public static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCNglCUwSijU3RAODpyY" +

@@ -42,9 +42,9 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     private void bootup(Context ctx) {
         if (PrefStore.isEnableAutoSync(ctx) &&
                 PrefStore.isLoginInformationSet(ctx) &&
-                !PrefStore.isFirstSync(ctx)) {
+                !PrefStore.isFirstBackup(ctx)) {
 
-            Alarms.scheduleRegularSync(ctx);
+            Alarms.scheduleRegularBackup(ctx);
         } else {
             Log.i(TAG, "Received bootup but not set up to sync.");
         }
@@ -53,9 +53,9 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     private void incomingSMS(Context ctx) {
         if (PrefStore.isEnableAutoSync(ctx) &&
                 PrefStore.isLoginInformationSet(ctx) &&
-                !PrefStore.isFirstSync(ctx)) {
+                !PrefStore.isFirstBackup(ctx)) {
 
-            Alarms.scheduleIncomingSync(ctx);
+            Alarms.scheduleIncomingBackup(ctx);
         } else {
             Log.i(TAG, "Received SMS but not set up to sync.");
         }

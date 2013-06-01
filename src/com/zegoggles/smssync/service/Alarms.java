@@ -26,51 +26,36 @@ import com.zegoggles.smssync.preferences.PrefStore;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.service.Alarms.Source.*;
+import static com.zegoggles.smssync.service.BackupType.*;
 
 
 public class Alarms {
-    public enum Source {
-        BROADCAST_INTENT,
-        INCOMING,
-        REGULAR,
-        UNKNOWN,
-        MANUAL;
 
-        public static Source fromIntent(Intent intent) {
-            if (intent.hasExtra(Consts.SOURCE)) {
-                return (Alarms.Source) intent.getSerializableExtra(Consts.SOURCE);
-            } else {
-                return MANUAL;
-            }
-        }
+    public static long scheduleIncomingBackup(Context ctx) {
+        return scheduleBackup(ctx, PrefStore.getIncomingTimeoutSecs(ctx), INCOMING, false);
     }
 
-    public static long scheduleIncomingSync(Context ctx) {
-        return scheduleSync(ctx, PrefStore.getIncomingTimeoutSecs(ctx), INCOMING, false);
+    public static long scheduleRegularBackup(Context ctx) {
+        return scheduleBackup(ctx, PrefStore.getRegularTimeoutSecs(ctx), REGULAR, false);
     }
 
-    public static long scheduleRegularSync(Context ctx) {
-        return scheduleSync(ctx, PrefStore.getRegularTimeoutSecs(ctx), REGULAR, false);
-    }
-
-    public static long scheduleImmediateSync(Context ctx) {
-        return scheduleSync(ctx, -1, BROADCAST_INTENT, true);
+    public static long scheduleImmediateBackup(Context ctx) {
+        return scheduleBackup(ctx, -1, BROADCAST_INTENT, true);
     }
 
     public static void cancel(Context ctx) {
         getAlarmManager(ctx).cancel(createPendingIntent(ctx, UNKNOWN));
     }
 
-    private static long scheduleSync(Context ctx, int inSeconds, Source source, boolean force) {
+    private static long scheduleBackup(Context ctx, int inSeconds, BackupType backupType, boolean force) {
         if (LOCAL_LOGV)
-            Log.v(TAG, "scheduleSync(" + ctx + ", " + inSeconds + ", " + source + ", " + force + ")");
+            Log.v(TAG, "scheduleBackup(" + ctx + ", " + inSeconds + ", " + backupType + ", " + force + ")");
 
         if (force || (PrefStore.isEnableAutoSync(ctx) && inSeconds > 0)) {
             final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
-            getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx, source));
+            getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx, backupType));
             if (LOCAL_LOGV)
-                Log.v(TAG, "Scheduled sync due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
+                Log.v(TAG, "Scheduled backup due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
             return atTime;
         } else {
             if (LOCAL_LOGV) Log.v(TAG, "Not scheduling sync because auto sync is disabled.");
@@ -82,10 +67,9 @@ public class Alarms {
         return (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
     }
 
-    private static PendingIntent createPendingIntent(Context ctx, Source source) {
+    private static PendingIntent createPendingIntent(Context ctx, BackupType backupType) {
         Intent intent = (new Intent(ctx, SmsBackupService.class))
-                .putExtra(Consts.KEY_NUM_RETRIES, Consts.NUM_AUTO_RETRIES)
-                .putExtra(Consts.SOURCE, source);
-        return PendingIntent.getService(ctx, 0, intent, 0);
+                .putExtra(Consts.BACKUP_TYPE, backupType);
+        return PendingIntent.getService(ctx, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }

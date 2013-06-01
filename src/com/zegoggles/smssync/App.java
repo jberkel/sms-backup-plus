@@ -18,6 +18,7 @@ package com.zegoggles.smssync;
 
 import android.app.Application;
 import com.fsck.k9.K9;
+import com.squareup.otto.Bus;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
@@ -27,6 +28,8 @@ public class App extends Application {
     public static final boolean LOCAL_LOGV = DEBUG;
     public static final String TAG = "SmsBackup+";
     public static final String LOG = "sms_backup_plus.log";
+
+    public static final Bus bus = new Bus();
 
     @Override
     public void onCreate() {

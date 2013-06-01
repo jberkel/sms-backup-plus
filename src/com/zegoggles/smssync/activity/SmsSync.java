@@ -16,10 +16,10 @@
 
 package com.zegoggles.smssync.activity;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,10 +28,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -43,21 +43,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
-import com.zegoggles.smssync.activity.auth.AuthActivity;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
-import com.zegoggles.smssync.auth.XOAuthConsumer;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.preferences.AuthMode;
@@ -65,22 +59,21 @@ import com.zegoggles.smssync.preferences.BackupManagerWrapper;
 import com.zegoggles.smssync.preferences.PrefStore;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
 import com.zegoggles.smssync.service.Alarms;
-import com.zegoggles.smssync.service.ServiceBase;
-import com.zegoggles.smssync.service.ServiceBase.SmsSyncState;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
+import com.zegoggles.smssync.tasks.OAuthCallbackTask;
+import com.zegoggles.smssync.tasks.RequestTokenTask;
 import com.zegoggles.smssync.utils.AppLog;
+import com.zegoggles.smssync.utils.UrlOpener;
 import com.zegoggles.smssync.utils.Utils;
-import oauth.signpost.OAuth;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import org.acra.ACRA;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 /**
@@ -91,49 +84,24 @@ public class SmsSync extends PreferenceActivity {
     public static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
     public static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
 
-    enum Dialogs {
-        MISSING_CREDENTIALS,
-        FIRST_SYNC,
-        INVALID_IMAP_FOLDER,
-        ABOUT,
-        RESET,
-        DISCONNECT,
-        REQUEST_TOKEN,
-        ACCESS_TOKEN,
-        ACCESS_TOKEN_ERROR,
-        REQUEST_TOKEN_ERROR,
-        CONNECT,
-        CONNECT_TOKEN_ERROR,
-        ACCOUNTMANAGER_TOKEN_ERROR,
-        UPGRADE,
-        BROKEN_DROIDX,
-        VIEW_LOG,
-        CONFIRM_ACTION
-    }
-
     enum Actions {
         Backup,
         Restore
     }
-
-    private Actions mActions = null;
+    private Actions mActions;
 
     private StatusPreference statusPref;
-    private Uri mAuthorizeUri = null;
-
-
+    private @Nullable Uri mAuthorizeUri;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ServiceBase.smsSync = this;
-
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         PrefStore.upgradeCredentials(this);
 
         addPreferencesFromResource(R.xml.main_screen);
 
-        this.statusPref = new StatusPreference(this);
-        getPreferenceScreen().addPreference(this.statusPref);
+        statusPref = new StatusPreference(this);
+        getPreferenceScreen().addPreference(statusPref);
 
         int version = Build.VERSION.SDK_INT;
         if (version < MIN_VERSION_MMS) {
@@ -142,22 +110,15 @@ public class SmsSync extends PreferenceActivity {
             backupMms.setChecked(false);
             backupMms.setSummary(R.string.ui_backup_mms_not_supported);
         }
-
         if (PrefStore.showUpgradeMessage(this)) show(Dialogs.UPGRADE);
         setPreferenceListeners(getPreferenceManager(), version >= MIN_VERSION_BACKUP);
 
-        if ("DROIDX".equals(Build.MODEL) ||
-                "DROID2".equals(Build.MODEL) &&
-                        Build.VERSION.SDK_INT == Build.VERSION_CODES.FROYO &&
-                        !getPreferences(MODE_PRIVATE).getBoolean("droidx_warning_displayed", false)) {
-
-            getPreferences(MODE_PRIVATE).edit().putBoolean("droidx_warning_displayed", true).commit();
-            show(Dialogs.BROKEN_DROIDX);
-        }
+        checkAndDisplayDroidWarning();
 
         if (PrefStore.showAboutDialog(this)) {
             show(Dialogs.ABOUT);
         }
+        setupStrictMode();
     }
 
     @Override
@@ -166,7 +127,8 @@ public class SmsSync extends PreferenceActivity {
         Uri uri = intent.getData();
         if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL) &&
                 (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
-            new OAuthCallbackTask().execute(intent);
+            show(Dialogs.ACCESS_TOKEN);
+            new OAuthCallbackTask(this).execute(intent);
         } else if (AccountManagerAuthActivity.ACTION_ADD_ACCOUNT.equals(intent.getAction())) {
             handleAccountManagerAuth(intent);
         } else if (AccountManagerAuthActivity.ACTION_FALLBACKAUTH.equals(intent.getAction())) {
@@ -177,8 +139,6 @@ public class SmsSync extends PreferenceActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ServiceBase.smsSync = this;
-
         initCalendarAndGroups();
 
         updateLastBackupTimes();
@@ -192,10 +152,22 @@ public class SmsSync extends PreferenceActivity {
         updateMaxItemsPerSync(null);
         updateMaxItemsPerRestore(null);
 
-        statusPref.update();
-
         updateImapSettings(!PrefStore.useXOAuth(this));
         checkUserDonationStatus();
+        App.bus.register(statusPref);
+        App.bus.register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        App.bus.unregister(statusPref);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        App.bus.unregister(this);
     }
 
     @Override
@@ -237,10 +209,32 @@ public class SmsSync extends PreferenceActivity {
     }
 
     private void handleFallbackAuth() {
-        new RequestTokenTask().execute(Consts.CALLBACK_URL);
+        show(Dialogs.REQUEST_TOKEN);
+        new RequestTokenTask(this).execute(Consts.CALLBACK_URL);
     }
 
-    private void onAuthenticated() {
+    @Subscribe public void onAuthorizedURLReceived(RequestTokenTask.AuthorizedURLReceived authorizedURLReceived) {
+        dismiss(Dialogs.REQUEST_TOKEN);
+        this.mAuthorizeUri = authorizedURLReceived.uri;
+        if (mAuthorizeUri != null) {
+            show(Dialogs.CONNECT);
+        } else {
+            show(Dialogs.CONNECT_TOKEN_ERROR);
+        }
+    }
+
+    @Subscribe public void onOAuthCallback(OAuthCallbackTask.OAuthCallbackEvent event) {
+        dismiss(Dialogs.ACCESS_TOKEN);
+        if (event.valid()) {
+            PrefStore.setOauthUsername(this, event.username);
+            PrefStore.setOauthTokens(this, event.token, event.tokenSecret);
+            onAuthenticated();
+        } else {
+            show(Dialogs.ACCESS_TOKEN_ERROR);
+        }
+    }
+
+    void onAuthenticated() {
         updateConnected();
         // Invite use to perform a backup, but only once
         if (PrefStore.isFirstUse(this)) {
@@ -248,13 +242,19 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
+    String getLastSyncText(final long lastSync) {
+        return getString(R.string.status_idle_details,
+                lastSync < 0 ? getString(R.string.status_idle_details_never) :
+                        new Date(lastSync).toLocaleString());
+    }
+
     private void updateLastBackupTimes() {
         findPreference("backup_sms").setSummary(
-                statusPref.getLastSyncText(PrefStore.getMaxSyncedDateSms(this)));
+                getLastSyncText(PrefStore.getMaxSyncedDateSms(this)));
         findPreference("backup_mms").setSummary(
-                statusPref.getLastSyncText(PrefStore.getMaxSyncedDateMms(this) * 1000));
+                getLastSyncText(PrefStore.getMaxSyncedDateMms(this) * 1000));
         findPreference("backup_calllog").setSummary(
-                statusPref.getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
+                getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
     }
 
     private ConnectivityManager getConnectivityManager() {
@@ -402,7 +402,7 @@ public class SmsSync extends PreferenceActivity {
 
     private void initiateSync() {
         if (checkLoginInformation()) {
-            if (PrefStore.isFirstSync(this)) {
+            if (PrefStore.isFirstBackup(this)) {
                 show(Dialogs.FIRST_SYNC);
             } else {
                 startSync(false);
@@ -419,8 +419,8 @@ public class SmsSync extends PreferenceActivity {
         }
     }
 
-    private void performAction(Actions act) {
-        this.performAction(act, PrefStore.confirmAction(this));
+    void performAction(Actions act) {
+        performAction(act, PrefStore.confirmAction(this));
     }
 
     private void performAction(Actions act, boolean needConfirm) {
@@ -438,249 +438,14 @@ public class SmsSync extends PreferenceActivity {
 
     private void startSync(boolean skip) {
         Intent intent = new Intent(this, SmsBackupService.class);
-        if (PrefStore.isFirstSync(this)) {
+        if (PrefStore.isFirstBackup(this)) {
             intent.putExtra(Consts.KEY_SKIP_MESSAGES, skip);
         }
         startService(intent);
     }
 
     private void startRestore() {
-        Intent intent = new Intent(this, SmsRestoreService.class);
-        startService(intent);
-    }
-
-    public class StatusPreference extends Preference implements OnClickListener {
-        private View mView;
-
-        private Button mSyncButton;
-        private Button mRestoreButton;
-
-        private ImageView mStatusIcon;
-
-        private TextView mStatusLabel;
-        private TextView mSyncDetailsLabel;
-
-        private View mSyncDetails;
-
-        private ProgressBar mProgressBar;
-
-        public StatusPreference(Context context) {
-            super(context);
-            setSelectable(false);
-            setOrder(0);
-        }
-
-        public void update() {
-            stateChanged(ServiceBase.getState());
-        }
-
-        private void authFailed() {
-            mStatusLabel.setText(R.string.status_auth_failure);
-
-            if (PrefStore.useXOAuth(getContext())) {
-                mSyncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
-            } else {
-                mSyncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
-            }
-        }
-
-        private void calc() {
-            mStatusLabel.setText(R.string.status_working);
-            mSyncDetailsLabel.setText(R.string.status_calc_details);
-            mProgressBar.setIndeterminate(true);
-        }
-
-        private void finishedBackup() {
-            int backedUpCount = SmsBackupService.getCurrentSyncedItems();
-            String text = null;
-            if (backedUpCount == PrefStore.getMaxItemsPerSync(getContext())) {
-                text = getString(R.string.status_backup_done_details_max_per_sync, backedUpCount);
-            } else if (backedUpCount > 0) {
-                text = getResources().getQuantityString(R.plurals.status_backup_done_details, backedUpCount,
-                        backedUpCount);
-            } else if (backedUpCount == 0) {
-                text = getString(R.string.status_backup_done_details_noitems);
-            }
-            mSyncDetailsLabel.setText(text);
-            mStatusLabel.setText(R.string.status_done);
-            mStatusLabel.setTextColor(getResources().getColor(R.color.status_done));
-        }
-
-        private void finishedRestore() {
-            mStatusLabel.setTextColor(getResources().getColor(R.color.status_done));
-            mStatusLabel.setText(R.string.status_done);
-            mSyncDetailsLabel.setText(getResources().getQuantityString(
-                    R.plurals.status_restore_done_details,
-                    SmsRestoreService.getRestoredCount(),
-                    SmsRestoreService.getRestoredCount(),
-                    SmsRestoreService.getDuplicateCount()));
-        }
-
-        private void idle() {
-            mSyncDetailsLabel.setText(getLastSyncText(PrefStore.getMostRecentSyncedDate(SmsSync.this)));
-            mStatusLabel.setText(R.string.status_idle);
-        }
-
-        private String getLastSyncText(final long lastSync) {
-            return getString(R.string.status_idle_details,
-                    lastSync < 0 ? getString(R.string.status_idle_details_never) :
-                            new Date(lastSync).toLocaleString());
-        }
-
-        public void stateChanged(final SmsSyncState newState) {
-            if (mView == null) return;
-            setAttributes(newState);
-
-            switch (newState) {
-                case FINISHED_RESTORE:
-                    finishedRestore();
-                    break;
-                case FINISHED_BACKUP:
-                    finishedBackup();
-                    break;
-                case IDLE:
-                    idle();
-                    break;
-                case LOGIN:
-                    mStatusLabel.setText(R.string.status_working);
-                    mSyncDetailsLabel.setText(R.string.status_login_details);
-                    mProgressBar.setIndeterminate(true);
-                    break;
-                case CALC:
-                    calc();
-                    break;
-                case BACKUP:
-                    mRestoreButton.setEnabled(false);
-                    mSyncButton.setText(R.string.ui_sync_button_label_syncing);
-                    mStatusLabel.setText(R.string.status_backup);
-
-                    mSyncDetailsLabel.setText(getString(R.string.status_backup_details,
-                            SmsBackupService.getCurrentSyncedItems(),
-                            SmsBackupService.getItemsToSyncCount()));
-
-                    mProgressBar.setIndeterminate(false);
-                    mProgressBar.setProgress(SmsBackupService.getCurrentSyncedItems());
-                    mProgressBar.setMax(SmsBackupService.getItemsToSyncCount());
-                    break;
-                case RESTORE:
-                    mSyncButton.setEnabled(false);
-                    mRestoreButton.setText(R.string.ui_restore_button_label_restoring);
-
-                    mStatusLabel.setText(R.string.status_restore);
-
-                    mSyncDetailsLabel.setText(getString(R.string.status_restore_details,
-                            SmsRestoreService.getCurrentRestoredItems(),
-                            SmsRestoreService.getItemsToRestoreCount()));
-
-                    mProgressBar.setIndeterminate(false);
-                    mProgressBar.setProgress(SmsRestoreService.getCurrentRestoredItems());
-                    mProgressBar.setMax(SmsRestoreService.getItemsToRestoreCount());
-                    break;
-                case UPDATING_THREADS:
-                    mProgressBar.setIndeterminate(true);
-                    mSyncDetailsLabel.setText(getString(R.string.status_updating_threads));
-                    break;
-                case AUTH_FAILED:
-                    authFailed();
-                    break;
-                case CONNECTIVITY_ERROR:
-                case GENERAL_ERROR:
-                    mStatusLabel.setText(R.string.status_unknown_error);
-                    mSyncDetailsLabel.setText(getString(R.string.status_unknown_error_details,
-                            ServiceBase.lastError == null ? "N/A" : ServiceBase.lastError));
-                    break;
-                case CANCELED_BACKUP:
-                    mStatusLabel.setText(R.string.status_canceled);
-
-                    mSyncDetailsLabel.setText(getString(R.string.status_canceled_details,
-                            SmsBackupService.getCurrentSyncedItems(),
-                            SmsBackupService.getItemsToSyncCount()));
-                    break;
-                case CANCELED_RESTORE:
-                    mStatusLabel.setText(R.string.status_canceled);
-
-                    mSyncDetailsLabel.setText(getString(R.string.status_restore_canceled_details,
-                            SmsRestoreService.getCurrentRestoredItems(),
-                            SmsRestoreService.getItemsToRestoreCount()));
-                    break;
-            }
-        }
-
-        private void setAttributes(final SmsSyncState state) {
-            switch (state) {
-                case GENERAL_ERROR:
-                case CONNECTIVITY_ERROR:
-                case AUTH_FAILED:
-                    mProgressBar.setProgress(0);
-                    mProgressBar.setIndeterminate(false);
-                    mStatusLabel.setTextColor(getResources().getColor(R.color.status_error));
-                    mStatusIcon.setImageResource(R.drawable.ic_error);
-                    break;
-                case LOGIN:
-                case CALC:
-                case BACKUP:
-                case RESTORE:
-                    mStatusLabel.setTextColor(getResources().getColor(R.color.status_sync));
-                    mStatusIcon.setImageResource(R.drawable.ic_syncing);
-                    break;
-                default:
-                    mProgressBar.setProgress(0);
-                    mProgressBar.setIndeterminate(false);
-                    mRestoreButton.setEnabled(true);
-                    mSyncButton.setEnabled(true);
-
-                    mSyncButton.setText(R.string.ui_sync_button_label_idle);
-                    mRestoreButton.setText(R.string.ui_restore_button_label_idle);
-
-                    mStatusLabel.setTextColor(getResources().getColor(R.color.status_idle));
-                    mStatusIcon.setImageResource(R.drawable.ic_idle);
-            }
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (v == mSyncButton) {
-                if (!SmsBackupService.isWorking()) {
-                    if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
-                    performAction(Actions.Backup);
-                } else {
-                    if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
-                    // Sync button will be restored on next status update.
-                    mSyncButton.setText(R.string.ui_sync_button_label_canceling);
-                    mSyncButton.setEnabled(false);
-                    SmsBackupService.cancel();
-                }
-            } else if (v == mRestoreButton) {
-                if (LOCAL_LOGV) Log.v(TAG, "restore");
-                if (!SmsRestoreService.isWorking()) {
-                    performAction(Actions.Restore);
-                } else {
-                    mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
-                    mRestoreButton.setEnabled(false);
-                    SmsRestoreService.cancel();
-                }
-            }
-        }
-
-        @Override
-        public View getView(View convertView, ViewGroup parent) {
-            if (mView == null) {
-                mView = getLayoutInflater().inflate(R.layout.status, parent, false);
-                mSyncButton = (Button) mView.findViewById(R.id.sync_button);
-                mSyncButton.setOnClickListener(this);
-
-                mRestoreButton = (Button) mView.findViewById(R.id.restore_button);
-                mRestoreButton.setOnClickListener(this);
-
-                mStatusIcon = (ImageView) mView.findViewById(R.id.status_icon);
-                mStatusLabel = (TextView) mView.findViewById(R.id.status_label);
-                mSyncDetails = mView.findViewById(R.id.details_sync);
-                mSyncDetailsLabel = (TextView) mSyncDetails.findViewById(R.id.details_sync_label);
-                mProgressBar = (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress);
-                update();
-            }
-            return mView;
-        }
+        startService(new Intent(this, SmsRestoreService.class));
     }
 
     @Override
@@ -787,7 +552,7 @@ public class SmsSync extends PreferenceActivity {
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (mAuthorizeUri != null) {
-                                    if (!openUriForAuthorization(mAuthorizeUri)) {
+                                    if (!UrlOpener.Default.openUriForAuthorization(SmsSync.this, mAuthorizeUri)) {
                                         Log.w(TAG, "could not open uri " + mAuthorizeUri);
                                     }
                                 }
@@ -858,66 +623,6 @@ public class SmsSync extends PreferenceActivity {
         return createMessageDialog(id, title, msg);
     }
 
-    @Deprecated
-    public StatusPreference getStatusPreference() {
-        return statusPref;
-    }
-
-    static interface UrlOpener {
-        boolean open(Uri uri);
-    }
-
-    private boolean openUriForAuthorization(final Uri uri) {
-        if (LOCAL_LOGV) {
-            Log.d(TAG, "openUrlForAutorization(" + uri + ")");
-
-        }
-        for (UrlOpener opener : new UrlOpener[]{webViewOpener, stockBrowser, standardViewOpener}) {
-            if (opener.open(uri)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private final UrlOpener webViewOpener = new UrlOpener() {
-        @Override
-        public boolean open(Uri uri) {
-            startActivity(new Intent(SmsSync.this, AuthActivity.class)
-                    .setData(uri)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
-            return true;
-        }
-    };
-
-    private final UrlOpener standardViewOpener = new UrlOpener() {
-        @Override
-        public boolean open(Uri uri) {
-            startActivity(new Intent(Intent.ACTION_VIEW, uri)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
-            return true;
-        }
-    };
-
-    private final UrlOpener stockBrowser = new UrlOpener() {
-        @Override
-        public boolean open(Uri uri) {
-            final Intent stockBrowser = new Intent()
-                    .setComponent(new ComponentName("com.android.browser",
-                            "com.android.browser.BrowserActivity"))
-                    .setData(uri)
-                    .setAction(Intent.ACTION_VIEW)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            try {
-                startActivity(stockBrowser);
-                return true;
-            } catch (ActivityNotFoundException e) {
-                Log.w(TAG, "default browser not found, falling back");
-                return false;
-            }
-        }
-    };
-
     private Dialog createMessageDialog(final int id, String title, String msg) {
         return new AlertDialog.Builder(this)
                 .setTitle(title)
@@ -964,107 +669,8 @@ public class SmsSync extends PreferenceActivity {
         return connected;
     }
 
-    class RequestTokenTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            show(Dialogs.REQUEST_TOKEN);
-        }
-
-        public String doInBackground(String... callback) {
-            synchronized (XOAuthConsumer.class) {
-                XOAuthConsumer consumer = PrefStore.getOAuthConsumer(SmsSync.this);
-                CommonsHttpOAuthProvider provider = consumer.getProvider(SmsSync.this);
-                try {
-                    String url = provider.retrieveRequestToken(consumer, callback[0]);
-                    PrefStore.setOauthTokens(SmsSync.this, consumer.getToken(), consumer.getTokenSecret());
-                    return url;
-                } catch (oauth.signpost.exception.OAuthCommunicationException e) {
-                    Log.e(TAG, "error requesting token: " + e.getResponseBody(), e);
-                    return null;
-                } catch (oauth.signpost.exception.OAuthException e) {
-                    Log.e(TAG, "error requesting token", e);
-                    return null;
-                }
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String authorizeUrl) {
-            dismiss(Dialogs.REQUEST_TOKEN);
-
-            if (authorizeUrl != null) {
-                SmsSync.this.mAuthorizeUri = Uri.parse(authorizeUrl);
-                show(Dialogs.CONNECT);
-            } else {
-                SmsSync.this.mAuthorizeUri = null;
-                show(Dialogs.CONNECT_TOKEN_ERROR);
-            }
-        }
-    }
-
-    class OAuthCallbackTask extends AsyncTask<Intent, Void, XOAuthConsumer> {
-        private final Context mContext = SmsSync.this;
-
-        @Override
-        protected void onPreExecute() {
-            show(Dialogs.ACCESS_TOKEN);
-        }
-
-        @Override
-        protected XOAuthConsumer doInBackground(Intent... callbackIntent) {
-            Uri uri = callbackIntent[0].getData();
-            if (LOCAL_LOGV) Log.v(TAG, "oauth callback: " + uri);
-
-            XOAuthConsumer consumer = PrefStore.getOAuthConsumer(mContext);
-            CommonsHttpOAuthProvider provider = consumer.getProvider(mContext);
-            String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
-            try {
-                provider.retrieveAccessToken(consumer, verifier);
-                String username = consumer.loadUsernameFromContacts();
-
-                if (username != null) {
-                    Log.i(TAG, "Valid access token for " + username);
-                    // intent has been handled
-                    callbackIntent[0].setData(null);
-
-                    return consumer;
-                } else {
-                    Log.e(TAG, "No valid user name");
-                    return null;
-                }
-            } catch (oauth.signpost.exception.OAuthException e) {
-                Log.e(TAG, "error", e);
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(XOAuthConsumer consumer) {
-            if (LOCAL_LOGV)
-                Log.v(TAG, String.format("%s#onPostExecute(%s)", getClass().getName(), consumer));
-
-            dismiss(Dialogs.ACCESS_TOKEN);
-            if (consumer != null) {
-                PrefStore.setOauthUsername(mContext, consumer.getUsername());
-                PrefStore.setOauthTokens(mContext, consumer.getToken(), consumer.getTokenSecret());
-                onAuthenticated();
-            } else {
-                show(Dialogs.ACCESS_TOKEN_ERROR);
-            }
-        }
-    }
-
     public void show(Dialogs d) {
         showDialog(d.ordinal());
-    }
-
-    public void remove(Dialogs d) {
-        try {
-            removeDialog(d.ordinal());
-        } catch (IllegalArgumentException e) {
-            // ignore
-        }
     }
 
     public void dismiss(Dialogs d) {
@@ -1228,6 +834,28 @@ public class SmsSync extends PreferenceActivity {
         } catch (Exception e) {
             Log.w(TAG, e);
             ACRA.getErrorReporter().handleSilentException(e);
+        }
+    }
+    @TargetApi(11) @SuppressWarnings({"ConstantConditions", "PointlessBooleanExpression"})
+    private void setupStrictMode() {
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()
+                    .penaltyFlashScreen()
+                    .build());
+        }
+    }
+
+    private void checkAndDisplayDroidWarning() {
+        if ("DROIDX".equals(Build.MODEL) ||
+            "DROID2".equals(Build.MODEL) &&
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.FROYO &&
+            !getPreferences(MODE_PRIVATE).getBoolean("droidx_warning_displayed", false)) {
+
+            getPreferences(MODE_PRIVATE).edit().putBoolean("droidx_warning_displayed", true).commit();
+            show(Dialogs.BROKEN_DROIDX);
         }
     }
 }

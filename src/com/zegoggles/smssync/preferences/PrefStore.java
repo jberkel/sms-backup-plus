@@ -519,14 +519,14 @@ public class PrefStore {
         return getPrefs(ctx).getBoolean(PREF_MARK_AS_READ_ON_RESTORE, DEFAULT_MARK_AS_READ_ON_RESTORE);
     }
 
-    public static boolean isFirstSync(Context ctx) {
+    public static boolean isFirstBackup(Context ctx) {
         return !getPrefs(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
     }
 
     public static boolean isFirstUse(Context ctx) {
         final String key = "first_use";
 
-        if (isFirstSync(ctx) &&
+        if (isFirstBackup(ctx) &&
                 !getPrefs(ctx).contains(key)) {
             getPrefs(ctx).edit().putBoolean(key, false).commit();
             return true;
@@ -647,7 +647,7 @@ public class PrefStore {
         PackageInfo pInfo;
         try {
             pInfo = context.getPackageManager().getPackageInfo(
-                    SmsSync.class.getPackage().getName(),
+                    context.getPackageName(),
                     PackageManager.GET_META_DATA);
             return "" + (code ? pInfo.versionCode : pInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
@@ -661,7 +661,7 @@ public class PrefStore {
         PackageInfo pInfo;
         try {
             pInfo = context.getPackageManager().getPackageInfo(
-                    SmsSync.class.getPackage().getName(),
+                    context.getPackageName(),
                     PackageManager.GET_META_DATA);
 
             return (pInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
@@ -686,7 +686,7 @@ public class PrefStore {
         int code;
         try {
             PackageInfo pInfo = ctx.getPackageManager().getPackageInfo(
-                    SmsSync.class.getPackage().getName(),
+                    ctx.getPackageName(),
                     PackageManager.GET_META_DATA);
             code = pInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
