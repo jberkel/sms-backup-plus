@@ -40,8 +40,6 @@ import java.util.Locale;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.mail.CursorToMessage.DataType;
-import static com.zegoggles.smssync.mail.CursorToMessage.Headers;
 
 public class BackupImapStore extends ImapStore {
     private Context context;

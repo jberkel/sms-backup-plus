@@ -28,7 +28,7 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.SmsSync;
 import com.zegoggles.smssync.preferences.PrefStore;
-import com.zegoggles.smssync.service.state.BackupStateChanged;
+import com.zegoggles.smssync.service.state.BackupState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,12 +46,10 @@ public class SmsBackupService extends ServiceBase {
      */
     private static final int MAX_MSG_PER_REQUEST = 1;
     @Nullable private static SmsBackupService service;
-    @NotNull private BackupStateChanged mState = new BackupStateChanged(INITIAL, 0, 0, MANUAL, null);
-
-    private Notification notification;
+    @NotNull private BackupState mState = new BackupState();
 
     @Override @NotNull
-    public BackupStateChanged getState() {
+    public BackupState getState() {
         return mState;
     }
 
@@ -66,16 +64,16 @@ public class SmsBackupService extends ServiceBase {
         super.onDestroy();
         if (LOCAL_LOGV) Log.v(TAG, "SmsBackupService#onDestroy(state=" + getState() + ")");
         service = null;
-        notification = null;
     }
 
     @Override
     protected void handleIntent(final Intent intent) {
         if (intent == null) return; // NB: should not happen with START_NOT_STICKY
-        if (LOCAL_LOGV) Log.v(TAG, "handleIntent(" + intent +
-                ", " + (intent.getExtras() == null ? "null" : intent.getExtras().keySet()) + ")");
-
         final BackupType backupType = BackupType.fromIntent(intent);
+        if (LOCAL_LOGV) Log.v(TAG, "handleIntent(" + intent +
+                ", " + (intent.getExtras() == null ? "null" : intent.getExtras().keySet()) +
+                ", type="+backupType+")");
+
         appLog(R.string.app_log_backup_requested, getString(backupType.resId));
 
         if (backupType.isBackground() && !getConnectivityManager().getBackgroundDataSetting()) {
@@ -104,11 +102,11 @@ public class SmsBackupService extends ServiceBase {
         }
     }
 
-    @Produce public BackupStateChanged produceLastState() {
+    @Produce public BackupState produceLastState() {
         return mState;
     }
 
-    @Subscribe public void backupStateChanged(BackupStateChanged state) {
+    @Subscribe public void backupStateChanged(BackupState state) {
         mState = state;
         if (mState.isInitialState()) return;
 
@@ -124,24 +122,13 @@ public class SmsBackupService extends ServiceBase {
             }
         }
 
-        if (mState.isRunning()) {
-            if (notification == null) {
-                notification = createBackupNotification();
+        if (state.isRunning()) {
+            if (state.backupType == MANUAL) {
+                notifyAboutBackup(state);
             }
-            PendingIntent intent = PendingIntent.getActivity(this, 0,
-                    new Intent(this, SmsSync.class),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            notification.setLatestEventInfo(this,
-                    getString(R.string.status_backup),
-                    getLabelFromState(state),
-                    intent);
-
-            getNotifier().notify(0, notification);
         } else {
-            if (mState.backupType == BackupType.REGULAR) {
+            if (state.backupType == BackupType.REGULAR) {
                 Log.d(TAG, "scheduling next backup");
-
                 scheduleNextBackup();
             }
             getNotifier().cancel(0);
@@ -149,21 +136,16 @@ public class SmsBackupService extends ServiceBase {
         }
     }
 
-    private String getLabelFromState(BackupStateChanged state) {
-        switch (state.state) {
-            case LOGIN:
-                return getString(R.string.status_login_details);
-            case CALC:
-                return getString(R.string.status_calc_details);
-            case BACKUP:
-                return getString(R.string.status_backup_details,
-                        state.currentSyncedItems,
-                        state.itemsToSync);
-            case ERROR:
-                return state.getErrorMessage(getResources());
-            default:
-                return "";
+    private void notifyAboutBackup(BackupState state) {
+        if (notification == null) {
+            notification = createNotification(R.string.status_backup);
         }
+        notification.setLatestEventInfo(this,
+            getString(R.string.status_backup),
+            state.getNotificationLabel(getResources()),
+            getPendingIntent());
+
+        getNotifier().notify(0, notification);
     }
 
     private void scheduleNextBackup() {
@@ -193,11 +175,5 @@ public class SmsBackupService extends ServiceBase {
         return service != null && service.isWorking();
     }
 
-    private Notification createBackupNotification() {
-        Notification n = new Notification(R.drawable.ic_notification,
-                getString(R.string.status_backup),
-                System.currentTimeMillis());
-        n.flags = Notification.FLAG_ONGOING_EVENT;
-        return n;
-    }
+
 }

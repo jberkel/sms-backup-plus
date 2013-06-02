@@ -5,18 +5,22 @@ import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.service.ConnectivityErrorException;
 import com.zegoggles.smssync.service.LocalizableException;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-public abstract class StateChanged {
+public abstract class State {
     public final SmsSyncState state;
     public final Exception exception;
+    public final @Nullable DataType dataType;
 
-    public StateChanged(SmsSyncState state, Exception exception) {
+    public State(SmsSyncState state, @Nullable DataType dataType, Exception exception) {
         this.state = state;
         this.exception = exception;
+        this.dataType = dataType;
     }
 
     public String getErrorMessage(Resources resources) {
@@ -45,7 +49,7 @@ public abstract class StateChanged {
                 SmsSyncState.UPDATING_THREADS).contains(state);
     }
 
-    public abstract StateChanged transition(SmsSyncState newState, Exception exception);
+    public abstract State transition(SmsSyncState newState, Exception exception);
 
     public boolean isAuthException() {
         return exception instanceof XOAuth2AuthenticationFailedException ||
@@ -58,5 +62,14 @@ public abstract class StateChanged {
 
     public boolean isError() {
         return state == SmsSyncState.ERROR;
+    }
+
+    public String getNotificationLabel(Resources resources) {
+        switch (state) {
+            case LOGIN: return resources.getString(R.string.status_login_details);
+            case CALC:  return resources.getString(R.string.status_calc_details);
+            case ERROR: return getErrorMessage(resources);
+            default: return null;
+        }
     }
 }

@@ -22,9 +22,11 @@ import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
+import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.CursorToMessage;
+import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.PrefStore;
-import com.zegoggles.smssync.service.state.BackupStateChanged;
+import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +42,7 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 /**
  * BackupTask does all the work
  */
-class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChanged> {
+class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
     private final int maxItemsPerSync;
     private final ContactAccessor.ContactGroup groupToBackup;
     private final BackupType backupType;
@@ -72,7 +74,7 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
     }
 
     @Override
-    protected BackupStateChanged doInBackground(Intent... params) {
+    protected BackupState doInBackground(Intent... params) {
         final Intent intent = params[0];
         if (intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false)) {
             appLog(R.string.app_log_skip_backup_skip_messages);
@@ -165,19 +167,19 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
         service.appLog(id, args);
     }
 
-    private BackupStateChanged transition(SmsSyncState smsSyncState, Exception exception) {
+    private BackupState transition(SmsSyncState smsSyncState, Exception exception) {
         return service.getState().transition(smsSyncState, exception);
     }
 
     @Override
-    protected void onProgressUpdate(BackupStateChanged... progress) {
+    protected void onProgressUpdate(BackupState... progress) {
         if (progress != null && progress.length > 0) {
             post(progress[0]);
         }
     }
 
     @Override
-    protected void onPostExecute(BackupStateChanged result) {
+    protected void onPostExecute(BackupState result) {
         appLog(R.string.app_log_backup_finished);
         if (result != null) {
             post(result);
@@ -192,11 +194,11 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
         App.bus.unregister(this);
     }
 
-    private void post(BackupStateChanged state) {
+    private void post(BackupState state) {
         App.bus.post(state);
     }
 
-    private BackupStateChanged backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems, Cursor whatsAppItems, final int itemsToSync)
+    private BackupState backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems, Cursor whatsAppItems, final int itemsToSync)
             throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
 
@@ -214,26 +216,26 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
         try {
             final CursorToMessage converter = new CursorToMessage(service, PrefStore.getUserEmail(service));
             Cursor curCursor;
-            CursorToMessage.DataType dataType;
+            DataType dataType = null;
             publish(CALC);
             int backedUpItems = 0;
             while (!isCancelled() && backedUpItems < itemsToSync) {
                 if (smsItems != null && smsItems.moveToNext()) {
-                    dataType = CursorToMessage.DataType.SMS;
+                    dataType = DataType.SMS;
                     curCursor = smsItems;
                 } else if (mmsItems != null && mmsItems.moveToNext()) {
-                    dataType = CursorToMessage.DataType.MMS;
+                    dataType = DataType.MMS;
                     curCursor = mmsItems;
                 } else if (callLogItems != null && callLogItems.moveToNext()) {
-                    dataType = CursorToMessage.DataType.CALLLOG;
+                    dataType = DataType.CALLLOG;
                     curCursor = callLogItems;
                 } else if (whatsAppItems != null && whatsAppItems.moveToNext()) {
-                    dataType = CursorToMessage.DataType.WHATSAPP;
+                    dataType = DataType.WHATSAPP;
                     curCursor = whatsAppItems;
                 } else break; // no more items available
 
                 if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
-                CursorToMessage.ConversionResult result = converter.cursorToMessages(curCursor, maxMessagePerRequest, dataType);
+                ConversionResult result = converter.cursorToMessages(curCursor, maxMessagePerRequest, dataType);
                 List<Message> messages = result.messageList;
                 if (!messages.isEmpty()) {
                     if (LOCAL_LOGV)
@@ -266,15 +268,17 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
                     }
                 }
                 backedUpItems += messages.size();
-                publishProgress(new BackupStateChanged(BACKUP,
+                publishProgress(new BackupState(BACKUP,
                         backedUpItems,
                         itemsToSync,
-                        backupType, null));
+                        backupType,
+                        dataType,
+                        null));
             }
-            return new BackupStateChanged(FINISHED_BACKUP,
+            return new BackupState(FINISHED_BACKUP,
                     backedUpItems,
                     itemsToSync,
-                    backupType, null);
+                    backupType, dataType, null);
         } finally {
             if (smsmmsfolder != null) smsmmsfolder.close();
             if (callLogfolder != null) callLogfolder.close();
@@ -298,7 +302,7 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
 
         return service.getContentResolver().query(Consts.SMS_PROVIDER, null,
                 String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s", SmsConsts.DATE, SmsConsts.TYPE,
-                        groupSelection(CursorToMessage.DataType.SMS, group)),
+                        groupSelection(DataType.SMS, group)),
                 new String[]{String.valueOf(getMaxSyncedDateSms(service)),
                         String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)},
                 sortOrder);
@@ -317,7 +321,7 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
 
         return service.getContentResolver().query(Consts.MMS_PROVIDER, null,
                 String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s", SmsConsts.DATE, MmsConsts.TYPE,
-                        groupSelection(CursorToMessage.DataType.MMS, group)),
+                        groupSelection(DataType.MMS, group)),
                 new String[]{String.valueOf(PrefStore.getMaxSyncedDateMms(service)),
                         MmsConsts.DELIVERY_REPORT},
                 sortOrder);
@@ -362,9 +366,9 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
         }
     }
 
-    private String groupSelection(CursorToMessage.DataType type, ContactAccessor.ContactGroup group) {
+    private String groupSelection(DataType type, ContactAccessor.ContactGroup group) {
         /* MMS group selection not supported at the moment */
-        if (type != CursorToMessage.DataType.SMS || group.type == ContactAccessor.ContactGroup.Type.EVERYBODY) return "";
+        if (type != DataType.SMS || group.type == ContactAccessor.ContactGroup.Type.EVERYBODY) return "";
 
         final Set<Long> ids = service.getContacts().getGroupContactIds(service, group).rawIds;
         if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
@@ -381,16 +385,16 @@ class BackupTask extends AsyncTask<Intent, BackupStateChanged, BackupStateChange
     }
 
     private void publish(SmsSyncState state, Exception exception) {
-        publishProgress(service.getState().transition(state, exception));
+        publishProgress(service.getState().transition(state, backupType, exception));
     }
 
     /** Only update the max synced ID, do not really sync. */
-    private BackupStateChanged skip() {
+    private BackupState skip() {
         service.updateMaxSyncedDateSms(getMaxItemDateSms());
         updateMaxSyncedDateMms(getMaxItemDateMms());
         updateMaxSyncedDateCallLog(getMaxItemDateCallLog());
         Log.i(TAG, "All messages skipped.");
-        return new BackupStateChanged(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null);
+        return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
     }
 
     private void updateMaxSyncedDateCallLog(long maxSyncedDate) {

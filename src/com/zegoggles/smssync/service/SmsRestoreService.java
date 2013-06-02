@@ -7,9 +7,10 @@ import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.CursorToMessage;
 import com.zegoggles.smssync.preferences.PrefStore;
-import com.zegoggles.smssync.service.state.RestoreStateChanged;
+import com.zegoggles.smssync.service.state.RestoreState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,14 +20,13 @@ import java.io.FilenameFilter;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
-import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
 
 public class SmsRestoreService extends ServiceBase {
-    @NotNull private RestoreStateChanged mState = new RestoreStateChanged(INITIAL, 0, 0, 0, 0, null);
+    @NotNull private RestoreState mState = new RestoreState();
     @Nullable private static SmsRestoreService service;
 
     @Override @NotNull
-    public RestoreStateChanged getState() {
+    public RestoreState getState() {
         return mState;
     }
 
@@ -89,17 +89,29 @@ public class SmsRestoreService extends ServiceBase {
         }
     }
 
-    @Subscribe public void restoreStateChanged(final RestoreStateChanged newState) {
-        mState = newState;
+    @Subscribe public void restoreStateChanged(final RestoreState state) {
+        mState = state;
         if (mState.isInitialState()) return;
 
-        if (!mState.isRunning()) {
+        if (mState.isRunning()) {
+            if (notification == null) {
+                notification = createNotification(R.string.status_restore);
+            }
+            notification.setLatestEventInfo(this,
+                    getString(R.string.status_restore),
+                    state.getNotificationLabel(getResources()),
+                    getPendingIntent());
+
+            getNotifier().notify(0, notification);
+        } else {
+            getNotifier().cancel(0);
+
             Log.d(TAG, "stopping service, state"+mState);
             stopSelf();
         }
     }
 
-    @Produce public RestoreStateChanged produceLastState() {
+    @Produce public RestoreState produceLastState() {
         return mState;
     }
 

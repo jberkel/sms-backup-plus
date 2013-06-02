@@ -119,6 +119,7 @@ public class SmsSync extends PreferenceActivity {
             show(Dialogs.ABOUT);
         }
         setupStrictMode();
+        App.bus.register(this);
     }
 
     @Override
@@ -155,7 +156,7 @@ public class SmsSync extends PreferenceActivity {
         updateImapSettings(!PrefStore.useXOAuth(this));
         checkUserDonationStatus();
         App.bus.register(statusPref);
-        App.bus.register(this);
+
     }
 
     @Override

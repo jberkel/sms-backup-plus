@@ -15,7 +15,9 @@
  */
 package com.zegoggles.smssync.service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -29,11 +31,12 @@ import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.SmsSync;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.preferences.PrefStore;
-import com.zegoggles.smssync.service.state.StateChanged;
+import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,6 +53,7 @@ public abstract class ServiceBase extends Service {
     private WifiManager.WifiLock sWifiLock;
 
     private AppLog appLog;
+    protected Notification notification;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -70,6 +74,7 @@ public abstract class ServiceBase extends Service {
         super.onDestroy();
         if (appLog != null) appLog.close();
         App.bus.unregister(this);
+        notification = null;
     }
 
     protected BackupImapStore getBackupImapStore() throws MessagingException {
@@ -152,7 +157,7 @@ public abstract class ServiceBase extends Service {
     }
 
     public abstract @NotNull
-    StateChanged getState();
+    State getState();
 
     public boolean isWorking() {
         return getState().isRunning();
@@ -164,5 +169,19 @@ public abstract class ServiceBase extends Service {
 
     protected ContactAccessor getContacts() {
         return ContactAccessor.Get.instance();
+    }
+
+    protected Notification createNotification(int resId) {
+        Notification n = new Notification(R.drawable.ic_notification,
+                getString(resId),
+                System.currentTimeMillis());
+        n.flags = Notification.FLAG_ONGOING_EVENT;
+        return n;
+    }
+
+    protected PendingIntent getPendingIntent() {
+        return PendingIntent.getActivity(this, 0,
+            new Intent(this, SmsSync.class),
+            PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

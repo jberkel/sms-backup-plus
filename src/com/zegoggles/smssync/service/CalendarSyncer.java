@@ -5,7 +5,10 @@ import android.provider.CallLog;
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
+import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.CursorToMessage;
+import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.mail.PersonRecord;
 
 import java.util.Date;
 import java.util.Map;
@@ -23,15 +26,15 @@ class CalendarSyncer {
         this.calendarId = calendarId;
     }
 
-    public void syncCalendar(CursorToMessage converter, CursorToMessage.ConversionResult result) {
-        if (result.type != CursorToMessage.DataType.CALLLOG) return;
+    public void syncCalendar(CursorToMessage converter, ConversionResult result) {
+        if (result.type != DataType.CALLLOG) return;
         for (Map<String, String> m : result.mapList) {
             try {
                 final int duration = Integer.parseInt(m.get(CallLog.Calls.DURATION));
                 final int callType = Integer.parseInt(m.get(CallLog.Calls.TYPE));
                 final String number = m.get(CallLog.Calls.NUMBER);
                 final Date then = new Date(Long.valueOf(m.get(CallLog.Calls.DATE)));
-                final CursorToMessage.PersonRecord record = converter.lookupPerson(number);
+                final PersonRecord record = converter.lookupPerson(number);
 
                 StringBuilder description = new StringBuilder();
                 description.append(context.getString(R.string.call_number_field, record.getNumber()))

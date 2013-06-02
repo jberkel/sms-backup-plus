@@ -71,7 +71,6 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.Attachment.*;
 
 public class CursorToMessage {
-
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
     public static final Uri ECLAIR_CONTENT_URI =
             Uri.parse("content://com.android.contacts/data/emails");
@@ -79,8 +78,6 @@ public class CursorToMessage {
     // PhoneLookup.CONTENT_FILTER_URI
     public static final Uri ECLAIR_CONTENT_FILTER_URI =
             Uri.parse("content://com.android.contacts/phone_lookup");
-
-    public enum DataType {MMS, SMS, CALLLOG, WHATSAPP}
 
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
@@ -135,25 +132,6 @@ public class CursorToMessage {
      * used for whitelisting specific contacts
      */
     private final ContactAccessor.GroupContactIds allowedIds;
-
-    /**
-     * email headers used to record meta data
-     */
-    public interface Headers {
-        String ID = "X-smssync-id";
-        String ADDRESS = "X-smssync-address";
-        String DATATYPE = "X-smssync-datatype";
-        String TYPE = "X-smssync-type";
-        String DATE = "X-smssync-date";
-        String THREAD_ID = "X-smssync-thread";
-        String READ = "X-smssync-read";
-        String STATUS = "X-smssync-status";
-        String PROTOCOL = "X-smssync-protocol";
-        String SERVICE_CENTER = "X-smssync-service_center";
-        String BACKUP_TIME = "X-smssync-backup-time";
-        String VERSION = "X-smssync-version";
-        String DURATION = "X-smssync-duration";
-    }
 
     public CursorToMessage(Context ctx, String userEmail) {
         mContext = ctx;
@@ -217,7 +195,7 @@ public class CursorToMessage {
                 result.messageList.add(m);
                 result.mapList.add(msgMap);
 
-                String dateHeader = getHeader(m, Headers.DATE);
+                String dateHeader = Headers.get(m, Headers.DATE);
                 if (dateHeader != null) {
                     final long date = Long.parseLong(dateHeader);
                     if (date > result.maxDate) {
@@ -244,26 +222,26 @@ public class CursorToMessage {
                     throw new MessagingException("body.getInputStream() is null for " + message.getBody());
                 }
                 final String body = IOUtils.toString(is);
-                final String address = getHeader(message, Headers.ADDRESS);
+                final String address = Headers.get(message, Headers.ADDRESS);
                 values.put(SmsConsts.BODY, body);
                 values.put(SmsConsts.ADDRESS, address);
-                values.put(SmsConsts.TYPE, getHeader(message, Headers.TYPE));
-                values.put(SmsConsts.PROTOCOL, getHeader(message, Headers.PROTOCOL));
-                values.put(SmsConsts.SERVICE_CENTER, getHeader(message, Headers.SERVICE_CENTER));
-                values.put(SmsConsts.DATE, getHeader(message, Headers.DATE));
-                values.put(SmsConsts.STATUS, getHeader(message, Headers.STATUS));
+                values.put(SmsConsts.TYPE, Headers.get(message, Headers.TYPE));
+                values.put(SmsConsts.PROTOCOL, Headers.get(message, Headers.PROTOCOL));
+                values.put(SmsConsts.SERVICE_CENTER, Headers.get(message, Headers.SERVICE_CENTER));
+                values.put(SmsConsts.DATE, Headers.get(message, Headers.DATE));
+                values.put(SmsConsts.STATUS, Headers.get(message, Headers.STATUS));
                 values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(mContext, address));
                 values.put(SmsConsts.READ,
-                        PrefStore.getMarkAsReadOnRestore(mContext) ? "1" : getHeader(message, Headers.READ));
+                        PrefStore.getMarkAsReadOnRestore(mContext) ? "1" : Headers.get(message, Headers.READ));
                 break;
             case CALLLOG:
-                values.put(CallLog.Calls.NUMBER, getHeader(message, Headers.ADDRESS));
-                values.put(CallLog.Calls.TYPE, Integer.valueOf(getHeader(message, Headers.TYPE)));
-                values.put(CallLog.Calls.DATE, getHeader(message, Headers.DATE));
-                values.put(CallLog.Calls.DURATION, Long.valueOf(getHeader(message, Headers.DURATION)));
+                values.put(CallLog.Calls.NUMBER, Headers.get(message, Headers.ADDRESS));
+                values.put(CallLog.Calls.TYPE, Integer.valueOf(Headers.get(message, Headers.TYPE)));
+                values.put(CallLog.Calls.DATE, Headers.get(message, Headers.DATE));
+                values.put(CallLog.Calls.DURATION, Long.valueOf(Headers.get(message, Headers.DURATION)));
                 values.put(CallLog.Calls.NEW, 0);
 
-                PersonRecord record = lookupPerson(getHeader(message, Headers.ADDRESS));
+                PersonRecord record = lookupPerson(Headers.get(message, Headers.ADDRESS));
                 if (!record.unknown) {
                     values.put(CallLog.Calls.CACHED_NAME, record.name);
                     values.put(CallLog.Calls.CACHED_NUMBER_TYPE, -2);
@@ -278,8 +256,8 @@ public class CursorToMessage {
     }
 
     public DataType getDataType(Message message) {
-        final String dataTypeHeader = getHeader(message, Headers.DATATYPE);
-        final String typeHeader = getHeader(message, Headers.TYPE);
+        final String dataTypeHeader = Headers.get(message, Headers.DATATYPE);
+        final String typeHeader = Headers.get(message, Headers.TYPE);
         //we have two possible header sets here
         //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
         //         contains either the string "mms" or an integer which is the internal type of the sms
@@ -322,7 +300,7 @@ public class CursorToMessage {
     /* Look up a person */
     public PersonRecord lookupPerson(final String address) {
         if (TextUtils.isEmpty(address)) {
-            final PersonRecord record = new PersonRecord();
+            final PersonRecord record = new PersonRecord(mStyle);
             record.number = "-1";
             record.email = getUnknownEmail(null);
             record.unknown = true;
@@ -332,7 +310,7 @@ public class CursorToMessage {
                     Phones.CONTENT_FILTER_URL, Uri.encode(address));
 
             Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
-            final PersonRecord record = new PersonRecord();
+            final PersonRecord record = new PersonRecord(mStyle);
             if (c != null && c.moveToFirst()) {
                 record._id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
                 record.name = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
@@ -722,16 +700,6 @@ public class CursorToMessage {
     }
 
 
-    private static String getHeader(Message msg, String header) {
-        try {
-            String[] hdrs = msg.getHeader(header);
-            if (hdrs != null && hdrs.length > 0) {
-                return hdrs[0];
-            }
-        } catch (MessagingException ignored) {
-        }
-        return null;
-    }
 
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
@@ -777,7 +745,7 @@ public class CursorToMessage {
         return (primaryEmail != null) ? primaryEmail : getUnknownEmail(number);
     }
 
-    private static String sanitize(String s) {
+    static String sanitize(String s) {
         return s != null ? s.replaceAll("\\p{Cntrl}", "") : null;
     }
 
@@ -794,7 +762,7 @@ public class CursorToMessage {
     private static boolean isGmailAddress(String email) {
         return email != null &&
                 (email.toLowerCase(Locale.ENGLISH).endsWith("gmail.com") ||
-                        email.toLowerCase(Locale.ENGLISH).endsWith("googlemail.com"));
+                 email.toLowerCase(Locale.ENGLISH).endsWith("googlemail.com"));
     }
 
     private static String generateReferenceValue() {
@@ -804,60 +772,5 @@ public class CursorToMessage {
             sb.append(Integer.toString(random.nextInt(35), 36));
         }
         return sb.toString();
-    }
-
-    public static class ConversionResult {
-        public final DataType type;
-        public final List<Message> messageList = new ArrayList<Message>();
-        public final List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
-        public long maxDate = PrefStore.DEFAULT_MAX_SYNCED_DATE;
-
-        public ConversionResult(DataType type) {
-            this.type = type;
-        }
-    }
-
-    public class PersonRecord {
-        public long _id;
-        public String name, email, number;
-        public boolean unknown = false;
-        private Address mAddress;
-
-        public Address getAddress() {
-            if (mAddress == null) {
-                switch (mStyle) {
-                    case NUMBER:
-                        mAddress = new Address(email, getNumber());
-                        break;
-                    case NAME_AND_NUMBER:
-                        mAddress = new Address(email,
-                                name == null ? getNumber() :
-                                        String.format(Locale.ENGLISH, "%s (%s)", getName(), getNumber()));
-                        break;
-                    case NAME:
-                        mAddress = new Address(email, getName());
-                        break;
-                    default:
-                        mAddress = new Address(email);
-                }
-            }
-            return mAddress;
-        }
-
-        public String getId() {
-            return unknown ? number : String.valueOf(_id);
-        }
-
-        public String getNumber() {
-            return sanitize("-1".equals(number) || "-2".equals(number) ? "Unknown" : number);
-        }
-
-        public String getName() {
-            return sanitize(name != null ? name : getNumber());
-        }
-
-        public String toString() {
-            return String.format(Locale.ENGLISH, "[name=%s email=%s id=%d]", getName(), email, _id);
-        }
     }
 }

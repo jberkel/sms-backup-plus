@@ -12,12 +12,12 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.preferences.PrefStore;
-import com.zegoggles.smssync.service.state.BackupStateChanged;
-import com.zegoggles.smssync.service.state.RestoreStateChanged;
+import com.zegoggles.smssync.service.state.BackupState;
+import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
 import com.zegoggles.smssync.service.state.SmsSyncState;
-import com.zegoggles.smssync.service.state.StateChanged;
+import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.service.UserCanceled;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -90,20 +90,17 @@ class StatusPreference extends Preference implements View.OnClickListener {
         return mView;
     }
 
-    @Subscribe public void restoreStateChanged(final RestoreStateChanged newState) {
+    @Subscribe public void restoreStateChanged(final RestoreState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "restoreStateChanged:" + newState);
+        if (mView == null) return;
+
         stateChanged(newState);
         switch (newState.state) {
             case RESTORE:
                 mSyncButton.setEnabled(false);
                 mRestoreButton.setText(R.string.ui_restore_button_label_restoring);
-
                 mStatusLabel.setText(R.string.status_restore);
-
-                mSyncDetailsLabel.setText(smsSync.getString(R.string.status_restore_details,
-                        newState.currentRestoredCount,
-                        newState.itemsToRestore));
-
+                mSyncDetailsLabel.setText(newState.getNotificationLabel(getContext().getResources()));
                 mProgressBar.setIndeterminate(false);
                 mProgressBar.setProgress(newState.currentRestoredCount);
                 mProgressBar.setMax(newState.itemsToRestore);
@@ -114,21 +111,21 @@ class StatusPreference extends Preference implements View.OnClickListener {
 
             case CANCELED_RESTORE:
                 mStatusLabel.setText(R.string.status_canceled);
-                mSyncDetailsLabel.setText(smsSync.getString(R.string.status_restore_canceled_details,
+                mSyncDetailsLabel.setText(getContext().getString(R.string.status_restore_canceled_details,
                         newState.currentRestoredCount,
                         newState.itemsToRestore));
                 break;
             case UPDATING_THREADS:
                 mProgressBar.setIndeterminate(true);
-                mSyncDetailsLabel.setText(smsSync.getString(R.string.status_updating_threads));
+                mSyncDetailsLabel.setText(getContext().getString(R.string.status_updating_threads));
                 break;
 
         }
     }
 
-    @Subscribe public void backupStateChanged(final BackupStateChanged newState) {
+    @Subscribe public void backupStateChanged(final BackupState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "backupStateChanged:"+newState);
-        if (newState.backupType.isBackground()) return;
+        if (mView == null || newState.backupType.isBackground()) return;
 
         stateChanged(newState);
 
@@ -140,11 +137,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
                 mRestoreButton.setEnabled(false);
                 mSyncButton.setText(R.string.ui_sync_button_label_syncing);
                 mStatusLabel.setText(R.string.status_backup);
-
-                mSyncDetailsLabel.setText(smsSync.getString(R.string.status_backup_details,
-                        newState.currentSyncedItems,
-                        newState.itemsToSync));
-
+                mSyncDetailsLabel.setText(newState.getNotificationLabel(getContext().getResources()));
                 mProgressBar.setIndeterminate(false);
                 mProgressBar.setProgress(newState.currentSyncedItems);
                 mProgressBar.setMax(newState.itemsToSync);
@@ -152,7 +145,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
             case CANCELED_BACKUP:
                 mStatusLabel.setText(R.string.status_canceled);
 
-                mSyncDetailsLabel.setText(smsSync.getString(R.string.status_canceled_details,
+                mSyncDetailsLabel.setText(getContext().getString(R.string.status_canceled_details,
                         newState.currentSyncedItems,
                         newState.itemsToSync));
                 break;
@@ -175,26 +168,26 @@ class StatusPreference extends Preference implements View.OnClickListener {
         mProgressBar.setIndeterminate(true);
     }
 
-    private void finishedBackup(BackupStateChanged state) {
+    private void finishedBackup(BackupState state) {
         int backedUpCount = state.currentSyncedItems;
         String text = null;
         if (backedUpCount == PrefStore.getMaxItemsPerSync(getContext())) {
-            text = smsSync.getString(R.string.status_backup_done_details_max_per_sync, backedUpCount);
+            text = getContext().getString(R.string.status_backup_done_details_max_per_sync, backedUpCount);
         } else if (backedUpCount > 0) {
-            text = smsSync.getResources().getQuantityString(R.plurals.status_backup_done_details, backedUpCount,
+            text = getContext().getResources().getQuantityString(R.plurals.status_backup_done_details, backedUpCount,
                     backedUpCount);
         } else if (backedUpCount == 0) {
-            text = smsSync.getString(R.string.status_backup_done_details_noitems);
+            text = getContext().getString(R.string.status_backup_done_details_noitems);
         }
         mSyncDetailsLabel.setText(text);
         mStatusLabel.setText(R.string.status_done);
-        mStatusLabel.setTextColor(smsSync.getResources().getColor(R.color.status_done));
+        mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_done));
     }
 
-    private void finishedRestore(RestoreStateChanged newState) {
-        mStatusLabel.setTextColor(smsSync.getResources().getColor(R.color.status_done));
+    private void finishedRestore(RestoreState newState) {
+        mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_done));
         mStatusLabel.setText(R.string.status_done);
-        mSyncDetailsLabel.setText(smsSync.getResources().getQuantityString(
+        mSyncDetailsLabel.setText(getContext().getResources().getQuantityString(
                 R.plurals.status_restore_done_details,
                 newState.actualRestoredCount,
                 newState.actualRestoredCount,
@@ -206,10 +199,8 @@ class StatusPreference extends Preference implements View.OnClickListener {
         mStatusLabel.setText(R.string.status_idle);
     }
 
-    private void stateChanged(StateChanged state) {
-        if (mView == null) return;
+    private void stateChanged(State state) {
         setAttributes(state.state);
-
         switch (state.state) {
             case INITIAL:
                 idle();
@@ -226,9 +217,9 @@ class StatusPreference extends Preference implements View.OnClickListener {
                 if (state.isAuthException()) {
                     authFailed();
                 } else {
-                    final String errorMessage = state.getErrorMessage(smsSync.getResources());
+                    final String errorMessage = state.getErrorMessage(getContext().getResources());
                     mStatusLabel.setText(R.string.status_unknown_error);
-                    mSyncDetailsLabel.setText(smsSync.getString(R.string.status_unknown_error_details,
+                    mSyncDetailsLabel.setText(getContext().getString(R.string.status_unknown_error_details,
                             errorMessage == null ? "N/A" : errorMessage));
                 }
                 break;
@@ -240,14 +231,14 @@ class StatusPreference extends Preference implements View.OnClickListener {
             case ERROR:
                 mProgressBar.setProgress(0);
                 mProgressBar.setIndeterminate(false);
-                mStatusLabel.setTextColor(smsSync.getResources().getColor(R.color.status_error));
+                mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_error));
                 mStatusIcon.setImageResource(R.drawable.ic_error);
                 break;
             case LOGIN:
             case CALC:
             case BACKUP:
             case RESTORE:
-                mStatusLabel.setTextColor(smsSync.getResources().getColor(R.color.status_sync));
+                mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_sync));
                 mStatusIcon.setImageResource(R.drawable.ic_syncing);
                 break;
             default:
@@ -259,7 +250,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
                 mSyncButton.setText(R.string.ui_sync_button_label_idle);
                 mRestoreButton.setText(R.string.ui_restore_button_label_idle);
 
-                mStatusLabel.setTextColor(smsSync.getResources().getColor(R.color.status_idle));
+                mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_idle));
                 mStatusIcon.setImageResource(R.drawable.ic_idle);
         }
     }

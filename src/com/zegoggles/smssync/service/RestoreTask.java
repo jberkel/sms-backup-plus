@@ -17,8 +17,9 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.CursorToMessage;
+import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.PrefStore;
-import com.zegoggles.smssync.service.state.RestoreStateChanged;
+import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +33,7 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
-class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateChanged> {
+class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
     private Set<String> smsIds = new HashSet<String>();
     private Set<String> callLogIds = new HashSet<String>();
     private Set<String> uids = new HashSet<String>();
@@ -65,11 +66,11 @@ class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateCh
         cancel(false);
     }
 
-    @NotNull protected RestoreStateChanged doInBackground(Integer... params) {
+    @NotNull protected RestoreState doInBackground(Integer... params) {
         int max = params.length > 0 ? params[0] : -1;
 
         if (!restoreSms && !restoreCallLog) {
-            return new RestoreStateChanged(FINISHED_RESTORE, 0, 0, 0, 0, null);
+            return new RestoreState(FINISHED_RESTORE, 0, 0, 0, 0, null, null);
         }
 
         try {
@@ -89,11 +90,11 @@ class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateCh
             int itemsToRestoreCount = max <= 0 ? msgs.size() : Math.min(msgs.size(), max);
             int currentRestoredItem = 0;
             for (int i = 0; i < itemsToRestoreCount && !isCancelled(); i++) {
-                importMessage(msgs.get(i));
+                DataType dataType = importMessage(msgs.get(i));
                 currentRestoredItem = i;
 
                 msgs.set(i, null); // help gc
-                publishProgress(new RestoreStateChanged(RESTORE, currentRestoredItem, itemsToRestoreCount, 0, 0, null));
+                publishProgress(new RestoreState(RESTORE, currentRestoredItem, itemsToRestoreCount, 0, 0, dataType, null));
 
                 if (i % 50 == 0) {
                     //clear cache periodically otherwise SD card fills up
@@ -105,11 +106,11 @@ class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateCh
             updateAllThreads(false);
 
             int restoredCount = smsIds.size() + callLogIds.size();
-            return new RestoreStateChanged(FINISHED_RESTORE,
+            return new RestoreState(FINISHED_RESTORE,
                     currentRestoredItem,
                     itemsToRestoreCount,
                     restoredCount,
-                    uids.size() - restoredCount, null);
+                    uids.size() - restoredCount, null, null);
         } catch (ConnectivityErrorException e) {
             return transition(ERROR, e);
         } catch (AuthenticationFailedException e) {
@@ -133,12 +134,12 @@ class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateCh
         publishProgress(transition(smsSyncState, exception));
     }
 
-    private RestoreStateChanged transition(SmsSyncState smsSyncState, Exception exception) {
+    private RestoreState transition(SmsSyncState smsSyncState, Exception exception) {
         return service.getState().transition(smsSyncState, exception);
     }
 
     @Override
-    protected void onPostExecute(RestoreStateChanged result) {
+    protected void onPostExecute(RestoreState result) {
         if (result != null) {
             Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
             post(result);
@@ -154,27 +155,26 @@ class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateCh
     }
 
     @Override
-    protected void onProgressUpdate(RestoreStateChanged... progress) {
+    protected void onProgressUpdate(RestoreState... progress) {
         if (progress == null || progress.length == 0) return;
         // TODO: don't publish too often or we get ANRs
         post(progress[0]);
     }
 
-    private void post(RestoreStateChanged changed) {
+    private void post(RestoreState changed) {
         App.bus.post(changed);
     }
 
-    private void importMessage(Message message) {
+    private DataType importMessage(Message message) {
         uids.add(message.getUid());
 
         FetchProfile fp = new FetchProfile();
         fp.add(FetchProfile.Item.BODY);
-
+        DataType dataType = null;
         try {
             if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
-
             message.getFolder().fetch(new Message[]{message}, fp, null);
-            final CursorToMessage.DataType dataType = converter.getDataType(message);
+            dataType = converter.getDataType(message);
             //only restore sms+call log for now
             switch (dataType) {
                 case CALLLOG:
@@ -186,6 +186,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateCh
                 default:
                     if (LOCAL_LOGV) Log.d(TAG, "ignoring restore of type: " + dataType);
             }
+
         } catch (MessagingException e) {
             Log.e(TAG, "error", e);
         } catch (IllegalArgumentException e) {
@@ -194,6 +195,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreStateChanged, RestoreStateCh
         } catch (java.io.IOException e) {
             Log.e(TAG, "error", e);
         }
+        return dataType;
     }
 
     private void importSms(final Message message) throws IOException, MessagingException {

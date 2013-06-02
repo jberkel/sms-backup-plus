@@ -4,7 +4,7 @@
   * Translation updates (French/Russian)
   * Moved IAB code to external apklib
   * Greek translation (https://github.com/jberkel/sms-backup-plus/pull/315)
-  * Show a notification when backup is running
+  * Show a notification when backup/restore is running manually
 
 == 1.4.8 01-18-2013
 
