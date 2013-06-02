@@ -194,8 +194,10 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private Notification createBackupNotification() {
-        return new Notification(R.drawable.ic_notification,
+        Notification n = new Notification(R.drawable.ic_notification,
                 getString(R.string.status_backup),
                 System.currentTimeMillis());
+        n.flags = Notification.FLAG_ONGOING_EVENT;
+        return n;
     }
 }
