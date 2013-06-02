@@ -48,6 +48,8 @@ public class SmsBackupService extends ServiceBase {
     @Nullable private static SmsBackupService service;
     @NotNull private BackupStateChanged mState = new BackupStateChanged(INITIAL, 0, 0, MANUAL, null);
 
+    private Notification notification;
+
     @Override @NotNull
     public BackupStateChanged getState() {
         return mState;
@@ -64,6 +66,7 @@ public class SmsBackupService extends ServiceBase {
         super.onDestroy();
         if (LOCAL_LOGV) Log.v(TAG, "SmsBackupService#onDestroy(state=" + getState() + ")");
         service = null;
+        notification = null;
     }
 
     @Override
@@ -121,13 +124,45 @@ public class SmsBackupService extends ServiceBase {
             }
         }
 
-        if (!mState.isRunning()) {
+        if (mState.isRunning()) {
+            if (notification == null) {
+                notification = createBackupNotification();
+            }
+            PendingIntent intent = PendingIntent.getActivity(this, 0,
+                    new Intent(this, SmsSync.class),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            notification.setLatestEventInfo(this,
+                    getString(R.string.status_backup),
+                    getLabelFromState(state),
+                    intent);
+
+            getNotifier().notify(0, notification);
+        } else {
             if (mState.backupType == BackupType.REGULAR) {
                 Log.d(TAG, "scheduling next backup");
 
                 scheduleNextBackup();
             }
+            getNotifier().cancel(0);
             stopSelf();
+        }
+    }
+
+    private String getLabelFromState(BackupStateChanged state) {
+        switch (state.state) {
+            case LOGIN:
+                return getString(R.string.status_login_details);
+            case CALC:
+                return getString(R.string.status_calc_details);
+            case BACKUP:
+                return getString(R.string.status_backup_details,
+                        state.currentSyncedItems,
+                        state.itemsToSync);
+            case ERROR:
+                return state.getErrorMessage(getResources());
+            default:
+                return "";
         }
     }
 
@@ -156,5 +191,11 @@ public class SmsBackupService extends ServiceBase {
 
     public static boolean isServiceWorking() {
         return service != null && service.isWorking();
+    }
+
+    private Notification createBackupNotification() {
+        return new Notification(R.drawable.ic_notification,
+                getString(R.string.status_backup),
+                System.currentTimeMillis());
     }
 }
