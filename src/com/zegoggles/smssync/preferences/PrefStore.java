@@ -39,7 +39,8 @@ import java.util.Locale;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.contacts.ContactAccessor.ContactGroup;
+
+import com.zegoggles.smssync.contacts.ContactGroup;
 
 public class PrefStore {
 

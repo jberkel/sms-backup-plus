@@ -17,7 +17,6 @@
 package com.zegoggles.smssync.service;
 
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -26,7 +25,6 @@ import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.SmsSync;
 import com.zegoggles.smssync.preferences.PrefStore;
 import com.zegoggles.smssync.service.state.BackupState;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +35,8 @@ import java.util.Date;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
-import static com.zegoggles.smssync.service.state.SmsSyncState.*;
+import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
+import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
 
 public class SmsBackupService extends ServiceBase {
     /**
@@ -161,12 +160,10 @@ public class SmsBackupService extends ServiceBase {
     protected void notifyUser(int icon, String shortText, String title, String text) {
         Notification n = new Notification(icon, shortText, System.currentTimeMillis());
         n.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL;
-        final Intent intent = new Intent(this, SmsSync.class);
-
         n.setLatestEventInfo(this,
                 title,
                 text,
-                PendingIntent.getActivity(this, 0, intent, 0));
+                getPendingIntent());
 
         getNotifier().notify(0, n);
     }

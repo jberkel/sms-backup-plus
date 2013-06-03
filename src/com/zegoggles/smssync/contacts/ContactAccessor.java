@@ -18,49 +18,10 @@ package com.zegoggles.smssync.contacts;
 import android.content.Context;
 import android.os.Build;
 
-import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 public interface ContactAccessor {
     int EVERYBODY_ID = -1;
-
-    public static class ContactGroup {
-        public final long _id;
-        public final Type type;
-
-        public enum Type {EVERYBODY, GROUP}
-
-        public ContactGroup(final long id) {
-            this._id = id;
-            this.type = (id == EVERYBODY_ID ? Type.EVERYBODY : Type.GROUP);
-        }
-    }
-
-    public static class Group {
-        String title;
-        int _id, count;
-
-        public Group(int id, String title, int count) {
-            this._id = id;
-            this.title = title;
-            this.count = count;
-        }
-
-        public String toString() {
-            return count > 0 ? String.format(Locale.ENGLISH, "%s (%d)", title, count) : title;
-        }
-    }
-
-    static class GroupContactIds {
-        public Set<Long> ids = new HashSet<Long>();
-        public Set<Long> rawIds = new HashSet<Long>();
-
-        public String toString() {
-            return getClass().getSimpleName() + "[ids: " + ids + " rawIds: " + rawIds + "]";
-        }
-    }
 
     /**
      * @param context the context

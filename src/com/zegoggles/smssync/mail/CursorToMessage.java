@@ -47,6 +47,7 @@ import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
+import com.zegoggles.smssync.contacts.GroupContactIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.PrefStore;
 import com.zegoggles.smssync.utils.ThreadHelper;
@@ -131,7 +132,7 @@ public class CursorToMessage {
     /**
      * used for whitelisting specific contacts
      */
-    private final ContactAccessor.GroupContactIds allowedIds;
+    private final GroupContactIds allowedIds;
 
     public CursorToMessage(Context ctx, String userEmail) {
         mContext = ctx;
@@ -337,7 +338,7 @@ public class CursorToMessage {
             return null;
         }
         PersonRecord record = lookupPerson(address);
-        if (!backupPerson(record, DataType.SMS)) return null;
+        if (!includePersonInBackup(record, DataType.SMS)) return null;
 
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.SMS, record));
@@ -394,7 +395,7 @@ public class CursorToMessage {
             return null;
         }
         PersonRecord record = lookupPerson(address);
-        if (!backupPerson(record, DataType.WHATSAPP)) return null;
+        if (!includePersonInBackup(record, DataType.WHATSAPP)) return null;
 
         final Message msg = new MimeMessage();
 
@@ -455,7 +456,7 @@ public class CursorToMessage {
         }
 
         PersonRecord record = lookupPerson(address);
-        if (!backupPerson(record, DataType.CALLLOG)) return null;
+        if (!includePersonInBackup(record, DataType.CALLLOG)) return null;
 
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.CALLLOG, record));
@@ -518,7 +519,7 @@ public class CursorToMessage {
         return msg;
     }
 
-    private boolean backupPerson(PersonRecord record, DataType type) {
+    private boolean includePersonInBackup(PersonRecord record, DataType type) {
         switch (type) {
             default:
                 final boolean backup = (allowedIds == null || allowedIds.ids.contains(record._id));
@@ -588,7 +589,7 @@ public class CursorToMessage {
 
         boolean backup = false;
         for (PersonRecord r : records) {
-            if (backupPerson(r, DataType.MMS)) {
+            if (includePersonInBackup(r, DataType.MMS)) {
                 backup = true;
                 break;
             }
@@ -698,9 +699,6 @@ public class CursorToMessage {
             throw new RuntimeException(e);
         }
     }
-
-
-
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     private String getPrimaryEmail(final long personId, final String number) {

@@ -20,7 +20,7 @@ import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
-import com.zegoggles.smssync.contacts.ContactAccessor;
+import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.CursorToMessage;
@@ -44,7 +44,7 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.*;
  */
 class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
     private final int maxItemsPerSync;
-    private final ContactAccessor.ContactGroup groupToBackup;
+    private final ContactGroup groupToBackup;
     private final BackupType backupType;
     private final SmsBackupService service;
     private final int maxMessagePerRequest;
@@ -54,7 +54,7 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
                @NotNull BackupImapStore imapStore,
                int maxMessagePerRequest,
                int maxItemsPerSync,
-               ContactAccessor.ContactGroup groupToBackup,
+               ContactGroup groupToBackup,
                BackupType backupType) {
         this.backupType = backupType;
         this.maxItemsPerSync = maxItemsPerSync;
@@ -286,7 +286,7 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
         }
     }
 
-    private Cursor getSmsItemsToSync(int max, ContactAccessor.ContactGroup group) {
+    private Cursor getSmsItemsToSync(int max, ContactGroup group) {
         if (LOCAL_LOGV) {
             Log.v(TAG, String.format("getSmsItemToSync(max=%d),  maxSyncedDate=%d", max,
                     getMaxSyncedDateSms(service)));
@@ -308,7 +308,7 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
                 sortOrder);
     }
 
-    private Cursor getMmsItemsToSync(int max, ContactAccessor.ContactGroup group) {
+    private Cursor getMmsItemsToSync(int max, ContactGroup group) {
         if (LOCAL_LOGV) Log.v(TAG, "getMmsItemsToSync(max=" + max + ")");
 
         if (!PrefStore.isMmsBackupEnabled(service)) {
@@ -366,9 +366,9 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
         }
     }
 
-    private String groupSelection(DataType type, ContactAccessor.ContactGroup group) {
+    private String groupSelection(DataType type, ContactGroup group) {
         /* MMS group selection not supported at the moment */
-        if (type != DataType.SMS || group.type == ContactAccessor.ContactGroup.Type.EVERYBODY) return "";
+        if (type != DataType.SMS || group.type == ContactGroup.Type.EVERYBODY) return "";
 
         final Set<Long> ids = service.getContacts().getGroupContactIds(service, group).rawIds;
         if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
