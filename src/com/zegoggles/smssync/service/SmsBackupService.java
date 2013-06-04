@@ -113,7 +113,7 @@ public class SmsBackupService extends ServiceBase {
         if (mState.isInitialState()) return;
 
         if (state.isError() &&
-            state.backupType == MANUAL || PrefStore.isNotificationEnabled(this)) {
+           (state.backupType == MANUAL || PrefStore.isNotificationEnabled(this))) {
             if (state.isAuthException()) {
                 int details = PrefStore.useXOAuth(this) ? R.string.status_auth_failure_details_xoauth :
                         R.string.status_auth_failure_details_plain;
