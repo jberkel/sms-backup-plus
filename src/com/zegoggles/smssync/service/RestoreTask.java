@@ -103,7 +103,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
             }
 
             publishProgress(UPDATING_THREADS);
-            updateAllThreads(false);
+            updateAllThreads();
 
             int restoredCount = smsIds.size() + callLogIds.size();
             return new RestoreState(FINISHED_RESTORE,
@@ -268,24 +268,12 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
         return exists;
     }
 
-    private void updateAllThreads(final boolean async) {
+    private void updateAllThreads() {
         // thread dates + states might be wrong, we need to force a full update
         // unfortunately there's no direct way to do that in the SDK, but passing a
         // negative conversation id to delete should to the trick
-
-        // execute in background, might take some time
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                Log.d(TAG, "updating threads");
-                resolver.delete(Uri.parse("content://sms/conversations/-1"), null, null);
-                Log.d(TAG, "finished");
-            }
-        };
-        t.start();
-        try {
-            if (!async) t.join();
-        } catch (InterruptedException ignored) {
-        }
+        Log.d(TAG, "updating threads");
+        resolver.delete(Uri.parse("content://sms/conversations/-1"), null, null);
+        Log.d(TAG, "finished");
     }
 }
