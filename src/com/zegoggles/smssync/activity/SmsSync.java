@@ -160,15 +160,10 @@ public class SmsSync extends PreferenceActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        App.bus.unregister(statusPref);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         App.bus.unregister(this);
+        App.bus.unregister(statusPref);
     }
 
     @Override
