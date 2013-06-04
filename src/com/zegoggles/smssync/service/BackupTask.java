@@ -43,6 +43,8 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.*;
  * BackupTask does all the work
  */
 class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
+    private static final String EXTRA_REFRESH_RETRIED = "refresh_retried";
+
     private final int maxItemsPerSync;
     private final ContactGroup groupToBackup;
     private final BackupType backupType;
@@ -127,11 +129,10 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
         } catch (XOAuth2AuthenticationFailedException e) {
             if (e.getStatus() == 400) {
                 Log.d(TAG, "need to perform xoauth2 token refresh");
-                if (!intent.hasExtra("refresh_retried") &&
-                        AccountManagerAuthActivity.refreshOAuth2Token(service)) {
-
+                if (!intent.hasExtra(EXTRA_REFRESH_RETRIED) &&
+                    AccountManagerAuthActivity.refreshOAuth2Token(service)) {
                     // we got a new token, let's retry one more time
-                    intent.putExtra("refresh_retried", true);
+                    intent.putExtra(EXTRA_REFRESH_RETRIED, true);
                     return doInBackground(intent);
                 } else {
                     Log.w(TAG, "no new token obtained, giving up");

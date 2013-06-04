@@ -36,13 +36,15 @@ public class AccountManagerAuthActivity extends Activity {
     public static final String ACTION_ADD_ACCOUNT = "addAccount";
     public static final String ACTION_FALLBACKAUTH = "fallBackAuth";
 
+    private static final String GOOGLE_TYPE = "com.google";
+
     private AccountManager accountManager;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accountManager = AccountManager.get(this);
 
-        Account[] accounts = accountManager.getAccountsByType("com.google");
+        Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
         if (accounts == null || accounts.length == 0) {
             Log.d(TAG, "no google accounts found on this device, using standard auth");
             startActivity(new Intent(this, SmsSync.class).setAction(ACTION_FALLBACKAUTH));
@@ -64,7 +66,7 @@ public class AccountManagerAuthActivity extends Activity {
             case DIALOG_ACCOUNTS:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.select_google_account);
-                final Account[] accounts = accountManager.getAccountsByType("com.google");
+                final Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
                 final int size = accounts.length;
                 String[] names = new String[size];
                 for (int i = 0; i < size; i++) {
@@ -129,7 +131,7 @@ public class AccountManagerAuthActivity extends Activity {
     }
 
     public static void invalidateToken(Context ctx, String token) {
-        AccountManager.get(ctx).invalidateAuthToken("com.google", token);
+        AccountManager.get(ctx).invalidateAuthToken(GOOGLE_TYPE, token);
     }
 
     public static boolean refreshOAuth2Token(Context ctx) {
@@ -138,7 +140,7 @@ public class AccountManagerAuthActivity extends Activity {
         if (!TextUtils.isEmpty(token)) {
             invalidateToken(ctx, token);
             try {
-                String newToken = AccountManager.get(ctx).getAuthToken(new Account(name, "com.google"),
+                String newToken = AccountManager.get(ctx).getAuthToken(new Account(name, GOOGLE_TYPE),
                         AUTH_TOKEN_TYPE, true, null, null).getResult().getString(AccountManager.KEY_AUTHTOKEN);
 
                 if (!TextUtils.isEmpty(newToken)) {
