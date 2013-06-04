@@ -39,11 +39,14 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
 
 public class SmsBackupService extends ServiceBase {
+    private static final int BACKUP_ID = 1;
+
     /**
      * Number of messages sent per sync request.
      * Changing this value will cause mms/sms messages to thread out of order.
      */
     private static final int MAX_MSG_PER_REQUEST = 1;
+
     @Nullable private static SmsBackupService service;
     @NotNull private BackupState mState = new BackupState();
 
@@ -109,7 +112,8 @@ public class SmsBackupService extends ServiceBase {
         mState = state;
         if (mState.isInitialState()) return;
 
-        if (state.isError() && state.backupType.isBackground() && PrefStore.isNotificationEnabled(this)) {
+        if (state.isError() &&
+            state.backupType == MANUAL || PrefStore.isNotificationEnabled(this)) {
             if (state.isAuthException()) {
                 int details = PrefStore.useXOAuth(this) ? R.string.status_auth_failure_details_xoauth :
                         R.string.status_auth_failure_details_plain;
@@ -130,7 +134,7 @@ public class SmsBackupService extends ServiceBase {
                 Log.d(TAG, "scheduling next backup");
                 scheduleNextBackup();
             }
-            getNotifier().cancel(0);
+            stopForeground(true);
             stopSelf();
         }
     }
@@ -144,7 +148,7 @@ public class SmsBackupService extends ServiceBase {
             state.getNotificationLabel(getResources()),
             getPendingIntent());
 
-        getNotifier().notify(0, notification);
+        startForeground(BACKUP_ID, notification);
     }
 
     private void scheduleNextBackup() {
@@ -171,6 +175,4 @@ public class SmsBackupService extends ServiceBase {
     public static boolean isServiceWorking() {
         return service != null && service.isWorking();
     }
-
-
 }

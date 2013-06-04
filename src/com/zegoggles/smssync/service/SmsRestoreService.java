@@ -22,6 +22,8 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 
 public class SmsRestoreService extends ServiceBase {
+    private static final int RESTORE_ID = 2;
+
     @NotNull private RestoreState mState = new RestoreState();
     @Nullable private static SmsRestoreService service;
 
@@ -102,11 +104,10 @@ public class SmsRestoreService extends ServiceBase {
                     state.getNotificationLabel(getResources()),
                     getPendingIntent());
 
-            getNotifier().notify(0, notification);
+            startForeground(RESTORE_ID, notification);
         } else {
-            getNotifier().cancel(0);
-
             Log.d(TAG, "stopping service, state"+mState);
+            stopForeground(true);
             stopSelf();
         }
     }

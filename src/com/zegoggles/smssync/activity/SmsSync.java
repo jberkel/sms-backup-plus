@@ -156,7 +156,6 @@ public class SmsSync extends PreferenceActivity {
         updateImapSettings(!PrefStore.useXOAuth(this));
         checkUserDonationStatus();
         App.bus.register(statusPref);
-
     }
 
     @Override

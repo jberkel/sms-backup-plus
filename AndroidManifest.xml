@@ -29,7 +29,7 @@
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
 
-    <uses-sdk android:minSdkVersion="4"
+    <uses-sdk android:minSdkVersion="5"
               android:targetSdkVersion="10"/>
 
     <supports-screens android:smallScreens="true"/>
