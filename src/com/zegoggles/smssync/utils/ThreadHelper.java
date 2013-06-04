@@ -13,7 +13,7 @@ import static com.zegoggles.smssync.App.TAG;
 
 public class ThreadHelper {
 
-    private Class telephonyThreads;
+    private Class<?> telephonyThreads;
     private Method getOrCreateThreadId;
     private boolean threadsAvailable = true;
 
