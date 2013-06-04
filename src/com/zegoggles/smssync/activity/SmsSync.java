@@ -252,6 +252,8 @@ public class SmsSync extends PreferenceActivity {
                 getLastSyncText(PrefStore.getMaxSyncedDateMms(this) * 1000));
         findPreference("backup_calllog").setSummary(
                 getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
+        findPreference("backup_whatsapp").setSummary(
+                getLastSyncText(PrefStore.getMaxSyncedDateWhatsApp(this)));
     }
 
     private ConnectivityManager getConnectivityManager() {
