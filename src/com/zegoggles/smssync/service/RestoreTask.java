@@ -101,12 +101,12 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
                     service.clearCache();
                 }
             }
-
-            publishProgress(UPDATING_THREADS);
-            updateAllThreads();
-
-            int restoredCount = smsIds.size() + callLogIds.size();
-            return new RestoreState(FINISHED_RESTORE,
+            if (!isCancelled()) {
+                publishProgress(UPDATING_THREADS);
+                updateAllThreads();
+            }
+            final int restoredCount = smsIds.size() + callLogIds.size();
+            return new RestoreState(isCancelled() ? CANCELED_RESTORE : FINISHED_RESTORE,
                     currentRestoredItem,
                     itemsToRestoreCount,
                     restoredCount,
