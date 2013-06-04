@@ -95,7 +95,6 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
 
                 msgs.set(i, null); // help gc
                 publishProgress(new RestoreState(RESTORE, currentRestoredItem, itemsToRestoreCount, 0, 0, dataType, null));
-
                 if (i % 50 == 0) {
                     //clear cache periodically otherwise SD card fills up
                     service.clearCache();
@@ -156,9 +155,9 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
 
     @Override
     protected void onProgressUpdate(RestoreState... progress) {
-        if (progress == null || progress.length == 0) return;
-        // TODO: don't publish too often or we get ANRs
-        post(progress[0]);
+        if (progress != null  && progress.length > 0 && !isCancelled()) {
+            post(progress[0]);
+        }
     }
 
     private void post(RestoreState changed) {

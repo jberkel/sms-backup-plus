@@ -174,7 +174,7 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
 
     @Override
     protected void onProgressUpdate(BackupState... progress) {
-        if (progress != null && progress.length > 0) {
+        if (progress != null  && progress.length > 0 && !isCancelled()) {
             post(progress[0]);
         }
     }
