@@ -31,6 +31,7 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.activity.SmsSync;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
+import com.zegoggles.smssync.contacts.ContactGroup;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.UnsupportedEncodingException;
@@ -39,8 +40,6 @@ import java.util.Locale;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-
-import com.zegoggles.smssync.contacts.ContactGroup;
 
 public class PrefStore {
 
@@ -585,7 +584,11 @@ public class PrefStore {
     }
 
     static String encode(String s) {
-        return s == null ? "" : URLEncoder.encode(s);
+        try {
+            return s == null ? "" : URLEncoder.encode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String getStoreUri(Context ctx) {
