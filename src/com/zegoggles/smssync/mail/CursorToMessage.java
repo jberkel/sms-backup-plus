@@ -49,27 +49,24 @@ import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.PrefStore;
 import com.zegoggles.smssync.utils.ThreadHelper;
 import org.apache.commons.io.IOUtils;
-import org.apache.james.mime4j.codec.EncoderUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-import java.util.TimeZone;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.Attachment.*;
+import static com.zegoggles.smssync.utils.Sanitizer.encodeLocal;
+import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
 public class CursorToMessage {
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
@@ -80,13 +77,11 @@ public class CursorToMessage {
     public static final Uri ECLAIR_CONTENT_FILTER_URI =
             Uri.parse("content://com.android.contacts/phone_lookup");
 
-    private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
-    private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
-
     private static final boolean NEW_CONTACT_API = Build.VERSION.SDK_INT >=
             Build.VERSION_CODES.ECLAIR;
 
     private static final String[] PHONE_PROJECTION = getPhoneProjection();
+    private final HeaderGenerator mHeaderGenerator;
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     @SuppressWarnings("deprecation")
@@ -120,8 +115,10 @@ public class CursorToMessage {
     private final Address mUserAddress;
     private final ThreadHelper threadHelper = new ThreadHelper();
 
+    private final boolean mMarkAsRead;
+    private final boolean mPrefix;
+
     // simple LRU cache
-    @SuppressWarnings("serial")
     private final Map<String, PersonRecord> mPeopleCache =
             new LinkedHashMap<String, PersonRecord>(MAX_PEOPLE_CACHE_SIZE + 1, .75F, true) {
                 @Override
@@ -129,11 +126,6 @@ public class CursorToMessage {
                     return size() > MAX_PEOPLE_CACHE_SIZE;
                 }
             };
-
-    private String mReferenceValue;
-    private final boolean mMarkAsRead;
-    private final boolean mPrefix;
-
     /**
      * used for whitelisting specific contacts
      */
@@ -143,15 +135,15 @@ public class CursorToMessage {
         mContext = ctx;
         mUserAddress = new Address(userEmail);
         mMarkAsRead = PrefStore.getMarkAsRead(ctx);
-        mReferenceValue = PrefStore.getReferenceUid(ctx);
         mPrefix = PrefStore.getMailSubjectPrefix(mContext);
         mStyle = PrefStore.getEmailAddressStyle(ctx);
 
-        if (mReferenceValue == null) {
-            mReferenceValue = generateReferenceValue();
-            PrefStore.setReferenceUid(ctx, mReferenceValue);
+        String referenceUid = PrefStore.getReferenceUid(ctx);
+        if (referenceUid == null) {
+            referenceUid = generateReferenceValue();
+            PrefStore.setReferenceUid(ctx, referenceUid);
         }
-
+        mHeaderGenerator = new HeaderGenerator(referenceUid, PrefStore.getVersion(mContext, true));
         switch (PrefStore.getBackupContactGroup(ctx).type) {
             case EVERYBODY:
                 allowedIds = null;
@@ -160,7 +152,6 @@ public class CursorToMessage {
                 allowedIds = ContactAccessor.Get.instance().getGroupContactIds(ctx, PrefStore.getBackupContactGroup(ctx));
                 if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
         }
-
         Log.d(TAG, String.format(Locale.ENGLISH, "using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
 
@@ -184,20 +175,14 @@ public class CursorToMessage {
 
             Message m = null;
             switch (dataType) {
-                case SMS:
-                    m = messageFromMapSms(msgMap);
-                    break;
-                case MMS:
-                    m = messageFromMapMms(msgMap);
-                    break;
-                case CALLLOG:
-                    m = messageFromMapCallLog(msgMap);
-                    break;
-                case WHATSAPP:
-                    m = messageFromMapWhatsApp(cursor);
-                    break;
+                case SMS: m = messageFromMapSms(msgMap); break;
+                case MMS: m = messageFromMapMms(msgMap); break;
+                case CALLLOG: m = messageFromMapCallLog(msgMap); break;
+                case WHATSAPP: m = messageFromMapWhatsApp(cursor); break;
             }
             if (m != null) {
+                m.setFlag(Flag.SEEN, mMarkAsRead);
+
                 result.messageList.add(m);
                 result.mapList.add(msgMap);
 
@@ -340,9 +325,8 @@ public class CursorToMessage {
 
     private @Nullable Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(SmsConsts.ADDRESS);
-        if (address == null || address.trim().length() == 0) {
-            return null;
-        }
+        if (TextUtils.isEmpty(address)) return null;
+
         PersonRecord record = lookupPerson(address);
         if (!includePersonInBackup(record, DataType.SMS)) return null;
 
@@ -361,40 +345,20 @@ public class CursorToMessage {
             msg.setFrom(mUserAddress);
         }
 
+        Date sentDate;
         try {
-            final Date then = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
-            msg.setSentDate(then);
-            msg.setInternalDate(then);
-            msg.setHeader("Message-ID", createMessageId(then, address, messageType));
+            sentDate = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
         } catch (NumberFormatException n) {
             Log.e(TAG, "error parsing date", n);
+            sentDate = new Date();
         }
-
-        // Threading by person ID, not by thread ID. I think this value is more stable.
-        msg.setHeader("References",
-                String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
-        msg.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
-        msg.setHeader(Headers.ADDRESS, sanitize(address));
-        msg.setHeader(Headers.DATATYPE, DataType.SMS.toString());
-        msg.setHeader(Headers.TYPE, msgMap.get(SmsConsts.TYPE));
-        msg.setHeader(Headers.DATE, msgMap.get(SmsConsts.DATE));
-        msg.setHeader(Headers.THREAD_ID, msgMap.get(SmsConsts.THREAD_ID));
-        msg.setHeader(Headers.READ, msgMap.get(SmsConsts.READ));
-        msg.setHeader(Headers.STATUS, msgMap.get(SmsConsts.STATUS));
-        msg.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
-        msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
-        msg.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
-        msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
-        msg.setFlag(Flag.SEEN, mMarkAsRead);
-
+        mHeaderGenerator.setHeaders(msg, msgMap, DataType.SMS, address, record, sentDate, messageType);
         return msg;
     }
-
 
     private @Nullable Message messageFromMapWhatsApp(Cursor cursor) throws MessagingException {
         WhatsAppMessage whatsapp = new WhatsAppMessage(cursor);
         // we don't deal with group messages (yet)
-
         if (whatsapp.isGroupMessage()) return null;
         final String address = whatsapp.getNumber();
         if (TextUtils.isEmpty(address)) {
@@ -429,24 +393,9 @@ public class CursorToMessage {
             msg.setRecipient(RecipientType.TO, record.getAddress());
             msg.setFrom(mUserAddress);
         }
-
-        final Date then = whatsapp.getTimestamp();
-        msg.setSentDate(then);
-        msg.setInternalDate(then);
-        msg.setHeader("Message-ID", createMessageId(then, address, whatsapp.getStatus()));
-
-        // Threading by person ID, not by thread ID. I think this value is more stable.
-        msg.setHeader("References",
-                String.format(REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
-        msg.setHeader(Headers.ID, String.valueOf(whatsapp.getId()));
-        msg.setHeader(Headers.ADDRESS, sanitize(address));
-        msg.setHeader(Headers.DATATYPE, DataType.WHATSAPP.toString());
-        msg.setHeader(Headers.DATE, String.valueOf(then.getTime()));
-        msg.setHeader(Headers.TYPE, String.valueOf(whatsapp.getStatus()));
-        msg.setHeader(Headers.STATUS, String.valueOf(whatsapp.getStatus()));
-        msg.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
-        msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
-        msg.setFlag(Flag.SEEN, mMarkAsRead);
+        mHeaderGenerator.setHeaders(msg, new HashMap<String, String>(), DataType.WHATSAPP, address, record,
+                whatsapp.getTimestamp(), whatsapp.getStatus()
+        );
         return msg;
     }
 
@@ -454,13 +403,10 @@ public class CursorToMessage {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
 
-        if (address == null || address.trim().length() == 0 ||
-                !PrefStore.isCallLogTypeEnabled(mContext, callType)) {
-
+        if (TextUtils.isEmpty(address) || !PrefStore.isCallLogTypeEnabled(mContext, callType)) {
             if (LOCAL_LOGV) Log.v(TAG, "ignoring call log entry: " + msgMap);
             return null;
         }
-
         PersonRecord record = lookupPerson(address);
         if (!includePersonInBackup(record, DataType.CALLLOG)) return null;
 
@@ -477,7 +423,6 @@ public class CursorToMessage {
                 msg.setFrom(record.getAddress());
                 msg.setRecipient(RecipientType.TO, mUserAddress);
                 break;
-
             default:
                 // some weird phones seem to have SMS in their call logs, which is
                 // not part of the official API.
@@ -500,28 +445,14 @@ public class CursorToMessage {
 
         msg.setBody(new TextBody(text.toString()));
 
+        Date sentDate;
         try {
-            Date then = new Date(Long.valueOf(msgMap.get(CallLog.Calls.DATE)));
-            msg.setSentDate(then);
-            msg.setInternalDate(then);
-            msg.setHeader("Message-ID", createMessageId(then, address, callType));
+            sentDate = new Date(Long.valueOf(msgMap.get(CallLog.Calls.DATE)));
         } catch (NumberFormatException n) {
             Log.e(TAG, "error parsing date", n);
+            sentDate = new Date();
         }
-
-        // Threading by person ID, not by thread ID. I think this value is more stable.
-        msg.setHeader("References",
-                String.format(Locale.ENGLISH, REFERENCE_UID_TEMPLATE, mReferenceValue, sanitize(record.getId())));
-        msg.setHeader(Headers.ID, msgMap.get(CallLog.Calls._ID));
-        msg.setHeader(Headers.ADDRESS, sanitize(address));
-        msg.setHeader(Headers.DATATYPE, DataType.CALLLOG.toString());
-        msg.setHeader(Headers.TYPE, msgMap.get(CallLog.Calls.TYPE));
-        msg.setHeader(Headers.DATE, msgMap.get(CallLog.Calls.DATE));
-        msg.setHeader(Headers.DURATION, msgMap.get(CallLog.Calls.DURATION));
-        msg.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
-        msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
-        msg.setFlag(Flag.SEEN, mMarkAsRead);
-
+        mHeaderGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record, sentDate, callType);
         return msg;
     }
 
@@ -614,29 +545,14 @@ public class CursorToMessage {
             msg.setFrom(mUserAddress);
         }
 
+        Date sentDate;
         try {
-            Date then = new Date(1000 * Long.valueOf(msgMap.get(MmsConsts.DATE)));
-            msg.setSentDate(then);
-            msg.setInternalDate(then);
-            msg.setHeader("Message-ID", createMessageId(then, address, msg_box));
+            sentDate = new Date(1000 * Long.valueOf(msgMap.get(MmsConsts.DATE)));
         } catch (NumberFormatException n) {
             Log.e(TAG, "error parsing date", n);
+            sentDate = new Date();
         }
-
-        // Threading by person ID, not by thread ID. I think this value is more stable.
-        msg.setHeader("References", String.format(Locale.ENGLISH, REFERENCE_UID_TEMPLATE, mReferenceValue,
-                sanitize(records[0].getId())));
-        msg.setHeader(Headers.ID, msgMap.get(MmsConsts.ID));
-        msg.setHeader(Headers.ADDRESS, sanitize(address));
-        msg.setHeader(Headers.DATATYPE, DataType.MMS.toString());
-        msg.setHeader(Headers.TYPE, msgMap.get(MmsConsts.TYPE));
-        msg.setHeader(Headers.DATE, msgMap.get(MmsConsts.DATE));
-        msg.setHeader(Headers.THREAD_ID, msgMap.get(MmsConsts.THREAD_ID));
-        msg.setHeader(Headers.READ, msgMap.get(MmsConsts.READ));
-        msg.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
-        msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
-        msg.setFlag(Flag.SEEN, mMarkAsRead);
-
+        mHeaderGenerator.setHeaders(msg, msgMap, DataType.MMS, address, records[0], sentDate, msg_box);
         // deal with attachments
         MimeMultipart body = new MimeMultipart();
         for (BodyPart p : getBodyParts(Uri.withAppendedPath(msgRef, "part"))) {
@@ -675,35 +591,6 @@ public class CursorToMessage {
 
         if (curPart != null) curPart.close();
         return parts;
-    }
-
-    /**
-     * Create a message-id based on message date, phone number and message
-     * type.
-     *
-     * @param sent    email send date
-     * @param address the email address
-     * @param type    the type
-     * @return the message-id
-     */
-    private String createMessageId(Date sent, String address, int type) {
-        try {
-            final MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-
-            digest.update(Long.toString(sent.getTime()).getBytes("UTF-8"));
-            digest.update(address.getBytes("UTF-8"));
-            digest.update(Integer.toString(type).getBytes("UTF-8"));
-
-            final StringBuilder sb = new StringBuilder();
-            for (byte b : digest.digest()) {
-                sb.append(String.format(Locale.ENGLISH, "%02x", b));
-            }
-            return String.format(Locale.ENGLISH, MSG_ID_TEMPLATE, sb.toString());
-        } catch (java.io.UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        } catch (java.security.NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
@@ -754,14 +641,6 @@ public class CursorToMessage {
         return (primaryEmail != null) ? primaryEmail : getUnknownEmail(number);
     }
 
-    static String sanitize(String s) {
-        return s != null ? s.replaceAll("\\p{Cntrl}", "") : null;
-    }
-
-    private static String encodeLocal(String s) {
-        return (s != null ? EncoderUtil.encodeAddressLocalPart(sanitize(s)) : null);
-    }
-
     private static String getUnknownEmail(String number) {
         final String no = (number == null || "-1".equals(number)) ? UNKNOWN_NUMBER : number;
         return encodeLocal(no.trim()) + "@" + UNKNOWN_EMAIL;
@@ -781,14 +660,5 @@ public class CursorToMessage {
             sb.append(Integer.toString(random.nextInt(35), 36));
         }
         return sb.toString();
-    }
-
-    private static String toGMTString(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("d MMM y HH:mm:ss 'GMT'", Locale.US);
-        TimeZone gmtZone = TimeZone.getTimeZone("GMT");
-        sdf.setTimeZone(gmtZone);
-        GregorianCalendar gc = new GregorianCalendar(gmtZone);
-        gc.setTimeInMillis(date.getTime());
-        return sdf.format(date);
     }
 }

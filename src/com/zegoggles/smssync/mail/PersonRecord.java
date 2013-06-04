@@ -5,6 +5,8 @@ import com.zegoggles.smssync.preferences.AddressStyle;
 
 import java.util.Locale;
 
+import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
+
 public class PersonRecord {
     public long _id;
     public String name, email, number;
@@ -42,11 +44,11 @@ public class PersonRecord {
     }
 
     public String getNumber() {
-        return CursorToMessage.sanitize("-1".equals(number) || "-2".equals(number) ? "Unknown" : number);
+        return sanitize("-1".equals(number) || "-2".equals(number) ? "Unknown" : number);
     }
 
     public String getName() {
-        return CursorToMessage.sanitize(name != null ? name : getNumber());
+        return sanitize(name != null ? name : getNumber());
     }
 
     public String toString() {
