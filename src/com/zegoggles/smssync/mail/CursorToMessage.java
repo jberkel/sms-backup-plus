@@ -24,9 +24,6 @@ import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CallLog;
-import android.provider.Contacts.ContactMethods;
-import android.provider.Contacts.People;
-import android.provider.Contacts.Phones;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.text.TextUtils;
@@ -58,14 +55,17 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.TimeZone;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -89,10 +89,15 @@ public class CursorToMessage {
     private static final String[] PHONE_PROJECTION = getPhoneProjection();
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
+    @SuppressWarnings("deprecation")
     private static String[] getPhoneProjection() {
         return NEW_CONTACT_API ?
                 new String[]{Contacts._ID, Contacts.DISPLAY_NAME} :
-                new String[]{Phones.PERSON_ID, People.NAME, Phones.NUMBER};
+                new String[]{
+                    android.provider.Contacts.Phones.PERSON_ID,
+                    android.provider.Contacts.People.NAME,
+                    android.provider.Contacts.Phones.NUMBER
+                };
     }
 
     // only query for needed fields
@@ -299,6 +304,7 @@ public class CursorToMessage {
     }
 
     /* Look up a person */
+    @SuppressWarnings("deprecation")
     public PersonRecord lookupPerson(final String address) {
         if (TextUtils.isEmpty(address)) {
             final PersonRecord record = new PersonRecord(mStyle);
@@ -308,7 +314,7 @@ public class CursorToMessage {
             return record;
         } else if (!mPeopleCache.containsKey(address)) {
             Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
-                    Phones.CONTENT_FILTER_URL, Uri.encode(address));
+                    android.provider.Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(address));
 
             Cursor c = mContext.getContentResolver().query(personUri, PHONE_PROJECTION, null, null, null);
             final PersonRecord record = new PersonRecord(mStyle);
@@ -377,7 +383,7 @@ public class CursorToMessage {
         msg.setHeader(Headers.STATUS, msgMap.get(SmsConsts.STATUS));
         msg.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
         msg.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
-        msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
+        msg.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
         msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
         msg.setFlag(Flag.SEEN, mMarkAsRead);
 
@@ -438,7 +444,7 @@ public class CursorToMessage {
         msg.setHeader(Headers.DATE, String.valueOf(then.getTime()));
         msg.setHeader(Headers.TYPE, String.valueOf(whatsapp.getStatus()));
         msg.setHeader(Headers.STATUS, String.valueOf(whatsapp.getStatus()));
-        msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
+        msg.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
         msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
         msg.setFlag(Flag.SEEN, mMarkAsRead);
         return msg;
@@ -512,7 +518,7 @@ public class CursorToMessage {
         msg.setHeader(Headers.TYPE, msgMap.get(CallLog.Calls.TYPE));
         msg.setHeader(Headers.DATE, msgMap.get(CallLog.Calls.DATE));
         msg.setHeader(Headers.DURATION, msgMap.get(CallLog.Calls.DURATION));
-        msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
+        msg.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
         msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
         msg.setFlag(Flag.SEEN, mMarkAsRead);
 
@@ -627,7 +633,7 @@ public class CursorToMessage {
         msg.setHeader(Headers.DATE, msgMap.get(MmsConsts.DATE));
         msg.setHeader(Headers.THREAD_ID, msgMap.get(MmsConsts.THREAD_ID));
         msg.setHeader(Headers.READ, msgMap.get(MmsConsts.READ));
-        msg.setHeader(Headers.BACKUP_TIME, new Date().toGMTString());
+        msg.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
         msg.setHeader(Headers.VERSION, PrefStore.getVersion(mContext, true));
         msg.setFlag(Flag.SEEN, mMarkAsRead);
 
@@ -701,6 +707,7 @@ public class CursorToMessage {
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
+    @SuppressWarnings("deprecation")
     private String getPrimaryEmail(final long personId, final String number) {
         if (personId <= 0) {
             return getUnknownEmail(number);
@@ -719,11 +726,15 @@ public class CursorToMessage {
             columnIndex = c != null ? c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA) : -1;
         } else {
             c = mContext.getContentResolver().query(
-                    ContactMethods.CONTENT_EMAIL_URI,
-                    new String[]{ContactMethods.DATA},
-                    ContactMethods.PERSON_ID + " = ?", new String[]{String.valueOf(personId)},
-                    ContactMethods.ISPRIMARY + " DESC");
-            columnIndex = c != null ? c.getColumnIndex(ContactMethods.DATA) : -1;
+                    android.provider.Contacts.ContactMethods.CONTENT_EMAIL_URI,
+                    new String[] {
+                        android.provider.Contacts.ContactMethods.DATA
+                    },
+                    android.provider.Contacts.ContactMethods.PERSON_ID + " = ?",
+                    new String[] { String.valueOf(personId) },
+                    android.provider.Contacts.ContactMethods.ISPRIMARY + " DESC");
+
+            columnIndex = c != null ? c.getColumnIndex(android.provider.Contacts.ContactMethods.DATA) : -1;
         }
 
         // Loop over cursor and find a Gmail address for that person.
@@ -770,5 +781,14 @@ public class CursorToMessage {
             sb.append(Integer.toString(random.nextInt(35), 36));
         }
         return sb.toString();
+    }
+
+    private static String toGMTString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM y HH:mm:ss 'GMT'", Locale.US);
+        TimeZone gmtZone = TimeZone.getTimeZone("GMT");
+        sdf.setTimeZone(gmtZone);
+        GregorianCalendar gc = new GregorianCalendar(gmtZone);
+        gc.setTimeInMillis(date.getTime());
+        return sdf.format(date);
     }
 }
