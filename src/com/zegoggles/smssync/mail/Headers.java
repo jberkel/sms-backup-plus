@@ -18,8 +18,8 @@ public final class Headers {
     public static final String BACKUP_TIME    = "X-smssync-backup-time";
     public static final String VERSION        = "X-smssync-version";
     public static final String DURATION       = "X-smssync-duration";
-    // standard headers
 
+    // standard headers
     public static final String REFERENCES = "References";
     public static final String MESSAGE_ID = "Message-ID";
 

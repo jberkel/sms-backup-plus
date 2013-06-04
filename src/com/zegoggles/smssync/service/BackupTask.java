@@ -23,7 +23,7 @@ import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.ConversionResult;
-import com.zegoggles.smssync.mail.CursorToMessage;
+import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.PrefStore;
 import com.zegoggles.smssync.service.state.BackupState;
@@ -214,7 +214,7 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
         }
 
         try {
-            final CursorToMessage converter = new CursorToMessage(service, PrefStore.getUserEmail(service));
+            final MessageConverter converter = new MessageConverter(service, PrefStore.getUserEmail(service));
             Cursor curCursor;
             DataType dataType = null;
             publish(CALC);
@@ -338,7 +338,7 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
         if (max > 0) sortOrder += " LIMIT " + max;
 
         return service.getContentResolver().query(Consts.CALLLOG_PROVIDER,
-                CursorToMessage.CALLLOG_PROJECTION,
+                MessageConverter.CALLLOG_PROJECTION,
                 String.format(Locale.ENGLISH, "%s > ?", CallLog.Calls.DATE),
                 new String[]{String.valueOf(PrefStore.getMaxSyncedDateCallLog(service))},
                 sortOrder);

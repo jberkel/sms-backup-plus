@@ -40,7 +40,7 @@ public class PersonRecord {
     }
 
     public String getId() {
-        return unknown ? number : String.valueOf(_id);
+        return sanitize(unknown ? number : String.valueOf(_id));
     }
 
     public String getNumber() {

@@ -6,7 +6,7 @@ import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.mail.ConversionResult;
-import com.zegoggles.smssync.mail.CursorToMessage;
+import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.PersonRecord;
 
@@ -26,7 +26,7 @@ class CalendarSyncer {
         this.calendarId = calendarId;
     }
 
-    public void syncCalendar(CursorToMessage converter, ConversionResult result) {
+    public void syncCalendar(MessageConverter converter, ConversionResult result) {
         if (result.type != DataType.CALLLOG) return;
         for (Map<String, String> m : result.mapList) {
             try {
@@ -45,7 +45,7 @@ class CalendarSyncer {
 
                 if (callType != CallLog.Calls.MISSED_TYPE) {
                     description.append(context.getString(R.string.call_duration_field,
-                            CursorToMessage.formattedDuration(duration)));
+                            MessageConverter.formattedDuration(duration)));
                 }
 
                 // insert into calendar

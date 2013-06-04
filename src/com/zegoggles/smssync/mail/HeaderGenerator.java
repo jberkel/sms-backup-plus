@@ -17,11 +17,11 @@ import java.util.TimeZone;
 import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
 /**
- * email headers used to record meta data
+ * Generates headers for SMS, MMS, Call logs and WhatsApp messages.
  */
-public final class HeaderGenerator {
+class HeaderGenerator {
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
-    private static final String MSG_ID_TEMPLATE = "<%s@sms-backup-plus.local>";
+    private static final String MSG_ID_TEMPLATE        = "<%s@sms-backup-plus.local>";
 
     private final String reference;
     private final String version;
@@ -39,8 +39,8 @@ public final class HeaderGenerator {
                            final Date sentDate,
                            final int status) throws MessagingException {
 
-        // Threading by person ID, not by thread ID. I think this value is more stable.
-        message.setHeader(Headers.REFERENCES, String.format(REFERENCE_UID_TEMPLATE, reference, sanitize(contact.getId())));
+        // Threading by contact ID, not by thread ID. I think this value is more stable.
+        message.setHeader(Headers.REFERENCES, String.format(REFERENCE_UID_TEMPLATE, reference, contact.getId()));
         message.setHeader(Headers.MESSAGE_ID, createMessageId(sentDate, address, status));
         message.setHeader(Headers.ADDRESS,  sanitize(address));
         message.setHeader(Headers.DATATYPE, dataType.toString());
@@ -82,7 +82,7 @@ public final class HeaderGenerator {
         message.setHeader(Headers.DURATION, msgMap.get(CallLog.Calls.DURATION));
     }
 
-    public void setWhatsAppHeaders(Message message, Date sentDate, int status) throws MessagingException {
+    private void setWhatsAppHeaders(Message message, Date sentDate, int status) throws MessagingException {
         message.setHeader(Headers.DATE, String.valueOf(sentDate.getTime()));
         message.setHeader(Headers.TYPE, String.valueOf(status));
         message.setHeader(Headers.STATUS, String.valueOf(status));
@@ -108,7 +108,7 @@ public final class HeaderGenerator {
      */
     private static String createMessageId(Date sent, String address, int type) {
         try {
-            final MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            final MessageDigest digest = MessageDigest.getInstance("MD5");
 
             digest.update(Long.toString(sent.getTime()).getBytes("UTF-8"));
             digest.update(address.getBytes("UTF-8"));

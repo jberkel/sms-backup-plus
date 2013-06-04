@@ -68,7 +68,7 @@ import static com.zegoggles.smssync.mail.Attachment.*;
 import static com.zegoggles.smssync.utils.Sanitizer.encodeLocal;
 import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
-public class CursorToMessage {
+public class MessageConverter {
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
     public static final Uri ECLAIR_CONTENT_URI =
             Uri.parse("content://com.android.contacts/data/emails");
@@ -131,7 +131,7 @@ public class CursorToMessage {
      */
     private final GroupContactIds allowedIds;
 
-    public CursorToMessage(Context ctx, String userEmail) {
+    public MessageConverter(Context ctx, String userEmail) {
         mContext = ctx;
         mUserAddress = new Address(userEmail);
         mMarkAsRead = PrefStore.getMarkAsRead(ctx);
@@ -155,7 +155,8 @@ public class CursorToMessage {
         Log.d(TAG, String.format(Locale.ENGLISH, "using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
 
-    public ConversionResult cursorToMessages(final Cursor cursor, final int maxEntries,
+    public ConversionResult cursorToMessages(final Cursor cursor,
+                                             final int maxEntries,
                                              DataType dataType) throws MessagingException {
         final String[] columns = cursor.getColumnNames();
         final ConversionResult result = new ConversionResult(dataType);
@@ -250,10 +251,10 @@ public class CursorToMessage {
         final String dataTypeHeader = Headers.get(message, Headers.DATATYPE);
         final String typeHeader = Headers.get(message, Headers.TYPE);
         //we have two possible header sets here
-        //legacy:  there is no CursorToMessage.Headers.DATATYPE. CursorToMessage.Headers.TYPE
+        //legacy:  there is Headers.DATATYPE .Headers.TYPE
         //         contains either the string "mms" or an integer which is the internal type of the sms
-        //current: there IS a Headers.DATATYPE containing a string representation of CursorToMessage.DataType
-        //         CursorToMessage.Headers.TYPE then contains the type of the sms, mms or calllog entry
+        //current: there IS a Headers.DATATYPE containing a string representation of Headers.DataType
+        //         Headers.TYPE then contains the type of the sms, mms or calllog entry
         //The current header set was introduced in version 1.2.00
         if (dataTypeHeader == null) {
             return MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;

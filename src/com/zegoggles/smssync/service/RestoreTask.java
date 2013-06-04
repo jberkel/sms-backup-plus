@@ -16,7 +16,7 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.mail.BackupImapStore;
-import com.zegoggles.smssync.mail.CursorToMessage;
+import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.PrefStore;
 import com.zegoggles.smssync.service.state.RestoreState;
@@ -40,13 +40,13 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
     private BackupImapStore.BackupFolder callFolder;
     private final SmsRestoreService service;
     private final ContentResolver resolver;
-    private final CursorToMessage converter;
+    private final MessageConverter converter;
     private final BackupImapStore imapStore;
     private final boolean restoreSms, restoreCallLog, restoreOnlyStarred;
 
     public RestoreTask(SmsRestoreService service,
                        BackupImapStore imapStore,
-                       CursorToMessage converter,
+                       MessageConverter converter,
                        boolean restoreSms, boolean restoreCalllog, boolean restoreOnlyStarred) {
         this.service = service;
         this.imapStore = imapStore;

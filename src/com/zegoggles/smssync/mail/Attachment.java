@@ -20,8 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-public class Attachment {
-
+class Attachment {
     public static MimeBodyPart createTextPart(String text) throws MessagingException {
         return new MimeBodyPart(new TextBody(text));
     }
