@@ -69,6 +69,7 @@ import com.zegoggles.smssync.utils.Utils;
 import org.acra.ACRA;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -245,7 +246,8 @@ public class SmsSync extends PreferenceActivity {
     String getLastSyncText(final long lastSync) {
         return getString(R.string.status_idle_details,
                 lastSync < 0 ? getString(R.string.status_idle_details_never) :
-                        new Date(lastSync).toLocaleString());
+                DateFormat.getDateTimeInstance().format(new Date(lastSync)));
+
     }
 
     private void updateLastBackupTimes() {
