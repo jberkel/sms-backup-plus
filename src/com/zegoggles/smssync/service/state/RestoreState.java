@@ -5,7 +5,6 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.DataType;
 
 import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
-import static com.zegoggles.smssync.service.state.SmsSyncState.RESTORE;
 
 public class RestoreState extends State {
     /** items currently restored */
@@ -58,16 +57,19 @@ public class RestoreState extends State {
     public String getNotificationLabel(Resources resources) {
         String label = super.getNotificationLabel(resources);
         if (label != null) return label;
-        if (state == RESTORE) {
-            label = resources.getString(R.string.status_restore_details,
-                    currentRestoredCount,
-                    itemsToRestore);
-            if (dataType != null) {
-                label += " ("+resources.getString(dataType.resId)+")";
-            }
-            return label;
-        } else {
-            return "";
+        switch (state) {
+            case RESTORE:
+                label = resources.getString(R.string.status_restore_details,
+                        currentRestoredCount,
+                        itemsToRestore);
+                if (dataType != null) {
+                    label += " ("+resources.getString(dataType.resId)+")";
+                }
+                return label;
+            case UPDATING_THREADS:
+                return resources.getString(R.string.status_updating_threads);
+            default:
+                return "";
         }
     }
 }
