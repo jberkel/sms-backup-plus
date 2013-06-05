@@ -24,6 +24,7 @@ import com.fsck.k9.mail.MessagingException;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.preferences.PrefStore;
 import com.zegoggles.smssync.service.state.BackupState;
@@ -86,12 +87,14 @@ public class SmsBackupService extends ServiceBase {
             // Only start a backup if there's no other operation going on at this time.
             if (!SmsRestoreService.isServiceWorking()) {
                 try {
-                    new BackupTask(this, getBackupImapStore(),
-                            MAX_MSG_PER_REQUEST,
+                    BackupConfig config = new BackupConfig(
+                            getBackupImapStore(), 0,
+                            intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false),
                             PrefStore.getMaxItemsPerSync(service),
                             PrefStore.getBackupContactGroup(service),
-                            backupType
-                        ).execute(intent);
+                            MAX_MSG_PER_REQUEST);
+
+                    new BackupTask(this, backupType).execute(config);
                 } catch (MessagingException e) {
                     App.bus.post(mState.transition(ERROR, e));
                 }

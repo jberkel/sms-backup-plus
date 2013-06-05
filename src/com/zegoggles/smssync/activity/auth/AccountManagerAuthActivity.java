@@ -135,8 +135,8 @@ public class AccountManagerAuthActivity extends Activity {
     }
 
     public static boolean refreshOAuth2Token(Context ctx) {
-        String token = PrefStore.getOauth2Token(ctx);
-        String name = PrefStore.getUsername(ctx);
+        final String token = PrefStore.getOauth2Token(ctx);
+        final String name  = PrefStore.getUsername(ctx);
         if (!TextUtils.isEmpty(token)) {
             invalidateToken(ctx, token);
             try {

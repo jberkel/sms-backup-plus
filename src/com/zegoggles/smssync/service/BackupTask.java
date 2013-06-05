@@ -1,6 +1,5 @@
 package com.zegoggles.smssync.service;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.AsyncTask;
@@ -19,12 +18,10 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.SmsConsts;
-import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.contacts.ContactGroup;
-import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.ConversionResult;
-import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.PrefStore;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
@@ -36,34 +33,20 @@ import java.util.Locale;
 import java.util.Set;
 
 import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.refreshOAuth2Token;
 import static com.zegoggles.smssync.preferences.PrefStore.getMaxSyncedDateSms;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
 /**
  * BackupTask does all the work
  */
-class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
-    private static final String EXTRA_REFRESH_RETRIED = "refresh_retried";
-
-    private final int maxItemsPerSync;
-    private final ContactGroup groupToBackup;
-    private final BackupType backupType;
+class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final SmsBackupService service;
-    private final int maxMessagePerRequest;
-    private final BackupImapStore imapStore;
+    private final BackupType backupType;
 
-    BackupTask(@NotNull SmsBackupService service,
-               @NotNull BackupImapStore imapStore,
-               int maxMessagePerRequest,
-               int maxItemsPerSync,
-               ContactGroup groupToBackup,
-               BackupType backupType) {
-        this.backupType = backupType;
-        this.maxItemsPerSync = maxItemsPerSync;
+    BackupTask(@NotNull SmsBackupService service, BackupType backupType) {
         this.service = service;
-        this.imapStore = imapStore;
-        this.groupToBackup = groupToBackup;
-        this.maxMessagePerRequest = maxMessagePerRequest;
+        this.backupType = backupType;
     }
 
     @Override
@@ -76,9 +59,9 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
     }
 
     @Override
-    protected BackupState doInBackground(Intent... params) {
-        final Intent intent = params[0];
-        if (intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false)) {
+    protected BackupState doInBackground(BackupConfig... params) {
+        final BackupConfig config = params[0];
+        if (config.skip) {
             appLog(R.string.app_log_skip_backup_skip_messages);
             return skip();
         }
@@ -92,16 +75,16 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
         final int smsCount, mmsCount, callLogCount, whatsAppItemsCount;
         try {
             service.acquireLocks(backupType.isBackground());
-            smsItems = getSmsItemsToSync(maxItemsPerSync, groupToBackup);
+            smsItems = getSmsItemsToSync(config.maxItemsPerSync, config.groupToBackup);
             smsCount = smsItems != null ? smsItems.getCount() : 0;
 
-            mmsItems = getMmsItemsToSync(maxItemsPerSync - smsCount, groupToBackup);
+            mmsItems = getMmsItemsToSync(config.maxItemsPerSync - smsCount, config.groupToBackup);
             mmsCount = mmsItems != null ? mmsItems.getCount() : 0;
 
-            callLogItems = getCallLogItemsToSync(maxItemsPerSync - smsCount - mmsCount);
+            callLogItems = getCallLogItemsToSync(config.maxItemsPerSync - smsCount - mmsCount);
             callLogCount = callLogItems != null ? callLogItems.getCount() : 0;
 
-            whatsAppItems = getWhatsAppItemsToSync(maxItemsPerSync - smsCount - mmsCount - callLogCount);
+            whatsAppItems = getWhatsAppItemsToSync(config.maxItemsPerSync - smsCount - mmsCount - callLogCount);
             whatsAppItemsCount = whatsAppItems != null ? whatsAppItems.getCount() : 0;
 
             final int itemsToSync = smsCount + mmsCount + callLogCount + whatsAppItemsCount;
@@ -112,7 +95,7 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
                     return transition(ERROR, new RequiresLoginException());
                 } else {
                     appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
-                    return backup(smsItems, mmsItems, callLogItems, whatsAppItems, itemsToSync);
+                    return backup(config, smsItems, mmsItems, callLogItems, whatsAppItems, itemsToSync);
                 }
             } else {
                 appLog(R.string.app_log_skip_backup_no_items);
@@ -129,11 +112,14 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
         } catch (XOAuth2AuthenticationFailedException e) {
             if (e.getStatus() == 400) {
                 Log.d(TAG, "need to perform xoauth2 token refresh");
-                if (!intent.hasExtra(EXTRA_REFRESH_RETRIED) &&
-                    AccountManagerAuthActivity.refreshOAuth2Token(service)) {
-                    // we got a new token, let's retry one more time
-                    intent.putExtra(EXTRA_REFRESH_RETRIED, true);
-                    return doInBackground(intent);
+                if (config.tries < 1 && refreshOAuth2Token(service)) {
+                    try {
+                        // we got a new token, let's retry one more time - we need to pass in a new store object
+                        // since the auth params on it are immutable
+                        return doInBackground(config.retryWithStore(service.getBackupImapStore()));
+                    } catch (MessagingException ignored) {
+                        Log.w(TAG, ignored);
+                    }
                 } else {
                     Log.w(TAG, "no new token obtained, giving up");
                 }
@@ -199,19 +185,21 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
         App.bus.post(state);
     }
 
-    private BackupState backup(Cursor smsItems, Cursor mmsItems, Cursor callLogItems, Cursor whatsAppItems, final int itemsToSync)
+    private BackupState backup(BackupConfig config,
+                               Cursor smsItems, Cursor mmsItems, Cursor callLogItems, Cursor whatsAppItems,
+                               final int itemsToSync)
             throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
 
         publish(LOGIN);
-        Folder smsmmsfolder = imapStore.getSMSBackupFolder();
+        Folder smsmmsfolder = config.imap.getSMSBackupFolder();
         Folder callLogfolder = null;
         Folder whatsAppFolder = null;
         if (PrefStore.isCallLogBackupEnabled(service)) {
-            callLogfolder = imapStore.getCallLogBackupFolder();
+            callLogfolder = config.imap.getCallLogBackupFolder();
         }
         if (PrefStore.isWhatsAppBackupEnabled(service)) {
-            whatsAppFolder = imapStore.getWhatsAppBackupFolder();
+            whatsAppFolder = config.imap.getWhatsAppBackupFolder();
         }
 
         try {
@@ -236,7 +224,7 @@ class BackupTask extends AsyncTask<Intent, BackupState, BackupState> {
                 } else break; // no more items available
 
                 if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
-                ConversionResult result = converter.cursorToMessages(curCursor, maxMessagePerRequest, dataType);
+                ConversionResult result = converter.cursorToMessages(curCursor, config.maxMessagePerRequest, dataType);
                 List<Message> messages = result.messageList;
                 if (!messages.isEmpty()) {
                     if (LOCAL_LOGV)

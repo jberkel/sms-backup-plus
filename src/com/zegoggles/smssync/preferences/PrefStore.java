@@ -593,7 +593,6 @@ public class PrefStore {
 
     public static String getStoreUri(Context ctx) {
         if (useXOAuth(ctx)) {
-
             if (hasOauthTokens(ctx)) {
                 XOAuthConsumer consumer = getOAuthConsumer(ctx);
                 return String.format(Consts.IMAP_URI,
