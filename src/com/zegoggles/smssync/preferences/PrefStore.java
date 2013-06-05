@@ -520,7 +520,12 @@ public class PrefStore {
     }
 
     public static boolean isFirstBackup(Context ctx) {
-        return !getPrefs(ctx).contains(PREF_MAX_SYNCED_DATE_SMS);
+        SharedPreferences prefs = getPrefs(ctx);
+        return !prefs.contains(PREF_MAX_SYNCED_DATE_SMS) &&
+               !prefs.contains(PREF_MAX_SYNCED_DATE_MMS) &&
+               !prefs.contains(PREF_MAX_SYNCED_DATE_CALLLOG) &&
+               !prefs.contains(PREF_MAX_SYNCED_DATE_WHATSAPP);
+
     }
 
     public static boolean isFirstUse(Context ctx) {
