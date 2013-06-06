@@ -35,11 +35,11 @@ class StatusPreference extends Preference implements View.OnClickListener {
     private TextView mSyncDetailsLabel;
 
     private ProgressBar mProgressBar;
-    private SmsSync smsSync;
+    private MainActivity mainActivity;
 
-    public StatusPreference(SmsSync smsSync) {
-        super(smsSync);
-        this.smsSync = smsSync;
+    public StatusPreference(MainActivity mainActivity) {
+        super(mainActivity);
+        this.mainActivity = mainActivity;
         setSelectable(false);
         setOrder(0);
     }
@@ -49,7 +49,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
         if (v == mSyncButton) {
             if (!SmsBackupService.isServiceWorking()) {
                 if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
-                smsSync.performAction(SmsSync.Actions.Backup);
+                mainActivity.performAction(MainActivity.Actions.Backup);
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
                 // Sync button will be restored on next status update.
@@ -60,7 +60,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
         } else if (v == mRestoreButton) {
             if (LOCAL_LOGV) Log.v(TAG, "restore");
             if (!SmsRestoreService.isServiceWorking()) {
-                smsSync.performAction(SmsSync.Actions.Restore);
+                mainActivity.performAction(MainActivity.Actions.Restore);
             } else {
                 mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
                 mRestoreButton.setEnabled(false);
@@ -72,7 +72,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
     @Override
     public View getView(View convertView, ViewGroup parent) {
         if (mView == null) {
-            mView = smsSync.getLayoutInflater().inflate(R.layout.status, parent, false);
+            mView = mainActivity.getLayoutInflater().inflate(R.layout.status, parent, false);
             mSyncButton = (Button) mView.findViewById(R.id.sync_button);
             mSyncButton.setOnClickListener(this);
 
@@ -195,7 +195,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
     }
 
     private void idle() {
-        mSyncDetailsLabel.setText(smsSync.getLastSyncText(PrefStore.getMostRecentSyncedDate(smsSync)));
+        mSyncDetailsLabel.setText(mainActivity.getLastSyncText(PrefStore.getMostRecentSyncedDate(mainActivity)));
         mStatusLabel.setText(R.string.status_idle);
     }
 

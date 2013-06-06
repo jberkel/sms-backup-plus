@@ -31,7 +31,7 @@ import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.SmsSync;
+import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
@@ -181,7 +181,7 @@ public abstract class ServiceBase extends Service {
 
     protected PendingIntent getPendingIntent() {
         return PendingIntent.getActivity(this, 0,
-            new Intent(this, SmsSync.class),
+            new Intent(this, MainActivity.class),
             PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

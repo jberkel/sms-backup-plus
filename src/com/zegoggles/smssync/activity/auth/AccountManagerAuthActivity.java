@@ -17,7 +17,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.SmsSync;
+import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.preferences.PrefStore;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class AccountManagerAuthActivity extends Activity {
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
         if (accounts == null || accounts.length == 0) {
             Log.d(TAG, "no google accounts found on this device, using standard auth");
-            startActivity(new Intent(this, SmsSync.class).setAction(ACTION_FALLBACKAUTH));
+            startActivity(new Intent(this, MainActivity.class).setAction(ACTION_FALLBACKAUTH));
             finish();
         }
     }
@@ -107,7 +107,7 @@ public class AccountManagerAuthActivity extends Activity {
 
     // should really use setResult + finish for all callbacks, but SmsSync is singleInstance (for some reason)
     private void onAccessDenied() {
-        startActivity(new Intent(this, SmsSync.class)
+        startActivity(new Intent(this, MainActivity.class)
                 .setAction(ACTION_ADD_ACCOUNT)
                 .putExtra(EXTRA_DENIED, true));
         finish();
@@ -115,7 +115,7 @@ public class AccountManagerAuthActivity extends Activity {
 
     private void handleException(Exception e) {
         Log.w(TAG, e);
-        startActivity(new Intent(this, SmsSync.class)
+        startActivity(new Intent(this, MainActivity.class)
                 .setAction(ACTION_ADD_ACCOUNT)
                 .putExtra(EXTRA_ERROR, e.getMessage()));
 
@@ -123,7 +123,7 @@ public class AccountManagerAuthActivity extends Activity {
     }
 
     private void useToken(Account account, String token) {
-        startActivity(new Intent(this, SmsSync.class)
+        startActivity(new Intent(this, MainActivity.class)
                 .setAction(ACTION_ADD_ACCOUNT)
                 .putExtra(EXTRA_ACCOUNT, account.name)
                 .putExtra(EXTRA_TOKEN, token));

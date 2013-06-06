@@ -187,6 +187,11 @@
   prevents this application from backing up incoming messages. See the FAQ
   on the website for more information.</string>
 
+  <string name="ui_dialog_enable_whatsapp_title">Enable WhatsApp</string>
+  <string name="ui_dialog_enable_whatsapp_message">
+      SMS Backup+ can now also back up your WhatsApp messages.
+      Do you want to enable this?</string>
+
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
   <string name="err_sync_requires_login_info">Cannot backup without login information.</string>

@@ -28,7 +28,7 @@ import android.provider.CallLog;
 import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.Consts;
-import com.zegoggles.smssync.activity.SmsSync;
+import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
 import com.zegoggles.smssync.contacts.ContactGroup;
@@ -367,11 +367,15 @@ public class PrefStore {
 
     public static boolean isMmsBackupEnabled(Context ctx) {
         final int version = android.os.Build.VERSION.SDK_INT;
-        return version >= SmsSync.MIN_VERSION_MMS && getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
+        return version >= MainActivity.MIN_VERSION_MMS && getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
     public static boolean isWhatsAppBackupEnabled(Context ctx) {
-        return getPrefs(ctx).getBoolean(PREF_BACKUP_WHATSAPP, true);
+        return getPrefs(ctx).getBoolean(PREF_BACKUP_WHATSAPP, false);
+    }
+
+    public static boolean setWhatsAppBackupEnabled(Context ctx, boolean enabled) {
+        return getPrefs(ctx).edit().putBoolean(PREF_BACKUP_WHATSAPP, enabled).commit();
     }
 
     public static boolean isCallLogBackupEnabled(Context ctx) {
@@ -715,11 +719,26 @@ public class PrefStore {
         try {
             context.getPackageManager().getPackageInfo(
                     "tv.studer.smssync",
-                    android.content.pm.PackageManager.GET_META_DATA);
+                    PackageManager.GET_META_DATA);
             return true;
-        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    static boolean isWhatsAppInstalled(Context context) {
+        try {
+            context.getPackageManager().getPackageInfo(
+                    "com.whatsapp",
+                    PackageManager.GET_META_DATA);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    public static boolean isWhatsAppInstalledAndPrefNotSet(Context context) {
+        return isWhatsAppInstalled(context) && !getPrefs(context).contains(PREF_BACKUP_WHATSAPP);
     }
 
     // move credentials from default shared prefs to new separate prefs

@@ -81,7 +81,7 @@ import static com.zegoggles.smssync.App.TAG;
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
-public class SmsSync extends PreferenceActivity {
+public class MainActivity extends PreferenceActivity {
     public static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
     public static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
 
@@ -99,7 +99,7 @@ public class SmsSync extends PreferenceActivity {
         super.onCreate(bundle);
         PrefStore.upgradeCredentials(this);
 
-        addPreferencesFromResource(R.xml.main_screen);
+        addPreferencesFromResource(R.xml.preferences);
 
         statusPref = new StatusPreference(this);
         getPreferenceScreen().addPreference(statusPref);
@@ -111,7 +111,7 @@ public class SmsSync extends PreferenceActivity {
             backupMms.setChecked(false);
             backupMms.setSummary(R.string.ui_backup_mms_not_supported);
         }
-        if (PrefStore.showUpgradeMessage(this)) show(Dialogs.UPGRADE);
+        if (PrefStore.showUpgradeMessage(this)) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
         setPreferenceListeners(getPreferenceManager(), version >= MIN_VERSION_BACKUP);
 
         checkAndDisplayDroidWarning();
@@ -119,6 +119,14 @@ public class SmsSync extends PreferenceActivity {
         if (PrefStore.showAboutDialog(this)) {
             show(Dialogs.ABOUT);
         }
+
+        // enable when whatsapp backup is stable
+        /*
+        if (PrefStore.isWhatsAppInstalledAndPrefNotSet(this)) {
+            show(Dialogs.ACTIVATE_WHATSAPP);
+        }
+        */
+
         setupStrictMode();
         App.bus.register(this);
     }
@@ -517,7 +525,7 @@ public class SmsSync extends PreferenceActivity {
                         .setTitle(R.string.ui_dialog_reset_title)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                PrefStore.clearLastSyncData(SmsSync.this);
+                                PrefStore.clearLastSyncData(MainActivity.this);
                                 dismissDialog(id);
                             }
                         })
@@ -551,7 +559,7 @@ public class SmsSync extends PreferenceActivity {
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (mAuthorizeUri != null) {
-                                    if (!UrlOpener.Default.openUriForAuthorization(SmsSync.this, mAuthorizeUri)) {
+                                    if (!UrlOpener.Default.openUriForAuthorization(MainActivity.this, mAuthorizeUri)) {
                                         Log.w(TAG, "could not open uri " + mAuthorizeUri);
                                     }
                                 }
@@ -589,15 +597,31 @@ public class SmsSync extends PreferenceActivity {
                         .setNegativeButton(android.R.string.cancel, null)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                PrefStore.clearOauthData(SmsSync.this);
-                                PrefStore.clearLastSyncData(SmsSync.this);
+                                PrefStore.clearOauthData(MainActivity.this);
+                                PrefStore.clearLastSyncData(MainActivity.this);
                                 updateConnected();
                             }
                         }).create();
-            case UPGRADE:
+            case UPGRADE_FROM_SMSBACKUP:
                 title = getString(R.string.ui_dialog_upgrade_title);
                 msg = getString(R.string.ui_dialog_upgrade_msg);
                 break;
+
+            case ACTIVATE_WHATSAPP:
+                return new AlertDialog.Builder(this)
+                        .setCustomTitle(null)
+                        .setMessage(R.string.ui_dialog_enable_whatsapp_message)
+                        .setNegativeButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                setWhatsAppEnabled(false);
+                            }
+                        })
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                setWhatsAppEnabled(true);
+                            }
+                        }).create();
             case BROKEN_DROIDX:
                 title = getString(R.string.ui_dialog_brokendroidx_title);
                 msg = getString(R.string.ui_dialog_brokendroidx_msg);
@@ -607,8 +631,8 @@ public class SmsSync extends PreferenceActivity {
                         .setTitle(R.string.ui_dialog_confirm_action_title)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                if (SmsSync.this.mActions != null) {
-                                    performAction(SmsSync.this.mActions, false);
+                                if (MainActivity.this.mActions != null) {
+                                    performAction(MainActivity.this.mActions, false);
                                 }
                             }
                         })
@@ -689,7 +713,7 @@ public class SmsSync extends PreferenceActivity {
             PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(
                     new SharedPreferences.OnSharedPreferenceChangeListener() {
                         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                            BackupManagerWrapper.dataChanged(SmsSync.this);
+                            BackupManagerWrapper.dataChanged(MainActivity.this);
                         }
                     }
             );
@@ -700,14 +724,14 @@ public class SmsSync extends PreferenceActivity {
 
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         boolean isEnabled = (Boolean) newValue;
-                        final ComponentName componentName = new ComponentName(SmsSync.this,
+                        final ComponentName componentName = new ComponentName(MainActivity.this,
                                 SmsBroadcastReceiver.class);
                         getPackageManager().setComponentEnabledSetting(componentName,
                                 isEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
                                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                 PackageManager.DONT_KILL_APP);
 
-                        if (!isEnabled) Alarms.cancel(SmsSync.this);
+                        if (!isEnabled) Alarms.cancel(MainActivity.this);
                         return true;
                     }
                 });
@@ -751,7 +775,7 @@ public class SmsSync extends PreferenceActivity {
         prefMgr.findPreference(PrefStore.PREF_LOGIN_PASSWORD)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        PrefStore.setImapPassword(SmsSync.this, newValue.toString());
+                        PrefStore.setImapPassword(MainActivity.this, newValue.toString());
                         return true;
                     }
                 });
@@ -762,7 +786,7 @@ public class SmsSync extends PreferenceActivity {
                 if (newValue) {
                     if (Integer.parseInt(Build.VERSION.SDK) >= 5) {
                         // use account manager on newer phones
-                        startActivity(new Intent(SmsSync.this, AccountManagerAuthActivity.class));
+                        startActivity(new Intent(MainActivity.this, AccountManagerAuthActivity.class));
                     } else {
                         // fall back to webview on older ones
                         handleFallbackAuth();
@@ -856,5 +880,10 @@ public class SmsSync extends PreferenceActivity {
             getPreferences(MODE_PRIVATE).edit().putBoolean("droidx_warning_displayed", true).commit();
             show(Dialogs.BROKEN_DROIDX);
         }
+    }
+
+    private void setWhatsAppEnabled(boolean enabled) {
+        PrefStore.setWhatsAppBackupEnabled(MainActivity.this, enabled);
+        updateAutoBackupEnabledSummary();
     }
 }
