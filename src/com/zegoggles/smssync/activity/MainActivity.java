@@ -609,7 +609,7 @@ public class MainActivity extends PreferenceActivity {
 
             case ACTIVATE_WHATSAPP:
                 return new AlertDialog.Builder(this)
-                        .setCustomTitle(null)
+                        .setTitle(R.string.ui_dialog_enable_whatsapp_title)
                         .setMessage(R.string.ui_dialog_enable_whatsapp_message)
                         .setNegativeButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
