@@ -1,4 +1,9 @@
-== 1.5.0 05-29-2013
+== 1.5.1 06-07-2013
+
+  * whassup 0.0.4: Fixed OutOfMemory crashes when decrypting the db
+  * pay-me 0.0.2: don't crash when helper is disposed
+
+== 1.5.0 06-06-2013
 
   * Added WhatsApp support
   * Translation updates (French/Russian)
