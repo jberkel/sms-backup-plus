@@ -3,6 +3,7 @@ package com.zegoggles.smssync.mail;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import com.fsck.k9.mail.Body;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.filter.Base64OutputStream;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+
+import static com.zegoggles.smssync.App.TAG;
 
 class Attachment {
     public static MimeBodyPart createTextPart(String text) throws MessagingException {
@@ -54,9 +57,13 @@ class Attachment {
         @Override
         public void writeTo(OutputStream outputStream) throws IOException, MessagingException {
             InputStream in = getInputStream();
-            Base64OutputStream base64Out = new Base64OutputStream(outputStream);
-            IOUtils.copy(in, base64Out);
-            base64Out.close();
+            if (in != null)  {
+                Base64OutputStream base64Out = new Base64OutputStream(outputStream);
+                IOUtils.copy(in, base64Out);
+                base64Out.close();
+            } else {
+                Log.w(TAG, "input stream is null");
+            }
         }
     }
 
