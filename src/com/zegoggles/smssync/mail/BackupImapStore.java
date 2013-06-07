@@ -87,7 +87,7 @@ public class BackupImapStore extends ImapStore {
             }
             folder.open(OpenMode.READ_WRITE);
             return folder;
-        } catch (java.lang.NumberFormatException e) {
+        } catch (IllegalArgumentException e) {
             // thrown inside K9
             Log.e(TAG, "K9 error", e);
             throw new MessagingException(e.getMessage());
