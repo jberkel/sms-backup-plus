@@ -78,8 +78,10 @@ public abstract class ServiceBase extends Service {
     }
 
     protected BackupImapStore getBackupImapStore() throws MessagingException {
-        String uri = PrefStore.getStoreUri(this);
-        if (uri == null) throw new MessagingException("No valid token");
+        final String uri = PrefStore.getStoreUri(this);
+        if (!BackupImapStore.isValidUri(uri)) {
+            throw new MessagingException("No valid IMAP URI: "+uri);
+        }
         return new BackupImapStore(this, uri);
     }
 

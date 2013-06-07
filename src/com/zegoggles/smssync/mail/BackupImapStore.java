@@ -16,6 +16,8 @@
 package com.zegoggles.smssync.mail;
 
 import android.content.Context;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.Account;
 import com.fsck.k9.mail.FetchProfile;
@@ -74,6 +76,27 @@ public class BackupImapStore extends ImapStore {
         return getBackupFolder(label, DataType.WHATSAPP);
     }
 
+    public static boolean isValidUri(String uri) {
+        if (TextUtils.isEmpty(uri)) return false;
+        Uri parsed = Uri.parse(uri);
+        return parsed != null &&
+            !TextUtils.isEmpty(parsed.getAuthority()) &&
+            !TextUtils.isEmpty(parsed.getHost()) &&
+            !TextUtils.isEmpty(parsed.getScheme()) &&
+            ("imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
+             "imap".equalsIgnoreCase(parsed.getScheme()));
+    }
+
+    /*
+    @Test
+    public void shouldValidUri() throws Exception {
+        assertThat(isValidUri("imap+ssl+://xoauth:foooo@imap.gmail.com:993")).isTrue();
+        assertThat(isValidUri("imap://xoauth:foooo@imap.gmail.com")).isTrue();
+        assertThat(isValidUri("imap+ssl+://xoauth:user:token@:993")).isFalse();
+        assertThat(isValidUri("imap://user:password@imap.gmail.com:993")).isTrue();
+        assertThat(isValidUri("http://xoauth:foooo@imap.gmail.com:993")).isFalse();
+    }
+    */
 
     private BackupFolder getBackupFolder(String label, DataType type) throws MessagingException {
         if (label == null) throw new IllegalStateException("label is null");
