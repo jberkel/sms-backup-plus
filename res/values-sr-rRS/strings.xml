@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d ставки успешно враћено.</string>
 
   <string name="status_unknown_error">Грешка</string>
-  <string name="notification_unknown_error">SMSBackup+ грешка</string>
+  <string name="notification_general_error">SMSBackup+ грешка</string>
 
   <string name="status_unknown_error_details">Грешка током прављења/враћања копије:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Грешка пријаве</string>

@@ -5,7 +5,7 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.service.BackupType;
 
-import static com.zegoggles.smssync.service.BackupType.MANUAL;
+import static com.zegoggles.smssync.service.BackupType.UNKNOWN;
 import static com.zegoggles.smssync.service.state.SmsSyncState.BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
 
@@ -14,7 +14,7 @@ public class BackupState extends State {
     public final BackupType backupType;
 
     public BackupState() {
-        this(INITIAL, 0, 0, MANUAL, null, null);
+        this(INITIAL, 0, 0, UNKNOWN, null, null);
     }
 
     public BackupState(SmsSyncState state,
@@ -42,10 +42,6 @@ public class BackupState extends State {
     @Override
     public BackupState transition(SmsSyncState newState, Exception exception) {
         return new BackupState(newState, currentSyncedItems, itemsToSync, backupType, dataType, exception);
-    }
-
-    public BackupState transition(SmsSyncState newState, BackupType type, Exception exception) {
-        return new BackupState(newState, currentSyncedItems, itemsToSync, type, dataType, exception);
     }
 
     @Override

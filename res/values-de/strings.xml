@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d Einträge erfolgreich wiederhergestellt.</string>
 
   <string name="status_unknown_error">Fehler</string>
-  <string name="notification_unknown_error">SMSBackup+ Fehler</string>
+  <string name="notification_general_error">SMSBackup+ Fehler</string>
 
   <string name="status_unknown_error_details">Fehler während der Sicherung/Wiederherstellung:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Anmeldungsfehler</string>

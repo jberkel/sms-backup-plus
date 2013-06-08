@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d items successfully restored.</string>
 
   <string name="status_unknown_error">Error</string>
-  <string name="notification_unknown_error">SMSBackup+ error</string>
+  <string name="notification_general_error">SMSBackup+ error</string>
 
   <string name="status_unknown_error_details">Error during backup/restore:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Login error</string>

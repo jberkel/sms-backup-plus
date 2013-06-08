@@ -11,19 +11,22 @@ public class BackupConfig {
     public final int maxItemsPerSync;
     public final ContactGroup groupToBackup;
     public final int maxMessagePerRequest;
+    public final BackupType backupType;
 
     public BackupConfig(BackupImapStore imap,
                         int tries,
                         boolean skip,
                         int maxItemsPerSync,
                         ContactGroup groupToBackup,
-                        int maxMessagePerRequest) {
+                        int maxMessagePerRequest,
+                        BackupType backupType) {
         this.imap = imap;
         this.skip = skip;
         this.tries = tries;
         this.maxItemsPerSync = maxItemsPerSync;
         this.groupToBackup = groupToBackup;
         this.maxMessagePerRequest = maxMessagePerRequest;
+        this.backupType = backupType;
     }
 
     public BackupConfig retryWithStore(BackupImapStore store) {
@@ -31,6 +34,7 @@ public class BackupConfig {
                 skip,
                 maxItemsPerSync,
                 groupToBackup,
-                maxMessagePerRequest);
+                maxMessagePerRequest,
+                backupType);
     }
 }

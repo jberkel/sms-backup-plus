@@ -44,7 +44,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d elementi ripristinati con successo.</string>
 
   <string name="status_unknown_error">Errore</string>
-  <string name="notification_unknown_error">Errore SMSBackup+</string>
+  <string name="notification_general_error">Errore SMSBackup+</string>
 
   <string name="status_unknown_error_details">Errore durante il backup/ripristino:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Errore login</string>

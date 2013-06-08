@@ -18,6 +18,7 @@ import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
+import com.zegoggles.smssync.service.exception.ConnectivityException;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +76,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
         }
 
         try {
-            service.acquireLocks(false);
+            service.acquireLocks();
 
             publishProgress(LOGIN);
             BackupImapStore.BackupFolder smsFolder = imapStore.getFolder(SMS);
@@ -111,7 +112,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
                     itemsToRestoreCount,
                     restoredCount,
                     uids.size() - restoredCount, null, null);
-        } catch (ConnectivityErrorException e) {
+        } catch (ConnectivityException e) {
             return transition(ERROR, e);
         } catch (AuthenticationFailedException e) {
             return transition(ERROR, e);

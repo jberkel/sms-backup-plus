@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">成功還原了 %1$d/%2$d 個項目。</string>
 
   <string name="status_unknown_error">錯誤</string>
-  <string name="notification_unknown_error">SMSBackup+ 出錯</string>
+  <string name="notification_general_error">SMSBackup+ 出錯</string>
 
   <string name="status_unknown_error_details">備份/還原時出錯：\n</string>
   <string name="status_auth_failure">登入出錯</string>

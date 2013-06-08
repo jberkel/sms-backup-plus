@@ -36,6 +36,8 @@ import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.service.exception.ConnectivityException;
+import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
@@ -88,12 +90,9 @@ public abstract class ServiceBase extends Service {
 
     /**
      * Acquire locks
-     *
-     * @param background if service is running in background (no UI)
-     * @throws ConnectivityErrorException
-     *          when unable to connect
+     * @throws com.zegoggles.smssync.service.exception.ConnectivityException when unable to connect
      */
-    protected void acquireLocks(boolean background) throws ConnectivityErrorException {
+    protected void acquireLocks() throws ConnectivityException {
         if (sWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
             sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
@@ -110,19 +109,23 @@ public abstract class ServiceBase extends Service {
                 sWifiLock = wMgr.createWifiLock(TAG);
             }
             sWifiLock.acquire();
-        } else if (background && Preferences.isWifiOnly(this)) {
-            throw new ConnectivityErrorException(getString(R.string.error_wifi_only_no_connection));
+        } else if (isBackgroundTask() && Preferences.isWifiOnly(this)) {
+            throw new RequiresWifiException();
         }
         NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
 
         if (active == null || !active.isConnectedOrConnecting()) {
-            throw new ConnectivityErrorException(getString(R.string.error_no_connection));
+            throw new ConnectivityException(getString(R.string.error_no_connection));
         }
     }
 
     protected void releaseLocks() {
         if (sWakeLock != null && sWakeLock.isHeld()) sWakeLock.release();
         if (sWifiLock != null && sWifiLock.isHeld()) sWifiLock.release();
+    }
+
+    protected boolean isBackgroundTask() {
+        return false;
     }
 
     protected abstract void handleIntent(final Intent intent);

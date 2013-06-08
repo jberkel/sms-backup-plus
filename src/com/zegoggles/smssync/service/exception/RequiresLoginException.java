@@ -1,4 +1,4 @@
-package com.zegoggles.smssync.service;
+package com.zegoggles.smssync.service.exception;
 
 import com.zegoggles.smssync.R;
 

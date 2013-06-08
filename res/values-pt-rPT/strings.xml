@@ -30,7 +30,7 @@
   </plurals>
   <string name="status_restore_canceled_details">%1$d/%2$d itens restaurados corretamente.</string>
   <string name="status_unknown_error">Erro</string>
-  <string name="notification_unknown_error">Erro em SMSBackup+</string>
+  <string name="notification_general_error">Erro em SMSBackup+</string>
   <string name="status_unknown_error_details">Erro na cópia/restauro:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Erro na autenticação</string>
   <string name="notification_auth_failure">Erro no início de sessão do SMSBackup+</string>

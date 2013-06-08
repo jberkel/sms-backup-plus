@@ -17,6 +17,8 @@ import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.service.exception.ConnectivityException;
+import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
@@ -36,25 +38,23 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.*;
  */
 class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final SmsBackupService service;
-    private final BackupType backupType;
     private final BackupItemsFetcher fetcher;
     private final MessageConverter converter;
     private final CalendarSyncer calendarSyncer;
 
-    BackupTask(@NotNull SmsBackupService service, BackupType backupType) {
+    BackupTask(@NotNull SmsBackupService service) {
         this.service = service;
-        this.backupType = backupType;
         this.fetcher = new BackupItemsFetcher(service,
                 new BackupQueryBuilder(service, service.getContacts()));
         this.converter = new MessageConverter(service, AuthPreferences.getUserEmail(service));
 
         if (Preferences.isCallLogCalendarSyncEnabled(service)) {
             calendarSyncer = new CalendarSyncer(
-                    service,
-                    service.getCalendars(),
-                    Preferences.getCallLogCalendarId(service),
-                    converter.getPersonLookup(),
-                    new CallFormatter(service.getResources())
+                service,
+                service.getCalendars(),
+                Preferences.getCallLogCalendarId(service),
+                converter.getPersonLookup(),
+                new CallFormatter(service.getResources())
             );
         } else {
             calendarSyncer = null;
@@ -82,15 +82,13 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
         }
 
-        appLog(R.string.app_log_start_backup, backupType);
-
         Cursor smsItems = null;
         Cursor mmsItems = null;
         Cursor callLogItems = null;
         Cursor whatsAppItems = null;
         final int smsCount, mmsCount, callLogCount, whatsAppItemsCount;
         try {
-            service.acquireLocks(backupType.isBackground());
+            service.acquireLocks();
             int max = config.maxItemsPerSync;
 
             smsItems = fetcher.getItemsForDataType(SMS, config.groupToBackup, max);
@@ -112,7 +110,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
             if (itemsToSync > 0) {
                 if (!AuthPreferences.isLoginInformationSet(service)) {
-                    appLog(R.string.app_log_missing_credentials);
                     return transition(ERROR, new RequiresLoginException());
                 } else {
                     appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
@@ -147,16 +144,12 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             } else {
                 Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
             }
-            appLog(R.string.app_log_backup_failed_authentication, e.getLocalizedMessage());
             return transition(ERROR, e);
         } catch (AuthenticationFailedException e) {
-            appLog(R.string.app_log_backup_failed_authentication, e.getLocalizedMessage());
             return transition(ERROR, e);
         } catch (MessagingException e) {
-            appLog(R.string.app_log_backup_failed_messaging, e.getLocalizedMessage());
             return transition(ERROR, e);
-        } catch (ConnectivityErrorException e) {
-            appLog(R.string.app_log_backup_failed_connectivity, e.getLocalizedMessage());
+        } catch (ConnectivityException e) {
             return transition(ERROR, e);
         } finally {
             service.releaseLocks();
@@ -188,7 +181,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
     @Override
     protected void onPostExecute(BackupState result) {
-        appLog(R.string.app_log_backup_finished);
         if (result != null) {
             post(result);
         }
@@ -197,7 +189,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
     @Override
     protected void onCancelled() {
-        appLog(R.string.app_log_backup_canceled);
         post(transition(CANCELED_BACKUP, null));
         App.bus.unregister(this);
     }
@@ -266,12 +257,12 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     }
                 }
                 backedUpItems += messages.size();
-                publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, backupType, dataType, null));
+                publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, config.backupType, dataType, null));
             }
             return new BackupState(FINISHED_BACKUP,
                     backedUpItems,
                     itemsToSync,
-                    backupType, dataType, null);
+                    config.backupType, dataType, null);
         } finally {
             if (smsmmsfolder != null) smsmmsfolder.close();
             if (callLogfolder != null) callLogfolder.close();
@@ -290,6 +281,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private void publish(SmsSyncState state, Exception exception) {
-        publishProgress(service.getState().transition(state, backupType, exception));
+        publishProgress(service.getState().transition(state, exception));
     }
 }

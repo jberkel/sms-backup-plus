@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d éléments restaurés avec succès.</string>
 
   <string name="status_unknown_error">Erreur</string>
-  <string name="notification_unknown_error">Erreur SMSBackup+</string>
+  <string name="notification_general_error">Erreur SMSBackup+</string>
 
   <string name="status_unknown_error_details">Erreur pendant la sauvegarde/restauration :\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Erreur d\'identification</string>

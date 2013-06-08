@@ -43,7 +43,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d items succesvol teruggeplaatst.</string>
 
   <string name="status_unknown_error">Fout</string>
-  <string name="notification_unknown_error">SMSBackup+ fout</string>
+  <string name="notification_general_error">SMSBackup+ fout</string>
 
   <string name="status_unknown_error_details">Fout gedurende backuppen/terugplaatsen:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Login fout</string>

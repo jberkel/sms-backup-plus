@@ -1,3 +1,7 @@
+== 1.5.2 (1515) tbd
+
+  * Fix notifications getting displayed when not connected to Wifi
+
 == 1.5.1 (1514) 06-07-2013
 
   * whassup 0.0.4: Fixed OutOfMemory crashes when decrypting the db

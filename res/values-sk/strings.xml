@@ -23,7 +23,7 @@
     <string name="status_backup_done_details_noitems">Nie sú žiadne položky na zálohovanie</string>
     <string name="status_restore_canceled_details">%1$d/%2$d položiek úspešne obnovených</string>
     <string name="status_unknown_error">Chyba</string>
-    <string name="notification_unknown_error">SMSBackup+ chyba</string>
+    <string name="notification_general_error">SMSBackup+ chyba</string>
     <string name="status_unknown_error_details">"Chyba počas zálohy/obnovy:
 %1$s"</string>
     <string name="status_auth_failure">Chyba prihlásenia</string>

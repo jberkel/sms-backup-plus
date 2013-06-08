@@ -23,7 +23,7 @@
     <string name="status_backup_done_details_noitems">Nie było żadnych elementów wymagających kopii zapasowej.</string>
     <string name="status_restore_canceled_details">%1$d/%2$d elementów poprawnie przywróconych.</string>
     <string name="status_unknown_error">Błąd</string>
-    <string name="notification_unknown_error">SMSBackup+ błąd</string>
+    <string name="notification_general_error">SMSBackup+ błąd</string>
     <string name="status_unknown_error_details">Błąd podczas wykonywania kopii zapasowej/przywracania:\n %1$s</string>
     <string name="status_auth_failure">Błąd podczas logowania</string>
     <string name="notification_auth_failure">SMSBackup+ błąd logowania</string>

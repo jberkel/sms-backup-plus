@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d из %2$d объектов успешно восстановлено.</string>
 
   <string name="status_unknown_error">Ошибка</string>
-  <string name="notification_unknown_error">Ошибка SMSBackup+</string>
+  <string name="notification_general_error">Ошибка SMSBackup+</string>
 
   <string name="status_unknown_error_details">Ошибка сохранения/восстановления\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Ошибка авторизации</string>

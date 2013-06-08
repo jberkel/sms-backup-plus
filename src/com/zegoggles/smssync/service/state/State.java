@@ -6,8 +6,9 @@ import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.DataType;
-import com.zegoggles.smssync.service.ConnectivityErrorException;
-import com.zegoggles.smssync.service.LocalizableException;
+import com.zegoggles.smssync.service.exception.ConnectivityException;
+import com.zegoggles.smssync.service.exception.LocalizableException;
+import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -53,15 +54,20 @@ public abstract class State {
 
     public boolean isAuthException() {
         return exception instanceof XOAuth2AuthenticationFailedException ||
-               exception instanceof AuthenticationFailedException;
+               exception instanceof AuthenticationFailedException ||
+               exception instanceof RequiresLoginException;
     }
 
     public boolean isConnectivityError() {
-        return exception instanceof ConnectivityErrorException;
+        return exception instanceof ConnectivityException;
     }
 
     public boolean isError() {
         return state == SmsSyncState.ERROR;
+    }
+
+    public boolean isCanceled() {
+        return state == SmsSyncState.CANCELED_BACKUP || state == SmsSyncState.CANCELED_RESTORE;
     }
 
     public String getNotificationLabel(Resources resources) {

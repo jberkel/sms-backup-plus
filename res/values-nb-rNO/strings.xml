@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d deler gjenopprettet.</string>
 
   <string name="status_unknown_error">Feil</string>
-  <string name="notification_unknown_error">SMSBackup+ feil</string>
+  <string name="notification_general_error">SMSBackup+ feil</string>
 
   <string name="status_unknown_error_details">Feil ved sikkerhetskopiering/gjenoppretting:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Innloggingsfeil</string>

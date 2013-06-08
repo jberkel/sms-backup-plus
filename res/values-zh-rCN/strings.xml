@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">成功还原了 %1$d/%2$d 个项目</string>
 
   <string name="status_unknown_error">错误</string>
-  <string name="notification_unknown_error">SMS Backup+ 错误</string>
+  <string name="notification_general_error">SMS Backup+ 错误</string>
 
   <string name="status_unknown_error_details">备份/还原时出错:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">登录失败</string>
