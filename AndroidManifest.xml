@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zegoggles.smssync"
     android:versionName="1.5.2"
-    android:versionCode="1515"
+    android:versionCode="1516"
     android:description="@string/app_description"
     android:installLocation="auto">
 
