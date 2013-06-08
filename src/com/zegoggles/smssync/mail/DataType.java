@@ -7,10 +7,10 @@ import android.preference.PreferenceManager;
 import com.zegoggles.smssync.R;
 
 public enum DataType {
-    SMS     (R.string.sms,      R.string.sms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      true,  PreferenceKeys.RESTORE_SMS,     PreferenceKeys.MAX_SYNCED_DATE_SMS,      -1),
-    MMS     (R.string.mms,      R.string.mms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_MMS,      false, null,                           PreferenceKeys.MAX_SYNCED_DATE_MMS,      Build.VERSION_CODES.ECLAIR),
-    CALLLOG (R.string.calllog,  R.string.call_with_field,    PreferenceKeys.IMAP_FOLDER_CALLLOG,  Defaults.CALLLOG_FOLDER, PreferenceKeys.BACKUP_CALLLOG,  false, PreferenceKeys.RESTORE_CALLLOG, PreferenceKeys.MAX_SYNCED_DATE_CALLLOG,  -1),
-    WHATSAPP(R.string.whatsapp, R.string.whatsapp_with_field,PreferenceKeys.IMAP_FOLDER_WHATSAPP, Defaults.WHATAPP_FOLDER, PreferenceKeys.BACKUP_WHATSAPP, false, null,                           PreferenceKeys.MAX_SYNCED_DATE_WHATSAPP, -1);
+    SMS     (R.string.sms,      R.string.sms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      Defaults.SMS_BACKUP_ENABLED,     PreferenceKeys.RESTORE_SMS,     Defaults.SMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_SMS,      -1),
+    MMS     (R.string.mms,      R.string.mms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_MMS,      Defaults.MMS_BACKUP_ENABLED,     null,                           Defaults.MMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_MMS,      Build.VERSION_CODES.ECLAIR),
+    CALLLOG (R.string.calllog,  R.string.call_with_field,    PreferenceKeys.IMAP_FOLDER_CALLLOG,  Defaults.CALLLOG_FOLDER, PreferenceKeys.BACKUP_CALLLOG,  Defaults.CALLLOG_BACKUP_ENABLED, PreferenceKeys.RESTORE_CALLLOG, Defaults.CALLLOG_RESTORE_ENABLED, PreferenceKeys.MAX_SYNCED_DATE_CALLLOG,  -1),
+    WHATSAPP(R.string.whatsapp, R.string.whatsapp_with_field,PreferenceKeys.IMAP_FOLDER_WHATSAPP, Defaults.WHATAPP_FOLDER, PreferenceKeys.BACKUP_WHATSAPP, Defaults.WHATSAPP_BACKUP_ENABLED, null,                          Defaults.WHATSAPP_RESTORE_ENABLED,PreferenceKeys.MAX_SYNCED_DATE_WHATSAPP, -1);
 
     public final int resId;
     public final int withField;
@@ -20,6 +20,7 @@ public enum DataType {
     public final String defaultFolder;
     public final int minSdkVersion;
     public final boolean backupEnabledByDefault;
+    public final boolean restoreEnabledByDefault;
     private final String maxSyncedPreference;
 
     private DataType(int resId,
@@ -29,6 +30,7 @@ public enum DataType {
                      String backupEnabledPreference,
                      boolean backupEnabledByDefault,
                      String restoreEnabledPreference,
+                     boolean restoreEnabledByDefault,
                      String maxSyncedPreference,
                      int minSdkVersion) {
         this.resId = resId;
@@ -38,6 +40,7 @@ public enum DataType {
         this.backupEnabledPreference = backupEnabledPreference;
         this.backupEnabledByDefault = backupEnabledByDefault;
         this.restoreEnabledPreference = restoreEnabledPreference;
+        this.restoreEnabledByDefault = restoreEnabledByDefault;
         this.maxSyncedPreference = maxSyncedPreference;
         this.minSdkVersion = minSdkVersion;
     }
@@ -61,7 +64,7 @@ public enum DataType {
 
     public boolean isRestoreEnabled(Context context) {
         return restoreEnabledPreference != null &&
-                prefs(context).getBoolean(restoreEnabledPreference, false);
+                prefs(context).getBoolean(restoreEnabledPreference, restoreEnabledByDefault);
     }
 
     public String getFolder(Context context) {
@@ -114,10 +117,24 @@ public enum DataType {
         public static final String MAX_SYNCED_DATE_WHATSAPP = "max_synced_date_whatsapp";
     }
 
+    /**
+     * Defaults for various settings
+     */
     public static class Defaults {
         public static final long   MAX_SYNCED_DATE = -1;
         public static final String SMS_FOLDER     = "SMS";
         public static final String CALLLOG_FOLDER = "Call log";
         public static final String WHATAPP_FOLDER = "WhatsApp";
+
+        public static final boolean SMS_BACKUP_ENABLED       = true;
+        public static final boolean MMS_BACKUP_ENABLED       = true;
+        public static final boolean CALLLOG_BACKUP_ENABLED   = false;
+        public static final boolean WHATSAPP_BACKUP_ENABLED  = false;
+
+        public static final boolean SMS_RESTORE_ENABLED      = true;
+        public static final boolean MMS_RESTORE_ENABLED      = false;
+        public static final boolean CALLLOG_RESTORE_ENABLED  = true;
+        public static final boolean WHATSAPP_RESTORE_ENABLED = false;
+
     }
 }
