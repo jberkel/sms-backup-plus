@@ -1,7 +1,6 @@
 package com.zegoggles.smssync.service;
 
 import android.content.Intent;
-import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 
 public enum BackupType {
@@ -17,11 +16,19 @@ public enum BackupType {
         this.resId = resId;
     }
 
+    public static final String EXTRA = "com.zegoggles.smssync.BackupTypeAsString";
+
     public static BackupType fromIntent(Intent intent) {
-        if (intent.hasExtra(Consts.BACKUP_TYPE)) {
-            return (BackupType) intent.getSerializableExtra(Consts.BACKUP_TYPE);
+        if (intent.hasExtra(EXTRA)) {
+            final String name = intent.getStringExtra(EXTRA);
+            for (BackupType type : values()) {
+                if (type.name().equals(name)) {
+                    return type;
+                }
+            }
+            return UNKNOWN;
         } else {
-            return MANUAL;
+            return UNKNOWN;
         }
     }
 

@@ -209,7 +209,7 @@
             android:title="@string/ui_restore_calllog_label"
             android:summary="@string/ui_restore_calllog_desc"
             android:persistent="true"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
 
           <CheckBoxPreference
               android:key="restore_starred_only"

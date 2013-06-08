@@ -61,6 +61,7 @@ import com.zegoggles.smssync.preferences.BackupManagerWrapper;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
 import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
 import com.zegoggles.smssync.tasks.OAuthCallbackTask;
@@ -408,12 +409,12 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    private void initiateSync() {
+    private void initiateBackup() {
         if (checkLoginInformation()) {
             if (Preferences.isFirstBackup(this)) {
                 show(Dialogs.FIRST_SYNC);
             } else {
-                startSync(false);
+                startBackup(false);
             }
         }
     }
@@ -437,18 +438,19 @@ public class MainActivity extends PreferenceActivity {
             show(Dialogs.CONFIRM_ACTION);
         } else {
             if (Actions.Backup.equals(act)) {
-                initiateSync();
+                initiateBackup();
             } else if (Actions.Restore.equals(act)) {
                 initiateRestore();
             }
         }
     }
 
-    private void startSync(boolean skip) {
-        Intent intent = new Intent(this, SmsBackupService.class);
+    private void startBackup(boolean skip) {
+        final Intent intent = new Intent(this, SmsBackupService.class);
         if (Preferences.isFirstBackup(this)) {
             intent.putExtra(Consts.KEY_SKIP_MESSAGES, skip);
         }
+        intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
         startService(intent);
     }
 
@@ -484,7 +486,7 @@ public class MainActivity extends PreferenceActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startSync(which == DialogInterface.BUTTON2);
+                                startBackup(which == DialogInterface.BUTTON2);
                             }
                         };
                 final int maxItems = Preferences.getMaxItemsPerSync(this);

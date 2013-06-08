@@ -30,9 +30,6 @@ public final class Consts {
      */
     public static final String KEY_SKIP_MESSAGES = "com.zegoggles.smssync.SkipMessages";
 
-    // type the backup intent
-    public static final String BACKUP_TYPE = "com.zegoggles.smssync.BackupType";
-
     /**
      * OAuth callback
      */

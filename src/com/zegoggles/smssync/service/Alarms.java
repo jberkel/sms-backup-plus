@@ -21,7 +21,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.preferences.Preferences;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -68,8 +67,8 @@ public class Alarms {
     }
 
     private static PendingIntent createPendingIntent(Context ctx, BackupType backupType) {
-        Intent intent = (new Intent(ctx, SmsBackupService.class))
-                .putExtra(Consts.BACKUP_TYPE, backupType);
+        final Intent intent = (new Intent(ctx, SmsBackupService.class))
+                .putExtra(BackupType.EXTRA, backupType.name());
         return PendingIntent.getService(ctx, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }
