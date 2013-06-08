@@ -11,6 +11,7 @@ import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.Set;
@@ -59,7 +60,7 @@ class BackupQueryBuilder {
         }
     }
 
-    public Query buildQueryForDataType(DataType type, int max, ContactGroup group) {
+    public @Nullable Query buildQueryForDataType(DataType type, int max, ContactGroup group) {
         switch (type) {
             case MMS:     return getQueryForMMS(max, group);
             case SMS:     return getQueryForSMS(max, group);
@@ -68,7 +69,7 @@ class BackupQueryBuilder {
         }
     }
 
-    public Query buildMaxQueryForDataType(DataType type) {
+    public @Nullable Query buildMaxQueryForDataType(DataType type) {
         switch (type) {
             case MMS:
                 return new Query(

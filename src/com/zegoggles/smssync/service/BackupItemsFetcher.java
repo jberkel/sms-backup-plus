@@ -49,7 +49,7 @@ public class BackupItemsFetcher {
         }
     }
 
-    private @Nullable Cursor performQuery(BackupQueryBuilder.Query query) {
+    private @Nullable Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
         if (query == null) return null;
         try {
             return context.getContentResolver().query(
