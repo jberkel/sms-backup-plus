@@ -44,7 +44,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d αντικείμενα επαναφέρθηκαν επιτυχώς.</string>
 
   <string name="status_unknown_error">Error</string>
-  <string name="notification_unknown_error"> σφάλμα SMSBackup+</string>
+  <string name="notification_general_error"> σφάλμα SMSBackup+</string>
 
   <string name="status_unknown_error_details">Σφάλμα κατα την αποθήκευση/αποκατάσταση:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Σφάλμα σύνδεσης</string>
@@ -326,8 +326,6 @@
   <string name="ui_dialog_donate_message"> Παρακαλούμε να προσδιορίσετε το ποσό:</string>
   <string name="ui_donation_success_message"> Επιτυχής Δωρεά, σας ευχαριστούμε !</string>
   <string name="ui_donation_failure_message">Η δωρεά απέτυχε: %1$s</string>
-  <string name="ui_donation_canceled_message">Η δωρεά ακυρώθηκε</string>
-  <string name="ui_donation_oh_noez_no_network"> Δυστυχώς, θα πρέπει να συνδεθεί με το διαδίκτυο, ώστε να κάνετε μια δωρεά.</string>
 
   <!-- purchase errors -->
   <string name="donation_error_iab_unavailable">In-app τιμολόγηση δεν είναι διαθέσιμη </string>
