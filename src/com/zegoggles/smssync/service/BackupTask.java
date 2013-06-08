@@ -110,6 +110,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
             if (itemsToSync > 0) {
                 if (!AuthPreferences.isLoginInformationSet(service)) {
+                    appLog(R.string.app_log_missing_credentials);
                     return transition(ERROR, new RequiresLoginException());
                 } else {
                     appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
