@@ -18,7 +18,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.MainActivity;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.preferences.AuthPreferences;
 
 import java.io.IOException;
 
@@ -135,8 +135,8 @@ public class AccountManagerAuthActivity extends Activity {
     }
 
     public static boolean refreshOAuth2Token(Context ctx) {
-        final String token = PrefStore.getOauth2Token(ctx);
-        final String name  = PrefStore.getUsername(ctx);
+        final String token = AuthPreferences.getOauth2Token(ctx);
+        final String name  = AuthPreferences.getUsername(ctx);
         if (!TextUtils.isEmpty(token)) {
             invalidateToken(ctx, token);
             try {
@@ -144,7 +144,7 @@ public class AccountManagerAuthActivity extends Activity {
                         AUTH_TOKEN_TYPE, true, null, null).getResult().getString(AccountManager.KEY_AUTHTOKEN);
 
                 if (!TextUtils.isEmpty(newToken)) {
-                    PrefStore.setOauth2Token(ctx, name, newToken);
+                    AuthPreferences.setOauth2Token(ctx, name, newToken);
                     return true;
                 } else {
                     Log.w(TAG, "no new token obtained");

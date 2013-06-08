@@ -16,9 +16,8 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.mail.BackupImapStore;
-import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.DataType;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
@@ -212,8 +211,8 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
                 smsIds.add(uri.getLastPathSegment());
                 Long timestamp = values.getAsLong(SmsConsts.DATE);
 
-                if (timestamp != null && PrefStore.getMaxSyncedDate(service, SMS) < timestamp) {
-                    PrefStore.setMaxSyncedDate(service, SMS, timestamp);
+                if (timestamp != null && SMS.getMaxSyncedDate(service) < timestamp) {
+                    SMS.setMaxSyncedDate(service, timestamp);
                 }
                 if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
             }

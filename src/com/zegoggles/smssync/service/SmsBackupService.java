@@ -26,7 +26,8 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.BackupState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,9 +91,11 @@ public class SmsBackupService extends ServiceBase {
                     BackupConfig config = new BackupConfig(
                             getBackupImapStore(), 0,
                             intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false),
-                            PrefStore.getMaxItemsPerSync(service),
-                            PrefStore.getBackupContactGroup(service),
+                            Preferences.getMaxItemsPerSync(service),
+                            Preferences.getBackupContactGroup(service),
                             MAX_MSG_PER_REQUEST);
+
+
 
                     new BackupTask(this, backupType).execute(config);
                 } catch (MessagingException e) {
@@ -116,9 +119,9 @@ public class SmsBackupService extends ServiceBase {
         if (mState.isInitialState()) return;
 
         if (state.isError() &&
-           (state.backupType == MANUAL || PrefStore.isNotificationEnabled(this))) {
+           (state.backupType == MANUAL || Preferences.isNotificationEnabled(this))) {
             if (state.isAuthException()) {
-                int details = PrefStore.useXOAuth(this) ? R.string.status_auth_failure_details_xoauth :
+                int details = AuthPreferences.useXOAuth(this) ? R.string.status_auth_failure_details_xoauth :
                         R.string.status_auth_failure_details_plain;
                 notifyUser(android.R.drawable.stat_sys_warning, TAG,
                         getString(R.string.notification_auth_failure), getString(details));

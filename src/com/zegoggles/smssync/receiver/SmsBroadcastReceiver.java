@@ -19,7 +19,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.Alarms;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -40,9 +41,9 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void bootup(Context ctx) {
-        if (PrefStore.isEnableAutoSync(ctx) &&
-                PrefStore.isLoginInformationSet(ctx) &&
-                !PrefStore.isFirstBackup(ctx)) {
+        if (Preferences.isEnableAutoSync(ctx) &&
+                AuthPreferences.isLoginInformationSet(ctx) &&
+                !Preferences.isFirstBackup(ctx)) {
 
             Alarms.scheduleRegularBackup(ctx);
         } else {
@@ -51,9 +52,9 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void incomingSMS(Context ctx) {
-        if (PrefStore.isEnableAutoSync(ctx) &&
-                PrefStore.isLoginInformationSet(ctx) &&
-                !PrefStore.isFirstBackup(ctx)) {
+        if (Preferences.isEnableAutoSync(ctx) &&
+                AuthPreferences.isLoginInformationSet(ctx) &&
+                !Preferences.isFirstBackup(ctx)) {
 
             Alarms.scheduleIncomingBackup(ctx);
         } else {

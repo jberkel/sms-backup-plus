@@ -11,17 +11,13 @@ import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
-import com.zegoggles.smssync.preferences.PrefStore;
 
 import java.util.Locale;
 import java.util.Set;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.mail.DataType.CALLLOG;
-import static com.zegoggles.smssync.mail.DataType.MMS;
-import static com.zegoggles.smssync.mail.DataType.SMS;
-import static com.zegoggles.smssync.preferences.PrefStore.getMaxSyncedDate;
+import static com.zegoggles.smssync.mail.DataType.*;
 
 class BackupQueryBuilder {
     private final Context context;
@@ -109,7 +105,7 @@ class BackupQueryBuilder {
                     SmsConsts.TYPE,
                     groupSelection(SMS, group)),
             new String[] {
-                String.valueOf(getMaxSyncedDate(context, SMS)),
+                String.valueOf(SMS.getMaxSyncedDate(context)),
                 String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
             },
             max);
@@ -124,7 +120,7 @@ class BackupQueryBuilder {
                     MmsConsts.TYPE,
                     groupSelection(DataType.MMS, group)),
             new String[] {
-                String.valueOf(PrefStore.getMaxSyncedDate(context, MMS)),
+                String.valueOf(MMS.getMaxSyncedDate(context)),
                 MmsConsts.DELIVERY_REPORT
             },
             max);
@@ -136,7 +132,7 @@ class BackupQueryBuilder {
             CALLLOG_PROJECTION,
             String.format(Locale.ENGLISH, "%s > ?", CallLog.Calls.DATE),
             new String[] {
-                String.valueOf(PrefStore.getMaxSyncedDate(context, CALLLOG))
+                String.valueOf(CALLLOG.getMaxSyncedDate(context))
             },
             max);
     }

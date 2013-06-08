@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import com.zegoggles.smssync.Consts;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.preferences.Preferences;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -32,11 +32,11 @@ import static com.zegoggles.smssync.service.BackupType.*;
 public class Alarms {
 
     public static long scheduleIncomingBackup(Context ctx) {
-        return scheduleBackup(ctx, PrefStore.getIncomingTimeoutSecs(ctx), INCOMING, false);
+        return scheduleBackup(ctx, Preferences.getIncomingTimeoutSecs(ctx), INCOMING, false);
     }
 
     public static long scheduleRegularBackup(Context ctx) {
-        return scheduleBackup(ctx, PrefStore.getRegularTimeoutSecs(ctx), REGULAR, false);
+        return scheduleBackup(ctx, Preferences.getRegularTimeoutSecs(ctx), REGULAR, false);
     }
 
     public static long scheduleImmediateBackup(Context ctx) {
@@ -51,7 +51,7 @@ public class Alarms {
         if (LOCAL_LOGV)
             Log.v(TAG, "scheduleBackup(" + ctx + ", " + inSeconds + ", " + backupType + ", " + force + ")");
 
-        if (force || (PrefStore.isEnableAutoSync(ctx) && inSeconds > 0)) {
+        if (force || (Preferences.isEnableAutoSync(ctx) && inSeconds > 0)) {
             final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
             getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx, backupType));
             if (LOCAL_LOGV)

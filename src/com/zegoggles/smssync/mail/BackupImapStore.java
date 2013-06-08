@@ -29,7 +29,6 @@ import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
 import com.fsck.k9.mail.store.ImapStore;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
-import com.zegoggles.smssync.preferences.PrefStore;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,35 +60,6 @@ public class BackupImapStore extends ImapStore {
         this.context = context;
     }
 
-    public BackupFolder getFolder(DataType type) throws MessagingException {
-        switch (type) {
-            case MMS:
-            case SMS:
-                return getSMSBackupFolder();
-            case CALLLOG:
-                return getCallLogBackupFolder();
-            case WHATSAPP:
-                return getWhatsAppBackupFolder();
-            default:
-                throw new MessagingException("No folder for "+type);
-        }
-    }
-
-    private BackupFolder getSMSBackupFolder() throws MessagingException {
-        String label = PrefStore.getImapFolder(context);
-        return getBackupFolder(label, DataType.SMS);
-    }
-
-    private BackupFolder getCallLogBackupFolder() throws MessagingException {
-        String label = PrefStore.getCallLogFolder(context);
-        return getBackupFolder(label, DataType.CALLLOG);
-    }
-
-    private BackupFolder getWhatsAppBackupFolder() throws MessagingException {
-        String label = PrefStore.getWhatsAppFolder(context);
-        return getBackupFolder(label, DataType.WHATSAPP);
-    }
-
     public static boolean isValidUri(String uri) {
         if (TextUtils.isEmpty(uri)) return false;
         Uri parsed = Uri.parse(uri);
@@ -112,7 +82,8 @@ public class BackupImapStore extends ImapStore {
     }
     */
 
-    private BackupFolder getBackupFolder(String label, DataType type) throws MessagingException {
+    public BackupFolder getFolder(DataType type) throws MessagingException {
+        String label = type.getFolder(context);
         if (label == null) throw new IllegalStateException("label is null");
 
         try {

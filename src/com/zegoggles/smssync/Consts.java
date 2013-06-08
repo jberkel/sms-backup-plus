@@ -23,19 +23,6 @@ import android.provider.CallLog;
  * Class containing application wide constants.
  */
 public final class Consts {
-    /**
-     * IMAP URI.
-     *
-     * This should be in the form of:
-     * <ol>
-     * <li><code>imap+ssl+://xoauth2:ENCODED_USERNAME:ENCODED_TOKEN@imap.gmail.com:993</code></li>
-     * <li><code>imap+ssl+://xoauth:ENCODED_USERNAME:ENCODED_TOKEN@imap.gmail.com:993</code></li>
-     * <li><code>imap+ssl+://ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com:993</code></li>
-     * <li><code>imap://ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com:993</code></li>
-     * <li><code>imap://ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com</code></li>
-     * </ol>
-     */
-    public static final String IMAP_URI = "imap%s://%s:%s@%s";
 
     /**
      * Key in the intent extras for indication whether all unsynced messages should

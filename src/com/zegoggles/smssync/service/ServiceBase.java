@@ -27,7 +27,6 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.text.format.DateFormat;
-import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
@@ -35,12 +34,14 @@ import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
 
-import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.App.LOG;
+import static com.zegoggles.smssync.App.TAG;
 
 public abstract class ServiceBase extends Service {
     /**
@@ -63,7 +64,7 @@ public abstract class ServiceBase extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (PrefStore.isAppLogEnabled(this)) {
+        if (Preferences.isAppLogEnabled(this)) {
             this.appLog = new AppLog(LOG, DateFormat.getDateFormatOrder(this));
         }
         App.bus.register(this);
@@ -78,7 +79,7 @@ public abstract class ServiceBase extends Service {
     }
 
     protected BackupImapStore getBackupImapStore() throws MessagingException {
-        final String uri = PrefStore.getStoreUri(this);
+        final String uri = AuthPreferences.getStoreUri(this);
         if (!BackupImapStore.isValidUri(uri)) {
             throw new MessagingException("No valid IMAP URI: "+uri);
         }
@@ -109,7 +110,7 @@ public abstract class ServiceBase extends Service {
                 sWifiLock = wMgr.createWifiLock(TAG);
             }
             sWifiLock.acquire();
-        } else if (background && PrefStore.isWifiOnly(this)) {
+        } else if (background && Preferences.isWifiOnly(this)) {
             throw new ConnectivityErrorException(getString(R.string.error_wifi_only_no_connection));
         }
         NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();

@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.preferences.AuthPreferences;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthException;
@@ -22,11 +22,11 @@ public class RequestTokenTask extends AsyncTask<String, Void, String> {
 
     public String doInBackground(String... callback) {
         synchronized (XOAuthConsumer.class) {
-            XOAuthConsumer consumer = PrefStore.getOAuthConsumer(context);
+            XOAuthConsumer consumer = AuthPreferences.getOAuthConsumer(context);
             CommonsHttpOAuthProvider provider = consumer.getProvider(context);
             try {
                 String url = provider.retrieveRequestToken(consumer, callback[0]);
-                PrefStore.setOauthTokens(context, consumer.getToken(), consumer.getTokenSecret());
+                AuthPreferences.setOauthTokens(context, consumer.getToken(), consumer.getTokenSecret());
                 return url;
             } catch (OAuthCommunicationException e) {
                 Log.e(TAG, "error requesting token: " + e.getResponseBody(), e);

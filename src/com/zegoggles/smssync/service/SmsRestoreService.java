@@ -9,7 +9,8 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.MessageConverter;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,8 @@ import java.io.FilenameFilter;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
+import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 
 public class SmsRestoreService extends ServiceBase {
@@ -51,17 +54,17 @@ public class SmsRestoreService extends ServiceBase {
     protected void handleIntent(final Intent intent) {
         if (isWorking()) return;
         try {
-            final boolean starredOnly = PrefStore.isRestoreStarredOnly(service);
-            final boolean restoreCallLog = PrefStore.isRestoreCallLog(service);
-            final boolean restoreSms = PrefStore.isRestoreSms(service);
+            final boolean starredOnly = Preferences.isRestoreStarredOnly(service);
+            final boolean restoreCallLog = CALLLOG.isRestoreEnabled(service);
+            final boolean restoreSms     = SMS.isRestoreEnabled(service);
 
-            MessageConverter converter = new MessageConverter(service, PrefStore.getUserEmail(service));
+            MessageConverter converter = new MessageConverter(service, AuthPreferences.getUserEmail(service));
 
             new RestoreTask(this,
                     getBackupImapStore(),
                     converter,
                     restoreSms, restoreCallLog, starredOnly).execute(
-                    PrefStore.getMaxItemsPerRestore(this));
+                    Preferences.getMaxItemsPerRestore(this));
         } catch (MessagingException e) {
             App.bus.post(mState.transition(ERROR, e));
         }

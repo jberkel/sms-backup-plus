@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
-import com.zegoggles.smssync.preferences.PrefStore;
+import com.zegoggles.smssync.preferences.AuthPreferences;
 import oauth.signpost.OAuth;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthException;
@@ -28,7 +28,7 @@ public class OAuthCallbackTask extends AsyncTask<Intent, Void, XOAuthConsumer> {
         Uri uri = callbackIntent[0].getData();
         if (LOCAL_LOGV) Log.v(TAG, "oauth callback: " + uri);
 
-        XOAuthConsumer consumer = PrefStore.getOAuthConsumer(context);
+        XOAuthConsumer consumer = AuthPreferences.getOAuthConsumer(context);
         CommonsHttpOAuthProvider provider = consumer.getProvider(context);
         String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
         try {
