@@ -84,7 +84,10 @@ public class BackupImapStore extends ImapStore {
             !TextUtils.isEmpty(parsed.getHost()) &&
             !TextUtils.isEmpty(parsed.getScheme()) &&
             ("imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap".equalsIgnoreCase(parsed.getScheme()));
+             "imap+ssl".equalsIgnoreCase(parsed.getScheme()) ||
+             "imap".equalsIgnoreCase(parsed.getScheme()) ||
+             "imap+tls+".equalsIgnoreCase(parsed.getScheme()) ||
+             "imap+tls".equalsIgnoreCase(parsed.getScheme()));
     }
 
     /*
@@ -93,6 +96,9 @@ public class BackupImapStore extends ImapStore {
         assertThat(isValidUri("imap+ssl+://xoauth:foooo@imap.gmail.com:993")).isTrue();
         assertThat(isValidUri("imap://xoauth:foooo@imap.gmail.com")).isTrue();
         assertThat(isValidUri("imap+ssl+://xoauth:user:token@:993")).isFalse();
+        assertThat(isValidUri("imap+ssl://user%40domain:password@imap.gmail.com:993")).isTrue();
+        assertThat(isValidUri("imap+tls+://user:password@imap.gmail.com:993")).isTrue();
+        assertThat(isValidUri("imap+tls://user:password@imap.gmail.com:993")).isTrue();
         assertThat(isValidUri("imap://user:password@imap.gmail.com:993")).isTrue();
         assertThat(isValidUri("http://xoauth:foooo@imap.gmail.com:993")).isFalse();
     }
