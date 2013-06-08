@@ -44,7 +44,7 @@ public enum DataType {
 
     public boolean isBackupEnabled(Context context) {
         //noinspection SimplifiableIfStatement
-        if (minSdkVersion > 0 && Build.VERSION.SDK_INT > minSdkVersion) {
+        if (minSdkVersion > 0 && Build.VERSION.SDK_INT < minSdkVersion) {
             return false;
         } else {
             return prefs(context)
