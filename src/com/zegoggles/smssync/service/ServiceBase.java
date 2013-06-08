@@ -139,13 +139,6 @@ public abstract class ServiceBase extends Service {
         return START_NOT_STICKY;
     }
 
-    protected void updateMaxSyncedDateSms(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDateSms(this, maxSyncedDate);
-        if (LOCAL_LOGV) {
-            Log.v(TAG, "Max synced date for sms set to: " + maxSyncedDate);
-        }
-    }
-
     protected void appLog(int id, Object... args) {
         if (appLog != null) appLog.append(getString(id, args));
     }

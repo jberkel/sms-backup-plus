@@ -61,17 +61,31 @@ public class BackupImapStore extends ImapStore {
         this.context = context;
     }
 
-    public BackupFolder getSMSBackupFolder() throws MessagingException {
+    public BackupFolder getFolder(DataType type) throws MessagingException {
+        switch (type) {
+            case MMS:
+            case SMS:
+                return getSMSBackupFolder();
+            case CALLLOG:
+                return getCallLogBackupFolder();
+            case WHATSAPP:
+                return getWhatsAppBackupFolder();
+            default:
+                throw new MessagingException("No folder for "+type);
+        }
+    }
+
+    private BackupFolder getSMSBackupFolder() throws MessagingException {
         String label = PrefStore.getImapFolder(context);
         return getBackupFolder(label, DataType.SMS);
     }
 
-    public BackupFolder getCallLogBackupFolder() throws MessagingException {
+    private BackupFolder getCallLogBackupFolder() throws MessagingException {
         String label = PrefStore.getCallLogFolder(context);
         return getBackupFolder(label, DataType.CALLLOG);
     }
 
-    public BackupFolder getWhatsAppBackupFolder() throws MessagingException {
+    private BackupFolder getWhatsAppBackupFolder() throws MessagingException {
         String label = PrefStore.getWhatsAppFolder(context);
         return getBackupFolder(label, DataType.WHATSAPP);
     }

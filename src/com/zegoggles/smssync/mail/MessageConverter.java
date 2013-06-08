@@ -95,16 +95,6 @@ public class MessageConverter {
                 };
     }
 
-    // only query for needed fields
-    // http://stackoverflow.com/questions/12033234/get-calls-provider-internal-structure
-    public static final String[] CALLLOG_PROJECTION = {
-            CallLog.Calls._ID,
-            CallLog.Calls.NUMBER,
-            CallLog.Calls.DURATION,
-            CallLog.Calls.DATE,
-            CallLog.Calls.TYPE
-    };
-
     private static final String UNKNOWN_NUMBER = "unknown.number";
     private static final String UNKNOWN_EMAIL = "unknown.email";
 

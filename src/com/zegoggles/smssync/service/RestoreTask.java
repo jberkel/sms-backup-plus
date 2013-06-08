@@ -31,6 +31,8 @@ import java.util.Set;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
+import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
 class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
@@ -77,8 +79,8 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
             service.acquireLocks(false);
 
             publishProgress(LOGIN);
-            BackupImapStore.BackupFolder smsFolder = imapStore.getSMSBackupFolder();
-            if (restoreCallLog) callFolder = imapStore.getCallLogBackupFolder();
+            BackupImapStore.BackupFolder smsFolder = imapStore.getFolder(SMS);
+            if (restoreCallLog) callFolder = imapStore.getFolder(CALLLOG);
 
             publishProgress(CALC);
 
@@ -210,8 +212,8 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
                 smsIds.add(uri.getLastPathSegment());
                 Long timestamp = values.getAsLong(SmsConsts.DATE);
 
-                if (timestamp != null && PrefStore.getMaxSyncedDateSms(service) < timestamp) {
-                    service.updateMaxSyncedDateSms(timestamp);
+                if (timestamp != null && PrefStore.getMaxSyncedDate(service, SMS) < timestamp) {
+                    PrefStore.setMaxSyncedDate(service, SMS, timestamp);
                 }
                 if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
             }

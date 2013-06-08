@@ -54,6 +54,7 @@ import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
+import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthMode;
 import com.zegoggles.smssync.preferences.BackupManagerWrapper;
 import com.zegoggles.smssync.preferences.PrefStore;
@@ -76,6 +77,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.mail.DataType.*;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -255,13 +257,13 @@ public class MainActivity extends PreferenceActivity {
 
     private void updateLastBackupTimes() {
         findPreference("backup_sms").setSummary(
-                getLastSyncText(PrefStore.getMaxSyncedDateSms(this)));
+                getLastSyncText(PrefStore.getMaxSyncedDate(this, SMS)));
         findPreference("backup_mms").setSummary(
-                getLastSyncText(PrefStore.getMaxSyncedDateMms(this) * 1000));
+                getLastSyncText(PrefStore.getMaxSyncedDate(this, MMS) * 1000));
         findPreference("backup_calllog").setSummary(
-                getLastSyncText(PrefStore.getMaxSyncedDateCallLog(this)));
+                getLastSyncText(PrefStore.getMaxSyncedDate(this, CALLLOG)));
         findPreference("backup_whatsapp").setSummary(
-                getLastSyncText(PrefStore.getMaxSyncedDateWhatsApp(this)));
+                getLastSyncText(PrefStore.getMaxSyncedDate(this, WHATSAPP)));
     }
 
     private ConnectivityManager getConnectivityManager() {
@@ -272,10 +274,11 @@ public class MainActivity extends PreferenceActivity {
         final Preference enableAutoBackup = findPreference("enable_auto_sync");
         final List<String> enabled = new ArrayList<String>();
 
-        if (PrefStore.isSmsBackupEnabled(this)) enabled.add(getString(R.string.sms));
-        if (PrefStore.isMmsBackupEnabled(this)) enabled.add(getString(R.string.mms));
-        if (PrefStore.isCallLogBackupEnabled(this)) enabled.add(getString(R.string.calllog));
-        if (PrefStore.isWhatsAppBackupEnabled(this)) enabled.add(getString(R.string.whatsapp));
+        for (DataType dataType : DataType.values()) {
+            if (PrefStore.isDataTypeBackupEnabled(this, dataType)) {
+                enabled.add(getString(dataType.resId));
+            }
+        }
 
         StringBuilder summary = new StringBuilder(
                 getString(R.string.ui_enable_auto_sync_summary, TextUtils.join(", ", enabled))
@@ -883,7 +886,7 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void setWhatsAppEnabled(boolean enabled) {
-        PrefStore.setWhatsAppBackupEnabled(MainActivity.this, enabled);
+        PrefStore.setBackupEnabled(MainActivity.this, WHATSAPP, enabled);
         updateAutoBackupEnabledSummary();
     }
 }

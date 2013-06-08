@@ -1,24 +1,16 @@
 package com.zegoggles.smssync.service;
 
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.os.AsyncTask;
-import android.provider.CallLog;
-import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
-import com.github.jberkel.whassup.Whassup;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
-import com.zegoggles.smssync.Consts;
-import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.SmsConsts;
-import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
@@ -27,14 +19,13 @@ import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
-import static com.zegoggles.smssync.App.*;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.refreshOAuth2Token;
-import static com.zegoggles.smssync.preferences.PrefStore.getMaxSyncedDateSms;
+import static com.zegoggles.smssync.mail.DataType.*;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
 /**
@@ -43,10 +34,13 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final SmsBackupService service;
     private final BackupType backupType;
+    private final BackupItemsFetcher fetcher;
 
     BackupTask(@NotNull SmsBackupService service, BackupType backupType) {
         this.service = service;
         this.backupType = backupType;
+        this.fetcher = new BackupItemsFetcher(service,
+                new BackupQueryBuilder(service, service.getContacts()));
     }
 
     @Override
@@ -63,7 +57,11 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         final BackupConfig config = params[0];
         if (config.skip) {
             appLog(R.string.app_log_skip_backup_skip_messages);
-            return skip();
+            for (DataType type : new DataType[] { SMS, MMS, CALLLOG }) {
+                PrefStore.setMaxSyncedDate(service, type, fetcher.getMaxData(type));
+            }
+            Log.i(TAG, "All messages skipped.");
+            return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
         }
 
         appLog(R.string.app_log_start_backup, backupType);
@@ -75,16 +73,21 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         final int smsCount, mmsCount, callLogCount, whatsAppItemsCount;
         try {
             service.acquireLocks(backupType.isBackground());
-            smsItems = getSmsItemsToSync(config.maxItemsPerSync, config.groupToBackup);
+            int max = config.maxItemsPerSync;
+
+            smsItems = fetcher.getItemsForDataType(SMS, config.groupToBackup, max);
             smsCount = smsItems != null ? smsItems.getCount() : 0;
+            max -= smsCount;
 
-            mmsItems = getMmsItemsToSync(config.maxItemsPerSync - smsCount, config.groupToBackup);
+            mmsItems = fetcher.getItemsForDataType(MMS, config.groupToBackup, max);
             mmsCount = mmsItems != null ? mmsItems.getCount() : 0;
+            max -= mmsCount;
 
-            callLogItems = getCallLogItemsToSync(config.maxItemsPerSync - smsCount - mmsCount);
+            callLogItems = fetcher.getItemsForDataType(CALLLOG, config.groupToBackup, max);
             callLogCount = callLogItems != null ? callLogItems.getCount() : 0;
+            max -= callLogCount;
 
-            whatsAppItems = getWhatsAppItemsToSync(config.maxItemsPerSync - smsCount - mmsCount - callLogCount);
+            whatsAppItems = fetcher.getItemsForDataType(DataType.WHATSAPP, config.groupToBackup, max);
             whatsAppItemsCount = whatsAppItems != null ? whatsAppItems.getCount() : 0;
 
             final int itemsToSync = smsCount + mmsCount + callLogCount + whatsAppItemsCount;
@@ -103,8 +106,8 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 if (PrefStore.isFirstBackup(service)) {
                     // If this is the first backup we need to write something to PREF_MAX_SYNCED_DATE
                     // such that we know that we've performed a backup before.
-                    PrefStore.setMaxSyncedDateSms(service, PrefStore.DEFAULT_MAX_SYNCED_DATE);
-                    PrefStore.setMaxSyncedDateMms(service, PrefStore.DEFAULT_MAX_SYNCED_DATE);
+                    PrefStore.setMaxSyncedDate(service, SMS, PrefStore.DEFAULT_MAX_SYNCED_DATE);
+                    PrefStore.setMaxSyncedDate(service, MMS, PrefStore.DEFAULT_MAX_SYNCED_DATE);
                 }
                 Log.i(TAG, "Nothing to do.");
                 return transition(FINISHED_BACKUP, null);
@@ -192,14 +195,15 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
 
         publish(LOGIN);
-        Folder smsmmsfolder = config.imap.getSMSBackupFolder();
+
+        Folder smsmmsfolder = config.imap.getFolder(SMS);
         Folder callLogfolder = null;
         Folder whatsAppFolder = null;
-        if (PrefStore.isCallLogBackupEnabled(service)) {
-            callLogfolder = config.imap.getCallLogBackupFolder();
+        if (PrefStore.isDataTypeBackupEnabled(service, CALLLOG)) {
+            callLogfolder = config.imap.getFolder(CALLLOG);
         }
-        if (PrefStore.isWhatsAppBackupEnabled(service)) {
-            whatsAppFolder = config.imap.getWhatsAppBackupFolder();
+        if (PrefStore.isDataTypeBackupEnabled(service, WHATSAPP)) {
+            whatsAppFolder = config.imap.getFolder(WHATSAPP);
         }
 
         try {
@@ -210,13 +214,13 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             int backedUpItems = 0;
             while (!isCancelled() && backedUpItems < itemsToSync) {
                 if (smsItems != null && smsItems.moveToNext()) {
-                    dataType = DataType.SMS;
+                    dataType = SMS;
                     curCursor = smsItems;
                 } else if (mmsItems != null && mmsItems.moveToNext()) {
-                    dataType = DataType.MMS;
+                    dataType = MMS;
                     curCursor = mmsItems;
                 } else if (callLogItems != null && callLogItems.moveToNext()) {
-                    dataType = DataType.CALLLOG;
+                    dataType = CALLLOG;
                     curCursor = callLogItems;
                 } else if (whatsAppItems != null && whatsAppItems.moveToNext()) {
                     dataType = DataType.WHATSAPP;
@@ -230,17 +234,16 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     if (LOCAL_LOGV)
                         Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
                                 messages.size(), dataType));
+
+                    PrefStore.setMaxSyncedDate(service, dataType, result.maxDate);
                     switch (dataType) {
                         case MMS:
-                            updateMaxSyncedDateMms(result.maxDate);
                             smsmmsfolder.appendMessages(messages.toArray(new Message[messages.size()]));
                             break;
                         case SMS:
-                            service.updateMaxSyncedDateSms(result.maxDate);
                             smsmmsfolder.appendMessages(messages.toArray(new Message[messages.size()]));
                             break;
                         case CALLLOG:
-                            updateMaxSyncedDateCallLog(result.maxDate);
                             if (callLogfolder != null) {
                                 callLogfolder.appendMessages(messages.toArray(new Message[messages.size()]));
                             }
@@ -249,7 +252,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                             }
                             break;
                         case WHATSAPP:
-                            updateMaxSyncedDateWhatsApp(result.maxDate);
                             if (whatsAppFolder != null) {
                                 whatsAppFolder.appendMessages(messages.toArray(new Message[messages.size()]));
                             }
@@ -275,173 +277,11 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         }
     }
 
-    private Cursor getSmsItemsToSync(int max, ContactGroup group) {
-        if (LOCAL_LOGV) {
-            Log.v(TAG, String.format("getSmsItemToSync(max=%d),  maxSyncedDate=%d", max,
-                    getMaxSyncedDateSms(service)));
-        }
-
-        if (!PrefStore.isSmsBackupEnabled(service)) {
-            if (LOCAL_LOGV) Log.v(TAG, "SMS backup disabled, returning empty cursor");
-            return new MatrixCursor(new String[0], 0);
-        }
-
-        String sortOrder = SmsConsts.DATE;
-        if (max > 0) sortOrder += " LIMIT " + max;
-
-        return service.getContentResolver().query(Consts.SMS_PROVIDER, null,
-                String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s", SmsConsts.DATE, SmsConsts.TYPE,
-                        groupSelection(DataType.SMS, group)),
-                new String[]{String.valueOf(getMaxSyncedDateSms(service)),
-                        String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)},
-                sortOrder);
-    }
-
-    private Cursor getMmsItemsToSync(int max, ContactGroup group) {
-        if (LOCAL_LOGV) Log.v(TAG, "getMmsItemsToSync(max=" + max + ")");
-
-        if (!PrefStore.isMmsBackupEnabled(service)) {
-            // return empty cursor if we don't have MMS
-            if (LOCAL_LOGV) Log.v(TAG, "MMS backup disabled, returning empty cursor");
-            return new MatrixCursor(new String[0], 0);
-        }
-        String sortOrder = SmsConsts.DATE;
-        if (max > 0) sortOrder += " LIMIT " + max;
-
-        return service.getContentResolver().query(Consts.MMS_PROVIDER, null,
-                String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s", SmsConsts.DATE, MmsConsts.TYPE,
-                        groupSelection(DataType.MMS, group)),
-                new String[]{String.valueOf(PrefStore.getMaxSyncedDateMms(service)),
-                        MmsConsts.DELIVERY_REPORT},
-                sortOrder);
-    }
-
-    private Cursor getCallLogItemsToSync(int max) {
-        if (LOCAL_LOGV) Log.v(TAG, "getCallLogItemsToSync(max=" + max + ")");
-
-        if (!PrefStore.isCallLogBackupEnabled(service)) {
-            if (LOCAL_LOGV) Log.v(TAG, "CallLog backup disabled, returning empty cursor");
-            return new MatrixCursor(new String[0], 0);
-        }
-        String sortOrder = SmsConsts.DATE;
-        if (max > 0) sortOrder += " LIMIT " + max;
-
-        return service.getContentResolver().query(Consts.CALLLOG_PROVIDER,
-                MessageConverter.CALLLOG_PROJECTION,
-                String.format(Locale.ENGLISH, "%s > ?", CallLog.Calls.DATE),
-                new String[]{String.valueOf(PrefStore.getMaxSyncedDateCallLog(service))},
-                sortOrder);
-    }
-
-    private Cursor getWhatsAppItemsToSync(int max) {
-        if (LOCAL_LOGV) Log.v(TAG, "getWhatsAppItemsToSync(max=" + max + ")");
-
-        if (!PrefStore.isWhatsAppBackupEnabled(service)) {
-            if (LOCAL_LOGV) Log.v(TAG, "WhatsApp backup disabled, returning empty");
-            return null;
-        }
-
-        Whassup whassup = new Whassup();
-        if (!whassup.hasBackupDB()) {
-            if (LOCAL_LOGV) Log.v(TAG, "No whatsapp backup DB found, returning empty");
-            return null;
-        }
-
-        try {
-            return whassup.queryMessages(PrefStore.getMaxSyncedDateWhatsApp(service), max);
-        } catch (IOException e) {
-            Log.w(LOG, "error fetching whatsapp messages", e);
-            return null;
-        }
-    }
-
-    private String groupSelection(DataType type, ContactGroup group) {
-        /* MMS group selection not supported at the moment */
-        if (type != DataType.SMS || group.type == ContactGroup.Type.EVERYBODY) return "";
-
-        final Set<Long> ids = service.getContacts().getGroupContactIds(service, group).rawIds;
-        if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
-        return String.format(Locale.ENGLISH, " AND (%s = %d OR %s IN (%s))",
-                SmsConsts.TYPE,
-                SmsConsts.MESSAGE_TYPE_SENT,
-                SmsConsts.PERSON,
-                TextUtils.join(",", ids.toArray(new Long[ids.size()])));
-
-    }
-
     private void publish(SmsSyncState state) {
         publish(state, null);
     }
 
     private void publish(SmsSyncState state, Exception exception) {
         publishProgress(service.getState().transition(state, backupType, exception));
-    }
-
-    /** Only update the max synced ID, do not really sync. */
-    private BackupState skip() {
-        service.updateMaxSyncedDateSms(getMaxItemDateSms());
-        updateMaxSyncedDateMms(getMaxItemDateMms());
-        updateMaxSyncedDateCallLog(getMaxItemDateCallLog());
-        Log.i(TAG, "All messages skipped.");
-        return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
-    }
-
-    private void updateMaxSyncedDateCallLog(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDateCallLog(service, maxSyncedDate);
-        if (LOCAL_LOGV) {
-            Log.v(TAG, "Max synced date for call log set to: " + maxSyncedDate);
-        }
-    }
-
-    private long getMaxItemDateCallLog() {
-        Cursor result = service.getContentResolver().query(Consts.CALLLOG_PROVIDER,
-                new String[]{CallLog.Calls.DATE}, null, null,
-                CallLog.Calls.DATE + " DESC LIMIT 1");
-        try {
-            return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
-        } finally {
-            if (result != null) result.close();
-        }
-    }
-
-    private void updateMaxSyncedDateMms(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDateMms(service, maxSyncedDate);
-        if (LOCAL_LOGV) {
-            Log.v(TAG, "Max synced date for mms set to: " + maxSyncedDate);
-        }
-    }
-
-    private void updateMaxSyncedDateWhatsApp(long maxSyncedDate) {
-        PrefStore.setMaxSyncedDateWhatsApp(service, maxSyncedDate);
-        if (LOCAL_LOGV) {
-            Log.v(TAG, "Max synced date for whats app set to: " + maxSyncedDate);
-        }
-    }
-
-    /** @return the maximum date of all MMS messages */
-    private long getMaxItemDateMms() {
-        Cursor result = service.getContentResolver().query(Consts.MMS_PROVIDER,
-                new String[]{MmsConsts.DATE}, null, null,
-                MmsConsts.DATE + " DESC LIMIT 1");
-        try {
-            return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
-        } finally {
-            if (result != null) result.close();
-        }
-    }
-
-    /** @return the maximum date of all SMS messages (except for drafts). */
-    private long getMaxItemDateSms() {
-        Cursor result = service.getContentResolver().query(Consts.SMS_PROVIDER,
-                new String[]{SmsConsts.DATE},
-                SmsConsts.TYPE + " <> ?",
-                new String[]{String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)},
-                SmsConsts.DATE + " DESC LIMIT 1");
-
-        try {
-            return result.moveToFirst() ? result.getLong(0) : PrefStore.DEFAULT_MAX_SYNCED_DATE;
-        } finally {
-            if (result != null) result.close();
-        }
     }
 }

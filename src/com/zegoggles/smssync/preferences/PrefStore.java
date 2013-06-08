@@ -32,6 +32,7 @@ import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
 import com.zegoggles.smssync.contacts.ContactGroup;
+import com.zegoggles.smssync.mail.DataType;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.UnsupportedEncodingException;
@@ -40,6 +41,7 @@ import java.util.Locale;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.mail.DataType.*;
 
 public class PrefStore {
 
@@ -208,50 +210,80 @@ public class PrefStore {
 
     public static long getMostRecentSyncedDate(Context ctx) {
         return Math.max(Math.max(
-                getMaxSyncedDateSms(ctx),
-                getMaxSyncedDateMms(ctx) * 1000),
-                getMaxSyncedDateCallLog(ctx));
+                getMaxSyncedDate(ctx, SMS),
+                getMaxSyncedDate(ctx, CALLLOG)),
+            getMaxSyncedDate(ctx, MMS) * 1000);
     }
 
-    public static long getMaxSyncedDateSms(Context ctx) {
+    @Deprecated
+    private static long getMaxSyncedDateSms(Context ctx) {
         return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_SMS, DEFAULT_MAX_SYNCED_DATE);
     }
 
-    public static long getMaxSyncedDateMms(Context ctx) {
+    @Deprecated
+    private static long getMaxSyncedDateMms(Context ctx) {
         return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_MMS, DEFAULT_MAX_SYNCED_DATE);
     }
 
-    public static long getMaxSyncedDateCallLog(Context ctx) {
+    @Deprecated
+    private static long getMaxSyncedDateCallLog(Context ctx) {
         return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_CALLLOG, DEFAULT_MAX_SYNCED_DATE);
     }
 
-    public static long getMaxSyncedDateWhatsApp(Context ctx) {
+    @Deprecated
+    private static long getMaxSyncedDateWhatsApp(Context ctx) {
         return getPrefs(ctx).getLong(PREF_MAX_SYNCED_DATE_WHATSAPP, DEFAULT_MAX_SYNCED_DATE);
     }
 
-    public static void setMaxSyncedDateSms(Context ctx, long maxSyncedDate) {
+    @Deprecated
+    private static void setMaxSyncedDateSms(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
                 .putLong(PREF_MAX_SYNCED_DATE_SMS, maxSyncedDate)
                 .commit();
     }
 
-    public static void setMaxSyncedDateMms(Context ctx, long maxSyncedDate) {
+    @Deprecated
+    private static void setMaxSyncedDateMms(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
                 .putLong(PREF_MAX_SYNCED_DATE_MMS, maxSyncedDate)
                 .commit();
     }
 
-    public static void setMaxSyncedDateCallLog(Context ctx, long maxSyncedDate) {
+    @Deprecated
+    private static void setMaxSyncedDateCallLog(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
                 .putLong(PREF_MAX_SYNCED_DATE_CALLLOG, maxSyncedDate)
                 .commit();
     }
 
-    public static void setMaxSyncedDateWhatsApp(Context ctx, long maxSyncedDate) {
+    @Deprecated
+    private static void setMaxSyncedDateWhatsApp(Context ctx, long maxSyncedDate) {
         getPrefs(ctx).edit()
                 .putLong(PREF_MAX_SYNCED_DATE_WHATSAPP, maxSyncedDate)
                 .commit();
     }
+
+    @SuppressWarnings("deprecation")
+    public static void setMaxSyncedDate(Context context, DataType dataType, long maxSyncedDate) {
+        switch (dataType) {
+            case MMS: setMaxSyncedDateMms(context, maxSyncedDate);
+            case SMS: setMaxSyncedDateSms(context, maxSyncedDate);
+            case CALLLOG: setMaxSyncedDateCallLog(context, maxSyncedDate);
+            case WHATSAPP: setMaxSyncedDateWhatsApp(context, maxSyncedDate);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static long getMaxSyncedDate(Context context, DataType dataType) {
+        switch (dataType) {
+            case MMS: return getMaxSyncedDateMms(context);
+            case SMS: return getMaxSyncedDateSms(context);
+            case CALLLOG: return getMaxSyncedDateCallLog(context);
+            case WHATSAPP: return getMaxSyncedDateWhatsApp(context);
+            default: return -1;
+        }
+    }
+
 
     static String getImapUsername(Context ctx) {
         return getPrefs(ctx).getString(PREF_LOGIN_USER, null);
@@ -361,25 +393,48 @@ public class PrefStore {
         }
     }
 
-    public static boolean isSmsBackupEnabled(Context ctx) {
+    @Deprecated
+    private static boolean isSmsBackupEnabled(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_BACKUP_SMS, true);
     }
 
-    public static boolean isMmsBackupEnabled(Context ctx) {
+    @Deprecated
+    private static boolean isMmsBackupEnabled(Context ctx) {
         final int version = android.os.Build.VERSION.SDK_INT;
         return version >= MainActivity.MIN_VERSION_MMS && getPrefs(ctx).getBoolean(PREF_BACKUP_MMS, false);
     }
 
-    public static boolean isWhatsAppBackupEnabled(Context ctx) {
+    @Deprecated
+    private static boolean isWhatsAppBackupEnabled(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_BACKUP_WHATSAPP, false);
     }
 
-    public static boolean setWhatsAppBackupEnabled(Context ctx, boolean enabled) {
+    @Deprecated
+    private static boolean setWhatsAppBackupEnabled(Context ctx, boolean enabled) {
         return getPrefs(ctx).edit().putBoolean(PREF_BACKUP_WHATSAPP, enabled).commit();
     }
 
-    public static boolean isCallLogBackupEnabled(Context ctx) {
+    @Deprecated
+    private static boolean isCallLogBackupEnabled(Context ctx) {
         return getPrefs(ctx).getBoolean(PREF_BACKUP_CALLLOG, false);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean isDataTypeBackupEnabled(Context context, DataType dataType) {
+        switch (dataType) {
+            case MMS: return isMmsBackupEnabled(context);
+            case SMS: return isSmsBackupEnabled(context);
+            case CALLLOG: return isCallLogBackupEnabled(context);
+            case WHATSAPP: return isWhatsAppBackupEnabled(context);
+            default: return false;
+        }
+    }
+
+    public static void setBackupEnabled(Context context, DataType dataType, boolean enabled) {
+        if (dataType == WHATSAPP) {
+            //noinspection deprecation
+            setWhatsAppBackupEnabled(context, enabled);
+        }
     }
 
     public static boolean isCallLogCalendarSyncEnabled(Context ctx) {
