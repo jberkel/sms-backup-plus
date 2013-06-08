@@ -28,7 +28,7 @@ import static com.zegoggles.smssync.App.TAG;
 class StatusPreference extends Preference implements View.OnClickListener {
     private View mView;
 
-    private Button mSyncButton;
+    private Button mBackupButton;
     private Button mRestoreButton;
 
     private ImageView mStatusIcon;
@@ -48,15 +48,15 @@ class StatusPreference extends Preference implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v == mSyncButton) {
+        if (v == mBackupButton) {
             if (!SmsBackupService.isServiceWorking()) {
                 if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
                 mainActivity.performAction(MainActivity.Actions.Backup);
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
                 // Sync button will be restored on next status update.
-                mSyncButton.setText(R.string.ui_sync_button_label_canceling);
-                mSyncButton.setEnabled(false);
+                mBackupButton.setText(R.string.ui_sync_button_label_canceling);
+                mBackupButton.setEnabled(false);
                 App.bus.post(new UserCanceled());
             }
         } else if (v == mRestoreButton) {
@@ -75,8 +75,8 @@ class StatusPreference extends Preference implements View.OnClickListener {
     public View getView(View convertView, ViewGroup parent) {
         if (mView == null) {
             mView = mainActivity.getLayoutInflater().inflate(R.layout.status, parent, false);
-            mSyncButton = (Button) mView.findViewById(R.id.sync_button);
-            mSyncButton.setOnClickListener(this);
+            mBackupButton = (Button) mView.findViewById(R.id.sync_button);
+            mBackupButton.setOnClickListener(this);
 
             mRestoreButton = (Button) mView.findViewById(R.id.restore_button);
             mRestoreButton.setOnClickListener(this);
@@ -99,7 +99,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
         stateChanged(newState);
         switch (newState.state) {
             case RESTORE:
-                mSyncButton.setEnabled(false);
+                mBackupButton.setEnabled(false);
                 mRestoreButton.setText(R.string.ui_restore_button_label_restoring);
                 mStatusLabel.setText(R.string.status_restore);
                 mSyncDetailsLabel.setText(newState.getNotificationLabel(getContext().getResources()));
@@ -137,7 +137,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
                 break;
             case BACKUP:
                 mRestoreButton.setEnabled(false);
-                mSyncButton.setText(R.string.ui_sync_button_label_syncing);
+                mBackupButton.setText(R.string.ui_sync_button_label_syncing);
                 mStatusLabel.setText(R.string.status_backup);
                 mSyncDetailsLabel.setText(newState.getNotificationLabel(getContext().getResources()));
                 mProgressBar.setIndeterminate(false);
@@ -202,7 +202,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
     }
 
     private void stateChanged(State state) {
-        setAttributes(state.state);
+        setViewAttributes(state.state);
         switch (state.state) {
             case INITIAL:
                 idle();
@@ -228,14 +228,8 @@ class StatusPreference extends Preference implements View.OnClickListener {
         }
     }
 
-    private void setAttributes(final SmsSyncState state) {
+    private void setViewAttributes(final SmsSyncState state) {
         switch (state) {
-            case ERROR:
-                mProgressBar.setProgress(0);
-                mProgressBar.setIndeterminate(false);
-                mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_error));
-                mStatusIcon.setImageResource(R.drawable.ic_error);
-                break;
             case LOGIN:
             case CALC:
             case BACKUP:
@@ -243,17 +237,27 @@ class StatusPreference extends Preference implements View.OnClickListener {
                 mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_sync));
                 mStatusIcon.setImageResource(R.drawable.ic_syncing);
                 break;
+            case ERROR:
+                mProgressBar.setProgress(0);
+                mProgressBar.setIndeterminate(false);
+                mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_error));
+                mStatusIcon.setImageResource(R.drawable.ic_error);
+                setButtonsToDefault();
+                break;
             default:
                 mProgressBar.setProgress(0);
                 mProgressBar.setIndeterminate(false);
-                mRestoreButton.setEnabled(true);
-                mSyncButton.setEnabled(true);
-
-                mSyncButton.setText(R.string.ui_sync_button_label_idle);
-                mRestoreButton.setText(R.string.ui_restore_button_label_idle);
-
                 mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_idle));
                 mStatusIcon.setImageResource(R.drawable.ic_idle);
+                setButtonsToDefault();
+                break;
         }
+    }
+
+    private void setButtonsToDefault() {
+        mRestoreButton.setEnabled(true);
+        mRestoreButton.setText(R.string.ui_restore_button_label_idle);
+        mBackupButton.setEnabled(true);
+        mBackupButton.setText(R.string.ui_sync_button_label_idle);
     }
 }
