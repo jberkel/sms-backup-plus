@@ -1,4 +1,9 @@
-== 1.5.2 (1515) tbd
+== 1.5.3 (xxx) tbd
+
+  * Korean translation (Yunsu Choi)
+  * Galician translation (Javier Pico)
+
+== 1.5.2 (1515) 09-07-2013
 
   * Fix notifications getting displayed when not connected to Wifi
   * Fixed greek translation
