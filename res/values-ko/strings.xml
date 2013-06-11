@@ -123,8 +123,8 @@
   <string name="ui_mark_as_read_label">읽은 상태로 표시(이메일)</string>
   <string name="ui_mark_as_read_desc">Gmail에 읽은 것으로 메시지를 표시할지 여부를 지정합니다.</string>
 
-  <string name="ui_mark_as_read_restore_label">읽은 상태로 표시(SMS)Mark as read (SMS)</string>
-  <string name="ui_mark_as_read_restore_desc">복구된 SMS를 읽은 상태로 표시할지 여부를 지정합니다.</string>
+  <string name="ui_mark_as_read_restore_label">읽은 상태로 표시 (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">복원된 SMS를 읽은 상태로 표시할지 여부를 지정합니다.</string>
 
   <string name="ui_email_address_style_label">이메일 주소 스타일</string>
   <string name="ui_email_address_style_desc">이메일 주소의 형식</string>
@@ -264,7 +264,7 @@
   <string name="auto_backup_settings">자동 백업 설정</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
-  <string name="ui_restore_settings_label">복구 설정</string>
+  <string name="ui_restore_settings_label">복원 설정</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">MMS 백업</string>
