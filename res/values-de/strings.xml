@@ -30,7 +30,7 @@
   <string name="status_updating_threads">Aktualisiere Threads\u2026</string>
   <string name="status_done">Fertig</string>
   <string name="status_backup_done_details_max_per_sync">Das Maximum von %1$d Einträgen pro Sicherung wurde erreicht. Zum Fortfahren Sicherung erneut starten.</string>
-  <string name="status_backup_done_details_noitems">Keine Einträge zum sichern gefunden.</string>
+  <string name="status_backup_done_details_noitems">Keine Einträge zum Sichern gefunden.</string>
 
   <plurals name="status_backup_done_details">
     <item quantity="one"><xliff:g id="total_items">%1$d</xliff:g> Eintrag erfolgreich gesichert.</item>
