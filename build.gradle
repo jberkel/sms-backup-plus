@@ -13,7 +13,7 @@ repositories {
    mavenCentral()
     maven {
       url "http://zegoggl.es:8081/nexus/content/repositories/releases"
-/      url "http://zegoggl.es:8081/nexus/content/repositories/snapshots"
+//      url "http://zegoggl.es:8081/nexus/content/repositories/snapshots"
     }
 }
 
