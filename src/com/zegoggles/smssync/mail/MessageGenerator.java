@@ -309,7 +309,7 @@ class MessageGenerator {
     }
 
     private boolean includePersonInBackup(PersonRecord record, DataType type) {
-        final boolean backup = (mAllowedIds == null || mAllowedIds.ids.contains(record.getLongId()));
+        final boolean backup = (mAllowedIds == null || mAllowedIds.ids.contains(record.getContactId()));
         if (LOCAL_LOGV && !backup) Log.v(TAG, "not backing up " + type + " / " + record);
         return backup;
     }

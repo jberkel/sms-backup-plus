@@ -16,7 +16,6 @@ import java.util.Map;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.MessageConverter.ECLAIR_CONTENT_URI;
-import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
 public class PersonLookup {
     private static final boolean NEW_CONTACT_API = Build.VERSION.SDK_INT >=
@@ -64,14 +63,14 @@ public class PersonLookup {
 
                 record = new PersonRecord(
                     id,
-                    sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1]))),
+                    c.getString(c.getColumnIndex(PHONE_PROJECTION[1])),
                     getPrimaryEmail(id, number),
-                    sanitize(number)
+                    number
                 );
 
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
-                record = new PersonRecord(0, null, null, sanitize(address));
+                record = new PersonRecord(0, null, null, address);
             }
             mPeopleCache.put(address, record);
 

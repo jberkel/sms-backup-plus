@@ -13,14 +13,14 @@ public class PersonRecord {
     private static final String UNKNOWN_NUMBER = "unknown.number";
     private static final String UNKNOWN_EMAIL = "unknown.email";
 
-    private long _id;
-    private String name, email, number;
+    private final long _id;
+    private final String name, email, number;
 
     public PersonRecord(long id, String name, String email, String number) {
         this._id = id;
-        this.name = name;
-        this.email = email;
-        this.number = number;
+        this.name = sanitize(name);
+        this.email = sanitize(email);
+        this.number = sanitize(number);
     }
 
     public boolean isUnknown() {
@@ -47,19 +47,19 @@ public class PersonRecord {
     }
 
     public String getId() {
-        return sanitize(isUnknown() ? number : String.valueOf(_id));
+        return isUnknown() ? number : String.valueOf(getContactId());
     }
 
-    public long getLongId() {
+    public long getContactId() {
         return _id;
     }
 
     public String getNumber() {
-        return sanitize("-1".equals(number) || "-2".equals(number) ? "Unknown" : number);
+        return ("-1".equals(number) || "-2".equals(number)) ? "Unknown" : number;
     }
 
     public String getName() {
-        return sanitize(name != null ? name : getNumber());
+        return name != null ? name : getNumber();
     }
 
     public String toString() {
