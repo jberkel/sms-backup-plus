@@ -8,6 +8,11 @@
     <packaging>jar</packaging>
     <name>SMS Backup+ tests</name>
 
+    <properties>
+       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+     </properties>
+
     <build>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
@@ -46,7 +51,6 @@
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
             <version>4.1.1.4</version>
-            <scope>provided</scope>
        </dependency>
 
         <dependency>
@@ -64,7 +68,7 @@
         <dependency>
             <groupId>com.squareup</groupId>
             <artifactId>fest-android</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.5</version>
         </dependency>
 
         <!--
