@@ -5,14 +5,11 @@ import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
@@ -35,7 +32,7 @@ class HeaderGenerator {
                            final Map<String, String> msgMap,
                            final DataType dataType,
                            final String address,
-                           final PersonRecord contact,
+                           final @NotNull PersonRecord contact,
                            final Date sentDate,
                            final int status) throws MessagingException {
 

@@ -57,6 +57,7 @@ public abstract class ServiceBase extends Service {
 
     private AppLog appLog;
     protected Notification notification;
+    protected AuthPreferences authPreferences = new AuthPreferences(this);
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -81,7 +82,7 @@ public abstract class ServiceBase extends Service {
     }
 
     protected BackupImapStore getBackupImapStore() throws MessagingException {
-        final String uri = AuthPreferences.getStoreUri(this);
+        final String uri = authPreferences.getStoreUri();
         if (!BackupImapStore.isValidUri(uri)) {
             throw new MessagingException("No valid IMAP URI: "+uri);
         }

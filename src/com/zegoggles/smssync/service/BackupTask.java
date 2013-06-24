@@ -1,15 +1,13 @@
 package com.zegoggles.smssync.service;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.fsck.k9.mail.AuthenticationFailedException;
-import com.fsck.k9.mail.Folder;
-import com.fsck.k9.mail.Message;
-import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
+import com.fsck.k9.mail.*;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.CallFormatter;
 import com.zegoggles.smssync.mail.ConversionResult;
@@ -41,24 +39,39 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final BackupItemsFetcher fetcher;
     private final MessageConverter converter;
     private final CalendarSyncer calendarSyncer;
+    private final AuthPreferences authPreferences;
 
     BackupTask(@NotNull SmsBackupService service) {
+        final Context context = service.getApplicationContext();
         this.service = service;
-        this.fetcher = new BackupItemsFetcher(service,
-                new BackupQueryBuilder(service, service.getContacts()));
-        this.converter = new MessageConverter(service, AuthPreferences.getUserEmail(service));
+        this.authPreferences = service.authPreferences;
 
-        if (Preferences.isCallLogCalendarSyncEnabled(service)) {
+        this.fetcher = new BackupItemsFetcher(context,
+                new BackupQueryBuilder(context, service.getContacts()));
+        this.converter = new MessageConverter(context, authPreferences.getUserEmail());
+
+        if (Preferences.isCallLogCalendarSyncEnabled(context)) {
             calendarSyncer = new CalendarSyncer(
-                service,
+                context,
                 service.getCalendars(),
-                Preferences.getCallLogCalendarId(service),
+                Preferences.getCallLogCalendarId(context),
                 converter.getPersonLookup(),
-                new CallFormatter(service.getResources())
+                new CallFormatter(context.getResources())
             );
         } else {
             calendarSyncer = null;
         }
+    }
+
+    BackupTask(SmsBackupService service,
+               BackupItemsFetcher fetcher,
+               MessageConverter messageConverter,
+               CalendarSyncer syncer, AuthPreferences authPreferences) {
+        this.service = service;
+        this.fetcher = fetcher;
+        this.converter = messageConverter;
+        this.calendarSyncer = syncer;
+        this.authPreferences = authPreferences;
     }
 
     @Override
@@ -109,7 +122,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             final int itemsToSync = smsCount + mmsCount + callLogCount + whatsAppItemsCount;
 
             if (itemsToSync > 0) {
-                if (!AuthPreferences.isLoginInformationSet(service)) {
+                if (!authPreferences.isLoginInformationSet()) {
                     appLog(R.string.app_log_missing_credentials);
                     return transition(ERROR, new RequiresLoginException());
                 } else {
@@ -166,6 +179,10 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private void appLog(int id, Object... args) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, service.getApplicationContext().getString(id, args));
+        }
+
         service.appLog(id, args);
     }
 
@@ -195,6 +212,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private void post(BackupState state) {
+        if (state == null) return;
         App.bus.post(state);
     }
 
@@ -234,8 +252,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
                 if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
                 ConversionResult result = converter.cursorToMessages(curCursor, config.maxMessagePerRequest, dataType);
-                List<Message> messages = result.messageList;
-                if (!messages.isEmpty()) {
+                if (result != null && !result.messageList.isEmpty()) {
+                    List<Message> messages = result.messageList;
+
                     if (LOCAL_LOGV)
                         Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
                                 messages.size(), dataType));
@@ -256,8 +275,10 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                             appendMessages(whatsAppFolder, messages);
                             break;
                     }
+                    backedUpItems += messages.size();
+                } else {
+                    Log.w(TAG, "no messages converted");
                 }
-                backedUpItems += messages.size();
                 publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, config.backupType, dataType, null));
             }
             return new BackupState(FINISHED_BACKUP,

@@ -42,7 +42,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     private void bootup(Context ctx) {
         if (Preferences.isEnableAutoSync(ctx) &&
-                AuthPreferences.isLoginInformationSet(ctx) &&
+                new AuthPreferences(ctx).isLoginInformationSet() &&
                 !Preferences.isFirstBackup(ctx)) {
 
             Alarms.scheduleRegularBackup(ctx);
@@ -53,7 +53,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     private void incomingSMS(Context ctx) {
         if (Preferences.isEnableAutoSync(ctx) &&
-                AuthPreferences.isLoginInformationSet(ctx) &&
+                new AuthPreferences(ctx).isLoginInformationSet() &&
                 !Preferences.isFirstBackup(ctx)) {
 
             Alarms.scheduleIncomingBackup(ctx);

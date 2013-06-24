@@ -2,6 +2,7 @@ package com.zegoggles.smssync.service;
 
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.BackupImapStore;
+import org.jetbrains.annotations.NotNull;
 
 public class BackupConfig {
     public final BackupImapStore imap;
@@ -13,11 +14,11 @@ public class BackupConfig {
     public final int maxMessagePerRequest;
     public final BackupType backupType;
 
-    public BackupConfig(BackupImapStore imap,
+    public BackupConfig(@NotNull BackupImapStore imap,
                         int tries,
                         boolean skip,
                         int maxItemsPerSync,
-                        ContactGroup groupToBackup,
+                        @NotNull ContactGroup groupToBackup,
                         int maxMessagePerRequest,
                         BackupType backupType) {
         this.imap = imap;

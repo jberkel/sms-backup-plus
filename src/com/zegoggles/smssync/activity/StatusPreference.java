@@ -157,7 +157,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
     private void authFailed() {
         mStatusLabel.setText(R.string.status_auth_failure);
 
-        if (AuthPreferences.useXOAuth(getContext())) {
+        if (new AuthPreferences(getContext()).useXOAuth()) {
             mSyncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
         } else {
             mSyncDetailsLabel.setText(R.string.status_auth_failure_details_plain);

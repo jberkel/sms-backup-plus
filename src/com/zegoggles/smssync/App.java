@@ -33,7 +33,7 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-        ACRA.init(this);
+        if (!BuildConfig.DEBUG) ACRA.init(this);
         super.onCreate();
         K9.app = this;
         K9.DEBUG = DEBUG;

@@ -134,17 +134,19 @@ public class AccountManagerAuthActivity extends Activity {
         AccountManager.get(ctx).invalidateAuthToken(GOOGLE_TYPE, token);
     }
 
-    public static boolean refreshOAuth2Token(Context ctx) {
-        final String token = AuthPreferences.getOauth2Token(ctx);
-        final String name  = AuthPreferences.getUsername(ctx);
+    public static boolean refreshOAuth2Token(Context context) {
+        AuthPreferences authPreferences = new AuthPreferences(context);
+        final String token = authPreferences.getOauth2Token();
+        final String name  = authPreferences.getUsername();
+
         if (!TextUtils.isEmpty(token)) {
-            invalidateToken(ctx, token);
+            invalidateToken(context, token);
             try {
-                String newToken = AccountManager.get(ctx).getAuthToken(new Account(name, GOOGLE_TYPE),
+                String newToken = AccountManager.get(context).getAuthToken(new Account(name, GOOGLE_TYPE),
                         AUTH_TOKEN_TYPE, true, null, null).getResult().getString(AccountManager.KEY_AUTHTOKEN);
 
                 if (!TextUtils.isEmpty(newToken)) {
-                    AuthPreferences.setOauth2Token(ctx, name, newToken);
+                    authPreferences.setOauth2Token(name, newToken);
                     return true;
                 } else {
                     Log.w(TAG, "no new token obtained");

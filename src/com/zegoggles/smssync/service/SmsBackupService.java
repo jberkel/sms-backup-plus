@@ -26,7 +26,6 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
 import com.zegoggles.smssync.service.state.BackupState;
@@ -38,9 +37,7 @@ import java.util.Date;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
-import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
-import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
-import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
+import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
 public class SmsBackupService extends ServiceBase {
     private static final int BACKUP_ID = 1;
@@ -156,7 +153,7 @@ public class SmsBackupService extends ServiceBase {
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
                     getString(R.string.notification_auth_failure),
-                    getString(AuthPreferences.useXOAuth(this) ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain));
+                    getString(authPreferences.useXOAuth() ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain));
             }
         } else if (state.isConnectivityError()) {
             appLog(R.string.app_log_backup_failed_connectivity, state.getErrorMessage(getResources()));

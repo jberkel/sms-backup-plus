@@ -8,7 +8,6 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
-import com.zegoggles.smssync.preferences.AddressStyle;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -17,7 +16,6 @@ import java.util.Map;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.MessageConverter.ECLAIR_CONTENT_URI;
-import static com.zegoggles.smssync.utils.Sanitizer.encodeLocal;
 import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
 public class PersonLookup {
@@ -29,8 +27,6 @@ public class PersonLookup {
     private static final Uri ECLAIR_CONTENT_FILTER_URI =
             Uri.parse("content://com.android.contacts/phone_lookup");
 
-    private static final String UNKNOWN_NUMBER = "unknown.number";
-    private static final String UNKNOWN_EMAIL = "unknown.email";
 
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
 
@@ -43,11 +39,9 @@ public class PersonLookup {
                 }
             };
 
-    private final AddressStyle mStyle;
     private final ContentResolver mResolver;
 
-    public PersonLookup(ContentResolver resolver, AddressStyle style) {
-        mStyle = style;
+    public PersonLookup(ContentResolver resolver) {
         mResolver = resolver;
         Log.d(TAG, String.format(Locale.ENGLISH, "using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
@@ -56,29 +50,28 @@ public class PersonLookup {
     @SuppressWarnings("deprecation")
     public PersonRecord lookupPerson(final String address) {
         if (TextUtils.isEmpty(address)) {
-            final PersonRecord record = new PersonRecord(mStyle);
-            record.number = "-1";
-            record.email = getUnknownEmail(null);
-            record.unknown = true;
+            final PersonRecord record = new PersonRecord(0, null, null, "-1");
             return record;
         } else if (!mPeopleCache.containsKey(address)) {
             Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
                     android.provider.Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(address));
 
             Cursor c = mResolver.query(personUri, PHONE_PROJECTION, null, null, null);
-            final PersonRecord record = new PersonRecord(mStyle);
+            final PersonRecord record;
             if (c != null && c.moveToFirst()) {
-                record._id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
-                record.name = sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1])));
-                record.number = sanitize(NEW_CONTACT_API ? address :
-                        c.getString(c.getColumnIndex(PHONE_PROJECTION[2])));
-                record.email = getPrimaryEmail(record._id, record.number);
+                long id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
+                String number = NEW_CONTACT_API ? address : c.getString(c.getColumnIndex(PHONE_PROJECTION[2]));
+
+                record = new PersonRecord(
+                    id,
+                    sanitize(c.getString(c.getColumnIndex(PHONE_PROJECTION[1]))),
+                    getPrimaryEmail(id, number),
+                    sanitize(number)
+                );
+
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
-
-                record.number = sanitize(address);
-                record.email = getUnknownEmail(address);
-                record.unknown = true;
+                record = new PersonRecord(0, null, null, sanitize(address));
             }
             mPeopleCache.put(address, record);
 
@@ -91,7 +84,7 @@ public class PersonLookup {
     @SuppressWarnings("deprecation")
     private String getPrimaryEmail(final long personId, final String number) {
         if (personId <= 0) {
-            return getUnknownEmail(number);
+            return null;
         }
         String primaryEmail = null;
 
@@ -132,12 +125,7 @@ public class PersonLookup {
         }
 
         if (c != null) c.close();
-        return (primaryEmail != null) ? primaryEmail : getUnknownEmail(number);
-    }
-
-    private static String getUnknownEmail(String number) {
-        final String no = (number == null || "-1".equals(number)) ? UNKNOWN_NUMBER : number;
-        return encodeLocal(no.trim()) + "@" + UNKNOWN_EMAIL;
+        return primaryEmail;
     }
 
     // Returns whether the given e-mail address is a Gmail address or not.

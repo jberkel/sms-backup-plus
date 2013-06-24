@@ -95,13 +95,14 @@ public class MainActivity extends PreferenceActivity {
     }
     private Actions mActions;
 
+    private AuthPreferences authPreferences;
     private StatusPreference statusPref;
     private @Nullable Uri mAuthorizeUri;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-
+        authPreferences = new AuthPreferences(this);
         addPreferencesFromResource(R.xml.preferences);
 
         statusPref = new StatusPreference(this);
@@ -165,7 +166,7 @@ public class MainActivity extends PreferenceActivity {
         updateMaxItemsPerSync(null);
         updateMaxItemsPerRestore(null);
 
-        updateImapSettings(!AuthPreferences.useXOAuth(this));
+        updateImapSettings(!authPreferences.useXOAuth());
         checkUserDonationStatus();
         App.bus.register(statusPref);
     }
@@ -205,7 +206,7 @@ public class MainActivity extends PreferenceActivity {
         String token = data.getStringExtra(AccountManagerAuthActivity.EXTRA_TOKEN);
         String account = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ACCOUNT);
         if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
-            AuthPreferences.setOauth2Token(this, account, token);
+            authPreferences.setOauth2Token(account, token);
             onAuthenticated();
         } else {
             String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
@@ -233,8 +234,8 @@ public class MainActivity extends PreferenceActivity {
     @Subscribe public void onOAuthCallback(OAuthCallbackTask.OAuthCallbackEvent event) {
         dismiss(Dialogs.ACCESS_TOKEN);
         if (event.valid()) {
-            AuthPreferences.setOauthUsername(this, event.username);
-            AuthPreferences.setOauthTokens(this, event.token, event.tokenSecret);
+            authPreferences.setOauthUsername(event.username);
+            authPreferences.setOauthTokens(event.token, event.tokenSecret);
             onAuthenticated();
         } else {
             show(Dialogs.ACCESS_TOKEN_ERROR);
@@ -420,7 +421,7 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private boolean checkLoginInformation() {
-        if (!AuthPreferences.isLoginInformationSet(this)) {
+        if (!authPreferences.isLoginInformationSet()) {
             show(Dialogs.MISSING_CREDENTIALS);
             return false;
         } else {
@@ -473,7 +474,7 @@ public class MainActivity extends PreferenceActivity {
         switch (Dialogs.values()[id]) {
             case MISSING_CREDENTIALS:
                 title = getString(R.string.ui_dialog_missing_credentials_title);
-                msg = AuthPreferences.useXOAuth(this) ?
+                msg = authPreferences.useXOAuth() ?
                         getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
                         getString(R.string.ui_dialog_missing_credentials_msg_plain);
                 break;
@@ -600,7 +601,7 @@ public class MainActivity extends PreferenceActivity {
                         .setNegativeButton(android.R.string.cancel, null)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                AuthPreferences.clearOauthData(MainActivity.this);
+                                authPreferences.clearOauthData();
                                 DataType.clearLastSyncData(MainActivity.this);
                                 updateConnected();
                             }
@@ -683,10 +684,10 @@ public class MainActivity extends PreferenceActivity {
         CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager()
                 .findPreference(Preferences.CONNECTED);
 
-        connected.setEnabled(AuthPreferences.useXOAuth(this));
-        connected.setChecked(AuthPreferences.hasOauthTokens(this) || AuthPreferences.hasOAuth2Tokens(this));
+        connected.setEnabled(authPreferences.useXOAuth());
+        connected.setChecked(authPreferences.hasOauthTokens() || authPreferences.hasOAuth2Tokens());
 
-        final String username = AuthPreferences.getUsername(this);
+        final String username = authPreferences.getUsername();
         String summary = connected.isChecked() && !TextUtils.isEmpty(username) ?
                 getString(R.string.gmail_already_connected, username) :
                 getString(R.string.gmail_needs_connecting);
@@ -778,7 +779,7 @@ public class MainActivity extends PreferenceActivity {
         prefMgr.findPreference(AuthPreferences.LOGIN_PASSWORD)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        AuthPreferences.setImapPassword(MainActivity.this, newValue.toString());
+                        authPreferences.setImapPassword(newValue.toString());
                         return true;
                     }
                 });

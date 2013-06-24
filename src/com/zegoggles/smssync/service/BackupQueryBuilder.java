@@ -140,7 +140,9 @@ class BackupQueryBuilder {
 
     private String groupSelection(DataType type, ContactGroup group) {
         /* MMS group selection not supported at the moment */
-        if (type != SMS || group.type == ContactGroup.Type.EVERYBODY) return "";
+        if (type != SMS || group == null || group.type == ContactGroup.Type.EVERYBODY) {
+            return "";
+        }
 
         final Set<Long> ids = contacts.getGroupContactIds(context, group).rawIds;
         if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);

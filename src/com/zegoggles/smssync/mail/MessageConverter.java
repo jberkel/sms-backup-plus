@@ -62,7 +62,7 @@ public class MessageConverter {
     public MessageConverter(Context ctx, String userEmail) {
         mContext = ctx;
         mMarkAsRead = Preferences.getMarkAsRead(ctx);
-        mPersonLookup = new PersonLookup(ctx.getContentResolver(), AddressStyle.getEmailAddressStyle(ctx));
+        mPersonLookup = new PersonLookup(ctx.getContentResolver());
 
         String referenceUid = Preferences.getReferenceUid(ctx);
         if (referenceUid == null) {
@@ -81,6 +81,7 @@ public class MessageConverter {
 
         mMessageGenerator = new MessageGenerator(mContext,
                 new Address(userEmail),
+                AddressStyle.getEmailAddressStyle(mContext),
                 new HeaderGenerator(referenceUid, Preferences.getVersion(mContext, true)),
                 mPersonLookup,
                 Preferences.getMailSubjectPrefix(mContext),
@@ -164,8 +165,8 @@ public class MessageConverter {
                 values.put(CallLog.Calls.NEW, 0);
 
                 PersonRecord record = mPersonLookup.lookupPerson(Headers.get(message, Headers.ADDRESS));
-                if (!record.unknown) {
-                    values.put(CallLog.Calls.CACHED_NAME, record.name);
+                if (!record.isUnknown()) {
+                    values.put(CallLog.Calls.CACHED_NAME, record.getName());
                     values.put(CallLog.Calls.CACHED_NUMBER_TYPE, -2);
                 }
 

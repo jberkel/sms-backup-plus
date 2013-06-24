@@ -19,21 +19,16 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.GroupContactIds;
+import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.CallLogTypes;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.mail.Attachment.createPartFromFile;
-import static com.zegoggles.smssync.mail.Attachment.createPartFromUri;
-import static com.zegoggles.smssync.mail.Attachment.createTextPart;
+import static com.zegoggles.smssync.mail.Attachment.*;
 
 class MessageGenerator {
     private final Context mContext;
@@ -43,15 +38,18 @@ class MessageGenerator {
     private final boolean mPrefix;
     private final GroupContactIds mAllowedIds;
     private final CallFormatter mCallFormatter;
+    private final AddressStyle mAddressStyle;
 
     public MessageGenerator(Context context,
                             Address userAddress,
+                            AddressStyle addressStyle,
                             HeaderGenerator headerGenerator,
                             PersonLookup personLookup,
                             boolean mailSubjectPrefix,
                             GroupContactIds allowedIds) {
         mHeaderGenerator = headerGenerator;
         mUserAddress = userAddress;
+        mAddressStyle = addressStyle;
         mContext = context;
         mPersonLookup = personLookup;
         mPrefix = mailSubjectPrefix;
@@ -68,7 +66,7 @@ class MessageGenerator {
         }
     }
 
-    public  @Nullable Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
+    public @Nullable Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(SmsConsts.ADDRESS);
         if (TextUtils.isEmpty(address)) return null;
 
@@ -79,14 +77,14 @@ class MessageGenerator {
         msg.setSubject(getSubject(DataType.SMS, record));
         msg.setBody(new TextBody(msgMap.get(SmsConsts.BODY)));
 
-        final int messageType = Integer.valueOf(msgMap.get(SmsConsts.TYPE));
+        final int messageType = toInt(msgMap.get(SmsConsts.TYPE));
         if (SmsConsts.MESSAGE_TYPE_INBOX == messageType) {
             // Received message
-            msg.setFrom(record.getAddress());
+            msg.setFrom(record.getAddress(mAddressStyle));
             msg.setRecipient(Message.RecipientType.TO, mUserAddress);
         } else {
             // Sent message
-            msg.setRecipient(Message.RecipientType.TO, record.getAddress());
+            msg.setRecipient(Message.RecipientType.TO, record.getAddress(mAddressStyle));
             msg.setFrom(mUserAddress);
         }
 
@@ -132,7 +130,7 @@ class MessageGenerator {
         final Address[] addresses = new Address[recipients.size()];
         for (int i = 0; i < recipients.size(); i++) {
             records[i] = mPersonLookup.lookupPerson(recipients.get(i));
-            addresses[i] = records[i].getAddress();
+            addresses[i] = records[i].getAddress(mAddressStyle);
         }
 
         boolean backup = false;
@@ -149,7 +147,7 @@ class MessageGenerator {
         final int msg_box = Integer.parseInt(msgMap.get("msg_box"));
         if (inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
-            msg.setFrom(records[0].getAddress());
+            msg.setFrom(records[0].getAddress(mAddressStyle));
             msg.setRecipient(Message.RecipientType.TO, mUserAddress);
         } else {
             msg.setRecipients(Message.RecipientType.TO, addresses);
@@ -190,11 +188,11 @@ class MessageGenerator {
         switch (callType) {
             case CallLog.Calls.OUTGOING_TYPE:
                 msg.setFrom(mUserAddress);
-                msg.setRecipient(Message.RecipientType.TO, record.getAddress());
+                msg.setRecipient(Message.RecipientType.TO, record.getAddress(mAddressStyle));
                 break;
             case CallLog.Calls.MISSED_TYPE:
             case CallLog.Calls.INCOMING_TYPE:
-                msg.setFrom(record.getAddress());
+                msg.setFrom(record.getAddress(mAddressStyle));
                 msg.setRecipient(Message.RecipientType.TO, mUserAddress);
                 break;
             default:
@@ -260,11 +258,11 @@ class MessageGenerator {
 
         if (whatsapp.isReceived()) {
             // Received message
-            msg.setFrom(record.getAddress());
+            msg.setFrom(record.getAddress(mAddressStyle));
             msg.setRecipient(Message.RecipientType.TO, mUserAddress);
         } else {
             // Sent message
-            msg.setRecipient(Message.RecipientType.TO, record.getAddress());
+            msg.setRecipient(Message.RecipientType.TO, record.getAddress(mAddressStyle));
             msg.setFrom(mUserAddress);
         }
         mHeaderGenerator.setHeaders(msg, new HashMap<String, String>(), DataType.WHATSAPP, address, record,
@@ -304,15 +302,23 @@ class MessageGenerator {
         return parts;
     }
 
-    private String getSubject(DataType type, PersonRecord record) {
+    private String getSubject(@NotNull DataType type, @NotNull PersonRecord record) {
         return mPrefix ?
                 String.format(Locale.ENGLISH, "[%s] %s", type.getFolder(mContext), record.getName()) :
                 mContext.getString(type.withField, record.getName());
     }
 
     private boolean includePersonInBackup(PersonRecord record, DataType type) {
-        final boolean backup = (mAllowedIds == null || mAllowedIds.ids.contains(record._id));
+        final boolean backup = (mAllowedIds == null || mAllowedIds.ids.contains(record.getLongId()));
         if (LOCAL_LOGV && !backup) Log.v(TAG, "not backing up " + type + " / " + record);
         return backup;
+    }
+
+    private int toInt(String s) {
+        try {
+             return Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }
