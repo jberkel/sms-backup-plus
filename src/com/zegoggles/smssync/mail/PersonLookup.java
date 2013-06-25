@@ -49,8 +49,7 @@ public class PersonLookup {
     @SuppressWarnings("deprecation")
     public PersonRecord lookupPerson(final String address) {
         if (TextUtils.isEmpty(address)) {
-            final PersonRecord record = new PersonRecord(0, null, null, "-1");
-            return record;
+            return new PersonRecord(0, null, null, "-1");
         } else if (!mPeopleCache.containsKey(address)) {
             Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
                     android.provider.Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(address));

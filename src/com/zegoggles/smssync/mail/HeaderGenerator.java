@@ -46,8 +46,8 @@ class HeaderGenerator {
         message.setSentDate(sentDate);
         message.setInternalDate(sentDate);
         switch (dataType) {
-            case MMS: setMmsHeaders(message, msgMap); break;
             case SMS: setSmsHeaders(message, msgMap); break;
+            case MMS: setMmsHeaders(message, msgMap); break;
             case CALLLOG: setCallLogHeaders(message, msgMap); break;
             case WHATSAPP: setWhatsAppHeaders(message, sentDate, status); break;
         }

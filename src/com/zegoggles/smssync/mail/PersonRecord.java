@@ -43,7 +43,7 @@ public class PersonRecord {
     }
 
     public String getEmail() {
-        return isUnknown() || TextUtils.isEmpty(email)? getUnknownEmail(number) : email;
+        return isUnknown() || TextUtils.isEmpty(email) ? getUnknownEmail(number) : email;
     }
 
     public String getId() {
@@ -59,7 +59,7 @@ public class PersonRecord {
     }
 
     public String getName() {
-        return name != null ? name : getNumber();
+        return !TextUtils.isEmpty(name) ? name : getNumber();
     }
 
     public String toString() {

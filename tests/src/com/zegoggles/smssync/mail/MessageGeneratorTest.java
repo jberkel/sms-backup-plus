@@ -11,11 +11,13 @@ import org.mockito.Mock;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -30,7 +32,7 @@ public class MessageGeneratorTest {
     public void before() {
         initMocks(this);
         generator = new MessageGenerator(Robolectric.application,
-                new Address("test@test.com"),
+                new Address("mine@mine.com", "me"),
                 AddressStyle.NAME,
                 headerGenerator,
                 personLookup,
@@ -47,7 +49,7 @@ public class MessageGeneratorTest {
 
     @Test
     public void testShouldGenerateSubjectWithNameForSMS() throws Exception {
-        PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
+        PersonRecord record = new PersonRecord(1, "Test Testor", null, null);
         Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.SMS);
         assertThat(msg).isNotNull();
         assertThat(msg.getSubject()).isEqualTo("SMS with Test Testor");
@@ -71,10 +73,67 @@ public class MessageGeneratorTest {
 
     @Test
     public void testShouldGenerateSubjectWithNameAndNumberForSMS() throws Exception {
-        PersonRecord record = new PersonRecord(-1, "Test Testor", null, "1234");
+        PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
         Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.SMS);
         assertThat(msg).isNotNull();
         assertThat(msg.getSubject()).isEqualTo("SMS with Test Testor");
+    }
+
+    @Test
+    public void shouldGenerateCorrectFromHeaderWithUsersEmailAddress() throws Exception {
+        PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
+        Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.SMS);
+        assertThat(msg).isNotNull();
+
+        assertThat(msg.getFrom()[0].toString())
+                .isEqualTo("\"me\" <mine@mine.com>");
+    }
+
+    @Test
+    public void shouldGenerateCorrectToHeader() throws Exception {
+        PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
+        Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.SMS);
+        assertThat(msg).isNotNull();
+
+        assertThat(msg.getRecipients(Message.RecipientType.TO)[0].toString())
+                .isEqualTo("\"Test Testor\" <test@test.com>");
+    }
+
+    @Test
+    public void shouldGenerateCorrectHeaders() throws Exception {
+        PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
+        Map<String, String> map = mockMessage("1234", record);
+
+        Date date = new Date();
+        map.put(SmsConsts.DATE, String.valueOf(date.getTime()));
+        map.put(SmsConsts.TYPE, "0");
+
+        Message msg = generator.messageForDataType(map, DataType.SMS);
+        assertThat(msg).isNotNull();
+
+        verify(headerGenerator).setHeaders(any(Message.class),
+                any(Map.class),
+                eq(DataType.SMS),
+                anyString(),
+                eq(record),
+                eq(date),
+                eq(0));
+    }
+
+    @Test
+    public void shouldGenerateCorrectToHeaderWhenUserisRecipient() throws Exception {
+        PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
+        Map<String, String> map = mockMessage("1234", record);
+        map.put(SmsConsts.TYPE, "1");
+
+        Message msg = generator.messageForDataType(map, DataType.SMS);
+        assertThat(msg).isNotNull();
+
+        assertThat(msg.getFrom()[0].toString())
+                .isEqualTo("\"Test Testor\" <test@test.com>");
+
+        assertThat(msg.getRecipients(Message.RecipientType.TO)[0].toString())
+                .isEqualTo("\"me\" <mine@mine.com>");
     }
 
     @Test
