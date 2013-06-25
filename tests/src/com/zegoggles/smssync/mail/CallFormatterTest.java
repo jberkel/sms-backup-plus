@@ -18,6 +18,23 @@ public class CallFormatterTest {
         formatter = new CallFormatter(Robolectric.application.getResources());
     }
 
+    @Test public void shouldFormatIncoming() throws Exception {
+        assertThat(formatter.format(CallLog.Calls.INCOMING_TYPE, "Foo", 100))
+                .isEqualTo("100s (00:01:40)\n" +
+                        "Foo (incoming call)");
+    }
+
+    @Test public void shouldFormatOutgoing() throws Exception {
+        assertThat(formatter.format(CallLog.Calls.OUTGOING_TYPE, "Foo", 100))
+                .isEqualTo("100s (00:01:40)\n" +
+                        "Foo (outgoing call)");
+    }
+
+    @Test public void shouldFormatMissing() throws Exception {
+        assertThat(formatter.format(CallLog.Calls.MISSED_TYPE, "Foo", 100))
+                .isEqualTo("Foo (missed call)");
+    }
+
     @Test public void shouldFormatCallIncoming() throws Exception {
         assertThat(formatter.callTypeString(CallLog.Calls.INCOMING_TYPE, "Foo")).isEqualTo("Call from Foo");
     }

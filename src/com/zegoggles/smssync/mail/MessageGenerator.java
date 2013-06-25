@@ -181,19 +181,8 @@ class MessageGenerator {
 
         final int duration = msgMap.get(CallLog.Calls.DURATION) == null ? 0 :
                 toInt(msgMap.get(CallLog.Calls.DURATION));
-        final StringBuilder text = new StringBuilder();
 
-        if (callType != CallLog.Calls.MISSED_TYPE) {
-            text.append(duration)
-                    .append("s")
-                    .append(" (").append(mCallFormatter.formattedCallDuration(duration)).append(")")
-                    .append("\n");
-        }
-        text.append(record.getNumber())
-                .append(" (").append(mCallFormatter.callTypeString(callType, null)).append(")");
-
-        msg.setBody(new TextBody(text.toString()));
-
+        msg.setBody(new TextBody(mCallFormatter.format(callType, record.getNumber(), duration)));
         Date sentDate;
         try {
             sentDate = new Date(Long.valueOf(msgMap.get(CallLog.Calls.DATE)));

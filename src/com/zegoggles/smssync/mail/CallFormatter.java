@@ -13,6 +13,21 @@ public class CallFormatter {
         mResources = resources;
     }
 
+    public String format(int callType, String number, int duration) {
+        final StringBuilder text = new StringBuilder();
+
+        if (callType != CallLog.Calls.MISSED_TYPE) {
+            text.append(duration)
+                    .append("s")
+                    .append(" (").append(formattedCallDuration(duration)).append(")")
+                    .append("\n");
+        }
+        text.append(number)
+            .append(" (").append(callTypeString(callType, null)).append(")");
+
+        return text.toString();
+    }
+
     public String formattedCallDuration(int duration) {
         return String.format(Locale.ENGLISH, "%02d:%02d:%02d",
                 duration / 3600,
