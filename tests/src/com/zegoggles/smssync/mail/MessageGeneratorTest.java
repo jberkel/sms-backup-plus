@@ -46,7 +46,7 @@ public class MessageGeneratorTest {
     }
 
     @Test
-    public void testShouldGenerateSubjectWithNameForMessage() throws Exception {
+    public void testShouldGenerateSubjectWithNameForSMS() throws Exception {
         PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
         Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.SMS);
         assertThat(msg).isNotNull();
@@ -54,7 +54,23 @@ public class MessageGeneratorTest {
     }
 
     @Test
-    public void testShouldGenerateSubjectWithNameAndNumberForMessage() throws Exception {
+    public void testShouldGenerateSubjectWithNameForMMS() throws Exception {
+        PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
+        Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.MMS);
+        assertThat(msg).isNull();
+        // TODO
+    }
+
+    @Test
+    public void testShouldGenerateSubjectWithNameForCallLog() throws Exception {
+        PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
+        Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.CALLLOG);
+        // TODO
+        assertThat(msg).isNull();
+    }
+
+    @Test
+    public void testShouldGenerateSubjectWithNameAndNumberForSMS() throws Exception {
         PersonRecord record = new PersonRecord(-1, "Test Testor", null, "1234");
         Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.SMS);
         assertThat(msg).isNotNull();

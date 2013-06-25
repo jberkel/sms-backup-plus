@@ -144,7 +144,7 @@ class MessageGenerator {
 
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.MMS, records[0]));
-        final int msg_box = Integer.parseInt(msgMap.get("msg_box"));
+        final int msg_box = toInt(msgMap.get("msg_box"));
         if (inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
             msg.setFrom(records[0].getAddress(mAddressStyle));
@@ -173,7 +173,7 @@ class MessageGenerator {
 
     public @Nullable Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
-        final int callType = Integer.parseInt(msgMap.get(CallLog.Calls.TYPE));
+        final int callType = toInt(msgMap.get(CallLog.Calls.TYPE));
 
         if (TextUtils.isEmpty(address) || !CallLogTypes.isTypeEnabled(mContext, callType)) {
             if (LOCAL_LOGV) Log.v(TAG, "ignoring call log entry: " + msgMap);
@@ -203,7 +203,7 @@ class MessageGenerator {
         }
 
         final int duration = msgMap.get(CallLog.Calls.DURATION) == null ? 0 :
-                Integer.parseInt(msgMap.get(CallLog.Calls.DURATION));
+                toInt(msgMap.get(CallLog.Calls.DURATION));
         final StringBuilder text = new StringBuilder();
 
         if (callType != CallLog.Calls.MISSED_TYPE) {
