@@ -19,6 +19,10 @@ public class GroupContactIds {
         return ids.contains(personRecord.getContactId());
     }
 
+    public boolean isEmpty() {
+        return ids.isEmpty() && rawIds.isEmpty();
+    }
+
     public Set<Long> getIds() {
         return new HashSet<Long>(ids);
     }

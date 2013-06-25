@@ -401,7 +401,7 @@ public class MainActivity extends PreferenceActivity {
         Utils.initListPreference(calendarPref, calendars.getCalendars(this.getContentResolver()), false);
         findPreference(Preferences.CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
         Utils.initListPreference((ListPreference) findPreference(Preferences.BACKUP_CONTACT_GROUP),
-                contacts.getGroups(this), false);
+                contacts.getGroups(getContentResolver(), getResources()), false);
     }
 
     private void initiateRestore() {

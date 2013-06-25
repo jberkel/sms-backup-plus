@@ -1,6 +1,6 @@
 package com.zegoggles.smssync.service;
 
-import android.content.Context;
+import android.content.ContentResolver;
 import android.net.Uri;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
@@ -48,7 +48,7 @@ public class BackupQueryBuilderTest {
         GroupContactIds ids = new GroupContactIds();
         ids.add(1L, 20L);
 
-        when(accessor.getGroupContactIds(any(Context.class), eq(group))).thenReturn(ids);
+        when(accessor.getGroupContactIds(any(ContentResolver.class), eq(group))).thenReturn(ids);
 
         BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.SMS, 200, group);
 
@@ -58,7 +58,6 @@ public class BackupQueryBuilderTest {
         assertThat(query.selectionArgs).isEqualTo(new String[] { "-1", "3"} );
         assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
     }
-
 
     @Test
     public void shouldBuildQueryForMMS() throws Exception {

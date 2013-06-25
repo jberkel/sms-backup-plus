@@ -59,23 +59,23 @@ public class MessageConverter {
     private final PersonLookup mPersonLookup;
     private final MessageGenerator mMessageGenerator;
 
-    public MessageConverter(Context ctx, String userEmail) {
-        mContext = ctx;
-        mMarkAsRead = Preferences.getMarkAsRead(ctx);
-        mPersonLookup = new PersonLookup(ctx.getContentResolver());
+    public MessageConverter(Context context, String userEmail) {
+        mContext = context;
+        mMarkAsRead = Preferences.getMarkAsRead(context);
+        mPersonLookup = new PersonLookup(context.getContentResolver());
 
-        String referenceUid = Preferences.getReferenceUid(ctx);
+        String referenceUid = Preferences.getReferenceUid(context);
         if (referenceUid == null) {
             referenceUid = generateReferenceValue();
-            Preferences.setReferenceUid(ctx, referenceUid);
+            Preferences.setReferenceUid(context, referenceUid);
         }
 
         GroupContactIds allowedIds = null;
-        final ContactGroup backupContactGroup = Preferences.getBackupContactGroup(ctx);
+        final ContactGroup backupContactGroup = Preferences.getBackupContactGroup(context);
         switch (backupContactGroup.type) {
             case EVERYBODY: break;
             default:
-                allowedIds = ContactAccessor.Get.instance().getGroupContactIds(ctx, backupContactGroup);
+                allowedIds = ContactAccessor.Get.instance().getGroupContactIds(context.getContentResolver(), backupContactGroup);
                 if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
         }
 
@@ -113,6 +113,7 @@ public class MessageConverter {
                 default:
                     m = mMessageGenerator.messageForDataType(msgMap, dataType); break;
             }
+
             if (m != null) {
                 m.setFlag(Flag.SEEN, mMarkAsRead);
 

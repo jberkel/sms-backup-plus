@@ -18,7 +18,9 @@ package com.zegoggles.smssync.contacts;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.Data;
@@ -38,12 +40,12 @@ public class ContactAccessorPost20 implements ContactAccessor {
         return null;
     }
 
-    public GroupContactIds getGroupContactIds(Context context, ContactGroup group) {
+    public GroupContactIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
         final GroupContactIds contactIds = new GroupContactIds();
         Cursor c = null;
         switch (group.type) {
             case GROUP:
-                c = context.getContentResolver().query(
+                c = resolver.query(
                         Data.CONTENT_URI,
                         new String[]{GroupMembership.CONTACT_ID, GroupMembership.RAW_CONTACT_ID,
                                 GroupMembership.GROUP_ROW_ID},
@@ -59,12 +61,12 @@ public class ContactAccessorPost20 implements ContactAccessor {
         return contactIds;
     }
 
-    public Map<Integer, Group> getGroups(Context context) {
+    public Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources) {
         final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
 
-        map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, context.getString(R.string.everybody), 0));
+        map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, resources.getString(R.string.everybody), 0));
 
-        final Cursor c = context.getContentResolver().query(
+        final Cursor c = resolver.query(
                 Groups.CONTENT_SUMMARY_URI,
                 new String[]{Groups._ID, Groups.TITLE, Groups.SUMMARY_COUNT},
                 null,

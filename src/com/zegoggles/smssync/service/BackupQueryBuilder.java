@@ -144,7 +144,7 @@ class BackupQueryBuilder {
             return "";
         }
 
-        final Set<Long> ids = contacts.getGroupContactIds(context, group).getRawIds();
+        final Set<Long> ids = contacts.getGroupContactIds(context.getContentResolver(), group).getRawIds();
 
         if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
         return String.format(Locale.ENGLISH, " AND (%s = %d OR %s IN (%s))",
