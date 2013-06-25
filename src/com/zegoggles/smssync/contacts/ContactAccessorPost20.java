@@ -28,9 +28,6 @@ import com.zegoggles.smssync.R;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * @noinspection UnusedDeclaration
- */
 @TargetApi(5)
 public class ContactAccessorPost20 implements ContactAccessor {
     public String getOwnerEmail(Context context) {
@@ -56,10 +53,8 @@ public class ContactAccessorPost20 implements ContactAccessor {
                 break;
         }
         while (c != null && c.moveToNext()) {
-            contactIds.ids.add(c.getLong(0));
-            contactIds.rawIds.add(c.getLong(1));
+            contactIds.add(c.getLong(0), c.getLong(1));
         }
-
         if (c != null) c.close();
         return contactIds;
     }

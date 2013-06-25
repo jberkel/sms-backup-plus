@@ -62,8 +62,8 @@ class BackupQueryBuilder {
 
     public @Nullable Query buildQueryForDataType(DataType type, int max, ContactGroup group) {
         switch (type) {
-            case MMS:     return getQueryForMMS(max, group);
             case SMS:     return getQueryForSMS(max, group);
+            case MMS:     return getQueryForMMS(max, group);
             case CALLLOG: return getQueryForCallLog(max);
             default:      return null;
         }
@@ -104,7 +104,7 @@ class BackupQueryBuilder {
                 "%s > ? AND %s <> ? %s",
                     SmsConsts.DATE,
                     SmsConsts.TYPE,
-                    groupSelection(SMS, group)),
+                    groupSelection(SMS, group)).trim(),
             new String[] {
                 String.valueOf(SMS.getMaxSyncedDate(context)),
                 String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
@@ -119,7 +119,7 @@ class BackupQueryBuilder {
             String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s",
                     SmsConsts.DATE,
                     MmsConsts.TYPE,
-                    groupSelection(DataType.MMS, group)),
+                    groupSelection(DataType.MMS, group)).trim(),
             new String[] {
                 String.valueOf(MMS.getMaxSyncedDate(context)),
                 MmsConsts.DELIVERY_REPORT
@@ -140,11 +140,12 @@ class BackupQueryBuilder {
 
     private String groupSelection(DataType type, ContactGroup group) {
         /* MMS group selection not supported at the moment */
-        if (type != SMS || group == null || group.type == ContactGroup.Type.EVERYBODY) {
+        if (type != SMS || group == null || group.isEveryBody()) {
             return "";
         }
 
-        final Set<Long> ids = contacts.getGroupContactIds(context, group).rawIds;
+        final Set<Long> ids = contacts.getGroupContactIds(context, group).getRawIds();
+
         if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
         return String.format(Locale.ENGLISH, " AND (%s = %d OR %s IN (%s))",
             SmsConsts.TYPE,

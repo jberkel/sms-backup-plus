@@ -36,7 +36,7 @@ class MessageGenerator {
     private final Address mUserAddress;
     private final PersonLookup mPersonLookup;
     private final boolean mPrefix;
-    private final GroupContactIds mAllowedIds;
+    private final GroupContactIds mAllowedContacts;
     private final CallFormatter mCallFormatter;
     private final AddressStyle mAddressStyle;
 
@@ -53,7 +53,7 @@ class MessageGenerator {
         mContext = context;
         mPersonLookup = personLookup;
         mPrefix = mailSubjectPrefix;
-        mAllowedIds = allowedIds;
+        mAllowedContacts = allowedIds;
         mCallFormatter = new CallFormatter(mContext.getResources());
     }
 
@@ -309,7 +309,8 @@ class MessageGenerator {
     }
 
     private boolean includePersonInBackup(PersonRecord record, DataType type) {
-        final boolean backup = (mAllowedIds == null || mAllowedIds.ids.contains(record.getContactId()));
+        final boolean backup = (mAllowedContacts == null || mAllowedContacts.contains(record));
+
         if (LOCAL_LOGV && !backup) Log.v(TAG, "not backing up " + type + " / " + record);
         return backup;
     }
