@@ -74,20 +74,6 @@ public class BackupImapStore extends ImapStore {
              "imap+tls".equalsIgnoreCase(parsed.getScheme()));
     }
 
-    /*
-    @Test
-    public void shouldValidUri() throws Exception {
-        assertThat(isValidUri("imap+ssl+://xoauth:foooo@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("imap://xoauth:foooo@imap.gmail.com")).isTrue();
-        assertThat(isValidUri("imap+ssl+://xoauth:user:token@:993")).isFalse();
-        assertThat(isValidUri("imap+ssl://user%40domain:password@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("imap+tls+://user:password@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("imap+tls://user:password@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("imap://user:password@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("http://xoauth:foooo@imap.gmail.com:993")).isFalse();
-    }
-    */
-
     public BackupFolder getFolder(DataType type) throws MessagingException {
         String label = type.getFolder(context);
         if (label == null) throw new IllegalStateException("label is null");
