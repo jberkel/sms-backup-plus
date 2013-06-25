@@ -187,7 +187,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private BackupState transition(SmsSyncState smsSyncState, Exception exception) {
-        return service.getState().transition(smsSyncState, exception);
+        return service.transition(smsSyncState, exception);
     }
 
     @Override
@@ -303,6 +303,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private void publish(SmsSyncState state, Exception exception) {
-        publishProgress(service.getState().transition(state, exception));
+        publishProgress(service.transition(state, exception));
     }
 }

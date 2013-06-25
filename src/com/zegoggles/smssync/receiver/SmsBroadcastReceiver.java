@@ -45,7 +45,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                 new AuthPreferences(ctx).isLoginInformationSet() &&
                 !Preferences.isFirstBackup(ctx)) {
 
-            Alarms.scheduleRegularBackup(ctx);
+            new Alarms(ctx).scheduleRegularBackup();
         } else {
             Log.i(TAG, "Received bootup but not set up to sync.");
         }
@@ -56,7 +56,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                 new AuthPreferences(ctx).isLoginInformationSet() &&
                 !Preferences.isFirstBackup(ctx)) {
 
-            Alarms.scheduleIncomingBackup(ctx);
+            new Alarms(ctx).scheduleIncomingBackup();
         } else {
             Log.i(TAG, "Received SMS but not set up to sync.");
         }

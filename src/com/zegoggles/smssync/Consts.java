@@ -40,6 +40,7 @@ public final class Consts {
     public static final String CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
 
     public static final Uri MMS_PROVIDER     = Uri.parse("content://mms");
+    public static final String MMS_PART      = "part";
     public static final Uri SMS_PROVIDER     = Uri.parse("content://sms");
     public static final Uri CALLLOG_PROVIDER = CallLog.Calls.CONTENT_URI;
 

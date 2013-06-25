@@ -149,11 +149,11 @@ public abstract class ServiceBase extends Service {
     }
 
     protected NotificationManager getNotifier() {
-        return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        return (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
     }
 
     protected ConnectivityManager getConnectivityManager() {
-        return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public abstract @NotNull

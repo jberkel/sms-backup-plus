@@ -29,6 +29,7 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
 import com.zegoggles.smssync.service.state.BackupState;
+import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,6 +51,8 @@ public class SmsBackupService extends ServiceBase {
 
     @Nullable private static SmsBackupService service;
     @NotNull private BackupState mState = new BackupState();
+
+    protected Alarms alarms = new Alarms(this);
 
     @Override @NotNull
     public BackupState getState() {
@@ -82,7 +85,8 @@ public class SmsBackupService extends ServiceBase {
         if (backupType.isBackground() && !getConnectivityManager().getBackgroundDataSetting()) {
             appLog(R.string.app_log_skip_backup_background_data);
 
-            App.bus.post(mState.transition(FINISHED_BACKUP, new RequiresBackgroundDataException()));
+            moveToState(mState.transition(FINISHED_BACKUP, new RequiresBackgroundDataException()));
+
         } else if (!isWorking()) {
             // Only start a backup if there's no other operation going on at this time.
             if (!SmsRestoreService.isServiceWorking()) {
@@ -94,23 +98,34 @@ public class SmsBackupService extends ServiceBase {
                             getBackupImapStore(),
                             0,
                             intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false),
-                            Preferences.getMaxItemsPerSync(service),
-                            Preferences.getBackupContactGroup(service),
+                            Preferences.getMaxItemsPerSync(this),
+                            Preferences.getBackupContactGroup(this),
                             MAX_MSG_PER_REQUEST,
                             backupType);
 
                     appLog(R.string.app_log_start_backup, backupType);
-                    new BackupTask(this).execute(config);
+
+                    getBackupTask().execute(config);
                 } catch (MessagingException e) {
-                    App.bus.post(mState.transition(ERROR, e));
+                    Log.w(TAG, e);
+                    moveToState(mState.transition(ERROR, e));
                 }
             } else {
                 // restore is already running
-                App.bus.post(mState.transition(ERROR, null));
+                moveToState(mState.transition(ERROR, null));
             }
         } else {
             appLog(R.string.app_log_skip_backup_already_running);
         }
+    }
+
+    protected BackupTask getBackupTask() {
+        return new BackupTask(this);
+    }
+
+    private void moveToState(BackupState state) {
+        backupStateChanged(state);
+        App.bus.post(state);
     }
 
     @Override
@@ -123,6 +138,8 @@ public class SmsBackupService extends ServiceBase {
     }
 
     @Subscribe public void backupStateChanged(BackupState state) {
+        if (mState == state) return;
+
         mState = state;
         if (mState.isInitialState()) return;
 
@@ -186,7 +203,7 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void scheduleNextBackup() {
-        final long nextSync = Alarms.scheduleRegularBackup(service);
+        final long nextSync = alarms.scheduleRegularBackup();
         if (nextSync >= 0) {
             appLog(R.string.app_log_scheduled_next_sync,
                     DateFormat.format("kk:mm", new Date(nextSync)));
@@ -210,5 +227,9 @@ public class SmsBackupService extends ServiceBase {
 
     public static boolean isServiceWorking() {
         return service != null && service.isWorking();
+    }
+
+    public BackupState transition(SmsSyncState newState, Exception e) {
+        return mState.transition(newState, e);
     }
 }

@@ -29,30 +29,35 @@ import static com.zegoggles.smssync.service.BackupType.*;
 
 
 public class Alarms {
+    private Context mContext;
 
-    public static long scheduleIncomingBackup(Context ctx) {
-        return scheduleBackup(ctx, Preferences.getIncomingTimeoutSecs(ctx), INCOMING, false);
+    public Alarms(Context context) {
+        mContext = context.getApplicationContext();
     }
 
-    public static long scheduleRegularBackup(Context ctx) {
-        return scheduleBackup(ctx, Preferences.getRegularTimeoutSecs(ctx), REGULAR, false);
+    public long scheduleIncomingBackup() {
+        return scheduleBackup(Preferences.getIncomingTimeoutSecs(mContext), INCOMING, false);
     }
 
-    public static long scheduleImmediateBackup(Context ctx) {
-        return scheduleBackup(ctx, -1, BROADCAST_INTENT, true);
+    public long scheduleRegularBackup() {
+        return scheduleBackup(Preferences.getRegularTimeoutSecs(mContext), REGULAR, false);
     }
 
-    public static void cancel(Context ctx) {
-        getAlarmManager(ctx).cancel(createPendingIntent(ctx, UNKNOWN));
+    public long scheduleImmediateBackup() {
+        return scheduleBackup(-1, BROADCAST_INTENT, true);
     }
 
-    private static long scheduleBackup(Context ctx, int inSeconds, BackupType backupType, boolean force) {
+    public void cancel() {
+        getAlarmManager(mContext).cancel(createPendingIntent(mContext, UNKNOWN));
+    }
+
+    private long scheduleBackup(int inSeconds, BackupType backupType, boolean force) {
         if (LOCAL_LOGV)
-            Log.v(TAG, "scheduleBackup(" + ctx + ", " + inSeconds + ", " + backupType + ", " + force + ")");
+            Log.v(TAG, "scheduleBackup(" + mContext + ", " + inSeconds + ", " + backupType + ", " + force + ")");
 
-        if (force || (Preferences.isEnableAutoSync(ctx) && inSeconds > 0)) {
+        if (force || (Preferences.isEnableAutoSync(mContext) && inSeconds > 0)) {
             final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
-            getAlarmManager(ctx).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(ctx, backupType));
+            getAlarmManager(mContext).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(mContext, backupType));
             if (LOCAL_LOGV)
                 Log.v(TAG, "Scheduled backup due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
             return atTime;

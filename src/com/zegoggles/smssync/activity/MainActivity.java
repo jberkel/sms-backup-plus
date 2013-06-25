@@ -735,7 +735,7 @@ public class MainActivity extends PreferenceActivity {
                                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                 PackageManager.DONT_KILL_APP);
 
-                        if (!isEnabled) Alarms.cancel(MainActivity.this);
+                        if (!isEnabled) new Alarms(MainActivity.this).cancel();
                         return true;
                     }
                 });

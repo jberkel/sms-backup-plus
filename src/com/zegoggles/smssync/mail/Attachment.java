@@ -111,7 +111,7 @@ class Attachment {
     private static final String RFC2231_SPECIALS = "*'%" + MIME_SPECIALS;
     private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
-    private static String encodeRFC2231(String key, String value) {
+    protected static String encodeRFC2231(String key, String value) {
         StringBuilder buf = new StringBuilder();
         boolean encoded = encodeRFC2231value(value, buf);
         if (encoded) {

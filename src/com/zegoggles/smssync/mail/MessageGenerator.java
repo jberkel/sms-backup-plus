@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.mail;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,7 +11,6 @@ import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.BodyPart;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.internet.MimeBodyPart;
 import com.fsck.k9.mail.internet.MimeMessage;
 import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.TextBody;
@@ -28,10 +28,13 @@ import java.util.*;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.mail.Attachment.*;
+import static com.zegoggles.smssync.Consts.MMS_PART;
+import static com.zegoggles.smssync.mail.Attachment.createPartFromFile;
+import static com.zegoggles.smssync.mail.Attachment.createTextPart;
 
 class MessageGenerator {
     private final Context mContext;
+    private final ContentResolver mResolver;
     private final HeaderGenerator mHeaderGenerator;
     private final Address mUserAddress;
     private final PersonLookup mPersonLookup;
@@ -55,6 +58,7 @@ class MessageGenerator {
         mPrefix = mailSubjectPrefix;
         mAllowedContacts = allowedIds;
         mCallFormatter = new CallFormatter(mContext.getResources());
+        mResolver = context.getContentResolver();
     }
 
     public  @Nullable Message messageForDataType(Map<String, String> msgMap, DataType dataType) throws MessagingException {
@@ -102,55 +106,26 @@ class MessageGenerator {
     public @Nullable Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
         if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
-        final Uri msgRef = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
-        Cursor curAddr = mContext.getContentResolver().query(Uri.withAppendedPath(msgRef, "addr"),
-                null, null, null, null);
+        final Uri mmsUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
+        MmsSupport.MmsDetails details = MmsSupport.getDetails(mResolver, mmsUri, mPersonLookup, mAddressStyle);
 
-        // TODO: this is probably not the best way to determine if a message is inbound or outbound
-        boolean inbound = true;
-        final List<String> recipients = new ArrayList<String>(); // MMS recipients
-        while (curAddr != null && curAddr.moveToNext()) {
-            final String address = curAddr.getString(curAddr.getColumnIndex("address"));
-            //final int type       = curAddr.getInt(curAddr.getColumnIndex("type"));
-
-            if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
-                inbound = false;
-            } else {
-                recipients.add(address);
-            }
-        }
-        if (curAddr != null) curAddr.close();
-        if (recipients.isEmpty()) {
+        if (details.isEmpty()) {
             Log.w(TAG, "no recipients found");
+            return null;
+        } else if (!includeInBackup(DataType.MMS, details.records)) {
+            Log.w(TAG, "no recipients included");
             return null;
         }
 
-        final String address = recipients.get(0);
-        final PersonRecord[] records = new PersonRecord[recipients.size()];
-        final Address[] addresses = new Address[recipients.size()];
-        for (int i = 0; i < recipients.size(); i++) {
-            records[i] = mPersonLookup.lookupPerson(recipients.get(i));
-            addresses[i] = records[i].getAddress(mAddressStyle);
-        }
-
-        boolean backup = false;
-        for (PersonRecord r : records) {
-            if (includePersonInBackup(r, DataType.MMS)) {
-                backup = true;
-                break;
-            }
-        }
-        if (!backup) return null;
-
         final Message msg = new MimeMessage();
-        msg.setSubject(getSubject(DataType.MMS, records[0]));
-        final int msg_box = toInt(msgMap.get("msg_box"));
-        if (inbound) {
+        msg.setSubject(getSubject(DataType.MMS, details.records[0]));
+
+        if (details.inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
-            msg.setFrom(records[0].getAddress(mAddressStyle));
+            msg.setFrom(details.addresses[0]);
             msg.setRecipient(Message.RecipientType.TO, mUserAddress);
         } else {
-            msg.setRecipients(Message.RecipientType.TO, addresses);
+            msg.setRecipients(Message.RecipientType.TO, details.addresses);
             msg.setFrom(mUserAddress);
         }
 
@@ -161,12 +136,14 @@ class MessageGenerator {
             Log.e(TAG, "error parsing date", n);
             sentDate = new Date();
         }
-        mHeaderGenerator.setHeaders(msg, msgMap, DataType.MMS, address, records[0], sentDate, msg_box);
-        // deal with attachments
+        final int msg_box = toInt(msgMap.get("msg_box"));
+        mHeaderGenerator.setHeaders(msg, msgMap, DataType.MMS, details.address, details.records[0], sentDate, msg_box);
         MimeMultipart body = new MimeMultipart();
-        for (BodyPart p : getBodyParts(Uri.withAppendedPath(msgRef, "part"))) {
+
+        for (BodyPart p : MmsSupport.getMMSBodyParts(mResolver, Uri.withAppendedPath(mmsUri, MMS_PART))) {
             body.addBodyPart(p);
         }
+
         msg.setBody(body);
         return msg;
     }
@@ -271,41 +248,19 @@ class MessageGenerator {
         return msg;
     }
 
-    private List<BodyPart> getBodyParts(final Uri uriPart) throws MessagingException {
-        final List<BodyPart> parts = new ArrayList<BodyPart>();
-        Cursor curPart = mContext.getContentResolver().query(uriPart, null, null, null, null);
-
-        // _id, mid, seq, ct, name, chset, cd, fn, cid, cl, ctt_s, ctt_t, _data, text
-        while (curPart != null && curPart.moveToNext()) {
-            final String id = curPart.getString(curPart.getColumnIndex("_id"));
-            final String contentType = curPart.getString(curPart.getColumnIndex("ct"));
-            final String fileName = curPart.getString(curPart.getColumnIndex("cl"));
-            final String text = curPart.getString(curPart.getColumnIndex("text"));
-
-            if (LOCAL_LOGV) Log.v(TAG, String.format(Locale.ENGLISH, "processing part %s, name=%s (%s)", id,
-                    fileName, contentType));
-
-            if (!TextUtils.isEmpty(contentType) && contentType.startsWith("text/") && !TextUtils.isEmpty(text)) {
-                // text
-                parts.add(new MimeBodyPart(new TextBody(text), contentType));
-            } else //noinspection StatementWithEmptyBody
-                if ("application/smil".equalsIgnoreCase(contentType)) {
-                    // silently ignore SMIL stuff
-                } else {
-                    // attach everything else
-                    final Uri partUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, "part/" + id);
-                    parts.add(createPartFromUri(mContext.getContentResolver(), partUri, fileName, contentType));
-                }
-        }
-
-        if (curPart != null) curPart.close();
-        return parts;
-    }
-
     private String getSubject(@NotNull DataType type, @NotNull PersonRecord record) {
         return mPrefix ?
                 String.format(Locale.ENGLISH, "[%s] %s", type.getFolder(mContext), record.getName()) :
                 mContext.getString(type.withField, record.getName());
+    }
+
+    private boolean includeInBackup(DataType type, PersonRecord[] records) {
+        for (PersonRecord r : records) {
+            if (includePersonInBackup(r, type)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean includePersonInBackup(PersonRecord record, DataType type) {
@@ -315,7 +270,7 @@ class MessageGenerator {
         return backup;
     }
 
-    private int toInt(String s) {
+    private static int toInt(String s) {
         try {
              return Integer.valueOf(s);
         } catch (NumberFormatException e) {
