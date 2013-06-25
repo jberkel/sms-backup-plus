@@ -68,7 +68,10 @@ public class CalendarAccessorPost40Test {
         MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "name" } );
         cursor.addRow(new Object[] { "12", "Testing" });
 
-        when(resolver.query(eq(CalendarContract.Calendars.CONTENT_URI), any(String[].class), null,  null, eq(CalendarContract.Calendars.NAME + " ASC"))).thenReturn(
+        when(resolver.query(eq(CalendarContract.Calendars.CONTENT_URI), any(String[].class),
+                any(String.class),
+                any(String[].class),
+                eq(CalendarContract.Calendars.NAME + " ASC"))).thenReturn(
             cursor
         );
 
