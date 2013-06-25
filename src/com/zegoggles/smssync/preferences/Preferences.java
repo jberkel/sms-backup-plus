@@ -137,6 +137,11 @@ public class Preferences {
         return prefs(ctx).getBoolean(ENABLE_AUTO_BACKUP, Defaults.ENABLE_AUTO_SYNC);
     }
 
+    public static boolean setEnableAutoSync(Context ctx, boolean enabled) {
+        return prefs(ctx).edit().putBoolean(ENABLE_AUTO_BACKUP, enabled).commit();
+    }
+
+
     public static int getIncomingTimeoutSecs(Context ctx) {
         return getStringAsInt(ctx, INCOMING_TIMEOUT_SECONDS, Defaults.INCOMING_TIMEOUT_SECONDS);
     }
