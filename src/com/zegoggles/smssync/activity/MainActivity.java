@@ -398,7 +398,7 @@ public class MainActivity extends PreferenceActivity {
         CalendarAccessor calendars = CalendarAccessor.Get.instance();
         ContactAccessor contacts = ContactAccessor.Get.instance();
 
-        Utils.initListPreference(calendarPref, calendars.getCalendars(this), false);
+        Utils.initListPreference(calendarPref, calendars.getCalendars(this.getContentResolver()), false);
         findPreference(Preferences.CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
         Utils.initListPreference((ListPreference) findPreference(Preferences.BACKUP_CONTACT_GROUP),
                 contacts.getGroups(this), false);

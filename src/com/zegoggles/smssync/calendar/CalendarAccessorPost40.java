@@ -1,8 +1,8 @@
 package com.zegoggles.smssync.calendar;
 
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.provider.CalendarContract;
@@ -20,7 +20,7 @@ import static com.zegoggles.smssync.App.TAG;
 public class CalendarAccessorPost40 implements CalendarAccessor {
 
     @Override
-    public void addEntry(Context context, int calendarId, Date when, int duration, String title,
+    public void addEntry(ContentResolver resolver, int calendarId, Date when, int duration, String title,
                          String description) {
         if (LOCAL_LOGV) {
             Log.v(TAG, String.format("addEntry(%d, %s, %d, %s, %s)",
@@ -38,21 +38,23 @@ public class CalendarAccessorPost40 implements CalendarAccessor {
         contentValues.put(CalendarContract.Events.EVENT_TIMEZONE, Time.getCurrentTimezone());
 
         try {
-            context.getContentResolver().insert(CalendarContract.Events.CONTENT_URI, contentValues);
+            resolver.insert(CalendarContract.Events.CONTENT_URI, contentValues);
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "could not add calendar entry", e);
         }
     }
 
     @Override
-    public Map<String, String> getCalendars(Context context) {
+    public Map<String, String> getCalendars(ContentResolver resolver) {
         final Map<String, String> map = new LinkedHashMap<String, String>();
 
         Cursor cursor = null;
         try {
-            cursor = context.getContentResolver().query(CalendarContract.Calendars.CONTENT_URI,
-                    new String[]{CalendarContract.Calendars._ID, CalendarContract.Calendars.NAME},
-                    null, null, CalendarContract.Calendars.NAME + " ASC");
+            cursor = resolver.query(CalendarContract.Calendars.CONTENT_URI,
+                    new String[]{ CalendarContract.Calendars._ID, CalendarContract.Calendars.NAME },
+                    null,
+                    null,
+                    CalendarContract.Calendars.NAME + " ASC");
 
             while (cursor != null && cursor.moveToNext()) {
                 map.put(cursor.getString(0), cursor.getString(1));

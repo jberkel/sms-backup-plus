@@ -58,7 +58,7 @@ class CalendarSyncer {
                 }
 
                 // insert into calendar
-                calendars.addEntry(context,
+                calendars.addEntry(context.getContentResolver(),
                         calendarId, /* PrefStore.getCallLogCalendarId(context) */
                         then, duration,
                         callFormatter.callTypeString(callType, record.getName()),
