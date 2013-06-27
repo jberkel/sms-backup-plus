@@ -61,11 +61,13 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         if (autoSync && loginInformationSet && !firstBackup) {
             new Alarms(ctx).scheduleIncomingBackup();
         } else {
-            Log.i(TAG, "Received SMS but not set up to sync.");
+            Log.i(TAG, "Received SMS but not set up to back up.");
 
-            new AppLog(LOG, DateFormat.getDateFormatOrder(ctx))
-                .appendAndClose("Received SMS but not set up to sync. "+
+            if (Preferences.isAppLogEnabled(ctx)) {
+                new AppLog(LOG, DateFormat.getDateFormatOrder(ctx))
+                    .appendAndClose("Received SMS but not set up to back up. "+
                     "autoSync="+autoSync+", loginInfoSet="+loginInformationSet+", firstBackup="+firstBackup);
+            }
         }
     }
 }
