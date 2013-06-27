@@ -160,10 +160,7 @@ public class Preferences {
 
     public static boolean isFirstBackup(Context ctx) {
         SharedPreferences prefs = prefs(ctx);
-        return !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_SMS) &&
-               !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_MMS) &&
-               !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_CALLLOG) &&
-               !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_WHATSAPP);
+        return !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_SMS);
     }
 
     public static boolean isFirstUse(Context ctx) {
