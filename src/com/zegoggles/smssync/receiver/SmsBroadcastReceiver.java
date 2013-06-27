@@ -57,7 +57,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     private void incomingSMS(Context ctx) {
         final boolean autoSync = Preferences.isEnableAutoSync(ctx);
         final boolean loginInformationSet = new AuthPreferences(ctx).isLoginInformationSet();
-        boolean firstBackup = Preferences.isFirstBackup(ctx);
+        final boolean firstBackup = Preferences.isFirstBackup(ctx);
         if (autoSync && loginInformationSet && !firstBackup) {
             new Alarms(ctx).scheduleIncomingBackup();
         } else {
