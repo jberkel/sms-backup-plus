@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zegoggles.smssync"
-    android:versionName="1.5.3"
-    android:versionCode="1518"
+    android:versionName="1.5.3-BETA"
+    android:versionCode="1519"
     android:description="@string/app_description"
     android:installLocation="auto">
 
