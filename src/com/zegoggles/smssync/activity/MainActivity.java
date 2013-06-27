@@ -115,12 +115,12 @@ public class MainActivity extends PreferenceActivity {
             backupMms.setChecked(false);
             backupMms.setSummary(R.string.ui_backup_mms_not_supported);
         }
-        if (Preferences.showUpgradeMessage(this)) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
+        if (Preferences.shouldShowUpgradeMessage(this)) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
         setPreferenceListeners(getPreferenceManager(), version >= MIN_VERSION_BACKUP);
 
         checkAndDisplayDroidWarning();
 
-        if (Preferences.showAboutDialog(this)) {
+        if (Preferences.shouldShowAboutDialog(this)) {
             show(Dialogs.ABOUT);
         }
 

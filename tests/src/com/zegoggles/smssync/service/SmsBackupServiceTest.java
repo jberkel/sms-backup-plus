@@ -40,15 +40,20 @@ public class SmsBackupServiceTest {
         initMocks(this);
 
         service = new SmsBackupService() {
-            @Override
-            protected BackupTask getBackupTask() {
+            @Override protected BackupTask getBackupTask() {
                 return backupTask;
+            }
+            @Override protected Alarms getAlarms() {
+                return alarms;
+            }
+
+            @Override protected AuthPreferences getAuthPreferences() {
+                return authPreferences;
             }
         };
         shadowNotificationManager = shadowOf(service.getNotifier());
         shadowConnectivityManager = shadowOf(service.getConnectivityManager());
-        service.authPreferences = authPreferences;
-        service.alarms = alarms;
+
         service.onCreate();
 
         when(authPreferences.getStoreUri()).thenReturn("imap+ssl+://xoauth:foooo@imap.gmail.com:993");

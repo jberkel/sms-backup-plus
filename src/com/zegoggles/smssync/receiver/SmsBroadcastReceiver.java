@@ -18,12 +18,15 @@ package com.zegoggles.smssync.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.util.Log;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.utils.AppLog;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.LOG;
 import static com.zegoggles.smssync.App.TAG;
 
 public class SmsBroadcastReceiver extends BroadcastReceiver {
@@ -52,13 +55,17 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void incomingSMS(Context ctx) {
-        if (Preferences.isEnableAutoSync(ctx) &&
-                new AuthPreferences(ctx).isLoginInformationSet() &&
-                !Preferences.isFirstBackup(ctx)) {
-
+        final boolean autoSync = Preferences.isEnableAutoSync(ctx);
+        final boolean loginInformationSet = new AuthPreferences(ctx).isLoginInformationSet();
+        boolean firstBackup = Preferences.isFirstBackup(ctx);
+        if (autoSync && loginInformationSet && !firstBackup) {
             new Alarms(ctx).scheduleIncomingBackup();
         } else {
             Log.i(TAG, "Received SMS but not set up to sync.");
+
+            new AppLog(LOG, DateFormat.getDateFormatOrder(ctx))
+                .appendAndClose("Received SMS but not set up to sync. "+
+                    "autoSync="+autoSync+", loginInfoSet="+loginInformationSet+", firstBackup="+firstBackup);
         }
     }
 }

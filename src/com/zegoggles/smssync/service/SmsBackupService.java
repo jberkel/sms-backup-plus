@@ -52,8 +52,6 @@ public class SmsBackupService extends ServiceBase {
     @Nullable private static SmsBackupService service;
     @NotNull private BackupState mState = new BackupState();
 
-    protected Alarms alarms = new Alarms(this);
-
     @Override @NotNull
     public BackupState getState() {
         return mState;
@@ -170,7 +168,7 @@ public class SmsBackupService extends ServiceBase {
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
                     getString(R.string.notification_auth_failure),
-                    getString(authPreferences.useXOAuth() ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain));
+                    getString(getAuthPreferences().useXOAuth() ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain));
             }
         } else if (state.isConnectivityError()) {
             appLog(R.string.app_log_backup_failed_connectivity, state.getErrorMessage(getResources()));
@@ -203,7 +201,7 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void scheduleNextBackup() {
-        final long nextSync = alarms.scheduleRegularBackup();
+        final long nextSync = getAlarms().scheduleRegularBackup();
         if (nextSync >= 0) {
             appLog(R.string.app_log_scheduled_next_sync,
                     DateFormat.format("kk:mm", new Date(nextSync)));
@@ -223,6 +221,10 @@ public class SmsBackupService extends ServiceBase {
                 getPendingIntent());
 
         getNotifier().notify(0, n);
+    }
+
+    protected Alarms getAlarms() {
+        return new Alarms(this);
     }
 
     public static boolean isServiceWorking() {

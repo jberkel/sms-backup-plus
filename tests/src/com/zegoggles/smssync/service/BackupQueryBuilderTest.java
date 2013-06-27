@@ -33,7 +33,7 @@ public class BackupQueryBuilderTest {
 
     @Test
     public void shouldBuildQueryForSMS() throws Exception {
-        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.SMS, 200, null);
+        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.SMS, null, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://sms"));
         assertThat(query.projection).isNull();
@@ -50,7 +50,7 @@ public class BackupQueryBuilderTest {
 
         when(accessor.getGroupContactIds(any(ContentResolver.class), eq(group))).thenReturn(ids);
 
-        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.SMS, 200, group);
+        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.SMS, group, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://sms"));
         assertThat(query.projection).isNull();
@@ -61,7 +61,7 @@ public class BackupQueryBuilderTest {
 
     @Test
     public void shouldBuildQueryForMMS() throws Exception {
-        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.MMS, 200, null);
+        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.MMS, null, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://mms"));
         assertThat(query.projection).isNull();
@@ -72,7 +72,7 @@ public class BackupQueryBuilderTest {
 
     @Test
     public void shouldBuildQueryForCallLog() throws Exception {
-        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.CALLLOG, 200, null);
+        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.CALLLOG, null, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://call_log/calls"));
         assertThat(query.projection).isEqualTo(new String[] { "_id", "number", "duration", "date", "type" });
@@ -82,8 +82,8 @@ public class BackupQueryBuilderTest {
     }
 
     @Test
-    public void shouldBuildMaxQueryForSMS() throws Exception {
-        BackupQueryBuilder.Query query = builder.buildMaxQueryForDataType(DataType.SMS);
+    public void shouldBuildMostRecentQueryForSMS() throws Exception {
+        BackupQueryBuilder.Query query = builder.buildMostRecentQueryForDataType(DataType.SMS);
         assertThat(query.uri).isEqualTo(Uri.parse("content://sms"));
         assertThat(query.projection).isEqualTo(new String[] { "date" } );
         assertThat(query.selection).isEqualTo("type <> ?");
@@ -92,8 +92,8 @@ public class BackupQueryBuilderTest {
     }
 
     @Test
-    public void shouldBuildMaxQueryForMMS() throws Exception {
-        BackupQueryBuilder.Query query = builder.buildMaxQueryForDataType(DataType.MMS);
+    public void shouldBuildMostRecentQueryForMMS() throws Exception {
+        BackupQueryBuilder.Query query = builder.buildMostRecentQueryForDataType(DataType.MMS);
         assertThat(query.uri).isEqualTo(Uri.parse("content://mms"));
         assertThat(query.projection).isEqualTo(new String[] { "date" } );
         assertThat(query.selection).isNull();
@@ -102,8 +102,8 @@ public class BackupQueryBuilderTest {
     }
 
     @Test
-    public void shouldBuildMaxQueryForCallLog() throws Exception {
-        BackupQueryBuilder.Query query = builder.buildMaxQueryForDataType(DataType.CALLLOG);
+    public void shouldBuildMostRecentQueryForCallLog() throws Exception {
+        BackupQueryBuilder.Query query = builder.buildMostRecentQueryForDataType(DataType.CALLLOG);
         assertThat(query.uri).isEqualTo(Uri.parse("content://call_log/calls"));
         assertThat(query.projection).isEqualTo(new String[] { "date" } );
         assertThat(query.selection).isNull();

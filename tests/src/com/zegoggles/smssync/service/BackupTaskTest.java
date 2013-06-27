@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.service;
 
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import com.fsck.k9.mail.Message;
@@ -19,6 +20,9 @@ import org.mockito.Mock;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.zegoggles.smssync.mail.DataType.*;
+import static com.zegoggles.smssync.service.BackupItemsFetcher.emptyCursor;
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,6 +32,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class BackupTaskTest {
     BackupTask task;
     BackupConfig config;
+    Context context;
     @Mock BackupImapStore store;
     @Mock BackupImapStore.BackupFolder folder;
     @Mock SmsBackupService service;
@@ -41,15 +46,16 @@ public class BackupTaskTest {
     public void before() {
         initMocks(this);
         config = new BackupConfig(store, 0, false, 100, new ContactGroup(-1), -1, BackupType.MANUAL);
-
         when(service.getApplicationContext()).thenReturn(Robolectric.application);
         when(service.getState()).thenReturn(state);
 
         task = new BackupTask(service, fetcher, converter, syncer, authPreferences);
+        context = Robolectric.application;
     }
 
     @Test
     public void shouldAcquireAndReleaseLocksDuringBackup() throws Exception {
+        mockAllFetchEmpty();
         task.doInBackground(config);
         verify(service).acquireLocks();
         verify(service).releaseLocks();
@@ -58,13 +64,32 @@ public class BackupTaskTest {
     @Test
     public void shouldBackupItems() throws Exception {
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
-        when(fetcher.getItemsForDataType(eq(DataType.SMS), any(ContactGroup.class), anyInt())).thenReturn(testMessages());
-        when(converter.cursorToMessages(any(Cursor.class), anyInt(), eq(DataType.SMS))).thenReturn(result(DataType.SMS, 1));
-        when(store.getFolder(DataType.SMS)).thenReturn(folder);
+
+        mockFetch(SMS, testMessages());
+        mockFetch(MMS, emptyCursor());
+        mockFetch(CALLLOG, emptyCursor());
+        mockFetch(WHATSAPP, emptyCursor());
+
+        when(converter.cursorToMessages(any(Cursor.class), anyInt(), eq(SMS))).thenReturn(result(SMS, 1));
+        when(store.getFolder(SMS)).thenReturn(folder);
 
         task.doInBackground(config);
 
         verify(folder).appendMessages(any(Message[].class));
+    }
+
+    @Test
+    public void shouldSkipItems() throws Exception {
+        when(authPreferences.isLoginInformationSet()).thenReturn(true);
+        when(fetcher.getMostRecentTimestamp(any(DataType.class))).thenReturn(-23L);
+
+        task.doInBackground(new BackupConfig(
+            store, 0, true, 100, new ContactGroup(-1), -1, BackupType.MANUAL)
+        );
+
+        for (DataType type : DataType.values()) {
+            assertThat(type.getMaxSyncedDate(context)).isEqualTo(-23);
+        }
     }
 
     private Cursor testMessages() {
@@ -81,5 +106,13 @@ public class BackupTaskTest {
             result.messageList.add(new MimeMessage());
         }
         return result;
+    }
+
+    private void mockFetch(DataType type, Cursor cursor) {
+        when(fetcher.getItemsForDataType(eq(type), any(ContactGroup.class), anyInt())).thenReturn(cursor);
+    }
+
+    private void mockAllFetchEmpty() {
+        when(fetcher.getItemsForDataType(any(DataType.class), any(ContactGroup.class), anyInt())).thenReturn(emptyCursor());
     }
 }

@@ -65,6 +65,11 @@ public class AppLog {
         }
     }
 
+    public void appendAndClose(String s) {
+        append(s);
+        close();
+    }
+
     public void close() {
         if (LOCAL_LOGV) Log.v(TAG, "AppLog#close()");
         if (writer != null) writer.close();

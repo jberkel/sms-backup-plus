@@ -211,7 +211,7 @@ public class Preferences {
         }
     }
 
-    public static boolean showUpgradeMessage(Context ctx) {
+    public static boolean shouldShowUpgradeMessage(Context ctx) {
         final String key = "upgrade_message_seen";
         boolean seen = prefs(ctx).getBoolean(key, false);
         if (!seen && isOldSmsBackupInstalled(ctx)) {
@@ -222,7 +222,7 @@ public class Preferences {
         }
     }
 
-    public static boolean showAboutDialog(Context ctx) {
+    public static boolean shouldShowAboutDialog(Context ctx) {
         int code;
         try {
             PackageInfo pInfo = ctx.getPackageManager().getPackageInfo(

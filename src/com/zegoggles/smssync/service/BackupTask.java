@@ -44,9 +44,10 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     BackupTask(@NotNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
         this.service = service;
-        this.authPreferences = service.authPreferences;
+        this.authPreferences = service.getAuthPreferences();
 
         this.fetcher = new BackupItemsFetcher(context,
+                context.getContentResolver(),
                 new BackupQueryBuilder(context, service.getContacts()));
         this.converter = new MessageConverter(context, authPreferences.getUserEmail());
 
@@ -87,12 +88,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     protected BackupState doInBackground(BackupConfig... params) {
         final BackupConfig config = params[0];
         if (config.skip) {
-            appLog(R.string.app_log_skip_backup_skip_messages);
-            for (DataType type : new DataType[] { SMS, MMS, CALLLOG }) {
-                type.setMaxSyncedDate(service, fetcher.getMaxData(type));
-            }
-            Log.i(TAG, "All messages skipped.");
-            return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
+            return skip();
         }
 
         Cursor smsItems = null;
@@ -105,19 +101,19 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             int max = config.maxItemsPerSync;
 
             smsItems = fetcher.getItemsForDataType(SMS, config.groupToBackup, max);
-            smsCount = smsItems != null ? smsItems.getCount() : 0;
+            smsCount = smsItems.getCount();
             max -= smsCount;
 
             mmsItems = fetcher.getItemsForDataType(MMS, config.groupToBackup, max);
-            mmsCount = mmsItems != null ? mmsItems.getCount() : 0;
+            mmsCount = mmsItems.getCount();
             max -= mmsCount;
 
             callLogItems = fetcher.getItemsForDataType(CALLLOG, config.groupToBackup, max);
-            callLogCount = callLogItems != null ? callLogItems.getCount() : 0;
+            callLogCount = callLogItems.getCount();
             max -= callLogCount;
 
             whatsAppItems = fetcher.getItemsForDataType(DataType.WHATSAPP, config.groupToBackup, max);
-            whatsAppItemsCount = whatsAppItems != null ? whatsAppItems.getCount() : 0;
+            whatsAppItemsCount = whatsAppItems.getCount();
 
             final int itemsToSync = smsCount + mmsCount + callLogCount + whatsAppItemsCount;
 
@@ -176,6 +172,15 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 Log.e(TAG, "error", ignore);
             }
         }
+    }
+
+    private BackupState skip() {
+        appLog(R.string.app_log_skip_backup_skip_messages);
+        for (DataType type : DataType.values()) {
+            type.setMaxSyncedDate(service, fetcher.getMostRecentTimestamp(type));
+        }
+        Log.i(TAG, "All messages skipped.");
+        return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
     }
 
     private void appLog(int id, Object... args) {

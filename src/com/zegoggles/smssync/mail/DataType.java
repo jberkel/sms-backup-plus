@@ -6,6 +6,9 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import com.zegoggles.smssync.R;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public enum DataType {
     SMS     (R.string.sms,      R.string.sms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      Defaults.SMS_BACKUP_ENABLED,     PreferenceKeys.RESTORE_SMS,     Defaults.SMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_SMS,      -1),
     MMS     (R.string.mms,      R.string.mms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_MMS,      Defaults.MMS_BACKUP_ENABLED,     null,                           Defaults.MMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_MMS,      Build.VERSION_CODES.ECLAIR),
@@ -81,6 +84,16 @@ public enum DataType {
 
     private SharedPreferences prefs(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public static Set<DataType> enabled(Context context) {
+        Set<DataType> set = new HashSet<DataType>();
+        for (DataType t : values()) {
+            if (t.isBackupEnabled(context)) {
+                set.add(t);
+            }
+        }
+        return set;
     }
 
     public static long getMostRecentSyncedDate(Context ctx) {

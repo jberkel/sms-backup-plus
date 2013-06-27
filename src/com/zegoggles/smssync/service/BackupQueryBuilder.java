@@ -60,16 +60,16 @@ class BackupQueryBuilder {
         }
     }
 
-    public @Nullable Query buildQueryForDataType(DataType type, int max, ContactGroup group) {
+    public @Nullable Query buildQueryForDataType(DataType type, ContactGroup group, int max) {
         switch (type) {
-            case SMS:     return getQueryForSMS(max, group);
-            case MMS:     return getQueryForMMS(max, group);
+            case SMS:     return getQueryForSMS(group, max);
+            case MMS:     return getQueryForMMS(group, max);
             case CALLLOG: return getQueryForCallLog(max);
             default:      return null;
         }
     }
 
-    public @Nullable Query buildMaxQueryForDataType(DataType type) {
+    public @Nullable Query buildMostRecentQueryForDataType(DataType type) {
         switch (type) {
             case MMS:
                 return new Query(
@@ -97,7 +97,7 @@ class BackupQueryBuilder {
         }
     }
 
-    private Query getQueryForSMS(int max, ContactGroup group) {
+    private Query getQueryForSMS(ContactGroup group, int max) {
         return new Query(Consts.SMS_PROVIDER,
             null,
             String.format(Locale.ENGLISH,
@@ -112,7 +112,7 @@ class BackupQueryBuilder {
             max);
     }
 
-    private Query getQueryForMMS(int max, ContactGroup group) {
+    private Query getQueryForMMS(ContactGroup group, int max) {
         return new Query(
             Consts.MMS_PROVIDER,
             null,

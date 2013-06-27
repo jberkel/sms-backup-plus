@@ -57,7 +57,7 @@ public class SmsRestoreService extends ServiceBase {
             final boolean restoreCallLog = CALLLOG.isRestoreEnabled(service);
             final boolean restoreSms     = SMS.isRestoreEnabled(service);
 
-            MessageConverter converter = new MessageConverter(service, authPreferences.getUserEmail());
+            MessageConverter converter = new MessageConverter(service, getAuthPreferences().getUserEmail());
 
             new RestoreTask(this,
                     getBackupImapStore(),
