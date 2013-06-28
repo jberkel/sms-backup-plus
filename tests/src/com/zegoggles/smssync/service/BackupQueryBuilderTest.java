@@ -1,10 +1,8 @@
 package com.zegoggles.smssync.service;
 
-import android.content.ContentResolver;
 import android.net.Uri;
 import com.zegoggles.smssync.contacts.ContactAccessor;
-import com.zegoggles.smssync.contacts.ContactGroup;
-import com.zegoggles.smssync.contacts.GroupContactIds;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +13,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class BackupQueryBuilderTest {
@@ -28,7 +23,7 @@ public class BackupQueryBuilderTest {
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        builder = new BackupQueryBuilder(Robolectric.application, accessor);
+        builder = new BackupQueryBuilder(Robolectric.application);
     }
 
     @Test
@@ -44,13 +39,10 @@ public class BackupQueryBuilderTest {
 
     @Test
     public void shouldBuildQueryForSMSIncludingContactGroup() throws Exception {
-        ContactGroup group = new ContactGroup(123);
-        GroupContactIds ids = new GroupContactIds();
+        ContactGroupIds ids = new ContactGroupIds();
         ids.add(1L, 20L);
 
-        when(accessor.getGroupContactIds(any(ContentResolver.class), eq(group))).thenReturn(ids);
-
-        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.SMS, group, 200);
+        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.SMS, ids, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://sms"));
         assertThat(query.projection).isNull();

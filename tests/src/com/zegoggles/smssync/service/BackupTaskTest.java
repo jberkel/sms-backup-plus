@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.internet.MimeMessage;
+import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.DataType;
@@ -41,6 +43,7 @@ public class BackupTaskTest {
     @Mock MessageConverter converter;
     @Mock CalendarSyncer syncer;
     @Mock AuthPreferences authPreferences;
+    @Mock ContactAccessor accessor;
 
     @Before
     public void before() {
@@ -49,7 +52,7 @@ public class BackupTaskTest {
         when(service.getApplicationContext()).thenReturn(Robolectric.application);
         when(service.getState()).thenReturn(state);
 
-        task = new BackupTask(service, fetcher, converter, syncer, authPreferences);
+        task = new BackupTask(service, fetcher, converter, syncer, authPreferences, accessor);
         context = Robolectric.application;
     }
 
@@ -109,10 +112,10 @@ public class BackupTaskTest {
     }
 
     private void mockFetch(DataType type, Cursor cursor) {
-        when(fetcher.getItemsForDataType(eq(type), any(ContactGroup.class), anyInt())).thenReturn(cursor);
+        when(fetcher.getItemsForDataType(eq(type), any(ContactGroupIds.class), anyInt())).thenReturn(cursor);
     }
 
     private void mockAllFetchEmpty() {
-        when(fetcher.getItemsForDataType(any(DataType.class), any(ContactGroup.class), anyInt())).thenReturn(emptyCursor());
+        when(fetcher.getItemsForDataType(any(DataType.class), any(ContactGroupIds.class), anyInt())).thenReturn(emptyCursor());
     }
 }

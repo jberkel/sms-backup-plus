@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
-import com.zegoggles.smssync.contacts.ContactGroup;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +25,7 @@ public class BackupItemsFetcher {
         this.resolver = resolver;
     }
 
-    public @NotNull Cursor getItemsForDataType(DataType dataType, ContactGroup group, int max) {
+    public @NotNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
         if (!dataType.isBackupEnabled(context)) {
             if (LOCAL_LOGV) Log.v(TAG, "backup disabled for " + dataType + ", returning empty cursor");

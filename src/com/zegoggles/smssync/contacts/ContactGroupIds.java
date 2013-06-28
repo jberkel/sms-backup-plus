@@ -5,7 +5,7 @@ import com.zegoggles.smssync.mail.PersonRecord;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GroupContactIds {
+public class ContactGroupIds {
     private final Set<Long> ids = new HashSet<Long>();
     private final Set<Long> rawIds = new HashSet<Long>();
 

@@ -9,6 +9,8 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.contacts.ContactAccessor;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.CallFormatter;
 import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.DataType;
@@ -40,6 +42,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final MessageConverter converter;
     private final CalendarSyncer calendarSyncer;
     private final AuthPreferences authPreferences;
+    private final ContactAccessor contactAccessor;
 
     BackupTask(@NotNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
@@ -48,8 +51,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
         this.fetcher = new BackupItemsFetcher(context,
                 context.getContentResolver(),
-                new BackupQueryBuilder(context, service.getContacts()));
+                new BackupQueryBuilder(context));
         this.converter = new MessageConverter(context, authPreferences.getUserEmail());
+        this.contactAccessor = ContactAccessor.Get.instance();
 
         if (Preferences.isCallLogCalendarSyncEnabled(context)) {
             calendarSyncer = new CalendarSyncer(
@@ -67,12 +71,15 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     BackupTask(SmsBackupService service,
                BackupItemsFetcher fetcher,
                MessageConverter messageConverter,
-               CalendarSyncer syncer, AuthPreferences authPreferences) {
+               CalendarSyncer syncer,
+               AuthPreferences authPreferences,
+               ContactAccessor accessor) {
         this.service = service;
         this.fetcher = fetcher;
         this.converter = messageConverter;
         this.calendarSyncer = syncer;
         this.authPreferences = authPreferences;
+        this.contactAccessor = accessor;
     }
 
     @Override
@@ -97,22 +104,24 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         Cursor whatsAppItems = null;
         final int smsCount, mmsCount, callLogCount, whatsAppItemsCount;
         try {
+            final ContactGroupIds groupIds = contactAccessor.getGroupContactIds(service.getContentResolver(), config.groupToBackup);
+
             service.acquireLocks();
             int max = config.maxItemsPerSync;
 
-            smsItems = fetcher.getItemsForDataType(SMS, config.groupToBackup, max);
+            smsItems = fetcher.getItemsForDataType(SMS, groupIds, max);
             smsCount = smsItems.getCount();
             max -= smsCount;
 
-            mmsItems = fetcher.getItemsForDataType(MMS, config.groupToBackup, max);
+            mmsItems = fetcher.getItemsForDataType(MMS, groupIds, max);
             mmsCount = mmsItems.getCount();
             max -= mmsCount;
 
-            callLogItems = fetcher.getItemsForDataType(CALLLOG, config.groupToBackup, max);
+            callLogItems = fetcher.getItemsForDataType(CALLLOG, groupIds, max);
             callLogCount = callLogItems.getCount();
             max -= callLogCount;
 
-            whatsAppItems = fetcher.getItemsForDataType(DataType.WHATSAPP, config.groupToBackup, max);
+            whatsAppItems = fetcher.getItemsForDataType(DataType.WHATSAPP, groupIds, max);
             whatsAppItemsCount = whatsAppItems.getCount();
 
             final int itemsToSync = smsCount + mmsCount + callLogCount + whatsAppItemsCount;

@@ -18,7 +18,7 @@ import com.github.jberkel.whassup.model.WhatsAppMessage;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
-import com.zegoggles.smssync.contacts.GroupContactIds;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.CallLogTypes;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ class MessageGenerator {
     private final Address mUserAddress;
     private final PersonLookup mPersonLookup;
     private final boolean mPrefix;
-    private final GroupContactIds mAllowedContacts;
+    private final ContactGroupIds mContactsToBackup;
     private final CallFormatter mCallFormatter;
     private final AddressStyle mAddressStyle;
 
@@ -49,14 +49,14 @@ class MessageGenerator {
                             HeaderGenerator headerGenerator,
                             PersonLookup personLookup,
                             boolean mailSubjectPrefix,
-                            GroupContactIds allowedIds) {
+                            ContactGroupIds contactsToBackup) {
         mHeaderGenerator = headerGenerator;
         mUserAddress = userAddress;
         mAddressStyle = addressStyle;
         mContext = context;
         mPersonLookup = personLookup;
         mPrefix = mailSubjectPrefix;
-        mAllowedContacts = allowedIds;
+        mContactsToBackup = contactsToBackup;
         mCallFormatter = new CallFormatter(mContext.getResources());
         mResolver = context.getContentResolver();
     }
@@ -253,7 +253,7 @@ class MessageGenerator {
     }
 
     private boolean includePersonInBackup(PersonRecord record, DataType type) {
-        final boolean backup = (mAllowedContacts == null || mAllowedContacts.contains(record));
+        final boolean backup = (type == DataType.SMS || mContactsToBackup == null || mContactsToBackup.contains(record));
 
         if (LOCAL_LOGV && !backup) Log.v(TAG, "not backing up " + type + " / " + record);
         return backup;

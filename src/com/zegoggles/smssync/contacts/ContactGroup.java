@@ -1,5 +1,8 @@
 package com.zegoggles.smssync.contacts;
 
+import android.content.ContentResolver;
+import org.jetbrains.annotations.Nullable;
+
 public class ContactGroup {
     public final long _id;
     public final Type type;

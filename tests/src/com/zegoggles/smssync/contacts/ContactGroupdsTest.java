@@ -8,11 +8,11 @@ import org.robolectric.RobolectricTestRunner;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class GroupContactIdsTest {
+public class ContactGroupdsTest {
 
     @Test
     public void shouldAddIds() throws Exception {
-        GroupContactIds ids = new GroupContactIds();
+        ContactGroupIds ids = new ContactGroupIds();
         assertThat(ids.getIds()).isEmpty();
         assertThat(ids.getRawIds()).isEmpty();
 
@@ -25,7 +25,7 @@ public class GroupContactIdsTest {
 
     @Test
     public void shouldCheckForPerson() throws Exception {
-        GroupContactIds ids = new GroupContactIds();
+        ContactGroupIds ids = new ContactGroupIds();
 
         PersonRecord record = new PersonRecord(22, "Test", "test@test.com", "123");
         assertThat(ids.contains(record)).isFalse();

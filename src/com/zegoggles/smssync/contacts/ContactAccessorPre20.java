@@ -30,8 +30,8 @@ public class ContactAccessorPre20 implements ContactAccessor {
         return null;
     }
 
-    public GroupContactIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
-        return new GroupContactIds();
+    public ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
+        return null;
     }
 
     public Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources) {

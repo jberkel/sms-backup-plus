@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 import com.github.jberkel.whassup.Whassup;
-import com.sun.istack.internal.NotNull;
 import com.zegoggles.smssync.mail.DataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 

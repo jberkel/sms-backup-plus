@@ -19,6 +19,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public interface ContactAccessor {
      * @param group   the group
      * @return All contacts from a group
      */
-    GroupContactIds getGroupContactIds(ContentResolver resolver, ContactGroup group);
+    @Nullable ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group);
 
     /**
      * All groups a user has

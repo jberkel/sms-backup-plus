@@ -40,20 +40,20 @@ public class ContactAccessorPost20 implements ContactAccessor {
         return null;
     }
 
-    public GroupContactIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
-        final GroupContactIds contactIds = new GroupContactIds();
-        Cursor c = null;
-        switch (group.type) {
-            case GROUP:
-                c = resolver.query(
-                        Data.CONTENT_URI,
-                        new String[]{GroupMembership.CONTACT_ID, GroupMembership.RAW_CONTACT_ID,
-                                GroupMembership.GROUP_ROW_ID},
-                        GroupMembership.GROUP_ROW_ID + " = ? AND " + GroupMembership.MIMETYPE + " = ?",
-                        new String[]{String.valueOf(group._id), GroupMembership.CONTENT_ITEM_TYPE},
-                        null);
-                break;
-        }
+    public ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
+        if (group.isEveryBody()) return null;
+
+        final ContactGroupIds contactIds = new ContactGroupIds();
+        Cursor c = resolver.query(
+                Data.CONTENT_URI,
+                new String[]{
+                        GroupMembership.CONTACT_ID,
+                        GroupMembership.RAW_CONTACT_ID,
+                        GroupMembership.GROUP_ROW_ID
+                },
+                GroupMembership.GROUP_ROW_ID + " = ? AND " + GroupMembership.MIMETYPE + " = ?",
+                new String[]{String.valueOf(group._id), GroupMembership.CONTENT_ITEM_TYPE},
+                null);
         while (c != null && c.moveToNext()) {
             contactIds.add(c.getLong(0), c.getLong(1));
         }

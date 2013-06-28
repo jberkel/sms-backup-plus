@@ -75,7 +75,7 @@ public class ContactAccessorPost20Test {
 
     @Test
     public void shouldGetGroupContactIdsEmpty() throws Exception {
-        GroupContactIds ids = accessor.getGroupContactIds(resolver, new ContactGroup(1));
+        ContactGroupIds ids = accessor.getGroupContactIds(resolver, new ContactGroup(1));
         assertThat(ids.isEmpty()).isTrue();
 
         verify(resolver).query(
@@ -105,7 +105,7 @@ public class ContactAccessorPost20Test {
                 any(String.class))
         ).thenReturn(cursor);
 
-        GroupContactIds ids = accessor.getGroupContactIds(resolver, new ContactGroup(1));
+        ContactGroupIds ids = accessor.getGroupContactIds(resolver, new ContactGroup(1));
 
         assertThat(ids.getIds().contains(123L));
         assertThat(ids.getRawIds().contains(256L));

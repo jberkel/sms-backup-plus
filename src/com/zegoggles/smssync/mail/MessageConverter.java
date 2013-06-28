@@ -31,7 +31,7 @@ import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
-import com.zegoggles.smssync.contacts.GroupContactIds;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.utils.ThreadHelper;
@@ -70,14 +70,9 @@ public class MessageConverter {
             Preferences.setReferenceUid(context, referenceUid);
         }
 
-        GroupContactIds allowedIds = null;
         final ContactGroup backupContactGroup = Preferences.getBackupContactGroup(context);
-        switch (backupContactGroup.type) {
-            case EVERYBODY: break;
-            default:
-                allowedIds = ContactAccessor.Get.instance().getGroupContactIds(context.getContentResolver(), backupContactGroup);
-                if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
-        }
+        ContactGroupIds allowedIds = ContactAccessor.Get.instance().getGroupContactIds(context.getContentResolver(), backupContactGroup);
+        if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
 
         mMessageGenerator = new MessageGenerator(mContext,
                 new Address(userEmail),
