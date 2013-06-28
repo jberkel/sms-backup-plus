@@ -9,7 +9,6 @@ public class ContactGroupIds {
     private final Set<Long> ids = new HashSet<Long>();
     private final Set<Long> rawIds = new HashSet<Long>();
 
-
     public void add(long id, long rawId) {
         this.ids.add(id);
         this.rawIds.add(rawId);
