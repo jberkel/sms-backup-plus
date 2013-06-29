@@ -265,7 +265,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 } else break; // no more items available
 
                 if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
-                ConversionResult result = converter.cursorToMessages(curCursor, config.maxMessagePerRequest, dataType);
+                ConversionResult result = converter.convertMessages(curCursor, config.maxMessagePerRequest, dataType);
                 if (result != null && !result.messageList.isEmpty()) {
                     List<Message> messages = result.messageList;
 

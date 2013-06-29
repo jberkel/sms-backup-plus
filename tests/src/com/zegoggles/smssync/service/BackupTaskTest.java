@@ -73,7 +73,7 @@ public class BackupTaskTest {
         mockFetch(CALLLOG, emptyCursor());
         mockFetch(WHATSAPP, emptyCursor());
 
-        when(converter.cursorToMessages(any(Cursor.class), anyInt(), eq(SMS))).thenReturn(result(SMS, 1));
+        when(converter.convertMessages(any(Cursor.class), anyInt(), eq(SMS))).thenReturn(result(SMS, 1));
         when(store.getFolder(SMS)).thenReturn(folder);
 
         task.doInBackground(config);

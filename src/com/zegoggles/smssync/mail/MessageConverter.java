@@ -84,9 +84,9 @@ public class MessageConverter {
                 new MmsSupport(mContext.getContentResolver(), mPersonLookup));
     }
 
-    public ConversionResult cursorToMessages(final Cursor cursor,
-                                             final int maxEntries,
-                                             DataType dataType) throws MessagingException {
+    public ConversionResult convertMessages(final Cursor cursor,
+                                            final int maxEntries,
+                                            DataType dataType) throws MessagingException {
         final String[] columns = cursor.getColumnNames();
         final ConversionResult result = new ConversionResult(dataType);
         do {
