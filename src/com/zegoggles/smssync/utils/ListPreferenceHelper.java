@@ -24,12 +24,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Utils {
-    private Utils() {
+public class ListPreferenceHelper {
+    private ListPreferenceHelper() {
     }
 
-    public static void initListPreference(final ListPreference pref,
-                                          final Map<?, ?> fields, boolean keepExisting) {
+    public static boolean initListPreference(final ListPreference pref,
+                                             final Map<?, ?> fields, boolean keepExisting) {
         if (fields.size() > 0) {
             final List<CharSequence> e = new ArrayList<CharSequence>();
             final List<CharSequence> ev = new ArrayList<CharSequence>();
@@ -61,7 +61,10 @@ public class Utils {
             }
         });
 
-        pref.setEnabled(pref.getEntries() != null &&
-                pref.getEntries().length > 0);
+        CharSequence[] entries = pref.getEntries();
+        boolean enabled = entries != null && entries.length > 0;
+        pref.setEnabled(enabled);
+
+        return enabled;
     }
 }

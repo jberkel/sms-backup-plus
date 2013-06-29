@@ -67,8 +67,8 @@ import com.zegoggles.smssync.service.SmsRestoreService;
 import com.zegoggles.smssync.tasks.OAuthCallbackTask;
 import com.zegoggles.smssync.tasks.RequestTokenTask;
 import com.zegoggles.smssync.utils.AppLog;
+import com.zegoggles.smssync.utils.ListPreferenceHelper;
 import com.zegoggles.smssync.utils.UrlOpener;
-import com.zegoggles.smssync.utils.Utils;
 import org.acra.ACRA;
 import org.jetbrains.annotations.Nullable;
 
@@ -153,7 +153,8 @@ public class MainActivity extends PreferenceActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initCalendarAndGroups();
+        initCalendars();
+        initGroups();
 
         updateLastBackupTimes();
         updateAutoBackupSummary();
@@ -391,17 +392,19 @@ public class MainActivity extends PreferenceActivity {
         pref.setTitle(imapFolder);
     }
 
-    private void initCalendarAndGroups() {
+    private void initGroups() {
+        ContactAccessor contacts = ContactAccessor.Get.instance();
+        ListPreferenceHelper.initListPreference((ListPreference) findPreference(Preferences.BACKUP_CONTACT_GROUP),
+                contacts.getGroups(getContentResolver(), getResources()), false);
+    }
+
+    private void initCalendars() {
         final ListPreference calendarPref = (ListPreference)
                 findPreference(Preferences.CALLLOG_SYNC_CALENDAR);
-
         CalendarAccessor calendars = CalendarAccessor.Get.instance();
-        ContactAccessor contacts = ContactAccessor.Get.instance();
+        boolean enabled = ListPreferenceHelper.initListPreference(calendarPref, calendars.getCalendars(getContentResolver()), false);
 
-        Utils.initListPreference(calendarPref, calendars.getCalendars(this.getContentResolver()), false);
-        findPreference(Preferences.CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(calendarPref.isEnabled());
-        Utils.initListPreference((ListPreference) findPreference(Preferences.BACKUP_CONTACT_GROUP),
-                contacts.getGroups(getContentResolver(), getResources()), false);
+        findPreference(Preferences.CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(enabled);
     }
 
     private void initiateRestore() {
