@@ -80,7 +80,8 @@ public class MessageConverter {
                 new HeaderGenerator(referenceUid, Preferences.getVersion(mContext, true)),
                 mPersonLookup,
                 Preferences.getMailSubjectPrefix(mContext),
-                allowedIds);
+                allowedIds,
+                new MmsSupport(mContext.getContentResolver(), mPersonLookup));
     }
 
     public ConversionResult cursorToMessages(final Cursor cursor,

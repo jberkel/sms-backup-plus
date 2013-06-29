@@ -19,8 +19,8 @@ public class PersonRecord {
     public PersonRecord(long id, String name, String email, String number) {
         this._id = id;
         this.name = sanitize(name);
-        this.email = sanitize(email);
         this.number = sanitize(number);
+        this.email =  sanitize(email);
     }
 
     public boolean isUnknown() {
@@ -30,15 +30,15 @@ public class PersonRecord {
     public Address getAddress(AddressStyle style) {
         switch (style) {
             case NUMBER:
-                return new Address(email, getNumber());
+                return new Address(getEmail(), getNumber());
             case NAME_AND_NUMBER:
-                return new Address(email,
+                return new Address(getEmail(),
                         name == null ? getNumber() :
                                 String.format(Locale.ENGLISH, "%s (%s)", getName(), getNumber()));
             case NAME:
-                return new Address(email, getName());
+                return new Address(getEmail(), getName());
             default:
-                return new Address(email);
+                return new Address(getEmail());
         }
     }
 
@@ -55,7 +55,7 @@ public class PersonRecord {
     }
 
     public String getNumber() {
-        return ("-1".equals(number) || "-2".equals(number)) ? "Unknown" : number;
+        return (TextUtils.isEmpty(number) || "-1".equals(number) || "-2".equals(number)) ? "Unknown" : number;
     }
 
     public String getName() {

@@ -54,6 +54,46 @@ public class PersonRecordTest {
 
         assertThat(record.getAddress(AddressStyle.NUMBER).toString()).isEqualTo(
                 "\"+141543432\" <john@appleseed.com>");
+    }
 
+    @Test
+    public void shouldGetAddressMissingEmail() throws Exception {
+        PersonRecord record = new PersonRecord(1, "John Appleseed", null, "+141543432");
+
+        assertThat(record.getAddress(AddressStyle.NAME_AND_NUMBER).toString()).isEqualTo(
+                "\"John Appleseed (+141543432)\" <+141543432@unknown.email>");
+
+        assertThat(record.getAddress(AddressStyle.NAME).toString()).isEqualTo(
+                "\"John Appleseed\" <+141543432@unknown.email>");
+
+        assertThat(record.getAddress(AddressStyle.NUMBER).toString()).isEqualTo(
+                "\"+141543432\" <+141543432@unknown.email>");
+    }
+
+    @Test
+    public void shouldGetAddressMissingName() throws Exception {
+        PersonRecord record = new PersonRecord(1, null, "john@appleseed.com", "+141543432");
+
+        assertThat(record.getAddress(AddressStyle.NAME_AND_NUMBER).toString()).isEqualTo(
+                "\"+141543432\" <john@appleseed.com>");
+
+        assertThat(record.getAddress(AddressStyle.NAME).toString()).isEqualTo(
+                "\"+141543432\" <john@appleseed.com>");
+
+        assertThat(record.getAddress(AddressStyle.NUMBER).toString()).isEqualTo(
+                "\"+141543432\" <john@appleseed.com>");
+    }
+
+    @Test
+    public void shouldGetAddressMissingNumber() throws Exception {
+        PersonRecord record = new PersonRecord(1, "John Appleseed", "john@appleseed.com", null);
+        assertThat(record.getAddress(AddressStyle.NAME_AND_NUMBER).toString()).isEqualTo(
+                "\"John Appleseed (Unknown)\" <john@appleseed.com>");
+
+        assertThat(record.getAddress(AddressStyle.NAME).toString()).isEqualTo(
+                "\"John Appleseed\" <john@appleseed.com>");
+
+        assertThat(record.getAddress(AddressStyle.NUMBER).toString()).isEqualTo(
+                "\"Unknown\" <john@appleseed.com>");
     }
 }

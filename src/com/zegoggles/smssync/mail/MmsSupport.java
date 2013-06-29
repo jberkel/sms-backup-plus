@@ -16,6 +16,7 @@ import com.zegoggles.smssync.preferences.AddressStyle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,48 +26,73 @@ import static com.zegoggles.smssync.Consts.MMS_PART;
 
 class MmsSupport {
 
+    private final PersonLookup personLookup;
+    private final ContentResolver resolver;
+
+    MmsSupport(ContentResolver resolver, PersonLookup personLookup) {
+        this.resolver = resolver;
+        this.personLookup = personLookup;
+    }
+
     static class MmsDetails {
         public final boolean inbound;
         public final List<String> recipients;
-        public final PersonRecord[] records;
-        public final Address[] addresses;
+        public final List<PersonRecord> records;
+        public final List<Address> addresses;
+
         public final String address;
 
-        public MmsDetails(@NotNull List<String> recipients, boolean inbound,
-                          PersonLookup lookup, AddressStyle style) {
+
+        public MmsDetails(boolean inbound,
+                          @NotNull List<String> recipients,
+                          List<PersonRecord> records,
+                          List<Address> addresses) {
+
+            if (recipients.isEmpty()) {
+                address = "Unknown";
+            } else {
+                address = recipients.get(0);
+            }
+
             this.recipients = recipients;
             this.inbound = inbound;
-            this.records   = new PersonRecord[recipients.size()];
-            this.addresses = new Address[recipients.size()];
+            this.records = records;
+            this.addresses = addresses;
+        }
 
-            if (!recipients.isEmpty()) {
-                address = recipients.get(0);
-                for (int i = 0; i < recipients.size(); i++) {
-                    records[i]   = lookup.lookupPerson(recipients.get(i));
-                    addresses[i] = records[i].getAddress(style);
-                }
-            } else {
-                address = "Unknown";
-            }
+        public MmsDetails(boolean inbound,
+                          String recipient,
+                          PersonRecord record,
+                          Address address) {
+            this(inbound, Arrays.asList(recipient), Arrays.asList(record), Arrays.asList(address));
         }
 
         public boolean isEmpty() {
             return recipients.isEmpty();
         }
+
+        public Address[] getAddresses() {
+            return addresses.toArray(new Address[addresses.size()]);
+        }
+
+        public PersonRecord getRecipient() {
+            return records.get(0);
+        }
+
+        public Address getRecipientAddress() {
+            return addresses.get(0);
+        }
     }
 
-    static MmsDetails getDetails(ContentResolver resolver,
-                                 Uri mmsUri,
-                                 PersonLookup lookup,
-                                 AddressStyle style) {
+    public MmsDetails getDetails(Uri mmsUri, AddressStyle style) {
 
-        Cursor addresses = resolver.query(Uri.withAppendedPath(mmsUri, "addr"), null, null, null, null);
+        Cursor cursor = resolver.query(Uri.withAppendedPath(mmsUri, "addr"), null, null, null, null);
 
         // TODO: this is probably not the best way to determine if a message is inbound or outbound
         boolean inbound = true;
         final List<String> recipients = new ArrayList<String>();
-        while (addresses != null && addresses.moveToNext()) {
-            final String address = addresses.getString(addresses.getColumnIndex("address"));
+        while (cursor != null && cursor.moveToNext()) {
+            final String address = cursor.getString(cursor.getColumnIndex("address"));
             //final int type       = addresses.getInt(addresses.getColumnIndex("type"));
             if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
                 inbound = false;
@@ -74,11 +100,21 @@ class MmsSupport {
                 recipients.add(address);
             }
         }
-        if (addresses != null) addresses.close();
-        return new MmsDetails(recipients, inbound, lookup, style);
+        if (cursor != null) cursor.close();
+
+        List<PersonRecord> records = new ArrayList<PersonRecord>(recipients.size());
+        List<Address> addresses = new ArrayList<Address>(recipients.size());
+        if (!recipients.isEmpty()) {
+            for (String s : recipients) {
+                PersonRecord record = personLookup.lookupPerson(s);
+                records.add(record);
+                addresses.add(record.getAddress(style));
+            }
+        }
+        return new MmsDetails(inbound, recipients, records, addresses);
     }
 
-    static List<BodyPart> getMMSBodyParts(ContentResolver resolver, final Uri uriPart) throws MessagingException {
+    public List<BodyPart> getMMSBodyParts(final Uri uriPart) throws MessagingException {
         final List<BodyPart> parts = new ArrayList<BodyPart>();
         Cursor curPart = resolver.query(uriPart, null, null, null, null);
 

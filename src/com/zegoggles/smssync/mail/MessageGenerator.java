@@ -1,6 +1,5 @@
 package com.zegoggles.smssync.mail;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -24,7 +23,10 @@ import com.zegoggles.smssync.preferences.CallLogTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -34,7 +36,6 @@ import static com.zegoggles.smssync.mail.Attachment.createTextPart;
 
 class MessageGenerator {
     private final Context mContext;
-    private final ContentResolver mResolver;
     private final HeaderGenerator mHeaderGenerator;
     private final Address mUserAddress;
     private final PersonLookup mPersonLookup;
@@ -42,6 +43,7 @@ class MessageGenerator {
     private final ContactGroupIds mContactsToBackup;
     private final CallFormatter mCallFormatter;
     private final AddressStyle mAddressStyle;
+    private final MmsSupport mMmsSupport;
 
     public MessageGenerator(Context context,
                             Address userAddress,
@@ -49,7 +51,8 @@ class MessageGenerator {
                             HeaderGenerator headerGenerator,
                             PersonLookup personLookup,
                             boolean mailSubjectPrefix,
-                            ContactGroupIds contactsToBackup) {
+                            ContactGroupIds contactsToBackup,
+                            MmsSupport mmsSupport) {
         mHeaderGenerator = headerGenerator;
         mUserAddress = userAddress;
         mAddressStyle = addressStyle;
@@ -58,7 +61,7 @@ class MessageGenerator {
         mPrefix = mailSubjectPrefix;
         mContactsToBackup = contactsToBackup;
         mCallFormatter = new CallFormatter(mContext.getResources());
-        mResolver = context.getContentResolver();
+        mMmsSupport = mmsSupport;
     }
 
     public  @Nullable Message messageForDataType(Map<String, String> msgMap, DataType dataType) throws MessagingException {
@@ -70,7 +73,7 @@ class MessageGenerator {
         }
     }
 
-    public @Nullable Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
+    private @Nullable Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(SmsConsts.ADDRESS);
         if (TextUtils.isEmpty(address)) return null;
 
@@ -103,11 +106,11 @@ class MessageGenerator {
         return msg;
     }
 
-    public @Nullable Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
+    private @Nullable Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
         if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
         final Uri mmsUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
-        MmsSupport.MmsDetails details = MmsSupport.getDetails(mResolver, mmsUri, mPersonLookup, mAddressStyle);
+        MmsSupport.MmsDetails details = mMmsSupport.getDetails(mmsUri, mAddressStyle);
 
         if (details.isEmpty()) {
             Log.w(TAG, "no recipients found");
@@ -118,14 +121,14 @@ class MessageGenerator {
         }
 
         final Message msg = new MimeMessage();
-        msg.setSubject(getSubject(DataType.MMS, details.records[0]));
+        msg.setSubject(getSubject(DataType.MMS, details.getRecipient()));
 
         if (details.inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
-            msg.setFrom(details.addresses[0]);
+            msg.setFrom(details.getRecipientAddress());
             msg.setRecipient(Message.RecipientType.TO, mUserAddress);
         } else {
-            msg.setRecipients(Message.RecipientType.TO, details.addresses);
+            msg.setRecipients(Message.RecipientType.TO, details.getAddresses());
             msg.setFrom(mUserAddress);
         }
 
@@ -137,10 +140,10 @@ class MessageGenerator {
             sentDate = new Date();
         }
         final int msg_box = toInt(msgMap.get("msg_box"));
-        mHeaderGenerator.setHeaders(msg, msgMap, DataType.MMS, details.address, details.records[0], sentDate, msg_box);
+        mHeaderGenerator.setHeaders(msg, msgMap, DataType.MMS, details.address, details.getRecipient(), sentDate, msg_box);
         MimeMultipart body = new MimeMultipart();
 
-        for (BodyPart p : MmsSupport.getMMSBodyParts(mResolver, Uri.withAppendedPath(mmsUri, MMS_PART))) {
+        for (BodyPart p : mMmsSupport.getMMSBodyParts(Uri.withAppendedPath(mmsUri, MMS_PART))) {
             body.addBodyPart(p);
         }
 
@@ -148,7 +151,7 @@ class MessageGenerator {
         return msg;
     }
 
-    public @Nullable Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
+    private  @Nullable Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = toInt(msgMap.get(CallLog.Calls.TYPE));
 
@@ -175,7 +178,7 @@ class MessageGenerator {
             default:
                 // some weird phones seem to have SMS in their call logs, which is
                 // not part of the official API.
-                Log.i(TAG, "ignoring unknown call type: " + callType);
+                Log.w(TAG, "ignoring unknown call type: " + callType);
                 return null;
         }
 
@@ -243,7 +246,7 @@ class MessageGenerator {
                 mContext.getString(type.withField, record.getName());
     }
 
-    private boolean includeInBackup(DataType type, PersonRecord[] records) {
+    private boolean includeInBackup(DataType type, Iterable<PersonRecord> records) {
         for (PersonRecord r : records) {
             if (includePersonInBackup(r, type)) {
                 return true;
@@ -254,7 +257,7 @@ class MessageGenerator {
 
     private boolean includePersonInBackup(PersonRecord record, DataType type) {
         final boolean backup = (type == DataType.SMS || mContactsToBackup == null || mContactsToBackup.contains(record));
-
+        //noinspection PointlessBooleanExpression,ConstantConditions
         if (LOCAL_LOGV && !backup) Log.v(TAG, "not backing up " + type + " / " + record);
         return backup;
     }
