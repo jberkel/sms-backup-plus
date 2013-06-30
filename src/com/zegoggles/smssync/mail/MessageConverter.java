@@ -58,28 +58,30 @@ public class MessageConverter {
     private final boolean mMarkAsRead;
     private final PersonLookup mPersonLookup;
     private final MessageGenerator mMessageGenerator;
+    private final boolean mMarkAsReadOnRestore;
 
-    public MessageConverter(Context context, String userEmail, PersonLookup personLookup) {
+    public MessageConverter(Context context, Preferences preferences, String userEmail, PersonLookup personLookup) {
         mContext = context;
-        mMarkAsRead = Preferences.getMarkAsRead(context);
+        mMarkAsRead = preferences.getMarkAsRead();
         mPersonLookup = personLookup;
+        mMarkAsReadOnRestore = preferences.getMarkAsReadOnRestore();
 
-        String referenceUid = Preferences.getReferenceUid(context);
+        String referenceUid = preferences.getReferenceUid();
         if (referenceUid == null) {
             referenceUid = generateReferenceValue();
-            Preferences.setReferenceUid(context, referenceUid);
+            preferences.setReferenceUid(referenceUid);
         }
 
-        final ContactGroup backupContactGroup = Preferences.getBackupContactGroup(context);
+        final ContactGroup backupContactGroup = preferences.getBackupContactGroup();
         ContactGroupIds allowedIds = ContactAccessor.Get.instance().getGroupContactIds(context.getContentResolver(), backupContactGroup);
         if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
 
         mMessageGenerator = new MessageGenerator(mContext,
                 new Address(userEmail),
-                AddressStyle.getEmailAddressStyle(mContext),
-                new HeaderGenerator(referenceUid, Preferences.getVersion(mContext, true)),
+                AddressStyle.getEmailAddressStyle(preferences),
+                new HeaderGenerator(referenceUid, preferences.getVersion(true)),
                 mPersonLookup,
-                Preferences.getMailSubjectPrefix(mContext),
+                preferences.getMailSubjectPrefix(),
                 allowedIds,
                 new MmsSupport(mContext.getContentResolver(), mPersonLookup));
     }
@@ -142,7 +144,7 @@ public class MessageConverter {
                 values.put(SmsConsts.STATUS, Headers.get(message, Headers.STATUS));
                 values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(mContext, address));
                 values.put(SmsConsts.READ,
-                        Preferences.getMarkAsReadOnRestore(mContext) ? "1" : Headers.get(message, Headers.READ));
+                        mMarkAsReadOnRestore ? "1" : Headers.get(message, Headers.READ));
                 break;
             case CALLLOG:
                 values.put(CallLog.Calls.NUMBER, Headers.get(message, Headers.ADDRESS));

@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.zegoggles.smssync.mail.BackupImapStore.isValidImapFolder;
 import static com.zegoggles.smssync.mail.BackupImapStore.isValidUri;
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -20,6 +21,18 @@ public class BackupImapStoreTest {
         assertThat(isValidUri("imap+tls://user:password@imap.gmail.com:993")).isTrue();
         assertThat(isValidUri("imap://user:password@imap.gmail.com:993")).isTrue();
         assertThat(isValidUri("http://xoauth:foooo@imap.gmail.com:993")).isFalse();
+    }
+
+    @Test
+    public void shouldTestForValidFolder() throws Exception {
+        assertThat(isValidImapFolder(null)).isFalse();
+        assertThat(isValidImapFolder("")).isFalse();
+        assertThat(isValidImapFolder("foo")).isTrue();
+        assertThat(isValidImapFolder("foo bar")).isTrue();
+        assertThat(isValidImapFolder(" foo")).isFalse();
+        assertThat(isValidImapFolder("foo ")).isFalse();
+        assertThat(isValidImapFolder("foo/nested")).isTrue();
+        assertThat(isValidImapFolder("/foo/nested")).isFalse();
     }
 
     @Test public void testAccountHasStoreUri() throws Exception {

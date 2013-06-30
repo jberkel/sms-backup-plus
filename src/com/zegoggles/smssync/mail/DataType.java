@@ -24,7 +24,7 @@ public enum DataType {
     public final int minSdkVersion;
     public final boolean backupEnabledByDefault;
     public final boolean restoreEnabledByDefault;
-    private final String maxSyncedPreference;
+    public final String maxSyncedPreference;
 
     private DataType(int resId,
                      int withField,

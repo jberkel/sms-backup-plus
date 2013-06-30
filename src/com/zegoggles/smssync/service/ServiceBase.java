@@ -63,7 +63,7 @@ public abstract class ServiceBase extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Preferences.isAppLogEnabled(this)) {
+        if (new Preferences(this).isAppLogEnabled()) {
             this.appLog = new AppLog(DateFormat.getDateFormatOrder(this));
         }
         App.bus.register(this);
@@ -89,6 +89,10 @@ public abstract class ServiceBase extends Service {
         return new AuthPreferences(this);
     }
 
+    protected Preferences getPreferences() {
+        return new Preferences(this);
+    }
+
     /**
      * Acquire locks
      * @throws com.zegoggles.smssync.service.exception.ConnectivityException when unable to connect
@@ -110,7 +114,7 @@ public abstract class ServiceBase extends Service {
                 sWifiLock = wMgr.createWifiLock(TAG);
             }
             sWifiLock.acquire();
-        } else if (isBackgroundTask() && Preferences.isWifiOnly(this)) {
+        } else if (isBackgroundTask() && new Preferences(this).isWifiOnly()) {
             throw new RequiresWifiException();
         }
         NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();

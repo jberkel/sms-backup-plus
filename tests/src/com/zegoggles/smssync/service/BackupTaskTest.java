@@ -14,6 +14,7 @@ import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.BackupState;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +46,7 @@ public class BackupTaskTest {
     @Mock MessageConverter converter;
     @Mock CalendarSyncer syncer;
     @Mock AuthPreferences authPreferences;
+    @Mock Preferences preferences;
     @Mock ContactAccessor accessor;
 
     @Before
@@ -54,7 +56,7 @@ public class BackupTaskTest {
         when(service.getApplicationContext()).thenReturn(Robolectric.application);
         when(service.getState()).thenReturn(state);
 
-        task = new BackupTask(service, fetcher, converter, syncer, authPreferences, accessor);
+        task = new BackupTask(service, fetcher, converter, syncer, authPreferences, preferences, accessor);
         context = Robolectric.application;
     }
 

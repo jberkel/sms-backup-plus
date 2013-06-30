@@ -3,18 +3,21 @@ package com.zegoggles.smssync.activity;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.DataType;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
+@Ignore
 @RunWith(RobolectricTestRunner.class)
 public class MainActivityTest {
     MainActivity activity;
 
     @Before public void before() {
-        activity = new MainActivity();
+        activity = Robolectric.buildActivity(MainActivity.class).create().get();
     }
 
     @Test public void shouldDisplaySummaryOfEnabledBackupTypesDefault() throws Exception {

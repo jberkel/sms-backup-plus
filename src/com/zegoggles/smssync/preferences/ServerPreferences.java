@@ -1,10 +1,16 @@
 package com.zegoggles.smssync.preferences;
 
 import android.content.Context;
-
-import static com.zegoggles.smssync.preferences.Preferences.prefs;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class ServerPreferences {
+    private final SharedPreferences preferences;
+
+    public ServerPreferences(Context context) {
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
     /**
      * Preference key containing the server address
      */
@@ -15,16 +21,16 @@ public class ServerPreferences {
     private static final String SERVER_PROTOCOL = "server_protocol";
 
 
-    static String getServerAddress(Context ctx) {
-        return prefs(ctx).getString(SERVER_ADDRESS, Defaults.SERVER_ADDRESS);
+    String getServerAddress() {
+        return preferences.getString(SERVER_ADDRESS, Defaults.SERVER_ADDRESS);
     }
 
-    static String getServerProtocol(Context ctx) {
-        return prefs(ctx).getString(SERVER_PROTOCOL, Defaults.SERVER_PROTOCOL);
+    String getServerProtocol() {
+        return preferences.getString(SERVER_PROTOCOL, Defaults.SERVER_PROTOCOL);
     }
 
-    static boolean isGmail(Context ctx) {
-        return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress(ctx));
+    boolean isGmail() {
+        return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress());
     }
 
     static class Defaults {

@@ -26,7 +26,6 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
@@ -96,11 +95,11 @@ public class SmsBackupService extends ServiceBase {
                             getBackupImapStore(),
                             0,
                             intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false),
-                            Preferences.getMaxItemsPerSync(this),
-                            Preferences.getBackupContactGroup(this),
+                            getPreferences().getMaxItemsPerSync(),
+                            getPreferences().getBackupContactGroup(),
                             MAX_MSG_PER_REQUEST,
                             backupType,
-                            Preferences.isAppLogDebug(this));
+                            getPreferences().isAppLogDebug());
 
                     appLog(R.string.app_log_start_backup, backupType);
 
@@ -186,7 +185,7 @@ public class SmsBackupService extends ServiceBase {
 
     private boolean shouldNotifyUser(BackupState state) {
         return state.backupType == MANUAL ||
-               (Preferences.isNotificationEnabled(this) && !state.isConnectivityError());
+               (getPreferences().isNotificationEnabled() && !state.isConnectivityError());
     }
 
     private void notifyAboutBackup(BackupState state) {

@@ -10,7 +10,6 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.PersonLookup;
-import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,11 +53,12 @@ public class SmsRestoreService extends ServiceBase {
     protected void handleIntent(final Intent intent) {
         if (isWorking()) return;
         try {
-            final boolean starredOnly = Preferences.isRestoreStarredOnly(service);
+            final boolean starredOnly = getPreferences().isRestoreStarredOnly();
             final boolean restoreCallLog = CALLLOG.isRestoreEnabled(service);
             final boolean restoreSms     = SMS.isRestoreEnabled(service);
 
             MessageConverter converter = new MessageConverter(service,
+                    getPreferences(),
                     getAuthPreferences().getUserEmail(),
                     new PersonLookup(getContentResolver()));
 
@@ -68,7 +68,7 @@ public class SmsRestoreService extends ServiceBase {
                     restoreSms,
                     restoreCallLog,
                     starredOnly).execute(
-                        Preferences.getMaxItemsPerRestore(this)
+                        getPreferences().getMaxItemsPerRestore()
                     );
         } catch (MessagingException e) {
             App.bus.post(mState.transition(ERROR, e));

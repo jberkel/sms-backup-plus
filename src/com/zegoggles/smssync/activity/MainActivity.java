@@ -54,6 +54,7 @@ import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
+import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthMode;
 import com.zegoggles.smssync.preferences.AuthPreferences;
@@ -97,6 +98,7 @@ public class MainActivity extends PreferenceActivity {
     private Actions mActions;
 
     private AuthPreferences authPreferences;
+    private Preferences preferences;
     private StatusPreference statusPref;
     private @Nullable Uri mAuthorizeUri;
 
@@ -104,6 +106,7 @@ public class MainActivity extends PreferenceActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         authPreferences = new AuthPreferences(this);
+        preferences = new Preferences(this);
         addPreferencesFromResource(R.xml.preferences);
 
         statusPref = new StatusPreference(this);
@@ -116,12 +119,12 @@ public class MainActivity extends PreferenceActivity {
             backupMms.setChecked(false);
             backupMms.setSummary(R.string.ui_backup_mms_not_supported);
         }
-        if (Preferences.shouldShowUpgradeMessage(this)) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
-        setPreferenceListeners(getPreferenceManager(), version >= MIN_VERSION_BACKUP);
+        if (preferences.shouldShowUpgradeMessage()) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
+        setPreferenceListeners(version >= MIN_VERSION_BACKUP);
 
         checkAndDisplayDroidWarning();
 
-        if (Preferences.shouldShowAboutDialog(this)) {
+        if (preferences.shouldShowAboutDialog()) {
             show(Dialogs.ABOUT);
         }
 
@@ -247,7 +250,7 @@ public class MainActivity extends PreferenceActivity {
     void onAuthenticated() {
         updateConnected();
         // Invite use to perform a backup, but only once
-        if (Preferences.isFirstUse(this)) {
+        if (preferences.isFirstUse()) {
             show(Dialogs.FIRST_SYNC);
         }
     }
@@ -293,7 +296,7 @@ public class MainActivity extends PreferenceActivity {
             if (!getConnectivityManager().getBackgroundDataSetting()) {
                 summary.append(' ').append(getString(R.string.ui_enable_auto_sync_bg_data));
             }
-            if (Preferences.isInstalledOnSDCard(this)) {
+            if (preferences.isInstalledOnSDCard()) {
                 summary.append(' ').append(getString(R.string.sd_card_disclaimer));
             }
         } else {
@@ -320,7 +323,7 @@ public class MainActivity extends PreferenceActivity {
                 .append(": ")
                 .append(incomingSchedule.getEntry());
 
-        if (Preferences.isWifiOnly(this)) {
+        if (preferences.isWifiOnly()) {
             summary.append(" (")
                     .append(findPreference(WIFI_ONLY.key).getTitle())
                     .append(")");
@@ -360,7 +363,7 @@ public class MainActivity extends PreferenceActivity {
             SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
             username = prefs.getString(AuthPreferences.LOGIN_USER, getString(R.string.ui_login_label));
         }
-        Preference pref = getPreferenceManager().findPreference(AuthPreferences.LOGIN_USER);
+        Preference pref = findPreference(AuthPreferences.LOGIN_USER);
         pref.setTitle(username);
     }
 
@@ -382,13 +385,13 @@ public class MainActivity extends PreferenceActivity {
 
     private void updateImapFolderLabelFromPref() {
         String imapFolder = SMS.getFolder(this);
-        Preference pref = getPreferenceManager().findPreference(SMS.folderPreference);
+        Preference pref = findPreference(SMS.folderPreference);
         pref.setTitle(imapFolder);
     }
 
     private void updateImapCallogFolderLabelFromPref() {
         String imapFolder = CALLLOG.getFolder(this);
-        Preference pref = getPreferenceManager().findPreference(CALLLOG.folderPreference);
+        Preference pref = findPreference(CALLLOG.folderPreference);
         pref.setTitle(imapFolder);
     }
 
@@ -415,7 +418,7 @@ public class MainActivity extends PreferenceActivity {
 
     private void initiateBackup() {
         if (checkLoginInformation()) {
-            if (Preferences.isFirstBackup(this)) {
+            if (preferences.isFirstBackup()) {
                 show(Dialogs.FIRST_SYNC);
             } else {
                 startBackup(false);
@@ -433,7 +436,7 @@ public class MainActivity extends PreferenceActivity {
     }
 
     void performAction(Actions act) {
-        performAction(act, Preferences.confirmAction(this));
+        performAction(act, preferences.confirmAction());
     }
 
     private void performAction(Actions act, boolean needConfirm) {
@@ -451,7 +454,7 @@ public class MainActivity extends PreferenceActivity {
 
     private void startBackup(boolean skip) {
         final Intent intent = new Intent(this, SmsBackupService.class);
-        if (Preferences.isFirstBackup(this)) {
+        if (preferences.isFirstBackup()) {
             intent.putExtra(Consts.KEY_SKIP_MESSAGES, skip);
         }
         intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
@@ -493,7 +496,7 @@ public class MainActivity extends PreferenceActivity {
                                 startBackup(which == DialogInterface.BUTTON2);
                             }
                         };
-                final int maxItems = Preferences.getMaxItemsPerSync(this);
+                final int maxItems = preferences.getMaxItemsPerSync();
                 final String syncMsg = maxItems < 0 ?
                         getString(R.string.ui_dialog_first_sync_msg) :
                         getString(R.string.ui_dialog_first_sync_msg_batched, maxItems);
@@ -667,15 +670,15 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void updateMaxItemsPerSync(String newValue) {
-        updateMaxItems(MAX_ITEMS_PER_SYNC.key, Preferences.getMaxItemsPerSync(this), newValue);
+        updateMaxItems(MAX_ITEMS_PER_SYNC.key, preferences.getMaxItemsPerSync(), newValue);
     }
 
     private void updateMaxItemsPerRestore(String newValue) {
-        updateMaxItems(MAX_ITEMS_PER_RESTORE.key, Preferences.getMaxItemsPerRestore(this), newValue);
+        updateMaxItems(MAX_ITEMS_PER_RESTORE.key, preferences.getMaxItemsPerRestore(), newValue);
     }
 
     private void updateMaxItems(String prefKey, int currentValue, String newValue) {
-        Preference pref = getPreferenceManager().findPreference(prefKey);
+        Preference pref = findPreference(prefKey);
         if (newValue == null) {
             newValue = String.valueOf(currentValue);
         }
@@ -684,8 +687,7 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private CheckBoxPreference updateConnected() {
-        CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager()
-                .findPreference(CONNECTED.key);
+        CheckBoxPreference connected = (CheckBoxPreference) findPreference(CONNECTED.key);
 
         connected.setEnabled(authPreferences.useXOAuth());
         connected.setChecked(authPreferences.hasOauthTokens() || authPreferences.hasOAuth2Tokens());
@@ -712,10 +714,10 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void updateImapSettings(boolean enabled) {
-        getPreferenceManager().findPreference(IMAP_SETTINGS.key).setEnabled(enabled);
+        findPreference(IMAP_SETTINGS.key).setEnabled(enabled);
     }
 
-    private void setPreferenceListeners(final PreferenceManager prefMgr, boolean backup) {
+    private void setPreferenceListeners(boolean backup) {
         if (backup) {
             PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(
                     new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -726,7 +728,7 @@ public class MainActivity extends PreferenceActivity {
             );
         }
 
-        prefMgr.findPreference(ENABLE_AUTO_BACKUP.key)
+        findPreference(ENABLE_AUTO_BACKUP.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -743,7 +745,7 @@ public class MainActivity extends PreferenceActivity {
                     }
                 });
 
-        prefMgr.findPreference(AuthPreferences.SERVER_AUTHENTICATION)
+        findPreference(AuthPreferences.SERVER_AUTHENTICATION)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         final boolean plain = (AuthMode.PLAIN) ==
@@ -755,7 +757,7 @@ public class MainActivity extends PreferenceActivity {
                     }
                 });
 
-        prefMgr.findPreference(MAX_ITEMS_PER_SYNC.key)
+        findPreference(MAX_ITEMS_PER_SYNC.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         updateMaxItemsPerSync(newValue.toString());
@@ -763,7 +765,7 @@ public class MainActivity extends PreferenceActivity {
                     }
                 });
 
-        prefMgr.findPreference(MAX_ITEMS_PER_RESTORE.key)
+        findPreference(MAX_ITEMS_PER_RESTORE.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         updateMaxItemsPerRestore(newValue.toString());
@@ -771,7 +773,7 @@ public class MainActivity extends PreferenceActivity {
                     }
                 });
 
-        prefMgr.findPreference(AuthPreferences.LOGIN_USER)
+        findPreference(AuthPreferences.LOGIN_USER)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         updateUsernameLabel(newValue.toString());
@@ -779,7 +781,7 @@ public class MainActivity extends PreferenceActivity {
                     }
                 });
 
-        prefMgr.findPreference(AuthPreferences.LOGIN_PASSWORD)
+        findPreference(AuthPreferences.LOGIN_PASSWORD)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         authPreferences.setImapPassword(newValue.toString());
@@ -805,12 +807,12 @@ public class MainActivity extends PreferenceActivity {
             }
         });
 
-        prefMgr.findPreference(SMS.folderPreference)
+        findPreference(SMS.folderPreference)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, final Object newValue) {
                         String imapFolder = newValue.toString();
 
-                        if (Preferences.isValidImapFolder(imapFolder)) {
+                        if (BackupImapStore.isValidImapFolder(imapFolder)) {
                             preference.setTitle(imapFolder);
                             return true;
                         } else {
@@ -825,12 +827,12 @@ public class MainActivity extends PreferenceActivity {
                     }
                 });
 
-        prefMgr.findPreference(CALLLOG.folderPreference)
+        findPreference(CALLLOG.folderPreference)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, final Object newValue) {
                         String imapFolder = newValue.toString();
 
-                        if (Preferences.isValidImapFolder(imapFolder)) {
+                        if (BackupImapStore.isValidImapFolder(imapFolder)) {
                             preference.setTitle(imapFolder);
                             return true;
                         } else {

@@ -199,6 +199,11 @@ public class BackupImapStore extends ImapStore {
         }
     }
 
+    public static boolean isValidImapFolder(String imapFolder) {
+        return !(imapFolder == null || imapFolder.length() == 0) &&
+               !(imapFolder.charAt(0) == '/' || imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ');
+    }
+
     public static boolean isValidUri(String uri) {
         if (TextUtils.isEmpty(uri)) return false;
         Uri parsed = Uri.parse(uri);

@@ -44,12 +44,14 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final MessageConverter converter;
     private final CalendarSyncer calendarSyncer;
     private final AuthPreferences authPreferences;
+    private final Preferences preferences;
     private final ContactAccessor contactAccessor;
 
     BackupTask(@NotNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
         this.service = service;
         this.authPreferences = service.getAuthPreferences();
+        this.preferences = service.getPreferences();
 
         this.fetcher = new BackupItemsFetcher(context,
                 context.getContentResolver(),
@@ -57,13 +59,13 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
         PersonLookup personLookup = new PersonLookup(service.getContentResolver());
 
-        this.converter = new MessageConverter(context, authPreferences.getUserEmail(), personLookup);
+        this.converter = new MessageConverter(context, preferences, authPreferences.getUserEmail(), personLookup);
         this.contactAccessor = ContactAccessor.Get.instance();
 
-        if (Preferences.isCallLogCalendarSyncEnabled(context)) {
+        if (preferences.isCallLogCalendarSyncEnabled()) {
             calendarSyncer = new CalendarSyncer(
                 CalendarAccessor.Get.instance(service.getContentResolver()),
-                Preferences.getCallLogCalendarId(context),
+                preferences.getCallLogCalendarId(),
                 personLookup,
                 new CallFormatter(context.getResources())
             );
@@ -78,12 +80,14 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                MessageConverter messageConverter,
                CalendarSyncer syncer,
                AuthPreferences authPreferences,
+               Preferences preferences,
                ContactAccessor accessor) {
         this.service = service;
         this.fetcher = fetcher;
         this.converter = messageConverter;
         this.calendarSyncer = syncer;
         this.authPreferences = authPreferences;
+        this.preferences = preferences;
         this.contactAccessor = accessor;
     }
 
@@ -145,7 +149,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             } else {
                 appLog(R.string.app_log_skip_backup_no_items);
 
-                if (Preferences.isFirstBackup(service)) {
+                if (preferences.isFirstBackup()) {
                     // If this is the first backup we need to write something to MAX_SYNCED_DATE
                     // such that we know that we've performed a backup before.
                     SMS.setMaxSyncedDate(service, Defaults.MAX_SYNCED_DATE);

@@ -3,6 +3,7 @@ package com.zegoggles.smssync.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
@@ -13,13 +14,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.preferences.Preferences.prefs;
 
 public class AuthPreferences {
     private final Context context;
+    private final SharedPreferences preferences;
+    private final ServerPreferences serverPreferences;
 
     public AuthPreferences(Context context) {
         this.context = context.getApplicationContext();
+        this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
+        this.serverPreferences = new ServerPreferences(this.context);
     }
 
     /**
@@ -74,11 +78,11 @@ public class AuthPreferences {
     }
 
     public String getUsername() {
-        return prefs(context).getString(OAUTH_USER, getOauth2Username());
+        return preferences.getString(OAUTH_USER, getOauth2Username());
     }
 
     public void setOauthUsername(String s) {
-        prefs(context).edit().putString(OAUTH_USER, s).commit();
+        preferences.edit().putString(OAUTH_USER, s).commit();
     }
 
     public void setOauthTokens(String token, String secret) {
@@ -89,7 +93,7 @@ public class AuthPreferences {
     }
 
     public void setOauth2Token(String username, String token) {
-        prefs(context).edit()
+        preferences.edit()
                 .putString(OAUTH2_USER, username)
                 .commit();
 
@@ -101,7 +105,7 @@ public class AuthPreferences {
    public void clearOauthData() {
         final String oauth2token = getOauth2Token();
 
-        prefs(context).edit()
+        preferences.edit()
                 .remove(OAUTH_USER)
                 .remove(OAUTH2_USER)
                 .commit();
@@ -123,7 +127,7 @@ public class AuthPreferences {
     }
 
     public boolean useXOAuth() {
-        return getAuthMode() == AuthMode.XOAUTH && ServerPreferences.isGmail(context);
+        return getAuthMode() == AuthMode.XOAUTH && serverPreferences.isGmail();
     }
 
     public String getUserEmail() {
@@ -155,13 +159,13 @@ public class AuthPreferences {
                         ServerPreferences.Defaults.SERVER_PROTOCOL,
                         "xoauth:" + encode(consumer.getUsername()),
                         encode(consumer.generateXOAuthString()),
-                        ServerPreferences.getServerAddress(context));
+                        serverPreferences.getServerAddress());
             } else if (hasOAuth2Tokens()) {
                 return String.format(IMAP_URI,
                         ServerPreferences.Defaults.SERVER_PROTOCOL,
                         "xoauth2:" + encode(getOauth2Username()),
                         encode(generateXOAuth2Token()),
-                        ServerPreferences.getServerAddress(context));
+                        serverPreferences.getServerAddress());
             } else {
                 Log.w(TAG, "No valid xoauth1/2 tokens");
                 return null;
@@ -169,10 +173,10 @@ public class AuthPreferences {
 
         } else {
             return String.format(IMAP_URI,
-                    ServerPreferences.getServerProtocol(context),
+                    serverPreferences.getServerProtocol(),
                     encode(getImapUsername()),
                     encode(getImapPassword()).replace("+", "%20"),
-                    ServerPreferences.getServerAddress(context));
+                    serverPreferences.getServerAddress());
         }
     }
 
@@ -185,15 +189,15 @@ public class AuthPreferences {
     }
 
     private String getOauthUsername() {
-        return prefs(context).getString(OAUTH_USER, null);
+        return preferences.getString(OAUTH_USER, null);
     }
 
     private String getOauth2Username() {
-        return prefs(context).getString(OAUTH2_USER, null);
+        return preferences.getString(OAUTH2_USER, null);
     }
 
     private AuthMode getAuthMode() {
-        return Preferences.getDefaultType(context, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
+        return new Preferences(context).getDefaultType(SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
     }
 
     // All sensitive information is stored in a separate prefs file so we can
@@ -203,7 +207,7 @@ public class AuthPreferences {
     }
 
     private String getImapUsername() {
-        return prefs(context).getString(LOGIN_USER, null);
+        return preferences.getString(LOGIN_USER, null);
     }
 
     private String getImapPassword() {

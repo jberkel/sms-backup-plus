@@ -20,6 +20,7 @@ import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.CallLogTypes;
+import com.zegoggles.smssync.preferences.Preferences;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +45,7 @@ class MessageGenerator {
     private final CallFormatter mCallFormatter;
     private final AddressStyle mAddressStyle;
     private final MmsSupport mMmsSupport;
+    private final CallLogTypes mCallLogTypes;
 
     public MessageGenerator(Context context,
                             Address userAddress,
@@ -62,6 +64,7 @@ class MessageGenerator {
         mContactsToBackup = contactsToBackup;
         mCallFormatter = new CallFormatter(mContext.getResources());
         mMmsSupport = mmsSupport;
+        mCallLogTypes = CallLogTypes.getCallLogType(new Preferences(context));
     }
 
     public  @Nullable Message messageForDataType(Map<String, String> msgMap, DataType dataType) throws MessagingException {
@@ -155,7 +158,7 @@ class MessageGenerator {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = toInt(msgMap.get(CallLog.Calls.TYPE));
 
-        if (TextUtils.isEmpty(address) || !CallLogTypes.isTypeEnabled(mContext, callType)) {
+        if (TextUtils.isEmpty(address) || !mCallLogTypes.isTypeEnabled(callType)) {
             if (LOCAL_LOGV) Log.v(TAG, "ignoring call log entry: " + msgMap);
             return null;
         }

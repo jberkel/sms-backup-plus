@@ -8,20 +8,25 @@ import com.zegoggles.smssync.preferences.Preferences;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowAlarmManager;
 import org.robolectric.shadows.ShadowPendingIntent;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.robolectric.Robolectric.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class AlarmsTest {
     Alarms alarms;
+    @Mock Preferences preferences;
 
     @Before public void before() {
-        alarms = new Alarms(Robolectric.application);
+        initMocks(this);
+        alarms = new Alarms(Robolectric.application, preferences);
     }
 
     @Test
@@ -32,27 +37,29 @@ public class AlarmsTest {
 
     @Test
     public void shouldScheduleRegularBackup() throws Exception {
-        Preferences.setEnableAutoSync(Robolectric.application, true);
+        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.getRegularTimeoutSecs()).thenReturn(2000);
         long scheduled = alarms.scheduleRegularBackup();
         verifyAlarmScheduled(scheduled, "REGULAR");
     }
 
     @Test
     public void shouldScheduleIncomingBackup() throws Exception {
-        Preferences.setEnableAutoSync(Robolectric.application, true);
+        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.getIncomingTimeoutSecs()).thenReturn(2000);
         long scheduled = alarms.scheduleIncomingBackup();
         verifyAlarmScheduled(scheduled, "INCOMING");
     }
 
     @Test
     public void shouldNotScheduleRegularBackupIfAutoBackupIsDisabled() throws Exception {
-        Preferences.setEnableAutoSync(Robolectric.application, false);
+        when(preferences.isEnableAutoSync()).thenReturn(false);
         assertThat(alarms.scheduleRegularBackup()).isEqualTo(-1);
     }
 
     @Test
     public void shouldNotScheduleIncomingBackupIfAutoBackupIsDisabled() throws Exception {
-        Preferences.setEnableAutoSync(Robolectric.application, false);
+        when(preferences.isEnableAutoSync()).thenReturn(false);
         assertThat(alarms.scheduleIncomingBackup()).isEqualTo(-1);
     }
 

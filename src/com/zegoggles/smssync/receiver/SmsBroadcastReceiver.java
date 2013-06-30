@@ -59,12 +59,15 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     }
 
     private boolean shouldSchedule(Context context) {
-        final boolean autoSync = Preferences.isEnableAutoSync(context);
+
+        final Preferences preferences = new Preferences(context);
+
+        final boolean autoSync = preferences.isEnableAutoSync();
         final boolean loginInformationSet = new AuthPreferences(context).isLoginInformationSet();
-        final boolean firstBackup = Preferences.isFirstBackup(context);
+        final boolean firstBackup = preferences.isFirstBackup();
         final boolean schedule = (autoSync && loginInformationSet && !firstBackup);
 
-        if (!schedule && Preferences.isAppLogDebug(context)) {
+        if (!schedule && preferences.isAppLogDebug()) {
             new AppLog(DateFormat.getDateFormatOrder(context))
                     .appendAndClose("Not set up to back up. "+
                             "autoSync="+autoSync+", loginInfoSet="+loginInformationSet+", firstBackup="+firstBackup);

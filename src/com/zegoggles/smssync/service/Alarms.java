@@ -29,18 +29,24 @@ import static com.zegoggles.smssync.service.BackupType.*;
 
 
 public class Alarms {
+    private final Preferences mPreferences;
     private Context mContext;
 
     public Alarms(Context context) {
+        this(context.getApplicationContext(), new Preferences(context));
+    }
+
+    Alarms(Context context, Preferences preferences) {
         mContext = context.getApplicationContext();
+        mPreferences = preferences;
     }
 
     public long scheduleIncomingBackup() {
-        return scheduleBackup(Preferences.getIncomingTimeoutSecs(mContext), INCOMING, false);
+        return scheduleBackup(mPreferences.getIncomingTimeoutSecs(), INCOMING, false);
     }
 
     public long scheduleRegularBackup() {
-        return scheduleBackup(Preferences.getRegularTimeoutSecs(mContext), REGULAR, false);
+        return scheduleBackup(mPreferences.getRegularTimeoutSecs(), REGULAR, false);
     }
 
     public long scheduleImmediateBackup() {
@@ -55,7 +61,7 @@ public class Alarms {
         if (LOCAL_LOGV)
             Log.v(TAG, "scheduleBackup(" + mContext + ", " + inSeconds + ", " + backupType + ", " + force + ")");
 
-        if (force || (Preferences.isEnableAutoSync(mContext) && inSeconds > 0)) {
+        if (force || (mPreferences.isEnableAutoSync() && inSeconds > 0)) {
             final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
             getAlarmManager(mContext).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(mContext, backupType));
             if (LOCAL_LOGV)
