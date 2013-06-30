@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.service.state;
 
 import android.content.res.Resources;
+import android.text.TextUtils;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
@@ -38,9 +39,17 @@ public abstract class State {
     }
 
     public String getDetailedErrorMessage(Resources resources) {
-        String msg = getErrorMessage(resources);
+        final String msg = getErrorMessage(resources);
         if (msg != null && exception != null) {
-            return msg + " (exception: "+exception.toString()+")";
+            final String underlying = exception.getCause() != null ? exception.getCause().toString() : null;
+            final StringBuilder message = new StringBuilder().append(msg)
+                    .append(" (exception: ")
+                    .append(exception.toString());
+
+            if (!TextUtils.isEmpty(underlying)) {
+                message.append(", underlying=").append(underlying);
+            }
+            return message.append(")").toString();
         } else {
             return null;
         }

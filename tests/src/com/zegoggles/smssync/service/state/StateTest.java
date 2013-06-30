@@ -43,6 +43,16 @@ public class StateTest {
         assertThat(state.getDetailedErrorMessage(resources)).isEqualTo("foo (exception: java.io.IOException: foo)");
     }
 
+    @Test public void shouldGetErrorMessageRootCause() throws Exception {
+        RuntimeException exception = new RuntimeException("foo", new IOException("bar"));
+
+        BackupState state = new BackupState(SmsSyncState.ERROR, 0, 0,
+                BackupType.REGULAR, DataType.SMS, exception);
+
+        assertThat(state.getErrorMessage(resources)).isEqualTo("foo");
+        assertThat(state.getDetailedErrorMessage(resources)).isEqualTo("foo (exception: java.lang.RuntimeException: foo, underlying=java.io.IOException: bar)");
+    }
+
     @Test public void shouldGetErrorMessageRequiresWifi() throws Exception {
         BackupState state = new BackupState(SmsSyncState.ERROR, 0, 0,
                 BackupType.REGULAR, DataType.SMS, new RequiresWifiException());
