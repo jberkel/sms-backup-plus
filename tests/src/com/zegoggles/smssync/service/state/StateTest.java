@@ -22,7 +22,6 @@ public class StateTest {
 
     @Before public void before() {
         resources = Robolectric.application.getResources();
-
     }
 
     @Test public void shouldCheckError() throws Exception {
