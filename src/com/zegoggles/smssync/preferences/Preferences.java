@@ -151,11 +151,6 @@ public class Preferences {
         return preferences.getBoolean(ENABLE_AUTO_BACKUP.key, Defaults.ENABLE_AUTO_SYNC);
     }
 
-    public boolean setEnableAutoSync(boolean enabled) {
-        return preferences.edit().putBoolean(ENABLE_AUTO_BACKUP.key, enabled).commit();
-    }
-
-
     public int getIncomingTimeoutSecs() {
         return getStringAsInt(INCOMING_TIMEOUT_SECONDS, Defaults.INCOMING_TIMEOUT_SECONDS);
     }
