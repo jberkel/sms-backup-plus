@@ -369,7 +369,7 @@
     <string name="pref_app_log_enabled">Log is stored on SD card as \"sms_backup_plus.log\".</string>
     <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
-    <string name="pref_app_log_debug">Extra debug information</string>
+    <string name="pref_app_log_debug">Debug mode</string>
 
     <string name="source_incoming">incoming</string>
     <string name="source_regular">regular</string>
