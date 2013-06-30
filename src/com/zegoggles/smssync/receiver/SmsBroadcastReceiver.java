@@ -44,7 +44,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     private void bootup(Context context) {
         if (shouldSchedule(context)) {
-            new Alarms(context).scheduleRegularBackup();
+            getAlarms(context).scheduleBootupBackup();
         } else {
             Log.i(TAG, "Received bootup but not set up to back up.");
         }
@@ -52,26 +52,46 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     private void incomingSMS(Context context) {
         if (shouldSchedule(context)) {
-            new Alarms(context).scheduleIncomingBackup();
+            getAlarms(context).scheduleIncomingBackup();
         } else {
             Log.i(TAG, "Received SMS but not set up to back up.");
         }
     }
 
     private boolean shouldSchedule(Context context) {
-        final Preferences preferences = new Preferences(context);
+        final Preferences preferences = getPreferences(context);
 
         final boolean autoSync = preferences.isEnableAutoSync();
-        final boolean loginInformationSet = new AuthPreferences(context).isLoginInformationSet();
+        final boolean loginInformationSet = getAuthPreferences(context).isLoginInformationSet();
         final boolean firstBackup = preferences.isFirstBackup();
         final boolean schedule = (autoSync && loginInformationSet && !firstBackup);
 
-        if (!schedule && preferences.isAppLogDebug()) {
-            new AppLog(DateFormat.getDateFormatOrder(context))
-                    .appendAndClose("Not set up to back up. "+
-                            "autoSync="+autoSync+", loginInfoSet="+loginInformationSet+", firstBackup="+firstBackup);
+        if (!schedule) {
+            final String message = new StringBuilder()
+                .append("Not set up to back up. ")
+                .append("autoSync=").append(autoSync)
+                .append(", loginInfoSet=").append(loginInformationSet)
+                .append(", firstBackup=").append(firstBackup)
+                .toString();
 
+            Log.w(TAG, message);
+            if (preferences.isAppLogDebug()) {
+                new AppLog(DateFormat.getDateFormatOrder(context))
+                    .appendAndClose(message);
+            }
         }
         return schedule;
+    }
+
+    protected Alarms getAlarms(Context context) {
+        return new Alarms(context);
+    }
+
+    protected Preferences getPreferences(Context context) {
+        return new Preferences(context);
+    }
+
+    protected AuthPreferences getAuthPreferences(Context context) {
+        return new AuthPreferences(context);
     }
 }

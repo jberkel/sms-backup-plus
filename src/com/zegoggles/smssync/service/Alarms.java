@@ -29,6 +29,8 @@ import static com.zegoggles.smssync.service.BackupType.*;
 
 
 public class Alarms {
+    private static final int BOOT_BACKUP_DELAY = 60;
+
     private final Preferences mPreferences;
     private Context mContext;
 
@@ -47,6 +49,10 @@ public class Alarms {
 
     public long scheduleRegularBackup() {
         return scheduleBackup(mPreferences.getRegularTimeoutSecs(), REGULAR, false);
+    }
+
+    public long scheduleBootupBackup() {
+        return scheduleBackup(BOOT_BACKUP_DELAY, REGULAR, false);
     }
 
     public long scheduleImmediateBackup() {

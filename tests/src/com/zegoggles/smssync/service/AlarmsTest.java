@@ -29,36 +29,37 @@ public class AlarmsTest {
         alarms = new Alarms(Robolectric.application, preferences);
     }
 
-    @Test
-    public void shouldScheduleImmediateBackup() throws Exception {
+    @Test public void shouldScheduleImmediateBackup() throws Exception {
         long scheduled = alarms.scheduleImmediateBackup();
         verifyAlarmScheduled(scheduled, "BROADCAST_INTENT");
     }
 
-    @Test
-    public void shouldScheduleRegularBackup() throws Exception {
+    @Test public void shouldScheduleRegularBackup() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.getRegularTimeoutSecs()).thenReturn(2000);
         long scheduled = alarms.scheduleRegularBackup();
         verifyAlarmScheduled(scheduled, "REGULAR");
     }
 
-    @Test
-    public void shouldScheduleIncomingBackup() throws Exception {
+    @Test public void shouldScheduleBootBackup() throws Exception {
+        when(preferences.isEnableAutoSync()).thenReturn(true);
+        long scheduled = alarms.scheduleBootupBackup();
+        verifyAlarmScheduled(scheduled, "REGULAR");
+    }
+
+    @Test public void shouldScheduleIncomingBackup() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.getIncomingTimeoutSecs()).thenReturn(2000);
         long scheduled = alarms.scheduleIncomingBackup();
         verifyAlarmScheduled(scheduled, "INCOMING");
     }
 
-    @Test
-    public void shouldNotScheduleRegularBackupIfAutoBackupIsDisabled() throws Exception {
+    @Test public void shouldNotScheduleRegularBackupIfAutoBackupIsDisabled() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(false);
         assertThat(alarms.scheduleRegularBackup()).isEqualTo(-1);
     }
 
-    @Test
-    public void shouldNotScheduleIncomingBackupIfAutoBackupIsDisabled() throws Exception {
+    @Test public void shouldNotScheduleIncomingBackupIfAutoBackupIsDisabled() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(false);
         assertThat(alarms.scheduleIncomingBackup()).isEqualTo(-1);
     }
