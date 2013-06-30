@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import com.zegoggles.smssync.preferences.Preferences;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +65,20 @@ public class AlarmsTest {
         assertThat(alarms.scheduleIncomingBackup()).isEqualTo(-1);
     }
 
-    private void verifyAlarmScheduled(long scheduled, String expectedType) {
+    @Test public void shouldScheduleIntentsWithUniqueActions() throws Exception {
+        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.getIncomingTimeoutSecs()).thenReturn(2000);
+
+        long scheduled = alarms.scheduleIncomingBackup();
+        Intent intent1 = verifyAlarmScheduled(scheduled, "INCOMING");
+
+        long scheduled2 = alarms.scheduleIncomingBackup();
+        Intent intent2 = verifyAlarmScheduled(scheduled2, "INCOMING");
+
+        assertThat(intent1.getAction()).isNotEqualTo(intent2.getAction());
+    }
+
+    private Intent verifyAlarmScheduled(long scheduled, String expectedType) {
         final Context context = Robolectric.application;
 
         assertThat(scheduled).isGreaterThan(0);
@@ -84,8 +98,11 @@ public class AlarmsTest {
         assertThat(component.getPackageName()).isEqualTo("com.zegoggles.smssync");
         assertThat(component.getClassName()).isEqualTo("com.zegoggles.smssync.service.SmsBackupService");
         assertThat(shadowPendingIntent.getFlags()).isEqualTo(0);
+        assertThat(shadowPendingIntent.getSavedIntent().getAction()).isNotEmpty();
 
         assertThat(shadowPendingIntent.getSavedIntent().getStringExtra(BackupType.EXTRA))
                 .isEqualTo(expectedType);
+
+        return shadowPendingIntent.getSavedIntent();
     }
 }

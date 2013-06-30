@@ -74,13 +74,17 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                 .append(", firstBackup=").append(firstBackup)
                 .toString();
 
-            Log.w(TAG, message);
-            if (preferences.isAppLogDebug()) {
-                new AppLog(DateFormat.getDateFormatOrder(context))
-                    .appendAndClose(message);
-            }
+            log(context, message, preferences.isAppLogDebug());
         }
         return schedule;
+    }
+
+    private void log(Context context, String message, boolean appLog) {
+        Log.d(TAG, message);
+        if (appLog) {
+            new AppLog(DateFormat.getDateFormatOrder(context))
+                    .appendAndClose(message);
+        }
     }
 
     protected Alarms getAlarms(Context context) {

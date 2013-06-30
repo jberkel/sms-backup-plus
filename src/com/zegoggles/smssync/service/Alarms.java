@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.util.Log;
 import com.zegoggles.smssync.preferences.Preferences;
 
+import java.util.UUID;
+
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.*;
@@ -86,8 +88,12 @@ public class Alarms {
     }
 
     private static PendingIntent createPendingIntent(Context ctx, BackupType backupType) {
+        final UUID uuid = UUID.randomUUID();
+
         final Intent intent = (new Intent(ctx, SmsBackupService.class))
-                .putExtra(BackupType.EXTRA, backupType.name());
+            .setAction(backupType.name() + "-" + uuid.toString()) // create fresh pending intent
+            .putExtra(BackupType.EXTRA, backupType.name());
+
         return PendingIntent.getService(ctx, 0, intent, 0);
     }
 }
