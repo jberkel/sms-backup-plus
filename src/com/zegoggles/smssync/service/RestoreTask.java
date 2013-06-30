@@ -39,7 +39,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
     private Set<String> smsIds = new HashSet<String>();
     private Set<String> callLogIds = new HashSet<String>();
     private Set<String> uids = new HashSet<String>();
-    private BackupImapStore.BackupFolder callFolder;
+
     private final SmsRestoreService service;
     private final ContentResolver resolver;
     private final MessageConverter converter;
@@ -49,7 +49,9 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
     public RestoreTask(SmsRestoreService service,
                        BackupImapStore imapStore,
                        MessageConverter converter,
-                       boolean restoreSms, boolean restoreCalllog, boolean restoreOnlyStarred) {
+                       boolean restoreSms,
+                       boolean restoreCalllog,
+                       boolean restoreOnlyStarred) {
         this.service = service;
         this.imapStore = imapStore;
         this.converter = converter;
@@ -80,6 +82,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
 
             publishProgress(LOGIN);
             BackupImapStore.BackupFolder smsFolder = imapStore.getFolder(SMS);
+            BackupImapStore.BackupFolder callFolder = null;
             if (restoreCallLog) callFolder = imapStore.getFolder(CALLLOG);
 
             publishProgress(CALC);
