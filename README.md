@@ -384,6 +384,8 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * Nemanja Bračko - Serbian translation
   * Markus Osanger - German translation
   * Dimitris / Mazin Hussein - Greek translation
+  * Yunsu Choi - Korean translation
+  * Javier Pico - Galician translation
 
 ##<a name="screenhots">Screenshots</a>
 

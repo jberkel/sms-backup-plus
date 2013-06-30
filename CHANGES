@@ -1,7 +1,12 @@
 == 1.5.3 (xxx) tbd
 
-  * Korean translation (Yunsu Choi)
-  * Galician translation (Javier Pico)
+  * Fixed calendar syncing (#260)
+  * Fixed call log sync grayed-out option (#308)
+  * Fixed loss of a sms/mms or call log if an exception occurs during backup (#270)
+  * Added sync log debug mode
+  * Added Korean translation (Yunsu Choi)
+  * Added Galician translation (Javier Pico)
+  * Refactored code + added unit tests
 
 == 1.5.2 (1515) 09-07-2013
 
