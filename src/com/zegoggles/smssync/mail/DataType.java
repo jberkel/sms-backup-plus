@@ -6,8 +6,8 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import com.zegoggles.smssync.R;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public enum DataType {
     SMS     (R.string.sms,      R.string.sms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      Defaults.SMS_BACKUP_ENABLED,     PreferenceKeys.RESTORE_SMS,     Defaults.SMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_SMS,      -1),
@@ -75,7 +75,12 @@ public enum DataType {
     }
 
     public long getMaxSyncedDate(Context context) {
-        return prefs(context).getLong(maxSyncedPreference, Defaults.MAX_SYNCED_DATE);
+        long maxSynced = prefs(context).getLong(maxSyncedPreference, Defaults.MAX_SYNCED_DATE);
+        if (this == MMS && maxSynced > 0) {
+            return maxSynced * 1000;
+        } else {
+            return maxSynced;
+        }
     }
 
     public boolean setMaxSyncedDate(Context context, long max) {
@@ -86,21 +91,21 @@ public enum DataType {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static Set<DataType> enabled(Context context) {
-        Set<DataType> set = new HashSet<DataType>();
+    public static List<DataType> enabled(Context context) {
+        List<DataType> enabledTypes = new ArrayList<DataType>();
         for (DataType t : values()) {
             if (t.isBackupEnabled(context)) {
-                set.add(t);
+                enabledTypes.add(t);
             }
         }
-        return set;
+        return enabledTypes;
     }
 
     public static long getMostRecentSyncedDate(Context ctx) {
         return Math.max(Math.max(
                 SMS.getMaxSyncedDate(ctx),
                 CALLLOG.getMaxSyncedDate(ctx)),
-                MMS.getMaxSyncedDate(ctx) * 1000);
+                MMS.getMaxSyncedDate(ctx));
     }
 
     public static void clearLastSyncData(Context ctx) {

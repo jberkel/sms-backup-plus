@@ -80,6 +80,7 @@ import java.util.Locale;
 
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.DataType.*;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.*;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -259,14 +260,11 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void updateLastBackupTimes() {
-        findPreference("backup_sms").setSummary(
-                getLastSyncText(SMS.getMaxSyncedDate(this)));
-        findPreference("backup_mms").setSummary(
-                getLastSyncText(MMS.getMaxSyncedDate(this) * 1000));
-        findPreference("backup_calllog").setSummary(
-                getLastSyncText(CALLLOG.getMaxSyncedDate(this)));
-        findPreference("backup_whatsapp").setSummary(
-                getLastSyncText(WHATSAPP.getMaxSyncedDate(this)));
+        for (DataType type : DataType.values()) {
+            findPreference(type.backupEnabledPreference).setSummary(
+                getLastSyncText(type.getMaxSyncedDate(this))
+            );
+        }
     }
 
     private ConnectivityManager getConnectivityManager() {
@@ -274,43 +272,45 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void updateAutoBackupEnabledSummary() {
-        final Preference enableAutoBackup = findPreference("enable_auto_sync");
-        final List<String> enabled = new ArrayList<String>();
-
-        for (DataType dataType : DataType.values()) {
-            if (dataType.isBackupEnabled(this)) {
-                enabled.add(getString(dataType.resId));
-            }
+        findPreference(ENABLE_AUTO_BACKUP.key).setSummary(getEnabledBackupSummary());
+        for (DataType t : DataType.values()) {
+            addSummaryListener(new Runnable() {
+                public void run() {
+                    updateAutoBackupEnabledSummary();
+                }
+            }, t.backupEnabledPreference);
         }
+    }
 
-        StringBuilder summary = new StringBuilder(
-                getString(R.string.ui_enable_auto_sync_summary, TextUtils.join(", ", enabled))
-        );
-
-        if (!getConnectivityManager().getBackgroundDataSetting())
-            summary.append(' ').append(getString(R.string.ui_enable_auto_sync_bg_data));
-
-        if (Preferences.isInstalledOnSDCard(this))
-            summary.append(' ').append(getString(R.string.sd_card_disclaimer));
-
-        enableAutoBackup.setSummary(summary.toString());
-
-        addSummaryListener(new Runnable() {
-            public void run() {
-                updateAutoBackupEnabledSummary();
+    protected String getEnabledBackupSummary() {
+        final List<String> enabled = new ArrayList<String>();
+        for (DataType dataType : DataType.enabled(this)) {
+            enabled.add(getString(dataType.resId));
+        }
+        StringBuilder summary = new StringBuilder();
+        if (!enabled.isEmpty()) {
+            summary.append(getString(R.string.ui_enable_auto_sync_summary, TextUtils.join(", ", enabled)));
+            if (!getConnectivityManager().getBackgroundDataSetting()) {
+                summary.append(' ').append(getString(R.string.ui_enable_auto_sync_bg_data));
             }
-        }, SMS.backupEnabledPreference, MMS.backupEnabledPreference, CALLLOG.backupEnabledPreference);
+            if (Preferences.isInstalledOnSDCard(this)) {
+                summary.append(' ').append(getString(R.string.sd_card_disclaimer));
+            }
+        } else {
+            summary.append(getString(R.string.ui_enable_auto_sync_no_enabled_summary));
+        }
+        return summary.toString();
     }
 
     private void updateAutoBackupSummary() {
-        final Preference autoBackup = findPreference("auto_backup_settings_screen");
+        final Preference autoBackup = findPreference(BACKUP_SETTINGS_SCREEN.key);
         final StringBuilder summary = new StringBuilder();
 
         final ListPreference regSchedule = (ListPreference)
-                findPreference(Preferences.REGULAR_TIMEOUT_SECONDS);
+                findPreference(REGULAR_TIMEOUT_SECONDS.key);
 
         final ListPreference incomingSchedule = (ListPreference)
-                findPreference(Preferences.INCOMING_TIMEOUT_SECONDS);
+                findPreference(INCOMING_TIMEOUT_SECONDS.key);
 
         summary.append(regSchedule.getTitle())
                 .append(": ")
@@ -322,7 +322,7 @@ public class MainActivity extends PreferenceActivity {
 
         if (Preferences.isWifiOnly(this)) {
             summary.append(" (")
-                    .append(findPreference(Preferences.WIFI_ONLY).getTitle())
+                    .append(findPreference(WIFI_ONLY.key).getTitle())
                     .append(")");
         }
 
@@ -332,9 +332,9 @@ public class MainActivity extends PreferenceActivity {
             public void run() {
                 updateAutoBackupSummary();
             }
-        }, Preferences.INCOMING_TIMEOUT_SECONDS,
-                Preferences.REGULAR_TIMEOUT_SECONDS,
-                Preferences.WIFI_ONLY);
+        }, INCOMING_TIMEOUT_SECONDS.key,
+                REGULAR_TIMEOUT_SECONDS.key,
+                WIFI_ONLY.key);
     }
 
     private void addSummaryListener(final Runnable r, String... prefs) {
@@ -366,7 +366,7 @@ public class MainActivity extends PreferenceActivity {
 
     private void updateBackupContactGroupLabelFromPref() {
         final ListPreference groupPref = (ListPreference)
-                findPreference(Preferences.BACKUP_CONTACT_GROUP);
+                findPreference(BACKUP_CONTACT_GROUP.key);
 
         groupPref.setTitle(groupPref.getEntry() != null ? groupPref.getEntry() :
                 getString(R.string.ui_backup_contact_group_label));
@@ -374,7 +374,7 @@ public class MainActivity extends PreferenceActivity {
 
     private void updateCallLogCalendarLabelFromPref() {
         final ListPreference calendarPref = (ListPreference)
-                findPreference(Preferences.CALLLOG_SYNC_CALENDAR);
+                findPreference(CALLLOG_SYNC_CALENDAR.key);
 
         calendarPref.setTitle(calendarPref.getEntry() != null ? calendarPref.getEntry() :
                 getString(R.string.ui_backup_calllog_sync_calendar_label));
@@ -394,17 +394,17 @@ public class MainActivity extends PreferenceActivity {
 
     private void initGroups() {
         ContactAccessor contacts = ContactAccessor.Get.instance();
-        ListPreferenceHelper.initListPreference((ListPreference) findPreference(Preferences.BACKUP_CONTACT_GROUP),
+        ListPreferenceHelper.initListPreference((ListPreference) findPreference(BACKUP_CONTACT_GROUP.key),
                 contacts.getGroups(getContentResolver(), getResources()), false);
     }
 
     private void initCalendars() {
         final ListPreference calendarPref = (ListPreference)
-                findPreference(Preferences.CALLLOG_SYNC_CALENDAR);
+                findPreference(CALLLOG_SYNC_CALENDAR.key);
         CalendarAccessor calendars = CalendarAccessor.Get.instance(getContentResolver());
         boolean enabled = ListPreferenceHelper.initListPreference(calendarPref, calendars.getCalendars(), false);
 
-        findPreference(Preferences.CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(enabled);
+        findPreference(CALLLOG_SYNC_CALENDAR_ENABLED.key).setEnabled(enabled);
     }
 
     private void initiateRestore() {
@@ -667,11 +667,11 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void updateMaxItemsPerSync(String newValue) {
-        updateMaxItems(Preferences.MAX_ITEMS_PER_SYNC, Preferences.getMaxItemsPerSync(this), newValue);
+        updateMaxItems(MAX_ITEMS_PER_SYNC.key, Preferences.getMaxItemsPerSync(this), newValue);
     }
 
     private void updateMaxItemsPerRestore(String newValue) {
-        updateMaxItems(Preferences.MAX_ITEMS_PER_RESTORE, Preferences.getMaxItemsPerRestore(this), newValue);
+        updateMaxItems(MAX_ITEMS_PER_RESTORE.key, Preferences.getMaxItemsPerRestore(this), newValue);
     }
 
     private void updateMaxItems(String prefKey, int currentValue, String newValue) {
@@ -685,7 +685,7 @@ public class MainActivity extends PreferenceActivity {
 
     private CheckBoxPreference updateConnected() {
         CheckBoxPreference connected = (CheckBoxPreference) getPreferenceManager()
-                .findPreference(Preferences.CONNECTED);
+                .findPreference(CONNECTED.key);
 
         connected.setEnabled(authPreferences.useXOAuth());
         connected.setChecked(authPreferences.hasOauthTokens() || authPreferences.hasOAuth2Tokens());
@@ -712,7 +712,7 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void updateImapSettings(boolean enabled) {
-        getPreferenceManager().findPreference("imap_settings").setEnabled(enabled);
+        getPreferenceManager().findPreference(IMAP_SETTINGS.key).setEnabled(enabled);
     }
 
     private void setPreferenceListeners(final PreferenceManager prefMgr, boolean backup) {
@@ -726,7 +726,7 @@ public class MainActivity extends PreferenceActivity {
             );
         }
 
-        prefMgr.findPreference(Preferences.ENABLE_AUTO_BACKUP)
+        prefMgr.findPreference(ENABLE_AUTO_BACKUP.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -755,7 +755,7 @@ public class MainActivity extends PreferenceActivity {
                     }
                 });
 
-        prefMgr.findPreference(Preferences.MAX_ITEMS_PER_SYNC)
+        prefMgr.findPreference(MAX_ITEMS_PER_SYNC.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         updateMaxItemsPerSync(newValue.toString());
@@ -763,7 +763,7 @@ public class MainActivity extends PreferenceActivity {
                     }
                 });
 
-        prefMgr.findPreference(Preferences.MAX_ITEMS_PER_RESTORE)
+        prefMgr.findPreference(MAX_ITEMS_PER_RESTORE.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         updateMaxItemsPerRestore(newValue.toString());
@@ -854,7 +854,7 @@ public class MainActivity extends PreferenceActivity {
                     switch (s) {
                         case NOT_AVAILABLE:
                         case DONATED:
-                            Preference donate = getPreferenceScreen().findPreference("donate");
+                            Preference donate = getPreferenceScreen().findPreference(DONATE.key);
                             if (donate != null) {
                                 getPreferenceScreen().removePreference(donate);
                             }
