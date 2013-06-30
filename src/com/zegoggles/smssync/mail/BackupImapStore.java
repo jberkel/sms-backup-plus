@@ -89,14 +89,24 @@ public class BackupImapStore extends ImapStore {
                 '}';
     }
 
-    private String getStoreUriForLogging() {
+    /**
+     * @return a uri which can be used for logging (i.e. with credentials masked)
+     */
+    public String getStoreUriForLogging() {
         Uri uri = Uri.parse(this.uri);
         String userInfo = uri.getUserInfo();
-        if (userInfo.contains(":")) {
-            String[] parts = userInfo.split(":");
+
+        if (!TextUtils.isEmpty(userInfo) && userInfo.contains(":")) {
+            String[] parts = userInfo.split(":", 2);
             userInfo = parts[0]+":"+(parts[1].replaceAll(".", "X"));
+            String host = uri.getHost();
+            if (uri.getPort() != -1) {
+                host += ":"+uri.getPort();
+            }
+            return uri.buildUpon().encodedAuthority(userInfo + "@" + host).toString();
+        } else {
+            return uri.toString();
         }
-        return uri.buildUpon().encodedAuthority(userInfo + "@" + uri.getHost()).toString();
     }
 
     public class BackupFolder extends ImapFolder {

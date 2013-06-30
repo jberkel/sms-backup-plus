@@ -22,17 +22,29 @@ public class BackupImapStoreTest {
         assertThat(isValidUri("http://xoauth:foooo@imap.gmail.com:993")).isFalse();
     }
 
-    @Test
-    public void testAccountHasStoreUri() throws Exception {
+    @Test public void testAccountHasStoreUri() throws Exception {
         String uri = "imap://xoauth:foooo@imap.gmail.com";
         BackupImapStore store = new BackupImapStore(Robolectric.application, uri);
         assertThat(store.getAccount().getStoreUri()).isEqualTo(uri);
     }
 
-    @Test
-    public void shouldHaveToStringWithObfuscatedStoreURI() throws Exception {
-        String uri = "imap://xoauth:foooo@imap.gmail.com";
-        BackupImapStore store = new BackupImapStore(Robolectric.application, uri);
+    @Test public void shouldHaveToStringWithObfuscatedStoreURI() throws Exception {
+        BackupImapStore store = new BackupImapStore(Robolectric.application, "imap://xoauth:foooo@imap.gmail.com");
+        assertThat(store.getStoreUriForLogging()).isEqualTo("imap://xoauth:XXXXX@imap.gmail.com");
+    }
+
+    @Test public void shouldHaveToStringWithObfuscatedStoreURIWithPort() throws Exception {
+        BackupImapStore store = new BackupImapStore(Robolectric.application, "imap://xoauth:foooo@imap.gmail.com:456");
+        assertThat(store.getStoreUriForLogging()).isEqualTo("imap://xoauth:XXXXX@imap.gmail.com:456");
+    }
+
+    @Test public void shouldHaveToStringWithObfuscatedStoreURIWithoutUserInfo() throws Exception {
+        BackupImapStore store = new BackupImapStore(Robolectric.application, "imap://imap.gmail.com:1234");
+        assertThat(store.getStoreUriForLogging()).isEqualTo("imap://imap.gmail.com:1234");
+    }
+
+    @Test public void shouldHaveToStringWithStoreUriForLogging() throws Exception {
+        BackupImapStore store = new BackupImapStore(Robolectric.application, "imap://xoauth:foooo@imap.gmail.com");
         assertThat(store.toString()).isEqualTo("BackupImapStore{uri=imap://xoauth:XXXXX@imap.gmail.com}");
     }
 }
