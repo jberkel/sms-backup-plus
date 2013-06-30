@@ -74,6 +74,6 @@ public class Alarms {
     private static PendingIntent createPendingIntent(Context ctx, BackupType backupType) {
         final Intent intent = (new Intent(ctx, SmsBackupService.class))
                 .putExtra(BackupType.EXTRA, backupType.name());
-        return PendingIntent.getService(ctx, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getService(ctx, 0, intent, 0);
     }
 }
