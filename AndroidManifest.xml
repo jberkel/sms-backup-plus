@@ -14,6 +14,10 @@
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <!--
+    http://stackoverflow.com/questions/11289568/monitoring-mms-received-like-sms-received-on-android
+    <uses-permission android:name="android.permission.RECEIVE_MMS"/>
+    -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>

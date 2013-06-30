@@ -30,44 +30,47 @@ import static com.zegoggles.smssync.App.LOG;
 import static com.zegoggles.smssync.App.TAG;
 
 public class SmsBroadcastReceiver extends BroadcastReceiver {
-    public static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
 
     @Override
-    public void onReceive(Context ctx, Intent intent) {
-        if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + ctx + "," + intent + ")");
+    public void onReceive(Context context, Intent intent) {
+        if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + context + "," + intent + ")");
 
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            bootup(ctx);
+            bootup(context);
         } else if (SMS_RECEIVED.equals(intent.getAction())) {
-            incomingSMS(ctx);
+            incomingSMS(context);
         }
     }
 
-    private void bootup(Context ctx) {
-        if (Preferences.isEnableAutoSync(ctx) &&
-                new AuthPreferences(ctx).isLoginInformationSet() &&
-                !Preferences.isFirstBackup(ctx)) {
-
-            new Alarms(ctx).scheduleRegularBackup();
+    private void bootup(Context context) {
+        if (shouldSchedule(context)) {
+            new Alarms(context).scheduleRegularBackup();
         } else {
-            Log.i(TAG, "Received bootup but not set up to sync.");
+            Log.i(TAG, "Received bootup but not set up to back up.");
         }
     }
 
-    private void incomingSMS(Context ctx) {
-        final boolean autoSync = Preferences.isEnableAutoSync(ctx);
-        final boolean loginInformationSet = new AuthPreferences(ctx).isLoginInformationSet();
-        final boolean firstBackup = Preferences.isFirstBackup(ctx);
-        if (autoSync && loginInformationSet && !firstBackup) {
-            new Alarms(ctx).scheduleIncomingBackup();
+    private void incomingSMS(Context context) {
+        if (shouldSchedule(context)) {
+            new Alarms(context).scheduleIncomingBackup();
         } else {
             Log.i(TAG, "Received SMS but not set up to back up.");
-
-            if (Preferences.isAppLogEnabled(ctx)) {
-                new AppLog(LOG, DateFormat.getDateFormatOrder(ctx))
-                    .appendAndClose("Received SMS but not set up to back up. "+
-                    "autoSync="+autoSync+", loginInfoSet="+loginInformationSet+", firstBackup="+firstBackup);
-            }
         }
+    }
+
+    private boolean shouldSchedule(Context context) {
+        final boolean autoSync = Preferences.isEnableAutoSync(context);
+        final boolean loginInformationSet = new AuthPreferences(context).isLoginInformationSet();
+        final boolean firstBackup = Preferences.isFirstBackup(context);
+        final boolean schedule = (autoSync && loginInformationSet && !firstBackup);
+
+        if (!schedule && Preferences.isAppLogDebug(context)) {
+            new AppLog(LOG, DateFormat.getDateFormatOrder(context))
+                    .appendAndClose("Not set up to back up. "+
+                            "autoSync="+autoSync+", loginInfoSet="+loginInformationSet+", firstBackup="+firstBackup);
+
+        }
+        return schedule;
     }
 }

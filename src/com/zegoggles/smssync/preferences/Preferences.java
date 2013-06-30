@@ -73,7 +73,8 @@ public class Preferences {
     }
 
     public static boolean isAppLogDebug(Context context) {
-        return prefs(context).getBoolean(APP_LOG_DEBUG.key, false);
+        return  isAppLogEnabled(context) &&
+                prefs(context).getBoolean(APP_LOG_DEBUG.key, false);
     }
 
     static SharedPreferences prefs(Context ctx) {
