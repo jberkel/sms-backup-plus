@@ -195,6 +195,9 @@ been reported. If not, create a new issue and attach the following details:
 If it is related to backing up / restoring you should also enable the sync log in debug mode (Advanced settings) 
 and attach a relevant portion of it. The sync log is located on your SD card as "sms_backup_plus.log".
 
+To attach the sync log create a "gist" (https://gist.github.com) and link to the gist you created instead
+of posting the full content in the issue.
+
 ### Backup questions
 
 #### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>
