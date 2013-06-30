@@ -370,6 +370,7 @@
     <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
     <string name="pref_app_log_debug">Debug mode</string>
+    <string name="pref_app_log_debug_summary">Enables extra debug logging in sync log</string>
 
     <string name="source_incoming">incoming</string>
     <string name="source_regular">regular</string>

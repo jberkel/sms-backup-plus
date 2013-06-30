@@ -269,6 +269,7 @@
                 android:key="app_log_debug"
                 android:dependency="app_log"
                 android:title="@string/pref_app_log_debug"
+                android:summary="@string/pref_app_log_debug_summary"
                 android:persistent="true"
                 android:defaultValue="false"/>
 
