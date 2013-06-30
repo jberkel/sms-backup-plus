@@ -50,7 +50,7 @@ public class BackupTaskTest {
     @Before
     public void before() {
         initMocks(this);
-        config = new BackupConfig(store, 0, false, 100, new ContactGroup(-1), -1, BackupType.MANUAL);
+        config = new BackupConfig(store, 0, false, 100, new ContactGroup(-1), -1, BackupType.MANUAL, false);
         when(service.getApplicationContext()).thenReturn(Robolectric.application);
         when(service.getState()).thenReturn(state);
 
@@ -89,7 +89,7 @@ public class BackupTaskTest {
         when(fetcher.getMostRecentTimestamp(any(DataType.class))).thenReturn(-23L);
 
         task.doInBackground(new BackupConfig(
-            store, 0, true, 100, new ContactGroup(-1), -1, BackupType.MANUAL)
+            store, 0, true, 100, new ContactGroup(-1), -1, BackupType.MANUAL, false)
         );
 
         for (DataType type : DataType.values()) {

@@ -262,7 +262,15 @@
         android:persistent="true"
         android:defaultValue="false"/>
 
-      <PreferenceScreen
+        <CheckBoxPreference
+            android:key="app_log_debug"
+            android:dependency="app_log"
+            android:title="@string/pref_app_log_debug"
+            android:persistent="true"
+            android:defaultValue="false"/>
+
+
+        <PreferenceScreen
         android:title="@string/ui_settings_advanced_server_label"
         android:summary="@string/ui_settings_advanced_server_desc">
 

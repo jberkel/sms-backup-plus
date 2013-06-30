@@ -43,12 +43,14 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class BackupImapStore extends ImapStore {
-    private Context context;
+    private final Context context;
+    private final String uri;
 
     static {
         // increase read timeout a bit
         com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 5;
     }
+
 
     public BackupImapStore(final Context context, final String uri) throws MessagingException {
         super(new Account(context) {
@@ -58,20 +60,7 @@ public class BackupImapStore extends ImapStore {
             }
         });
         this.context = context;
-    }
-
-    public static boolean isValidUri(String uri) {
-        if (TextUtils.isEmpty(uri)) return false;
-        Uri parsed = Uri.parse(uri);
-        return parsed != null &&
-            !TextUtils.isEmpty(parsed.getAuthority()) &&
-            !TextUtils.isEmpty(parsed.getHost()) &&
-            !TextUtils.isEmpty(parsed.getScheme()) &&
-            ("imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap+ssl".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap+tls+".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap+tls".equalsIgnoreCase(parsed.getScheme()));
+        this.uri = uri;
     }
 
     public BackupFolder getFolder(DataType type) throws MessagingException {
@@ -92,6 +81,22 @@ public class BackupImapStore extends ImapStore {
             Log.e(TAG, "K9 error", e);
             throw new MessagingException(e.getMessage());
         }
+    }
+
+    @Override public String toString() {
+        return "BackupImapStore{" +
+                "uri=" + getStoreUriForLogging() +
+                '}';
+    }
+
+    private String getStoreUriForLogging() {
+        Uri uri = Uri.parse(this.uri);
+        String userInfo = uri.getUserInfo();
+        if (userInfo.contains(":")) {
+            String[] parts = userInfo.split(":");
+            userInfo = parts[0]+":"+(parts[1].replaceAll(".", "X"));
+        }
+        return uri.buildUpon().encodedAuthority(userInfo + "@" + uri.getHost()).toString();
     }
 
     public class BackupFolder extends ImapFolder {
@@ -182,5 +187,19 @@ public class BackupImapStore extends ImapStore {
             final Date d2 = m2 == null ? EARLY : m2.getSentDate() != null ? m2.getSentDate() : EARLY;
             return d2.compareTo(d1);
         }
+    }
+
+    public static boolean isValidUri(String uri) {
+        if (TextUtils.isEmpty(uri)) return false;
+        Uri parsed = Uri.parse(uri);
+        return parsed != null &&
+                !TextUtils.isEmpty(parsed.getAuthority()) &&
+                !TextUtils.isEmpty(parsed.getHost()) &&
+                !TextUtils.isEmpty(parsed.getScheme()) &&
+                ("imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
+                "imap+ssl".equalsIgnoreCase(parsed.getScheme()) ||
+                "imap".equalsIgnoreCase(parsed.getScheme()) ||
+                "imap+tls+".equalsIgnoreCase(parsed.getScheme()) ||
+                "imap+tls".equalsIgnoreCase(parsed.getScheme()));
     }
 }

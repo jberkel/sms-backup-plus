@@ -99,7 +99,8 @@ public class SmsBackupService extends ServiceBase {
                             Preferences.getMaxItemsPerSync(this),
                             Preferences.getBackupContactGroup(this),
                             MAX_MSG_PER_REQUEST,
-                            backupType);
+                            backupType,
+                            Preferences.isAppLogDebug(this));
 
                     appLog(R.string.app_log_start_backup, backupType);
 
@@ -171,9 +172,9 @@ public class SmsBackupService extends ServiceBase {
                     getString(getAuthPreferences().useXOAuth() ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain));
             }
         } else if (state.isConnectivityError()) {
-            appLog(R.string.app_log_backup_failed_connectivity, state.getErrorMessage(getResources()));
+            appLog(R.string.app_log_backup_failed_connectivity, state.getDetailedErrorMessage(getResources()));
         } else {
-            appLog(R.string.app_log_backup_failed_messaging, state.getErrorMessage(getResources()));
+            appLog(R.string.app_log_backup_failed_messaging, state.getDetailedErrorMessage(getResources()));
 
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,

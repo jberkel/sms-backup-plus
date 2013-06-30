@@ -28,4 +28,11 @@ public class BackupImapStoreTest {
         BackupImapStore store = new BackupImapStore(Robolectric.application, uri);
         assertThat(store.getAccount().getStoreUri()).isEqualTo(uri);
     }
+
+    @Test
+    public void shouldHaveToStringWithObfuscatedStoreURI() throws Exception {
+        String uri = "imap://xoauth:foooo@imap.gmail.com";
+        BackupImapStore store = new BackupImapStore(Robolectric.application, uri);
+        assertThat(store.toString()).isEqualTo("BackupImapStore{uri=imap://xoauth:XXXXX@imap.gmail.com}");
+    }
 }

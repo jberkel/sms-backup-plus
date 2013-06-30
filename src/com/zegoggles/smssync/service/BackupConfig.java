@@ -8,11 +8,11 @@ public class BackupConfig {
     public final BackupImapStore imap;
     public final boolean skip;
     public final int tries;
-
     public final int maxItemsPerSync;
     public final ContactGroup groupToBackup;
     public final int maxMessagePerRequest;
     public final BackupType backupType;
+    public final boolean debug;
 
     public BackupConfig(@NotNull BackupImapStore imap,
                         int tries,
@@ -20,7 +20,8 @@ public class BackupConfig {
                         int maxItemsPerSync,
                         @NotNull ContactGroup groupToBackup,
                         int maxMessagePerRequest,
-                        BackupType backupType) {
+                        BackupType backupType,
+                        boolean debug) {
         this.imap = imap;
         this.skip = skip;
         this.tries = tries;
@@ -28,6 +29,7 @@ public class BackupConfig {
         this.groupToBackup = groupToBackup;
         this.maxMessagePerRequest = maxMessagePerRequest;
         this.backupType = backupType;
+        this.debug = debug;
     }
 
     public BackupConfig retryWithStore(BackupImapStore store) {
@@ -36,6 +38,20 @@ public class BackupConfig {
                 maxItemsPerSync,
                 groupToBackup,
                 maxMessagePerRequest,
-                backupType);
+                backupType,
+                debug);
+    }
+
+    @Override public String toString() {
+        return "BackupConfig{" +
+                "imap=" + imap +
+                ", skip=" + skip +
+                ", tries=" + tries +
+                ", maxItemsPerSync=" + maxItemsPerSync +
+                ", groupToBackup=" + groupToBackup +
+                ", maxMessagePerRequest=" + maxMessagePerRequest +
+                ", backupType=" + backupType +
+                ", debug=" + debug +
+                '}';
     }
 }

@@ -37,6 +37,15 @@ public abstract class State {
         }
     }
 
+    public String getDetailedErrorMessage(Resources resources) {
+        String msg = getErrorMessage(resources);
+        if (msg != null && exception != null) {
+            return msg + " (exception: "+exception.toString()+")";
+        } else {
+            return null;
+        }
+    }
+
     public boolean isInitialState() {
         return state == SmsSyncState.INITIAL;
     }

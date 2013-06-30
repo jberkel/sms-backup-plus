@@ -137,6 +137,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     return transition(ERROR, new RequiresLoginException());
                 } else {
                     appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
+                    if (config.debug) {
+                        appLog(R.string.app_log_backup_messages_with_config, config);
+                    }
                     return backup(config, smsItems, mmsItems, callLogItems, whatsAppItems, itemsToSync);
                 }
             } else {

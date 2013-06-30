@@ -1,8 +1,5 @@
 package com.zegoggles.smssync.contacts;
 
-import android.content.ContentResolver;
-import org.jetbrains.annotations.Nullable;
-
 public class ContactGroup {
     public final long _id;
     public final Type type;
@@ -36,5 +33,12 @@ public class ContactGroup {
         int result = (int) (_id ^ (_id >>> 32));
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
+    }
+
+    @Override public String toString() {
+        return "ContactGroup{" +
+                "_id=" + _id +
+                ", type=" + type +
+                '}';
     }
 }

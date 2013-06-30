@@ -33,6 +33,7 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.*;
 
 public class Preferences {
+
     public enum Keys {
         ENABLE_AUTO_BACKUP("enable_auto_sync"),
         INCOMING_TIMEOUT_SECONDS("auto_backup_incoming_schedule"),
@@ -51,6 +52,7 @@ public class Preferences {
         MARK_AS_READ_ON_RESTORE("mark_as_read_on_restore"),
         THIRD_PARTY_INTEGRATION("third_party_integration"),
         APP_LOG("app_log"),
+        APP_LOG_DEBUG("app_log_debug"),
         LAST_VERSION_CODE("last_version_code"),
         CONFIRM_ACTION("confirm_action"),
         NOTIFICATIONS("notifications"),
@@ -68,6 +70,10 @@ public class Preferences {
 
     public static boolean isAppLogEnabled(Context ctx) {
         return prefs(ctx).getBoolean(APP_LOG.key, false);
+    }
+
+    public static boolean isAppLogDebug(Context context) {
+        return prefs(context).getBoolean(APP_LOG_DEBUG.key, false);
     }
 
     static SharedPreferences prefs(Context ctx) {

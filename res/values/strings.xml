@@ -304,6 +304,7 @@
   <string name="app_log_backup_requested">Backup requested (%1$s)</string>
   <string name="app_log_start_backup">Starting backup (%1$s)</string>
   <string name="app_log_backup_messages">Backing up (%1$d SMS, %2$d MMS, %3$d call log)</string>
+  <string name="app_log_backup_messages_with_config">Using config: %1$s</string>
   <string name="app_log_backup_canceled">Backup canceled</string>
   <string name="app_log_backup_finished">Backup finished</string>
 
@@ -320,7 +321,10 @@
   <string name="pref_app_log_enabled">Log is stored on SD card as \"sms_backup_plus.log\".</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
-  <string name="source_incoming">incoming</string>
+  <string name="pref_app_log_debug">Extra debug information</string>
+
+
+    <string name="source_incoming">incoming</string>
   <string name="source_regular">regular</string>
   <string name="source_3rd_party">3rd party</string>
   <string name="source_manual">manual</string>
