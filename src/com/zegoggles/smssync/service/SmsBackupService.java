@@ -164,7 +164,7 @@ public class SmsBackupService extends ServiceBase {
 
     private void handleErrorState(BackupState state) {
         if (state.isAuthException()) {
-            appLog(R.string.app_log_backup_failed_authentication, state.getErrorMessage(getResources()));
+            appLog(R.string.app_log_backup_failed_authentication, state.getDetailedErrorMessage(getResources()));
 
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
