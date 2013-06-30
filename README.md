@@ -258,6 +258,10 @@ In Gmail settings, set conversation view to `off`
 No. SMS Backup+ does not do a "real" sync, once the text has been transferred
 to Gmail it won't get modified or deleted by the app.
 
+#### <a name="sms-as-calls">My messages get backed up as calls!</a>
+
+This might be due to some changes in Samsung's version of Android, see [#287](https://github.com/jberkel/sms-backup-plus/issues/287).
+
 
 ### Restore questions
 
