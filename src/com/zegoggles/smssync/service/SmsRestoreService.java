@@ -65,8 +65,11 @@ public class SmsRestoreService extends ServiceBase {
             new RestoreTask(this,
                     getBackupImapStore(),
                     converter,
-                    restoreSms, restoreCallLog, starredOnly).execute(
-                    Preferences.getMaxItemsPerRestore(this));
+                    restoreSms,
+                    restoreCallLog,
+                    starredOnly).execute(
+                        Preferences.getMaxItemsPerRestore(this)
+                    );
         } catch (MessagingException e) {
             App.bus.post(mState.transition(ERROR, e));
         }
