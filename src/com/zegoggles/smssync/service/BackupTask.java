@@ -9,12 +9,14 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.CallFormatter;
 import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
+import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.exception.ConnectivityException;
@@ -52,17 +54,20 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         this.fetcher = new BackupItemsFetcher(context,
                 context.getContentResolver(),
                 new BackupQueryBuilder(context));
-        this.converter = new MessageConverter(context, authPreferences.getUserEmail());
+
+        PersonLookup personLookup = new PersonLookup(service.getContentResolver());
+
+        this.converter = new MessageConverter(context, authPreferences.getUserEmail(), personLookup);
         this.contactAccessor = ContactAccessor.Get.instance();
 
         if (Preferences.isCallLogCalendarSyncEnabled(context)) {
             calendarSyncer = new CalendarSyncer(
-                context,
-                service.getCalendars(),
+                CalendarAccessor.Get.instance(service.getContentResolver()),
                 Preferences.getCallLogCalendarId(context),
-                converter.getPersonLookup(),
+                personLookup,
                 new CallFormatter(context.getResources())
             );
+
         } else {
             calendarSyncer = null;
         }
@@ -266,14 +271,14 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
                 if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
                 ConversionResult result = converter.convertMessages(curCursor, config.maxMessagePerRequest, dataType);
-                if (result != null && !result.messageList.isEmpty()) {
-                    List<Message> messages = result.messageList;
+                if (result != null && !result.isEmpty()) {
+                    List<Message> messages = result.getMessages();
 
                     if (LOCAL_LOGV)
                         Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
                                 messages.size(), dataType));
 
-                    dataType.setMaxSyncedDate(service, result.maxDate);
+                    dataType.setMaxSyncedDate(service, result.getMaxDate());
                     switch (dataType) {
                         case MMS:
                         case SMS:

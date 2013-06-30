@@ -34,6 +34,12 @@ public class CalendarAccessorPre40 implements CalendarAccessor {
     private static final Uri CALENDAR_URI_2_2 = Uri.parse("content://com.android.calendar");
     private static final Uri CALENDAR;
 
+    private ContentResolver resolver;
+
+    public CalendarAccessorPre40(ContentResolver resolver) {
+        this.resolver = resolver;
+    }
+
     static {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             CALENDAR = CALENDAR_URI_2_2;
@@ -76,8 +82,12 @@ public class CalendarAccessorPre40 implements CalendarAccessor {
         int STATUS_CANCELED = 2;
     }
 
-    public void addEntry(ContentResolver resolver, int calendarId, Date when, int duration,
-                         String title, String description) {
+    @Override public boolean enableSync(long calendarId) {
+        return false;
+    }
+
+    public boolean addEntry(long calendarId, Date when, int duration,
+                            String title, String description) {
         if (LOCAL_LOGV) {
             Log.v(TAG, String.format("addEntry(%d, %s, %d, %s, %s)",
                     calendarId, when.toString(), duration, title, description));
@@ -94,12 +104,14 @@ public class CalendarAccessorPre40 implements CalendarAccessor {
 
         try {
             resolver.insert(Uri.withAppendedPath(CALENDAR, "events"), contentValues);
+            return true;
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "could not add calendar entry", e);
+            return false;
         }
     }
 
-    public Map<String, String> getCalendars(ContentResolver resolver) {
+    public Map<String, String> getCalendars() {
         final Map<String, String> map = new LinkedHashMap<String, String>();
 
         Cursor cursor = null;

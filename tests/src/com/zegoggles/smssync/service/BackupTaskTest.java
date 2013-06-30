@@ -22,6 +22,8 @@ import org.mockito.Mock;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.HashMap;
+
 import static com.zegoggles.smssync.mail.DataType.*;
 import static com.zegoggles.smssync.service.BackupItemsFetcher.emptyCursor;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -106,7 +108,7 @@ public class BackupTaskTest {
     private ConversionResult result(DataType type, int n) {
         ConversionResult result = new ConversionResult(type);
         for (int i = 0; i<n; i++) {
-            result.messageList.add(new MimeMessage());
+            result.add(new MimeMessage(), new HashMap<String, String>());
         }
         return result;
     }

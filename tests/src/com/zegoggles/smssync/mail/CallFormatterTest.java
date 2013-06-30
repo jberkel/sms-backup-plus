@@ -50,4 +50,21 @@ public class CallFormatterTest {
     @Test public void shouldFormatCallDuration() throws Exception {
         assertThat(formatter.formattedCallDuration(1242)).isEqualTo("00:20:42");
     }
+
+    @Test public void shouldFormatForCalendarOutgoing() throws Exception {
+        assertThat(formatter.formatForCalendar(CallLog.Calls.OUTGOING_TYPE, "Foo", 100))
+                .isEqualTo("Number: Foo (outgoing call)\n" +
+                        "Duration: 00:01:40");
+    }
+
+    @Test public void shouldFormatForCalendarIncoming() throws Exception {
+        assertThat(formatter.formatForCalendar(CallLog.Calls.INCOMING_TYPE, "Foo", 100))
+                .isEqualTo("Number: Foo (incoming call)\n" +
+                        "Duration: 00:01:40");
+    }
+
+    @Test public void shouldFormatForCalendarMissed() throws Exception {
+        assertThat(formatter.formatForCalendar(CallLog.Calls.MISSED_TYPE, "Foo", 100))
+                .isEqualTo("Number: Foo (missed call)\n");
+    }
 }

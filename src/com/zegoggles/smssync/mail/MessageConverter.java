@@ -59,10 +59,10 @@ public class MessageConverter {
     private final PersonLookup mPersonLookup;
     private final MessageGenerator mMessageGenerator;
 
-    public MessageConverter(Context context, String userEmail) {
+    public MessageConverter(Context context, String userEmail, PersonLookup personLookup) {
         mContext = context;
         mMarkAsRead = Preferences.getMarkAsRead(context);
-        mPersonLookup = new PersonLookup(context.getContentResolver());
+        mPersonLookup = personLookup;
 
         String referenceUid = Preferences.getReferenceUid(context);
         if (referenceUid == null) {
@@ -112,19 +112,9 @@ public class MessageConverter {
 
             if (m != null) {
                 m.setFlag(Flag.SEEN, mMarkAsRead);
-
-                result.messageList.add(m);
-                result.mapList.add(msgMap);
-
-                String dateHeader = Headers.get(m, Headers.DATE);
-                if (dateHeader != null) {
-                    final long date = Long.parseLong(dateHeader);
-                    if (date > result.maxDate) {
-                        result.maxDate = date;
-                    }
-                }
+                result.add(m, msgMap);
             }
-        } while (result.messageList.size() < maxEntries && cursor.moveToNext());
+        } while (result.size() < maxEntries && cursor.moveToNext());
         return result;
     }
 
@@ -202,9 +192,5 @@ public class MessageConverter {
             sb.append(Integer.toString(random.nextInt(35), 36));
         }
         return sb.toString();
-    }
-
-    public PersonLookup getPersonLookup() {
-        return mPersonLookup;
     }
 }

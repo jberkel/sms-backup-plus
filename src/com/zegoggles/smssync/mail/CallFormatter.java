@@ -28,6 +28,22 @@ public class CallFormatter {
         return text.toString();
     }
 
+
+    public String formatForCalendar(int callType, String number, int duration) {
+        StringBuilder description = new StringBuilder();
+        description.append(mResources.getString(R.string.call_number_field, number))
+                .append(" (")
+                .append(callTypeString(callType, null))
+                .append(")")
+                .append("\n");
+
+        if (callType != CallLog.Calls.MISSED_TYPE) {
+            description.append(mResources.getString(R.string.call_duration_field,
+                    formattedCallDuration(duration)));
+        }
+        return description.toString();
+    }
+
     public String formattedCallDuration(int duration) {
         return String.format(Locale.ENGLISH, "%02d:%02d:%02d",
                 duration / 3600,

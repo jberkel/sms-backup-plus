@@ -401,8 +401,8 @@ public class MainActivity extends PreferenceActivity {
     private void initCalendars() {
         final ListPreference calendarPref = (ListPreference)
                 findPreference(Preferences.CALLLOG_SYNC_CALENDAR);
-        CalendarAccessor calendars = CalendarAccessor.Get.instance();
-        boolean enabled = ListPreferenceHelper.initListPreference(calendarPref, calendars.getCalendars(getContentResolver()), false);
+        CalendarAccessor calendars = CalendarAccessor.Get.instance(getContentResolver());
+        boolean enabled = ListPreferenceHelper.initListPreference(calendarPref, calendars.getCalendars(), false);
 
         findPreference(Preferences.CALLLOG_SYNC_CALENDAR_ENABLED).setEnabled(enabled);
     }

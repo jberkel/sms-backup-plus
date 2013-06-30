@@ -22,6 +22,7 @@ import java.util.Map;
 import static android.provider.CalendarContract.Events;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,19 @@ public class CalendarAccessorPost40Test {
 
     @Before public void before() {
         initMocks(this);
-        accessor = new CalendarAccessorPost40();
+        accessor = new CalendarAccessorPost40(resolver);
+    }
+
+
+    @Test
+    public void shouldEnableSync() throws Exception {
+        when(resolver.update(eq(Uri.parse("content://com.android.calendar/calendars/123")),
+                any(ContentValues.class),
+                anyString(),
+                any(String[].class)))
+            .thenReturn(1);
+
+        assertThat(accessor.enableSync(123)).isTrue();
     }
 
     @Test
@@ -45,7 +58,7 @@ public class CalendarAccessorPost40Test {
         ArgumentCaptor<ContentValues> values = ArgumentCaptor.forClass(ContentValues.class);
 
         Date when = new Date();
-        accessor.addEntry(resolver,
+        accessor.addEntry(
                 12,
                 when, 100, "Title", "Desc");
 
@@ -65,8 +78,8 @@ public class CalendarAccessorPost40Test {
 
     @Test
     public void shouldGetCalendars() throws Exception {
-        MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "name" } );
-        cursor.addRow(new Object[] { "12", "Testing" });
+        MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "name", "sync_events" } );
+        cursor.addRow(new Object[] { "12", "Testing", 1 });
 
         when(resolver.query(eq(CalendarContract.Calendars.CONTENT_URI), any(String[].class),
                 any(String.class),
@@ -75,7 +88,7 @@ public class CalendarAccessorPost40Test {
             cursor
         );
 
-        Map<String, String> calendars = accessor.getCalendars(resolver);
+        Map<String, String> calendars = accessor.getCalendars();
         assertThat(calendars).hasSize(1);
         assertThat(calendars).contains(MapEntry.entry("12", "Testing"));
     }

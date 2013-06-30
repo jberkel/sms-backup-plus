@@ -9,6 +9,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.MessageConverter;
+import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,9 @@ public class SmsRestoreService extends ServiceBase {
             final boolean restoreCallLog = CALLLOG.isRestoreEnabled(service);
             final boolean restoreSms     = SMS.isRestoreEnabled(service);
 
-            MessageConverter converter = new MessageConverter(service, getAuthPreferences().getUserEmail());
+            MessageConverter converter = new MessageConverter(service,
+                    getAuthPreferences().getUserEmail(),
+                    new PersonLookup(getContentResolver()));
 
             new RestoreTask(this,
                     getBackupImapStore(),

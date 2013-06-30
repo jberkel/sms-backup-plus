@@ -8,11 +8,44 @@ import java.util.Map;
 
 public class ConversionResult {
     public final DataType type;
-    public final List<Message> messageList = new ArrayList<Message>();
-    public final List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
-    public long maxDate = DataType.Defaults.MAX_SYNCED_DATE;
+    private final List<Message> messageList = new ArrayList<Message>();
+    private final List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
+    private long maxDate = DataType.Defaults.MAX_SYNCED_DATE;
 
     public ConversionResult(DataType type) {
         this.type = type;
+    }
+
+    public void add(Message message, Map<String, String> map) {
+        messageList.add(message);
+        mapList.add(map);
+
+        String dateHeader = Headers.get(message, Headers.DATE);
+        if (dateHeader != null) {
+            final long date = Long.parseLong(dateHeader);
+            if (date > maxDate) {
+                maxDate = date;
+            }
+        }
+    }
+
+    public boolean isEmpty() {
+        return messageList.isEmpty();
+    }
+
+    public List<Message> getMessages() {
+        return messageList;
+    }
+
+    public long getMaxDate() {
+        return maxDate;
+    }
+
+    public List<Map<String, String>> getMapList() {
+        return mapList;
+    }
+
+    public int size() {
+        return messageList.size();
     }
 }

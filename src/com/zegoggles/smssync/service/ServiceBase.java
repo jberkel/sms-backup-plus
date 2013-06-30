@@ -31,8 +31,6 @@ import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.MainActivity;
-import com.zegoggles.smssync.calendar.CalendarAccessor;
-import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
@@ -166,13 +164,7 @@ public abstract class ServiceBase extends Service {
         return getState().isRunning();
     }
 
-    protected CalendarAccessor getCalendars() {
-        return CalendarAccessor.Get.instance();
-    }
 
-    protected ContactAccessor getContacts() {
-        return ContactAccessor.Get.instance();
-    }
 
     protected Notification createNotification(int resId) {
         Notification n = new Notification(R.drawable.ic_notification,
