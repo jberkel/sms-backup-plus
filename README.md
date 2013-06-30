@@ -192,11 +192,14 @@ been reported. If not, create a new issue and attach the following details:
  * Version of SMS Backup+ used
  * Version of Android / brand of phone used
 
-If it is related to backing up / restoring you should also enable the sync log in debug mode (Advanced settings) 
+If it is related to backing up / restoring you should also enable the sync log in debug mode (Advanced settings)
 and attach a relevant portion of it. The sync log is located on your SD card as "sms_backup_plus.log".
 
 To attach the sync log create a "gist" (https://gist.github.com) and link to the gist you created instead
 of posting the full content in the issue.
+
+It might also be worth to install the current <a href="#beta">beta</a> version of SMS Backup+ to make sure the
+bug has not already been fixed.
 
 ### Backup questions
 
@@ -339,6 +342,13 @@ you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and set "Adjustme
 ([screenshot1][smstimefixshot1], [screenshot2][smstimefixshot2]).
 
 
+## <a name="beta">Beta testing
+
+If you want to help beta testing, join the [community][] on Google+ and follow the "Become a beta tester"
+link in the "About this community box". You will be asked to opt in to the beta program (you can leave it at any time).
+
+Once opted in your device will automatically update to the latest beta which might have bug fixes and features not found
+in the currently released version.
 
 ## <a name="contributing">Contributing</a>
 
