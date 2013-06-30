@@ -131,7 +131,6 @@
               <ListPreference
                 android:key="backup_calllog_sync_calendar"
                 android:dependency="backup_calllog_sync_calendar_enabled"
-                android:title="@string/ui_backup_calllog_sync_calendar_label"
                 android:persistent="true"
                 android:defaultValue="-1"
                 android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
