@@ -26,7 +26,6 @@ import com.zegoggles.smssync.service.Alarms;
 import com.zegoggles.smssync.utils.AppLog;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
-import static com.zegoggles.smssync.App.LOG;
 import static com.zegoggles.smssync.App.TAG;
 
 public class SmsBroadcastReceiver extends BroadcastReceiver {
@@ -66,7 +65,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         final boolean schedule = (autoSync && loginInformationSet && !firstBackup);
 
         if (!schedule && Preferences.isAppLogDebug(context)) {
-            new AppLog(LOG, DateFormat.getDateFormatOrder(context))
+            new AppLog(DateFormat.getDateFormatOrder(context))
                     .appendAndClose("Not set up to back up. "+
                             "autoSync="+autoSync+", loginInfoSet="+loginInformationSet+", firstBackup="+firstBackup);
 

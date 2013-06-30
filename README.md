@@ -184,6 +184,17 @@ Try uninstalling the app, then installing the new version. Make sure to select
 "Skip" when doing the first backup, otherwise messages will get backed up
 twice.
 
+#### <a name="faq-file-bug-report">I want to file a bug report, what should I do?</a>
+
+First check [github issues](https://github.com/jberkel/sms-backup-plus/issues) and see if the bug has already
+been reported. If not, create a new issue and attach the following details:
+
+ * Version of SMS Backup+ used
+ * Version of Android / brand of phone used
+
+If it is related to backing up / restoring you should also enable the sync log in debug mode (Advanced settings) 
+and attach a relevant portion of it. The sync log is located on your SD card as "sms_backup_plus.log".
+
 ### Backup questions
 
 #### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>

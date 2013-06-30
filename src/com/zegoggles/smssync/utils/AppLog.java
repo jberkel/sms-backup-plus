@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 
 import java.io.BufferedReader;
@@ -31,7 +32,11 @@ public class AppLog {
     private PrintWriter writer;
     private String dateFormat;
 
-    public AppLog(String name, char[] format) {
+    public AppLog(char[] format) {
+        this(App.LOG, format);
+    }
+
+    private AppLog(String name, char[] format) {
         for (char c : format) {
             if (c == DateFormat.MONTH) {
                 dateFormat = "MM-dd kk:mm";

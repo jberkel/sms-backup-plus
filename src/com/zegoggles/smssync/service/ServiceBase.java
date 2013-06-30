@@ -40,7 +40,6 @@ import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
 
-import static com.zegoggles.smssync.App.LOG;
 import static com.zegoggles.smssync.App.TAG;
 
 public abstract class ServiceBase extends Service {
@@ -65,7 +64,7 @@ public abstract class ServiceBase extends Service {
     public void onCreate() {
         super.onCreate();
         if (Preferences.isAppLogEnabled(this)) {
-            this.appLog = new AppLog(LOG, DateFormat.getDateFormatOrder(this));
+            this.appLog = new AppLog(DateFormat.getDateFormatOrder(this));
         }
         App.bus.register(this);
     }
