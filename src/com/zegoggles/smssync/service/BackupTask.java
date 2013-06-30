@@ -278,7 +278,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                         Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
                                 messages.size(), dataType));
 
-                    dataType.setMaxSyncedDate(service, result.getMaxDate());
                     switch (dataType) {
                         case MMS:
                         case SMS:
@@ -294,6 +293,8 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                             appendMessages(whatsAppFolder, messages);
                             break;
                     }
+                    dataType.setMaxSyncedDate(service, result.getMaxDate());
+
                     backedUpItems += messages.size();
                 } else {
                     Log.w(TAG, "no messages converted");
