@@ -82,6 +82,7 @@ public class AlarmsTest {
         ComponentName component = shadowPendingIntent.getSavedIntent().getComponent();
         assertThat(component.getPackageName()).isEqualTo("com.zegoggles.smssync");
         assertThat(component.getClassName()).isEqualTo("com.zegoggles.smssync.service.SmsBackupService");
+        assertThat(shadowPendingIntent.getFlags()).isEqualTo(0);
 
         assertThat(shadowPendingIntent.getSavedIntent().getStringExtra(BackupType.EXTRA))
                 .isEqualTo(expectedType);

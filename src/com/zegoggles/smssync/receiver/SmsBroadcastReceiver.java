@@ -59,7 +59,6 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     }
 
     private boolean shouldSchedule(Context context) {
-
         final Preferences preferences = new Preferences(context);
 
         final boolean autoSync = preferences.isEnableAutoSync();

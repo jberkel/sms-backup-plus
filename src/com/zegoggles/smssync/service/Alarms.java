@@ -58,14 +58,16 @@ public class Alarms {
     }
 
     private long scheduleBackup(int inSeconds, BackupType backupType, boolean force) {
-        if (LOCAL_LOGV)
+        if (LOCAL_LOGV) {
             Log.v(TAG, "scheduleBackup(" + mContext + ", " + inSeconds + ", " + backupType + ", " + force + ")");
+        }
 
         if (force || (mPreferences.isEnableAutoSync() && inSeconds > 0)) {
             final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
             getAlarmManager(mContext).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(mContext, backupType));
-            if (LOCAL_LOGV)
+            if (LOCAL_LOGV) {
                 Log.v(TAG, "Scheduled backup due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
+            }
             return atTime;
         } else {
             if (LOCAL_LOGV) Log.v(TAG, "Not scheduling sync because auto sync is disabled.");
