@@ -1,4 +1,4 @@
-== 1.5.3 (xxx) tbd
+== 1.5.3 (1525) 01-07-2013
 
   * Fixed calendar syncing (#260)
   * Fixed call log sync grayed-out option (#308)
@@ -8,7 +8,7 @@
   * Added Galician translation (Javier Pico)
   * Refactored code + added unit tests
 
-== 1.5.2 (1515) 09-07-2013
+== 1.5.2 (1515) 09-06-2013
 
   * Fix notifications getting displayed when not connected to Wifi
   * Fixed greek translation
