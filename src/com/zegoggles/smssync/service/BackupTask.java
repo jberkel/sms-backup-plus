@@ -102,6 +102,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
     @Override
     protected BackupState doInBackground(BackupConfig... params) {
+        if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
         final BackupConfig config = params[0];
         if (config.skip) {
             return skip();

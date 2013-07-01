@@ -53,23 +53,28 @@ public class SmsRestoreService extends ServiceBase {
     protected void handleIntent(final Intent intent) {
         if (isWorking()) return;
         try {
-            final boolean starredOnly = getPreferences().isRestoreStarredOnly();
+            final boolean starredOnly   = getPreferences().isRestoreStarredOnly();
             final boolean restoreCallLog = CALLLOG.isRestoreEnabled(service);
             final boolean restoreSms     = SMS.isRestoreEnabled(service);
 
             MessageConverter converter = new MessageConverter(service,
                     getPreferences(),
                     getAuthPreferences().getUserEmail(),
-                    new PersonLookup(getContentResolver()));
+                    new PersonLookup(getContentResolver())
+            );
 
-            new RestoreTask(this,
-                    getBackupImapStore(),
-                    converter,
-                    restoreSms,
-                    restoreCallLog,
-                    starredOnly).execute(
-                        getPreferences().getMaxItemsPerRestore()
-                    );
+            RestoreConfig config = new RestoreConfig(
+                getBackupImapStore(),
+                0,
+                restoreSms,
+                restoreCallLog,
+                starredOnly,
+                getPreferences().getMaxItemsPerRestore(),
+                0
+            );
+
+            new RestoreTask(this, converter, getContentResolver()).execute(config);
+
         } catch (MessagingException e) {
             App.bus.post(mState.transition(ERROR, e));
         }
