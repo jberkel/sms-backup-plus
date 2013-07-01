@@ -100,7 +100,6 @@ public class SmsBackupServiceTest {
         assertThat(backupConfig.maxMessagePerRequest).isEqualTo(1);
         assertThat(backupConfig.tries).isEqualTo(0);
         assertThat(backupConfig.skip).isFalse();
-        assertThat(backupConfig.imap).isNotNull();
     }
 
     @Test
