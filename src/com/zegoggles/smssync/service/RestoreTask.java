@@ -214,7 +214,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         } catch (IllegalArgumentException e) {
             // http://code.google.com/p/android/issues/detail?id=2916
             Log.e(TAG, "error", e);
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "error", e);
         }
         return dataType;
