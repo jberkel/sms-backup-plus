@@ -253,9 +253,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
         publish(LOGIN);
 
-        Folder smsmmsfolder   = (smsItems != null || mmsItems != null) ? config.imap.getFolder(SMS) : null;
-        Folder callLogfolder  = callLogItems  != null ?  config.imap.getFolder(CALLLOG) : null;
-        Folder whatsAppFolder = whatsAppItems != null ? config.imap.getFolder(WHATSAPP) : null;
+        Folder smsmmsfolder   = (smsItems != null || mmsItems != null) ? config.getFolder(SMS) : null;
+        Folder callLogfolder  = callLogItems  != null ?  config.getFolder(CALLLOG) : null;
+        Folder whatsAppFolder = whatsAppItems != null ? config.getFolder(WHATSAPP) : null;
 
         try {
             Cursor curCursor;

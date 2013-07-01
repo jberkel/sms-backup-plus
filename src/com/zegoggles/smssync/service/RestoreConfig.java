@@ -1,15 +1,18 @@
 package com.zegoggles.smssync.service;
 
+import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.mail.BackupImapStore;
+import com.zegoggles.smssync.mail.DataType;
 
 public class RestoreConfig {
     final int tries;
-    final BackupImapStore imapStore;
     final boolean restoreSms;
     final boolean restoreCallLog;
     final boolean restoreOnlyStarred;
     final int maxRestore;
     final int currentRestoredItem;
+
+    private final BackupImapStore imapStore;
 
     public RestoreConfig(BackupImapStore imapStore,
                          int tries,
@@ -38,5 +41,21 @@ public class RestoreConfig {
                 maxRestore,
                 currentItem
         );
+    }
+
+    public BackupImapStore.BackupFolder getFolder(DataType type) throws MessagingException {
+        return imapStore.getFolder(type);
+    }
+
+    @Override public String toString() {
+        return "RestoreConfig{" +
+                "tries=" + tries +
+                ", restoreSms=" + restoreSms +
+                ", restoreCallLog=" + restoreCallLog +
+                ", restoreOnlyStarred=" + restoreOnlyStarred +
+                ", maxRestore=" + maxRestore +
+                ", currentRestoredItem=" + currentRestoredItem +
+                ", imapStore=" + imapStore +
+                '}';
     }
 }

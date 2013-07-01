@@ -1,11 +1,13 @@
 package com.zegoggles.smssync.service;
 
+import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.BackupImapStore;
+import com.zegoggles.smssync.mail.DataType;
 import org.jetbrains.annotations.NotNull;
 
 public class BackupConfig {
-    public final BackupImapStore imap;
+    private final BackupImapStore imap;
     public final boolean skip;
     public final int tries;
     public final int maxItemsPerSync;
@@ -40,6 +42,10 @@ public class BackupConfig {
                 maxMessagePerRequest,
                 backupType,
                 debug);
+    }
+
+    public BackupImapStore.BackupFolder getFolder(DataType type) throws MessagingException {
+        return imap.getFolder(type);
     }
 
     @Override public String toString() {

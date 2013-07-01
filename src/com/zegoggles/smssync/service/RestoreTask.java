@@ -76,9 +76,9 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             service.acquireLocks();
 
             publishProgress(LOGIN);
-            BackupImapStore.BackupFolder smsFolder = config.imapStore.getFolder(SMS);
+            BackupImapStore.BackupFolder smsFolder = config.getFolder(SMS);
             BackupImapStore.BackupFolder callFolder = null;
-            if (config.restoreCallLog) callFolder = config.imapStore.getFolder(CALLLOG);
+            if (config.restoreCallLog) callFolder = config.getFolder(CALLLOG);
 
             publishProgress(CALC);
 
