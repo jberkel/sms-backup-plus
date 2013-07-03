@@ -279,6 +279,10 @@ to Gmail it won't get modified or deleted by the app.
 
 This might be due to some changes in Samsung's version of Android, see [#287](https://github.com/jberkel/sms-backup-plus/issues/287).
 
+#### <a name="whatsapp-does-not-get-backed-up">I enabled the WhatsApp backup, but my messages don't get backed up!</a>
+
+Make sure that you have WhatsApp backups enabled (Settings - Chat Settings, see [screenshot][whatsapp-screenshot]). In
+newer versions of WhatsApp this option will default to "off", so you will have to manually enable it.
 
 ### Restore questions
 
