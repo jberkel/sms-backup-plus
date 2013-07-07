@@ -28,6 +28,7 @@ public class BackupConfig {
                         @NotNull BackupType backupType,
                         @NotNull EnumSet<DataType> typesToBackup,
                         boolean debug) {
+        if (imap == null) throw new IllegalArgumentException("need imapstore");
         if (typesToBackup == null || typesToBackup.isEmpty()) throw new IllegalArgumentException("need to specify types to backup");
         if (currentTry < 0) throw new IllegalArgumentException("currentTry < 0");
 

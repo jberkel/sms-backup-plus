@@ -4,30 +4,24 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.MainActivity;
-import com.zegoggles.smssync.preferences.AuthPreferences;
-
-import java.io.IOException;
 
 import static com.zegoggles.smssync.App.TAG;
 
 @TargetApi(5)
 public class AccountManagerAuthActivity extends Activity {
     private static final int DIALOG_ACCOUNTS = 0;
-    private static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
+
     public static final String EXTRA_TOKEN = "token";
     public static final String EXTRA_ERROR = "error";
     public static final String EXTRA_DENIED = "denied";
@@ -36,7 +30,8 @@ public class AccountManagerAuthActivity extends Activity {
     public static final String ACTION_ADD_ACCOUNT = "addAccount";
     public static final String ACTION_FALLBACKAUTH = "fallBackAuth";
 
-    private static final String GOOGLE_TYPE = "com.google";
+    public static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
+    public static final String GOOGLE_TYPE = "com.google";
 
     private AccountManager accountManager;
 
@@ -128,43 +123,5 @@ public class AccountManagerAuthActivity extends Activity {
                 .putExtra(EXTRA_ACCOUNT, account.name)
                 .putExtra(EXTRA_TOKEN, token));
         finish();
-    }
-
-    public static void invalidateToken(Context ctx, String token) {
-        AccountManager.get(ctx).invalidateAuthToken(GOOGLE_TYPE, token);
-    }
-
-    public static boolean refreshOAuth2Token(Context context) {
-        AuthPreferences authPreferences = new AuthPreferences(context);
-        final String token = authPreferences.getOauth2Token();
-        final String name  = authPreferences.getUsername();
-
-        if (!TextUtils.isEmpty(token)) {
-            invalidateToken(context, token);
-            try {
-                String newToken = AccountManager.get(context).getAuthToken(new Account(name, GOOGLE_TYPE),
-                        AUTH_TOKEN_TYPE, true, null, null).getResult().getString(AccountManager.KEY_AUTHTOKEN);
-
-                if (!TextUtils.isEmpty(newToken)) {
-                    authPreferences.setOauth2Token(name, newToken);
-                    return true;
-                } else {
-                    Log.w(TAG, "no new token obtained");
-                    return false;
-                }
-            } catch (OperationCanceledException e) {
-                Log.w(TAG, e);
-                return false;
-            } catch (IOException e) {
-                Log.w(TAG, e);
-                return false;
-            } catch (AuthenticatorException e) {
-                Log.w(TAG, e);
-                return false;
-            }
-        } else {
-            Log.w(TAG, "no current token set");
-            return false;
-        }
     }
 }

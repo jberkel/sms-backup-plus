@@ -9,6 +9,7 @@ import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.SmsConsts;
+import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
@@ -42,6 +43,7 @@ public class RestoreTaskTest {
     @Mock RestoreState state;
     @Mock MessageConverter converter;
     @Mock ContentResolver resolver;
+    @Mock TokenRefresher tokenRefresher;
 
     @Before
     public void before() throws MessagingException {
@@ -52,7 +54,7 @@ public class RestoreTaskTest {
 
         when(store.getFolder(any(DataType.class))).thenReturn(folder);
 
-        task = new RestoreTask(service, converter, resolver);
+        task = new RestoreTask(service, converter, resolver, tokenRefresher);
         context = Robolectric.application;
     }
 

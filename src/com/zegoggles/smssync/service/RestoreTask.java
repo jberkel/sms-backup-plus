@@ -16,6 +16,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.SmsConsts;
+import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
@@ -32,7 +33,6 @@ import java.util.Set;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.refreshOAuth2Token;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
@@ -45,13 +45,16 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private final SmsRestoreService service;
     private final ContentResolver resolver;
     private final MessageConverter converter;
+    private final TokenRefresher tokenRefresher;
 
     public RestoreTask(SmsRestoreService service,
                        MessageConverter converter,
-                       ContentResolver resolver) {
+                       ContentResolver resolver,
+                       TokenRefresher tokenRefresher) {
         this.service = service;
         this.converter = converter;
         this.resolver = resolver;
+        this.tokenRefresher = tokenRefresher;
     }
 
     @Override
@@ -115,23 +118,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                     restoredCount,
                     uids.size() - restoredCount, null, null);
         } catch (XOAuth2AuthenticationFailedException e) {
-            if (e.getStatus() == 400) {
-                Log.d(TAG, "need to perform xoauth2 token refresh");
-                if (config.tries < 1 && refreshOAuth2Token(service)) {
-                    try {
-                        // we got a new token, let's retry one more time - we need to pass in a new store object
-                        // since the auth params on it are immutable
-                        return doInBackground(config.retryWithStore(currentRestoredItem, service.getBackupImapStore()));
-                    } catch (MessagingException ignored) {
-                        Log.w(TAG, ignored);
-                    }
-                } else {
-                    Log.w(TAG, "no new token obtained, giving up");
-                }
-            } else {
-                Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
-            }
-            return transition(ERROR, e);
+            return handleAuthError(config, currentRestoredItem, e);
         } catch (ConnectivityException e) {
             return transition(ERROR, e);
         } catch (AuthenticationFailedException e) {
@@ -145,6 +132,26 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         } finally {
             service.releaseLocks();
         }
+    }
+
+    private RestoreState handleAuthError(RestoreConfig config, int currentRestoredItem, XOAuth2AuthenticationFailedException e) {
+        if (e.getStatus() == 400) {
+            Log.d(TAG, "need to perform xoauth2 token refresh");
+            if (config.tries < 1 && tokenRefresher.refreshOAuth2Token()) {
+                try {
+                    // we got a new token, let's retry one more time - we need to pass in a new store object
+                    // since the auth params on it are immutable
+                    return doInBackground(config.retryWithStore(currentRestoredItem, service.getBackupImapStore()));
+                } catch (MessagingException ignored) {
+                    Log.w(TAG, ignored);
+                }
+            } else {
+                Log.w(TAG, "no new token obtained, giving up");
+            }
+        } else {
+            Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
+        }
+        return transition(ERROR, e);
     }
 
     private void publishProgress(SmsSyncState smsSyncState) {

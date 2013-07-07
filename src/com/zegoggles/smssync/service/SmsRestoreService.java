@@ -8,8 +8,10 @@ import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.PersonLookup;
+import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,7 +75,8 @@ public class SmsRestoreService extends ServiceBase {
                 0
             );
 
-            new RestoreTask(this, converter, getContentResolver()).execute(config);
+            new RestoreTask(this, converter, getContentResolver(),
+                    new TokenRefresher(service, new AuthPreferences(this))).execute(config);
 
         } catch (MessagingException e) {
             App.bus.post(mState.transition(ERROR, e));

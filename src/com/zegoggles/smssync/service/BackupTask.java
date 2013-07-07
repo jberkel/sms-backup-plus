@@ -11,6 +11,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
@@ -36,7 +37,6 @@ import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.refreshOAuth2Token;
 import static com.zegoggles.smssync.mail.DataType.*;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
@@ -51,6 +51,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final AuthPreferences authPreferences;
     private final Preferences preferences;
     private final ContactAccessor contactAccessor;
+    private final TokenRefresher tokenRefresher;
 
     private Map<DataType, BackupImapStore.BackupFolder> backupFolders = new HashMap<DataType, BackupImapStore.BackupFolder>();
 
@@ -81,6 +82,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         } else {
             calendarSyncer = null;
         }
+        this.tokenRefresher = new TokenRefresher(service, authPreferences);
     }
 
     BackupTask(SmsBackupService service,
@@ -89,7 +91,8 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                CalendarSyncer syncer,
                AuthPreferences authPreferences,
                Preferences preferences,
-               ContactAccessor accessor) {
+               ContactAccessor accessor,
+               TokenRefresher refresher) {
         this.service = service;
         this.fetcher = fetcher;
         this.converter = messageConverter;
@@ -97,6 +100,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         this.authPreferences = authPreferences;
         this.preferences = preferences;
         this.contactAccessor = accessor;
+        this.tokenRefresher = refresher;
     }
 
     @Override
@@ -108,8 +112,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         cancel(false);
     }
 
-    @Override
-    protected BackupState doInBackground(BackupConfig... params) {
+    @Override protected BackupState doInBackground(BackupConfig... params) {
         if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
         final BackupConfig config = params[0];
         if (config.skip) {
@@ -165,7 +168,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) {
         if (e.getStatus() == 400) {
             Log.d(TAG, "need to perform xoauth2 token refresh");
-            if (config.currentTry < 1 && refreshOAuth2Token(service)) {
+            if (config.currentTry < 1 && tokenRefresher.refreshOAuth2Token()) {
                 try {
                     // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
                     // since the auth params on it are immutable
@@ -269,7 +272,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     itemsToSync,
                     config.backupType, null, null);
         } finally {
-
             closeFolders();
         }
     }

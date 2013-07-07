@@ -2,11 +2,10 @@ package com.zegoggles.smssync.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
+import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
 import org.apache.commons.codec.binary.Base64;
 
@@ -116,8 +115,8 @@ public class AuthPreferences {
                 .remove(OAUTH2_TOKEN)
                 .commit();
 
-        if (!TextUtils.isEmpty(oauth2token) && Integer.parseInt(Build.VERSION.SDK) >= 5) {
-            AccountManagerAuthActivity.invalidateToken(context, oauth2token);
+        if (!TextUtils.isEmpty(oauth2token)) {
+            new TokenRefresher(context, this).invalidateToken(oauth2token);
         }
     }
 
