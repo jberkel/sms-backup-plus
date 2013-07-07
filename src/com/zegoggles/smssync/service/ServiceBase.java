@@ -46,11 +46,11 @@ public abstract class ServiceBase extends Service {
     /**
      * A wakelock held while this service is working.
      */
-    private PowerManager.WakeLock sWakeLock;
+    private PowerManager.WakeLock mWakeLock;
     /**
      * A wifilock held while this service is working.
      */
-    private WifiManager.WifiLock sWifiLock;
+    private WifiManager.WifiLock mWifiLock;
 
     private AppLog appLog;
     protected Notification notification;
@@ -98,11 +98,11 @@ public abstract class ServiceBase extends Service {
      * @throws com.zegoggles.smssync.service.exception.ConnectivityException when unable to connect
      */
     protected void acquireLocks() throws ConnectivityException {
-        if (sWakeLock == null) {
+        if (mWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            sWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+            mWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
         }
-        sWakeLock.acquire();
+        mWakeLock.acquire();
 
         WifiManager wMgr = (WifiManager) getSystemService(WIFI_SERVICE);
         if (wMgr.isWifiEnabled() &&
@@ -110,10 +110,10 @@ public abstract class ServiceBase extends Service {
                 getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
 
             // we have Wifi, lock it
-            if (sWifiLock == null) {
-                sWifiLock = wMgr.createWifiLock(TAG);
+            if (mWifiLock == null) {
+                mWifiLock = wMgr.createWifiLock(TAG);
             }
-            sWifiLock.acquire();
+            mWifiLock.acquire();
         } else if (isBackgroundTask() && new Preferences(this).isWifiOnly()) {
             throw new RequiresWifiException();
         }
@@ -125,8 +125,14 @@ public abstract class ServiceBase extends Service {
     }
 
     protected void releaseLocks() {
-        if (sWakeLock != null && sWakeLock.isHeld()) sWakeLock.release();
-        if (sWifiLock != null && sWifiLock.isHeld()) sWifiLock.release();
+        if (mWakeLock != null && mWakeLock.isHeld()) {
+            mWakeLock.release();
+            mWakeLock = null;
+        }
+        if (mWifiLock != null && mWifiLock.isHeld()) {
+            mWifiLock.release();
+            mWifiLock = null;
+        }
     }
 
     protected boolean isBackgroundTask() {
