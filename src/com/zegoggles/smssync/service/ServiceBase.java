@@ -39,21 +39,16 @@ import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.zegoggles.smssync.App.TAG;
 
 public abstract class ServiceBase extends Service {
-    /**
-     * A wakelock held while this service is working.
-     */
-    private PowerManager.WakeLock mWakeLock;
-    /**
-     * A wifilock held while this service is working.
-     */
-    private WifiManager.WifiLock mWifiLock;
+    @Nullable private PowerManager.WakeLock mWakeLock;
+    @Nullable private WifiManager.WifiLock mWifiLock;
 
     private AppLog appLog;
-    protected Notification notification;
+    @Nullable protected Notification notification;
 
     @Override
     public IBinder onBind(Intent arg0) {
