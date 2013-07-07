@@ -5,7 +5,6 @@ import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -21,14 +20,12 @@ public class BackupQueryBuilderTest {
     BackupQueryBuilder builder;
     @Mock private ContactAccessor accessor;
 
-    @Before
-    public void before() {
+    @Before public void before() {
         MockitoAnnotations.initMocks(this);
         builder = new BackupQueryBuilder(Robolectric.application);
     }
 
-    @Test
-    public void shouldBuildQueryForSMS() throws Exception {
+    @Test public void shouldBuildQueryForSMS() throws Exception {
         BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.SMS, null, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://sms"));
@@ -38,8 +35,7 @@ public class BackupQueryBuilderTest {
         assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
     }
 
-    @Test
-    public void shouldBuildQueryForSMSIncludingContactGroup() throws Exception {
+    @Test public void shouldBuildQueryForSMSIncludingContactGroup() throws Exception {
         ContactGroupIds ids = new ContactGroupIds();
         ids.add(1L, 20L);
 
@@ -52,8 +48,7 @@ public class BackupQueryBuilderTest {
         assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
     }
 
-    @Test
-    public void shouldBuildQueryForMMS() throws Exception {
+    @Test public void shouldBuildQueryForMMS() throws Exception {
         BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.MMS, null, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://mms"));
@@ -63,22 +58,23 @@ public class BackupQueryBuilderTest {
         assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
     }
 
-    @Test @Ignore
-    public void shouldBuildQueryForMMSWithSyncedDate() throws Exception {
-        long now = System.currentTimeMillis();
-        DataType.MMS.setMaxSyncedDate(Robolectric.application, now);
+    @Test public void shouldBuildQueryForMMSWithSyncedDate() throws Exception {
+        long nowInSecs = (long) (System.currentTimeMillis() / 1000.0);
+
+        DataType.MMS.setMaxSyncedDate(Robolectric.application, nowInSecs);
 
         BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.MMS, null, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://mms"));
         assertThat(query.projection).isNull();
         assertThat(query.selection).isEqualTo("date > ? AND m_type <> ?");
-        assertThat(query.selectionArgs).isEqualTo(new String[] { "-1", "134"} );
+        assertThat(query.selectionArgs).isEqualTo(new String[] {
+            String.valueOf(nowInSecs), "134"
+        });
         assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
     }
 
-    @Test
-    public void shouldBuildQueryForCallLog() throws Exception {
+    @Test public void shouldBuildQueryForCallLog() throws Exception {
         BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.CALLLOG, null, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://call_log/calls"));
@@ -88,8 +84,7 @@ public class BackupQueryBuilderTest {
         assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
     }
 
-    @Test
-    public void shouldBuildMostRecentQueryForSMS() throws Exception {
+    @Test public void shouldBuildMostRecentQueryForSMS() throws Exception {
         BackupQueryBuilder.Query query = builder.buildMostRecentQueryForDataType(DataType.SMS);
         assertThat(query.uri).isEqualTo(Uri.parse("content://sms"));
         assertThat(query.projection).isEqualTo(new String[] { "date" } );
@@ -98,8 +93,7 @@ public class BackupQueryBuilderTest {
         assertThat(query.sortOrder).isEqualTo("date DESC LIMIT 1");
     }
 
-    @Test
-    public void shouldBuildMostRecentQueryForMMS() throws Exception {
+    @Test public void shouldBuildMostRecentQueryForMMS() throws Exception {
         BackupQueryBuilder.Query query = builder.buildMostRecentQueryForDataType(DataType.MMS);
         assertThat(query.uri).isEqualTo(Uri.parse("content://mms"));
         assertThat(query.projection).isEqualTo(new String[] { "date" } );
@@ -108,8 +102,7 @@ public class BackupQueryBuilderTest {
         assertThat(query.sortOrder).isEqualTo("date DESC LIMIT 1");
     }
 
-    @Test
-    public void shouldBuildMostRecentQueryForCallLog() throws Exception {
+    @Test public void shouldBuildMostRecentQueryForCallLog() throws Exception {
         BackupQueryBuilder.Query query = builder.buildMostRecentQueryForDataType(DataType.CALLLOG);
         assertThat(query.uri).isEqualTo(Uri.parse("content://call_log/calls"));
         assertThat(query.projection).isEqualTo(new String[] { "date" } );

@@ -110,6 +110,11 @@ class BackupQueryBuilder {
     }
 
     private Query getQueryForMMS(@Nullable ContactGroupIds group, int max) {
+        long maxSynced = MMS.getMaxSyncedDate(context);
+        if (maxSynced > 0) {
+            // NB: max synced date is stored in seconds since epoch in database
+            maxSynced = (long) (maxSynced / 1000d);
+        }
         return new Query(
             Consts.MMS_PROVIDER,
             null,
@@ -118,7 +123,7 @@ class BackupQueryBuilder {
                     MmsConsts.TYPE,
                     groupSelection(DataType.MMS, group)).trim(),
             new String[] {
-                String.valueOf(MMS.getMaxSyncedDate(context)),
+                String.valueOf(maxSynced),
                 MmsConsts.DELIVERY_REPORT
             },
             max);

@@ -75,10 +75,15 @@ public enum DataType {
         return prefs(context).getString(folderPreference, defaultFolder);
     }
 
+
+    /**
+     * @param context the context
+     * @return returns the last synced date in msecs (epoch)
+     */
     public long getMaxSyncedDate(Context context) {
         long maxSynced = prefs(context).getLong(maxSyncedPreference, Defaults.MAX_SYNCED_DATE);
         if (this == MMS && maxSynced > 0) {
-            return maxSynced * 1000;
+            return maxSynced * 1000L;
         } else {
             return maxSynced;
         }
