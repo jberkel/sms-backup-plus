@@ -7,6 +7,7 @@ import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.preferences.AuthPreferences;
@@ -28,7 +29,7 @@ public class TokenRefresher {
         this(Build.VERSION.SDK_INT >= 5 ? AccountManager.get(context) : null, authPreferences);
     }
 
-    private TokenRefresher(@Nullable AccountManager accountManager, AuthPreferences authPreferences) {
+    TokenRefresher(@Nullable AccountManager accountManager, AuthPreferences authPreferences) {
         this.authPreferences = authPreferences;
         this.accountManager = accountManager;
     }
@@ -42,14 +43,26 @@ public class TokenRefresher {
         if (!TextUtils.isEmpty(token)) {
             invalidateToken(token);
             try {
-                String newToken = accountManager.getAuthToken(new Account(name, GOOGLE_TYPE),
-                        AUTH_TOKEN_TYPE, true, null, null).getResult().getString(AccountManager.KEY_AUTHTOKEN);
+                Bundle bundle = accountManager.getAuthToken(
+                        new Account(name, GOOGLE_TYPE),
+                        AUTH_TOKEN_TYPE,
+                        true,   /* notify on failure */
+                        null,   /* callback */
+                        null    /* handler */
+                ).getResult();
 
-                if (!TextUtils.isEmpty(newToken)) {
-                    authPreferences.setOauth2Token(name, newToken);
-                    return true;
+                if (bundle != null) {
+                    String newToken = bundle.getString(AccountManager.KEY_AUTHTOKEN);
+
+                    if (!TextUtils.isEmpty(newToken)) {
+                        authPreferences.setOauth2Token(name, newToken);
+                        return true;
+                    } else {
+                        Log.w(TAG, "no new token obtained");
+                        return false;
+                    }
                 } else {
-                    Log.w(TAG, "no new token obtained");
+                    Log.w(TAG, "no bundle received from accountmanager");
                     return false;
                 }
             } catch (OperationCanceledException e) {
