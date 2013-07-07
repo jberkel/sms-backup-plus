@@ -1,3 +1,8 @@
+== 1.5.4 (xxx) tbd
+
+  * Fixed MMS not getting backed up (#334)
+  * Fixed folders getting unneccesarily created  (#333)
+
 == 1.5.3 (1525) 01-07-2013
 
   * Fixed calendar syncing (#260)
