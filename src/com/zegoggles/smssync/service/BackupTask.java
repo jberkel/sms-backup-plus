@@ -146,23 +146,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 return transition(FINISHED_BACKUP, null);
             }
         } catch (XOAuth2AuthenticationFailedException e) {
-            if (e.getStatus() == 400) {
-                Log.d(TAG, "need to perform xoauth2 token refresh");
-                if (config.tries < 1 && refreshOAuth2Token(service)) {
-                    try {
-                        // we got a new token, let's retry one more time - we need to pass in a new store object
-                        // since the auth params on it are immutable
-                        return doInBackground(config.retryWithStore(service.getBackupImapStore()));
-                    } catch (MessagingException ignored) {
-                        Log.w(TAG, ignored);
-                    }
-                } else {
-                    Log.w(TAG, "no new token obtained, giving up");
-                }
-            } else {
-                Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
-            }
-            return transition(ERROR, e);
+            return handleAuthError(config, e);
         } catch (AuthenticationFailedException e) {
             return transition(ERROR, e);
         } catch (MessagingException e) {
@@ -175,6 +159,26 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             }
             service.releaseLocks();
         }
+    }
+
+    private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) {
+        if (e.getStatus() == 400) {
+            Log.d(TAG, "need to perform xoauth2 token refresh");
+            if (config.tries < 1 && refreshOAuth2Token(service)) {
+                try {
+                    // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
+                    // since the auth params on it are immutable
+                    return doInBackground(config.retryWithStore(service.getBackupImapStore()));
+                } catch (MessagingException ignored) {
+                    Log.w(TAG, ignored);
+                }
+            } else {
+                Log.w(TAG, "no new token obtained, giving up");
+            }
+        } else {
+            Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
+        }
+        return transition(ERROR, e);
     }
 
     private BackupState skip() {
