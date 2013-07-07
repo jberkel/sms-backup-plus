@@ -81,9 +81,20 @@ public class TokenRefresher {
         }
     }
 
-    public void invalidateToken(String token) {
+    public boolean invalidateToken(String token) {
         if (accountManager != null) {
-            accountManager.invalidateAuthToken(GOOGLE_TYPE, token);
+
+            // USE_CREDENTIALS permission should be enough according to docs
+            // but some systems require MANAGE_ACCOUNTS
+
+            // java.lang.SecurityException: caller uid 10051 lacks android.permission.MANAGE_ACCOUNTS
+            try {
+                accountManager.invalidateAuthToken(GOOGLE_TYPE, token);
+                return true;
+            } catch (SecurityException e) {
+                Log.w(TAG, e);
+            }
         }
+        return false;
     }
 }

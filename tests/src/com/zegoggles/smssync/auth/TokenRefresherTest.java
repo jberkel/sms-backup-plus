@@ -33,8 +33,13 @@ public class TokenRefresherTest {
     }
 
     @Test public void shouldInvalidateTokenManually() throws Exception {
-        refresher.invalidateToken("token");
+        assertThat(refresher.invalidateToken("token")).isTrue();
         verify(accountManager).invalidateAuthToken(GOOGLE_TYPE, "token");
+    }
+
+    @Test public void shouldHandleSecurityExceptionWhenInvalidatingToken() throws Exception {
+        doThrow(new SecurityException()).when(accountManager).invalidateAuthToken(GOOGLE_TYPE, "token");
+        assertThat(refresher.invalidateToken("token")).isFalse();
     }
 
     @Test public void shouldInvalidateTokenOnRefresh() throws Exception {
