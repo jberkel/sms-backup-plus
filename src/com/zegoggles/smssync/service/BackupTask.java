@@ -28,6 +28,7 @@ import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -112,7 +113,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
         final BackupConfig config = params[0];
         if (config.skip) {
-            return skip();
+            return skip(config.typesToBackup);
         } else if (!authPreferences.isLoginInformationSet()) {
             appLog(R.string.app_log_missing_credentials);
             return transition(ERROR, new RequiresLoginException());
@@ -123,7 +124,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             final ContactGroupIds groupIds = contactAccessor.getGroupContactIds(service.getContentResolver(), config.groupToBackup);
 
             service.acquireLocks();
-            cursors = BackupCursors.fetch(fetcher, groupIds, config.maxItemsPerSync, config.typesToBackup);
+            cursors = new BulkFetcher(fetcher).fetch(config.typesToBackup, groupIds, config.maxItemsPerSync);
             final int itemsToSync = cursors.count();
 
             if (itemsToSync > 0) {
@@ -181,9 +182,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         return transition(ERROR, e);
     }
 
-    private BackupState skip() {
+    private BackupState skip(EnumSet<DataType> types) {
         appLog(R.string.app_log_skip_backup_skip_messages);
-        for (DataType type : DataType.values()) {
+        for (DataType type : types) {
             type.setMaxSyncedDate(service, fetcher.getMostRecentTimestamp(type));
         }
         Log.i(TAG, "All messages skipped.");

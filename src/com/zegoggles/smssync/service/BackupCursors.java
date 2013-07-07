@@ -2,13 +2,9 @@ package com.zegoggles.smssync.service;
 
 import android.database.Cursor;
 import android.util.Log;
-import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -117,21 +113,5 @@ public class BackupCursors implements Iterator<BackupCursors.CursorAndType> {
 
     private CursorAndType getCurrent() {
         return index < cursorAndTypes.size() ? cursorAndTypes.get(index) : CursorAndType.empty();
-    }
-
-
-    static @NotNull BackupCursors fetch(BackupItemsFetcher fetcher,
-                                        @Nullable ContactGroupIds groups,
-                                        int max,
-                                        @NotNull EnumSet<DataType> types) {
-        BackupCursors cursors = new BackupCursors();
-        for (DataType type : types) {
-            Cursor cursor = fetcher.getItemsForDataType(type, groups, max);
-            if (max > 0) {
-                max -= cursor.getCount();
-            }
-            cursors.add(type, cursor);
-        }
-        return cursors;
     }
 }

@@ -6,17 +6,16 @@ import com.zegoggles.smssync.mail.DataType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.EnumSet;
 import java.util.NoSuchElementException;
 
 import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
 public class BackupCursorsTest {
@@ -72,23 +71,23 @@ public class BackupCursorsTest {
         }
     }
 
-    @Test public void shouldFetchAllItems() throws Exception {
-        BackupItemsFetcher fetcher = mock(BackupItemsFetcher.class);
+    @Test
+    public void shouldCloseAllCursors() throws Exception {
+        BackupCursors cursors = new BackupCursors();
+        Cursor mockedCursor1 = Mockito.mock(Cursor.class);
+        Cursor mockedCursor2 = Mockito.mock(Cursor.class);
+        cursors.add(SMS, mockedCursor1);
+        cursors.add(MMS, mockedCursor2);
 
-        when(fetcher.getItemsForDataType(SMS, null, 50)).thenReturn(cursor(3));
-        when(fetcher.getItemsForDataType(MMS, null, 47)).thenReturn(cursor(5));
+        cursors.close();
 
-        BackupCursors cursors = BackupCursors.fetch(fetcher, null, 50, EnumSet.of(SMS, MMS));
-
-        assertThat(cursors.count()).isEqualTo(8);
-        assertThat(cursors.count(SMS)).isEqualTo(3);
-        assertThat(cursors.count(MMS)).isEqualTo(5);
+        verify(mockedCursor1).close();
+        verify(mockedCursor2).close();
     }
 
-    @Test public void shouldFetchAllItemsEmptyList() throws Exception {
-        BackupItemsFetcher fetcher = mock(BackupItemsFetcher.class);
-        BackupCursors cursors = BackupCursors.fetch(fetcher, null, 50, EnumSet.noneOf(DataType.class));
-        assertThat(cursors.count()).isEqualTo(0);
+    @Test(expected = UnsupportedOperationException.class)
+    public void shouldNotSupportRemove() throws Exception {
+        cursors.remove();
     }
 
     private Cursor cursor(int rows) {

@@ -40,6 +40,8 @@ public class BackupItemsFetcher {
         }
     }
 
+
+
     private long getMostRecentTimestampForQuery(BackupQueryBuilder.Query query) {
         Cursor cursor = performQuery(query);
         try {

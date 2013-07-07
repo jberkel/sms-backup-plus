@@ -15,7 +15,9 @@ import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.state.BackupState;
+import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,8 +52,7 @@ public class BackupTaskTest {
     @Mock Preferences preferences;
     @Mock ContactAccessor accessor;
 
-    @Before
-    public void before() {
+    @Before public void before() {
         initMocks(this);
         config = new BackupConfig(store, 0, false, 100, new ContactGroup(-1), -1, BackupType.MANUAL,
                 EnumSet.of(SMS),
@@ -64,46 +65,66 @@ public class BackupTaskTest {
         context = Robolectric.application;
     }
 
-    @Test
-    public void shouldAcquireAndReleaseLocksDuringBackup() throws Exception {
+    @Test public void shouldAcquireAndReleaseLocksDuringBackup() throws Exception {
         mockAllFetchEmpty();
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
 
         task.doInBackground(config);
+
         verify(service).acquireLocks();
         verify(service).releaseLocks();
+        verify(service).transition(SmsSyncState.FINISHED_BACKUP, null);
     }
 
-    @Test
-    public void shouldBackupItems() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
+    @Test public void shouldReturnErrorIfLoginInformationNotSet() throws Exception {
+        mockAllFetchEmpty();
+        when(authPreferences.isLoginInformationSet()).thenReturn(false);
 
+        task.doInBackground(config);
+        verify(service).transition(eq(SmsSyncState.ERROR), notNull(RequiresLoginException.class));
+    }
+
+    @Test public void shouldBackupItems() throws Exception {
+        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         mockFetch(SMS, testMessages());
-        mockFetch(MMS, emptyCursor());
-        mockFetch(CALLLOG, emptyCursor());
-        mockFetch(WHATSAPP, emptyCursor());
 
         when(converter.convertMessages(any(Cursor.class), anyInt(), eq(SMS))).thenReturn(result(SMS, 1));
         when(store.getFolder(SMS)).thenReturn(folder);
 
-        task.doInBackground(config);
+        BackupState finalState = task.doInBackground(config);
 
         verify(folder).appendMessages(any(Message[].class));
+
+        verify(service).transition(SmsSyncState.LOGIN, null);
+        verify(service).transition(SmsSyncState.CALC, null);
+
+        assertThat(finalState).isNotNull();
+        assertThat(finalState.isFinished()).isTrue();
+        assertThat(finalState.currentSyncedItems).isEqualTo(1);
+        assertThat(finalState.itemsToSync).isEqualTo(1);
+        assertThat(finalState.backupType).isEqualTo(config.backupType);
     }
 
-    @Test
-    public void shouldSkipItems() throws Exception {
+    @Test public void shouldSkipItems() throws Exception {
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
         when(fetcher.getMostRecentTimestamp(any(DataType.class))).thenReturn(-23L);
 
-        task.doInBackground(new BackupConfig(
+        BackupState finalState = task.doInBackground(new BackupConfig(
             store, 0, true, 100, new ContactGroup(-1), -1, BackupType.MANUAL, EnumSet.of(SMS), false
-        )
+            )
         );
+        assertThat(DataType.SMS.getMaxSyncedDate(context)).isEqualTo(-23);
+        assertThat(DataType.MMS.getMaxSyncedDate(context)).isEqualTo(-1);
+        assertThat(DataType.CALLLOG.getMaxSyncedDate(context)).isEqualTo(-1);
 
-        for (DataType type : DataType.values()) {
-            assertThat(type.getMaxSyncedDate(context)).isEqualTo(-23);
-        }
+        assertThat(finalState).isNotNull();
+        assertThat(finalState.isFinished()).isTrue();
+    }
+
+    @Test
+    public void shouldHandleAuthError() throws Exception {
+
+
     }
 
     private Cursor testMessages() {
