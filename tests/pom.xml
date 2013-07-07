@@ -4,7 +4,7 @@
 
     <groupId>com.zegoggles</groupId>
     <artifactId>smsbackup-plus-tests</artifactId>
-    <version>1.5.3</version>
+    <version>1.5.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>SMS Backup+ tests</name>
 
@@ -44,7 +44,7 @@
        <dependency>
             <groupId>com.zegoggles</groupId>
             <artifactId>smsbackup-plus</artifactId>
-            <version>1.5.3</version>
+            <version>1.5.4-SNAPSHOT</version>
        </dependency>
 
        <dependency>
