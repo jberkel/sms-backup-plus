@@ -5,6 +5,7 @@ import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -53,6 +54,20 @@ public class BackupQueryBuilderTest {
 
     @Test
     public void shouldBuildQueryForMMS() throws Exception {
+        BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.MMS, null, 200);
+
+        assertThat(query.uri).isEqualTo(Uri.parse("content://mms"));
+        assertThat(query.projection).isNull();
+        assertThat(query.selection).isEqualTo("date > ? AND m_type <> ?");
+        assertThat(query.selectionArgs).isEqualTo(new String[] { "-1", "134"} );
+        assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
+    }
+
+    @Test @Ignore
+    public void shouldBuildQueryForMMSWithSyncedDate() throws Exception {
+        long now = System.currentTimeMillis();
+        DataType.MMS.setMaxSyncedDate(Robolectric.application, now);
+
         BackupQueryBuilder.Query query = builder.buildQueryForDataType(DataType.MMS, null, 200);
 
         assertThat(query.uri).isEqualTo(Uri.parse("content://mms"));

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class ConversionResult {
     public final DataType type;
-    private final List<Message> messageList = new ArrayList<Message>();
+    private final List<Message> messages = new ArrayList<Message>();
     private final List<Map<String, String>> mapList = new ArrayList<Map<String, String>>();
     private long maxDate = DataType.Defaults.MAX_SYNCED_DATE;
 
@@ -17,7 +17,7 @@ public class ConversionResult {
     }
 
     public void add(Message message, Map<String, String> map) {
-        messageList.add(message);
+        messages.add(message);
         mapList.add(map);
 
         String dateHeader = Headers.get(message, Headers.DATE);
@@ -30,11 +30,11 @@ public class ConversionResult {
     }
 
     public boolean isEmpty() {
-        return messageList.isEmpty();
+        return messages.isEmpty();
     }
 
     public List<Message> getMessages() {
-        return messageList;
+        return messages;
     }
 
     public long getMaxDate() {
@@ -46,6 +46,6 @@ public class ConversionResult {
     }
 
     public int size() {
-        return messageList.size();
+        return messages.size();
     }
 }

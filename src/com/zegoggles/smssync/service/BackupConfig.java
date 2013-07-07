@@ -6,6 +6,8 @@ import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class BackupConfig {
     private final BackupImapStore imap;
     public final boolean skip;
@@ -15,6 +17,7 @@ public class BackupConfig {
     public final int maxMessagePerRequest;
     public final BackupType backupType;
     public final boolean debug;
+    public final List<DataType> typesToBackup;
 
     public BackupConfig(@NotNull BackupImapStore imap,
                         int tries,
@@ -23,7 +26,11 @@ public class BackupConfig {
                         @NotNull ContactGroup groupToBackup,
                         int maxMessagePerRequest,
                         BackupType backupType,
-                        boolean debug) {
+                        boolean debug,
+                        List<DataType> typesToBackup) {
+        if (typesToBackup == null || typesToBackup.isEmpty()) {
+            throw new IllegalArgumentException("need to specify types to backup");
+        }
         this.imap = imap;
         this.skip = skip;
         this.tries = tries;
@@ -32,6 +39,7 @@ public class BackupConfig {
         this.maxMessagePerRequest = maxMessagePerRequest;
         this.backupType = backupType;
         this.debug = debug;
+        this.typesToBackup = typesToBackup;
     }
 
     public BackupConfig retryWithStore(BackupImapStore store) {
@@ -41,7 +49,7 @@ public class BackupConfig {
                 groupToBackup,
                 maxMessagePerRequest,
                 backupType,
-                debug);
+                debug, typesToBackup);
     }
 
     public BackupImapStore.BackupFolder getFolder(DataType type) throws MessagingException {

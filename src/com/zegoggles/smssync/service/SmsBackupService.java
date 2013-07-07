@@ -26,6 +26,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
@@ -99,7 +100,9 @@ public class SmsBackupService extends ServiceBase {
                             getPreferences().getBackupContactGroup(),
                             MAX_MSG_PER_REQUEST,
                             backupType,
-                            getPreferences().isAppLogDebug());
+                            getPreferences().isAppLogDebug(),
+                            DataType.enabled(this)
+                            );
 
                     appLog(R.string.app_log_start_backup, backupType);
 

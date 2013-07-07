@@ -1,10 +1,12 @@
 package com.zegoggles.smssync.service;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.fsck.k9.mail.*;
+import com.fsck.k9.mail.AuthenticationFailedException;
+import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.BuildConfig;
@@ -12,6 +14,7 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
+import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.CallFormatter;
 import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.DataType;
@@ -24,10 +27,11 @@ import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -46,6 +50,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final AuthPreferences authPreferences;
     private final Preferences preferences;
     private final ContactAccessor contactAccessor;
+
+    private Map<DataType, BackupImapStore.BackupFolder> backupFolders = new HashMap<DataType, BackupImapStore.BackupFolder>();
+
 
     BackupTask(@NotNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
@@ -106,47 +113,26 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         final BackupConfig config = params[0];
         if (config.skip) {
             return skip();
+        } else if (!authPreferences.isLoginInformationSet()) {
+            appLog(R.string.app_log_missing_credentials);
+            return transition(ERROR, new RequiresLoginException());
         }
 
-        Cursor smsItems = null;
-        Cursor mmsItems = null;
-        Cursor callLogItems = null;
-        Cursor whatsAppItems = null;
-        final int smsCount, mmsCount, callLogCount, whatsAppItemsCount;
+        BackupCursors cursors = null;
         try {
             final ContactGroupIds groupIds = contactAccessor.getGroupContactIds(service.getContentResolver(), config.groupToBackup);
 
             service.acquireLocks();
-            int max = config.maxItemsPerSync;
-
-            smsItems = fetcher.getItemsForDataType(SMS, groupIds, max);
-            smsCount = smsItems.getCount();
-            max -= smsCount;
-
-            mmsItems = fetcher.getItemsForDataType(MMS, groupIds, max);
-            mmsCount = mmsItems.getCount();
-            max -= mmsCount;
-
-            callLogItems = fetcher.getItemsForDataType(CALLLOG, groupIds, max);
-            callLogCount = callLogItems.getCount();
-            max -= callLogCount;
-
-            whatsAppItems = fetcher.getItemsForDataType(DataType.WHATSAPP, groupIds, max);
-            whatsAppItemsCount = whatsAppItems.getCount();
-
-            final int itemsToSync = smsCount + mmsCount + callLogCount + whatsAppItemsCount;
+            cursors = BackupCursors.fetch(fetcher, groupIds, config.maxItemsPerSync, config.typesToBackup);
+            final int itemsToSync = cursors.count();
 
             if (itemsToSync > 0) {
-                if (!authPreferences.isLoginInformationSet()) {
-                    appLog(R.string.app_log_missing_credentials);
-                    return transition(ERROR, new RequiresLoginException());
-                } else {
-                    appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
-                    if (config.debug) {
-                        appLog(R.string.app_log_backup_messages_with_config, config);
-                    }
-                    return backup(config, smsItems, mmsItems, callLogItems, whatsAppItems, itemsToSync);
+                appLog(R.string.app_log_backup_messages, cursors.count(SMS), cursors.count(MMS), cursors.count(CALLLOG));
+                if (config.debug) {
+                    appLog(R.string.app_log_backup_messages_with_config, config);
                 }
+
+                return backup(config, cursors, itemsToSync);
             } else {
                 appLog(R.string.app_log_skip_backup_no_items);
 
@@ -184,15 +170,10 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         } catch (ConnectivityException e) {
             return transition(ERROR, e);
         } finally {
-            service.releaseLocks();
-            try {
-                if (smsItems != null) smsItems.close();
-                if (mmsItems != null) mmsItems.close();
-                if (callLogItems != null) callLogItems.close();
-                if (whatsAppItems != null) whatsAppItems.close();
-            } catch (Exception ignore) {
-                Log.e(TAG, "error", ignore);
+            if (cursors != null) {
+                cursors.close();
             }
+            service.releaseLocks();
         }
     }
 
@@ -243,86 +224,67 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         App.bus.post(state);
     }
 
-    private BackupState backup(BackupConfig config,
-                               @Nullable Cursor smsItems,
-                               @Nullable Cursor mmsItems,
-                               @Nullable Cursor callLogItems,
-                               @Nullable Cursor whatsAppItems,
-                               final int itemsToSync) throws MessagingException {
+    private BackupState backup(BackupConfig config, BackupCursors cursors, final int itemsToSync)
+            throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
-
         publish(LOGIN);
 
-        Folder smsmmsfolder   = (smsItems != null || mmsItems != null) ? config.getFolder(SMS) : null;
-        Folder callLogfolder  = callLogItems  != null ?  config.getFolder(CALLLOG) : null;
-        Folder whatsAppFolder = whatsAppItems != null ? config.getFolder(WHATSAPP) : null;
-
         try {
-            Cursor curCursor;
-            DataType dataType = null;
             publish(CALC);
             int backedUpItems = 0;
-            while (!isCancelled() && backedUpItems < itemsToSync) {
-                if (smsItems != null && smsItems.moveToNext()) {
-                    dataType = SMS;
-                    curCursor = smsItems;
-                } else if (mmsItems != null && mmsItems.moveToNext()) {
-                    dataType = MMS;
-                    curCursor = mmsItems;
-                } else if (callLogItems != null && callLogItems.moveToNext()) {
-                    dataType = CALLLOG;
-                    curCursor = callLogItems;
-                } else if (whatsAppItems != null && whatsAppItems.moveToNext()) {
-                    dataType = DataType.WHATSAPP;
-                    curCursor = whatsAppItems;
-                } else break; // no more items available
+            while (!isCancelled() && cursors.hasNext()) {
+                BackupCursors.CursorAndType cursor = cursors.next();
+                if (LOCAL_LOGV) Log.v(TAG, "backing up: " + cursor);
 
-                if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
-                ConversionResult result = converter.convertMessages(curCursor, config.maxMessagePerRequest, dataType);
-                if (result != null && !result.isEmpty()) {
+                ConversionResult result = converter.convertMessages(cursor.cursor, config.maxMessagePerRequest, cursor.type);
+                if (!result.isEmpty()) {
                     List<Message> messages = result.getMessages();
 
-                    if (LOCAL_LOGV)
+                    if (LOCAL_LOGV) {
                         Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
-                                messages.size(), dataType));
-
-                    switch (dataType) {
-                        case MMS:
-                        case SMS:
-                            appendMessages(smsmmsfolder, messages);
-                            break;
-                        case CALLLOG:
-                            appendMessages(callLogfolder, messages);
-                            if (calendarSyncer != null) {
-                                calendarSyncer.syncCalendar(result);
-                            }
-                            break;
-                        case WHATSAPP:
-                            appendMessages(whatsAppFolder, messages);
-                            break;
+                                messages.size(), cursor.type));
                     }
-                    dataType.setMaxSyncedDate(service, result.getMaxDate());
 
+                    getFolder(cursor.type, config).appendMessages(messages.toArray(new Message[messages.size()]));
+
+                    if (cursor.type == CALLLOG && calendarSyncer != null) {
+                        calendarSyncer.syncCalendar(result);
+                    }
+                    cursor.type.setMaxSyncedDate(service, result.getMaxDate());
                     backedUpItems += messages.size();
                 } else {
                     Log.w(TAG, "no messages converted");
                 }
-                publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, config.backupType, dataType, null));
+
+                publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, config.backupType, cursor.type, null));
             }
+
             return new BackupState(FINISHED_BACKUP,
                     backedUpItems,
                     itemsToSync,
-                    config.backupType, dataType, null);
+                    config.backupType, null, null);
         } finally {
-            if (smsmmsfolder != null) smsmmsfolder.close();
-            if (callLogfolder != null) callLogfolder.close();
-            if (whatsAppFolder != null) whatsAppFolder.close();
+
+            closeFolders();
         }
     }
 
-    private void appendMessages(Folder folder, List<Message> messages) throws MessagingException {
-        if (folder != null) {
-            folder.appendMessages(messages.toArray(new Message[messages.size()]));
+    private BackupImapStore.BackupFolder getFolder(DataType type, BackupConfig config) throws MessagingException {
+        BackupImapStore.BackupFolder folder = backupFolders.get(type);
+        if (folder == null) {
+            folder = config.getFolder(type);
+            backupFolders.put(type, folder);
+        }
+        return folder;
+    }
+
+    private void closeFolders() {
+        for (BackupImapStore.BackupFolder folder : backupFolders.values()) {
+            try {
+                folder.close();
+            } catch (Exception e) {
+                Log.w(TAG, e);
+            }
         }
     }
 

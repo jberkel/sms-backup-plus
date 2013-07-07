@@ -36,6 +36,7 @@ import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.utils.ThreadHelper;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,7 +87,7 @@ public class MessageConverter {
                 new MmsSupport(mContext.getContentResolver(), mPersonLookup));
     }
 
-    public ConversionResult convertMessages(final Cursor cursor,
+    public @NotNull ConversionResult convertMessages(final Cursor cursor,
                                             final int maxEntries,
                                             DataType dataType) throws MessagingException {
         final String[] columns = cursor.getColumnNames();

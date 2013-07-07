@@ -23,6 +23,7 @@ import org.mockito.Mock;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static com.zegoggles.smssync.mail.DataType.*;
@@ -52,7 +53,8 @@ public class BackupTaskTest {
     @Before
     public void before() {
         initMocks(this);
-        config = new BackupConfig(store, 0, false, 100, new ContactGroup(-1), -1, BackupType.MANUAL, false);
+        config = new BackupConfig(store, 0, false, 100, new ContactGroup(-1), -1, BackupType.MANUAL, false,
+                Arrays.asList(SMS));
         when(service.getApplicationContext()).thenReturn(Robolectric.application);
         when(service.getState()).thenReturn(state);
 
@@ -91,7 +93,8 @@ public class BackupTaskTest {
         when(fetcher.getMostRecentTimestamp(any(DataType.class))).thenReturn(-23L);
 
         task.doInBackground(new BackupConfig(
-            store, 0, true, 100, new ContactGroup(-1), -1, BackupType.MANUAL, false)
+            store, 0, true, 100, new ContactGroup(-1), -1, BackupType.MANUAL, false,
+                Arrays.asList(SMS))
         );
 
         for (DataType type : DataType.values()) {

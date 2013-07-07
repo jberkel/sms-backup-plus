@@ -27,14 +27,9 @@ public class BackupItemsFetcher {
 
     public @NotNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
-        if (!dataType.isBackupEnabled(context)) {
-            if (LOCAL_LOGV) Log.v(TAG, "backup disabled for " + dataType + ", returning empty cursor");
-            return emptyCursor();
-        }  else {
-            switch (dataType) {
-                case WHATSAPP: return new WhatsAppItemsFetcher().getItems(context, max);
-                default: return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
-            }
+        switch (dataType) {
+            case WHATSAPP: return new WhatsAppItemsFetcher().getItems(context, max);
+            default: return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
         }
     }
 
