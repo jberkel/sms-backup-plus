@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.zegoggles.smssync.R;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 public enum DataType {
@@ -91,14 +92,14 @@ public enum DataType {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static List<DataType> enabled(Context context) {
+    public static EnumSet<DataType> enabled(Context context) {
         List<DataType> enabledTypes = new ArrayList<DataType>();
         for (DataType t : values()) {
             if (t.isBackupEnabled(context)) {
                 enabledTypes.add(t);
             }
         }
-        return enabledTypes;
+        return enabledTypes.isEmpty() ? EnumSet.noneOf(DataType.class) : EnumSet.copyOf(enabledTypes);
     }
 
     public static long getMostRecentSyncedDate(Context ctx) {

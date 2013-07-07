@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 
 import static com.zegoggles.smssync.mail.DataType.*;
@@ -53,8 +53,10 @@ public class BackupTaskTest {
     @Before
     public void before() {
         initMocks(this);
-        config = new BackupConfig(store, 0, false, 100, new ContactGroup(-1), -1, BackupType.MANUAL, false,
-                Arrays.asList(SMS));
+        config = new BackupConfig(store, 0, false, 100, new ContactGroup(-1), -1, BackupType.MANUAL,
+                EnumSet.of(SMS),
+                false
+        );
         when(service.getApplicationContext()).thenReturn(Robolectric.application);
         when(service.getState()).thenReturn(state);
 
@@ -65,6 +67,8 @@ public class BackupTaskTest {
     @Test
     public void shouldAcquireAndReleaseLocksDuringBackup() throws Exception {
         mockAllFetchEmpty();
+        when(authPreferences.isLoginInformationSet()).thenReturn(true);
+
         task.doInBackground(config);
         verify(service).acquireLocks();
         verify(service).releaseLocks();
@@ -93,8 +97,8 @@ public class BackupTaskTest {
         when(fetcher.getMostRecentTimestamp(any(DataType.class))).thenReturn(-23L);
 
         task.doInBackground(new BackupConfig(
-            store, 0, true, 100, new ContactGroup(-1), -1, BackupType.MANUAL, false,
-                Arrays.asList(SMS))
+            store, 0, true, 100, new ContactGroup(-1), -1, BackupType.MANUAL, EnumSet.of(SMS), false
+        )
         );
 
         for (DataType type : DataType.values()) {

@@ -164,7 +164,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) {
         if (e.getStatus() == 400) {
             Log.d(TAG, "need to perform xoauth2 token refresh");
-            if (config.tries < 1 && refreshOAuth2Token(service)) {
+            if (config.currentTry < 1 && refreshOAuth2Token(service)) {
                 try {
                     // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
                     // since the auth params on it are immutable

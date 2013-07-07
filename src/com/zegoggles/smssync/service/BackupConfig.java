@@ -6,34 +6,34 @@ import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.EnumSet;
 
 public class BackupConfig {
     private final BackupImapStore imap;
     public final boolean skip;
-    public final int tries;
+    public final int currentTry;
     public final int maxItemsPerSync;
     public final ContactGroup groupToBackup;
     public final int maxMessagePerRequest;
     public final BackupType backupType;
     public final boolean debug;
-    public final List<DataType> typesToBackup;
+    public final EnumSet<DataType> typesToBackup;
 
     public BackupConfig(@NotNull BackupImapStore imap,
-                        int tries,
+                        int currentTry,
                         boolean skip,
                         int maxItemsPerSync,
                         @NotNull ContactGroup groupToBackup,
                         int maxMessagePerRequest,
-                        BackupType backupType,
-                        boolean debug,
-                        List<DataType> typesToBackup) {
-        if (typesToBackup == null || typesToBackup.isEmpty()) {
-            throw new IllegalArgumentException("need to specify types to backup");
-        }
+                        @NotNull BackupType backupType,
+                        @NotNull EnumSet<DataType> typesToBackup,
+                        boolean debug) {
+        if (typesToBackup == null || typesToBackup.isEmpty()) throw new IllegalArgumentException("need to specify types to backup");
+        if (currentTry < 0) throw new IllegalArgumentException("currentTry < 0");
+
         this.imap = imap;
         this.skip = skip;
-        this.tries = tries;
+        this.currentTry = currentTry;
         this.maxItemsPerSync = maxItemsPerSync;
         this.groupToBackup = groupToBackup;
         this.maxMessagePerRequest = maxMessagePerRequest;
@@ -43,13 +43,13 @@ public class BackupConfig {
     }
 
     public BackupConfig retryWithStore(BackupImapStore store) {
-        return new BackupConfig(store, tries + 1,
+        return new BackupConfig(store, currentTry + 1,
                 skip,
                 maxItemsPerSync,
                 groupToBackup,
                 maxMessagePerRequest,
                 backupType,
-                debug, typesToBackup);
+                typesToBackup, debug);
     }
 
     public BackupImapStore.BackupFolder getFolder(DataType type) throws MessagingException {
@@ -60,7 +60,7 @@ public class BackupConfig {
         return "BackupConfig{" +
                 "imap=" + imap +
                 ", skip=" + skip +
-                ", tries=" + tries +
+                ", currentTry=" + currentTry +
                 ", maxItemsPerSync=" + maxItemsPerSync +
                 ", groupToBackup=" + groupToBackup +
                 ", maxMessagePerRequest=" + maxMessagePerRequest +

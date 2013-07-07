@@ -9,6 +9,8 @@ public class ContactGroup {
         GROUP
     }
 
+    public static final ContactGroup EVERYBODY = new ContactGroup(-1);
+
     public ContactGroup(final long id) {
         this._id = id;
         this.type = id > 0 ? Type.GROUP : Type.EVERYBODY;

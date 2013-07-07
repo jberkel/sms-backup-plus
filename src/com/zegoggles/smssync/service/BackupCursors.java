@@ -4,8 +4,11 @@ import android.database.Cursor;
 import android.util.Log;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +43,10 @@ public class BackupCursors implements Iterator<BackupCursors.CursorAndType> {
                     ", cursor=" + cursor +
                     '}';
         }
+
+        public static CursorAndType empty() {
+            return new CursorAndType(DataType.SMS, emptyCursor());
+        }
     }
 
     BackupCursors() {
@@ -64,11 +71,7 @@ public class BackupCursors implements Iterator<BackupCursors.CursorAndType> {
     }
 
     @Override public boolean hasNext() {
-        if (cursorAndTypes.isEmpty()) {
-            return false;
-        } else {
-            return getCurrent().hasNext() || getNext().hasNext();
-        }
+        return !cursorAndTypes.isEmpty() && (getCurrent().hasNext() || getNext().hasNext());
     }
 
     @Override public CursorAndType next() {
@@ -113,11 +116,14 @@ public class BackupCursors implements Iterator<BackupCursors.CursorAndType> {
     }
 
     private CursorAndType getCurrent() {
-        return index < cursorAndTypes.size() ? cursorAndTypes.get(index) : null;
+        return index < cursorAndTypes.size() ? cursorAndTypes.get(index) : CursorAndType.empty();
     }
 
 
-    static BackupCursors fetch(BackupItemsFetcher fetcher, ContactGroupIds groups, int max, List<DataType> types) {
+    static @NotNull BackupCursors fetch(BackupItemsFetcher fetcher,
+                                        @Nullable ContactGroupIds groups,
+                                        int max,
+                                        @NotNull EnumSet<DataType> types) {
         BackupCursors cursors = new BackupCursors();
         for (DataType type : types) {
             Cursor cursor = fetcher.getItemsForDataType(type, groups, max);

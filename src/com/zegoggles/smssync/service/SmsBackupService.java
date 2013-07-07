@@ -100,9 +100,8 @@ public class SmsBackupService extends ServiceBase {
                             getPreferences().getBackupContactGroup(),
                             MAX_MSG_PER_REQUEST,
                             backupType,
-                            getPreferences().isAppLogDebug(),
-                            DataType.enabled(this)
-                            );
+                            DataType.enabled(this), getPreferences().isAppLogDebug()
+                    );
 
                     appLog(R.string.app_log_start_backup, backupType);
 

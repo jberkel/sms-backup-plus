@@ -68,6 +68,10 @@ public abstract class State {
                 SmsSyncState.UPDATING_THREADS).contains(state);
     }
 
+    public boolean isFinished() {
+        return !isRunning();
+    }
+
     public abstract State transition(SmsSyncState newState, Exception exception);
 
     public boolean isAuthException() {

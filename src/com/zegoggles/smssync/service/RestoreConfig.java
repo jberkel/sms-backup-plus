@@ -49,7 +49,7 @@ public class RestoreConfig {
 
     @Override public String toString() {
         return "RestoreConfig{" +
-                "tries=" + tries +
+                "currentTry=" + tries +
                 ", restoreSms=" + restoreSms +
                 ", restoreCallLog=" + restoreCallLog +
                 ", restoreOnlyStarred=" + restoreOnlyStarred +

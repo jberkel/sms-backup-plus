@@ -57,7 +57,7 @@ class BackupQueryBuilder {
         }
     }
 
-    public @Nullable Query buildQueryForDataType(DataType type, ContactGroupIds groupIds, int max) {
+    public @Nullable Query buildQueryForDataType(DataType type, @Nullable ContactGroupIds groupIds, int max) {
         switch (type) {
             case SMS:     return getQueryForSMS(groupIds, max);
             case MMS:     return getQueryForMMS(groupIds, max);
@@ -94,7 +94,7 @@ class BackupQueryBuilder {
         }
     }
 
-    private Query getQueryForSMS(ContactGroupIds groupIds, int max) {
+    private Query getQueryForSMS(@Nullable ContactGroupIds groupIds, int max) {
         return new Query(Consts.SMS_PROVIDER,
             null,
             String.format(Locale.ENGLISH,
@@ -109,7 +109,7 @@ class BackupQueryBuilder {
             max);
     }
 
-    private Query getQueryForMMS(ContactGroupIds group, int max) {
+    private Query getQueryForMMS(@Nullable ContactGroupIds group, int max) {
         return new Query(
             Consts.MMS_PROVIDER,
             null,
@@ -135,7 +135,7 @@ class BackupQueryBuilder {
             max);
     }
 
-    private String groupSelection(DataType type, ContactGroupIds group) {
+    private String groupSelection(DataType type, @Nullable ContactGroupIds group) {
         /* Only MMS selection is supported at the moment */
         if (type != SMS || group == null) {
             return "";
