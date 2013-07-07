@@ -57,7 +57,6 @@ public class BulkFetcherTest {
 
 
     @Test public void shouldFetchAllItemsEmptyList() throws Exception {
-        BackupItemsFetcher fetcher = mock(BackupItemsFetcher.class);
         BackupCursors cursors = bulkFetcher.fetch(EnumSet.noneOf(DataType.class), null, 50);
         assertThat(cursors.count()).isEqualTo(0);
     }
