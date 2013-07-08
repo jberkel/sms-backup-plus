@@ -284,6 +284,10 @@ This might be due to some changes in Samsung's version of Android, see [#287](ht
 Make sure that you have WhatsApp backups enabled (Settings - Chat Settings, see [screenshot][whatsapp-screenshot]). In
 newer versions of WhatsApp this option will default to "off", so you will have to manually enable it.
 
+#### <a name="whatsapp-group-messages-do-not-get-backed-up">I enabled the WhatsApp backup, but group messages don't get backed up!</a>
+
+This is a current limitation. A future version might address this issue.
+
 ### Restore questions
 
 #### <a name="faq-partial-restore">How do I restore the last N weeks / N messages?</a>
