@@ -87,39 +87,28 @@ public class MessageConverter {
                 new MmsSupport(mContext.getContentResolver(), mPersonLookup));
     }
 
-    public @NotNull ConversionResult convertMessages(final Cursor cursor,
-                                            final int maxEntries,
-                                            DataType dataType) throws MessagingException {
-        final String[] columns = cursor.getColumnNames();
-        final ConversionResult result = new ConversionResult(dataType);
-        do {
-            final Map<String, String> msgMap = new HashMap<String, String>(columns.length);
-            for (int i = 0; i < columns.length; i++) {
-                String value;
-                try {
-                    value = cursor.getString(i);
-                } catch (SQLiteException ignored) {
-                    // this can happen in case of BLOBS in the DB
-                    // column type checking is API level >= 11
-                    value = "[BLOB]";
-                }
-                msgMap.put(columns[i], value);
-            }
-            final Message m;
-            switch (dataType) {
-                case WHATSAPP:
-                    m = mMessageGenerator.messageFromMapWhatsApp(cursor); break;
-                default:
-                    m = mMessageGenerator.messageForDataType(msgMap, dataType); break;
-            }
+    public @NotNull ConversionResult convertMessages(final Cursor cursor, DataType dataType)
+            throws MessagingException {
 
-            if (m != null) {
-                m.setFlag(Flag.SEEN, mMarkAsRead);
-                result.add(m, msgMap);
-            }
-        } while (result.size() < maxEntries && cursor.moveToNext());
+        final Map<String, String> msgMap = getMessageMap(cursor);
+        final Message m;
+        switch (dataType) {
+            case WHATSAPP:
+                m = mMessageGenerator.messageFromMapWhatsApp(cursor);
+                break;
+            default:
+                m = mMessageGenerator.messageForDataType(msgMap, dataType);
+                break;
+        }
+        final ConversionResult result = new ConversionResult(dataType);
+        if (m != null) {
+            m.setFlag(Flag.SEEN, mMarkAsRead);
+            result.add(m, msgMap);
+        }
+
         return result;
     }
+
 
     public ContentValues messageToContentValues(final Message message)
             throws IOException, MessagingException {
@@ -186,6 +175,28 @@ public class MessageConverter {
                 return DataType.SMS; // whateva
             }
         }
+    }
+
+    private Map<String, String> getMessageMap(Cursor cursor) {
+        final String[] columns = cursor.getColumnNames();
+        final Map<String, String> msgMap = new HashMap<String, String>(columns.length);
+        for (String column : columns) {
+            String value;
+            try {
+                final int index = cursor.getColumnIndex(column);
+                if (index != -1) {
+                    value = cursor.getString(index);
+                } else {
+                    continue;
+                }
+            } catch (SQLiteException ignored) {
+                // this can happen in case of BLOBS in the DB
+                // column type checking is API level >= 11
+                value = "[BLOB]";
+            }
+            msgMap.put(column, value);
+        }
+        return msgMap;
     }
 
     private static String generateReferenceValue() {

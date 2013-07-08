@@ -2,6 +2,7 @@
 
   * Fixed MMS not getting backed up (#334)
   * Fixed folders getting unneccesarily created  (#333)
+  * Fixed contact group id selection
   * Upgraded whassup to 0.0.5
   * Various smaller bugfixes
 

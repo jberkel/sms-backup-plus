@@ -41,7 +41,7 @@ class MessageGenerator {
     private final Address mUserAddress;
     private final PersonLookup mPersonLookup;
     private final boolean mPrefix;
-    private final ContactGroupIds mContactsToBackup;
+    private final @Nullable ContactGroupIds mContactsToBackup;
     private final CallFormatter mCallFormatter;
     private final AddressStyle mAddressStyle;
     private final MmsSupport mMmsSupport;
@@ -53,7 +53,7 @@ class MessageGenerator {
                             HeaderGenerator headerGenerator,
                             PersonLookup personLookup,
                             boolean mailSubjectPrefix,
-                            ContactGroupIds contactsToBackup,
+                            @Nullable ContactGroupIds contactsToBackup,
                             MmsSupport mmsSupport) {
         mHeaderGenerator = headerGenerator;
         mUserAddress = userAddress;
@@ -259,7 +259,7 @@ class MessageGenerator {
     }
 
     private boolean includePersonInBackup(PersonRecord record, DataType type) {
-        final boolean backup = (type == DataType.SMS || mContactsToBackup == null || mContactsToBackup.contains(record));
+        final boolean backup = mContactsToBackup == null || mContactsToBackup.contains(record);
         //noinspection PointlessBooleanExpression,ConstantConditions
         if (LOCAL_LOGV && !backup) Log.v(TAG, "not backing up " + type + " / " + record);
         return backup;

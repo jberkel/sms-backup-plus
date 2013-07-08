@@ -43,12 +43,6 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 public class SmsBackupService extends ServiceBase {
     private static final int BACKUP_ID = 1;
 
-    /**
-     * Number of messages sent per sync request.
-     * Changing this value will cause mms/sms messages to thread out of order.
-     */
-    private static final int MAX_MSG_PER_REQUEST = 1;
-
     @Nullable private static SmsBackupService service;
     @NotNull private BackupState mState = new BackupState();
 
@@ -98,7 +92,6 @@ public class SmsBackupService extends ServiceBase {
                             intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false),
                             getPreferences().getMaxItemsPerSync(),
                             getPreferences().getBackupContactGroup(),
-                            MAX_MSG_PER_REQUEST,
                             backupType,
                             DataType.enabled(this), getPreferences().isAppLogDebug()
                     );

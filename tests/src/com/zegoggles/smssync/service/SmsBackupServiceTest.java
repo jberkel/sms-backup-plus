@@ -97,7 +97,6 @@ public class SmsBackupServiceTest {
         BackupConfig backupConfig = config.getValue();
         assertThat(backupConfig.backupType).isEqualTo(BackupType.MANUAL);
         assertThat(backupConfig.maxItemsPerSync).isEqualTo(-1);
-        assertThat(backupConfig.maxMessagePerRequest).isEqualTo(1);
         assertThat(backupConfig.currentTry).isEqualTo(0);
         assertThat(backupConfig.skip).isFalse();
     }

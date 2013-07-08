@@ -14,7 +14,6 @@ public class BackupConfig {
     public final int currentTry;
     public final int maxItemsPerSync;
     public final ContactGroup groupToBackup;
-    public final int maxMessagePerRequest;
     public final BackupType backupType;
     public final boolean debug;
     public final EnumSet<DataType> typesToBackup;
@@ -24,7 +23,6 @@ public class BackupConfig {
                         boolean skip,
                         int maxItemsPerSync,
                         @NotNull ContactGroup groupToBackup,
-                        int maxMessagePerRequest,
                         @NotNull BackupType backupType,
                         @NotNull EnumSet<DataType> typesToBackup,
                         boolean debug) {
@@ -37,7 +35,6 @@ public class BackupConfig {
         this.currentTry = currentTry;
         this.maxItemsPerSync = maxItemsPerSync;
         this.groupToBackup = groupToBackup;
-        this.maxMessagePerRequest = maxMessagePerRequest;
         this.backupType = backupType;
         this.debug = debug;
         this.typesToBackup = typesToBackup;
@@ -48,7 +45,6 @@ public class BackupConfig {
                 skip,
                 maxItemsPerSync,
                 groupToBackup,
-                maxMessagePerRequest,
                 backupType,
                 typesToBackup, debug);
     }
@@ -64,7 +60,6 @@ public class BackupConfig {
                 ", currentTry=" + currentTry +
                 ", maxItemsPerSync=" + maxItemsPerSync +
                 ", groupToBackup=" + groupToBackup +
-                ", maxMessagePerRequest=" + maxMessagePerRequest +
                 ", backupType=" + backupType +
                 ", debug=" + debug +
                 '}';

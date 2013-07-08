@@ -231,7 +231,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         App.bus.post(state);
     }
 
-    private BackupState backup(BackupConfig config, BackupCursors cursors, final int itemsToSync)
+    private BackupState backup(BackupConfig config, BackupCursors cursors, int itemsToSync)
             throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
         publish(LOGIN);
@@ -243,7 +243,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 BackupCursors.CursorAndType cursor = cursors.next();
                 if (LOCAL_LOGV) Log.v(TAG, "backing up: " + cursor);
 
-                ConversionResult result = converter.convertMessages(cursor.cursor, config.maxMessagePerRequest, cursor.type);
+                ConversionResult result = converter.convertMessages(cursor.cursor, cursor.type);
                 if (!result.isEmpty()) {
                     List<Message> messages = result.getMessages();
 
@@ -261,6 +261,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     backedUpItems += messages.size();
                 } else {
                     Log.w(TAG, "no messages converted");
+                    itemsToSync -= 1;
                 }
 
                 publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, config.backupType, cursor.type, null));

@@ -20,20 +20,21 @@ public class BackupConfigTest {
                 0,
                 false,
                 -1,
-                ContactGroup.EVERYBODY, -1,
+                ContactGroup.EVERYBODY,
                 BackupType.MANUAL,
                 EnumSet.noneOf(DataType.class),
                 false);
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = IllegalArgumentException.class)
     public void shouldCheckForDataTypesNull() throws Exception {
         new BackupConfig(mock(BackupImapStore.class),
                 0,
                 false,
                 -1,
-                ContactGroup.EVERYBODY, -1,
+                ContactGroup.EVERYBODY,
                 BackupType.MANUAL,
                 null,
                 false);
@@ -46,7 +47,7 @@ public class BackupConfigTest {
                 -1,
                 false,
                 -1,
-                ContactGroup.EVERYBODY, -1,
+                ContactGroup.EVERYBODY,
                 BackupType.MANUAL,
                 EnumSet.of(DataType.MMS),
                 false);
