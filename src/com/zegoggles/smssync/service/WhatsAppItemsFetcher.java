@@ -1,6 +1,5 @@
 package com.zegoggles.smssync.service;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 import com.github.jberkel.whassup.Whassup;
@@ -10,25 +9,29 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static com.zegoggles.smssync.App.*;
-import static com.zegoggles.smssync.mail.DataType.WHATSAPP;
 import static com.zegoggles.smssync.service.BackupItemsFetcher.emptyCursor;
 
 public class WhatsAppItemsFetcher {
-    public @NotNull Cursor getItems(Context context, int max) {
+    private Whassup whassup;
+
+    public WhatsAppItemsFetcher() {
+        this(new Whassup());
+    }
+
+    protected WhatsAppItemsFetcher(Whassup whassup) {
+        this.whassup = whassup;
+    }
+
+    public @NotNull Cursor getItems(long maxSyncedDate, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItems(max=" + max + ")");
 
-        if (!WHATSAPP.isBackupEnabled(context)) {
-            if (LOCAL_LOGV) Log.v(TAG, "WhatsApp backup disabled, returning empty");
-            return emptyCursor();
-        }
-        Whassup whassup = new Whassup();
         if (!whassup.hasBackupDB()) {
             if (LOCAL_LOGV) Log.v(TAG, "No whatsapp backup DB found, returning empty");
             return emptyCursor();
         }
 
         try {
-            return whassup.queryMessages(WHATSAPP.getMaxSyncedDate(context), max);
+            return whassup.queryMessages(maxSyncedDate, max);
         } catch (IOException e) {
             Log.w(LOG, "error fetching whatsapp messages", e);
             return emptyCursor();
@@ -36,7 +39,14 @@ public class WhatsAppItemsFetcher {
     }
 
     public long getMostRecentTimestamp() {
-        // TODO
-        return DataType.Defaults.MAX_SYNCED_DATE;
+        if (!whassup.hasBackupDB()) {
+            return DataType.Defaults.MAX_SYNCED_DATE;
+        } else {
+            try {
+                return whassup.getMostRecentTimestamp(true);
+            } catch (IOException e) {
+                return DataType.Defaults.MAX_SYNCED_DATE;
+            }
+        }
     }
 }

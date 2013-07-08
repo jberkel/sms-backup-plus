@@ -52,6 +52,16 @@ public class BackupItemsFetcherTest {
         assertThat(fetcher.getItemsForDataType(SMS, null, -1).getCount()).isEqualTo(0);
     }
 
+    @Test public void shouldCatchNullPointerExceptions() throws Exception {
+        SMS.setBackupEnabled(context, true);
+        when(resolver.query(any(Uri.class), any(String[].class), anyString(), any(String[].class), anyString()))
+                .thenThrow(new NullPointerException());
+
+        mockEmptyQuery();
+
+        assertThat(fetcher.getItemsForDataType(SMS, null, -1).getCount()).isEqualTo(0);
+    }
+
     @Test public void shouldReturnDefaultIfDataTypeCannotBeRead() throws Exception {
         for (DataType type : DataType.values()) {
             assertThat(fetcher.getMostRecentTimestamp(type)).isEqualTo(-1);

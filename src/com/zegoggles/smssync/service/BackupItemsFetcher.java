@@ -19,7 +19,10 @@ public class BackupItemsFetcher {
     private final ContentResolver resolver;
     private final BackupQueryBuilder queryBuilder;
 
-    public BackupItemsFetcher(Context context, ContentResolver resolver, BackupQueryBuilder queryBuilder) {
+    public BackupItemsFetcher(@NotNull Context context, @NotNull ContentResolver resolver, @NotNull BackupQueryBuilder queryBuilder) {
+        if (resolver == null) throw new IllegalArgumentException("resolver cannot be null");
+        if (queryBuilder == null) throw new IllegalArgumentException("queryBuilder cannot be null");
+
         this.queryBuilder = queryBuilder;
         this.context = context;
         this.resolver = resolver;
@@ -28,7 +31,7 @@ public class BackupItemsFetcher {
     public @NotNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
         switch (dataType) {
-            case WHATSAPP: return new WhatsAppItemsFetcher().getItems(context, max);
+            case WHATSAPP: return new WhatsAppItemsFetcher().getItems(DataType.WHATSAPP.getMaxSyncedDate(context), max);
             default: return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
         }
     }
@@ -39,8 +42,6 @@ public class BackupItemsFetcher {
             default: return getMostRecentTimestampForQuery(queryBuilder.buildMostRecentQueryForDataType(dataType));
         }
     }
-
-
 
     private long getMostRecentTimestampForQuery(BackupQueryBuilder.Query query) {
         Cursor cursor = performQuery(query);
@@ -67,6 +68,9 @@ public class BackupItemsFetcher {
             );
             return cursor == null ? emptyCursor() : cursor;
         } catch (SQLiteException e) {
+            Log.w(TAG, "error querying DB", e);
+            return emptyCursor();
+        } catch (NullPointerException e) {
             Log.w(TAG, "error querying DB", e);
             return emptyCursor();
         }
