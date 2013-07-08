@@ -29,7 +29,6 @@ import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -185,7 +184,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         return transition(ERROR, e);
     }
 
-    private BackupState skip(EnumSet<DataType> types) {
+    private BackupState skip(Iterable<DataType> types) {
         appLog(R.string.app_log_skip_backup_skip_messages);
         for (DataType type : types) {
             type.setMaxSyncedDate(service, fetcher.getMostRecentTimestamp(type));
