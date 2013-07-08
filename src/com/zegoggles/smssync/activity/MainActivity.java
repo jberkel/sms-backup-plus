@@ -45,6 +45,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.BuildConfig;
@@ -470,7 +471,10 @@ public class MainActivity extends PreferenceActivity {
         super.onPrepareDialog(id, dialog);
         switch (Dialogs.values()[id]) {
             case VIEW_LOG:
-                AppLog.readLog(App.LOG, dialog.findViewById(AppLog.ID));
+                View view = dialog.findViewById(AppLog.ID);
+                if (view instanceof TextView) {
+                    AppLog.readLog(App.LOG, (TextView) view);
+                }
         }
     }
 

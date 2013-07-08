@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Environment;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.zegoggles.smssync.App;
@@ -149,13 +148,13 @@ public class AppLog {
                 .create();
     }
 
-    public static boolean readLog(String name, View view) {
+    public static boolean readLog(String name, TextView view) {
         return readLog(getFile(name), view);
     }
 
-    public static boolean readLog(File f, View view) {
+    public static boolean readLog(File f, TextView view) {
         StringBuilder text = new StringBuilder();
-        if (f.exists() && view instanceof TextView) {
+        if (view != null && f.exists()) {
             BufferedReader br = null;
             try {
                 br = new BufferedReader(new FileReader(f));
@@ -174,9 +173,9 @@ public class AppLog {
                     }
                 }
             }
+            view.setText(text.length() > 0 ? text :
+                    view.getContext().getString(R.string.app_log_empty));
         }
-        ((TextView) view).setText(text.length() > 0 ? text :
-                view.getContext().getString(R.string.app_log_empty));
 
         return text.length() > 0;
     }
