@@ -2,7 +2,6 @@ package com.zegoggles.smssync.service;
 
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import com.zegoggles.smssync.mail.DataType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +10,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.NoSuchElementException;
 
-import static com.zegoggles.smssync.mail.DataType.MMS;
-import static com.zegoggles.smssync.mail.DataType.SMS;
+import static com.zegoggles.smssync.mail.DataType.*;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.fail;
 import static org.mockito.Mockito.verify;
@@ -25,8 +23,8 @@ public class BackupCursorsTest {
         cursors = new BackupCursors();
 
         cursors.add(SMS, cursor(1));
+        cursors.add(CALLLOG, cursor(0));
         cursors.add(MMS, cursor(4));
-        cursors.add(DataType.CALLLOG, cursor(0));
     }
 
     @Test public void testEmptyCursor() {
@@ -48,8 +46,8 @@ public class BackupCursorsTest {
     @Test public void shouldReportCountForDataType() throws Exception {
         assertThat(cursors.count(SMS)).isEqualTo(1);
         assertThat(cursors.count(MMS)).isEqualTo(4);
-        assertThat(cursors.count(DataType.CALLLOG)).isEqualTo(0);
-        assertThat(cursors.count(DataType.WHATSAPP)).isEqualTo(0);
+        assertThat(cursors.count(CALLLOG)).isEqualTo(0);
+        assertThat(cursors.count(WHATSAPP)).isEqualTo(0);
         assertThat(cursors.count(null)).isEqualTo(0);
     }
 

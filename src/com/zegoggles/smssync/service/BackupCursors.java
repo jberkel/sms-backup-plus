@@ -67,7 +67,7 @@ public class BackupCursors implements Iterator<BackupCursors.CursorAndType> {
     }
 
     @Override public boolean hasNext() {
-        return !cursorAndTypes.isEmpty() && (getCurrent().hasNext() || getNext().hasNext());
+        return !cursorAndTypes.isEmpty() && (getCurrent().hasNext() || getNextNonEmptyIndex() != -1);
     }
 
     @Override public CursorAndType next() {
@@ -75,8 +75,8 @@ public class BackupCursors implements Iterator<BackupCursors.CursorAndType> {
 
         if (getCurrent().hasNext()) {
             getCurrentCursor().moveToNext();
-        } else if (getNext().hasNext()) {
-            index += 1;
+        } else if (getNextNonEmptyIndex() != -1) {
+            index = getNextNonEmptyIndex();
             getCurrentCursor().moveToFirst();
         } else {
             throw new NoSuchElementException();
@@ -99,19 +99,23 @@ public class BackupCursors implements Iterator<BackupCursors.CursorAndType> {
         }
     }
 
-    private CursorAndType getNext() {
-        if (index < cursorAndTypes.size()-1) {
-            return cursorAndTypes.get(index+1);
-        } else {
-            return new CursorAndType(DataType.SMS, emptyCursor());
+    private int getNextNonEmptyIndex() {
+        for (int i = index + 1; i < cursorAndTypes.size(); i++) {
+            if (cursorAndTypes.get(i).hasNext()) {
+                return i;
+            }
         }
-    }
-
-    private Cursor getCurrentCursor() {
-        return getCurrent().cursor;
+        return -1;
     }
 
     private CursorAndType getCurrent() {
         return index < cursorAndTypes.size() ? cursorAndTypes.get(index) : CursorAndType.empty();
     }
+
+
+    private Cursor getCurrentCursor() {
+        return getCurrent().cursor;
+    }
+
+
 }
