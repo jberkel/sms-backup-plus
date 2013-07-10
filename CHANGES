@@ -1,3 +1,7 @@
+== 1.5.5 (xxx) tbd
+
+  * Fix call logs not getting backed up (#336)
+
 == 1.5.4 (1527) 07-08-2013
 
   * Fixed MMS not getting backed up (#334)
