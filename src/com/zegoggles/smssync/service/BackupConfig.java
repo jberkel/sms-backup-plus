@@ -62,6 +62,7 @@ public class BackupConfig {
                 ", groupToBackup=" + groupToBackup +
                 ", backupType=" + backupType +
                 ", debug=" + debug +
+                ", typesToBackup=" + typesToBackup +
                 '}';
     }
 }
