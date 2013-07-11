@@ -27,6 +27,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.service.exception.BackupDisabledException;
 import com.zegoggles.smssync.service.exception.ConnectivityException;
@@ -40,13 +41,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
+import java.util.EnumSet;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
-import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
-import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
-import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
+import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
 public class SmsBackupService extends ServiceBase {
     private static final int BACKUP_ID = 1;
@@ -94,7 +94,7 @@ public class SmsBackupService extends ServiceBase {
         try {
             // set initial state
             mState = new BackupState(INITIAL, 0, 0, backupType, null, null);
-            checkBackupEnabled();
+            EnumSet<DataType> enabledTypes = getEnabledBackupTypes();
             if (!skip) {
                 checkCredentials();
                 checkBackgroundDataSettings(backupType);
@@ -102,7 +102,7 @@ public class SmsBackupService extends ServiceBase {
             }
 
             appLog(R.string.app_log_start_backup, backupType);
-            getBackupTask().execute(getBackupConfig(backupType, skip));
+            getBackupTask().execute(getBackupConfig(backupType, enabledTypes, getBackupImapStore(), skip));
         } catch (MessagingException e) {
             Log.w(TAG, e);
             moveToState(mState.transition(ERROR, e));
@@ -118,23 +118,28 @@ public class SmsBackupService extends ServiceBase {
         }
     }
 
-    private BackupConfig getBackupConfig(BackupType backupType, boolean skip) throws MessagingException {
+    private BackupConfig getBackupConfig(BackupType backupType,
+                                         EnumSet<DataType> enabledTypes,
+                                         BackupImapStore imapStore,
+                                         boolean skip) {
         return new BackupConfig(
-            getBackupImapStore(),
+            imapStore,
             0,
             skip,
             getPreferences().getMaxItemsPerSync(),
             getPreferences().getBackupContactGroup(),
             backupType,
-            DataType.enabled(this),
+            enabledTypes,
             getPreferences().isAppLogDebug()
         );
     }
 
-    private void checkBackupEnabled() throws BackupDisabledException {
-        if (DataType.enabled(this).isEmpty()) {
+    private EnumSet<DataType> getEnabledBackupTypes() throws BackupDisabledException {
+        EnumSet<DataType> dataTypes = DataType.enabled(this);
+        if (dataTypes.isEmpty()) {
             throw new BackupDisabledException();
         }
+        return dataTypes;
     }
 
     private void checkCredentials() throws RequiresLoginException {
