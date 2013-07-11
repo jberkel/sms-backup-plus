@@ -7,8 +7,10 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.contacts.ContactGroup;
+import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.service.exception.BackupDisabledException;
 import com.zegoggles.smssync.service.exception.NoConnectionException;
 import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
 import com.zegoggles.smssync.service.exception.RequiresLoginException;
@@ -20,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowConnectivityManager;
 import org.robolectric.shadows.ShadowNetworkInfo;
@@ -141,6 +144,19 @@ public class SmsBackupServiceTest {
         service.handleIntent(intent);
         verifyZeroInteractions(backupTask);
         assertThat(service.getState().exception).isExactlyInstanceOf(RequiresLoginException.class);
+    }
+
+    @Test public void shouldCheckForEnabledDataTypes() throws Exception {
+        for (DataType type : DataType.values()) {
+            type.setBackupEnabled(Robolectric.application, false);
+        }
+        Intent intent = new Intent();
+        when(authPreferences.isLoginInformationSet()).thenReturn(true);
+        shadowConnectivityManager.setBackgroundDataSetting(true);
+        service.handleIntent(intent);
+        verifyZeroInteractions(backupTask);
+        assertThat(service.getState().exception).isExactlyInstanceOf(BackupDisabledException.class);
+        assertThat(service.getState().state).isEqualTo(SmsSyncState.FINISHED_BACKUP);
     }
 
     @Test public void shouldPassInCorrectBackupConfig() throws Exception {

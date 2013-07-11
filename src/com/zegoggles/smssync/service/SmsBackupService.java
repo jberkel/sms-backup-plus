@@ -28,6 +28,7 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.service.exception.BackupDisabledException;
 import com.zegoggles.smssync.service.exception.ConnectivityException;
 import com.zegoggles.smssync.service.exception.NoConnectionException;
 import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
@@ -44,6 +45,7 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
 import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
+import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
 
 public class SmsBackupService extends ServiceBase {
@@ -92,11 +94,13 @@ public class SmsBackupService extends ServiceBase {
         try {
             // set initial state
             mState = new BackupState(INITIAL, 0, 0, backupType, null, null);
+            checkBackupEnabled();
             if (!skip) {
                 checkCredentials();
                 checkBackgroundDataSettings(backupType);
                 checkConnectivity();
             }
+
             appLog(R.string.app_log_start_backup, backupType);
             getBackupTask().execute(getBackupConfig(backupType, skip));
         } catch (MessagingException e) {
@@ -108,6 +112,8 @@ public class SmsBackupService extends ServiceBase {
             moveToState(mState.transition(ERROR, e));
         } catch (RequiresLoginException e) {
             moveToState(mState.transition(ERROR, e));
+        } catch (BackupDisabledException e) {
+            moveToState(mState.transition(FINISHED_BACKUP, e));
         }
     }
 
@@ -124,19 +130,25 @@ public class SmsBackupService extends ServiceBase {
         );
     }
 
-    protected void checkCredentials() throws RequiresLoginException {
+    private void checkBackupEnabled() throws BackupDisabledException {
+        if (DataType.enabled(this).isEmpty()) {
+            throw new BackupDisabledException();
+        }
+    }
+
+    private void checkCredentials() throws RequiresLoginException {
         if (!getAuthPreferences().isLoginInformationSet()) {
             throw new RequiresLoginException();
         }
     }
 
-    protected void checkBackgroundDataSettings(BackupType backupType) throws RequiresBackgroundDataException {
+    private void checkBackgroundDataSettings(BackupType backupType) throws RequiresBackgroundDataException {
         if (backupType.isBackground() && !getConnectivityManager().getBackgroundDataSetting()) {
             throw new RequiresBackgroundDataException();
         }
     }
 
-    protected void checkConnectivity() throws ConnectivityException {
+    private void checkConnectivity() throws ConnectivityException {
         NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
         if (active == null || !active.isConnectedOrConnecting()) {
             throw new NoConnectionException();
