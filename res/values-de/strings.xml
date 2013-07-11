@@ -294,7 +294,7 @@
   <string name="app_log_backup_finished">Sicherung fertiggestellt</string>
 
   <string name="app_log_backup_failed_authentication">Authentifizierungsfehler: %1$s</string>
-  <string name="app_log_backup_failed_messaging">Allgemeiner Fehler: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Allgemeiner Fehler: %1$s</string>
   <string name="app_log_backup_failed_connectivity">Sicherung übersprungen, keine Verbindung</string>
   <string name="app_log_scheduled_next_sync">Nächste Sicherung geplant für: %1$s</string>
   <string name="app_log_no_next_sync">Keine neue Sicherung geplant</string>

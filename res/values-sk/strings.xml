@@ -204,7 +204,7 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="app_log_backup_canceled">Zálohovanie prerušené</string>
     <string name="app_log_backup_finished">Zálohovanie dokončené</string>
     <string name="app_log_backup_failed_authentication">Chyba pri autentifikácií: %1$s</string>
-    <string name="app_log_backup_failed_messaging">Všeobecná chyba: %1$s</string>
+    <string name="app_log_backup_failed_general_error">Všeobecná chyba: %1$s</string>
     <string name="app_log_backup_failed_connectivity">Zálohovania vynechané, žiadne pripojenie</string>
     <string name="app_log_scheduled_next_sync">Ďalšie zálohovanie je naplánované na: %1$s</string>
     <string name="app_log_no_next_sync">Žiadne nové zálohovania nie je naplánované</string>

@@ -22,7 +22,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -34,8 +33,6 @@ import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.exception.ConnectivityException;
-import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
@@ -72,6 +69,25 @@ public abstract class ServiceBase extends Service {
         notification = null;
     }
 
+    // Android api level < 5
+    @Override
+    public void onStart(final Intent intent, int startId) {
+        handleIntent(intent);
+    }
+
+    // Android api level >= 5
+    @Override
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+        handleIntent(intent);
+        return START_NOT_STICKY;
+    }
+
+    public abstract @NotNull State getState();
+
+    public boolean isWorking() {
+        return getState().isRunning();
+    }
+
     protected BackupImapStore getBackupImapStore() throws MessagingException {
         final String uri = getAuthPreferences().getStoreUri();
         if (!BackupImapStore.isValidUri(uri)) {
@@ -88,34 +104,20 @@ public abstract class ServiceBase extends Service {
         return new Preferences(this);
     }
 
-    /**
-     * Acquire locks
-     * @throws com.zegoggles.smssync.service.exception.ConnectivityException when unable to connect
-     */
-    protected void acquireLocks() throws ConnectivityException {
+    protected void acquireLocks() {
         if (mWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
             mWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
         }
         mWakeLock.acquire();
 
-        WifiManager wMgr = (WifiManager) getSystemService(WIFI_SERVICE);
-        if (wMgr.isWifiEnabled() &&
-                getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null &&
-                getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
-
+        if (isConnectedViaWifi()) {
             // we have Wifi, lock it
+            WifiManager wMgr = getWifiManager();
             if (mWifiLock == null) {
                 mWifiLock = wMgr.createWifiLock(TAG);
             }
             mWifiLock.acquire();
-        } else if (isBackgroundTask() && new Preferences(this).isWifiOnly()) {
-            throw new RequiresWifiException();
-        }
-        NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
-
-        if (active == null || !active.isConnectedOrConnecting()) {
-            throw new ConnectivityException(getString(R.string.error_no_connection));
         }
     }
 
@@ -136,19 +138,6 @@ public abstract class ServiceBase extends Service {
 
     protected abstract void handleIntent(final Intent intent);
 
-    // Android api level < 5
-    @Override
-    public void onStart(final Intent intent, int startId) {
-        handleIntent(intent);
-    }
-
-    // Android api level >= 5
-    @Override
-    public int onStartCommand(final Intent intent, int flags, int startId) {
-        handleIntent(intent);
-        return START_NOT_STICKY;
-    }
-
     protected void appLog(int id, Object... args) {
         if (appLog != null) appLog.append(getString(id, args));
     }
@@ -161,14 +150,9 @@ public abstract class ServiceBase extends Service {
         return (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
-    public abstract @NotNull
-    State getState();
-
-    public boolean isWorking() {
-        return getState().isRunning();
+    protected WifiManager getWifiManager() {
+        return (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
-
-
 
     protected Notification createNotification(int resId) {
         Notification n = new Notification(R.drawable.ic_notification,
@@ -182,5 +166,13 @@ public abstract class ServiceBase extends Service {
         return PendingIntent.getActivity(this, 0,
             new Intent(this, MainActivity.class),
             PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    protected boolean isConnectedViaWifi() {
+        WifiManager wifiManager = getWifiManager();
+        return (wifiManager != null &&
+                wifiManager.isWifiEnabled() &&
+                getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null &&
+                getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected());
     }
 }

@@ -297,7 +297,7 @@
   <string name="app_log_backup_finished">Копирање завршено</string>
 
   <string name="app_log_backup_failed_authentication">Грешка аутентификације: %1$s</string>
-  <string name="app_log_backup_failed_messaging">Општа грешка: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Општа грешка: %1$s</string>
   <string name="app_log_backup_failed_connectivity">Прескочено копирање, није повезано</string>
   <string name="app_log_scheduled_next_sync">Следеће копирање је заказано за: %1$s</string>
   <string name="app_log_no_next_sync">Није заказано следеће копирање</string>

@@ -23,25 +23,18 @@ import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.exception.ConnectivityException;
-import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.DataType.*;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
-/**
- * BackupTask does all the work
- */
 class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final SmsBackupService service;
     private final BackupItemsFetcher fetcher;
@@ -51,8 +44,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final Preferences preferences;
     private final ContactAccessor contactAccessor;
     private final TokenRefresher tokenRefresher;
-
-    private Map<DataType, BackupImapStore.BackupFolder> backupFolders = new HashMap<DataType, BackupImapStore.BackupFolder>();
 
 
     BackupTask(@NotNull SmsBackupService service) {
@@ -116,16 +107,25 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         final BackupConfig config = params[0];
         if (config.skip) {
             return skip(config.typesToBackup);
-        } else if (!authPreferences.isLoginInformationSet()) {
-            appLog(R.string.app_log_missing_credentials);
-            return transition(ERROR, new RequiresLoginException());
+        } else {
+            return acquireLocksAndBackup(config);
         }
+    }
 
+    private BackupState acquireLocksAndBackup(BackupConfig config) {
+        try {
+            service.acquireLocks();
+            return fetchAndBackupItems(config);
+        } finally {
+            service.releaseLocks();
+        }
+    }
+
+    private BackupState fetchAndBackupItems(BackupConfig config) {
         BackupCursors cursors = null;
         try {
             final ContactGroupIds groupIds = contactAccessor.getGroupContactIds(service.getContentResolver(), config.groupToBackup);
 
-            service.acquireLocks();
             cursors = new BulkFetcher(fetcher).fetch(config.typesToBackup, groupIds, config.maxItemsPerSync);
             final int itemsToSync = cursors.count();
 
@@ -135,7 +135,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     appLog(R.string.app_log_backup_messages_with_config, config);
                 }
 
-                return backup(config, cursors, itemsToSync);
+                return backupCursors(cursors, config.imapStore, config.backupType, itemsToSync);
             } else {
                 appLog(R.string.app_log_skip_backup_no_items);
 
@@ -154,13 +154,10 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             return transition(ERROR, e);
         } catch (MessagingException e) {
             return transition(ERROR, e);
-        } catch (ConnectivityException e) {
-            return transition(ERROR, e);
         } finally {
             if (cursors != null) {
                 cursors.close();
             }
-            service.releaseLocks();
         }
     }
 
@@ -171,7 +168,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 try {
                     // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
                     // since the auth params on it are immutable
-                    return doInBackground(config.retryWithStore(service.getBackupImapStore()));
+                    return fetchAndBackupItems(config.retryWithStore(service.getBackupImapStore()));
                 } catch (MessagingException ignored) {
                     Log.w(TAG, ignored);
                 }
@@ -207,7 +204,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
     @Override
     protected void onProgressUpdate(BackupState... progress) {
-        if (progress != null  && progress.length > 0 && !isCancelled()) {
+        if (progress != null && progress.length > 0 && !isCancelled()) {
             post(progress[0]);
         }
     }
@@ -231,7 +228,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         App.bus.post(state);
     }
 
-    private BackupState backup(BackupConfig config, BackupCursors cursors, int itemsToSync)
+    private BackupState backupCursors(BackupCursors cursors, BackupImapStore store, BackupType backupType, int itemsToSync)
             throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
         publish(LOGIN);
@@ -252,7 +249,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                                 messages.size(), cursor.type));
                     }
 
-                    getFolder(cursor.type, config).appendMessages(messages.toArray(new Message[messages.size()]));
+                    store.getFolder(cursor.type).appendMessages(messages.toArray(new Message[messages.size()]));
 
                     if (cursor.type == CALLLOG && calendarSyncer != null) {
                         calendarSyncer.syncCalendar(result);
@@ -264,34 +261,15 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     itemsToSync -= 1;
                 }
 
-                publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, config.backupType, cursor.type, null));
+                publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, backupType, cursor.type, null));
             }
 
             return new BackupState(FINISHED_BACKUP,
                     backedUpItems,
                     itemsToSync,
-                    config.backupType, null, null);
+                    backupType, null, null);
         } finally {
-            closeFolders();
-        }
-    }
-
-    private BackupImapStore.BackupFolder getFolder(DataType type, BackupConfig config) throws MessagingException {
-        BackupImapStore.BackupFolder folder = backupFolders.get(type);
-        if (folder == null) {
-            folder = config.getFolder(type);
-            backupFolders.put(type, folder);
-        }
-        return folder;
-    }
-
-    private void closeFolders() {
-        for (BackupImapStore.BackupFolder folder : backupFolders.values()) {
-            try {
-                folder.close();
-            } catch (Exception e) {
-                Log.w(TAG, e);
-            }
+            store.closeFolders();
         }
     }
 

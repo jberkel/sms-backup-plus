@@ -294,7 +294,7 @@
   <string name="app_log_backup_finished">Backup finito</string>
 
   <string name="app_log_backup_failed_authentication">Errore di autenticazione: %1$s</string>
-  <string name="app_log_backup_failed_messaging">Errore Generale: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Errore Generale: %1$s</string>
   <string name="app_log_backup_failed_connectivity">Backup fallito, assenza di connessione</string>
   <string name="app_log_scheduled_next_sync">Il prossimo backup sarà avviato tra: %1$s</string>
   <string name="app_log_no_next_sync">Nessun nuovo backup pianificato</string>

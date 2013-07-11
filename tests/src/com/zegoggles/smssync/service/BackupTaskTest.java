@@ -17,7 +17,6 @@ import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.junit.Before;
@@ -77,7 +76,6 @@ public class BackupTaskTest {
 
     @Test public void shouldAcquireAndReleaseLocksDuringBackup() throws Exception {
         mockAllFetchEmpty();
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
 
         task.doInBackground(config);
 
@@ -86,16 +84,7 @@ public class BackupTaskTest {
         verify(service).transition(SmsSyncState.FINISHED_BACKUP, null);
     }
 
-    @Test public void shouldReturnErrorIfLoginInformationNotSet() throws Exception {
-        mockAllFetchEmpty();
-        when(authPreferences.isLoginInformationSet()).thenReturn(false);
-
-        task.doInBackground(config);
-        verify(service).transition(eq(SmsSyncState.ERROR), notNull(RequiresLoginException.class));
-    }
-
     @Test public void shouldBackupItems() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         mockFetch(SMS, 1);
 
         when(converter.convertMessages(any(Cursor.class), eq(SMS))).thenReturn(result(SMS, 1));
@@ -117,7 +106,6 @@ public class BackupTaskTest {
 
     @Test
     public void shouldBackupMultipleTypes() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         mockFetch(SMS, 1);
         mockFetch(MMS, 2);
         when(store.getFolder(notNull(DataType.class))).thenReturn(folder);
@@ -131,7 +119,6 @@ public class BackupTaskTest {
     }
 
     @Test public void shouldCreateFoldersLazilyOnlyForNeededTypes() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         mockFetch(SMS, 1);
 
         when(converter.convertMessages(any(Cursor.class), eq(SMS))).thenReturn(result(SMS, 1));
@@ -146,31 +133,22 @@ public class BackupTaskTest {
     }
 
     @Test public void shouldCloseImapFolderAfterBackup() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         mockFetch(SMS, 1);
         when(converter.convertMessages(any(Cursor.class), eq(SMS))).thenReturn(result(SMS, 1));
         when(store.getFolder(notNull(DataType.class))).thenReturn(folder);
 
         task.doInBackground(config);
 
-        verify(folder).close();
-    }
-
-    @Test public void shouldCreateNoFoldersIfLoginInformationMissing() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(false);
-        task.doInBackground(config);
-        verifyZeroInteractions(store);
+        verify(store).closeFolders();
     }
 
     @Test public void shouldCreateNoFoldersIfNoItemsToBackup() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         mockFetch(SMS, 0);
         task.doInBackground(config);
         verifyZeroInteractions(store);
     }
 
     @Test public void shouldSkipItems() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         when(fetcher.getMostRecentTimestamp(any(DataType.class))).thenReturn(-23L);
 
         BackupState finalState = task.doInBackground(new BackupConfig(
@@ -186,7 +164,6 @@ public class BackupTaskTest {
     }
 
     @Test public void shouldHandleAuthErrorAndTokenCannotBeRefreshed() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         mockFetch(SMS, 1);
         when(converter.convertMessages(any(Cursor.class), notNull(DataType.class))).thenReturn(result(SMS, 1));
 
@@ -200,10 +177,13 @@ public class BackupTaskTest {
 
         verify(tokenRefresher, times(1)).refreshOAuth2Token();
         verify(service).transition(SmsSyncState.ERROR, exception);
+
+        // make sure locks only get acquired+released once
+        verify(service).acquireLocks();
+        verify(service).releaseLocks();
     }
 
     @Test public void shouldHandleAuthErrorAndTokenCouldBeRefreshed() throws Exception {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
         mockFetch(SMS, 1);
         when(converter.convertMessages(any(Cursor.class), notNull(DataType.class))).thenReturn(result(SMS, 1));
 
@@ -216,12 +196,17 @@ public class BackupTaskTest {
 
         task.doInBackground(config);
 
-        verify(tokenRefresher, times(1)).refreshOAuth2Token();
+        verify(tokenRefresher).refreshOAuth2Token();
 
         verify(service, times(2)).transition(SmsSyncState.LOGIN, null);
         verify(service, times(2)).transition(SmsSyncState.CALC, null);
-        verify(service, times(1)).transition(SmsSyncState.ERROR, exception);
+        verify(service).transition(SmsSyncState.ERROR, exception);
+
+        // make sure locks only get acquired+released once
+        verify(service).acquireLocks();
+        verify(service).releaseLocks();
     }
+
 
     private ConversionResult result(DataType type, int n) {
         ConversionResult result = new ConversionResult(type);

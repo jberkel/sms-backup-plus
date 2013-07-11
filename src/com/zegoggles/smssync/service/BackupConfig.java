@@ -1,6 +1,5 @@
 package com.zegoggles.smssync.service;
 
-import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumSet;
 
 public class BackupConfig {
-    private final BackupImapStore imap;
+    public final BackupImapStore imapStore;
     public final boolean skip;
     public final int currentTry;
     public final int maxItemsPerSync;
@@ -18,7 +17,7 @@ public class BackupConfig {
     public final boolean debug;
     public final EnumSet<DataType> typesToBackup;
 
-    public BackupConfig(@NotNull BackupImapStore imap,
+    public BackupConfig(@NotNull BackupImapStore imapStore,
                         int currentTry,
                         boolean skip,
                         int maxItemsPerSync,
@@ -26,11 +25,11 @@ public class BackupConfig {
                         @NotNull BackupType backupType,
                         @NotNull EnumSet<DataType> typesToBackup,
                         boolean debug) {
-        if (imap == null) throw new IllegalArgumentException("need imapstore");
+        if (imapStore == null) throw new IllegalArgumentException("need imapstore");
         if (typesToBackup == null || typesToBackup.isEmpty()) throw new IllegalArgumentException("need to specify types to backup");
         if (currentTry < 0) throw new IllegalArgumentException("currentTry < 0");
 
-        this.imap = imap;
+        this.imapStore = imapStore;
         this.skip = skip;
         this.currentTry = currentTry;
         this.maxItemsPerSync = maxItemsPerSync;
@@ -49,13 +48,10 @@ public class BackupConfig {
                 typesToBackup, debug);
     }
 
-    public BackupImapStore.BackupFolder getFolder(DataType type) throws MessagingException {
-        return imap.getFolder(type);
-    }
 
     @Override public String toString() {
         return "BackupConfig{" +
-                "imap=" + imap +
+                "imap=" + imapStore +
                 ", skip=" + skip +
                 ", currentTry=" + currentTry +
                 ", maxItemsPerSync=" + maxItemsPerSync +

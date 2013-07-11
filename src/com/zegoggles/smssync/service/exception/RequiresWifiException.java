@@ -2,7 +2,7 @@ package com.zegoggles.smssync.service.exception;
 
 import com.zegoggles.smssync.R;
 
-public class RequiresWifiException extends ConnectivityException implements LocalizableException {
+public class RequiresWifiException extends ConnectivityException {
     public RequiresWifiException() {
         super(null);
     }

@@ -20,7 +20,6 @@ import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
-import com.zegoggles.smssync.service.exception.ConnectivityException;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
@@ -68,27 +67,40 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
 
     @NotNull protected RestoreState doInBackground(RestoreConfig... params) {
         if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
-        final RestoreConfig config = params[0];
+        RestoreConfig config = params[0];
 
         if (!config.restoreSms && !config.restoreCallLog) {
             return new RestoreState(FINISHED_RESTORE, 0, 0, 0, 0, null, null);
+        } else {
+            try {
+                service.acquireLocks();
+                return restore(config);
+            } finally {
+                service.releaseLocks();
+            }
         }
+    }
+
+    private RestoreState restore(RestoreConfig config) {
+        final BackupImapStore imapStore = config.imapStore;
 
         int currentRestoredItem = config.currentRestoredItem;
         try {
-            service.acquireLocks();
-
             publishProgress(LOGIN);
-            BackupImapStore.BackupFolder smsFolder = config.getFolder(SMS);
+            BackupImapStore.BackupFolder smsFolder = imapStore.getFolder(SMS);
             BackupImapStore.BackupFolder callFolder = null;
-            if (config.restoreCallLog) callFolder = config.getFolder(CALLLOG);
+            if (config.restoreCallLog) callFolder = imapStore.getFolder(CALLLOG);
 
             publishProgress(CALC);
 
             final List<Message> msgs = new ArrayList<Message>();
 
-            if (config.restoreSms) msgs.addAll(smsFolder.getMessages(config.maxRestore, config.restoreOnlyStarred, null));
-            if (config.restoreCallLog) msgs.addAll(callFolder.getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+            if (config.restoreSms) {
+                msgs.addAll(smsFolder.getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+            }
+            if (config.restoreCallLog) {
+                msgs.addAll(callFolder.getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+            }
 
             final int itemsToRestoreCount = config.maxRestore <= 0 ? msgs.size() : Math.min(msgs.size(), config.maxRestore);
 
@@ -119,8 +131,6 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                     uids.size() - restoredCount, null, null);
         } catch (XOAuth2AuthenticationFailedException e) {
             return handleAuthError(config, currentRestoredItem, e);
-        } catch (ConnectivityException e) {
-            return transition(ERROR, e);
         } catch (AuthenticationFailedException e) {
             return transition(ERROR, e);
         } catch (MessagingException e) {
@@ -130,7 +140,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             // usually memory problems (Couldn't init cursor window)
             return transition(ERROR, e);
         } finally {
-            service.releaseLocks();
+            imapStore.closeFolders();
         }
     }
 
@@ -141,7 +151,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                 try {
                     // we got a new token, let's retry one more time - we need to pass in a new store object
                     // since the auth params on it are immutable
-                    return doInBackground(config.retryWithStore(currentRestoredItem, service.getBackupImapStore()));
+                    return restore(config.retryWithStore(currentRestoredItem, service.getBackupImapStore()));
                 } catch (MessagingException ignored) {
                     Log.w(TAG, ignored);
                 }
@@ -184,7 +194,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
 
     @Override
     protected void onProgressUpdate(RestoreState... progress) {
-        if (progress != null  && progress.length > 0 && !isCancelled()) {
+        if (progress != null && progress.length > 0 && !isCancelled()) {
             post(progress[0]);
         }
     }

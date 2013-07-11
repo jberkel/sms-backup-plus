@@ -292,7 +292,7 @@
   <string name="app_log_backup_finished">Sauvegarde effectuée</string>
 
   <string name="app_log_backup_failed_authentication">Erreur d\'authentification : %1$s</string>
-  <string name="app_log_backup_failed_messaging">Erreur générale : %1$s</string>
+  <string name="app_log_backup_failed_general_error">Erreur générale : %1$s</string>
   <string name="app_log_backup_failed_connectivity">Sauvegarde non effectuée, aucune connection</string>
   <string name="app_log_scheduled_next_sync">Prochaine sauvegarde prévue pour : %1$s</string>
   <string name="app_log_no_next_sync">Pas de nouvelle sauvegarde prévue</string>

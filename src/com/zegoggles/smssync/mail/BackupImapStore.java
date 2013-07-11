@@ -29,15 +29,19 @@ import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
 import com.fsck.k9.mail.store.ImapStore;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -45,12 +49,12 @@ import static com.zegoggles.smssync.App.TAG;
 public class BackupImapStore extends ImapStore {
     private final Context context;
     private final String uri;
+    private final Map<DataType, BackupFolder> openFolders = new HashMap<DataType, BackupFolder>();
 
     static {
         // increase read timeout a bit
         com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 5;
     }
-
 
     public BackupImapStore(final Context context, final String uri) throws MessagingException {
         super(new Account(context) {
@@ -64,23 +68,27 @@ public class BackupImapStore extends ImapStore {
     }
 
     public BackupFolder getFolder(DataType type) throws MessagingException {
-        String label = type.getFolder(context);
-        if (label == null) throw new IllegalStateException("label is null");
+        BackupFolder folder = openFolders.get(type);
+        if (folder == null) {
+            String label = type.getFolder(context);
+            if (label == null) throw new IllegalStateException("label is null");
 
-        try {
-            final BackupFolder folder = new BackupFolder(this, label, type);
-
-            if (!folder.exists()) {
-                folder.create(FolderType.HOLDS_MESSAGES);
-                Log.i(TAG, "Label '" + label + "' does not exist yet. Creating.");
-            }
-            folder.open(OpenMode.READ_WRITE);
-            return folder;
-        } catch (IllegalArgumentException e) {
-            // thrown inside K9
-            Log.e(TAG, "K9 error", e);
-            throw new MessagingException(e.getMessage());
+            folder = createAndOpenFolder(type, label);
+            openFolders.put(type, folder);
         }
+        return folder;
+    }
+
+    public void closeFolders() {
+        Collection<BackupFolder> folders = openFolders.values();
+        for (BackupFolder folder : folders) {
+            try {
+                folder.close();
+            } catch (Exception e) {
+                Log.w(TAG, e);
+            }
+        }
+        openFolders.clear();
     }
 
     @Override public String toString() {
@@ -106,6 +114,22 @@ public class BackupImapStore extends ImapStore {
             return uri.buildUpon().encodedAuthority(userInfo + "@" + host).toString();
         } else {
             return uri.toString();
+        }
+    }
+
+    private @NotNull BackupFolder createAndOpenFolder(DataType type, @NotNull String label) throws MessagingException {
+        try {
+            BackupFolder folder = new BackupFolder(this, label, type);
+            if (!folder.exists()) {
+                Log.i(TAG, "Label '" + label + "' does not exist yet. Creating.");
+                folder.create(FolderType.HOLDS_MESSAGES);
+            }
+            folder.open(OpenMode.READ_WRITE);
+            return folder;
+        } catch (IllegalArgumentException e) {
+            // thrown inside K9
+            Log.e(TAG, "K9 error", e);
+            throw new MessagingException(e.getMessage());
         }
     }
 
