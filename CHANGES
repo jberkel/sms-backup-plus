@@ -1,6 +1,7 @@
 == 1.5.5 (xxx) tbd
 
   * Fix call logs not getting backed up (#336)
+  * Fix battery drainage
 
 == 1.5.4 (1527) 07-08-2013
 
