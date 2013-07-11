@@ -69,6 +69,11 @@ public class RestoreTaskTest {
         verify(store).checkSettings();
     }
 
+    @Test public void shouldCloseFolders() throws Exception {
+        task.doInBackground(config);
+        verify(store).closeFolders();
+    }
+
     @Test
     public void shouldRestoreItems() throws Exception {
         Date now = new Date();
@@ -93,5 +98,7 @@ public class RestoreTaskTest {
 
         assertThat(DataType.SMS.getMaxSyncedDate(context)).isEqualTo(now.getTime());
         assertThat(task.getSmsIds()).containsExactly("123");
+
+        verify(store).closeFolders();
     }
 }
