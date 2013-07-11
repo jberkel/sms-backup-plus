@@ -111,6 +111,7 @@ public class SmsBackupService extends ServiceBase {
         } catch (ConnectivityException e) {
             moveToState(mState.transition(ERROR, e));
         } catch (RequiresLoginException e) {
+            appLog(R.string.app_log_missing_credentials);
             moveToState(mState.transition(ERROR, e));
         } catch (BackupDisabledException e) {
             moveToState(mState.transition(FINISHED_BACKUP, e));
