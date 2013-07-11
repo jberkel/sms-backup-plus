@@ -232,6 +232,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
         publish(LOGIN);
+        store.checkSettings();
 
         try {
             publish(CALC);

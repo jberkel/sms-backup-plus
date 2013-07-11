@@ -79,6 +79,7 @@ public class BackupImapStore extends ImapStore {
         return folder;
     }
 
+
     public void closeFolders() {
         Collection<BackupFolder> folders = openFolders.values();
         for (BackupFolder folder : folders) {

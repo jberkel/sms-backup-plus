@@ -64,6 +64,11 @@ public class RestoreTaskTest {
         verify(service).releaseLocks();
     }
 
+    @Test public void shouldVerifyStoreSettings() throws Exception {
+        task.doInBackground(config);
+        verify(store).checkSettings();
+    }
+
     @Test
     public void shouldRestoreItems() throws Exception {
         Date now = new Date();

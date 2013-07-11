@@ -84,6 +84,14 @@ public class BackupTaskTest {
         verify(service).transition(SmsSyncState.FINISHED_BACKUP, null);
     }
 
+    @Test public void shouldVerifyStoreSettings() throws Exception {
+        mockFetch(SMS, 1);
+        when(converter.convertMessages(any(Cursor.class), eq(SMS))).thenReturn(result(SMS, 1));
+        when(store.getFolder(SMS)).thenReturn(folder);
+        task.doInBackground(config);
+        verify(store).checkSettings();
+    }
+
     @Test public void shouldBackupItems() throws Exception {
         mockFetch(SMS, 1);
 
