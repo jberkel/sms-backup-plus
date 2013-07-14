@@ -51,7 +51,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 
-import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
@@ -104,7 +103,6 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
                 }
             }
 
-            if (LOCAL_LOGV) Log.v(TAG, "sasl: " + sasl.toString());
             return base64(sasl.toString().getBytes(OAuth.ENCODING));
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);

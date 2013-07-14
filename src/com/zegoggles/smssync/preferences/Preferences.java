@@ -168,9 +168,8 @@ public class Preferences {
     }
 
     public boolean isFirstBackup() {
-        SharedPreferences prefs = preferences;
         for (DataType type : DataType.values()) {
-            if (prefs.contains(type.maxSyncedPreference)) {
+            if (preferences.contains(type.maxSyncedPreference)) {
                 return false;
             }
         }

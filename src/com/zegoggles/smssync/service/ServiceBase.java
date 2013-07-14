@@ -26,6 +26,7 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.text.format.DateFormat;
+import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
@@ -38,6 +39,7 @@ import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public abstract class ServiceBase extends Service {
@@ -139,7 +141,9 @@ public abstract class ServiceBase extends Service {
     protected abstract void handleIntent(final Intent intent);
 
     protected void appLog(int id, Object... args) {
-        if (appLog != null) appLog.append(getString(id, args));
+        final String msg = getString(id, args);
+        if (LOCAL_LOGV) Log.d(App.TAG, "AppLog: "+msg);
+        if (appLog != null) appLog.append(msg);
     }
 
     protected NotificationManager getNotifier() {

@@ -78,7 +78,7 @@ public class Alarms {
             }
             return atTime;
         } else {
-            if (LOCAL_LOGV) Log.v(TAG, "Not scheduling sync because auto sync is disabled.");
+            if (LOCAL_LOGV) Log.v(TAG, "Not scheduling backup because auto sync is disabled.");
             return -1;
         }
     }
