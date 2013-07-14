@@ -274,6 +274,10 @@
   <string name="mms">MMS</string>
   <string name="calllog">Anrufprotokoll</string>
 
+
+  <string name="donate">Spenden</string>
+  <string name="donate_summary">Mit der sicheren Google Play Bezahlmethode.</string>
+
   <string name="ui_dialog_donate_message">Bitte geben Sie Betrag und Währung an:</string>
   <string name="ui_donation_success_message">Spende erfolgreich, Vielen Dank!</string>
   <string name="ui_donation_failure_message">Spende fehlgeschlagen: %1$s</string>
@@ -311,4 +315,14 @@
   <string name="source_3rd_party">3rd party</string>
   <string name="source_manual">manuell</string>
   <string name="source_unknown">unbekannt</string>
+
+  <string name="pref_app_log_debug">Ausführliches Protokoll</string>
+  <string name="pref_app_log_debug_summary">Zusätzliche Informationen im Sync-Protokoll.</string>
+
+  <string name="ui_confirm_action_label">Bestätige Aktionen</string>
+  <string name="ui_confirm_action_desc">Frage vor Backup / Restore</string>
+  <string name="ui_dialog_confirm_action_title">Bestätigung</string>
+  <string name="ui_dialog_confirm_action_msg">Wollen Sie diese Aktion ausführen?</string>
+
+
 </resources>
