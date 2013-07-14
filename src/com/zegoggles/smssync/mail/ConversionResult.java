@@ -22,9 +22,12 @@ public class ConversionResult {
 
         String dateHeader = Headers.get(message, Headers.DATE);
         if (dateHeader != null) {
-            final long date = Long.parseLong(dateHeader);
-            if (date > maxDate) {
-                maxDate = date;
+            try {
+                final long date = Long.parseLong(dateHeader);
+                if (date > maxDate) {
+                    maxDate = date;
+                }
+            } catch (NumberFormatException ignored) {
             }
         }
     }
