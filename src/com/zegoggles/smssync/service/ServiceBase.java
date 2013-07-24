@@ -144,8 +144,11 @@ public abstract class ServiceBase extends Service {
 
     protected void appLog(int id, Object... args) {
         final String msg = getString(id, args);
-        if (LOCAL_LOGV) Log.d(App.TAG, "AppLog: "+msg);
-        if (appLog != null) appLog.append(msg);
+        if (appLog != null) {
+            appLog.append(msg);
+        } else if (LOCAL_LOGV) {
+            Log.d(App.TAG, "AppLog: "+msg);
+        }
     }
 
     protected void appLogDebug(String message, Object... args) {
