@@ -9,7 +9,6 @@ import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
-import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
@@ -163,7 +162,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
     private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) {
         if (e.getStatus() == 400) {
-            Log.d(TAG, "need to perform xoauth2 token refresh");
+            appLogDebug("need to perform xoauth2 token refresh");
             if (config.currentTry < 1 && tokenRefresher.refreshOAuth2Token()) {
                 try {
                     // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
@@ -173,10 +172,10 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     Log.w(TAG, ignored);
                 }
             } else {
-                Log.w(TAG, "no new token obtained, giving up");
+                appLogDebug("no new token obtained, giving up");
             }
         } else {
-            Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
+            appLogDebug("unexpected xoauth status code " + e.getStatus());
         }
         return transition(ERROR, e);
     }
@@ -191,11 +190,11 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private void appLog(int id, Object... args) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, service.getApplicationContext().getString(id, args));
-        }
-
         service.appLog(id, args);
+    }
+
+    private void appLogDebug(String message, Object... args) {
+        service.appLogDebug(message, args);
     }
 
     private BackupState transition(SmsSyncState smsSyncState, Exception exception) {

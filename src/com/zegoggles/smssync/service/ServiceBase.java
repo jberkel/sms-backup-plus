@@ -39,6 +39,8 @@ import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
@@ -144,6 +146,13 @@ public abstract class ServiceBase extends Service {
         final String msg = getString(id, args);
         if (LOCAL_LOGV) Log.d(App.TAG, "AppLog: "+msg);
         if (appLog != null) appLog.append(msg);
+    }
+
+    protected void appLogDebug(String message, Object... args) {
+        if (getPreferences().isAppLogDebug() && appLog != null) {
+            String formatted = String.format(Locale.ENGLISH, message, args);
+            appLog.append(formatted);
+        }
     }
 
     protected NotificationManager getNotifier() {
