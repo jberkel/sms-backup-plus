@@ -17,6 +17,7 @@ import org.robolectric.RobolectricTestRunner;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.AUTH_TOKEN_TYPE;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.GOOGLE_TYPE;
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -52,7 +53,12 @@ public class TokenRefresherTest {
                 any(AccountManagerCallback.class),
                 any(Handler.class))).thenReturn(mock(AccountManagerFuture.class));
 
-        assertThat(refresher.refreshOAuth2Token()).isFalse();
+        try {
+            refresher.refreshOAuth2Token();
+            fail("expected error ");
+        } catch (TokenRefreshException e) {
+            assertThat(e.getMessage()).isEqualTo("no bundle received from accountmanager");
+        }
         verify(accountManager).invalidateAuthToken(GOOGLE_TYPE, "token");
     }
 
@@ -67,9 +73,16 @@ public class TokenRefresherTest {
                 anyBoolean(),
                 any(AccountManagerCallback.class),
                 any(Handler.class))).thenReturn(future);
-        when(future.getResult()).thenThrow(new AuthenticatorException());
+        AuthenticatorException exception = new AuthenticatorException();
+        when(future.getResult()).thenThrow(exception);
 
-        assertThat(refresher.refreshOAuth2Token()).isFalse();
+        try {
+            refresher.refreshOAuth2Token();
+            fail("expected exception");
+        } catch (TokenRefreshException e) {
+
+            assertThat(e.getCause()).isSameAs(exception);
+        }
 
         verify(accountManager).invalidateAuthToken(GOOGLE_TYPE, "token");
     }
@@ -91,7 +104,7 @@ public class TokenRefresherTest {
 
         when(future.getResult()).thenReturn(bundle);
 
-        assertThat(refresher.refreshOAuth2Token()).isTrue();
+        refresher.refreshOAuth2Token();
 
         verify(authPreferences).setOauth2Token("username", "newToken");
     }

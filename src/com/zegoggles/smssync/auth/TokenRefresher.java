@@ -34,8 +34,8 @@ public class TokenRefresher {
         this.accountManager = accountManager;
     }
 
-    public boolean refreshOAuth2Token() {
-        if (accountManager == null) return false;
+    public void refreshOAuth2Token() throws TokenRefreshException{
+        if (accountManager == null) throw new TokenRefreshException("account manager is null");
 
         final String token = authPreferences.getOauth2Token();
         final String name  = authPreferences.getUsername();
@@ -56,28 +56,24 @@ public class TokenRefresher {
 
                     if (!TextUtils.isEmpty(newToken)) {
                         authPreferences.setOauth2Token(name, newToken);
-                        return true;
                     } else {
-                        Log.w(TAG, "no new token obtained");
-                        return false;
+                        throw new TokenRefreshException("no new token obtained");
                     }
                 } else {
-                    Log.w(TAG, "no bundle received from accountmanager");
-                    return false;
+                    throw new TokenRefreshException("no bundle received from accountmanager");
                 }
             } catch (OperationCanceledException e) {
                 Log.w(TAG, e);
-                return false;
+                throw new TokenRefreshException(e);
             } catch (IOException e) {
                 Log.w(TAG, e);
-                return false;
+                throw new TokenRefreshException(e);
             } catch (AuthenticatorException e) {
                 Log.w(TAG, e);
-                return false;
+                throw new TokenRefreshException(e);
             }
         } else {
-            Log.w(TAG, "no current token set");
-            return false;
+            throw new TokenRefreshException("no current token set");
         }
     }
 

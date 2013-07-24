@@ -16,6 +16,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.SmsConsts;
+import com.zegoggles.smssync.auth.TokenRefreshException;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
@@ -145,13 +146,16 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private RestoreState handleAuthError(RestoreConfig config, int currentRestoredItem, XOAuth2AuthenticationFailedException e) {
         if (e.getStatus() == 400) {
             Log.d(TAG, "need to perform xoauth2 token refresh");
-            if (config.tries < 1 && tokenRefresher.refreshOAuth2Token()) {
+            if (config.tries < 1) {
                 try {
+                    tokenRefresher.refreshOAuth2Token();
                     // we got a new token, let's retry one more time - we need to pass in a new store object
                     // since the auth params on it are immutable
                     return restore(config.retryWithStore(currentRestoredItem, service.getBackupImapStore()));
                 } catch (MessagingException ignored) {
                     Log.w(TAG, ignored);
+                } catch (TokenRefreshException refreshException) {
+                    Log.w(TAG, refreshException);
                 }
             } else {
                 Log.w(TAG, "no new token obtained, giving up");

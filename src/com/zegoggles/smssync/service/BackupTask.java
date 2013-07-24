@@ -10,6 +10,7 @@ import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.auth.TokenRefreshException;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
@@ -163,13 +164,17 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) {
         if (e.getStatus() == 400) {
             appLogDebug("need to perform xoauth2 token refresh");
-            if (config.currentTry < 1 && tokenRefresher.refreshOAuth2Token()) {
+            if (config.currentTry < 1) {
                 try {
+                    tokenRefresher.refreshOAuth2Token();
                     // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
                     // since the auth params on it are immutable
+                    appLogDebug("token refreshed, retrying");
                     return fetchAndBackupItems(config.retryWithStore(service.getBackupImapStore()));
                 } catch (MessagingException ignored) {
                     Log.w(TAG, ignored);
+                } catch (TokenRefreshException refreshException) {
+                    appLogDebug("error refreshing token: "+refreshException);
                 }
             } else {
                 appLogDebug("no new token obtained, giving up");

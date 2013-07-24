@@ -7,6 +7,7 @@ import android.database.MatrixCursor;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.fsck.k9.mail.internet.MimeMessage;
+import com.zegoggles.smssync.auth.TokenRefreshException;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
@@ -179,7 +180,8 @@ public class BackupTaskTest {
         when(exception.getStatus()).thenReturn(400);
 
         when(store.getFolder(notNull(DataType.class))).thenThrow(exception);
-        when(tokenRefresher.refreshOAuth2Token()).thenReturn(false);
+
+        doThrow(new TokenRefreshException("failed")).when(tokenRefresher).refreshOAuth2Token();
 
         task.doInBackground(config);
 
@@ -199,7 +201,6 @@ public class BackupTaskTest {
         when(exception.getStatus()).thenReturn(400);
 
         when(store.getFolder(notNull(DataType.class))).thenThrow(exception);
-        when(tokenRefresher.refreshOAuth2Token()).thenReturn(true);
         when(service.getBackupImapStore()).thenReturn(store);
 
         task.doInBackground(config);
