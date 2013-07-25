@@ -197,6 +197,7 @@ public class SmsBackupService extends ServiceBase {
                 notifyAboutBackup(state);
             }
         } else {
+            appLogDebug(state.toString());
             appLog(state.isCanceled() ? R.string.app_log_backup_canceled : R.string.app_log_backup_finished);
 
             if (state.backupType == BackupType.REGULAR) {
