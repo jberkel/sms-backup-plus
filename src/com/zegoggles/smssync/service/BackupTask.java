@@ -174,7 +174,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 } catch (MessagingException ignored) {
                     Log.w(TAG, ignored);
                 } catch (TokenRefreshException refreshException) {
-                    appLogDebug("error refreshing token: "+refreshException);
+                    appLogDebug("error refreshing token: "+refreshException+", cause="+refreshException.getCause());
                 }
             } else {
                 appLogDebug("no new token obtained, giving up");
