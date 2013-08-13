@@ -267,7 +267,7 @@
   <string name="ui_restore_settings_label">복원 설정</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
-  <string name="ui_backup_sms_label">MMS 백업</string>
+  <string name="ui_backup_sms_label">SMS 백업</string>
   <string name="ui_backup_sms_desc">SMS 백업 활성화</string>
 
   <string name="ui_restore_sms_label">SMS 복원</string>
