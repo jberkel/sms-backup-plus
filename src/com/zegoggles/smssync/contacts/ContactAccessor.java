@@ -15,8 +15,11 @@
  */
 package com.zegoggles.smssync.contacts;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -27,23 +30,27 @@ public interface ContactAccessor {
      * @param context the context
      * @return the email address of the Android phone owner, or null if not known
      */
+    @SuppressWarnings("UnusedDeclaration")
     String getOwnerEmail(Context context);
 
     /**
-     * @param context the context
+     *
+     * @param resolver the resolver
      * @param group   the group
      * @return All contacts from a group
      */
-    GroupContactIds getGroupContactIds(Context context, ContactGroup group);
+    @Nullable ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group);
 
     /**
      * All groups a user has
      *
-     * @param ctxt the context
+     *
+     *
+     * @param resolver the resolver
+     * @param resources the resources
      * @return the ids and groups
      */
-    Map<Integer, Group> getGroups(Context ctxt);
-
+    Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources);
 
     public static class Get {
         private static ContactAccessor sContactAccessor;

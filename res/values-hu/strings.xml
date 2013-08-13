@@ -299,7 +299,7 @@
   <string name="app_log_backup_finished">Mentés kész</string>
 
   <string name="app_log_backup_failed_authentication">Hitelesítési hiba: %1$s</string>
-  <string name="app_log_backup_failed_messaging">Általános hiba: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Általános hiba: %1$s</string>
   <string name="app_log_backup_failed_connectivity">Mentés kihagyva, nincs kapcsolat</string>
   <string name="app_log_scheduled_next_sync">Következő mentés ütemezve: %1$s</string>
   <string name="app_log_no_next_sync">Nincs új mentés ütemezve</string>

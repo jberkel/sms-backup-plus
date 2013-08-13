@@ -8,9 +8,10 @@ import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.MessageConverter;
+import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
-import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,17 +55,29 @@ public class SmsRestoreService extends ServiceBase {
     protected void handleIntent(final Intent intent) {
         if (isWorking()) return;
         try {
-            final boolean starredOnly = Preferences.isRestoreStarredOnly(service);
+            final boolean starredOnly   = getPreferences().isRestoreStarredOnly();
             final boolean restoreCallLog = CALLLOG.isRestoreEnabled(service);
             final boolean restoreSms     = SMS.isRestoreEnabled(service);
 
-            MessageConverter converter = new MessageConverter(service, AuthPreferences.getUserEmail(service));
+            MessageConverter converter = new MessageConverter(service,
+                    getPreferences(),
+                    getAuthPreferences().getUserEmail(),
+                    new PersonLookup(getContentResolver())
+            );
 
-            new RestoreTask(this,
-                    getBackupImapStore(),
-                    converter,
-                    restoreSms, restoreCallLog, starredOnly).execute(
-                    Preferences.getMaxItemsPerRestore(this));
+            RestoreConfig config = new RestoreConfig(
+                getBackupImapStore(),
+                0,
+                restoreSms,
+                restoreCallLog,
+                starredOnly,
+                getPreferences().getMaxItemsPerRestore(),
+                0
+            );
+
+            new RestoreTask(this, converter, getContentResolver(),
+                    new TokenRefresher(service, new AuthPreferences(this))).execute(config);
+
         } catch (MessagingException e) {
             App.bus.post(mState.transition(ERROR, e));
         }

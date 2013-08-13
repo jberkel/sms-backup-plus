@@ -200,7 +200,7 @@
     <string name="app_log_backup_canceled">Tworzenie kopii anulowane</string>
     <string name="app_log_backup_finished">Tworzenie kopii ukończone</string>
     <string name="app_log_backup_failed_authentication">Błąd autoryzacji: %1$s</string>
-    <string name="app_log_backup_failed_messaging">Błąd: %1$s</string>
+    <string name="app_log_backup_failed_general_error">Błąd: %1$s</string>
     <string name="app_log_backup_failed_connectivity">Pomijam tworzenie kopii, brak połączenia</string>
     <string name="app_log_scheduled_next_sync">Następna planowana kopia zapasowa: %1$s</string>
     <string name="app_log_no_next_sync">Brak zaplanowanych kopii zapasowych</string>

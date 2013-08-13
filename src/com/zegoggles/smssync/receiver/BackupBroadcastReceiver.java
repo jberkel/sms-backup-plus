@@ -28,18 +28,18 @@ public class BackupBroadcastReceiver extends BroadcastReceiver {
     public static final String BACKUP_ACTION = "com.zegoggles.smssync.BACKUP";
 
     @Override
-    public void onReceive(Context ctx, Intent intent) {
-        if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + ctx + "," + intent + ")");
+    public void onReceive(Context context, Intent intent) {
+        if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + context + "," + intent + ")");
 
         if (BACKUP_ACTION.equals(intent.getAction())) {
-            backupRequested(ctx, intent);
+            backupRequested(context, intent);
         }
     }
 
-    private void backupRequested(Context ctx, Intent intent) {
-        if (Preferences.isAllow3rdPartyIntegration(ctx)) {
+    private void backupRequested(Context context, Intent intent) {
+        if (new Preferences(context).isAllow3rdPartyIntegration()) {
             Log.d(TAG, "backup requested via broadcast intent");
-            Alarms.scheduleImmediateBackup(ctx);
+            new Alarms(context).scheduleImmediateBackup();
         } else {
             Log.d(TAG, "backup requested via broadcast intent but ignored");
         }

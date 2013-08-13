@@ -15,8 +15,8 @@
  */
 package com.zegoggles.smssync.calendar;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -33,6 +33,12 @@ public class CalendarAccessorPre40 implements CalendarAccessor {
     private static final Uri CALENDAR_URI = Uri.parse("content://calendar");
     private static final Uri CALENDAR_URI_2_2 = Uri.parse("content://com.android.calendar");
     private static final Uri CALENDAR;
+
+    private ContentResolver resolver;
+
+    public CalendarAccessorPre40(ContentResolver resolver) {
+        this.resolver = resolver;
+    }
 
     static {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
@@ -76,8 +82,12 @@ public class CalendarAccessorPre40 implements CalendarAccessor {
         int STATUS_CANCELED = 2;
     }
 
-    public void addEntry(Context context, int calendarId, Date when, int duration,
-                         String title, String description) {
+    @Override public boolean enableSync(long calendarId) {
+        return false;
+    }
+
+    public boolean addEntry(long calendarId, Date when, int duration,
+                            String title, String description) {
         if (LOCAL_LOGV) {
             Log.v(TAG, String.format("addEntry(%d, %s, %d, %s, %s)",
                     calendarId, when.toString(), duration, title, description));
@@ -93,18 +103,20 @@ public class CalendarAccessorPre40 implements CalendarAccessor {
         contentValues.put(Consts.CALENDAR_ID, calendarId);
 
         try {
-            context.getContentResolver().insert(Uri.withAppendedPath(CALENDAR, "events"), contentValues);
+            resolver.insert(Uri.withAppendedPath(CALENDAR, "events"), contentValues);
+            return true;
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "could not add calendar entry", e);
+            return false;
         }
     }
 
-    public Map<String, String> getCalendars(Context context) {
+    public Map<String, String> getCalendars() {
         final Map<String, String> map = new LinkedHashMap<String, String>();
 
         Cursor cursor = null;
         try {
-            cursor = context.getContentResolver().query(Uri.withAppendedPath(CALENDAR, "calendars"),
+            cursor = resolver.query(Uri.withAppendedPath(CALENDAR, "calendars"),
                     new String[]{"_id", "displayname"},
                     null, null, "displayname ASC");
 

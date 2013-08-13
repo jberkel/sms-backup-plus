@@ -302,7 +302,7 @@
   <string name="app_log_backup_finished">백업 완료됨</string>
 
   <string name="app_log_backup_failed_authentication">인증 에러: %1$s</string>
-  <string name="app_log_backup_failed_messaging">일반적인 에러: %1$s</string>
+  <string name="app_log_backup_failed_general_error">일반적인 에러: %1$s</string>
   <string name="app_log_backup_failed_connectivity">백업 생략, 연결 없음</string>
   <string name="app_log_scheduled_next_sync">다음 백업 예정: %1$s</string>
   <string name="app_log_no_next_sync">새로운 백업 예정 없음</string>

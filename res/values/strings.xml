@@ -134,6 +134,7 @@
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
   <string name="ui_enable_auto_sync_summary">Automatically backup %1$s.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">No item type to backup selected.</string>
 
   <string name="sd_card_disclaimer">Auto backup might not work reliably when app is installed on SD card.</string>
 
@@ -303,11 +304,12 @@
   <string name="app_log_backup_requested">Backup requested (%1$s)</string>
   <string name="app_log_start_backup">Starting backup (%1$s)</string>
   <string name="app_log_backup_messages">Backing up (%1$d SMS, %2$d MMS, %3$d call log)</string>
+  <string name="app_log_backup_messages_with_config">Using config: %1$s</string>
   <string name="app_log_backup_canceled">Backup canceled</string>
   <string name="app_log_backup_finished">Backup finished</string>
 
   <string name="app_log_backup_failed_authentication">Authentication error: %1$s</string>
-  <string name="app_log_backup_failed_messaging">General error: %1$s</string>
+  <string name="app_log_backup_failed_general_error">General error: %1$s</string>
   <string name="app_log_backup_failed_connectivity">Backup skipped, no connectivity</string>
   <string name="app_log_scheduled_next_sync">Next backup scheduled for: %1$s</string>
   <string name="app_log_no_next_sync">No new backup scheduled</string>
@@ -318,6 +320,9 @@
   <string name="pref_app_log">Sync log</string>
   <string name="pref_app_log_enabled">Log is stored on SD card as \"sms_backup_plus.log\".</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="pref_app_log_debug">Extra debug information</string>
+  <string name="pref_app_log_debug_summary">Enables extra debug logging in sync log</string>
 
   <string name="source_incoming">incoming</string>
   <string name="source_regular">regular</string>

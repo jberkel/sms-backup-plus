@@ -1,9 +1,27 @@
-== 1.5.3 (xxx) tbd
+== 1.5.5 (1531) 07-16-2013
 
-  * Korean translation (Yunsu Choi)
-  * Galician translation (Javier Pico)
+  * Fix call logs not getting backed up (#336)
+  * Fix battery drainage
 
-== 1.5.2 (1515) 09-07-2013
+== 1.5.4 (1527) 07-08-2013
+
+  * Fixed MMS not getting backed up (#334)
+  * Fixed folders getting unnecessarily created  (#333)
+  * Fixed contact group id selection
+  * Upgraded whassup to 0.0.5
+  * Various smaller bugfixes
+
+== 1.5.3 (1525) 07-01-2013
+
+  * Fixed calendar syncing (#260)
+  * Fixed call log sync grayed-out option (#308)
+  * Fixed loss of a sms/mms or call log if an exception occurs during backup (#270)
+  * Added sync log debug mode
+  * Added Korean translation (Yunsu Choi)
+  * Added Galician translation (Javier Pico)
+  * Refactored code + added unit tests
+
+== 1.5.2 (1515) 06-09-2013
 
   * Fix notifications getting displayed when not connected to Wifi
   * Fixed greek translation

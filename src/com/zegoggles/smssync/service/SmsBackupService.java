@@ -18,6 +18,7 @@ package com.zegoggles.smssync.service;
 
 import android.app.Notification;
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.text.format.DateFormat;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
@@ -26,30 +27,29 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.preferences.AuthPreferences;
-import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.mail.BackupImapStore;
+import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.service.exception.BackupDisabledException;
+import com.zegoggles.smssync.service.exception.ConnectivityException;
+import com.zegoggles.smssync.service.exception.NoConnectionException;
 import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
+import com.zegoggles.smssync.service.exception.RequiresLoginException;
+import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.BackupState;
+import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
+import java.util.EnumSet;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
-import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
-import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
-import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
+import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
 public class SmsBackupService extends ServiceBase {
     private static final int BACKUP_ID = 1;
-
-    /**
-     * Number of messages sent per sync request.
-     * Changing this value will cause mms/sms messages to thread out of order.
-     */
-    private static final int MAX_MSG_PER_REQUEST = 1;
 
     @Nullable private static SmsBackupService service;
     @NotNull private BackupState mState = new BackupState();
@@ -82,38 +82,95 @@ public class SmsBackupService extends ServiceBase {
 
         appLog(R.string.app_log_backup_requested, getString(backupType.resId));
 
-        if (backupType.isBackground() && !getConnectivityManager().getBackgroundDataSetting()) {
-            appLog(R.string.app_log_skip_backup_background_data);
-
-            App.bus.post(mState.transition(FINISHED_BACKUP, new RequiresBackgroundDataException()));
-        } else if (!isWorking()) {
-            // Only start a backup if there's no other operation going on at this time.
-            if (!SmsRestoreService.isServiceWorking()) {
-                // set initial state
-                mState = new BackupState(INITIAL, 0, 0, backupType, null, null);
-
-                try {
-                    BackupConfig config = new BackupConfig(
-                            getBackupImapStore(),
-                            0,
-                            intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false),
-                            Preferences.getMaxItemsPerSync(service),
-                            Preferences.getBackupContactGroup(service),
-                            MAX_MSG_PER_REQUEST,
-                            backupType);
-
-                    appLog(R.string.app_log_start_backup, backupType);
-                    new BackupTask(this).execute(config);
-                } catch (MessagingException e) {
-                    App.bus.post(mState.transition(ERROR, e));
-                }
-            } else {
-                // restore is already running
-                App.bus.post(mState.transition(ERROR, null));
-            }
+        // Only start a backup if there's no other operation going on at this time.
+        if (!isWorking() && !SmsRestoreService.isServiceWorking()) {
+            backup(backupType, intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false));
         } else {
             appLog(R.string.app_log_skip_backup_already_running);
         }
+    }
+
+    private void backup(BackupType backupType, boolean skip) {
+        try {
+            // set initial state
+            mState = new BackupState(INITIAL, 0, 0, backupType, null, null);
+            EnumSet<DataType> enabledTypes = getEnabledBackupTypes();
+            if (!skip) {
+                checkCredentials();
+                checkBackgroundDataSettings(backupType);
+                checkConnectivity();
+            }
+
+            appLog(R.string.app_log_start_backup, backupType);
+            getBackupTask().execute(getBackupConfig(backupType, enabledTypes, getBackupImapStore(), skip));
+        } catch (MessagingException e) {
+            Log.w(TAG, e);
+            moveToState(mState.transition(ERROR, e));
+        } catch (RequiresBackgroundDataException e) {
+            moveToState(mState.transition(ERROR, e));
+        } catch (ConnectivityException e) {
+            moveToState(mState.transition(ERROR, e));
+        } catch (RequiresLoginException e) {
+            appLog(R.string.app_log_missing_credentials);
+            moveToState(mState.transition(ERROR, e));
+        } catch (BackupDisabledException e) {
+            moveToState(mState.transition(FINISHED_BACKUP, e));
+        }
+    }
+
+    private BackupConfig getBackupConfig(BackupType backupType,
+                                         EnumSet<DataType> enabledTypes,
+                                         BackupImapStore imapStore,
+                                         boolean skip) {
+        return new BackupConfig(
+            imapStore,
+            0,
+            skip,
+            getPreferences().getMaxItemsPerSync(),
+            getPreferences().getBackupContactGroup(),
+            backupType,
+            enabledTypes,
+            getPreferences().isAppLogDebug()
+        );
+    }
+
+    private EnumSet<DataType> getEnabledBackupTypes() throws BackupDisabledException {
+        EnumSet<DataType> dataTypes = DataType.enabled(this);
+        if (dataTypes.isEmpty()) {
+            throw new BackupDisabledException();
+        }
+        return dataTypes;
+    }
+
+    private void checkCredentials() throws RequiresLoginException {
+        if (!getAuthPreferences().isLoginInformationSet()) {
+            throw new RequiresLoginException();
+        }
+    }
+
+    private void checkBackgroundDataSettings(BackupType backupType) throws RequiresBackgroundDataException {
+        if (backupType.isBackground() && !getConnectivityManager().getBackgroundDataSetting()) {
+            throw new RequiresBackgroundDataException();
+        }
+    }
+
+    private void checkConnectivity() throws ConnectivityException {
+        NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
+        if (active == null || !active.isConnectedOrConnecting()) {
+            throw new NoConnectionException();
+        }
+        if (getPreferences().isWifiOnly() && isBackgroundTask() && !isConnectedViaWifi()) {
+            throw new RequiresWifiException();
+        }
+    }
+
+    protected BackupTask getBackupTask() {
+        return new BackupTask(this);
+    }
+
+    private void moveToState(BackupState state) {
+        backupStateChanged(state);
+        App.bus.post(state);
     }
 
     @Override
@@ -126,6 +183,8 @@ public class SmsBackupService extends ServiceBase {
     }
 
     @Subscribe public void backupStateChanged(BackupState state) {
+        if (mState == state) return;
+
         mState = state;
         if (mState.isInitialState()) return;
 
@@ -138,6 +197,7 @@ public class SmsBackupService extends ServiceBase {
                 notifyAboutBackup(state);
             }
         } else {
+            appLogDebug(state.toString());
             appLog(state.isCanceled() ? R.string.app_log_backup_canceled : R.string.app_log_backup_finished);
 
             if (state.backupType == BackupType.REGULAR) {
@@ -151,17 +211,17 @@ public class SmsBackupService extends ServiceBase {
 
     private void handleErrorState(BackupState state) {
         if (state.isAuthException()) {
-            appLog(R.string.app_log_backup_failed_authentication, state.getErrorMessage(getResources()));
+            appLog(R.string.app_log_backup_failed_authentication, state.getDetailedErrorMessage(getResources()));
 
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
                     getString(R.string.notification_auth_failure),
-                    getString(AuthPreferences.useXOAuth(this) ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain));
+                    getString(getAuthPreferences().useXOAuth() ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain));
             }
         } else if (state.isConnectivityError()) {
-            appLog(R.string.app_log_backup_failed_connectivity, state.getErrorMessage(getResources()));
+            appLog(R.string.app_log_backup_failed_connectivity, state.getDetailedErrorMessage(getResources()));
         } else {
-            appLog(R.string.app_log_backup_failed_messaging, state.getErrorMessage(getResources()));
+            appLog(R.string.app_log_backup_failed_general_error, state.getDetailedErrorMessage(getResources()));
 
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
@@ -173,7 +233,7 @@ public class SmsBackupService extends ServiceBase {
 
     private boolean shouldNotifyUser(BackupState state) {
         return state.backupType == MANUAL ||
-               (Preferences.isNotificationEnabled(this) && !state.isConnectivityError());
+               (getPreferences().isNotificationEnabled() && !state.isConnectivityError());
     }
 
     private void notifyAboutBackup(BackupState state) {
@@ -189,7 +249,7 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void scheduleNextBackup() {
-        final long nextSync = Alarms.scheduleRegularBackup(service);
+        final long nextSync = getAlarms().scheduleRegularBackup();
         if (nextSync >= 0) {
             appLog(R.string.app_log_scheduled_next_sync,
                     DateFormat.format("kk:mm", new Date(nextSync)));
@@ -211,7 +271,15 @@ public class SmsBackupService extends ServiceBase {
         getNotifier().notify(0, n);
     }
 
+    protected Alarms getAlarms() {
+        return new Alarms(this);
+    }
+
     public static boolean isServiceWorking() {
         return service != null && service.isWorking();
+    }
+
+    public BackupState transition(SmsSyncState newState, Exception e) {
+        return mState.transition(newState, e);
     }
 }

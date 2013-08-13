@@ -30,96 +30,115 @@ import com.zegoggles.smssync.mail.DataType;
 import java.util.Locale;
 
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.*;
 
 public class Preferences {
-    public static final String ENABLE_AUTO_BACKUP = "enable_auto_sync";
+    private final Context context;
+    private final SharedPreferences preferences;
 
-    public static final String INCOMING_TIMEOUT_SECONDS = "auto_backup_incoming_schedule";
-    public static final String REGULAR_TIMEOUT_SECONDS = "auto_backup_schedule";
-
-    public static final String MAX_ITEMS_PER_SYNC = "max_items_per_sync";
-    public static final String MAX_ITEMS_PER_RESTORE = "max_items_per_restore";
-
-    public static final String CALLLOG_SYNC_CALENDAR = "backup_calllog_sync_calendar";
-    public static final String CALLLOG_SYNC_CALENDAR_ENABLED = "backup_calllog_sync_calendar_enabled";
-
-    public static final String BACKUP_CONTACT_GROUP = "backup_contact_group";
-
-    public static final String CONNECTED = "connected";
-    public static final String WIFI_ONLY = "wifi_only";
-
-    private static final String REFERENCE_UID = "reference_uid";
-    private static final String MAIL_SUBJECT_PREFIX = "mail_subject_prefix";
-    private static final String RESTORE_STARRED_ONLY = "restore_starred_only";
-    private static final String MARK_AS_READ = "mark_as_read";
-    private static final String MARK_AS_READ_ON_RESTORE = "mark_as_read_on_restore";
-    private static final String THIRD_PARTY_INTEGRATION = "third_party_integration";
-    private static final String APP_LOG = "app_log";
-    private static final String LAST_VERSION_CODE = "last_version_code";
-    private static final String CONFIRM_ACTION = "confirm_action";
-    private static final String NOTIFICATIONS = "notifications";
-    private static final String FIRST_USE = "first_use";
-
-
-    public static boolean isAppLogEnabled(Context ctx) {
-        return prefs(ctx).getBoolean(APP_LOG, false);
+    public Preferences(Context context) {
+        this.context = context.getApplicationContext();
+        this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
     }
 
-    static SharedPreferences prefs(Context ctx) {
-        return PreferenceManager.getDefaultSharedPreferences(ctx);
+    public enum Keys {
+        ENABLE_AUTO_BACKUP("enable_auto_sync"),
+        INCOMING_TIMEOUT_SECONDS("auto_backup_incoming_schedule"),
+        REGULAR_TIMEOUT_SECONDS ("auto_backup_schedule"),
+        MAX_ITEMS_PER_SYNC("max_items_per_sync"),
+        MAX_ITEMS_PER_RESTORE ("max_items_per_restore"),
+        CALLLOG_SYNC_CALENDAR ("backup_calllog_sync_calendar"),
+        CALLLOG_SYNC_CALENDAR_ENABLED ("backup_calllog_sync_calendar_enabled"),
+        BACKUP_CONTACT_GROUP("backup_contact_group"),
+        CONNECTED("connected"),
+        WIFI_ONLY("wifi_only"),
+        REFERENCE_UID("reference_uid"),
+        MAIL_SUBJECT_PREFIX("mail_subject_prefix"),
+        RESTORE_STARRED_ONLY("restore_starred_only"),
+        MARK_AS_READ("mark_as_read"),
+        MARK_AS_READ_ON_RESTORE("mark_as_read_on_restore"),
+        THIRD_PARTY_INTEGRATION("third_party_integration"),
+        APP_LOG("app_log"),
+        APP_LOG_DEBUG("app_log_debug"),
+        LAST_VERSION_CODE("last_version_code"),
+        CONFIRM_ACTION("confirm_action"),
+        NOTIFICATIONS("notifications"),
+        FIRST_USE("first_use"),
+        IMAP_SETTINGS("imap_settings"),
+        DONATE("donate"),
+        BACKUP_SETTINGS_SCREEN("auto_backup_settings_screen"),
+        ;
+
+        public final String key;
+        private Keys(String key) {
+            this.key = key;
+        }
     }
 
-    public static ContactGroup getBackupContactGroup(Context ctx) {
-        return new ContactGroup(getStringAsInt(ctx, BACKUP_CONTACT_GROUP, -1));
+    public boolean isAppLogEnabled() {
+        return preferences.getBoolean(APP_LOG.key, false);
     }
 
-    public static boolean isCallLogCalendarSyncEnabled(Context ctx) {
-        return getCallLogCalendarId(ctx) >= 0 &&
-                        prefs(ctx).getBoolean(CALLLOG_SYNC_CALENDAR_ENABLED, false);
+    public boolean isAppLogDebug() {
+        return  isAppLogEnabled() &&
+                preferences.getBoolean(APP_LOG_DEBUG.key, false);
+    }
+
+    public ContactGroup getBackupContactGroup() {
+        return new ContactGroup(getStringAsInt(BACKUP_CONTACT_GROUP, -1));
+    }
+
+    public boolean isCallLogCalendarSyncEnabled() {
+        return getCallLogCalendarId() >= 0 &&
+                    preferences.getBoolean(CALLLOG_SYNC_CALENDAR_ENABLED.key, false);
     }
 
 
-    public static int getCallLogCalendarId(Context ctx) {
-        return getStringAsInt(ctx, CALLLOG_SYNC_CALENDAR, -1);
+    public int getCallLogCalendarId() {
+        return getStringAsInt(CALLLOG_SYNC_CALENDAR, -1);
     }
 
-    public static boolean isRestoreStarredOnly(Context ctx) {
-        return prefs(ctx).getBoolean(RESTORE_STARRED_ONLY, false);
+    public boolean isRestoreStarredOnly() {
+        return preferences.getBoolean(RESTORE_STARRED_ONLY.key, false);
     }
 
-    public static String getReferenceUid(Context ctx) {
-        return prefs(ctx).getString(REFERENCE_UID, null);
+    public String getReferenceUid() {
+        return preferences.getString(REFERENCE_UID.key, null);
     }
 
-    public static void setReferenceUid(Context ctx, String referenceUid) {
-        prefs(ctx).edit()
-                .putString(REFERENCE_UID, referenceUid)
+    public void setReferenceUid(String referenceUid) {
+        preferences.edit()
+                .putString(REFERENCE_UID.key, referenceUid)
                 .commit();
     }
 
-    public static boolean getMailSubjectPrefix(Context ctx) {
-        return prefs(ctx).getBoolean(MAIL_SUBJECT_PREFIX, Defaults.MAIL_SUBJECT_PREFIX);
+    public boolean getMailSubjectPrefix() {
+        return preferences.getBoolean(MAIL_SUBJECT_PREFIX.key, Defaults.MAIL_SUBJECT_PREFIX);
     }
 
-    public static int getMaxItemsPerSync(Context ctx) {
-        return getStringAsInt(ctx, MAX_ITEMS_PER_SYNC, Defaults.MAX_ITEMS_PER_SYNC);
+    public int getMaxItemsPerSync() {
+        return getStringAsInt(MAX_ITEMS_PER_SYNC, Defaults.MAX_ITEMS_PER_SYNC);
     }
 
-    public static int getMaxItemsPerRestore(Context ctx) {
-        return getStringAsInt(ctx, MAX_ITEMS_PER_RESTORE, Defaults.MAX_ITEMS_PER_RESTORE);
+    public int getMaxItemsPerRestore() {
+        return getStringAsInt(MAX_ITEMS_PER_RESTORE, Defaults.MAX_ITEMS_PER_RESTORE);
     }
 
-    public static boolean isWifiOnly(Context ctx) {
-        return prefs(ctx).getBoolean(WIFI_ONLY, false);
+    public boolean isWifiOnly() {
+        return preferences.getBoolean(WIFI_ONLY.key, false);
     }
 
-    public static boolean isAllow3rdPartyIntegration(Context ctx) {
-        return prefs(ctx).getBoolean(THIRD_PARTY_INTEGRATION, false);
+    public boolean isAllow3rdPartyIntegration() {
+        return preferences.getBoolean(THIRD_PARTY_INTEGRATION.key, false);
     }
 
-    private static int getStringAsInt(Context ctx, String key, int def) {
+    private int getStringAsInt(Keys key, int def) {
+        return getStringAsInt(key.key, def);
+    }
+
+    private int getStringAsInt(String key, int def) {
         try {
-            String s = prefs(ctx).getString(key, null);
+            String s = preferences.getString(key, null);
             if (s == null) return def;
 
             return Integer.valueOf(s);
@@ -128,57 +147,53 @@ public class Preferences {
         }
     }
 
-    public static boolean isValidImapFolder(String imapFolder) {
-        return !(imapFolder == null || imapFolder.length() == 0) &&
-                !(imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ');
+    public boolean isEnableAutoSync() {
+        return preferences.getBoolean(ENABLE_AUTO_BACKUP.key, Defaults.ENABLE_AUTO_SYNC);
     }
 
-    public static boolean isEnableAutoSync(Context ctx) {
-        return prefs(ctx).getBoolean(ENABLE_AUTO_BACKUP, Defaults.ENABLE_AUTO_SYNC);
+    public int getIncomingTimeoutSecs() {
+        return getStringAsInt(INCOMING_TIMEOUT_SECONDS, Defaults.INCOMING_TIMEOUT_SECONDS);
     }
 
-    public static int getIncomingTimeoutSecs(Context ctx) {
-        return getStringAsInt(ctx, INCOMING_TIMEOUT_SECONDS, Defaults.INCOMING_TIMEOUT_SECONDS);
+    public int getRegularTimeoutSecs() {
+        return getStringAsInt(REGULAR_TIMEOUT_SECONDS, Defaults.REGULAR_TIMEOUT_SECONDS);
     }
 
-    public static int getRegularTimeoutSecs(Context ctx) {
-        return getStringAsInt(ctx, REGULAR_TIMEOUT_SECONDS, Defaults.REGULAR_TIMEOUT_SECONDS);
+    public boolean getMarkAsRead() {
+        return preferences.getBoolean(MARK_AS_READ.key, Defaults.MARK_AS_READ);
     }
 
-    public static boolean getMarkAsRead(Context ctx) {
-        return prefs(ctx).getBoolean(MARK_AS_READ, Defaults.MARK_AS_READ);
+    public boolean getMarkAsReadOnRestore() {
+        return preferences.getBoolean(MARK_AS_READ_ON_RESTORE.key, Defaults.MARK_AS_READ_ON_RESTORE);
     }
 
-    public static boolean getMarkAsReadOnRestore(Context ctx) {
-        return prefs(ctx).getBoolean(MARK_AS_READ_ON_RESTORE, Defaults.MARK_AS_READ_ON_RESTORE);
+    public boolean isFirstBackup() {
+        for (DataType type : DataType.values()) {
+            if (preferences.contains(type.maxSyncedPreference)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public static boolean isFirstBackup(Context ctx) {
-        SharedPreferences prefs = prefs(ctx);
-        return !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_SMS) &&
-               !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_MMS) &&
-               !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_CALLLOG) &&
-               !prefs.contains(DataType.PreferenceKeys.MAX_SYNCED_DATE_WHATSAPP);
-    }
-
-    public static boolean isFirstUse(Context ctx) {
-        if (isFirstBackup(ctx) && !prefs(ctx).contains(FIRST_USE)) {
-            prefs(ctx).edit().putBoolean(FIRST_USE, false).commit();
+    public boolean isFirstUse() {
+        if (isFirstBackup() && !preferences.contains(FIRST_USE.key)) {
+            preferences.edit().putBoolean(FIRST_USE.key, false).commit();
             return true;
         } else {
             return false;
         }
     }
 
-    public static boolean isNotificationEnabled(Context ctx) {
-        return prefs(ctx).getBoolean(NOTIFICATIONS, false);
+    public boolean isNotificationEnabled() {
+        return preferences.getBoolean(NOTIFICATIONS.key, false);
     }
 
-    public static boolean confirmAction(Context ctx) {
-        return prefs(ctx).getBoolean(CONFIRM_ACTION, false);
+    public boolean confirmAction() {
+        return preferences.getBoolean(CONFIRM_ACTION.key, false);
     }
 
-    public static String getVersion(Context context, boolean code) {
+    public String getVersion(boolean code) {
         PackageInfo pInfo;
         try {
             pInfo = context.getPackageManager().getPackageInfo(
@@ -192,7 +207,7 @@ public class Preferences {
     }
 
     @TargetApi(8)
-    public static boolean isInstalledOnSDCard(Context context) {
+    public boolean isInstalledOnSDCard() {
         PackageInfo pInfo;
         try {
             pInfo = context.getPackageManager().getPackageInfo(
@@ -206,22 +221,22 @@ public class Preferences {
         }
     }
 
-    public static boolean showUpgradeMessage(Context ctx) {
+    public boolean shouldShowUpgradeMessage() {
         final String key = "upgrade_message_seen";
-        boolean seen = prefs(ctx).getBoolean(key, false);
-        if (!seen && isOldSmsBackupInstalled(ctx)) {
-            prefs(ctx).edit().putBoolean(key, true).commit();
+        boolean seen = preferences.getBoolean(key, false);
+        if (!seen && isOldSmsBackupInstalled()) {
+            preferences.edit().putBoolean(key, true).commit();
             return true;
         } else {
             return false;
         }
     }
 
-    public static boolean showAboutDialog(Context ctx) {
+    public boolean shouldShowAboutDialog() {
         int code;
         try {
-            PackageInfo pInfo = ctx.getPackageManager().getPackageInfo(
-                    ctx.getPackageName(),
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(
+                    context.getPackageName(),
                     PackageManager.GET_META_DATA);
             code = pInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
@@ -229,16 +244,16 @@ public class Preferences {
             code = -1;
         }
 
-        int lastSeenCode = prefs(ctx).getInt(LAST_VERSION_CODE, -1);
+        int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, -1);
         if (lastSeenCode < code) {
-            prefs(ctx).edit().putInt(LAST_VERSION_CODE, code).commit();
+            preferences.edit().putInt(LAST_VERSION_CODE.key, code).commit();
             return true;
         } else {
             return false;
         }
     }
 
-    static boolean isOldSmsBackupInstalled(Context context) {
+    boolean isOldSmsBackupInstalled() {
         try {
             context.getPackageManager().getPackageInfo(
                     "tv.studer.smssync",
@@ -249,7 +264,7 @@ public class Preferences {
         }
     }
 
-    static boolean isWhatsAppInstalled(Context context) {
+    boolean isWhatsAppInstalled() {
         try {
             context.getPackageManager().getPackageInfo(
                     "com.whatsapp",
@@ -261,13 +276,13 @@ public class Preferences {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public static boolean isWhatsAppInstalledAndPrefNotSet(Context context) {
-        return isWhatsAppInstalled(context) && !prefs(context).contains(DataType.WHATSAPP.backupEnabledPreference);
+    public boolean isWhatsAppInstalledAndPrefNotSet() {
+        return isWhatsAppInstalled() && !preferences.contains(DataType.WHATSAPP.backupEnabledPreference);
     }
 
-    static <T extends Enum<T>> T getDefaultType(Context ctx, String pref, Class<T> tClazz, T defaultType) {
+    <T extends Enum<T>> T getDefaultType(String pref, Class<T> tClazz, T defaultType) {
         try {
-            final String s = prefs(ctx).getString(pref, null);
+            final String s = preferences.getString(pref, null);
             return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase(Locale.ENGLISH));
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "getDefaultType(" + pref + ")", e);

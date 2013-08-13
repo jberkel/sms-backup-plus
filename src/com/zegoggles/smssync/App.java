@@ -26,14 +26,14 @@ import org.acra.annotation.ReportsCrashes;
 public class App extends Application {
     public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final boolean LOCAL_LOGV = DEBUG;
-    public static final String TAG = "SmsBackup+";
+    public static final String TAG = "SMSBackup+";
     public static final String LOG = "sms_backup_plus.log";
 
     public static final Bus bus = new Bus();
 
     @Override
     public void onCreate() {
-        ACRA.init(this);
+        if (!BuildConfig.DEBUG) ACRA.init(this);
         super.onCreate();
         K9.app = this;
         K9.DEBUG = DEBUG;

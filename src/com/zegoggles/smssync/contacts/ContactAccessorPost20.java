@@ -18,7 +18,9 @@ package com.zegoggles.smssync.contacts;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.Data;
@@ -28,9 +30,6 @@ import com.zegoggles.smssync.R;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * @noinspection UnusedDeclaration
- */
 @TargetApi(5)
 public class ContactAccessorPost20 implements ContactAccessor {
     public String getOwnerEmail(Context context) {
@@ -41,35 +40,33 @@ public class ContactAccessorPost20 implements ContactAccessor {
         return null;
     }
 
-    public GroupContactIds getGroupContactIds(Context context, ContactGroup group) {
-        final GroupContactIds contactIds = new GroupContactIds();
-        Cursor c = null;
-        switch (group.type) {
-            case GROUP:
-                c = context.getContentResolver().query(
-                        Data.CONTENT_URI,
-                        new String[]{GroupMembership.CONTACT_ID, GroupMembership.RAW_CONTACT_ID,
-                                GroupMembership.GROUP_ROW_ID},
-                        GroupMembership.GROUP_ROW_ID + " = ? AND " + GroupMembership.MIMETYPE + " = ?",
-                        new String[]{String.valueOf(group._id), GroupMembership.CONTENT_ITEM_TYPE},
-                        null);
-                break;
-        }
-        while (c != null && c.moveToNext()) {
-            contactIds.ids.add(c.getLong(0));
-            contactIds.rawIds.add(c.getLong(1));
-        }
+    public ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
+        if (group.isEveryBody()) return null;
 
+        final ContactGroupIds contactIds = new ContactGroupIds();
+        Cursor c = resolver.query(
+                Data.CONTENT_URI,
+                new String[]{
+                        GroupMembership.CONTACT_ID,
+                        GroupMembership.RAW_CONTACT_ID,
+                        GroupMembership.GROUP_ROW_ID
+                },
+                GroupMembership.GROUP_ROW_ID + " = ? AND " + GroupMembership.MIMETYPE + " = ?",
+                new String[]{String.valueOf(group._id), GroupMembership.CONTENT_ITEM_TYPE},
+                null);
+        while (c != null && c.moveToNext()) {
+            contactIds.add(c.getLong(0), c.getLong(1));
+        }
         if (c != null) c.close();
         return contactIds;
     }
 
-    public Map<Integer, Group> getGroups(Context context) {
+    public Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources) {
         final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
 
-        map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, context.getString(R.string.everybody), 0));
+        map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, resources.getString(R.string.everybody), 0));
 
-        final Cursor c = context.getContentResolver().query(
+        final Cursor c = resolver.query(
                 Groups.CONTENT_SUMMARY_URI,
                 new String[]{Groups._ID, Groups.TITLE, Groups.SUMMARY_COUNT},
                 null,

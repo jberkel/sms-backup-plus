@@ -1,64 +1,96 @@
 package com.zegoggles.smssync.service;
 
-import android.database.Cursor;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
-import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.auth.TokenRefreshException;
+import com.zegoggles.smssync.auth.TokenRefresher;
+import com.zegoggles.smssync.calendar.CalendarAccessor;
+import com.zegoggles.smssync.contacts.ContactAccessor;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
+import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.CallFormatter;
 import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
+import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.exception.ConnectivityException;
-import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.refreshOAuth2Token;
 import static com.zegoggles.smssync.mail.DataType.*;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
-/**
- * BackupTask does all the work
- */
 class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final SmsBackupService service;
     private final BackupItemsFetcher fetcher;
     private final MessageConverter converter;
     private final CalendarSyncer calendarSyncer;
+    private final AuthPreferences authPreferences;
+    private final Preferences preferences;
+    private final ContactAccessor contactAccessor;
+    private final TokenRefresher tokenRefresher;
+
 
     BackupTask(@NotNull SmsBackupService service) {
+        final Context context = service.getApplicationContext();
         this.service = service;
-        this.fetcher = new BackupItemsFetcher(service,
-                new BackupQueryBuilder(service, service.getContacts()));
-        this.converter = new MessageConverter(service, AuthPreferences.getUserEmail(service));
+        this.authPreferences = service.getAuthPreferences();
+        this.preferences = service.getPreferences();
 
-        if (Preferences.isCallLogCalendarSyncEnabled(service)) {
+        this.fetcher = new BackupItemsFetcher(context,
+                context.getContentResolver(),
+                new BackupQueryBuilder(context));
+
+        PersonLookup personLookup = new PersonLookup(service.getContentResolver());
+
+        this.converter = new MessageConverter(context, preferences, authPreferences.getUserEmail(), personLookup);
+        this.contactAccessor = ContactAccessor.Get.instance();
+
+        if (preferences.isCallLogCalendarSyncEnabled()) {
             calendarSyncer = new CalendarSyncer(
-                service,
-                service.getCalendars(),
-                Preferences.getCallLogCalendarId(service),
-                converter.getPersonLookup(),
-                new CallFormatter(service.getResources())
+                CalendarAccessor.Get.instance(service.getContentResolver()),
+                preferences.getCallLogCalendarId(),
+                personLookup,
+                new CallFormatter(context.getResources())
             );
+
         } else {
             calendarSyncer = null;
         }
+        this.tokenRefresher = new TokenRefresher(service, authPreferences);
+    }
+
+    BackupTask(SmsBackupService service,
+               BackupItemsFetcher fetcher,
+               MessageConverter messageConverter,
+               CalendarSyncer syncer,
+               AuthPreferences authPreferences,
+               Preferences preferences,
+               ContactAccessor accessor,
+               TokenRefresher refresher) {
+        this.service = service;
+        this.fetcher = fetcher;
+        this.converter = messageConverter;
+        this.calendarSyncer = syncer;
+        this.authPreferences = authPreferences;
+        this.preferences = preferences;
+        this.contactAccessor = accessor;
+        this.tokenRefresher = refresher;
     }
 
     @Override
@@ -70,56 +102,44 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         cancel(false);
     }
 
-    @Override
-    protected BackupState doInBackground(BackupConfig... params) {
+    @Override protected BackupState doInBackground(BackupConfig... params) {
+        if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
         final BackupConfig config = params[0];
         if (config.skip) {
-            appLog(R.string.app_log_skip_backup_skip_messages);
-            for (DataType type : new DataType[] { SMS, MMS, CALLLOG }) {
-                type.setMaxSyncedDate(service, fetcher.getMaxData(type));
-            }
-            Log.i(TAG, "All messages skipped.");
-            return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
+            return skip(config.typesToBackup);
+        } else {
+            return acquireLocksAndBackup(config);
         }
+    }
 
-        Cursor smsItems = null;
-        Cursor mmsItems = null;
-        Cursor callLogItems = null;
-        Cursor whatsAppItems = null;
-        final int smsCount, mmsCount, callLogCount, whatsAppItemsCount;
+    private BackupState acquireLocksAndBackup(BackupConfig config) {
         try {
             service.acquireLocks();
-            int max = config.maxItemsPerSync;
+            return fetchAndBackupItems(config);
+        } finally {
+            service.releaseLocks();
+        }
+    }
 
-            smsItems = fetcher.getItemsForDataType(SMS, config.groupToBackup, max);
-            smsCount = smsItems != null ? smsItems.getCount() : 0;
-            max -= smsCount;
+    private BackupState fetchAndBackupItems(BackupConfig config) {
+        BackupCursors cursors = null;
+        try {
+            final ContactGroupIds groupIds = contactAccessor.getGroupContactIds(service.getContentResolver(), config.groupToBackup);
 
-            mmsItems = fetcher.getItemsForDataType(MMS, config.groupToBackup, max);
-            mmsCount = mmsItems != null ? mmsItems.getCount() : 0;
-            max -= mmsCount;
-
-            callLogItems = fetcher.getItemsForDataType(CALLLOG, config.groupToBackup, max);
-            callLogCount = callLogItems != null ? callLogItems.getCount() : 0;
-            max -= callLogCount;
-
-            whatsAppItems = fetcher.getItemsForDataType(DataType.WHATSAPP, config.groupToBackup, max);
-            whatsAppItemsCount = whatsAppItems != null ? whatsAppItems.getCount() : 0;
-
-            final int itemsToSync = smsCount + mmsCount + callLogCount + whatsAppItemsCount;
+            cursors = new BulkFetcher(fetcher).fetch(config.typesToBackup, groupIds, config.maxItemsPerSync);
+            final int itemsToSync = cursors.count();
 
             if (itemsToSync > 0) {
-                if (!AuthPreferences.isLoginInformationSet(service)) {
-                    appLog(R.string.app_log_missing_credentials);
-                    return transition(ERROR, new RequiresLoginException());
-                } else {
-                    appLog(R.string.app_log_backup_messages, smsCount, mmsCount, callLogCount);
-                    return backup(config, smsItems, mmsItems, callLogItems, whatsAppItems, itemsToSync);
+                appLog(R.string.app_log_backup_messages, cursors.count(SMS), cursors.count(MMS), cursors.count(CALLLOG));
+                if (config.debug) {
+                    appLog(R.string.app_log_backup_messages_with_config, config);
                 }
+
+                return backupCursors(cursors, config.imapStore, config.backupType, itemsToSync);
             } else {
                 appLog(R.string.app_log_skip_backup_no_items);
 
-                if (Preferences.isFirstBackup(service)) {
+                if (preferences.isFirstBackup()) {
                     // If this is the first backup we need to write something to MAX_SYNCED_DATE
                     // such that we know that we've performed a backup before.
                     SMS.setMaxSyncedDate(service, Defaults.MAX_SYNCED_DATE);
@@ -129,53 +149,66 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 return transition(FINISHED_BACKUP, null);
             }
         } catch (XOAuth2AuthenticationFailedException e) {
-            if (e.getStatus() == 400) {
-                Log.d(TAG, "need to perform xoauth2 token refresh");
-                if (config.tries < 1 && refreshOAuth2Token(service)) {
-                    try {
-                        // we got a new token, let's retry one more time - we need to pass in a new store object
-                        // since the auth params on it are immutable
-                        return doInBackground(config.retryWithStore(service.getBackupImapStore()));
-                    } catch (MessagingException ignored) {
-                        Log.w(TAG, ignored);
-                    }
-                } else {
-                    Log.w(TAG, "no new token obtained, giving up");
-                }
-            } else {
-                Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
-            }
-            return transition(ERROR, e);
+            return handleAuthError(config, e);
         } catch (AuthenticationFailedException e) {
             return transition(ERROR, e);
         } catch (MessagingException e) {
             return transition(ERROR, e);
-        } catch (ConnectivityException e) {
-            return transition(ERROR, e);
         } finally {
-            service.releaseLocks();
-            try {
-                if (smsItems != null) smsItems.close();
-                if (mmsItems != null) mmsItems.close();
-                if (callLogItems != null) callLogItems.close();
-                if (whatsAppItems != null) whatsAppItems.close();
-            } catch (Exception ignore) {
-                Log.e(TAG, "error", ignore);
+            if (cursors != null) {
+                cursors.close();
             }
         }
+    }
+
+    private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) {
+        if (e.getStatus() == 400) {
+            appLogDebug("need to perform xoauth2 token refresh");
+            if (config.currentTry < 1) {
+                try {
+                    tokenRefresher.refreshOAuth2Token();
+                    // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
+                    // since the auth params on it are immutable
+                    appLogDebug("token refreshed, retrying");
+                    return fetchAndBackupItems(config.retryWithStore(service.getBackupImapStore()));
+                } catch (MessagingException ignored) {
+                    Log.w(TAG, ignored);
+                } catch (TokenRefreshException refreshException) {
+                    appLogDebug("error refreshing token: "+refreshException+", cause="+refreshException.getCause());
+                }
+            } else {
+                appLogDebug("no new token obtained, giving up");
+            }
+        } else {
+            appLogDebug("unexpected xoauth status code " + e.getStatus());
+        }
+        return transition(ERROR, e);
+    }
+
+    private BackupState skip(Iterable<DataType> types) {
+        appLog(R.string.app_log_skip_backup_skip_messages);
+        for (DataType type : types) {
+            type.setMaxSyncedDate(service, fetcher.getMostRecentTimestamp(type));
+        }
+        Log.i(TAG, "All messages skipped.");
+        return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
     }
 
     private void appLog(int id, Object... args) {
         service.appLog(id, args);
     }
 
+    private void appLogDebug(String message, Object... args) {
+        service.appLogDebug(message, args);
+    }
+
     private BackupState transition(SmsSyncState smsSyncState, Exception exception) {
-        return service.getState().transition(smsSyncState, exception);
+        return service.transition(smsSyncState, exception);
     }
 
     @Override
     protected void onProgressUpdate(BackupState... progress) {
-        if (progress != null  && progress.length > 0 && !isCancelled()) {
+        if (progress != null && progress.length > 0 && !isCancelled()) {
             post(progress[0]);
         }
     }
@@ -195,85 +228,53 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private void post(BackupState state) {
+        if (state == null) return;
         App.bus.post(state);
     }
 
-    private BackupState backup(BackupConfig config,
-                               @Nullable Cursor smsItems,
-                               @Nullable Cursor mmsItems,
-                               @Nullable Cursor callLogItems,
-                               @Nullable Cursor whatsAppItems,
-                               final int itemsToSync) throws MessagingException {
+    private BackupState backupCursors(BackupCursors cursors, BackupImapStore store, BackupType backupType, int itemsToSync)
+            throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
-
         publish(LOGIN);
-
-        Folder smsmmsfolder   = (smsItems != null || mmsItems != null) ? config.imap.getFolder(SMS) : null;
-        Folder callLogfolder  = callLogItems  != null ?  config.imap.getFolder(CALLLOG) : null;
-        Folder whatsAppFolder = whatsAppItems != null ? config.imap.getFolder(WHATSAPP) : null;
+        store.checkSettings();
 
         try {
-            Cursor curCursor;
-            DataType dataType = null;
             publish(CALC);
             int backedUpItems = 0;
-            while (!isCancelled() && backedUpItems < itemsToSync) {
-                if (smsItems != null && smsItems.moveToNext()) {
-                    dataType = SMS;
-                    curCursor = smsItems;
-                } else if (mmsItems != null && mmsItems.moveToNext()) {
-                    dataType = MMS;
-                    curCursor = mmsItems;
-                } else if (callLogItems != null && callLogItems.moveToNext()) {
-                    dataType = CALLLOG;
-                    curCursor = callLogItems;
-                } else if (whatsAppItems != null && whatsAppItems.moveToNext()) {
-                    dataType = DataType.WHATSAPP;
-                    curCursor = whatsAppItems;
-                } else break; // no more items available
+            while (!isCancelled() && cursors.hasNext()) {
+                BackupCursors.CursorAndType cursor = cursors.next();
+                if (LOCAL_LOGV) Log.v(TAG, "backing up: " + cursor);
 
-                if (LOCAL_LOGV) Log.v(TAG, "backing up: " + dataType);
-                ConversionResult result = converter.cursorToMessages(curCursor, config.maxMessagePerRequest, dataType);
-                List<Message> messages = result.messageList;
-                if (!messages.isEmpty()) {
-                    if (LOCAL_LOGV)
+                ConversionResult result = converter.convertMessages(cursor.cursor, cursor.type);
+                if (!result.isEmpty()) {
+                    List<Message> messages = result.getMessages();
+
+                    if (LOCAL_LOGV) {
                         Log.v(TAG, String.format(Locale.ENGLISH, "sending %d %s message(s) to server.",
-                                messages.size(), dataType));
-
-                    dataType.setMaxSyncedDate(service, result.maxDate);
-                    switch (dataType) {
-                        case MMS:
-                        case SMS:
-                            appendMessages(smsmmsfolder, messages);
-                            break;
-                        case CALLLOG:
-                            appendMessages(callLogfolder, messages);
-                            if (calendarSyncer != null) {
-                                calendarSyncer.syncCalendar(result);
-                            }
-                            break;
-                        case WHATSAPP:
-                            appendMessages(whatsAppFolder, messages);
-                            break;
+                                messages.size(), cursor.type));
                     }
+
+                    store.getFolder(cursor.type).appendMessages(messages.toArray(new Message[messages.size()]));
+
+                    if (cursor.type == CALLLOG && calendarSyncer != null) {
+                        calendarSyncer.syncCalendar(result);
+                    }
+                    cursor.type.setMaxSyncedDate(service, result.getMaxDate());
+                    backedUpItems += messages.size();
+                } else {
+                    Log.w(TAG, "no messages converted");
+                    itemsToSync -= 1;
                 }
-                backedUpItems += messages.size();
-                publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, config.backupType, dataType, null));
+
+                publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, backupType, cursor.type, null));
             }
+
             return new BackupState(FINISHED_BACKUP,
                     backedUpItems,
                     itemsToSync,
-                    config.backupType, dataType, null);
+                    backupType, null, null);
         } finally {
-            if (smsmmsfolder != null) smsmmsfolder.close();
-            if (callLogfolder != null) callLogfolder.close();
-            if (whatsAppFolder != null) whatsAppFolder.close();
-        }
-    }
-
-    private void appendMessages(Folder folder, List<Message> messages) throws MessagingException {
-        if (folder != null) {
-            folder.appendMessages(messages.toArray(new Message[messages.size()]));
+            store.closeFolders();
         }
     }
 
@@ -282,6 +283,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private void publish(SmsSyncState state, Exception exception) {
-        publishProgress(service.getState().transition(state, exception));
+        publishProgress(service.transition(state, exception));
     }
 }

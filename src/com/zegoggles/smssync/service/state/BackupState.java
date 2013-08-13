@@ -29,13 +29,13 @@ public class BackupState extends State {
         this.backupType = backupType;
     }
 
-    @Override
-    public String toString() {
-        return "BackupStateChanged{" +
-                "state=" + state +
-                ", currentSyncedItems=" + currentSyncedItems +
+    @Override public String toString() {
+        return "BackupState{" +
+                "currentSyncedItems=" + currentSyncedItems +
                 ", itemsToSync=" + itemsToSync +
                 ", backupType=" + backupType +
+                ", exception=" + exception +
+                ", state =" + state +
                 '}';
     }
 

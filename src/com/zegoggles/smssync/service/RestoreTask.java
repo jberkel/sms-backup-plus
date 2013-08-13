@@ -11,14 +11,16 @@ import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.FetchProfile;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.SmsConsts;
+import com.zegoggles.smssync.auth.TokenRefreshException;
+import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
-import com.zegoggles.smssync.service.exception.ConnectivityException;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.jetbrains.annotations.NotNull;
@@ -35,28 +37,24 @@ import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
-class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
+class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private Set<String> smsIds = new HashSet<String>();
     private Set<String> callLogIds = new HashSet<String>();
     private Set<String> uids = new HashSet<String>();
-    private BackupImapStore.BackupFolder callFolder;
+
     private final SmsRestoreService service;
     private final ContentResolver resolver;
     private final MessageConverter converter;
-    private final BackupImapStore imapStore;
-    private final boolean restoreSms, restoreCallLog, restoreOnlyStarred;
+    private final TokenRefresher tokenRefresher;
 
     public RestoreTask(SmsRestoreService service,
-                       BackupImapStore imapStore,
                        MessageConverter converter,
-                       boolean restoreSms, boolean restoreCalllog, boolean restoreOnlyStarred) {
+                       ContentResolver resolver,
+                       TokenRefresher tokenRefresher) {
         this.service = service;
-        this.imapStore = imapStore;
         this.converter = converter;
-        this.restoreSms = restoreSms;
-        this.restoreCallLog = restoreCalllog;
-        this.restoreOnlyStarred = restoreOnlyStarred;
-        resolver = service.getContentResolver();
+        this.resolver = resolver;
+        this.tokenRefresher = tokenRefresher;
     }
 
     @Override
@@ -68,52 +66,70 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
         cancel(false);
     }
 
-    @NotNull protected RestoreState doInBackground(Integer... params) {
-        int max = params.length > 0 ? params[0] : -1;
+    @NotNull protected RestoreState doInBackground(RestoreConfig... params) {
+        if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
+        RestoreConfig config = params[0];
 
-        if (!restoreSms && !restoreCallLog) {
+        if (!config.restoreSms && !config.restoreCallLog) {
             return new RestoreState(FINISHED_RESTORE, 0, 0, 0, 0, null, null);
+        } else {
+            try {
+                service.acquireLocks();
+                return restore(config);
+            } finally {
+                service.releaseLocks();
+            }
         }
+    }
 
+    private RestoreState restore(RestoreConfig config) {
+        final BackupImapStore imapStore = config.imapStore;
+
+        int currentRestoredItem = config.currentRestoredItem;
         try {
-            service.acquireLocks();
-
             publishProgress(LOGIN);
-            BackupImapStore.BackupFolder smsFolder = imapStore.getFolder(SMS);
-            if (restoreCallLog) callFolder = imapStore.getFolder(CALLLOG);
+            imapStore.checkSettings();
 
             publishProgress(CALC);
 
             final List<Message> msgs = new ArrayList<Message>();
 
-            if (restoreSms) msgs.addAll(smsFolder.getMessages(max, restoreOnlyStarred, null));
-            if (restoreCallLog) msgs.addAll(callFolder.getMessages(max, restoreOnlyStarred, null));
+            if (config.restoreSms) {
+                msgs.addAll(imapStore.getFolder(SMS).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+            }
+            if (config.restoreCallLog) {
+                msgs.addAll(imapStore.getFolder(CALLLOG).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+            }
 
-            int itemsToRestoreCount = max <= 0 ? msgs.size() : Math.min(msgs.size(), max);
-            int currentRestoredItem = 0;
-            for (int i = 0; i < itemsToRestoreCount && !isCancelled(); i++) {
-                DataType dataType = importMessage(msgs.get(i));
-                currentRestoredItem = i;
+            final int itemsToRestoreCount = config.maxRestore <= 0 ? msgs.size() : Math.min(msgs.size(), config.maxRestore);
 
-                msgs.set(i, null); // help gc
-                publishProgress(new RestoreState(RESTORE, currentRestoredItem, itemsToRestoreCount, 0, 0, dataType, null));
-                if (i % 50 == 0) {
-                    //clear cache periodically otherwise SD card fills up
-                    service.clearCache();
+            if (itemsToRestoreCount > 0) {
+                for (; currentRestoredItem < itemsToRestoreCount && !isCancelled(); currentRestoredItem++) {
+                    DataType dataType = importMessage(msgs.get(currentRestoredItem));
+
+                    msgs.set(currentRestoredItem, null); // help gc
+                    publishProgress(new RestoreState(RESTORE, currentRestoredItem, itemsToRestoreCount, 0, 0, dataType, null));
+                    if (currentRestoredItem % 50 == 0) {
+                        //clear cache periodically otherwise SD card fills up
+                        service.clearCache();
+                    }
                 }
+                if (!isCancelled()) {
+                    publishProgress(UPDATING_THREADS);
+                    updateAllThreads();
+                }
+            } else {
+                Log.d(TAG, "nothing to restore");
             }
-            if (!isCancelled()) {
-                publishProgress(UPDATING_THREADS);
-                updateAllThreads();
-            }
+
             final int restoredCount = smsIds.size() + callLogIds.size();
             return new RestoreState(isCancelled() ? CANCELED_RESTORE : FINISHED_RESTORE,
                     currentRestoredItem,
                     itemsToRestoreCount,
                     restoredCount,
                     uids.size() - restoredCount, null, null);
-        } catch (ConnectivityException e) {
-            return transition(ERROR, e);
+        } catch (XOAuth2AuthenticationFailedException e) {
+            return handleAuthError(config, currentRestoredItem, e);
         } catch (AuthenticationFailedException e) {
             return transition(ERROR, e);
         } catch (MessagingException e) {
@@ -123,8 +139,31 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
             // usually memory problems (Couldn't init cursor window)
             return transition(ERROR, e);
         } finally {
-            service.releaseLocks();
+            imapStore.closeFolders();
         }
+    }
+
+    private RestoreState handleAuthError(RestoreConfig config, int currentRestoredItem, XOAuth2AuthenticationFailedException e) {
+        if (e.getStatus() == 400) {
+            Log.d(TAG, "need to perform xoauth2 token refresh");
+            if (config.tries < 1) {
+                try {
+                    tokenRefresher.refreshOAuth2Token();
+                    // we got a new token, let's retry one more time - we need to pass in a new store object
+                    // since the auth params on it are immutable
+                    return restore(config.retryWithStore(currentRestoredItem, service.getBackupImapStore()));
+                } catch (MessagingException ignored) {
+                    Log.w(TAG, ignored);
+                } catch (TokenRefreshException refreshException) {
+                    Log.w(TAG, refreshException);
+                }
+            } else {
+                Log.w(TAG, "no new token obtained, giving up");
+            }
+        } else {
+            Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
+        }
+        return transition(ERROR, e);
     }
 
     private void publishProgress(SmsSyncState smsSyncState) {
@@ -157,12 +196,13 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
 
     @Override
     protected void onProgressUpdate(RestoreState... progress) {
-        if (progress != null  && progress.length > 0 && !isCancelled()) {
+        if (progress != null && progress.length > 0 && !isCancelled()) {
             post(progress[0]);
         }
     }
 
     private void post(RestoreState changed) {
+        if (changed == null) return;
         App.bus.post(changed);
     }
 
@@ -193,7 +233,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
         } catch (IllegalArgumentException e) {
             // http://code.google.com/p/android/issues/detail?id=2916
             Log.e(TAG, "error", e);
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "error", e);
         }
         return dataType;
@@ -205,8 +245,8 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
         final Integer type = values.getAsInteger(SmsConsts.TYPE);
 
         // only restore inbox messages and sent messages - otherwise sms might get sent on restore
-        if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX ||
-                type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
+        if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX || type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
+
             final Uri uri = resolver.insert(Consts.SMS_PROVIDER, values);
             if (uri != null) {
                 smsIds.add(uri.getLastPathSegment());
@@ -215,6 +255,7 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
                 if (timestamp != null && SMS.getMaxSyncedDate(service) < timestamp) {
                     SMS.setMaxSyncedDate(service, timestamp);
                 }
+
                 if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
             }
         } else {
@@ -235,12 +276,14 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
 
     private boolean callLogExists(ContentValues values) {
         Cursor c = resolver.query(Consts.CALLLOG_PROVIDER,
-                new String[]{"_id"},
-                "number = ? AND duration = ? AND type = ?",
-                new String[]{values.getAsString(CallLog.Calls.NUMBER),
-                        values.getAsString(CallLog.Calls.DURATION),
-                        values.getAsString(CallLog.Calls.TYPE)},
-                null
+            new String[] { "_id" },
+            "number = ? AND duration = ? AND type = ?",
+            new String[]{
+                values.getAsString(CallLog.Calls.NUMBER),
+                values.getAsString(CallLog.Calls.DURATION),
+                values.getAsString(CallLog.Calls.TYPE)
+            },
+            null
         );
         boolean exists = false;
         if (c != null) {
@@ -253,12 +296,14 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
     private boolean smsExists(ContentValues values) {
         // just assume equality on date+address+type
         Cursor c = resolver.query(Consts.SMS_PROVIDER,
-                new String[]{"_id"},
-                "date = ? AND address = ? AND type = ?",
-                new String[]{values.getAsString(SmsConsts.DATE),
-                        values.getAsString(SmsConsts.ADDRESS),
-                        values.getAsString(SmsConsts.TYPE)},
-                null
+            new String[] {"_id" },
+            "date = ? AND address = ? AND type = ?",
+            new String[] {
+                values.getAsString(SmsConsts.DATE),
+                values.getAsString(SmsConsts.ADDRESS),
+                values.getAsString(SmsConsts.TYPE)
+            },
+            null
         );
 
         boolean exists = false;
@@ -276,5 +321,9 @@ class RestoreTask extends AsyncTask<Integer, RestoreState, RestoreState> {
         Log.d(TAG, "updating threads");
         resolver.delete(Uri.parse("content://sms/conversations/-1"), null, null);
         Log.d(TAG, "finished");
+    }
+
+    protected Set<String> getSmsIds() {
+        return smsIds;
     }
 }

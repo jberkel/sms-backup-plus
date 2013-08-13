@@ -11,4 +11,5 @@ before_install:
 install: mvn install -DskipTests=true
 script:
   - mvn android:lint
+  - mvn -f tests/pom.xml test
 after_failure: cat target/lint-results/lint-results.xml || true

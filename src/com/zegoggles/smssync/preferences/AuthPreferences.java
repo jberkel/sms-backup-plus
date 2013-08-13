@@ -2,10 +2,10 @@ package com.zegoggles.smssync.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
+import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
 import org.apache.commons.codec.binary.Base64;
 
@@ -13,9 +13,18 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.preferences.Preferences.prefs;
 
 public class AuthPreferences {
+    private final Context context;
+    private final SharedPreferences preferences;
+    private final ServerPreferences serverPreferences;
+
+    public AuthPreferences(Context context) {
+        this.context = context.getApplicationContext();
+        this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
+        this.serverPreferences = new ServerPreferences(this.context);
+    }
+
     /**
      * Preference key containing the Google account username.
      */
@@ -45,117 +54,117 @@ public class AuthPreferences {
      */
     private static final String IMAP_URI = "imap%s://%s:%s@%s";
 
-    public static XOAuthConsumer getOAuthConsumer(Context ctx) {
+    public XOAuthConsumer getOAuthConsumer() {
         return new XOAuthConsumer(
-                getOauthUsername(ctx),
-                getOauthToken(ctx),
-                getOauthTokenSecret(ctx));
+                getOauthUsername(),
+                getOauthToken(),
+                getOauthTokenSecret());
     }
 
-    public static String getOauth2Token(Context ctx) {
-        return getCredentials(ctx).getString(OAUTH2_TOKEN, null);
+    public String getOauth2Token() {
+        return getCredentials().getString(OAUTH2_TOKEN, null);
     }
 
-    public static boolean hasOauthTokens(Context ctx) {
-        return getOauthUsername(ctx) != null &&
-                getOauthToken(ctx) != null &&
-                getOauthTokenSecret(ctx) != null;
+    public boolean hasOauthTokens() {
+        return getOauthUsername() != null &&
+                getOauthToken() != null &&
+                getOauthTokenSecret() != null;
     }
 
-    public static boolean hasOAuth2Tokens(Context ctx) {
-        return getOauth2Username(ctx) != null &&
-                getOauth2Token(ctx) != null;
+    public boolean hasOAuth2Tokens() {
+        return getOauth2Username() != null &&
+                getOauth2Token() != null;
     }
 
-    public static String getUsername(Context ctx) {
-        return prefs(ctx).getString(OAUTH_USER, getOauth2Username(ctx));
+    public String getUsername() {
+        return preferences.getString(OAUTH_USER, getOauth2Username());
     }
 
-    public static void setOauthUsername(Context ctx, String s) {
-        prefs(ctx).edit().putString(OAUTH_USER, s).commit();
+    public void setOauthUsername(String s) {
+        preferences.edit().putString(OAUTH_USER, s).commit();
     }
 
-    public static void setOauthTokens(Context ctx, String token, String secret) {
-        getCredentials(ctx).edit()
+    public void setOauthTokens(String token, String secret) {
+        getCredentials().edit()
                 .putString(OAUTH_TOKEN, token)
                 .putString(OAUTH_TOKEN_SECRET, secret)
                 .commit();
     }
 
-    public static void setOauth2Token(Context ctx, String username, String token) {
-        prefs(ctx).edit()
+    public void setOauth2Token(String username, String token) {
+        preferences.edit()
                 .putString(OAUTH2_USER, username)
                 .commit();
 
-        getCredentials(ctx).edit()
+        getCredentials().edit()
                 .putString(OAUTH2_TOKEN, token)
                 .commit();
     }
 
-   public static void clearOauthData(Context ctx) {
-        final String oauth2token = getOauth2Token(ctx);
+   public void clearOauthData() {
+        final String oauth2token = getOauth2Token();
 
-        prefs(ctx).edit()
+        preferences.edit()
                 .remove(OAUTH_USER)
                 .remove(OAUTH2_USER)
                 .commit();
 
-        getCredentials(ctx).edit()
+        getCredentials().edit()
                 .remove(OAUTH_TOKEN)
                 .remove(OAUTH_TOKEN_SECRET)
                 .remove(OAUTH2_TOKEN)
                 .commit();
 
-        if (!TextUtils.isEmpty(oauth2token) && Integer.parseInt(Build.VERSION.SDK) >= 5) {
-            AccountManagerAuthActivity.invalidateToken(ctx, oauth2token);
+        if (!TextUtils.isEmpty(oauth2token)) {
+            new TokenRefresher(context, this).invalidateToken(oauth2token);
         }
     }
 
 
-    public static void setImapPassword(Context ctx, String s) {
-        getCredentials(ctx).edit().putString(LOGIN_PASSWORD, s).commit();
+    public void setImapPassword(String s) {
+        getCredentials().edit().putString(LOGIN_PASSWORD, s).commit();
     }
 
-    public static boolean useXOAuth(Context ctx) {
-        return getAuthMode(ctx) == AuthMode.XOAUTH && ServerPreferences.isGmail(ctx);
+    public boolean useXOAuth() {
+        return getAuthMode() == AuthMode.XOAUTH && serverPreferences.isGmail();
     }
 
-    public static String getUserEmail(Context ctx) {
-        switch (getAuthMode(ctx)) {
+    public String getUserEmail() {
+        switch (getAuthMode()) {
             case XOAUTH:
-                return getUsername(ctx);
+                return getUsername();
             default:
-                return getImapUsername(ctx);
+                return getImapUsername();
         }
     }
 
-    public static boolean isLoginInformationSet(Context ctx) {
-        switch (getAuthMode(ctx)) {
+    public boolean isLoginInformationSet() {
+        switch (getAuthMode()) {
             case PLAIN:
-                return !TextUtils.isEmpty(getImapPassword(ctx)) &&
-                        !TextUtils.isEmpty(getImapUsername(ctx));
+                return !TextUtils.isEmpty(getImapPassword()) &&
+                        !TextUtils.isEmpty(getImapUsername());
             case XOAUTH:
-                return hasOauthTokens(ctx) || hasOAuth2Tokens(ctx);
+                return hasOauthTokens() || hasOAuth2Tokens();
             default:
                 return false;
         }
     }
 
-    public static String getStoreUri(Context ctx) {
-        if (useXOAuth(ctx)) {
-            if (hasOauthTokens(ctx)) {
-                XOAuthConsumer consumer = getOAuthConsumer(ctx);
+    public String getStoreUri() {
+        if (useXOAuth()) {
+            if (hasOauthTokens()) {
+                XOAuthConsumer consumer = getOAuthConsumer();
                 return String.format(IMAP_URI,
                         ServerPreferences.Defaults.SERVER_PROTOCOL,
                         "xoauth:" + encode(consumer.getUsername()),
                         encode(consumer.generateXOAuthString()),
-                        ServerPreferences.getServerAddress(ctx));
-            } else if (hasOAuth2Tokens(ctx)) {
+                        serverPreferences.getServerAddress());
+            } else if (hasOAuth2Tokens()) {
                 return String.format(IMAP_URI,
                         ServerPreferences.Defaults.SERVER_PROTOCOL,
-                        "xoauth2:" + encode(getOauth2Username(ctx)),
-                        encode(generateXOAuth2Token(ctx)),
-                        ServerPreferences.getServerAddress(ctx));
+                        "xoauth2:" + encode(getOauth2Username()),
+                        encode(generateXOAuth2Token()),
+                        serverPreferences.getServerAddress());
             } else {
                 Log.w(TAG, "No valid xoauth1/2 tokens");
                 return null;
@@ -163,45 +172,45 @@ public class AuthPreferences {
 
         } else {
             return String.format(IMAP_URI,
-                    ServerPreferences.getServerProtocol(ctx),
-                    encode(getImapUsername(ctx)),
-                    encode(getImapPassword(ctx)).replace("+", "%20"),
-                    ServerPreferences.getServerAddress(ctx));
+                    serverPreferences.getServerProtocol(),
+                    encode(getImapUsername()),
+                    encode(getImapPassword()).replace("+", "%20"),
+                    serverPreferences.getServerAddress());
         }
     }
 
-    private static String getOauthTokenSecret(Context ctx) {
-        return getCredentials(ctx).getString(OAUTH_TOKEN_SECRET, null);
+    private String getOauthTokenSecret() {
+        return getCredentials().getString(OAUTH_TOKEN_SECRET, null);
     }
 
-    private static String getOauthToken(Context ctx) {
-        return getCredentials(ctx).getString(OAUTH_TOKEN, null);
+    private String getOauthToken() {
+        return getCredentials().getString(OAUTH_TOKEN, null);
     }
 
-    private static String getOauthUsername(Context ctx) {
-        return prefs(ctx).getString(OAUTH_USER, null);
+    private String getOauthUsername() {
+        return preferences.getString(OAUTH_USER, null);
     }
 
-    private static String getOauth2Username(Context ctx) {
-        return prefs(ctx).getString(OAUTH2_USER, null);
+    private String getOauth2Username() {
+        return preferences.getString(OAUTH2_USER, null);
     }
 
-    private static AuthMode getAuthMode(Context ctx) {
-        return Preferences.getDefaultType(ctx, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
+    private AuthMode getAuthMode() {
+        return new Preferences(context).getDefaultType(SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
     }
 
     // All sensitive information is stored in a separate prefs file so we can
     // backup the rest without exposing sensitive data
-    private static SharedPreferences getCredentials(Context ctx) {
-        return ctx.getSharedPreferences("credentials", Context.MODE_PRIVATE);
+    private SharedPreferences getCredentials() {
+        return context.getSharedPreferences("credentials", Context.MODE_PRIVATE);
     }
 
-    private static String getImapUsername(Context ctx) {
-        return prefs(ctx).getString(LOGIN_USER, null);
+    private String getImapUsername() {
+        return preferences.getString(LOGIN_USER, null);
     }
 
-    private static String getImapPassword(Context ctx) {
-        return getCredentials(ctx).getString(LOGIN_PASSWORD, null);
+    private String getImapPassword() {
+        return getCredentials().getString(LOGIN_PASSWORD, null);
     }
 
     /**
@@ -219,9 +228,9 @@ public class AuthPreferences {
      * @see <a href="https://developers.google.com/google-apps/gmail/xoauth2_protocol#the_sasl_xoauth2_mechanism">
      *      The SASL XOAUTH2 Mechanism</a>
      */
-    private static String generateXOAuth2Token(Context context) {
-        final String username = getOauth2Username(context);
-        final String token = getOauth2Token(context);
+    private String generateXOAuth2Token() {
+        final String username = getOauth2Username();
+        final String token = getOauth2Token();
         final String formatted = "user=" + username + "\001auth=Bearer " + token + "\001\001";
         try {
             return new String(Base64.encodeBase64(formatted.getBytes("UTF-8")), "UTF-8");

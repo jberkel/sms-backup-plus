@@ -293,7 +293,7 @@
   <string name="app_log_backup_finished">备份已完成</string>
 
   <string name="app_log_backup_failed_authentication">认证错误：%1$s</string>
-  <string name="app_log_backup_failed_messaging">一般错误：%1$s</string>
+  <string name="app_log_backup_failed_general_error">一般错误：%1$s</string>
   <string name="app_log_backup_failed_connectivity">备份已跳过，无网络连接</string>
   <string name="app_log_scheduled_next_sync">下次备份于 %1$s</string>
   <string name="app_log_no_next_sync">没有新的备份计划</string>

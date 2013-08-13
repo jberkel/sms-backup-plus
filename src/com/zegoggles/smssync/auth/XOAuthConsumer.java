@@ -15,12 +15,14 @@
  */
 package com.zegoggles.smssync.auth;
 
+import android.content.Context;
 import android.util.Log;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import oauth.signpost.OAuth;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import oauth.signpost.exception.OAuthException;
 import oauth.signpost.http.HttpParameters;
 import oauth.signpost.http.HttpRequest;
 import oauth.signpost.signature.SignatureBaseString;
@@ -31,14 +33,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -46,10 +51,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 
-import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
-@SuppressWarnings("serial")
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
     private String mUsername;
     private static final String MAC_NAME = "HmacSHA1";
@@ -100,7 +103,6 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
                 }
             }
 
-            if (LOCAL_LOGV) Log.v(TAG, "sasl: " + sasl.toString());
             return base64(sasl.toString().getBytes(OAuth.ENCODING));
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
@@ -109,7 +111,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
         }
     }
 
-    public CommonsHttpOAuthProvider getProvider(android.content.Context context) {
+    public CommonsHttpOAuthProvider getProvider(Context context) {
         //System.setProperty("debug", "true");
         final String scope = Consts.GMAIL_SCOPE + " " + Consts.CONTACTS_SCOPE;
         return new CommonsHttpOAuthProvider(
@@ -165,16 +167,16 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
             xr.parse(new InputSource(resp.getEntity().getContent()));
             return email.toString();
 
-        } catch (oauth.signpost.exception.OAuthException e) {
+        } catch (OAuthException e) {
             Log.e(TAG, "error", e);
             return null;
-        } catch (org.xml.sax.SAXException e) {
+        } catch (SAXException e) {
             Log.e(TAG, "error", e);
             return null;
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "error", e);
             return null;
-        } catch (javax.xml.parsers.ParserConfigurationException e) {
+        } catch (ParserConfigurationException e) {
             Log.e(TAG, "error", e);
             return null;
         }

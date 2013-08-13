@@ -28,7 +28,7 @@ public class OAuthCallbackTask extends AsyncTask<Intent, Void, XOAuthConsumer> {
         Uri uri = callbackIntent[0].getData();
         if (LOCAL_LOGV) Log.v(TAG, "oauth callback: " + uri);
 
-        XOAuthConsumer consumer = AuthPreferences.getOAuthConsumer(context);
+        XOAuthConsumer consumer = new AuthPreferences(context).getOAuthConsumer();
         CommonsHttpOAuthProvider provider = consumer.getProvider(context);
         String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
         try {

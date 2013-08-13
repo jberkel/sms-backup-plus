@@ -8,8 +8,7 @@ import android.util.Log;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
-import com.zegoggles.smssync.contacts.ContactAccessor;
-import com.zegoggles.smssync.contacts.ContactGroup;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +21,6 @@ import static com.zegoggles.smssync.mail.DataType.*;
 
 class BackupQueryBuilder {
     private final Context context;
-    private final ContactAccessor contacts;
 
     // only query for needed fields
     // http://stackoverflow.com/questions/12033234/get-calls-provider-internal-structure
@@ -34,9 +32,8 @@ class BackupQueryBuilder {
         CallLog.Calls.TYPE
     };
 
-    public BackupQueryBuilder(Context context, ContactAccessor contacts) {
+    public BackupQueryBuilder(Context context) {
         this.context = context;
-        this.contacts = contacts;
     }
 
     static class Query {
@@ -60,16 +57,16 @@ class BackupQueryBuilder {
         }
     }
 
-    public @Nullable Query buildQueryForDataType(DataType type, int max, ContactGroup group) {
+    public @Nullable Query buildQueryForDataType(DataType type, @Nullable ContactGroupIds groupIds, int max) {
         switch (type) {
-            case MMS:     return getQueryForMMS(max, group);
-            case SMS:     return getQueryForSMS(max, group);
+            case SMS:     return getQueryForSMS(groupIds, max);
+            case MMS:     return getQueryForMMS(groupIds, max);
             case CALLLOG: return getQueryForCallLog(max);
             default:      return null;
         }
     }
 
-    public @Nullable Query buildMaxQueryForDataType(DataType type) {
+    public @Nullable Query buildMostRecentQueryForDataType(DataType type) {
         switch (type) {
             case MMS:
                 return new Query(
@@ -97,14 +94,14 @@ class BackupQueryBuilder {
         }
     }
 
-    private Query getQueryForSMS(int max, ContactGroup group) {
+    private Query getQueryForSMS(@Nullable ContactGroupIds groupIds, int max) {
         return new Query(Consts.SMS_PROVIDER,
             null,
             String.format(Locale.ENGLISH,
                 "%s > ? AND %s <> ? %s",
                     SmsConsts.DATE,
                     SmsConsts.TYPE,
-                    groupSelection(SMS, group)),
+                    groupSelection(SMS, groupIds)).trim(),
             new String[] {
                 String.valueOf(SMS.getMaxSyncedDate(context)),
                 String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
@@ -112,16 +109,21 @@ class BackupQueryBuilder {
             max);
     }
 
-    private Query getQueryForMMS(int max, ContactGroup group) {
+    private Query getQueryForMMS(@Nullable ContactGroupIds group, int max) {
+        long maxSynced = MMS.getMaxSyncedDate(context);
+        if (maxSynced > 0) {
+            // NB: max synced date is stored in seconds since epoch in database
+            maxSynced = (long) (maxSynced / 1000d);
+        }
         return new Query(
             Consts.MMS_PROVIDER,
             null,
             String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s",
                     SmsConsts.DATE,
                     MmsConsts.TYPE,
-                    groupSelection(DataType.MMS, group)),
+                    groupSelection(DataType.MMS, group)).trim(),
             new String[] {
-                String.valueOf(MMS.getMaxSyncedDate(context)),
+                String.valueOf(maxSynced),
                 MmsConsts.DELIVERY_REPORT
             },
             max);
@@ -138,11 +140,14 @@ class BackupQueryBuilder {
             max);
     }
 
-    private String groupSelection(DataType type, ContactGroup group) {
-        /* MMS group selection not supported at the moment */
-        if (type != SMS || group.type == ContactGroup.Type.EVERYBODY) return "";
+    private String groupSelection(DataType type, @Nullable ContactGroupIds group) {
+        /* Only MMS selection is supported at the moment */
+        if (type != SMS || group == null) {
+            return "";
+        }
 
-        final Set<Long> ids = contacts.getGroupContactIds(context, group).rawIds;
+        final Set<Long> ids = group.getRawIds();
+
         if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
         return String.format(Locale.ENGLISH, " AND (%s = %d OR %s IN (%s))",
             SmsConsts.TYPE,

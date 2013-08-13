@@ -157,7 +157,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
     private void authFailed() {
         mStatusLabel.setText(R.string.status_auth_failure);
 
-        if (AuthPreferences.useXOAuth(getContext())) {
+        if (new AuthPreferences(getContext()).useXOAuth()) {
             mSyncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
         } else {
             mSyncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
@@ -173,7 +173,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
     private void finishedBackup(BackupState state) {
         int backedUpCount = state.currentSyncedItems;
         String text = null;
-        if (backedUpCount == Preferences.getMaxItemsPerSync(getContext())) {
+        if (backedUpCount == new Preferences(getContext()).getMaxItemsPerSync()) {
             text = getContext().getString(R.string.status_backup_done_details_max_per_sync, backedUpCount);
         } else if (backedUpCount > 0) {
             text = getContext().getResources().getQuantityString(R.plurals.status_backup_done_details, backedUpCount,

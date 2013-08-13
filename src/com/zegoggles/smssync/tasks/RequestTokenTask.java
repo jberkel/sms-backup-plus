@@ -15,18 +15,20 @@ import static com.zegoggles.smssync.App.TAG;
 
 public class RequestTokenTask extends AsyncTask<String, Void, String> {
     private Context context;
+    private AuthPreferences authPreferences;
 
-    public RequestTokenTask(Context smsSync) {
-        this.context = smsSync;
+    public RequestTokenTask(Context context) {
+        this.context = context;
+        this.authPreferences = new AuthPreferences(context);
     }
 
     public String doInBackground(String... callback) {
         synchronized (XOAuthConsumer.class) {
-            XOAuthConsumer consumer = AuthPreferences.getOAuthConsumer(context);
+            XOAuthConsumer consumer = authPreferences.getOAuthConsumer();
             CommonsHttpOAuthProvider provider = consumer.getProvider(context);
             try {
                 String url = provider.retrieveRequestToken(consumer, callback[0]);
-                AuthPreferences.setOauthTokens(context, consumer.getToken(), consumer.getTokenSecret());
+                authPreferences.setOauthTokens(consumer.getToken(), consumer.getTokenSecret());
                 return url;
             } catch (OAuthCommunicationException e) {
                 Log.e(TAG, "error requesting token: " + e.getResponseBody(), e);

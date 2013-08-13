@@ -31,11 +31,12 @@ import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
-import com.zegoggles.smssync.contacts.GroupContactIds;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.utils.ThreadHelper;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,77 +59,56 @@ public class MessageConverter {
     private final boolean mMarkAsRead;
     private final PersonLookup mPersonLookup;
     private final MessageGenerator mMessageGenerator;
+    private final boolean mMarkAsReadOnRestore;
 
-    public MessageConverter(Context ctx, String userEmail) {
-        mContext = ctx;
-        mMarkAsRead = Preferences.getMarkAsRead(ctx);
-        mPersonLookup = new PersonLookup(ctx.getContentResolver(), AddressStyle.getEmailAddressStyle(ctx));
+    public MessageConverter(Context context, Preferences preferences, String userEmail, PersonLookup personLookup) {
+        mContext = context;
+        mMarkAsRead = preferences.getMarkAsRead();
+        mPersonLookup = personLookup;
+        mMarkAsReadOnRestore = preferences.getMarkAsReadOnRestore();
 
-        String referenceUid = Preferences.getReferenceUid(ctx);
+        String referenceUid = preferences.getReferenceUid();
         if (referenceUid == null) {
             referenceUid = generateReferenceValue();
-            Preferences.setReferenceUid(ctx, referenceUid);
+            preferences.setReferenceUid(referenceUid);
         }
 
-        GroupContactIds allowedIds = null;
-        final ContactGroup backupContactGroup = Preferences.getBackupContactGroup(ctx);
-        switch (backupContactGroup.type) {
-            case EVERYBODY: break;
-            default:
-                allowedIds = ContactAccessor.Get.instance().getGroupContactIds(ctx, backupContactGroup);
-                if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
-        }
+        final ContactGroup backupContactGroup = preferences.getBackupContactGroup();
+        ContactGroupIds allowedIds = ContactAccessor.Get.instance().getGroupContactIds(context.getContentResolver(), backupContactGroup);
+        if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
 
         mMessageGenerator = new MessageGenerator(mContext,
                 new Address(userEmail),
-                new HeaderGenerator(referenceUid, Preferences.getVersion(mContext, true)),
+                AddressStyle.getEmailAddressStyle(preferences),
+                new HeaderGenerator(referenceUid, preferences.getVersion(true)),
                 mPersonLookup,
-                Preferences.getMailSubjectPrefix(mContext),
-                allowedIds);
+                preferences.getMailSubjectPrefix(),
+                allowedIds,
+                new MmsSupport(mContext.getContentResolver(), mPersonLookup));
     }
 
-    public ConversionResult cursorToMessages(final Cursor cursor,
-                                             final int maxEntries,
-                                             DataType dataType) throws MessagingException {
-        final String[] columns = cursor.getColumnNames();
+    public @NotNull ConversionResult convertMessages(final Cursor cursor, DataType dataType)
+            throws MessagingException {
+
+        final Map<String, String> msgMap = getMessageMap(cursor);
+        final Message m;
+        switch (dataType) {
+            case WHATSAPP:
+                m = mMessageGenerator.messageFromMapWhatsApp(cursor);
+                break;
+            default:
+                m = mMessageGenerator.messageForDataType(msgMap, dataType);
+                break;
+        }
         final ConversionResult result = new ConversionResult(dataType);
-        do {
-            final Map<String, String> msgMap = new HashMap<String, String>(columns.length);
-            for (int i = 0; i < columns.length; i++) {
-                String value;
-                try {
-                    value = cursor.getString(i);
-                } catch (SQLiteException ignored) {
-                    // this can happen in case of BLOBS in the DB
-                    // column type checking is API level >= 11
-                    value = "[BLOB]";
-                }
-                msgMap.put(columns[i], value);
-            }
-            final Message m;
-            switch (dataType) {
-                case WHATSAPP:
-                    m = mMessageGenerator.messageFromMapWhatsApp(cursor); break;
-                default:
-                    m = mMessageGenerator.messageForDataType(msgMap, dataType); break;
-            }
-            if (m != null) {
-                m.setFlag(Flag.SEEN, mMarkAsRead);
+        if (m != null) {
+            m.setFlag(Flag.SEEN, mMarkAsRead);
+            result.add(m, msgMap);
+        }
 
-                result.messageList.add(m);
-                result.mapList.add(msgMap);
-
-                String dateHeader = Headers.get(m, Headers.DATE);
-                if (dateHeader != null) {
-                    final long date = Long.parseLong(dateHeader);
-                    if (date > result.maxDate) {
-                        result.maxDate = date;
-                    }
-                }
-            }
-        } while (result.messageList.size() < maxEntries && cursor.moveToNext());
         return result;
     }
+
 
     public ContentValues messageToContentValues(final Message message)
             throws IOException, MessagingException {
@@ -154,7 +134,7 @@ public class MessageConverter {
                 values.put(SmsConsts.STATUS, Headers.get(message, Headers.STATUS));
                 values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(mContext, address));
                 values.put(SmsConsts.READ,
-                        Preferences.getMarkAsReadOnRestore(mContext) ? "1" : Headers.get(message, Headers.READ));
+                        mMarkAsReadOnRestore ? "1" : Headers.get(message, Headers.READ));
                 break;
             case CALLLOG:
                 values.put(CallLog.Calls.NUMBER, Headers.get(message, Headers.ADDRESS));
@@ -164,8 +144,8 @@ public class MessageConverter {
                 values.put(CallLog.Calls.NEW, 0);
 
                 PersonRecord record = mPersonLookup.lookupPerson(Headers.get(message, Headers.ADDRESS));
-                if (!record.unknown) {
-                    values.put(CallLog.Calls.CACHED_NAME, record.name);
+                if (!record.isUnknown()) {
+                    values.put(CallLog.Calls.CACHED_NAME, record.getName());
                     values.put(CallLog.Calls.CACHED_NUMBER_TYPE, -2);
                 }
 
@@ -197,6 +177,28 @@ public class MessageConverter {
         }
     }
 
+    private Map<String, String> getMessageMap(Cursor cursor) {
+        final String[] columns = cursor.getColumnNames();
+        final Map<String, String> msgMap = new HashMap<String, String>(columns.length);
+        for (String column : columns) {
+            String value;
+            try {
+                final int index = cursor.getColumnIndex(column);
+                if (index != -1) {
+                    value = cursor.getString(index);
+                } else {
+                    continue;
+                }
+            } catch (SQLiteException ignored) {
+                // this can happen in case of BLOBS in the DB
+                // column type checking is API level >= 11
+                value = "[BLOB]";
+            }
+            msgMap.put(column, value);
+        }
+        return msgMap;
+    }
+
     private static String generateReferenceValue() {
         final StringBuilder sb = new StringBuilder();
         final Random random = new Random();
@@ -204,9 +206,5 @@ public class MessageConverter {
             sb.append(Integer.toString(random.nextInt(35), 36));
         }
         return sb.toString();
-    }
-
-    public PersonLookup getPersonLookup() {
-        return mPersonLookup;
     }
 }

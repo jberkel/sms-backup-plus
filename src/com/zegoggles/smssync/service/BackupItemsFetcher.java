@@ -1,88 +1,82 @@
 package com.zegoggles.smssync.service;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
-import com.github.jberkel.whassup.Whassup;
-import com.zegoggles.smssync.contacts.ContactGroup;
+import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-
-import static com.zegoggles.smssync.App.*;
-import static com.zegoggles.smssync.mail.DataType.WHATSAPP;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
+import static com.zegoggles.smssync.App.TAG;
 
 public class BackupItemsFetcher {
     private final Context context;
+    private final ContentResolver resolver;
     private final BackupQueryBuilder queryBuilder;
 
-    public BackupItemsFetcher(Context context, BackupQueryBuilder queryBuilder) {
+    public BackupItemsFetcher(@NotNull Context context, @NotNull ContentResolver resolver, @NotNull BackupQueryBuilder queryBuilder) {
+        if (resolver == null) throw new IllegalArgumentException("resolver cannot be null");
+        if (queryBuilder == null) throw new IllegalArgumentException("queryBuilder cannot be null");
+
         this.queryBuilder = queryBuilder;
         this.context = context;
+        this.resolver = resolver;
     }
 
-    public @Nullable Cursor getItemsForDataType(DataType dataType, ContactGroup group, int max) {
+    public @NotNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
-        if (!dataType.isBackupEnabled(context)) {
-            if (LOCAL_LOGV) Log.v(TAG, "backup disabled for " + dataType + ", returning empty cursor");
-            return null;
-        }
-        if (dataType == WHATSAPP) {
-            return getWhatsAppItemsToSync(max);
-        } else {
-            return performQuery(queryBuilder.buildQueryForDataType(dataType, max, group));
+        switch (dataType) {
+            case WHATSAPP: return new WhatsAppItemsFetcher().getItems(DataType.WHATSAPP.getMaxSyncedDate(context), max);
+            default: return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
         }
     }
 
-    public long getMaxData(DataType dataType) {
-        Cursor cursor = performQuery(queryBuilder.buildMaxQueryForDataType(dataType));
+    public long getMostRecentTimestamp(DataType dataType) {
+        switch (dataType) {
+            case WHATSAPP: new WhatsAppItemsFetcher().getMostRecentTimestamp();
+            default: return getMostRecentTimestampForQuery(queryBuilder.buildMostRecentQueryForDataType(dataType));
+        }
+    }
+
+    private long getMostRecentTimestampForQuery(BackupQueryBuilder.Query query) {
+        Cursor cursor = performQuery(query);
         try {
-            if (cursor != null && cursor.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 return cursor.getLong(0);
             } else {
                 return DataType.Defaults.MAX_SYNCED_DATE;
             }
         } finally {
-            if (cursor != null) cursor.close();
+            cursor.close();
         }
     }
 
-    private @Nullable Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
-        if (query == null) return null;
+    private @NotNull Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
+        if (query == null) return emptyCursor();
         try {
-            return context.getContentResolver().query(
+            final Cursor cursor = resolver.query(
                     query.uri,
                     query.projection,
                     query.selection,
                     query.selectionArgs,
                     query.sortOrder
             );
+            return cursor == null ? emptyCursor() : cursor;
         } catch (SQLiteException e) {
             Log.w(TAG, "error querying DB", e);
-            return null;
+            return emptyCursor();
+        } catch (NullPointerException e) {
+            Log.w(TAG, "error querying DB", e);
+            return emptyCursor();
         }
     }
 
-    private @Nullable Cursor getWhatsAppItemsToSync(int max) {
-        if (LOCAL_LOGV) Log.v(TAG, "getWhatsAppItemsToSync(max=" + max + ")");
-
-        if (!WHATSAPP.isBackupEnabled(context)) {
-            if (LOCAL_LOGV) Log.v(TAG, "WhatsApp backup disabled, returning empty");
-            return null;
-        }
-        Whassup whassup = new Whassup();
-        if (!whassup.hasBackupDB()) {
-            if (LOCAL_LOGV) Log.v(TAG, "No whatsapp backup DB found, returning empty");
-            return null;
-        }
-
-        try {
-            return whassup.queryMessages(WHATSAPP.getMaxSyncedDate(context), max);
-        } catch (IOException e) {
-            Log.w(LOG, "error fetching whatsapp messages", e);
-            return null;
-        }
+    static Cursor emptyCursor() {
+        return new MatrixCursor(new String[] {});
     }
 }

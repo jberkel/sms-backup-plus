@@ -29,21 +29,27 @@ import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
 import com.fsck.k9.mail.store.ImapStore;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class BackupImapStore extends ImapStore {
-    private Context context;
+    private final Context context;
+    private final String uri;
+    private final Map<DataType, BackupFolder> openFolders = new HashMap<DataType, BackupFolder>();
 
     static {
         // increase read timeout a bit
@@ -58,46 +64,66 @@ public class BackupImapStore extends ImapStore {
             }
         });
         this.context = context;
+        this.uri = uri;
     }
-
-    public static boolean isValidUri(String uri) {
-        if (TextUtils.isEmpty(uri)) return false;
-        Uri parsed = Uri.parse(uri);
-        return parsed != null &&
-            !TextUtils.isEmpty(parsed.getAuthority()) &&
-            !TextUtils.isEmpty(parsed.getHost()) &&
-            !TextUtils.isEmpty(parsed.getScheme()) &&
-            ("imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap+ssl".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap+tls+".equalsIgnoreCase(parsed.getScheme()) ||
-             "imap+tls".equalsIgnoreCase(parsed.getScheme()));
-    }
-
-    /*
-    @Test
-    public void shouldValidUri() throws Exception {
-        assertThat(isValidUri("imap+ssl+://xoauth:foooo@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("imap://xoauth:foooo@imap.gmail.com")).isTrue();
-        assertThat(isValidUri("imap+ssl+://xoauth:user:token@:993")).isFalse();
-        assertThat(isValidUri("imap+ssl://user%40domain:password@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("imap+tls+://user:password@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("imap+tls://user:password@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("imap://user:password@imap.gmail.com:993")).isTrue();
-        assertThat(isValidUri("http://xoauth:foooo@imap.gmail.com:993")).isFalse();
-    }
-    */
 
     public BackupFolder getFolder(DataType type) throws MessagingException {
-        String label = type.getFolder(context);
-        if (label == null) throw new IllegalStateException("label is null");
+        BackupFolder folder = openFolders.get(type);
+        if (folder == null) {
+            String label = type.getFolder(context);
+            if (label == null) throw new IllegalStateException("label is null");
 
+            folder = createAndOpenFolder(type, label);
+            openFolders.put(type, folder);
+        }
+        return folder;
+    }
+
+
+    public void closeFolders() {
+        Collection<BackupFolder> folders = openFolders.values();
+        for (BackupFolder folder : folders) {
+            try {
+                folder.close();
+            } catch (Exception e) {
+                Log.w(TAG, e);
+            }
+        }
+        openFolders.clear();
+    }
+
+    @Override public String toString() {
+        return "BackupImapStore{" +
+                "uri=" + getStoreUriForLogging() +
+                '}';
+    }
+
+    /**
+     * @return a uri which can be used for logging (i.e. with credentials masked)
+     */
+    public String getStoreUriForLogging() {
+        Uri uri = Uri.parse(this.uri);
+        String userInfo = uri.getUserInfo();
+
+        if (!TextUtils.isEmpty(userInfo) && userInfo.contains(":")) {
+            String[] parts = userInfo.split(":", 2);
+            userInfo = parts[0]+":"+(parts[1].replaceAll(".", "X"));
+            String host = uri.getHost();
+            if (uri.getPort() != -1) {
+                host += ":"+uri.getPort();
+            }
+            return uri.buildUpon().encodedAuthority(userInfo + "@" + host).toString();
+        } else {
+            return uri.toString();
+        }
+    }
+
+    private @NotNull BackupFolder createAndOpenFolder(DataType type, @NotNull String label) throws MessagingException {
         try {
-            final BackupFolder folder = new BackupFolder(this, label, type);
-
+            BackupFolder folder = new BackupFolder(this, label, type);
             if (!folder.exists()) {
-                folder.create(FolderType.HOLDS_MESSAGES);
                 Log.i(TAG, "Label '" + label + "' does not exist yet. Creating.");
+                folder.create(FolderType.HOLDS_MESSAGES);
             }
             folder.open(OpenMode.READ_WRITE);
             return folder;
@@ -196,5 +222,24 @@ public class BackupImapStore extends ImapStore {
             final Date d2 = m2 == null ? EARLY : m2.getSentDate() != null ? m2.getSentDate() : EARLY;
             return d2.compareTo(d1);
         }
+    }
+
+    public static boolean isValidImapFolder(String imapFolder) {
+        return !(imapFolder == null || imapFolder.length() == 0) &&
+               !(imapFolder.charAt(0) == '/' || imapFolder.charAt(0) == ' ' || imapFolder.charAt(imapFolder.length() - 1) == ' ');
+    }
+
+    public static boolean isValidUri(String uri) {
+        if (TextUtils.isEmpty(uri)) return false;
+        Uri parsed = Uri.parse(uri);
+        return parsed != null &&
+                !TextUtils.isEmpty(parsed.getAuthority()) &&
+                !TextUtils.isEmpty(parsed.getHost()) &&
+                !TextUtils.isEmpty(parsed.getScheme()) &&
+                ("imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
+                "imap+ssl".equalsIgnoreCase(parsed.getScheme()) ||
+                "imap".equalsIgnoreCase(parsed.getScheme()) ||
+                "imap+tls+".equalsIgnoreCase(parsed.getScheme()) ||
+                "imap+tls".equalsIgnoreCase(parsed.getScheme()));
     }
 }

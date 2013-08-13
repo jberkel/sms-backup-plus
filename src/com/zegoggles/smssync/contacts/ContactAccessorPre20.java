@@ -15,7 +15,9 @@
  */
 package com.zegoggles.smssync.contacts;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
 
 import java.util.Collections;
 import java.util.Map;
@@ -28,11 +30,11 @@ public class ContactAccessorPre20 implements ContactAccessor {
         return null;
     }
 
-    public GroupContactIds getGroupContactIds(Context context, ContactGroup group) {
-        return new GroupContactIds();
+    public ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
+        return null;
     }
 
-    public Map<Integer, Group> getGroups(Context context) {
+    public Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources) {
         return Collections.emptyMap();
     }
 }
