@@ -10,7 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <platform.version>4.0.1.2</platform.version>
+        <platform.version>4.4</platform.version>
     </properties>
 
     <dependencies>
@@ -96,7 +96,7 @@
                   <assetsDirectory>${project.basedir}/assets</assetsDirectory>
                   <resourceDirectory>${project.basedir}/res</resourceDirectory>
                   <sdk>
-                     <platform>14</platform>
+                     <platform>19</platform>
                   </sdk>
                   <undeployBeforeDeploy>true</undeployBeforeDeploy>
                   <lint>
