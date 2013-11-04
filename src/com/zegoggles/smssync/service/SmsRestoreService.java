@@ -1,12 +1,15 @@
 package com.zegoggles.smssync.service;
 
 import android.content.Intent;
+import android.os.Build;
+import android.provider.Telephony;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.MessageConverter;
@@ -51,9 +54,29 @@ public class SmsRestoreService extends ServiceBase {
         service = null;
     }
 
+    /**
+     * Android KitKat requires SMS Backup+ to be the default SMS application in order to
+     * write to the SMS Provider.
+     */
+    private Boolean canWriteToSmsProvider() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return true;
+        }
+
+        String defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this);
+        return defaultSmsPackage.equals(getPackageName());
+    }
+
     @Override
     protected void handleIntent(final Intent intent) {
         if (isWorking()) return;
+        if (!canWriteToSmsProvider()) {
+            // TODO: The main app's status should be updated here to mention that SMS Backup+
+            // is not the default SMS application, and that the restore cannot be completed.
+            Log.e(TAG, "SMS Backup+ is not the default SMS provider, aborting.");
+            return;
+        }
+
         try {
             final boolean starredOnly   = getPreferences().isRestoreStarredOnly();
             final boolean restoreCallLog = CALLLOG.isRestoreEnabled(service);
@@ -80,6 +103,16 @@ public class SmsRestoreService extends ServiceBase {
 
         } catch (MessagingException e) {
             App.bus.post(mState.transition(ERROR, e));
+        } finally {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+                intent.hasExtra(Consts.KEY_DEFAULT_SMS_PROVIDER)) {
+                final String defaultSmsPackage = intent.getStringExtra(Consts.KEY_DEFAULT_SMS_PROVIDER);
+
+                // NOTE: This will require user interaction.
+                final Intent restoreSmsPackageIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                restoreSmsPackageIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, defaultSmsPackage);
+                startActivity(restoreSmsPackageIntent);
+            }
         }
     }
 

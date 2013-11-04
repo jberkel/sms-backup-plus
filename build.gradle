@@ -28,8 +28,8 @@ dependencies {
 }
 
 android {
-  buildToolsVersion '17'
-  compileSdkVersion 17
+  buildToolsVersion '19'
+  compileSdkVersion 19
 
   sourceSets {
     main {
