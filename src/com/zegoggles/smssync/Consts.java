@@ -31,6 +31,12 @@ public final class Consts {
     public static final String KEY_SKIP_MESSAGES = "com.zegoggles.smssync.SkipMessages";
 
     /**
+     * Key in the intent extras for storing the previously set default sms provider,
+     * allowing it to be restored after the restore finishes.
+     */
+    public static final String KEY_DEFAULT_SMS_PROVIDER = "com.zegoggles.smssync.DefaultSmsProvider";
+
+    /**
      * OAuth callback
      */
     public static final String CALLBACK_URL = "smssync://gmail";
