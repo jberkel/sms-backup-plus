@@ -10,12 +10,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <platform.version>4.0.1.2</platform.version>
+        <platform.version>4.4_r1</platform.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.google.android</groupId>
+            <groupId>android</groupId>
             <artifactId>android</artifactId>
             <version>${platform.version}</version>
             <scope>provided</scope>
@@ -90,7 +90,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.8.0</version>
                 <configuration>
                   <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
                   <assetsDirectory>${project.basedir}/assets</assetsDirectory>
@@ -197,6 +197,11 @@
             <id>zegoggles-releases</id>
             <name>zeggogles releases</name>
             <url>http://zegoggl.es:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>zegoggles-thirdparty</id>
+            <name>zeggogles releases</name>
+            <url>http://zegoggl.es:8081/nexus/content/repositories/thirdparty/</url>
         </repository>
         <repository>
             <id>zegoggles-snapshots</id>
