@@ -135,6 +135,7 @@
   <string name="ui_enable_auto_sync_label">Automatikus mentés</string>
   <string name="ui_enable_auto_sync_desc">Új SMS-ek automatikus mentése.</string>
   <string name="ui_enable_auto_sync_summary">%1$s automatikus mentése.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Nincs mentésre kijelölt elem.</string>
 
   <string name="sd_card_disclaimer">Az automatikus mentés nem működik megbízhatóan, ha az alkalmazás az SD-kártyára van telepítve.</string>
 
@@ -177,13 +178,13 @@
   <string name="ui_dialog_disconnect_msg">Biztos benne? A kapcsolat bontása után újra jóvá kell hagynia hozzáférést a fiókjával és a helyi biztonsági mentés állapota is alaphelyzetbe kerül.</string>
 
   <string name="ui_dialog_upgrade_title">Frissítési információk</string>
-  <string name="ui_dialog_upgrade_msg">
-  Az SMS Backup+ visszafelé kompatibilis az SMS Backuppal. Mindazonáltal bizonyosodjon meg róla, hogy az \"Automatikus mentés\" csak az egyik alkalmazásban aktív, különben előfordulhatnak ismétlődések a mentett üzenetek között. Ezen kívül válassza a \"Kihagyás\" opciót az első mentéskor, ha már korábban készült biztonsági mentés az üzenetekről.
-  </string>
+  <string name="ui_dialog_upgrade_msg">Az SMS Backup+ visszafelé kompatibilis az SMS Backuppal. Mindazonáltal bizonyosodjon meg róla, hogy az \"Automatikus mentés\" csak az egyik alkalmazásban aktív, különben előfordulhatnak ismétlődések a mentett üzenetek között. Ezen kívül válassza a \"Kihagyás\" opciót az első mentéskor, ha már korábban készült biztonsági mentés az üzenetekről.</string>
 
   <string name="ui_dialog_brokendroidx_title">DROID X SMS hiba</string>
-  <string name="ui_dialog_brokendroidx_msg">Van egy hiba a Droid X készülékekben,
-  amely megakadályozza, hogy az alkalmazás hozzáférjen a bejövő üzenetekhez. További információkért keresse fel a gyakran ismételt kérdéseket a weboldalon.</string>
+  <string name="ui_dialog_brokendroidx_msg">Van egy hiba a Droid X készülékekben, amely megakadályozza, hogy az alkalmazás hozzáférjen a bejövő üzenetekhez. További információkért keresse fel a gyakran ismételt kérdéseket a weboldalon.</string>
+
+  <string name="ui_dialog_enable_whatsapp_title">WhatsApp engedélyezése</string>
+  <string name="ui_dialog_enable_whatsapp_message">Az SMS Backup+ képes menteni a WhatsApp üzeneteket. Szeretné engedélyezni?</string>
 
   <string name="ui_sync">Mentés</string>
   <string name="ui_skip">Kihagyás</string>
@@ -295,6 +296,7 @@
   <string name="app_log_backup_requested">Mentés kérvényezve (%1$s)</string>
   <string name="app_log_start_backup">Mentés indítása (%1$s)</string>
   <string name="app_log_backup_messages">Mentés (%1$d SMS, %2$d MMS, %3$d hívásnapló bejegyzés)</string>
+  <string name="app_log_backup_messages_with_config">Konfiguráció: %1$s</string>
   <string name="app_log_backup_canceled">Mentés leállítva</string>
   <string name="app_log_backup_finished">Mentés kész</string>
 
@@ -310,6 +312,9 @@
   <string name="pref_app_log">Szinkronizálás naplózása</string>
   <string name="pref_app_log_enabled">A napló az SD-kártyán az \"sms_backup_plus.log\" nevű fájlban van.</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="pref_app_log_debug">Extra hibakeresési információ</string>
+  <string name="pref_app_log_debug_summary">Engedélyezi az extra hibakeresési adatok mentését a szinkronizációs naplóba</string>
 
   <string name="source_incoming">bejövő</string>
   <string name="source_regular">rendszeres</string>
@@ -328,7 +333,7 @@
   <string name="select_google_account">Válasszon Google-fiókot</string>
 
   <!-- donation related -->
-  <string name="donate">Adományozás</string>
+  <string name="donate">Támogatás</string>
   <string name="donate_summary">Biztonságosan Google Play Áruház rendszerén keresztül.</string>
 
   <string name="ui_dialog_donate_message">Adja meg az összeget:</string>
