@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.service;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Telephony;
@@ -58,6 +59,7 @@ public class SmsRestoreService extends ServiceBase {
      * Android KitKat requires SMS Backup+ to be the default SMS application in order to
      * write to the SMS Provider.
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private Boolean canWriteToSmsProvider() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return true;
@@ -106,14 +108,18 @@ public class SmsRestoreService extends ServiceBase {
         } finally {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
                 intent.hasExtra(Consts.KEY_DEFAULT_SMS_PROVIDER)) {
-                final String defaultSmsPackage = intent.getStringExtra(Consts.KEY_DEFAULT_SMS_PROVIDER);
 
-                // NOTE: This will require user interaction.
-                final Intent restoreSmsPackageIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-                restoreSmsPackageIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, defaultSmsPackage);
-                startActivity(restoreSmsPackageIntent);
+                restoreDefaultSmsProvider(intent.getStringExtra(Consts.KEY_DEFAULT_SMS_PROVIDER));
             }
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void restoreDefaultSmsProvider(String defaultSmsPackage) {
+        // NOTE: This will require user interaction.
+        final Intent restoreSmsPackageIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+        restoreSmsPackageIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, defaultSmsPackage);
+        startActivity(restoreSmsPackageIntent);
     }
 
     private void asyncClearCache() {

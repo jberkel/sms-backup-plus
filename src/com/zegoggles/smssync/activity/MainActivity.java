@@ -463,6 +463,7 @@ public class MainActivity extends PreferenceActivity {
         startService(intent);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void startRestore() {
         final Intent intent = new Intent(this, SmsRestoreService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
