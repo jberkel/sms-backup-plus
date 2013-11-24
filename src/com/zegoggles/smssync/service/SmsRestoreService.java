@@ -16,6 +16,7 @@ import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.service.exception.SmsProviderNotWritableException;
 import com.zegoggles.smssync.service.state.RestoreState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,19 +64,16 @@ public class SmsRestoreService extends ServiceBase {
     private Boolean canWriteToSmsProvider() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return true;
+        } else {
+            return getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
         }
-
-        String defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this);
-        return defaultSmsPackage.equals(getPackageName());
     }
 
     @Override
     protected void handleIntent(final Intent intent) {
         if (isWorking()) return;
         if (!canWriteToSmsProvider()) {
-            // TODO: The main app's status should be updated here to mention that SMS Backup+
-            // is not the default SMS application, and that the restore cannot be completed.
-            Log.e(TAG, "SMS Backup+ is not the default SMS provider, aborting.");
+            postError(new SmsProviderNotWritableException());
             return;
         }
 
@@ -104,7 +102,7 @@ public class SmsRestoreService extends ServiceBase {
                     new TokenRefresher(service, new AuthPreferences(this))).execute(config);
 
         } catch (MessagingException e) {
-            App.bus.post(mState.transition(ERROR, e));
+            postError(e);
         } finally {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
                 intent.hasExtra(Consts.KEY_DEFAULT_SMS_PROVIDER)) {
@@ -112,6 +110,10 @@ public class SmsRestoreService extends ServiceBase {
                 restoreDefaultSmsProvider(intent.getStringExtra(Consts.KEY_DEFAULT_SMS_PROVIDER));
             }
         }
+    }
+
+    private void postError(Exception exception) {
+        App.bus.post(mState.transition(ERROR, exception));
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

@@ -154,6 +154,7 @@
 
   <string name="error_wifi_only_no_connection">No Wifi connection</string>
   <string name="error_no_connection">No internet connection</string>
+  <string name="error_sms_provider_not_writable">Cannot write to SMS provider</string>
 
   <string name="ui_dialog_missing_credentials_title">Login information</string>
 

@@ -104,7 +104,7 @@
         <!-- Activity that allows the user to send new SMS/MMS messages -->
         <activity android:name=".ComposeSmsActivity" >
             <intent-filter>
-                <action android:name="android.intent.action.SEND" />                
+                <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

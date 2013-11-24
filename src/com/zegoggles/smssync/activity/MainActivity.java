@@ -468,21 +468,25 @@ public class MainActivity extends PreferenceActivity {
         final Intent intent = new Intent(this, SmsRestoreService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             String defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this);
-            if (!defaultSmsPackage.equals(getPackageName())) {
-                // NOTE: This will require user interaction.
-                final Intent changeSmsPackageIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-                changeSmsPackageIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
-                startActivity(changeSmsPackageIntent);
-
-                // TODO: Don't assume that the user clicked "Yes" here and that the activity
-                // finished instantly. We should probably have a conditional wait here checking
-                // whether SMS Backup+ became the default application, and only proceed when
-                // it did.
-                intent.putExtra(Consts.KEY_DEFAULT_SMS_PROVIDER, defaultSmsPackage);
+            if (!getPackageName().equals(defaultSmsPackage)) {
+                changeDefaultSmsPackage(intent, defaultSmsPackage);
             }
         }
 
         startService(intent);
+    }
+
+    private void changeDefaultSmsPackage(Intent intent, String defaultSmsPackage) {
+        // NOTE: This will require user interaction.
+        final Intent changeSmsPackageIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+        changeSmsPackageIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
+        startActivity(changeSmsPackageIntent);
+
+        // TODO: Don't assume that the user clicked "Yes" here and that the activity
+        // finished instantly. We should probably have a conditional wait here checking
+        // whether SMS Backup+ became the default application, and only proceed when
+        // it did.
+        intent.putExtra(Consts.KEY_DEFAULT_SMS_PROVIDER, defaultSmsPackage);
     }
 
     @Override
@@ -895,7 +899,7 @@ public class MainActivity extends PreferenceActivity {
     private void setupStrictMode() {
         if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads()
+//                    .detectDiskReads()
                     .detectDiskWrites()
                     .detectNetwork()
                     .penaltyFlashScreen()
