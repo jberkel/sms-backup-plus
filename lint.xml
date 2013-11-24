@@ -25,4 +25,5 @@
     <issue id="IconLocation" severity="ignore"/>
     <issue id="IconDuplicatesConfig" severity="ignore"/>
     <issue id="IconDensities" severity="ignore"/>
+    <issue id="LintError" severity="ignore"/>
 </lint>
