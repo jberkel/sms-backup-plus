@@ -69,7 +69,7 @@ public abstract class State {
     }
 
     public boolean isFinished() {
-        return !isRunning();
+        return !isInitialState() && !isRunning();
     }
 
     public abstract State transition(SmsSyncState newState, Exception exception);

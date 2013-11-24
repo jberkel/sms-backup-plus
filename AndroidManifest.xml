@@ -46,7 +46,6 @@
       android:name="App">
 
         <activity android:name=".activity.MainActivity" android:label="@string/app_name"
-                  android:launchMode="singleInstance"
                   android:theme="@style/Theme.SmsBackupPlus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,7 +62,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.auth.AuthActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".activity.auth.WebAuthActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name=".activity.auth.AccountManagerAuthActivity" android:theme="@style/Theme.SmsBackupPlus"/>
         <activity android:name=".activity.donation.DonationActivity" android:theme="@style/Theme.Donation"/>
 

@@ -10,7 +10,6 @@ import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
-import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.MessageConverter;
@@ -61,7 +60,7 @@ public class SmsRestoreService extends ServiceBase {
      * write to the SMS Provider.
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private Boolean canWriteToSmsProvider() {
+    private boolean canWriteToSmsProvider() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return true;
         } else {
@@ -103,25 +102,11 @@ public class SmsRestoreService extends ServiceBase {
 
         } catch (MessagingException e) {
             postError(e);
-        } finally {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-                intent.hasExtra(Consts.KEY_DEFAULT_SMS_PROVIDER)) {
-
-                restoreDefaultSmsProvider(intent.getStringExtra(Consts.KEY_DEFAULT_SMS_PROVIDER));
-            }
         }
     }
 
     private void postError(Exception exception) {
         App.bus.post(mState.transition(ERROR, exception));
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void restoreDefaultSmsProvider(String defaultSmsPackage) {
-        // NOTE: This will require user interaction.
-        final Intent restoreSmsPackageIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-        restoreSmsPackageIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, defaultSmsPackage);
-        startActivity(restoreSmsPackageIntent);
     }
 
     private void asyncClearCache() {

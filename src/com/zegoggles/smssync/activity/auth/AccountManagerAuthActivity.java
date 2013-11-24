@@ -42,7 +42,7 @@ public class AccountManagerAuthActivity extends Activity {
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
         if (accounts == null || accounts.length == 0) {
             Log.d(TAG, "no google accounts found on this device, using standard auth");
-            startActivity(new Intent(this, MainActivity.class).setAction(ACTION_FALLBACKAUTH));
+            setResult(RESULT_OK, new Intent(ACTION_FALLBACKAUTH));
             finish();
         }
     }
@@ -100,28 +100,28 @@ public class AccountManagerAuthActivity extends Activity {
         }, null);
     }
 
-    // should really use setResult + finish for all callbacks, but SmsSync is singleInstance (for some reason)
     private void onAccessDenied() {
-        startActivity(new Intent(this, MainActivity.class)
+        Intent result = new Intent(this, MainActivity.class)
                 .setAction(ACTION_ADD_ACCOUNT)
-                .putExtra(EXTRA_DENIED, true));
+                .putExtra(EXTRA_DENIED, true);
+        setResult(RESULT_OK, result);
         finish();
     }
 
     private void handleException(Exception e) {
         Log.w(TAG, e);
-        startActivity(new Intent(this, MainActivity.class)
+        Intent result = new Intent(this, MainActivity.class)
                 .setAction(ACTION_ADD_ACCOUNT)
-                .putExtra(EXTRA_ERROR, e.getMessage()));
-
+                .putExtra(EXTRA_ERROR, e.getMessage());
+        setResult(RESULT_OK, result);
         finish();
     }
 
     private void useToken(Account account, String token) {
-        startActivity(new Intent(this, MainActivity.class)
-                .setAction(ACTION_ADD_ACCOUNT)
+        Intent result = new Intent(ACTION_ADD_ACCOUNT)
                 .putExtra(EXTRA_ACCOUNT, account.name)
-                .putExtra(EXTRA_TOKEN, token));
+                .putExtra(EXTRA_TOKEN, token);
+        setResult(RESULT_OK, result);
         finish();
     }
 }

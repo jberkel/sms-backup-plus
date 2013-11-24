@@ -21,7 +21,7 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 
-public class AuthActivity extends Activity {
+public class WebAuthActivity extends Activity {
     private WebView mWebview;
     private ProgressDialog mProgress;
 
@@ -77,9 +77,7 @@ public class AuthActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(final WebView view, String url) {
                 if (url.startsWith(Consts.CALLBACK_URL)) {
-                    // should really use setResult + finish, but SmsSync is singleInstance (for some reason)
-                    Intent intent = new Intent().setData(Uri.parse(url));
-                    startActivity(intent);
+                    setResult(RESULT_OK, new Intent().setData(Uri.parse(url)));
                     finish();
                     return true;
                 } else {

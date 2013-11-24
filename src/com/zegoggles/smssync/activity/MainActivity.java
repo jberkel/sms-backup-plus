@@ -53,6 +53,7 @@ import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
+import com.zegoggles.smssync.activity.auth.WebAuthActivity;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
@@ -67,11 +68,11 @@ import com.zegoggles.smssync.service.Alarms;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
+import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuthCallbackTask;
 import com.zegoggles.smssync.tasks.RequestTokenTask;
 import com.zegoggles.smssync.utils.AppLog;
 import com.zegoggles.smssync.utils.ListPreferenceHelper;
-import com.zegoggles.smssync.utils.UrlOpener;
 import org.acra.ACRA;
 import org.jetbrains.annotations.Nullable;
 
@@ -93,6 +94,10 @@ public class MainActivity extends PreferenceActivity {
     public static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
     public static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
 
+    private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
+    private static final int REQUEST_PICK_ACCOUNT = 2;
+    private static final int REQUEST_WEB_AUTH = 3;
+
     enum Actions {
         Backup,
         Restore
@@ -103,6 +108,7 @@ public class MainActivity extends PreferenceActivity {
     private Preferences preferences;
     private StatusPreference statusPref;
     private @Nullable Uri mAuthorizeUri;
+    private @Nullable String currentSmsPackage;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -142,22 +148,9 @@ public class MainActivity extends PreferenceActivity {
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Uri uri = intent.getData();
-        if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL) &&
-                (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0) {
-            show(Dialogs.ACCESS_TOKEN);
-            new OAuthCallbackTask(this).execute(intent);
-        } else if (AccountManagerAuthActivity.ACTION_ADD_ACCOUNT.equals(intent.getAction())) {
-            handleAccountManagerAuth(intent);
-        } else if (AccountManagerAuthActivity.ACTION_FALLBACKAUTH.equals(intent.getAction())) {
-            handleFallbackAuth();
-        }
-    }
-
-    @Override
     protected void onResume() {
+        Log.d(TAG, "onResume()");
+
         super.onResume();
         initCalendars();
         initGroups();
@@ -176,6 +169,11 @@ public class MainActivity extends PreferenceActivity {
         updateImapSettings(!authPreferences.useXOAuth());
         checkUserDonationStatus();
         App.bus.register(statusPref);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        App.bus.unregister(statusPref);
     }
 
     @Override
@@ -209,23 +207,43 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    private void handleAccountManagerAuth(Intent data) {
-        String token = data.getStringExtra(AccountManagerAuthActivity.EXTRA_TOKEN);
-        String account = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ACCOUNT);
-        if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
-            authPreferences.setOauth2Token(account, token);
-            onAuthenticated();
-        } else {
-            String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
-            if (!TextUtils.isEmpty(error)) {
-                show(Dialogs.ACCOUNTMANAGER_TOKEN_ERROR);
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data + ")");
+        if (resultCode == RESULT_CANCELED) return;
+
+        switch (requestCode) {
+            case REQUEST_CHANGE_DEFAULT_SMS_PACKAGE: {
+                if (currentSmsPackage != null) {
+                    startRestore();
+                }
+                break;
+            }
+            case REQUEST_WEB_AUTH: {
+                Uri uri = data.getData();
+                if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL)) {
+                    show(Dialogs.ACCESS_TOKEN);
+                    new OAuthCallbackTask(this).execute(data);
+                }
+                break;
+            }
+            case REQUEST_PICK_ACCOUNT: {
+                if (AccountManagerAuthActivity.ACTION_ADD_ACCOUNT.equals(data.getAction())) {
+                    handleAccountManagerAuth(data);
+                } else if (AccountManagerAuthActivity.ACTION_FALLBACKAUTH.equals(data.getAction())) {
+                    handleFallbackAuth();
+                }
+                break;
             }
         }
     }
 
-    private void handleFallbackAuth() {
-        show(Dialogs.REQUEST_TOKEN);
-        new RequestTokenTask(this).execute(Consts.CALLBACK_URL);
+    @Subscribe public void restoreStateChanged(final RestoreState newState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && currentSmsPackage != null
+                && newState.isFinished()) {
+            restoreDefaultSmsProvider(currentSmsPackage);
+        }
     }
 
     @Subscribe public void onAuthorizedURLReceived(RequestTokenTask.AuthorizedURLReceived authorizedURLReceived) {
@@ -249,7 +267,7 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    void onAuthenticated() {
+    private void onAuthenticated() {
         updateConnected();
         // Invite use to perform a backup, but only once
         if (preferences.isFirstUse()) {
@@ -466,27 +484,20 @@ public class MainActivity extends PreferenceActivity {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void startRestore() {
         final Intent intent = new Intent(this, SmsRestoreService.class);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             String defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this);
+            Log.d(TAG, "default SMS package: "+defaultSmsPackage);
             if (!getPackageName().equals(defaultSmsPackage)) {
-                changeDefaultSmsPackage(intent, defaultSmsPackage);
+                this.currentSmsPackage = defaultSmsPackage;
+
+                requestDefaultSmsPackageChange();
+            } else {
+                startService(intent);
             }
+        } else {
+            startService(intent);
         }
-
-        startService(intent);
-    }
-
-    private void changeDefaultSmsPackage(Intent intent, String defaultSmsPackage) {
-        // NOTE: This will require user interaction.
-        final Intent changeSmsPackageIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
-        changeSmsPackageIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
-        startActivity(changeSmsPackageIntent);
-
-        // TODO: Don't assume that the user clicked "Yes" here and that the activity
-        // finished instantly. We should probably have a conditional wait here checking
-        // whether SMS Backup+ became the default application, and only proceed when
-        // it did.
-        intent.putExtra(Consts.KEY_DEFAULT_SMS_PROVIDER, defaultSmsPackage);
     }
 
     @Override
@@ -596,9 +607,8 @@ public class MainActivity extends PreferenceActivity {
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (mAuthorizeUri != null) {
-                                    if (!UrlOpener.Default.openUriForAuthorization(MainActivity.this, mAuthorizeUri)) {
-                                        Log.w(TAG, "could not open uri " + mAuthorizeUri);
-                                    }
+                                    startActivityForResult(new Intent(MainActivity.this, WebAuthActivity.class)
+                                            .setData(mAuthorizeUri), REQUEST_WEB_AUTH);
                                 }
                                 dismissDialog(id);
                             }
@@ -728,11 +738,11 @@ public class MainActivity extends PreferenceActivity {
         return connected;
     }
 
-    public void show(Dialogs d) {
+    private void show(Dialogs d) {
         showDialog(d.ordinal());
     }
 
-    public void dismiss(Dialogs d) {
+    private void dismiss(Dialogs d) {
         try {
             dismissDialog(d.ordinal());
         } catch (IllegalArgumentException e) {
@@ -822,7 +832,7 @@ public class MainActivity extends PreferenceActivity {
                 if (newValue) {
                     if (Integer.parseInt(Build.VERSION.SDK) >= 5) {
                         // use account manager on newer phones
-                        startActivity(new Intent(MainActivity.this, AccountManagerAuthActivity.class));
+                        startActivityForResult(new Intent(MainActivity.this, AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
                     } else {
                         // fall back to webview on older ones
                         handleFallbackAuth();
@@ -921,5 +931,41 @@ public class MainActivity extends PreferenceActivity {
     private void setWhatsAppEnabled(boolean enabled) {
         WHATSAPP.setBackupEnabled(MainActivity.this, enabled);
         updateAutoBackupEnabledSummary();
+    }
+
+    private void requestDefaultSmsPackageChange() {
+        final Intent changeIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+            .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
+
+        startActivityForResult(changeIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void restoreDefaultSmsProvider(String smsPackage) {
+        Log.d(TAG, "restoring SMS provider "+smsPackage);
+        final Intent changeDefaultIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+            .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, smsPackage);
+
+        startActivity(changeDefaultIntent);
+    }
+
+    private void handleAccountManagerAuth(Intent data) {
+        String token = data.getStringExtra(AccountManagerAuthActivity.EXTRA_TOKEN);
+        String account = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ACCOUNT);
+        if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
+            authPreferences.setOauth2Token(account, token);
+            onAuthenticated();
+        } else {
+            String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
+            if (!TextUtils.isEmpty(error)) {
+                show(Dialogs.ACCOUNTMANAGER_TOKEN_ERROR);
+            }
+        }
+    }
+
+    private void handleFallbackAuth() {
+        show(Dialogs.REQUEST_TOKEN);
+        new RequestTokenTask(this).execute(Consts.CALLBACK_URL);
     }
 }
