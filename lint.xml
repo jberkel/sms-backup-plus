@@ -26,4 +26,5 @@
     <issue id="IconDuplicatesConfig" severity="ignore"/>
     <issue id="IconDensities" severity="ignore"/>
     <issue id="LintError" severity="ignore"/>
+    <issue id="MissingRegistered" severity="ignore"/>
 </lint>

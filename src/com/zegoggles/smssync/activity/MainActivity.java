@@ -933,6 +933,7 @@ public class MainActivity extends PreferenceActivity {
         updateAutoBackupEnabledSummary();
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void requestDefaultSmsPackageChange() {
         final Intent changeIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
             .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
