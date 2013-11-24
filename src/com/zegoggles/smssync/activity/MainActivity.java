@@ -38,6 +38,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -463,7 +464,24 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void startRestore() {
-        startService(new Intent(this, SmsRestoreService.class));
+        final Intent intent = new Intent(this, SmsRestoreService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this);
+            if (!defaultSmsPackage.equals(getPackageName())) {
+                // NOTE: This will require user interaction.
+                final Intent changeSmsPackageIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                changeSmsPackageIntent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
+                startActivity(changeSmsPackageIntent);
+
+                // TODO: Don't assume that the user clicked "Yes" here and that the activity
+                // finished instantly. We should probably have a conditional wait here checking
+                // whether SMS Backup+ became the default application, and only proceed when
+                // it did.
+                intent.putExtra(Consts.KEY_DEFAULT_SMS_PROVIDER, defaultSmsPackage);
+            }
+        }
+
+        startService(intent);
     }
 
     @Override
