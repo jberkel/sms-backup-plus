@@ -15,20 +15,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>android</groupId>
-            <artifactId>android</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>com.google.android</groupId>-->
-            <!--<artifactId>annotations</artifactId>-->
-            <!--<version>4.1.1.4</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-
-        <dependency>
             <groupId>com.squareup</groupId>
             <artifactId>otto</artifactId>
             <version>1.3.4</version>
@@ -109,6 +95,13 @@
             <artifactId>mockito-all</artifactId>
             <version>1.9.5</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>android</groupId>
+            <artifactId>android</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

@@ -9,7 +9,6 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-@Ignore
 @RunWith(RobolectricTestRunner.class)
 public class XOAuthConsumerTest {
 
