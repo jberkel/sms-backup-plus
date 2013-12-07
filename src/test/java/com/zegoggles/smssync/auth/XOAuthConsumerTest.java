@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.auth;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -8,6 +9,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
+@Ignore
 @RunWith(RobolectricTestRunner.class)
 public class XOAuthConsumerTest {
 
