@@ -45,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d elements restaurats amb èxit.</string>
 
   <string name="status_unknown_error">Error</string>
-  <string name="notification_unknown_error">Error d\'SMSBackup+</string>
+  <string name="notification_general_error">Error d\'SMSBackup+</string>
 
   <string name="status_unknown_error_details">Hi ha hagut un error durant la còpia/restauració:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Error d\'inici de sessió</string>
@@ -310,7 +310,7 @@
   <string name="app_log_backup_finished">S\'ha acabat la còpia</string>
 
   <string name="app_log_backup_failed_authentication">Error d\'autenticació: %1$s</string>
-  <string name="app_log_backup_failed_messaging">Error general: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Error general: %1$s</string>
   <string name="app_log_backup_failed_connectivity">S\'ha omès la còpia de seguretat, no hi ha connexió</string>
   <string name="app_log_scheduled_next_sync">La propera còpia està planificada per a: %1$s</string>
   <string name="app_log_no_next_sync">No s\'ha planificat cap més còpia</string>
