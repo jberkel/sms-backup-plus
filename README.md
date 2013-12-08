@@ -29,7 +29,7 @@ Main differences / improvements:
 
   * Works with any IMAP server (but defaults to Gmail).
 
-Tested with Android 1.5 - 4.2.x.
+Tested with Android 1.5 - 4.4.x.
 
 SMS Backup+ is available for free in the Google Play Store, there will never be a pro / paid version.
 
@@ -65,18 +65,6 @@ SMS Backup+ permission to access your emails.
 After clicking on "Grant Access" SMS Backup+ will become visible again, the
 checkbox should now be checked, indicating that the authorization process was
 successful.
-
-### Upgrading (for users of SMS Backup)
-
-You don't need to uninstall the old version in order to try out SMS Backup+.
-However make sure that "Auto backup" is disabled in both apps, otherwise you
-might end up with messages backed up multiple times, resulting in duplicates in
-Gmail.
-
-If you've used SMS Backup before you should just connect your Gmail account as
-described above (SMS Backup+ is not able to access login information stored by
-SMS Backup). Make sure you select "Skip" when asked about the initial sync,
-otherwise already backed up messages will be backed up again.
 
 ### Initial backup
 
@@ -212,7 +200,7 @@ mark it as not important.
 ![](https://img.skitch.com/20120106-tymk3rn4i5apshhr6e1hbd17qn.jpg)
 ![](https://img.skitch.com/20120106-rsg7912rnus5gwe3e572rxwbae.jpg)
 
-#### <a name="faq-backup-to-inbox">I want the backed up mesages to show up in my gmail inbox!</a>
+#### <a name="faq-backup-to-inbox">I want the backed up messages to show up in my gmail inbox!</a>
 
 Just set the label to "Inbox" instead of the default "SMS" or "Call log".
 
@@ -305,6 +293,15 @@ faster.
 #### <a name="restore-reversed">The timestamps of the restored messages is wrong / the messages are not restored in the right order</a>
 
 This is a known bug: [#94](https://github.com/jberkel/sms-backup-plus/issues/94)
+
+#### <a name="restore-kitkat">How do I restore on KitKat</a>
+
+Restoring on KitKat requires an additional permission which needs to be granted by the user after installation.
+SMS Backup+ will open the settings app for you - in the `Messaging` tab select SMS Backup+.
+Then set the `Write SMS/MMS` permission to `ON` (see [screenshot][appopsdetail]),
+return to SMS Backup+ and re-run restore.
+
+*Note*: this only applies to version 1.5.6-BETA.
 
 ### Authentication questions
 
@@ -422,6 +419,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
+[appopssummary]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/app_ops_summary.png
+[appopsdetail]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/app_ops_detail.png
 [gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
 [gcalshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gcal_screenshot.png
 [whatsapp-screenshot]: https://www.evernote.com/shard/s1/sh/79d6ab92-778d-4308-9025-5306bda7beaf/500b42c3484688f3b4a1d2b1894baba0
