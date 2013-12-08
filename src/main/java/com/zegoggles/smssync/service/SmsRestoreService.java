@@ -1,9 +1,6 @@
 package com.zegoggles.smssync.service;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
-import android.provider.Telephony;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
@@ -17,6 +14,7 @@ import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.service.exception.SmsProviderNotWritableException;
 import com.zegoggles.smssync.service.state.RestoreState;
+import com.zegoggles.smssync.utils.AppOps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,23 +53,10 @@ public class SmsRestoreService extends ServiceBase {
         service = null;
     }
 
-    /**
-     * Android KitKat requires SMS Backup+ to be the default SMS application in order to
-     * write to the SMS Provider.
-     */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private boolean canWriteToSmsProvider() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return true;
-        } else {
-            return getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
-        }
-    }
-
     @Override
     protected void handleIntent(final Intent intent) {
         if (isWorking()) return;
-        if (!canWriteToSmsProvider()) {
+        if (!AppOps.hasSMSWritePermission(this)) {
             postError(new SmsProviderNotWritableException());
             return;
         }
