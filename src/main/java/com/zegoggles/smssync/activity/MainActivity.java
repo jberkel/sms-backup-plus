@@ -118,6 +118,7 @@ public class MainActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences);
 
         statusPref = new StatusPreference(this);
+        statusPref.setOrder(-1);
         getPreferenceScreen().addPreference(statusPref);
 
         int version = Build.VERSION.SDK_INT;
