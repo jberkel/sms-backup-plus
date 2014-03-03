@@ -194,14 +194,6 @@
       SMS Backup+ can now also back up your WhatsApp messages.
       Do you want to enable this?</string>
 
-  <string name="ui_dialog_kitkat_sms_permission_title">SMS write permission required</string>
-  <string name="ui_dialog_kitkat_sms_permission_message">
-      On Android KitKat and above you need to give SMS Backup+ the permission to write SMS in order
-      to restore them. Tapping OK will take you to permissions screen. You need to select "Messaging", then
-      SMS Backup+. Set the "Write SMS/MMS" preference to ON, then return to SMS Backup+
-      and retry the operation.
-  </string>
-
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
   <string name="err_sync_requires_login_info">Cannot backup without login information.</string>

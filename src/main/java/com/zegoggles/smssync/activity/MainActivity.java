@@ -38,6 +38,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -67,10 +68,10 @@ import com.zegoggles.smssync.service.Alarms;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
+import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuthCallbackTask;
 import com.zegoggles.smssync.tasks.RequestTokenTask;
 import com.zegoggles.smssync.utils.AppLog;
-import com.zegoggles.smssync.utils.AppOps;
 import com.zegoggles.smssync.utils.ListPreferenceHelper;
 import org.acra.ACRA;
 import org.jetbrains.annotations.Nullable;
@@ -93,8 +94,9 @@ public class MainActivity extends PreferenceActivity {
     public static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
     public static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
 
-    private static final int REQUEST_PICK_ACCOUNT = 1;
-    private static final int REQUEST_WEB_AUTH     = 2;
+    private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
+    private static final int REQUEST_PICK_ACCOUNT = 2;
+    private static final int REQUEST_WEB_AUTH = 3;
 
     enum Actions {
         Backup,
@@ -106,6 +108,7 @@ public class MainActivity extends PreferenceActivity {
     private Preferences preferences;
     private StatusPreference statusPref;
     private @Nullable Uri mAuthorizeUri;
+    private @Nullable String currentSmsPackage;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -177,6 +180,7 @@ public class MainActivity extends PreferenceActivity {
     protected void onDestroy() {
         super.onDestroy();
         App.bus.unregister(this);
+        App.bus.unregister(statusPref);
     }
 
     @Override
@@ -209,6 +213,12 @@ public class MainActivity extends PreferenceActivity {
         if (resultCode == RESULT_CANCELED) return;
 
         switch (requestCode) {
+            case REQUEST_CHANGE_DEFAULT_SMS_PACKAGE: {
+                if (currentSmsPackage != null) {
+                    startRestore();
+                }
+                break;
+            }
             case REQUEST_WEB_AUTH: {
                 Uri uri = data.getData();
                 if (uri != null && uri.toString().startsWith(Consts.CALLBACK_URL)) {
@@ -225,6 +235,14 @@ public class MainActivity extends PreferenceActivity {
                 }
                 break;
             }
+        }
+    }
+
+    @Subscribe public void restoreStateChanged(final RestoreState newState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && currentSmsPackage != null
+                && newState.isFinished()) {
+            restoreDefaultSmsProvider(currentSmsPackage);
         }
     }
 
@@ -261,6 +279,7 @@ public class MainActivity extends PreferenceActivity {
         return getString(R.string.status_idle_details,
                 lastSync < 0 ? getString(R.string.status_idle_details_never) :
                 DateFormat.getDateTimeInstance().format(new Date(lastSync)));
+
     }
 
     private void updateLastBackupTimes() {
@@ -466,8 +485,16 @@ public class MainActivity extends PreferenceActivity {
     private void startRestore() {
         final Intent intent = new Intent(this, SmsRestoreService.class);
 
-        if (!AppOps.hasSMSWritePermission(this)) {
-            show(Dialogs.KITKAT_SMS_WRITE_PERMISSION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this);
+            Log.d(TAG, "default SMS package: "+defaultSmsPackage);
+            if (!getPackageName().equals(defaultSmsPackage)) {
+                this.currentSmsPackage = defaultSmsPackage;
+
+                requestDefaultSmsPackageChange();
+            } else {
+                startService(intent);
+            }
         } else {
             startService(intent);
         }
@@ -660,25 +687,13 @@ public class MainActivity extends PreferenceActivity {
                         .setNegativeButton(android.R.string.cancel, null)
                         .create();
 
-            case KITKAT_SMS_WRITE_PERMISSION:
-                return new AlertDialog.Builder(this)
-                        .setTitle(R.string.ui_dialog_kitkat_sms_permission_title)
-                        .setMessage(getString(R.string.ui_dialog_kitkat_sms_permission_message))
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override public void onClick(DialogInterface dialog, int which) {
-                                AppOps.launchSettings(MainActivity.this);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .create();
-
             default:
                 return null;
         }
-        return createMessageDialog(title, msg);
+        return createMessageDialog(id, title, msg);
     }
 
-    private Dialog createMessageDialog(String title, String msg) {
+    private Dialog createMessageDialog(final int id, String title, String msg) {
         return new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(msg)
@@ -916,6 +931,24 @@ public class MainActivity extends PreferenceActivity {
     private void setWhatsAppEnabled(boolean enabled) {
         WHATSAPP.setBackupEnabled(MainActivity.this, enabled);
         updateAutoBackupEnabledSummary();
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void requestDefaultSmsPackageChange() {
+        final Intent changeIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+            .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
+
+        startActivityForResult(changeIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void restoreDefaultSmsProvider(String smsPackage) {
+        Log.d(TAG, "restoring SMS provider "+smsPackage);
+        final Intent changeDefaultIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+            .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, smsPackage);
+
+        startActivity(changeDefaultIntent);
     }
 
     private void handleAccountManagerAuth(Intent data) {
