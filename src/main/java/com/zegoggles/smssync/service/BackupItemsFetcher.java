@@ -19,7 +19,9 @@ public class BackupItemsFetcher {
     private final ContentResolver resolver;
     private final BackupQueryBuilder queryBuilder;
 
-    public BackupItemsFetcher(@NotNull Context context, @NotNull ContentResolver resolver, @NotNull BackupQueryBuilder queryBuilder) {
+    public BackupItemsFetcher(@NotNull Context context,
+                              @NotNull ContentResolver resolver,
+                              @NotNull BackupQueryBuilder queryBuilder) {
         if (resolver == null) throw new IllegalArgumentException("resolver cannot be null");
         if (queryBuilder == null) throw new IllegalArgumentException("queryBuilder cannot be null");
 
@@ -31,14 +33,14 @@ public class BackupItemsFetcher {
     public @NotNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
         switch (dataType) {
-            case WHATSAPP: return new WhatsAppItemsFetcher().getItems(DataType.WHATSAPP.getMaxSyncedDate(context), max);
+            case WHATSAPP: return new WhatsAppItemsFetcher(context).getItems(DataType.WHATSAPP.getMaxSyncedDate(context), max);
             default: return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
         }
     }
 
     public long getMostRecentTimestamp(DataType dataType) {
         switch (dataType) {
-            case WHATSAPP: new WhatsAppItemsFetcher().getMostRecentTimestamp();
+            case WHATSAPP: return new WhatsAppItemsFetcher(context).getMostRecentTimestamp();
             default: return getMostRecentTimestampForQuery(queryBuilder.buildMostRecentQueryForDataType(dataType));
         }
     }

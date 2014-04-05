@@ -85,6 +85,7 @@ public class BackupItemsFetcherTest {
 
     @Test public void shouldGetMostRecentTimestampForItemTypeWhatsApp() throws Exception {
         assertThat(fetcher.getMostRecentTimestamp(WHATSAPP)).isEqualTo(-1);
+        verifyZeroInteractions(queryBuilder);
     }
 
     private void mockMostRecentTimestampForType(DataType type, long max) {

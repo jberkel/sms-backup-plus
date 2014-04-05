@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.service;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 import com.github.jberkel.whassup.Whassup;
@@ -14,8 +15,8 @@ import static com.zegoggles.smssync.service.BackupItemsFetcher.emptyCursor;
 public class WhatsAppItemsFetcher {
     private Whassup whassup;
 
-    public WhatsAppItemsFetcher() {
-        this(new Whassup());
+    public WhatsAppItemsFetcher(Context context) {
+        this(new Whassup(context));
     }
 
     protected WhatsAppItemsFetcher(Whassup whassup) {
