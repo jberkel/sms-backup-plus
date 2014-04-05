@@ -1,0 +1,5 @@
+<resources>
+    <style name="Theme.SmsBackupPlus" parent="android:Theme.Black"/>
+    <style name="Theme.Donation" parent="android:Theme.Translucent.NoTitleBar"/>
+    <style name="Theme.WebAuth" parent="android:Theme.Translucent.NoTitleBar"/>
+</resources>

@@ -1,0 +1,241 @@
+== 1.5.6 (xxx) tbd
+
+  * KitKat compatibility fixes (#388)
+  * Catalan translation (#408)
+  * pay-me 0.0.3
+  * whassup with crypt5 support
+
+== 1.5.5 (1531) 07-16-2013
+
+  * Fix call logs not getting backed up (#336)
+  * Fix battery drainage
+
+== 1.5.4 (1527) 07-08-2013
+
+  * Fixed MMS not getting backed up (#334)
+  * Fixed folders getting unnecessarily created  (#333)
+  * Fixed contact group id selection
+  * Upgraded whassup to 0.0.5
+  * Various smaller bugfixes
+
+== 1.5.3 (1525) 07-01-2013
+
+  * Fixed calendar syncing (#260)
+  * Fixed call log sync grayed-out option (#308)
+  * Fixed loss of a sms/mms or call log if an exception occurs during backup (#270)
+  * Added sync log debug mode
+  * Added Korean translation (Yunsu Choi)
+  * Added Galician translation (Javier Pico)
+  * Refactored code + added unit tests
+
+== 1.5.2 (1515) 06-09-2013
+
+  * Fix notifications getting displayed when not connected to Wifi
+  * Fixed greek translation
+  * Fixed serialization problem in BroadcastReceiver
+  * Fixed buttons displaying incorrectly after error
+
+== 1.5.1 (1514) 06-07-2013
+
+  * whassup 0.0.4: Fixed OutOfMemory crashes when decrypting the db
+  * pay-me 0.0.2: don't crash when helper is disposed
+
+== 1.5.0 (1513) 06-06-2013
+
+  * Added WhatsApp support
+  * Translation updates (French/Russian)
+  * Moved IAB code to external apklib
+  * Greek translation (https://github.com/jberkel/sms-backup-plus/pull/315)
+  * Show a notification when backup/restore is running manually
+
+== 1.4.8 (1409) 01-18-2013
+
+  * Fixed XOAuth2 token refresh
+
+== 1.4.7 (1408) 01-12-2013
+
+  * Added AccountManager support
+  * Translation updates (fr/cn)
+  * Removed donation via paypal, added donation via in-app billing V3
+
+== 1.4.6 (1407) 09-06-2012
+
+  * Fixes for ICS / Jelly Bean (missing permissions)
+  * Enable holo theme for API level >= 11
+  * Added Hungarian translation (László Gárdonyi)
+  * Added Slovak translation (https://github.com/Matrix44)
+  * Translation fixes (Italian: Chiara De Liberato, Chinese: https://github.com/CzBiX)
+  * Handle authentication in a WebView to avoid compatibility problems
+  * Try opening stock browser first
+  * Schedule regular backup after BOOT_COMPLETE (https://github.com/jberkel/sms-backup-plus/pull/215)
+  * Fix crash on some Samsung devices running 4.0.4 (https://github.com/jberkel/sms-backup-plus/issues/253)
+
+
+== 1.4.5 (1406) 01-02-2012
+
+  * Added call log calendar support on ICS (github.com/smike)
+  * Upgraded + fixed PayPal donation
+
+== 1.4.4 (1405) 11-26-2011
+
+  * Compatible w/ ICS (Android 4.0)
+  * Translation updates (de,cs,fr,it,no,sr,zh)
+
+== 1.4.3 (1404) 02-08-2011
+
+  * Fix FC
+
+== 1.4.2 (1403) 02-08-2011
+
+  * Fix MMS backup
+  * New icon (Shimon Simon)
+  * Sync log
+
+== 1.4.1 (1401) 01-29-2011
+
+  * Dutch translation (Martijn Brouns)
+  * Various bugfixes
+
+== 1.4.0 (1400) 01-13-2011
+
+  * Call log restore
+  * Cleaned up preference menu structure
+  * Fix SMS/MMS threading
+  * Fix IO error during restore
+  * Automatic crash reporting (using ACRA)
+  * Android 2.2 Data Backup support (for preferences)
+  * In-app donation support: Flattr, PayPal
+
+== 1.3.6/1.3.7 (1306/1307) 12-22-2010
+
+  * Fix for GH-97, GH-84
+  * Portugese translation (João Pedro Ferreira)
+
+== 1.3.5 (1305) 12-19-2010
+
+  * Upgraded to K9 mail HEAD
+  * IMAP timeout fixes
+  * Swedish translation (Erik Eloff)
+  * Polish translation update (Arkadiusz Kałka)
+  * Norwegian translation (Toralv Berge)
+
+== 1.3.4 (1304) 12-10-2010
+
+ * Fix for greyed out calendar / groups options
+ * 3rd party app integration via broadcast intents (GH-92)
+
+== 1.3.3 (1303) 12-01-2010
+
+ * Fix for broken restore (GH-89)
+
+== 1.3.2 (1302) 11-30-2010
+
+ * Fix for broken MMS backup
+
+== 1.3.1 (1301) 11-30-2010
+
+ * Fix bugs introduced in 1.3
+
+== 1.3 (1300) 11-30-2010
+
+ * Add call log entries to calendar (similar to CallTrack)
+ * Ability to specify which contacts' SMSes will be backed up (GH-24)
+ * Selective call log backups (incoming/outgoing/missed)
+ * Czech translation (Lukas Pribyl)
+ * Support multi-recipient MMS
+ * Call Log needs Incoming/Outgoing/Missed Status (GH-81)
+ * Fix "Could not skip all call logs after re-configuration" (GH-82)
+ * Better error messages (GH-83)
+
+== 1.2 (1200) 11-10-2010
+
+ * Call log support (Felix Knecht)
+ * Backup all MMS attachments (GH-78)
+ * Lift folder name restrictions (GH-79)
+ * Turkish translation (Harun Sahin)
+
+== 1.1.5 (1105) 11-04-2010
+
+ * French translation (Christian Sorgi)
+ * Russian translation (Petr P. Gornostaev)
+ * Updating thread progress message (GH-69)
+ * Label prefix patch (Daniele Battista)
+ * Warning message for DROID X users
+ * Cache clearing on start is now async
+ * Ignore Require WiFi setting on manual backup (GH-65)
+ * Better threading on restore
+ * fix gets stuck on mms read receipts (GH-66)
+ * MMS: gmail doesn't show attachment paperclip (GH-71)
+
+== 1.1.4 (1104) 10-26-2010
+
+ * Italian translation (Gabriele Ravanetti)
+ * Restore only starred messages (GH-63)
+ * Request token warning message
+
+== 1.1.2, 1.1.3 (1102/1103) 10-23-2010
+
+ * Disable MMS backup on unsupported devices
+ * Fix for gmail timestamps (GH-60)
+
+== 1.1.1 (1101) 10-14-2010
+
+ * Make MMS backup optional
+
+== 1.1 (1100) 10-13-2010
+
+ * MMS support [bjdodson]
+
+== 1.0.11 (111) 10-05-2010
+
+ * Issues: GH-19,43,48,49,51
+ * Use new Contacts 2.x API [bjdodson]
+
+== 1.0.10 (110) 09-30-2010
+
+ * Issues: GH-46,47
+ * Use separate preference for XOAuth (avoid conflicts with plain)
+ * Always reload gmail username after completing OAuth dance
+
+== 1.0.9 (109) 09-25-2010
+
+ * UI code / service integration code rewrite
+ * Issues: GH-17,21,26,41
+ * Chinese translation updates [marcher233]
+
+== 1.0.8 (108) 09-17-2010
+
+ * Bugfixes: GH-25,30,31,38
+
+== 1.0.7 (107) 09-10-2010
+
+ * FC fix
+
+== 1.0.6 (106) 09-08-2010
+
+ * Various bugfixes
+ * Translations: pl (skolima), es (Roberto Elena Ormad)
+
+== 1.0.5 (105) 08-19-2010
+
+ * Threading fixes
+
+== 1.0.4 (104) 08-13-2010
+
+ * Chinese translation by bbs.goapk.com, message-id fixes
+
+== 1.0.3 (103) 08-13-2010
+
+ * GH-27, wording changes
+
+== 1.0.2 (102) 08-10-2010
+
+ * Fix potential NPE / crash during restore
+
+== 1.0.1 (101) 08-10-2010
+
+ * small fixes (IllegalArgumentError, NPE)
+
+== 1.0 (100) 08-09-2010
+
+ * Initial release

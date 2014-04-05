@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Utilice Gmail para hacer una copia de seguridad de sus SMS. Es una version mejorada de la applicacion de la aplicacion "SMS Backup" por
+     Christoph Studer que soporta la restoracion de los SMS en el telefono. Es
+     totalmente compatible con SMS Backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Copia de seguridad</string>
+  <string name="ui_sync_button_label_canceling">Deteniendo</string>
+  <string name="ui_sync_button_label_syncing">Parar</string>
+
+  <string name="ui_restore_button_label_idle">Restaurar</string>
+  <string name="ui_restore_button_label_restoring">Parar</string>
+
+  <string name="status_idle">Inactivo</string>
+  <string name="status_idle_details">Última copia de seguridad: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">Nunca</string>
+
+  <string name="status_working">Trabajando</string>
+
+  <string name="status_backup">Realizando copia de seguridad</string>
+  <string name="status_restore">Restaurando</string>
+
+  <string name="status_backup_details">Respaldados <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementos\u2026</string>
+  <string name="status_restore_details">Restaurados <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>elementos\u2026</string>
+  <string name="status_login_details">Iniciando sesión\u2026</string>
+  <string name="status_updating_threads">Actualisado mensajes\u2026</string>
+  <string name="status_done">Hecho</string>
+  <string name="status_backup_done_details_max_per_sync">Máximo de %1$d elementos por copia de seguridad alcanzado. Reinicie la copia de seguridad para continuar.</string>
+  <string name="status_backup_done_details_noitems">No hubo ningún elemento para copia de seguridad.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Respaldo hecho con éxito <xliff:g id="total_items">%1$d</xliff:g> item.</item>
+    <item quantity="other">Respaldo hecho con éxito <xliff:g id="total_items">%1$d</xliff:g> items.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Restauración hecha con éxito <xliff:g id="total_items">%1$d</xliff:g> item (%2$d dups).</item>
+    <item quantity="other">Restauración hecha con éxito <xliff:g id="total_items">%1$d</xliff:g> items (%2$d dups).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d elementos restaurados con éxito.</string>
+
+  <string name="status_unknown_error">Error</string>
+  <string name="notification_general_error">Error de SMSBackup+</string>
+
+  <string name="status_unknown_error_details">Error durante la copia de seguridad/restauración:\n</string>
+  <string name="status_auth_failure">Error al iniciar la sesión</string>
+  <string name="notification_auth_failure">Error de inicio de sesión en SMSBackup+</string>
+
+
+  <string name="status_auth_failure_details_xoauth">Por favor, asegúrese de que ha habilitado IMAP en la configuración de su cuenta de Gmail.</string>
+  <string name="status_auth_failure_details_plain">Error de autorización IMAP. Asegurese de que su nombre de usuario y contraseña sean correctos.</string>
+  <string name="status_calc_details">Calculando\u2026</string>
+  <string name="status_canceled">Cancelado</string>
+  <string name="status_canceled_details">%1$d/%2$d elementos han sido respaldados.</string>
+
+  <string name="ui_settings_advanced_label">Configuración avanzada</string>
+  <string name="ui_settings_advanced_desc">Establecer preferencias avanzadas.</string>
+  <string name="ui_settings_advanced_server_label">Configuración del servidor</string>
+  <string name="ui_settings_advanced_server_desc">¡No cambiar a menos que sepa lo que está haciendo!</string>
+
+  <string name="imap_settings">Configuración IMAP</string>
+  <string name="ui_login_label">Nombre de usuario</string>
+  <string name="ui_login_desc">Su cuenta de Google/dirección de e-mail.</string>
+  <string name="ui_login_dialog_msg">ADVERTENCIA: Cambiar el nombre de usuario restablecerá toda la información de copia de seguridad y su contraseña.</string>
+  <string name="ui_password_label">Contraseña</string>
+  <string name="ui_password_desc">Su contraseña de cuenta IMAP. Sólo se usa cuando XOAuth está deshabilitado.</string>
+  <string name="ui_password_dialog_msg">La contraseña es almacenada en este dispositivo y sólo se utiliza para iniciar sesión en Gmail.</string>
+  <string name="ui_server_label">Dirección del servidor</string>
+  <string name="ui_server_desc">La dirección del servidor al que desea sincronizar incl. su puerto.</string>
+  <string name="ui_server_dialog_msg">ADVERTENCIA: Cambiar la dirección del servidor restablecerá toda la información de copia de seguridad y su contraseña. Predeterminado para gmail es \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Seguridad</string>
+  <string name="ui_protocol_desc">El protocolo de seguridad del servidor. Predeterminado para gmail es \"SSL (Obligatorio)\"."</string>
+  <string name="ui_authentication_label">Autenticación</string>
+  <string name="ui_authentication_desc">El método de autenticación. Predeterminado para gmail es \"XOauth\".</string>
+  <string name="plain">Texto legible</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
+  <string name="ui_imap_folder_desc">Etiqueta de Gmail asignada a SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Los SMS respaldados serán marcados con esta etiqueta en Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">Prefijo del sujeto de los mails</string>
+  <string name="ui_mail_subject_prefix_desc">Use el nombre del archivo IMAP como prefijo en el sujeto de los mails</string>
+
+  <string name="ui_max_items_per_sync_label">Elementos por copia de seguridad</string>
+  <string name="ui_max_items_per_sync_desc">Número máximo de elementos por copia de seguridad.</string>
+  <string name="ui_max_items_per_restore_label">Elementos por restauración</string>
+  <string name="ui_max_items_per_restore_desc">Número máximo de mensajes restaurados.</string>
+
+  <string name="ui_restore_starred_only_label">Starred SMS</string>
+  <string name="ui_restore_starred_only_desc">Restaurar unicamente los mensajes .</string>
+
+  <string name="ui_backup_mms_label">Añadir los MMS</string>
+  <string name="ui_backup_mms_desc">Activar la copia de los MMS</string>
+  <string name="ui_backup_mms_not_supported">La copia de los MMS no es soportada en esta plataforma.</string>
+
+  <string name="ui_backup_calllog_label">Copiar el registro de llamadas</string>
+  <string name="ui_backup_calllog_desc">Activar la copia del registro de llamadas (beta)</string>
+
+  <string name="ui_imap_folder_calllog_label">Label del registro de llamadas</string>
+  <string name="ui_imap_folder_calllog_desc">Label Gmail del registro de llamadas.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Las llamadas copiadas en Gmail tendaran este label.</string>
+
+ <string name="ui_mark_as_read_label">Marcar como leído (emails)</string>
+  <string name="ui_mark_as_read_desc">Si se marcan los mensajes en Gmail como leídos o no.</string>
+  <string name="ui_mark_as_read_restore_label">Marcar como leído (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Si se debe marcar todos los SMS restaurados como leídos o no.</string>
+
+  <string name="ui_email_address_style_label">Estilo de la dirección de correo</string>
+  <string name="ui_email_address_style_desc">Formato de la dirección de correo</string>
+
+  <string name="ui_enable_auto_sync_label">Copia de seguridad automática</string>
+  <string name="ui_enable_auto_sync_desc">Si se hace copia de seguridad de nuevos SMS automáticamente o no.</string>
+
+  <string name="auto_backup_settings">Copia de seguridad automatica</string>
+  <string name="ui_auto_backup_schedule_label">Horario regular</string>
+  <string name="ui_auto_backup_schedule_desc">Cuando hacer una copia de los SMS</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Horario de copia</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Cuando copiar los SMS (después de la recepcion)</string>
+
+  <string name="ui_wifi_only_label">Necesita Wifi</string>
+  <string name="ui_wifi_only_desc">Copiar/Retaurar unicamente cuando hay una conexion Wifi</string>
+
+  <string name="ui_notifications_label">Notificaciones</string>
+  <string name="ui_notifications_desc">Notificaciones en fondo</string>
+
+  <string name="error_wifi_only_no_connection">No conexión Wifi</string>
+  <string name="error_no_connection">No conexión internet</string>
+
+  <string name="ui_dialog_missing_credentials_title">Información de inicio de sesión</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Necesita conectar su cuenta de Gmail en primer lugar.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Necesita configurar su nombre de usuario y contraseña en primer lugar.</string>
+
+
+
+
+  <string name="ui_dialog_invalid_imap_folder_title">Nombre de la etiqueta no válido</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">El nombre de la etiqueta sólo puede contener letras sin acentuar (AZ, az).</string>
+  <string name="ui_dialog_first_sync_title">Primera copia de seguridad</string>
+  <string name="ui_dialog_first_sync_msg">Copia de seguridad o saltarse todos los mensajes almacenados actualmente en este dispositivo?\n\nNota: La copia de seguridad se dividirá en lotes de %1$d mensajes.</string>
+  <string name="ui_dialog_first_sync_msg_batched">¿Copia de seguridad o saltarse todos los mensajes almacenados actualmente en este dispositivo?\n\nNota: La copia de seguridad se dividirá en lotes de %1$d mensajes.</string>
+  <string name="ui_dialog_request_token_msg">Obteniendo token de solicitud...</string>
+  <string name="ui_dialog_access_token_msg">Solicitando acceso...</string>
+
+  <string name="ui_dialog_access_token_error_title">Fallo de autorización</string>
+  <string name="ui_dialog_access_token_error_msg">No se pudo obtener el token de acceso. Asegúrese de seleccionar \"Conceder acceso\".</string>
+
+
+
+  <string name="ui_dialog_connect_msg">Se abrirá una ventana de navegador, donde usted necesitará iniciar sesión en gmail y autorizar esta aplicación</string>
+  <string name="ui_dialog_connect_token_error">No se pudo obtener el token de solicitud de Google. Asegúrese de que el teléfono está conectado a internet.</string>
+  <string name="ui_dialog_disconnect_msg">¿Está seguro? Necesitará autorizar de nuevo después de desconectar esta cuenta</string>
+
+  <string name="ui_dialog_upgrade_title">Información de actualización</string>
+  <string name="ui_dialog_upgrade_msg">SMS Backup+ es completamente compatible con SMS Backup. Sin embargo asegúrese de que \"Copia de seguridad automática\" está sólo habilitada en una aplicación, de lo contrario podría obtener duplicados. También debe seleccionar \"Saltar\" mensajes para su primera sincronización, si ya ha hecho previamente copia de seguridad de los mensajes en el teléfono.</string>
+
+
+
+  <string name="ui_dialog_brokendroidx_title">Bug SMS de DROID X</string>
+  <string name="ui_dialog_brokendroidx_msg">Hay un bug en el DROID X que impede esta applicacion de copiar los mensajes entrantes. Mas informacion en la FAQ de sitio web.</string>
+
+
+
+  <string name="ui_sync">Copia de seguridad</string>
+  <string name="ui_skip">Saltar</string>
+  <string name="err_sync_requires_login_info">No se puede realizar copia de seguridad sin la información de inicio de sesión.</string>
+  <string name="menu_info">Acerca de</string>
+  <string name="menu_reset">Reinicializar</string>
+  <string name="ui_dialog_reset_title">Reinicializar el estado actual de sincronización</string>
+  <string name="ui_dialog_reset_message">Quiere reinicializar el
+  estado actual de sincronización? Es possible elejir de saltar todos los mensajes más tarde.</string>
+  <string name="all_messages">Todo</string>
+
+  <string name="gmail_needs_connecting">Toque para conectar su cuenta de Gmail (requerido).</string>
+  <string name="gmail_already_connected">Cuenta de Gmail conectada (toque para desconectar).</string>
+
+  <string name="ui_connected_label">Conectar</string>
+  <string name="ui_connected_desc">Su cuenta necesita ser autorizada.</string>
+
+  <string name="email_address_style_name">Nombre</string>
+  <string name="email_address_style_name_and_number">Nombre (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 h</string>
+  <string name="_2h">2 h</string>
+  <string name="_6h">6 h</string>
+  <string name="_24h">24 h</string>
+  <string name="never">Nunca</string>
+
+  <string name="ssl_required">SSL (Obligatorio)</string>
+  <string name="ssl_optional">SSL (Opcional)</string>
+  <string name="tls_required">TLS (Obligatorio)</string>
+  <string name="tls_optional">TLS (Opcional)</string>
+  <string name="none">Ninguno</string>
+</resources>

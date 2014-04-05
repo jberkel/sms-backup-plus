@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Použijte GMail účet pro zálohování SMS zpráv. Toto je vylepšená verze aplikace "SMS Backup" od
+     Christopha Studera která podporuje obnovení SMS zpět do telefonu. Je plně zpětně kompatibilní s aplikací SMS backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Zálohovat</string>
+  <string name="ui_sync_button_label_canceling">Zastavuji</string>
+  <string name="ui_sync_button_label_syncing">Stop</string>
+
+  <string name="ui_restore_button_label_idle">Obnovit</string>
+  <string name="ui_restore_button_label_restoring">Stop</string>
+
+  <string name="status_idle">Nečinný</string>
+  <string name="status_idle_details">Poslední zálohovaná položka: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">Nikdy</string>
+
+  <string name="status_working">Pracuji</string>
+
+  <string name="status_backup">Zálohuji</string>
+  <string name="status_restore">Obnovuji</string>
+
+  <string name="status_backup_details">Zálohováno <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_restore_details">Obnoveno <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_login_details">Přihlašuji se\u2026</string>
+  <string name="status_updating_threads">Obnovuji spojeni\u2026</string>
+  <string name="status_done">Hotovo</string>
+  <string name="status_backup_done_details_max_per_sync">Maximum %1$d položek v záloze dosaženo. Pro pokračování restartujte zálohu.</string>
+  <string name="status_backup_done_details_noitems">Nejsou žádné položky k zálohování.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Úspěšně zazálohována <xliff:g id="total_items">%1$d</xliff:g> položka.</item>
+    <item quantity="other">Úspěšně zazálohováno <xliff:g id="total_items">%1$d</xliff:g> položek.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Úspěšně obnovena <xliff:g id="total_items">%1$d</xliff:g> položka (%2$d dups).</item>
+    <item quantity="other">Úspěšně obnoveno <xliff:g id="total_items">%1$d</xliff:g> položek (%2$d dups).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d položek úspěšně obnoveno.</string>
+
+  <string name="status_unknown_error">Chyba</string>
+  <string name="notification_general_error">SMSBackup+ chyba</string>
+
+  <string name="status_unknown_error_details">Chyba během zálohy/obnovy:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Chyba přihlášení</string>
+  <string name="notification_auth_failure">SMSBackup+ chyba přihlášení</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth chyba přihlášení. Ujistěte se prosím, že jste povolili IMAP v nastavení svého GMail účtu.</string>
+  <string name="status_auth_failure_details_plain">IMAP chyba přihlášení.
+  Ujistěte se, že uživatel i heslo je správně zadané.</string>
+  <string name="status_calc_details">Počítám\u2026</string>
+  <string name="status_canceled">Zrušeno</string>
+  <string name="status_canceled_details">%1$d/%2$d položek úspěšně zazálohováno.</string>
+
+  <string name="ui_settings_advanced_label">Pokročilé nastavení</string>
+  <string name="ui_settings_advanced_desc">Nastavit pokročilé možnosti.</string>
+  <string name="ui_settings_advanced_server_label">Nastavení serveru</string>
+  <string name="ui_settings_advanced_server_desc">Neměňte, dokud nevíte, co děláte!</string>
+
+  <string name="imap_settings">IMAP nastavení</string>
+  <string name="ui_login_label">Uživatel</string>
+  <string name="ui_login_desc">Váš IMAP uživatel/emailová adresa.</string>
+  <string name="ui_login_dialog_msg">UPOZORNĚNÍ: Změna uživ.jména může při užití XOAuth způsobit problémy.</string>
+  <string name="ui_password_label">Heslo</string>
+  <string name="ui_password_desc">Heslo pro IMAP účet. Aktivní pouze při zakázaném XOAuth.</string>
+  <string name="ui_password_dialog_msg">Heslo je uloženo v telefonu a je použito jen pro přihlášení.</string>
+  <string name="ui_server_label">Adresa serveru</string>
+  <string name="ui_server_desc">Adresa serveru se kterým chcete provést synchronizaci.</string>
+  <string name="ui_server_dialog_msg">Výchozí pro GMail je \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Bezpečnost</string>
+  <string name="ui_protocol_desc">Zabezpečené spojení k serveru. Výchozí pro GMail je \"SSL (Required)\"."</string>
+  <string name="ui_authentication_label">Přihlášení</string>
+  <string name="ui_authentication_desc">Přihlašovací metoda. Výchozí pro GMail je \"XOauth\".</string>
+  <string name="plain">Prostý text</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">GMail složka</string>
+  <string name="ui_imap_folder_desc">GMail složka pro SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Zálohované zprávy budou na GMailu uloženy v této složce.</string>
+  <string name="ui_mail_subject_prefix_label">Prefix v předmětu emailu</string>
+  <string name="ui_mail_subject_prefix_desc">Použít název složky jako prefix v předmětu emailu</string>
+
+  <string name="ui_max_items_per_sync_label">Položek v záloze</string>
+  <string name="ui_max_items_per_sync_desc">Maximální počet položek v záloze.</string>
+  <string name="ui_max_items_per_restore_label">Položek v obnově</string>
+  <string name="ui_max_items_per_restore_desc">Maximální počet obnovených zpráv.</string>
+
+  <string name="ui_restore_starred_only_label">Oblíbené SMS</string>
+  <string name="ui_restore_starred_only_desc">Obnovit jen oblíbené SMS.</string>
+
+  <string name="ui_backup_mms_label">Zálohuj MMS</string>
+  <string name="ui_backup_mms_desc">Povolit zálohu MMS</string>
+  <string name="ui_backup_mms_not_supported">Záloha MMS není na této platformě podporována.</string>
+
+  <string name="ui_backup_calllog_label">Zálohuj výpis volání</string>
+  <string name="ui_backup_calllog_desc">Polovit zálohu výpisu volání (beta)</string>
+
+  <string name="ui_imap_folder_calllog_label">Složka pro výpisy</string>
+  <string name="ui_imap_folder_calllog_desc">Složka GMailu přiřazená výpisům.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Zálohované výpisy hovorů budou uloženy v této složce.</string>
+
+  <string name="ui_mark_as_read_label">Označit za přečtené (emaily)</string>
+  <string name="ui_mark_as_read_desc">Zda-li označit zprávy v GMailu jako přečtené nebo ne.</string>
+  <string name="ui_mark_as_read_restore_label">Označit za přečtené (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Zda-li označit všechny obnovené zprávy jako přečtené nebo ne.</string>
+
+  <string name="ui_email_address_style_label">Styl emailové adresy</string>
+  <string name="ui_email_address_style_desc">Formát emailových adres</string>
+
+  <string name="ui_enable_auto_sync_label">Automatická záloha</string>
+  <string name="ui_enable_auto_sync_desc">Zda-li automaticky zálohovat nové zprávy.</string>
+
+  <string name="auto_backup_settings">Automatická záloha</string>
+  <string name="ui_auto_backup_schedule_label">Dle plánovače</string>
+  <string name="ui_auto_backup_schedule_desc">Kdy zálohovat SMS</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Příchozí zprávy</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Kdy zálohovat příchozí SMS (po přijetí)</string>
+
+  <string name="ui_wifi_only_label">Vyžadovat Wifi</string>
+  <string name="ui_wifi_only_desc">Zálohovat/obnovovat jen pri připojení přes WiFi</string>
+
+  <string name="ui_notifications_label">Oznámení</string>
+  <string name="ui_notifications_desc">Oznámení na pozadí</string>
+
+  <string name="error_wifi_only_no_connection">Není připojení WiFi</string>
+  <string name="error_no_connection">Není internetové připojení</string>
+
+  <string name="ui_dialog_missing_credentials_title">Přihlašovací informace</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Nejdříve se musíte připojit k GMail účtu.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Nejdříve musíte vložit uživatele a heslo.</string>
+  <string name="ui_dialog_invalid_imap_folder_title">Neplatný název složky</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Název složky nesmí mít mezery (na začátku nebo na konci).</string>
+  <string name="ui_dialog_first_sync_title">První záloha</string>
+  <string name="ui_dialog_first_sync_msg">Zálohovat nebo přeskočit všechny zprávy v tomto telefonu?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Zálohovat nebo přeskočit všechny zprávy v tomto telefonu?\n\nPoznámka: Záloha bude rozdělena do dávek po %1$d zpráv.</string>
+  <string name="ui_dialog_request_token_msg">Připojování ke Google...</string>
+  <string name="ui_dialog_access_token_msg">Vyžadování přístupu...</string>
+
+  <string name="ui_dialog_access_token_error_title">Chyba authentifikace</string>
+  <string name="ui_dialog_access_token_error_msg">Nebylo možné získat přístupový token. Ujistěte se, že jste vybrali
+    \"Grant access\".
+  </string>
+
+  <string name="ui_dialog_connect_msg">Bude otevřen prohlížeč pro přihlášení do GMail účtu a povolení %1$s přístupu do GMailu.</string>
+  <string name="ui_dialog_connect_token_error">Není možné získat přístupový token od Googlu. Ujistěte se, že připojení k internetu je aktivní a Váš čas / časová zóna je správně nastavena.</string>
+  <string name="ui_dialog_disconnect_msg">Jste si jistí? Po odpojení bude nutné opětovně autorizovat Váš účet a stav synchonizace bude resetován.</string>
+
+  <string name="ui_dialog_upgrade_title">Informace o upgradu</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ je plně zpětně kompatibilní s SMS backup. Přesto se ujistěte, že \"Auto backup\" je povolen jen v jedné aplikaci, jinak je možný vznik duplikací. Měli byste také zvolit \"Skip\" zprávy pro první migraci, pokud zprávy v telefonu již byly dříve zálohovány.
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS chyba</string>
+  <string name="ui_dialog_brokendroidx_msg">V Droid X je chyba která
+  zabraňuje této aplikaci v záloze příchozích zpráv. Více informací naleznete v sekci FAQ na webové stránce.</string>
+
+  <string name="ui_sync">Zálohovat</string>
+  <string name="ui_skip">Přeskočit</string>
+  <string name="err_sync_requires_login_info">Není možné zálohovat bez přihlášení.</string>
+  <string name="menu_info">O programu</string>
+  <string name="menu_reset">Reset</string>
+  <string name="ui_dialog_reset_title">Resetovat současný stav synchronizace</string>
+  <string name="ui_dialog_reset_message">Chcete resetovat současný stav synchronizace? Stále je možné později zvolit přeskočení všech zpráv.</string>
+  <string name="all_messages">Vše</string>
+
+  <string name="gmail_needs_connecting">Stiskněte pro připojeni GMailu (vyžadováno).</string>
+  <string name="gmail_already_connected">Připojeno jako %1$s (stiskněte pro odpojení).</string>
+
+  <string name="ui_connected_label">Připojit</string>
+  <string name="ui_connected_desc">Váš účet potřebuje být připojen.</string>
+
+  <string name="call_type_everything">Vše</string>
+  <string name="call_type_incoming">Pouze příchozí hovory</string>
+  <string name="call_type_outgoing">Pouze odchozí hovory</string>
+  <string name="call_type_incoming_outgoing">Příchozí &amp; Odchozí</string>
+  <string name="call_type_missed">Pouze nepřijaté hovory</string>
+
+  <string name="email_address_style_name">Jméno</string>
+  <string name="email_address_style_name_and_number">Jméno (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 h</string>
+  <string name="_2h">2 h</string>
+  <string name="_6h">6 h</string>
+  <string name="_24h">24 h</string>
+  <string name="never">Nikdy</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="ssl_required">SSL (Vyžadováno)</string>
+  <string name="ssl_optional">SSL (Volitelně)</string>
+  <string name="tls_required">TLS (Vyžadováno)</string>
+  <string name="tls_optional">TLS (Volitelně)</string>
+  <string name="none">None</string>
+</resources>

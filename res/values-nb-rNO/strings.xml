@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Bruk Gmail for å ta en sikkerhetskopi av dine meldinger. Dette er en forbedret versjon av
+     applikasjonen "SMS Backup" av Christoph Studer som støtter gjenoppretting av meldinger
+     til telefonen. Den er fult kompatibel med SMS Backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Sikkerhetskop.</string>
+  <string name="ui_sync_button_label_canceling">Stopper</string>
+  <string name="ui_sync_button_label_syncing">Stopp</string>
+
+  <string name="ui_restore_button_label_idle">Gjenopprett</string>
+  <string name="ui_restore_button_label_restoring">Stopp</string>
+
+  <string name="status_idle">Uvirksom</string>
+  <string name="status_idle_details">Siste sikkerhetskopiering: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">Aldri</string>
+
+  <string name="status_working">Arbeider</string>
+
+  <string name="status_backup">Sikkerhetskopierer</string>
+  <string name="status_restore">Gjenoppretter</string>
+
+  <string name="status_backup_details">Sikkerhetskopierte <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> deler\u2026</string>
+  <string name="status_restore_details">Gjenopprettet <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> deler\u2026</string>
+  <string name="status_login_details">Logger inn\u2026</string>
+  <string name="status_updating_threads">Oppdaterer tråder\u2026</string>
+  <string name="status_done">Ferdig</string>
+  <string name="status_backup_done_details_max_per_sync">Maksimum av %1$d deler per sikkerhetskopiering nådd. Start sikkerhetskopiering på nytt for å fullføre.</string>
+  <string name="status_backup_done_details_noitems">Det er ingen ting å sikkerhetskopiere.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Vellykket sikkerhetskopiering av <xliff:g id="total_items">%1$d</xliff:g> del.</item>
+    <item quantity="other">Vellykket sikkerhetskopiering av <xliff:g id="total_items">%1$d</xliff:g> deler.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Vellykket gjenoppretting av <xliff:g id="total_items">%1$d</xliff:g> del (%2$d dupl.).</item>
+    <item quantity="other">Vellykket gjenoppretting av <xliff:g id="total_items">%1$d</xliff:g> deler (%2$d dupl.).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d deler gjenopprettet.</string>
+
+  <string name="status_unknown_error">Feil</string>
+  <string name="notification_general_error">SMSBackup+ feil</string>
+
+  <string name="status_unknown_error_details">Feil ved sikkerhetskopiering/gjenoppretting:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Innloggingsfeil</string>
+  <string name="notification_auth_failure">SMSBackup+ innloggingsfeil</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth autorisasjonsfeil. Vennligst sjekk at IMAP er aktivert i dine Gmail instillinger.</string>
+  <string name="status_auth_failure_details_plain">IMAP autorisasjonsfeil.
+  Sjekk at brukernavn og passord er riktig.</string>
+  <string name="status_calc_details">Beregner\u2026</string>
+  <string name="status_canceled">Avbrutt</string>
+  <string name="status_canceled_details">%1$d/%2$d deler gjenopprettet.</string>
+  <string name="status_gmail_temp_error">Midlertidig Gmail IMAP feil, vennligst prøv igjen senere.</string>
+
+  <string name="ui_settings_advanced_label">Avanserte innstillinger</string>
+  <string name="ui_settings_advanced_desc">Gjør avanserte innstillinger.</string>
+  <string name="ui_settings_advanced_server_label">Tjenerinnstillinger</string>
+  <string name="ui_settings_advanced_server_desc">Ikke forandre noe om ikke du vet hva du gjør!</string>
+
+  <string name="imap_settings">IMAP innstillinger</string>
+  <string name="ui_login_label">Brukernavn</string>
+  <string name="ui_login_desc">Din IMAP konto/epost adresse.</string>
+  <string name="ui_login_dialog_msg">Advarsel: Forandring av brukernavn ved bruk av XOAuth, kann føre til feil.</string>
+  <string name="ui_password_label">Passord</string>
+  <string name="ui_password_desc">Ditt IMAP passord. Brukes kun om XOAuth er avslått.</string>
+  <string name="ui_password_dialog_msg">Passordet er lagret på denne enheten og brukes kun for å logge inn.</string>
+  <string name="ui_server_label">Tjener adresse</string>
+  <string name="ui_server_desc">Adressen til tjeneren du vil synkronisere til inkl. port.</string>
+  <string name="ui_server_dialog_msg">Standart for Gmail er \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Sikkerhet</string>
+  <string name="ui_protocol_desc">Tjenerens sikkerhetsprotokoll. Standart for Gmail er \"SSL (påkrevd)\"."</string>
+  <string name="ui_authentication_label">Autentisering</string>
+  <string name="ui_authentication_desc">Autentisering metoden. Standart for Gmail er \"XOauth\".</string>
+  <string name="plain">Ren tekst</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Gmail etikett</string>
+  <string name="ui_imap_folder_desc">Gmail etikett for meldinger.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Sikkerhetskopierte meldinger vil ha denne etiketten.</string>
+  <string name="ui_mail_subject_prefix_label">Epost emne prefiks</string>
+  <string name="ui_mail_subject_prefix_desc">Bruk IMAP mappenavn som prefiks i epostemne.</string>
+
+  <string name="ui_max_items_per_sync_label">Deler per sikkerhetskopiering</string>
+  <string name="ui_max_items_per_sync_desc">Maksimalt antall deler per sikkerhetskopiering.</string>
+  <string name="ui_max_items_per_restore_label">Deler per gjenoppretting</string>
+  <string name="ui_max_items_per_restore_desc">Maksimalt antall deler per gjenoppretting.</string>
+
+  <string name="ui_restore_starred_only_label">Stjernemerkede meldinger</string>
+  <string name="ui_restore_starred_only_desc">Kun gjenopprett stjernemerkede meldinger.</string>
+
+  <string name="ui_backup_mms_label">Sikkerhetskopier MMS</string>
+  <string name="ui_backup_mms_desc">Aktiver MMS sikkerhetskopiering</string>
+  <string name="ui_backup_mms_not_supported">MMS sikkerhetskopiering er ikke støttet på denne enheten.</string>
+
+  <string name="ui_backup_calllog_label">Sikkerhetskopier samtalelogg</string>
+  <string name="ui_backup_calllog_desc">Aktiver sikkerhetskopiering av samtalelogg (beta).</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Kalender synkronisering</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Legg til anrop i kalenderen.</string>
+
+  <string name="ui_backup_calllog_types_label">Anropstyper</string>
+  <string name="ui_backup_calllog_types_desc">Hvilke anrop å sikkerhetskopiere.</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Ingen</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Kalender for samtalelogg.</string>
+
+  <string name="ui_imap_folder_calllog_label">Samtalelogg etikett</string>
+  <string name="ui_imap_folder_calllog_desc">Gmail etikett for samtalelogg.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Sikkerhetskopiert samtalelogg vil ha denne etiketten i Gmail.</string>
+
+  <string name="ui_mark_as_read_label">Marker som lest (epost)</string>
+  <string name="ui_mark_as_read_desc">Om meldinger skal merkes som lest eller ikke i Gmail.</string>
+
+  <string name="ui_mark_as_read_restore_label">Marker som lest (meldinger)</string>
+  <string name="ui_mark_as_read_restore_desc">Om meldinger som gjenopprettes skal merkes som lest eller ikke.</string>
+
+  <string name="ui_email_address_style_label">Epost adresse format</string>
+  <string name="ui_email_address_style_desc">Format for epost adresser</string>
+
+  <string name="ui_enable_auto_sync_label">Auto sikkerhetskopiering</string>
+  <string name="ui_enable_auto_sync_desc">Om nye meldinger automatisk skal sikkerhetskopieres.</string>
+  <string name="ui_enable_auto_sync_summary">Automatisk sikkerhetskopier %1$s.</string>
+
+  <string name="sd_card_disclaimer">Automatisk sikkerhetskopiering virker kanskje ikke om appen er installert på SD-kortet.</string>
+
+  <string name="ui_enable_auto_sync_bg_data">Du må også aktivere bakgrunnsdata.</string>
+
+  <string name="ui_auto_backup_schedule_label">Vanlig tidsplan</string>
+  <string name="ui_auto_backup_schedule_desc">Når meldinger skal sikkerhetskopieres.</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Innkommende tidsplan</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Når innkommende meldinger skal sikkerhetskopieres (etter ankomst).</string>
+
+  <string name="ui_wifi_only_label">Kun ved trådløst nett</string>
+  <string name="ui_wifi_only_desc">Kun sikkerhetskopier når koblet til trådløst nett.</string>
+
+  <string name="ui_notifications_label">Varsler</string>
+  <string name="ui_notifications_desc">Bakgrunnsvarsler</string>
+
+  <string name="error_wifi_only_no_connection">Ingen trådløs tilkobling</string>
+  <string name="error_no_connection">Ingen internettforbindelse</string>
+
+  <string name="ui_dialog_missing_credentials_title">Innloggingsinformasjon</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Du må koble til en Gmail konto først.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Du må angi
+  brukernavn og passord først.</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">Ugyldig etikett navn</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Etikett navn kan ikke inneholde mellomrom på begynnelsen eller slutten.</string>
+  <string name="ui_dialog_first_sync_title">Første sikkerhetskopiering</string>
+  <string name="ui_dialog_first_sync_msg">Sikkerhetskopier eller hopp over alle meldinger på denne enheten?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Sikkerhetskopier eller hopp over alle meldinger på denne enheten?\n\nVarsel: Sikkerhetskopiering vil deles i samlinger med %1$d meldinger.</string>
+  <string name="ui_dialog_request_token_msg">Kontaker Google...</string>
+  <string name="ui_dialog_access_token_msg">Spør om tilgang...</string>
+
+  <string name="ui_dialog_access_token_error_title">Autorisasjons feil</string>
+  <string name="ui_dialog_access_token_error_msg">Mottok ikke tilgangs-brikke. Sørg for å velge
+    \"Tillat tilgang\".
+  </string>
+
+  <string name="ui_dialog_connect_msg">Et nettleser vindu vil åpnes og be deg om å logge inn på Gmail for å tillate %1$s tilgang til din epost.</string>
+  <string name="ui_dialog_connect_token_error">Mottok ikke forespørselsbrikke fra Goolge. Sørg for at du er koblet til internett og tid/tidssone er konfigurert riktig.</string>
+  <string name="ui_dialog_disconnect_msg">Er du sikker? Du må da reautorisere mot din konto og synkroniserings-status vil bli tilbakestilt.</string>
+
+  <string name="ui_dialog_upgrade_title">Oppgraderings informasjon</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ er fult kompatibel med SMS Backup. Men sørg for at \"Auto sikkerhetskopiering\" kun er aktiv i en applikasjon, ellers vil det kunne oppstå duplikater. Du bør også velge \"Hopp over\" meldinger ved din første synkronisering om meldinger har blitt sikkerhetskopiert tidligere.
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS feil</string>
+  <string name="ui_dialog_brokendroidx_msg">Det er en feil i Droid X som
+  forhindrer denne applikasjonen fra å sikkerhetskopiere innkommende
+  meldinger. Se FAQ på nettsiden for mer informasjon.</string>
+
+  <string name="ui_sync">Sikkerhetskopier</string>
+  <string name="ui_skip">Hopp over</string>
+  <string name="err_sync_requires_login_info">Kan ikke sikkerhetskopiere uten innloggings-informasjon.</string>
+  <string name="menu_info">Om</string>
+  <string name="menu_reset">Tilbakestill</string>
+  <string name="ui_dialog_reset_title">Tilbakestill nåværende synkroniserings-status</string>
+  <string name="ui_dialog_reset_message">Vil du tilbakestille synkroniserings-status? Du kan velge
+  å hoppe over alle meldinger senere.</string>
+  <string name="all_messages">Alle</string>
+
+  <string name="gmail_needs_connecting">Velg for å koble til Gmail konto (påkrevd).</string>
+  <string name="gmail_already_connected">Koblet til som %1$s.</string>
+
+  <string name="ui_connected_label">Koble til</string>
+  <string name="ui_connected_desc">Din konto må kobles til.</string>
+
+  <string name="call_incoming">innkommende anrop</string>
+  <string name="call_outgoing">utgående anrop</string>
+  <string name="call_missed">tapt anrop</string>
+
+  <string name="call_missed_text">Tapt anrop fra %1$s</string>
+  <string name="call_incoming_text">Anrop fra %1$s</string>
+  <string name="call_outgoing_text">Ringte %1$s</string>
+
+  <string name="call_number_field">Nummer: %1$s</string>
+  <string name="call_duration_field">Lengde: %1$s</string>
+
+  <string name="sms_with_field">Melding med %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">Samtale med %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Kontakter å sikkerhetskopiere</string>
+  <string name="ui_backup_contact_group_desc">Kun sikkerhetskopier meldinger/anrop fra bestemt gruppe</string>
+
+  <string name="everybody">Alle</string>
+
+  <string name="call_type_everything">Alt</string>
+  <string name="call_type_incoming">Kun innkommende samtaler</string>
+  <string name="call_type_outgoing">Kun utgående samtaler</string>
+  <string name="call_type_incoming_outgoing">Innkommende &amp; Utgående</string>
+  <string name="call_type_missed">Kun tapte anrop</string>
+
+  <string name="email_address_style_name">Navn</string>
+  <string name="email_address_style_name_and_number">Navn (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 t</string>
+  <string name="_2h">2 t</string>
+  <string name="_6h">6 t</string>
+  <string name="_24h">24 t</string>
+  <string name="never">Aldri</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="ssl_required">SSL (påkrevd)</string>
+  <string name="ssl_optional">SSL (valgfritt)</string>
+  <string name="tls_required">TLS (påkrevd)</string>
+  <string name="tls_optional">TLS (valgfritt)</string>
+  <string name="none">Ingen</string>
+
+  <string name="ui_third_party_integration_label">Tredjeparts integrasjon</string>
+  <string name="ui_third_party_integration_desc">Tillat andre applikasjon å starte sikkerhetskopiering ved valgt kringkasting.</string>
+</resources>
+<!-- new ui -->

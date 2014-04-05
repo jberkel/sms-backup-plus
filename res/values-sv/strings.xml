@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Använd Gmail som backup för dina SMS. Det här en en förbättrad version av
+     programmet "SMS Backup" av Christoph Studer som tillåter återställning av
+     SMS till telefonen och är fullt bakåtkompatibelt med SMS Backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Säkerhetskopiera</string>
+  <string name="ui_sync_button_label_canceling">Stoppar</string>
+  <string name="ui_sync_button_label_syncing">Stopp</string>
+
+  <string name="ui_restore_button_label_idle">Återställ</string>
+  <string name="ui_restore_button_label_restoring">Stopp</string>
+
+  <string name="status_idle">Overksam</string>
+  <string name="status_idle_details">Senaste säkerhetskopiering: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">Aldrig</string>
+
+  <string name="status_working">Arbetar</string>
+
+  <string name="status_backup">Säkerhetskopierar</string>
+  <string name="status_restore">Återställer</string>
+
+  <string name="status_backup_details">Säkerhetskopierade <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> poster\u2026</string>
+  <string name="status_restore_details">Återställde <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> poster\u2026</string>
+  <string name="status_login_details">Loggar in\u2026</string>
+  <string name="status_updating_threads">Uppdaterar trådar\u2026</string>
+  <string name="status_done">Klar</string>
+  <string name="status_backup_done_details_max_per_sync">maximalt antal av %1$d poster per backup uppnått. Starta om säkerhetskopiering för att fortsätta.</string>
+  <string name="status_backup_done_details_noitems">Det fanns inga poster att säkerhetskopiera.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Säkerhetskopierade <xliff:g id="total_items">%1$d</xliff:g> post.</item>
+    <item quantity="other">Säkerhetskopierade <xliff:g id="total_items">%1$d</xliff:g> poster.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Återställde <xliff:g id="total_items">%1$d</xliff:g> post (%2$d dubbletter).</item>
+    <item quantity="other">Återställde <xliff:g id="total_items">%1$d</xliff:g> poster (%2$d dubbletter).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d poster återställdes.</string>
+
+  <string name="status_unknown_error">Fel</string>
+  <string name="notification_general_error">SMSBackup+ error</string>
+
+  <string name="status_unknown_error_details">Fel under säkerhetskopiering/återställning:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Inloggningsfel</string>
+  <string name="notification_auth_failure">SMSBackup+ inloggningsfel</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth autentiseringsfel. Kontrollera att du aktiverat IMAP i ditt Gmail kontoinställningar.</string>
+  <string name="status_auth_failure_details_plain">IMAP autentiseringsfel.
+  Kontrollera användarnamn och lösenord.</string>
+  <string name="status_calc_details">Beräknar\u2026</string>
+  <string name="status_canceled">Avbruten</string>
+  <string name="status_canceled_details">%1$d/%2$d poster säkerhetskopierades.</string>
+  <string name="status_gmail_temp_error">Tillfälligt Gmail IMAP-fel, försök igen senare.</string>
+
+  <string name="ui_settings_advanced_label">Avancerad inställningar</string>
+  <string name="ui_settings_advanced_desc">Ställ in avancerade inställningar.</string>
+  <string name="ui_settings_advanced_server_label">Serverinställningar</string>
+  <string name="ui_settings_advanced_server_desc">Ändra inte såvida du inte vet vad du gör!</string>
+
+  <string name="imap_settings">IMAP-inställningar</string>
+  <string name="ui_login_label">Användarnamn</string>
+  <string name="ui_login_desc">Ditt IMAP-konto/e-postadress.</string>
+  <string name="ui_login_dialog_msg">Varning: Att byta användarnamn kan förstöra saker när du använder XOAuth.</string>
+  <string name="ui_password_label">Lösenord</string>
+  <string name="ui_password_desc">IMAP-lösenord. Används bara när XOAuth inte är aktiverat.</string>
+  <string name="ui_password_dialog_msg">Lösenordet sparas på denna enhet och används bara vid inloggning.</string>
+  <string name="ui_server_label">Server-adress</string>
+  <string name="ui_server_desc">Adressen till servern som du vill synkronisera med, inkl. port.</string>
+  <string name="ui_server_dialog_msg">Standardinställning för Gmail är \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Säkerhet</string>
+  <string name="ui_protocol_desc">Serverns säkerhetsprotokoll. Standardinställning för Gmail är \"SSL (Required)\"."</string>
+  <string name="ui_authentication_label">Autentisering</string>
+  <string name="ui_authentication_desc">Standardinställningen för Gmail är \"XOauth\".</string>
+  <string name="plain">Vanlig text</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Gmail-etikett</string>
+  <string name="ui_imap_folder_desc">Etikett i Gmail som tilldelas SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Säkerhetskopierade SMS kommer att markeras med denna etikett i Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">Ämnesrad</string>
+  <string name="ui_mail_subject_prefix_desc">Använd IMAP-mappens namn som prefix i ämnesraden</string>
+
+  <string name="ui_max_items_per_sync_label">Poster per säkerhetskopiering</string>
+  <string name="ui_max_items_per_sync_desc">Maximalt antal poster att säkerhetskopiera per omgång.</string>
+  <string name="ui_max_items_per_restore_label">Poster per återställning</string>
+  <string name="ui_max_items_per_restore_desc">Maximalt antal poster att återställa per omgång.</string>
+
+  <string name="ui_restore_starred_only_label">Stjärnmärkta SMS</string>
+  <string name="ui_restore_starred_only_desc">Återställ bara stjärnmärkta meddelanden.</string>
+
+  <string name="ui_backup_mms_label">Backup av MMS</string>
+  <string name="ui_backup_mms_desc">Aktivera säkerhetskopiering av MMS</string>
+  <string name="ui_backup_mms_not_supported">Säkerhetskopiering av MMS stöds inte på den här plattformen.</string>
+
+  <string name="ui_backup_calllog_label">Backup av samtalshistorik</string>
+  <string name="ui_backup_calllog_desc">Aktivera säkerhetskopiering av samtalshistorik (beta)</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Kalendersynkronisering</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Lägg till samtal i kalender</string>
+
+  <string name="ui_backup_calllog_types_label">Samtalstyper</string>
+  <string name="ui_backup_calllog_types_desc">De typer av samtal som ska säkerhetskopieras</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Ingen</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Kalender som används för samtalshistorik</string>
+
+  <string name="ui_imap_folder_calllog_label">Etikett för samtalshistorik</string>
+  <string name="ui_imap_folder_calllog_desc">Etikett i Gmail för samtalshistorik.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Samtalshistoriken kommer att markeras med denna etikett i Gmail.</string>
+
+  <string name="ui_mark_as_read_label">Markera som läst (e-post)</string>
+  <string name="ui_mark_as_read_desc">Anger att meddelanden ska markeras som lästa i Gmail.</string>
+  <string name="ui_mark_as_read_restore_label">Markera som läst (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Anger att meddelanden ska markeras som lästa efter återställning.</string>
+
+  <string name="ui_email_address_style_label">E-postformat</string>
+  <string name="ui_email_address_style_desc">Format för e-postadresser</string>
+
+  <string name="ui_enable_auto_sync_label">Automatisk backup</string>
+  <string name="ui_enable_auto_sync_desc">Anger att nya SMS ska säkerhetskopieras automatiskt.</string>
+
+  <string name="auto_backup_settings">Automatisk backup</string>
+  <string name="ui_auto_backup_schedule_label">Regelbundet schema</string>
+  <string name="ui_auto_backup_schedule_desc">Anger när SMS ska säkerhetskopieras</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Inkommande schema</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Anger när inkommande SMS ska säkerhetskopieras</string>
+
+  <string name="ui_wifi_only_label">Kräv Wi-Fi</string>
+  <string name="ui_wifi_only_desc">Säkerhetskopiera/återställ bara om ansluten till Wi-Fi</string>
+
+  <string name="ui_notifications_label">Notifieringar</string>
+  <string name="ui_notifications_desc">Bakgrundsnotifieringar</string>
+
+  <string name="error_wifi_only_no_connection">Ingen Wi-Fi-anslutning</string>
+  <string name="error_no_connection">Ingen internetanslutning</string>
+
+  <string name="ui_dialog_missing_credentials_title">Inloggningsuppgifter</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Du måste ansluta ditt Gmail-konto först</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Du måste ange användarnamn
+  och lösenord först.</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">Ogiltig etikett</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Etiketten får inte innehålla mellanslag (i början eller slutet).</string>
+  <string name="ui_dialog_first_sync_title">Första säkerhetskopieringen</string>
+  <string name="ui_dialog_first_sync_msg">Säkerhetskopiera eller hoppa över alla meddelanden som för tillfället finns på denna enhet?</string>
+  <string name="ui_dialog_first_sync_msg_batched">
+      Kopiera eller hoppa över alla meddelanden som finns på den här telefonen?\n\n
+      Obs: Säkerhetskopieringen kommer att delas upp i omgångar om %1$d meddelanden.
+  </string>
+  <string name="ui_dialog_request_token_msg">Kontaktar Google...</string>
+  <string name="ui_dialog_access_token_msg">Begär åtkomst...</string>
+
+  <string name="ui_dialog_access_token_error_title">Autentiseringen misslyckads</string>
+  <string name="ui_dialog_access_token_error_msg">Kunde inte få åtkomsttoken. Kontrollera att du valde \"Bevilja åtkomst\". </string>
+
+  <string name="ui_dialog_connect_msg">Webbläsaren kommer att öppnas och begära att du loggar in på Gmail för att ge %1$s tillgång till din e-post.</string>
+  <string name="ui_dialog_connect_token_error">Misslyckades med att få tillgång från Google. Kontrollera att internetanslutningen är aktiv samt att din tid / tidszon är konfigurerad korrect.</string>
+  <string name="ui_dialog_disconnect_msg">Är du säker? Du måste autentisera igen efter frånkoppling och synkronisering nollställs.</string>
+
+  <string name="ui_dialog_upgrade_title">Uppgraderingsinformation</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ är fullständigt bakåtkompatibelt med SMS Backup. Dock får bara
+   \"Automatisk säkerhetskopiering\" vara aktiverat i ett program, annars
+   riskerar du att få dubletter. Du ska också välja \"Hoppa över\" meddelanden
+   vid första säkerhetskopieringen om de meddelanden som finns på telefonen
+   redan har säkerhetskopierats tidigare.
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
+  <string name="ui_dialog_brokendroidx_msg">There is a bug in Droid X which
+  prevents this application from backing up incoming messages. See the FAQ
+  on the website for more information.</string>
+
+  <string name="ui_sync">Säkerhetskopiera</string>
+  <string name="ui_skip">Hoppa över</string>
+  <string name="err_sync_requires_login_info">Kan inte säkerhetskopiera utan inloggningsuppgifter.</string>
+  <string name="menu_info">Om</string>
+  <string name="menu_reset">Nollställ</string>
+  <string name="ui_dialog_reset_title">Nollställ synkronisering</string>
+  <string name="ui_dialog_reset_message">Vill du nollställa synkroniseringen? Du kan fortfarande välja att hoppa över meddelanden senare.</string>
+  <string name="all_messages">Alla</string>
+
+  <string name="gmail_needs_connecting">Tryck för att ansluta till ditt Gmail-konto (krävs).</string>
+  <string name="gmail_already_connected">Ansluten som %1$s (tryck för att koppla från).</string>
+
+  <string name="ui_connected_label">Anslut</string>
+  <string name="ui_connected_desc">Ditt konto måste vara anslutet.</string>
+
+  <string name="call_incoming">Inkommande samtal</string>
+  <string name="call_outgoing">Utgående samtal</string>
+  <string name="call_missed">Missade samtal</string>
+
+  <string name="call_missed_text">Missat samtal från %1$s</string>
+  <string name="call_incoming_text">Samtal från %1$s</string>
+  <string name="call_outgoing_text">Samtal till %1$s</string>
+
+  <string name="call_number_field">Nummer: %1$s</string>
+  <string name="call_duration_field">Samtalstid: %1$s</string>
+
+  <string name="sms_with_field">SMS med %1$s</string>
+  <string name="mms_with_field">SMS med %1$s</string>
+  <string name="call_with_field">Samtal med %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Kontakter att säkerhetskopiera</string>
+  <string name="ui_backup_contact_group_desc">Säkerhetskopiera bara post från en specifik grupp.</string>
+
+  <string name="everybody">Alla</string>
+
+  <string name="call_type_everything">Alla</string>
+  <string name="call_type_incoming">Inkommande samtal</string>
+  <string name="call_type_outgoing">Utgående samtal</string>
+  <string name="call_type_incoming_outgoing">Inkommande &amp; utgående</string>
+  <string name="call_type_missed">Missade samtal</string>
+
+  <string name="email_address_style_name">Namn</string>
+  <string name="email_address_style_name_and_number">Namn (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 h</string>
+  <string name="_2h">2 h</string>
+  <string name="_6h">6 h</string>
+  <string name="_24h">24 h</string>
+  <string name="never">Aldrig</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 mins</string>
+  <string name="_30mins">30 mins</string>
+
+  <string name="ssl_required">SSL (Krävs)</string>
+  <string name="ssl_optional">SSL (Frivillig)</string>
+  <string name="tls_required">TLS (Krävs)</string>
+  <string name="tls_optional">TLS (Frivillig)</string>
+  <string name="none">Ingen</string>
+</resources>
