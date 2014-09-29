@@ -81,7 +81,7 @@
 
   <string name="ui_imap_folder_label">Gmail-label</string>
   <string name="ui_imap_folder_desc">Gmail-label voor sms.</string>
-  <string name="ui_imap_folder_label_dialog_msg">Geback-upte sms'en zullen dit label krijgen im Gmail.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Geback-upte sms\'en zullen dit label krijgen im Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Voorvoegsel e-mailonderwerp</string>
   <string name="ui_mail_subject_prefix_desc">Gebruik IMAP-mapnaam als voorvoegsel in e-mailonderwerp</string>
 
