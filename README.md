@@ -439,7 +439,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Tasker]: http://tasker.dinglisch.net/
 [NumberPicker.java]: http://www.technologichron.net/?p=42
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
-[Icon]: https://github.com/downloads/jberkel/sms-backup-plus/smsbackup72.png
+[Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
 [Getting started with 2-step verification]: http://www.google.com/support/accounts/bin/static.py?page=guide.cs&guide=1056283&topic=1056284
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
 [community]: https://plus.google.com/communities/113290889178902750997
