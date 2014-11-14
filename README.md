@@ -405,6 +405,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * Yunsu Choi - Korean translation
   * Javier Pico - Galician translation
   * Ferran Rius - Catalan translation
+  * Mads Andreasen - Danish translation
 
 ##<a name="screenhots">Screenshots</a>
 
