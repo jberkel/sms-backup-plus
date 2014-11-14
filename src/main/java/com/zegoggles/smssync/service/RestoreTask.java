@@ -277,8 +277,9 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private boolean callLogExists(ContentValues values) {
         Cursor c = resolver.query(Consts.CALLLOG_PROVIDER,
             new String[] { "_id" },
-            "number = ? AND duration = ? AND type = ?",
+            "date = ? AND number = ? AND duration = ? AND type = ?",
             new String[]{
+                values.getAsString(CallLog.Calls.DATE),
                 values.getAsString(CallLog.Calls.NUMBER),
                 values.getAsString(CallLog.Calls.DURATION),
                 values.getAsString(CallLog.Calls.TYPE)
