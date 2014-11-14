@@ -73,7 +73,6 @@ import com.zegoggles.smssync.tasks.OAuthCallbackTask;
 import com.zegoggles.smssync.tasks.RequestTokenTask;
 import com.zegoggles.smssync.utils.AppLog;
 import com.zegoggles.smssync.utils.ListPreferenceHelper;
-import org.acra.ACRA;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DateFormat;
@@ -903,7 +902,6 @@ public class MainActivity extends PreferenceActivity {
             });
         } catch (Exception e) {
             Log.w(TAG, e);
-            ACRA.getErrorReporter().handleSilentException(e);
         }
     }
     @TargetApi(11) @SuppressWarnings({"ConstantConditions", "PointlessBooleanExpression"})

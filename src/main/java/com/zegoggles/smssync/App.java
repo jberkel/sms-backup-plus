@@ -19,10 +19,7 @@ package com.zegoggles.smssync;
 import android.app.Application;
 import com.fsck.k9.K9;
 import com.squareup.otto.Bus;
-import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
 
-@ReportsCrashes(formUri = "https://bugsense.appspot.com/api/acra?api_key=a2603e16", formKey = "")
 public class App extends Application {
     public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final boolean LOCAL_LOGV = DEBUG;
@@ -33,7 +30,6 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-        if (!DEBUG) ACRA.init(this);
         super.onCreate();
         K9.app = this;
         K9.DEBUG = DEBUG;
