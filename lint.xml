@@ -6,6 +6,7 @@
 
     <issue id="MissingTranslation" severity="ignore"/>
     <issue id="MissingQuantity" severity="ignore"/>
+    <issue id="UnusedQuantity" severity="ignore"/>
     <issue id="ContentDescription" severity="ignore"/>
 
     <issue id="UselessParent">
@@ -25,6 +26,7 @@
     <issue id="IconLocation" severity="ignore"/>
     <issue id="IconDuplicatesConfig" severity="ignore"/>
     <issue id="IconDensities" severity="ignore"/>
+    <issue id="IconMissingDensityFolder" severity="ignore"/>
     <issue id="LintError" severity="ignore"/>
     <issue id="MissingRegistered" severity="ignore"/>
 </lint>

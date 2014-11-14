@@ -4,7 +4,7 @@
     android:versionName="1.5.6"
     android:versionCode="1539"
     android:description="@string/app_description"
-    android:installLocation="auto">
+    >
 
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>

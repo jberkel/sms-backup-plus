@@ -1,89 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="fill_parent"
-  android:orientation="vertical"
-  android:paddingLeft="10dip"
-  android:paddingRight="10dip"
-  android:paddingTop="10dip"
-  android:paddingBottom="10dip">
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+    android:paddingTop="10dip">
 
     <RelativeLayout
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
-          android:id="@+id/status_icon"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentLeft="true"
-          android:src="@drawable/ic_done"
-        />
+            android:id="@+id/status_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_done" />
 
         <TextView
-          android:id="@+id/status_label"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:layout_toRightOf="@id/status_icon"
-          android:layout_alignParentTop="true"
-          android:textSize="16sp"
-          android:textStyle="bold"
-          android:textColor="@color/status_done"
-          android:layout_marginLeft="6dip"
-          android:layout_alignBaseline="@id/status_icon"
-        />
+            android:id="@+id/status_label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/status_icon"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="6dip"
+            android:layout_toRightOf="@id/status_icon"
+            android:textColor="@color/status_done"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <LinearLayout
-          android:id="@+id/details_sync"
-          android:orientation="vertical"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@id/status_label"
-          android:layout_below="@id/status_icon"
-        >
+            android:id="@+id/details_sync"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/status_label"
+            android:layout_below="@id/status_icon"
+            android:orientation="vertical">
 
             <ProgressBar
-              android:id="@+id/details_sync_progress"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:paddingRight="10dip"
-              style="?android:attr/progressBarStyleHorizontal"
-              android:indeterminate="false"
-             />
+                android:id="@+id/details_sync_progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"
+                android:paddingRight="10dip" />
 
             <TextView
-              android:id="@+id/details_sync_label"
-              android:layout_marginTop="6dip"
-              android:layout_height="wrap_content"
-              android:layout_width="fill_parent"
-            />
+                android:id="@+id/details_sync_label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dip" />
         </LinearLayout>
     </RelativeLayout>
 
     <TableLayout
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingTop="10dip"
-      android:paddingLeft="20dip"
-      android:paddingRight="20dip"
-      android:stretchColumns="*"
-      android:shrinkColumns="*"
-    >
-        <TableRow>
-          <Button
-            android:id="@+id/sync_button"
-            android:text="@string/ui_sync_button_label_idle"
-            android:textStyle="bold"
-            android:gravity="center"
-          />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dip"
+        android:paddingRight="20dip"
+        android:paddingTop="10dip"
+        android:shrinkColumns="*"
+        android:stretchColumns="*">
 
-          <Button
-            android:id="@+id/restore_button"
-            android:text="@string/ui_restore_button_label_idle"
-            android:textStyle="bold"
-            android:gravity="center"
-          />
+        <TableRow>
+
+            <Button
+                android:id="@+id/sync_button"
+                android:gravity="center"
+                android:text="@string/ui_sync_button_label_idle"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/restore_button"
+                android:gravity="center"
+                android:text="@string/ui_restore_button_label_idle"
+                android:textStyle="bold" />
 
         </TableRow>
     </TableLayout>
