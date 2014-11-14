@@ -180,7 +180,6 @@ public class MainActivity extends PreferenceActivity {
     protected void onDestroy() {
         super.onDestroy();
         App.bus.unregister(this);
-        App.bus.unregister(statusPref);
     }
 
     @Override
