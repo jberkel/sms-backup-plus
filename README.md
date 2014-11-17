@@ -49,7 +49,7 @@ You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
 account or look at this [screenshot][imapenableshot]. If you use Google Apps
 make sure you select "Sign in with a Google Apps Account"
-([screenshot](http://skitch.com/jberkel/ditwx/5554-emu-2.2)).
+([screenshot](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/5554-emu-2.2.jpg)).
 
 After starting SMS Backup+, tap on the "Connect" check box to start the
 authorization process.
@@ -99,7 +99,7 @@ After you performed your initial backup, SMS Backup+ is ready to run in the
 background and finish uploading all of your current and future messages (check
 "Auto Backup"). Make sure that you have `Background data` enabled in your
 Android `Accounts & Sync` settings
-([screenshot](http://skitch.com/jberkel/d9pi7/5554-emu-2.2)).
+([screenshot](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/5554-emu-2.2.jpg)).
 
 ### Restoring
 
@@ -209,8 +209,8 @@ This is probably related to Gmail's automatic priority inbox filing.
 A workaround is to set up a filter with "subject: SMS with", let the filter
 mark it as not important.
 
-![](https://img.skitch.com/20120106-tymk3rn4i5apshhr6e1hbd17qn.jpg)
-![](https://img.skitch.com/20120106-rsg7912rnus5gwe3e572rxwbae.jpg)
+![](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/20120106-tymk3rn4i5apshhr6e1hbd17qn.jpg)
+![](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/20120106-rsg7912rnus5gwe3e572rxwbae.jpg)
 
 #### <a name="faq-backup-to-inbox">I want the backed up mesages to show up in my gmail inbox!</a>
 
@@ -424,11 +424,11 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
 [whatsapp-screenshot]: https://www.evernote.com/shard/s1/sh/79d6ab92-778d-4308-9025-5306bda7beaf/500b42c3484688f3b4a1d2b1894baba0
-[showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
-[source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
+[showoriginal]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/google-mail-sms-with-orange-jan.berkel-gmail.com.jpg
+[source]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820.jpg
 [droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/
 [SMS Time fix]: http://www.appbrain.com/app/sms-time-fix/com.mattprecious.smsfix
-[converationviewoff]: https://skitch.com/jberkel/ryk8y/soundcloud.com-mail-settings-jan-soundcloud.com
+[converationviewoff]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/soundcloud.com-mail-settings-jan-soundcloud.com.jpg
 [smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
 [imapenableshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/enable_imap.png
 [showimap]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/show_imap.png
