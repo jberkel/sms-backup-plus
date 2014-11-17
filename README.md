@@ -385,9 +385,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * [Felix Knecht](http://github.com/dicer) - Call log backup code
   * [Michael Scharfstein](http://github.com/smike) - Call log calendar ICS support
   * [k9mail](http://code.google.com/p/k9mail/) IMAP library, with some modifications ([k9mail/sms-backup-plus](http://github.com/jberkel/k9mail))
-  * [acra](http://code.google.com/p/acra) ACRA - Application Crash Report for Android
   * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
-  * Jeffrey F. Cole - [NumberPicker.java][]
   * Shimon Simon (new icon designs)
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
   * [skolima](http://github.com/skolima) - Polish translation
@@ -418,9 +416,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [github issues]: http://github.com/jberkel/sms-backup-plus/issues
 [MarketQRCode]: http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [MarketLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
-[WhatisFlattr]: http://en.wikipedia.org/wiki/Flattr
-[FlattrLink]: http://flattr.com/thing/45809/SMS-Backup
-[FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
 [whatsapp-screenshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/whatsapp.png
@@ -433,7 +428,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [imapenableshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/enable_imap.png
 [showimap]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/show_imap.png
 [Tasker]: http://tasker.dinglisch.net/
-[NumberPicker.java]: http://www.technologichron.net/?p=42
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
 [Getting started with 2-step verification]: http://www.google.com/support/accounts/bin/static.py?page=guide.cs&guide=1056283&topic=1056284
