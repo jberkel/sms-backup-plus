@@ -423,7 +423,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
-[whatsapp-screenshot]: https://www.evernote.com/shard/s1/sh/79d6ab92-778d-4308-9025-5306bda7beaf/500b42c3484688f3b4a1d2b1894baba0
+[whatsapp-screenshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/whatsapp.png
 [showoriginal]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/google-mail-sms-with-orange-jan.berkel-gmail.com.jpg
 [source]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820.jpg
 [droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/
