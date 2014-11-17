@@ -409,7 +409,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
 
 ##<a name="screenhots">Screenshots</a>
 
-![SMS Backup+ screenshot][smsbackupshot] ![Gmail screenshot][gmailshot] ![Gcal screenshot][gcalshot]
+![SMS Backup+ screenshot][smsbackupshot]
 
 ##<a name="license">License</a>
 
@@ -424,8 +424,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [FlattrButton]: http://api.flattr.com/button/button-static-50x60.png
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
-[gmailshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gmail_screenshot.png
-[gcalshot]: https://github.com/downloads/jberkel/sms-backup-plus/sms_gcal_screenshot.png
 [whatsapp-screenshot]: https://www.evernote.com/shard/s1/sh/79d6ab92-778d-4308-9025-5306bda7beaf/500b42c3484688f3b4a1d2b1894baba0
 [showoriginal]: http://skitch.com/jberkel/d51wp/google-mail-sms-with-orange-jan.berkel-gmail.com
 [source]: http://skitch.com/jberkel/d51w1/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820
