@@ -99,7 +99,7 @@ After you performed your initial backup, SMS Backup+ is ready to run in the
 background and finish uploading all of your current and future messages (check
 "Auto Backup"). Make sure that you have `Background data` enabled in your
 Android `Accounts & Sync` settings
-([screenshot](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/5554-emu-2.2.jpg)).
+([screenshot](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/bgdata.jpg)).
 
 ### Restoring
 
