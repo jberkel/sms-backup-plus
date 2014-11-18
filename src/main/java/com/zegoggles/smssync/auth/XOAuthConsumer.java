@@ -42,7 +42,6 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.net.URI;
@@ -147,12 +146,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
             HttpGet get = new HttpGet(sign(url));
             HttpResponse resp = httpClient.execute(get);
 
-            SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-            final XMLReader xmlReader = saxParser.getXMLReader();
-            final FeedHandler feedHandler = new FeedHandler();
-            xmlReader.setContentHandler(feedHandler);
-            xmlReader.parse(new InputSource(resp.getEntity().getContent()));
-            return feedHandler.getEmail();
+            return extractEmail(resp);
         } catch (OAuthException e) {
             Log.e(TAG, "error", e);
             return null;
@@ -166,6 +160,14 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
             Log.e(TAG, "error", e);
             return null;
         }
+    }
+
+    private String extractEmail(HttpResponse response) throws ParserConfigurationException, SAXException, IOException {
+        final XMLReader xmlReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+        final FeedHandler feedHandler = new FeedHandler();
+        xmlReader.setContentHandler(feedHandler);
+        xmlReader.parse(new InputSource(response.getEntity().getContent()));
+        return feedHandler.getEmail();
     }
 
     private String urlEncode(String s) {
