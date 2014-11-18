@@ -1,6 +1,7 @@
 *.*~
 *.keystore
 gen
+classes
 local.properties
 *.iml
 *.ipr
