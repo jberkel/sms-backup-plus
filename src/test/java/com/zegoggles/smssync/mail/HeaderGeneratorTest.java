@@ -117,4 +117,13 @@ public class HeaderGeneratorTest {
         assertThat(get(message, Headers.READ)).isEqualTo("read");
         assertThat(get(message, Headers.DATE)).isEqualTo("date");
     }
+
+    @Test public void testShouldSetHeadersWithNullAddress() throws Exception {
+        Message message = new MimeMessage();
+        Map<String, String> map = new HashMap<String, String>();
+        Date sent = new Date();
+        PersonRecord person = new PersonRecord(0, null, null, null);
+
+        generator.setHeaders(message, map, DataType.SMS, null, person, sent, 0);
+    }
 }

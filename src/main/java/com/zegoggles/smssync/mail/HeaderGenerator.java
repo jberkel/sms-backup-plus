@@ -108,7 +108,9 @@ class HeaderGenerator {
             final MessageDigest digest = MessageDigest.getInstance("MD5");
 
             digest.update(Long.toString(sent.getTime()).getBytes("UTF-8"));
-            digest.update(address.getBytes("UTF-8"));
+            if (address != null) {
+                digest.update(address.getBytes("UTF-8"));
+            }
             digest.update(Integer.toString(type).getBytes("UTF-8"));
 
             final StringBuilder sb = new StringBuilder();
