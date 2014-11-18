@@ -113,7 +113,7 @@ public abstract class ServiceBase extends Service {
     protected void acquireLocks() {
         if (mWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            mWakeLock = pMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+            mWakeLock = pMgr.newWakeLock(wakeLockType(), TAG);
         }
         mWakeLock.acquire();
 
@@ -125,6 +125,10 @@ public abstract class ServiceBase extends Service {
             }
             mWifiLock.acquire();
         }
+    }
+
+    protected int wakeLockType() {
+        return PowerManager.PARTIAL_WAKE_LOCK;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
@@ -178,7 +182,7 @@ public abstract class ServiceBase extends Service {
         return (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
-    protected Notification createNotification(int resId) {
+    protected @NotNull Notification createNotification(int resId) {
         Notification n = new Notification(R.drawable.ic_notification,
                 getString(resId),
                 System.currentTimeMillis());

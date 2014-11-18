@@ -3,6 +3,7 @@ package com.zegoggles.smssync.service;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
+import android.os.PowerManager;
 import android.provider.Telephony;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
@@ -56,16 +57,13 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     /**
-     * Android KitKat requires SMS Backup+ to be the default SMS application in order to
+     * Android KitKat and above require SMS Backup+ to be the default SMS application in order to
      * write to the SMS Provider.
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private boolean canWriteToSmsProvider() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return true;
-        } else {
-            return getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
-        }
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ||
+               getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
     }
 
     @Override
@@ -156,6 +154,16 @@ public class SmsRestoreService extends ServiceBase {
 
     @Produce public RestoreState produceLastState() {
         return mState;
+    }
+
+    @Override protected int wakeLockType() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // hold a full wake lock when restoring on newer version of Android, since
+            // the user needs to switch  back the sms app afterwards
+            return PowerManager.FULL_WAKE_LOCK;
+        } else {
+            return super.wakeLockType();
+        }
     }
 
     public static boolean isServiceWorking() {
