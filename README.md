@@ -403,6 +403,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * Javier Pico - Galician translation
   * Ferran Rius - Catalan translation
   * Mads Andreasen - Danish translation
+  * [shadoll](http://shadoll.info) - Ukrainian translation
 
 ##<a name="screenhots">Screenshots</a>
 
