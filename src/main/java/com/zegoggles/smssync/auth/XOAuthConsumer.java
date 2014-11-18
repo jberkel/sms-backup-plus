@@ -17,9 +17,7 @@ package com.zegoggles.smssync.auth;
 
 import android.content.Context;
 import android.util.Log;
-import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
-import oauth.signpost.OAuth;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthException;
@@ -52,11 +50,27 @@ import java.util.Map;
 import java.util.SortedSet;
 
 import static com.zegoggles.smssync.App.TAG;
+import static oauth.signpost.OAuth.ENCODING;
+import static oauth.signpost.OAuth.OAUTH_SIGNATURE;
+import static oauth.signpost.OAuth.percentEncode;
 
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
-    private String mUsername;
     private static final String MAC_NAME = "HmacSHA1";
     private static final String ANONYMOUS = "anonymous";
+
+    // Scopes as defined in http://code.google.com/apis/accounts/docs/OAuth.html#prepScope
+    private static final String GMAIL_SCOPE = "https://mail.google.com/";
+    private static final String CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
+    private static final String DEFAULT_SCOPE  = GMAIL_SCOPE + " " + CONTACTS_SCOPE;
+
+    // endpoints
+    private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/thin?max-results=1";
+    private static final String REQUEST_TOKEN_URL = "https://www.google.com/accounts/OAuthGetRequestToken" +
+            "?scope=%s&xoauth_displayname=%s";
+    private static final String ACCESS_TOKEN_ENDPOINT_URL = "https://www.google.com/accounts/OAuthGetAccessToken";
+    private static final String AUTHORIZE_TOKEN_URL       = "https://www.google.com/accounts/OAuthAuthorizeToken?btmpl=mobile";
+
+    private String mUsername;
 
     public XOAuthConsumer(String username) {
         super(ANONYMOUS, ANONYMOUS);
@@ -76,8 +90,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
         if (username == null) throw new IllegalArgumentException("username is null");
 
         try {
-            final URI uri = new URI(String.format("https://mail.google.com/mail/b/%s/imap/",
-                    urlEncode(username)));
+            final URI uri = new URI(String.format("https://mail.google.com/mail/b/%s/imap/", urlEncode(username)));
             final HttpRequest request = wrap(new HttpGet(uri));
             final HttpParameters requestParameters = new HttpParameters();
 
@@ -88,7 +101,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
                     .append(uri.toString())
                     .append(" ");
 
-            requestParameters.put("oauth_signature", generateSig(request, requestParameters), true);
+            requestParameters.put(OAUTH_SIGNATURE, generateSig(request, requestParameters), true);
 
             Iterator<Map.Entry<String, SortedSet<String>>> it = requestParameters.entrySet().iterator();
             while (it.hasNext()) {
@@ -103,7 +116,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
                 }
             }
 
-            return base64(sasl.toString().getBytes(OAuth.ENCODING));
+            return base64(sasl.toString().getBytes(ENCODING));
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         } catch (Exception e) {
@@ -113,18 +126,20 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
 
     public CommonsHttpOAuthProvider getProvider(Context context) {
         //System.setProperty("debug", "true");
-        final String scope = Consts.GMAIL_SCOPE + " " + Consts.CONTACTS_SCOPE;
         return new CommonsHttpOAuthProvider(
-                String.format("https://www.google.com/accounts/OAuthGetRequestToken" +
-                        "?scope=%s&xoauth_displayname=%s",
-                        urlEncode(scope),
-                        urlEncode(context.getString(R.string.app_name))),
-                "https://www.google.com/accounts/OAuthGetAccessToken",
-                "https://www.google.com/accounts/OAuthAuthorizeToken?btmpl=mobile") {
+                requestTokenEndpointUrl(context),
+                ACCESS_TOKEN_ENDPOINT_URL,
+                AUTHORIZE_TOKEN_URL) {
             {
                 setOAuth10a(true);
             }
         };
+    }
+
+    private String requestTokenEndpointUrl(Context context) {
+        return String.format(REQUEST_TOKEN_URL,
+            urlEncode(DEFAULT_SCOPE),
+            urlEncode(context.getString(R.string.app_name)));
     }
 
     public String getUsername() {
@@ -138,15 +153,11 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
 
     // Retrieves the google email account address using the contacts API
     protected String getUsernameFromContacts() {
-
         final HttpClient httpClient = new DefaultHttpClient();
-        final String url = "https://www.google.com/m8/feeds/contacts/default/thin?max-results=1";
 
         try {
-            HttpGet get = new HttpGet(sign(url));
-            HttpResponse resp = httpClient.execute(get);
-
-            return extractEmail(resp);
+            HttpGet get = new HttpGet(sign(CONTACTS_URL));
+            return extractEmail(httpClient.execute(get));
         } catch (OAuthException e) {
             Log.e(TAG, "error", e);
             return null;
@@ -179,15 +190,14 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
     }
 
     private String generateSig(HttpRequest request, HttpParameters requestParameters) throws Exception {
-        String keyString = OAuth.percentEncode(getConsumerSecret()) + '&' + OAuth.percentEncode(getTokenSecret());
-        byte[] keyBytes = keyString.getBytes(OAuth.ENCODING);
+        String keyString = percentEncode(getConsumerSecret()) + '&' + percentEncode(getTokenSecret());
 
-        SecretKey key = new SecretKeySpec(keyBytes, MAC_NAME);
+        SecretKey key = new SecretKeySpec(keyString.getBytes(ENCODING), MAC_NAME);
         Mac mac = Mac.getInstance(MAC_NAME);
         mac.init(key);
 
         String sbs = new SignatureBaseString(request, requestParameters).generate();
-        return base64(mac.doFinal(sbs.getBytes(OAuth.ENCODING)));
+        return base64(mac.doFinal(sbs.getBytes(ENCODING)));
     }
 
     private String base64(byte[] data) {

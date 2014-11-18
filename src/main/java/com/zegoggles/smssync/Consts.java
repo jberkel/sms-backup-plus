@@ -41,9 +41,6 @@ public final class Consts {
      */
     public static final String CALLBACK_URL = "smssync://gmail";
 
-    // Scopes as defined in http://code.google.com/apis/accounts/docs/OAuth.html#prepScope
-    public static final String GMAIL_SCOPE = "https://mail.google.com/";
-    public static final String CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
 
     public static final Uri MMS_PROVIDER     = Uri.parse("content://mms");
     public static final String MMS_PART      = "part";
