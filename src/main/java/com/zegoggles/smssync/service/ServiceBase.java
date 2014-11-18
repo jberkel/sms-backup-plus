@@ -110,7 +110,7 @@ public abstract class ServiceBase extends Service {
         return new Preferences(this);
     }
 
-    protected void acquireLocks() {
+    protected synchronized void acquireLocks() {
         if (mWakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
             mWakeLock = pMgr.newWakeLock(wakeLockType(), TAG);
@@ -137,7 +137,7 @@ public abstract class ServiceBase extends Service {
                 WifiManager.WIFI_MODE_FULL_HIGH_PERF : WifiManager.WIFI_MODE_FULL;
     }
 
-    protected void releaseLocks() {
+    protected synchronized void releaseLocks() {
         if (mWakeLock != null && mWakeLock.isHeld()) {
             mWakeLock.release();
             mWakeLock = null;
