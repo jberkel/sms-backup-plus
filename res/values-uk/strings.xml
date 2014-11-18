@@ -8,7 +8,7 @@
 <string name="ui_restore_button_label_idle">Відновити</string>
 <string name="ui_restore_button_label_restoring">Зупинити</string>
 <string name="status_idle">Очікую</string>
-<string name="status_idle_details">Останнє збереження: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+<string name="status_idle_details">Востаннє: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
 <string name="status_idle_details_never">ніколи</string>
 <string name="status_working">Виконується</string>
 <string name="status_backup">Резервне копіювання</string>
@@ -67,19 +67,19 @@
 <string name="ui_imap_folder_desc">Мітки Gmail для SMS.</string>
 <string name="ui_imap_folder_label_dialog_msg">Збережені SMS повідомлення будуть позначені цією міткою в Gmail.</string>
 <string name="ui_mail_subject_prefix_label">Тема електронного листа</string>
-<string name="ui_mail_subject_prefix_desc">Використання назви IMAP теки як префікс теми листа</string>
+<string name="ui_mail_subject_prefix_desc">Використання назви IMAP-тек як префікс теми листа</string>
 <string name="ui_max_items_per_sync_label">Елементів для резервної копії</string>
 <string name="ui_max_items_per_sync_desc">Максимальна кількість елементів для резервної копії.</string>
 <string name="ui_max_items_per_restore_label">Елементів для відновлення</string>
 <string name="ui_max_items_per_restore_desc">Максимальна кількість елементів для відновлення.</string>
 <string name="ui_restore_starred_only_label">Позначені елементи</string>
 <string name="ui_restore_starred_only_desc">Відновлення лише позначених елементів.</string>
-<string name="ui_backup_mms_label">Резервне копіювання MMS</string>
+<string name="ui_backup_mms_label">Збереження MMS</string>
 <string name="ui_backup_mms_desc">Дозволити резервне копіювання MMS повідомлень</string>
 <string name="ui_backup_mms_not_supported">Резервне копіювання MMS не підтримується на цій платформі.</string>
-<string name="ui_backup_calllog_label">Резервне копіювання журналу викликів</string>
+<string name="ui_backup_calllog_label">Збереження журналу викликів</string>
 <string name="ui_backup_calllog_desc">Дозволити резервне копіювання журналу викликів</string>
-<string name="ui_backup_whatsapp_label">Резервне копіювання WhatsApp</string>
+<string name="ui_backup_whatsapp_label">Збереження WhatsApp</string>
 <string name="ui_backup_whatsapp_desc">Ввімкнути резервне копіювання WhatsApp повідомлень</string>
 <string name="ui_backup_calllog_sync_calendar_enabled_label">Синхронізація до календаря</string>
 <string name="ui_backup_calllog_sync_calendar_enabled_desc">Зберігати журнал викликів до календаря</string>
@@ -112,7 +112,7 @@
 <string name="ui_wifi_only_label">Вимагати WiFi</string>
 <string name="ui_wifi_only_desc">Резервне копіювання лише при підключенні до WiFi мережі</string>
 <string name="ui_notifications_label">Сповіщення</string>
-<string name="ui_notifications_desc">Фонові сповіщення</string>
+<string name="ui_notifications_desc">Відображати фонові сповіщення</string>
 <string name="error_wifi_only_no_connection">Немає WiFi з’єднання</string>
 <string name="error_no_connection">Немає підключення до інтернету</string>
 <string name="error_sms_provider_not_writable">Не можливо записати до sms-провайдера</string>
@@ -169,11 +169,11 @@
 <string name="ui_backup_contact_group_label">Контакти для резервного копіювання</string>
 <string name="ui_backup_contact_group_desc">Резервнє копіювання елементів з певної групи</string>
 <string name="everybody">Всі</string>
-<string name="call_type_everything">Все</string>
-<string name="call_type_incoming">Лише вхідні виклики</string>
-<string name="call_type_outgoing">Лише вихідні виклики</string>
+<string name="call_type_everything">Всі</string>
+<string name="call_type_incoming">Лише вхідні</string>
+<string name="call_type_outgoing">Лише вихідні</string>
 <string name="call_type_incoming_outgoing">Вхідні та вихідні</string>
-<string name="call_type_missed">Лише пропущені виклики</string>
+<string name="call_type_missed">Лише пропущені</string>
 <string name="email_address_style_name">Ім’я</string>
 <string name="email_address_style_name_and_number">Ім’я (+380 12 3456789)</string>
 <string name="email_address_style_number">+380 12 3456789</string>
@@ -194,7 +194,7 @@
 <string name="ui_third_party_integration_label">Інтеграції</string>
 <string name="ui_third_party_integration_desc">Дозволити іншим застосункам запуск резервного копіювання за допомогою трансляції намірів</string>
 
-<string name="ui_backup_settings_label">Параметри резервного копіювання</string>
+<string name="ui_backup_settings_label">Резервне копіювання</string>
 <!-- <string name="ui_backup_settings_desc">Параметри резервного копіювання</string> -->
 
 <string name="ui_backup_calllog_settings_label">Налаштування журналу викликів</string>
@@ -203,10 +203,10 @@
 <string name="auto_backup_settings">Налаштування автоматичного резервного копіювання</string>
 <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
-<string name="ui_restore_settings_label">Відновлення налаштувань</string>
-<!-- <string name="ui_restore_settings_desc">Відновлення налаштувань</string> -->
+<string name="ui_restore_settings_label">Відновлення</string>
+<!-- <string name="ui_restore_settings_desc">Параметри відновлення з резервної копії</string> -->
 
-<string name="ui_backup_sms_label">Резервне копіювання SMS</string>
+<string name="ui_backup_sms_label">Збереження SMS</string>
 <string name="ui_backup_sms_desc">Включити резервне копіювання SMS</string>
 <string name="ui_restore_sms_label">Відновлення SMS</string>
 <string name="ui_restore_sms_desc"></string>
@@ -260,9 +260,9 @@
 <string name="select_google_account">Оберіть Google-акаунт</string>
 
 <!-- donation related -->
-<string name="donate">Здарувати</string>
-<string name="donate_summary">Скористатися безпечною оплатою Google Play безпосередньо з додатку.</string>
-<string name="ui_dialog_donate_message">Будь ласка, вкажіть суму та валюту:</string>
+<string name="donate">Віддячити</string>
+<string name="donate_summary">Скориставшись безпечною оплатою Google Play безпосередньо з додатку.</string>
+<string name="ui_dialog_donate_message">Будь ласка, оберіть суму та валюту:</string>
 <string name="ui_donation_success_message">Дякуємо за підтримку!</string>
 <string name="ui_donation_failure_message">Сталася помилка: %1$s</string>
 
