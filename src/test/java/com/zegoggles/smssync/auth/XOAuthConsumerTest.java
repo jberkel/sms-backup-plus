@@ -1,12 +1,12 @@
 package com.zegoggles.smssync.auth;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.zegoggles.smssync.TestHelper.getResource;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
@@ -19,7 +19,14 @@ public class XOAuthConsumerTest {
     }
 
     @Test
-    public void shouldgetProvider() throws Exception {
+    public void testLoadUsernameFromContacts() throws Exception {
+        Robolectric.addPendingHttpResponse(200, getResource("/contacts.xml"));
+        XOAuthConsumer consumer = new XOAuthConsumer("username");
+        assertThat(consumer.loadUsernameFromContacts()).isEqualTo("foo@example.com");
+    }
+
+    @Test
+    public void shouldGetProvider() throws Exception {
         XOAuthConsumer consumer = new XOAuthConsumer("username");
         CommonsHttpOAuthProvider provider = consumer.getProvider(Robolectric.application);
 

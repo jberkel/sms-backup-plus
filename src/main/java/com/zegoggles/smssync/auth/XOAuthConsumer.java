@@ -34,6 +34,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -141,32 +142,17 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
 
         final HttpClient httpClient = new DefaultHttpClient();
         final String url = "https://www.google.com/m8/feeds/contacts/default/thin?max-results=1";
-        final StringBuilder email = new StringBuilder();
 
         try {
             HttpGet get = new HttpGet(sign(url));
             HttpResponse resp = httpClient.execute(get);
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
-            xr.setContentHandler(new DefaultHandler() {
-                boolean inEmail;
 
-                @Override
-                public void startElement(String uri, String localName, String qName, Attributes atts) {
-                    inEmail = "email".equals(localName);
-                }
-
-                @Override
-                public void characters(char[] c, int start, int length) {
-                    if (inEmail) {
-                        email.append(c, start, length);
-                    }
-                }
-            });
-            xr.parse(new InputSource(resp.getEntity().getContent()));
-            return email.toString();
-
+            SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
+            final XMLReader xmlReader = saxParser.getXMLReader();
+            final FeedHandler feedHandler = new FeedHandler();
+            xmlReader.setContentHandler(feedHandler);
+            xmlReader.parse(new InputSource(resp.getEntity().getContent()));
+            return feedHandler.getEmail();
         } catch (OAuthException e) {
             Log.e(TAG, "error", e);
             return null;
@@ -207,6 +193,49 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
             return new String(Base64.encodeBase64(data), "UTF-8");
         } catch (java.io.UnsupportedEncodingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private static class FeedHandler extends DefaultHandler {
+        private static final String EMAIL = "email";
+        private static final String AUTHOR = "author";
+        private final StringBuilder email = new StringBuilder();
+        private boolean inEmail;
+        private boolean inAuthor;
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes atts) {
+            inEmail = EMAIL.equals(qName);
+            if (AUTHOR.equals(qName)) {
+                inAuthor = true;
+            }
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            if (inAuthor && AUTHOR.equals(qName)) {
+                inAuthor = false;
+            }
+        }
+
+        @Override
+        public void characters(char[] c, int start, int length) {
+            if (inAuthor && inEmail) {
+                email.append(c, start, length);
+            }
+        }
+
+        @Override
+        public void error(SAXParseException e) throws SAXException {
+            Log.e(TAG, "error during parsing", e);
+        }
+
+        @Override public void warning(SAXParseException e) throws SAXException {
+            Log.w(TAG, "error during parsing", e);
+        }
+
+        public String getEmail() {
+            return email.toString().trim();
         }
     }
 }
