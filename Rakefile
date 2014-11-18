@@ -16,15 +16,6 @@ CLEAN.include('tmp', 'bin')
       end
     end
 
-    namespace :parts do
-      task :pull do
-        sh "adb #{flag} pull /data/data/com.android.providers.telephony/app_parts/ app_parts"
-      end
-      task :push do
-        sh "adb #{flag} push app_parts /data/data/com.android.providers.telephony/app_parts/"
-      end
-    end
-
     namespace :log do
       task :pull do
         sh "adb #{flag} pull /sdcard/sms_backup_plus.log ."
@@ -51,6 +42,11 @@ task :check_version do
   raise "about not updated" unless IO.read('assets/about.html') =~ /SMS Backup\+ #{version}/
 end
 
+desc "perform a release build"
+task :release => :check_version do
+  sh "mvn clean install -DskipTests -Prelease,smsbackupplus"
+end
+
 desc "tag the current version"
 task :tag => [:check_version] do
   unless `git branch` =~ /^\* master$/
@@ -64,7 +60,7 @@ end
 
 desc "spellcheck README"
 task :spell do
-  system "aspell", "--mode", "html", "--dont-backup", "check", 'README.md'
+  sh "aspell", "--mode", "html", "--dont-backup", "check", 'README.md'
 end
 
 namespace :doc do

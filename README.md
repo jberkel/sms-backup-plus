@@ -54,7 +54,7 @@ make sure you select "Sign in with a Google Apps Account"
 After starting SMS Backup+, tap on the "Connect" check box to start the
 authorization process.
 
-On newer Android devices you'll be presented with a list of gmail accounts to
+On newer Android devices you'll be presented with a list of Gmail accounts to
 be used for the backup. You'll need to give SMSBackup+ the permission to access your
 emails.
 
@@ -132,14 +132,14 @@ If you only want to backup specific call types you can do so as well.
 
 ### <a name="whatsapp-support">WhatsApp support</a>
 
-SMS Backup+ can also transfer your WhatsApp messages to your gmail account.
+SMS Backup+ can also transfer your WhatsApp messages to your Gmail account.
 In order for this to work you need to make sure to have "Backup conversations"
 enabled in WhatsApp (Settings - Chat Settings, see [screenshot][whatsapp-screenshot]).
 
 To enable the backup in SMS Backup+, go to "Advanced Settings",
 then "Backup Settings" and tick the "Backup WhatsApp" checkbox.
 
-The messages will be backed up to the "WhatsApp" label in gmail.
+The messages will be backed up to the "WhatsApp" label in Gmail.
 Note that WhatsApp messages are backup only, there is no way to restore them.
 
 ### <a name="3rdparty">3rd party app integration</a>
@@ -212,7 +212,7 @@ mark it as not important.
 ![](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/20120106-tymk3rn4i5apshhr6e1hbd17qn.jpg)
 ![](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/20120106-rsg7912rnus5gwe3e572rxwbae.jpg)
 
-#### <a name="faq-backup-to-inbox">I want the backed up mesages to show up in my gmail inbox!</a>
+#### <a name="faq-backup-to-inbox">I want the backed up messages to show up in my Gmail inbox!</a>
 
 Just set the label to "Inbox" instead of the default "SMS" or "Call log".
 
@@ -270,7 +270,7 @@ In Gmail settings, set conversation view to `off`
 
 
 <a name="faq-delete"/>
-#### <a name="faq-does-it-sync">When I delete a text locally, will it delete the saved copy on gmail?</a>
+#### <a name="faq-does-it-sync">When I delete a text locally, will it delete the saved copy on Gmail?</a>
 
 No. SMS Backup+ does not do a "real" sync, once the text has been transferred
 to Gmail it won't get modified or deleted by the app.
@@ -295,8 +295,8 @@ This is a current limitation. A future version might address this issue.
 If you have a lot of messages backed up (let's say over 5000) restoring can be
 very slow, especially if you're only interested in the most recent messages.
 
-A workaround is to use the gmail web interface (or an IMAP email client) to
-move the bulk of the messages to another label in gmail (e.g. SMSARCHIVED), and
+A workaround is to use the Gmail web interface (or an IMAP email client) to
+move the bulk of the messages to another label in Gmail (e.g. SMSARCHIVED), and
 only keep a few hundred or so messages in the SMS label.
 
 Next time you restore it will only restore those messages and it will be a lot
@@ -328,7 +328,7 @@ Some possible workarounds:
   afterwards)
   * Install a 3rd party browser (Dolphin HD has been reported to work)
   * Use plain text authentication (Advanced Settings - Server Settings), use
-  your gmail address as username and supply your password
+  your Gmail address as username and supply your password
 
 #### <a name="faq-browser">After granting access, the Messaging app opens.</a>
 
@@ -393,7 +393,7 @@ repository and send me a [pull request](http://help.github.com/pull-requests/).
   * Gabriele Ravanetti / [Patryk Rzucidlo](http://www.ptkdev.it/) / [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
   * Harun Sahin - Turkish translation
   * [Lukas Pribyl](http://www.lukaspribyl.eu) - Czech translation
-  * João Pedro Ferreira - Portugese translation
+  * João Pedro Ferreira - Portuguese translation
   * Martijn Brouns - Dutch translation
   * [Tobeon](http://tobeon.net) - Norwegian translation
   * Nemanja Bračko - Serbian translation
