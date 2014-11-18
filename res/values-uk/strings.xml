@@ -79,7 +79,7 @@
 <string name="ui_backup_mms_not_supported">Резервне копіювання MMS не підтримується на цій платформі.</string>
 <string name="ui_backup_calllog_label">Збереження журналу викликів</string>
 <string name="ui_backup_calllog_desc">Дозволити резервне копіювання журналу викликів</string>
-<string name="ui_backup_whatsapp_label">З WhatsApp</string>
+<string name="ui_backup_whatsapp_label">Збереження WhatsApp</string>
 <string name="ui_backup_whatsapp_desc">Ввімкнути резервне копіювання WhatsApp повідомлень</string>
 <string name="ui_backup_calllog_sync_calendar_enabled_label">Синхронізація до календаря</string>
 <string name="ui_backup_calllog_sync_calendar_enabled_desc">Зберігати журнал викликів до календаря</string>
@@ -195,7 +195,7 @@
 <string name="ui_third_party_integration_desc">Дозволити іншим застосункам запуск резервного копіювання за допомогою трансляції намірів</string>
 
 <string name="ui_backup_settings_label">Резервне копіювання</string>
-<string name="ui_backup_settings_desc">Параметри резервного копіювання</string>
+<!-- <string name="ui_backup_settings_desc">Параметри резервного копіювання</string> -->
 
 <string name="ui_backup_calllog_settings_label">Налаштування журналу викликів</string>
 <!-- <string name="ui_backup_calllog_settings_desc">Налаштування журналу викликів</string> -->
@@ -204,7 +204,7 @@
 <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
 <string name="ui_restore_settings_label">Відновлення</string>
-<string name="ui_restore_settings_desc">Параметри відновлення з резервної копії</string>
+<!-- <string name="ui_restore_settings_desc">Параметри відновлення з резервної копії</string> -->
 
 <string name="ui_backup_sms_label">Збереження SMS</string>
 <string name="ui_backup_sms_desc">Включити резервне копіювання SMS</string>
