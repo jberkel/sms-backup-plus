@@ -84,7 +84,7 @@
         </receiver>
 
         <!-- BroadcastReceiver that listens for incoming SMS messages -->
-        <receiver android:name=".SmsReceiver"
+        <receiver android:name=".compat.SmsReceiver"
                 android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_DELIVER" />
@@ -92,7 +92,7 @@
         </receiver>
 
         <!-- BroadcastReceiver that listens for incoming MMS messages -->
-        <receiver android:name=".MmsReceiver"
+        <receiver android:name=".compat.MmsReceiver"
             android:permission="android.permission.BROADCAST_WAP_PUSH">
             <intent-filter>
                 <action android:name="android.provider.Telephony.WAP_PUSH_DELIVER" />
@@ -101,7 +101,7 @@
         </receiver>
 
         <!-- Activity that allows the user to send new SMS/MMS messages -->
-        <activity android:name=".ComposeSmsActivity" >
+        <activity android:name=".compat.ComposeSmsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
@@ -115,7 +115,7 @@
         </activity>
 
         <!-- Service that delivers messages from the phone "quick response" -->
-        <service android:name=".HeadlessSmsSendService"
+        <service android:name=".compat.HeadlessSmsSendService"
                  android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"
                  android:exported="true" >
             <intent-filter>
