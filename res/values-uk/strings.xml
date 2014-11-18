@@ -8,33 +8,33 @@
 <string name="ui_restore_button_label_idle">Відновити</string>
 <string name="ui_restore_button_label_restoring">Зупинити</string>
 <string name="status_idle">Очікую</string>
-<string name="status_idle_details">Останнє збереження: <xliff:g id='last_backup_date'>%1$s</xliff:g></string>
+<string name="status_idle_details">Останнє збереження: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
 <string name="status_idle_details_never">ніколи</string>
 <string name="status_working">Виконується</string>
 <string name="status_backup">Резервне копіювання</string>
 <string name="status_restore">Відновлення</string>
-<string name="status_backup_details">Збережено <xliff:g id='backed_up_items'>%1$d</xliff:g> из <xliff:g id='total_items'>%2$d</xliff:g> елементів\u2026</string>
-<string name="status_restore_details">Відновлено <xliff:g id='backed_up_items'>%1$d</xliff:g> из <xliff:g id='total_items'>%2$d</xliff:g> елементів\u2026</string>
+<string name="status_backup_details">Збережено <xliff:g id="backed_up_items">%1$d</xliff:g> из <xliff:g id="total_items">%2$d</xliff:g> елементів\u2026</string>
+<string name="status_restore_details">Відновлено <xliff:g id="backed_up_items">%1$d</xliff:g> из <xliff:g id="total_items">%2$d</xliff:g> елементів\u2026</string>
 <string name="status_login_details">Триває вхід\u2026</string>
 <string name="status_updating_threads">Оновлення\u2026</string>
 <string name="status_done">Готово</string>
 <string name="status_backup_done_details_max_per_sync">Досягнуто максимальну кількість елементів (%1$d) на одну резервну копію. Для продовження виконайте резервне копіювання знову.</string>
 <string name="status_backup_done_details_noitems">Немає нічого для резервного копіювання.</string>
 <plurals name="status_backup_done_details">
-	<item quantity="one">Вдало збережено <xliff:g id='total_items'>%1$d</xliff:g> елемент.</item>
-<item quantity="few">Вдало збережено <xliff:g id='total_items'>%1$d</xliff:g> елементів.</item>
-<item quantity="other">Вдало збережено <xliff:g id='total_items'>%1$d</xliff:g> елемент.</item>
+	<item quantity="one">Вдало збережено <xliff:g id="total_items">%1$d</xliff:g> елемент.</item>
+<item quantity="few">Вдало збережено <xliff:g id="total_items">%1$d</xliff:g> елементів.</item>
+<item quantity="other">Вдало збережено <xliff:g id="total_items">%1$d</xliff:g> елемент.</item>
 </plurals>
 <plurals name="status_restore_done_details">
-<item quantity="one">Вдало відновлено <xliff:g id='total_items'>%1$d</xliff:g> елемент (%2$d повторів).</item>
-<item quantity="few">Вдало відновлено <xliff:g id='total_items'>%1$d</xliff:g> елементів (%2$d повторів).</item>
-<item quantity="other">Вдало відновлено <xliff:g id='total_items'>%1$d</xliff:g> елементів (%2$d повторів).</item>
+<item quantity="one">Вдало відновлено <xliff:g id="total_items">%1$d</xliff:g> елемент (%2$d повторів).</item>
+<item quantity="few">Вдало відновлено <xliff:g id="total_items">%1$d</xliff:g> елементів (%2$d повторів).</item>
+<item quantity="other">Вдало відновлено <xliff:g id="total_items">%1$d</xliff:g> елементів (%2$d повторів).</item>
 </plurals>
 <string name="status_restore_canceled_details">Вдало відновлено %1$d/%2$d елементів.</string>
 <string name="status_unknown_error">Помилка</string>
 <string name="notification_general_error">Помилка SMSBackup+</string>
 <string name="status_unknown_error_details">Помилка під час збереження/відновлення
-<xliff:g id='error_description'>%1$s</xliff:g></string>
+<xliff:g id="error_description">%1$s</xliff:g></string>
 <string name="status_auth_failure">Помилка входу</string>
 <string name="notification_auth_failure">Помилка входу SMSBackup+</string>
 <string name="status_auth_failure_details_xoauth">Помилка авторизації XOAuth. Будь ласка, переконайтеся, що ви вмикнули IMAP в налаштуваннях Gmail.</string>
@@ -48,7 +48,7 @@
 <string name="ui_settings_advanced_server_label">Налаштування серверу IMAP</string>
 <string name="ui_settings_advanced_server_desc">Не змінюйте налаштування, якщо ви не знаєте, що ви робите!</string>
 <string name="imap_settings">Налаштування IMAP</string>
-<string name="ui_login_label">Ім'я користувача</string>
+<string name="ui_login_label">Ім’я користувача</string>
 <string name="ui_login_desc">IMAP логін або адреса електронної пошти.</string>
 <string name="ui_login_dialog_msg">УВАГА: Зміна зміна логіну викликати проблеми при використанні XOAuth.</string>
 <string name="ui_password_label">Пароль</string>
@@ -58,7 +58,7 @@
 <string name="ui_server_desc">Адреса і порт серверу для синхронізації.</string>
 <string name="ui_server_dialog_msg">Типово для Gmail є \"imap.gmail.com:993\"</string>
 <string name="ui_protocol_label">Безпека</string>
-<string name="ui_protocol_desc">Протокол безпеки на сервері. Типово для Gmail є \"SSL (обов'язково)\".</string>
+<string name="ui_protocol_desc">Протокол безпеки на сервері. Типово для Gmail є \"SSL (обов’язково)\".</string>
 <string name="ui_authentication_label">Автентифікація</string>
 <string name="ui_authentication_desc">Метод перевірки автентичності. Типово для Gmail є \"XOAuth\".</string>
 <string name="plain">Звичайний текст</string>
@@ -113,12 +113,12 @@
 <string name="ui_wifi_only_desc">Резервне копіювання лише при підключенні до WiFi мережі</string>
 <string name="ui_notifications_label">Сповіщення</string>
 <string name="ui_notifications_desc">Фонові сповіщення</string>
-<string name="error_wifi_only_no_connection">Немає WiFi з'єднання</string>
+<string name="error_wifi_only_no_connection">Немає WiFi з’єднання</string>
 <string name="error_no_connection">Немає підключення до інтернету</string>
 <string name="error_sms_provider_not_writable">Не можливо записати до sms-провайдера</string>
 <string name="ui_dialog_missing_credentials_title">Інформація про вхід</string>
 <string name="ui_dialog_missing_credentials_msg_xoauth">Перш за все вам необхідно підключити ваш обліковий запис Gmail.</string>
-<string name="ui_dialog_missing_credentials_msg_plain">Спочатку потрібно встановити ваше ім'я користувача та пароль.</string>
+<string name="ui_dialog_missing_credentials_msg_plain">Спочатку потрібно встановити ваше ім’я користувача та пароль.</string>
 <string name="ui_dialog_invalid_imap_folder_title">Невірна назва мітки</string>
 <string name="ui_dialog_invalid_imap_folder_msg">Назва мітки не може містити пробіли (на початку або в кінці).</string>
 <string name="ui_dialog_first_sync_title">Перша резервна копія</string>
@@ -131,7 +131,7 @@
 <string name="ui_dialog_access_token_error_title">Помилка авторизації</string>
 <string name="ui_dialog_access_token_error_msg">Не можливо отримати доступ. Переконайтеся, що ви надали доступ застосунку.</string>
 <string name="ui_dialog_connect_msg">В вікні переглядачу тенет надайте доступ застосунку %1$s до вашої пошти.</string>
-<string name="ui_dialog_connect_token_error">Не вдалося з’єднатися з Google. Переконайтеся, що мережеве з'єднання встановлено і час та часовий пояс налаштовані правильно.</string>
+<string name="ui_dialog_connect_token_error">Не вдалося з’єднатися з Google. Переконайтеся, що мережеве з’єднання встановлено і час та часовий пояс налаштовані правильно.</string>
 <string name="ui_dialog_disconnect_msg">Ви впевнені? Після відключення потрібно буде повторно надати доступ до вашої пошти. Стан синхронізації буде скинуто.</string>
 <string name="ui_dialog_upgrade_title">Інформація про сумісність</string>
 <string name="ui_dialog_upgrade_msg">
@@ -148,7 +148,7 @@
 <string name="ui_dialog_reset_title">Скидання поточного стану синхронізації</string>
 <string name="ui_dialog_reset_message">Ви бажаєте скинути поточний стан синхронізації? Ви можете обрати пропуск всіх повідомлень пізніше.</string>
 <string name="all_messages">Всі</string>
-<string name="gmail_needs_connecting">Натисніть, для підключення до Gmail рахунку (обов'язково).</string>
+<string name="gmail_needs_connecting">Натисніть, для підключення до Gmail рахунку (обов’язково).</string>
 <string name="gmail_already_connected">Підключений як %1$s.</string>
 <string name="ui_connected_label">Підключення</string>
 <string name="ui_connected_desc">Ваш обліковий запис має бути підключений.</string>
@@ -185,10 +185,10 @@
 <string name="_1min">1 хвилина</string>
 <string name="_3mins">3 хвилини</string>
 <string name="_30mins">30 хвилин</string>
-<string name="ssl_required">SSL (обов'язково)</string>
-<string name="ssl_optional">SSL (необов'язково)</string>
-<string name="tls_required">TLS (обов'язково)</string>
-<string name="tls_optional">TLS (необов'язково)</string>
+<string name="ssl_required">SSL (обов’язково)</string>
+<string name="ssl_optional">SSL (необов’язково)</string>
+<string name="tls_required">TLS (обов’язково)</string>
+<string name="tls_optional">TLS (необов’язково)</string>
 <string name="none">Немає</string>
 
 <string name="ui_third_party_integration_label">Інтеграції</string>
