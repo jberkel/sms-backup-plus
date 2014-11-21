@@ -69,15 +69,15 @@ public class SmsRestoreService extends ServiceBase {
     @Override
     protected void handleIntent(final Intent intent) {
         if (isWorking()) return;
-        if (!canWriteToSmsProvider()) {
-            postError(new SmsProviderNotWritableException());
-            return;
-        }
 
         try {
-            final boolean starredOnly   = getPreferences().isRestoreStarredOnly();
             final boolean restoreCallLog = CALLLOG.isRestoreEnabled(service);
             final boolean restoreSms     = SMS.isRestoreEnabled(service);
+
+            if (restoreSms && !canWriteToSmsProvider()) {
+                postError(new SmsProviderNotWritableException());
+                return;
+            }
 
             MessageConverter converter = new MessageConverter(service,
                     getPreferences(),
@@ -90,7 +90,7 @@ public class SmsRestoreService extends ServiceBase {
                 0,
                 restoreSms,
                 restoreCallLog,
-                starredOnly,
+                getPreferences().isRestoreStarredOnly(),
                 getPreferences().getMaxItemsPerRestore(),
                 0
             );
