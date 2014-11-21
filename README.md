@@ -155,7 +155,7 @@ disabled.
 You don't have to use Gmail to backup your text messages - change
 Authentication to Plain text in "Advanced Settings - IMAP server settings",
 then change the server address / username and password accordingly. Make sure
-to set security to "SSL (Optional)" if the IMAP server you're connecting to has
+to set security to "SSL (optional / trust all)" if the IMAP server you're connecting to has
 a self-signed certificate ("Unknown certificate" error during backup).
 
 Also note that Gmail labels correspond to IMAP folders, which will
@@ -298,7 +298,7 @@ newer versions of WhatsApp this option will default to "off", so you will have t
 
 This is a current limitation. A future version might address this issue.
 
-#### <a name="faq-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a<
+#### <a name="faq-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
 
 This means that it is impossible to establish a trusted connection with the IMAP server. A few
 reasons why this might happen:
