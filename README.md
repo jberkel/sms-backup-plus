@@ -123,7 +123,7 @@ The messages will be backed up to the "WhatsApp" label in Gmail.
 Note that WhatsApp messages are backup only, there is no way to restore them.
 
 Note: due to serveral changes to the WhatsApp encryption mechanism it is no longer possible
-to reliable back up WhatsApp messages. There exist some workarounds though using an external app
+to reliably back up WhatsApp messages. There exist some workarounds though using an external app
 named [Tri-Crypt][]. You can find instructions [here][WhatsApp-Workaround] (thank you
 [+AbinashBishoyi][] !).
 
