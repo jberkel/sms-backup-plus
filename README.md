@@ -298,7 +298,15 @@ newer versions of WhatsApp this option will default to "off", so you will have t
 
 This is a current limitation. A future version might address this issue.
 
-### Restore questions
+#### <a name="faq-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a<
+
+This means that it is impossible to establish a trusted connection with the IMAP server. A few
+reasons why this might happen:
+
+  * You run an old version of Android
+  * You use an IMAP server with an expired / self-signed certificate
+
+You can try to set the IMAP Server Setting `Security` to `SSL (optional / trust all)`.
 
 #### <a name="faq-partial-restore">How do I restore the last N weeks / N messages?</a>
 
