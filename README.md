@@ -170,7 +170,7 @@ twice.
 
 #### <a name="faq-file-bug-report">I want to file a bug report, what should I do?</a>
 
-First check [github issues][]) and see if the bug has already been reported. If not, create a new
+First check [github issues][] to see if the bug has already been reported. If not, create a new
 issue and attach the following details:
 
  * Version of SMS Backup+ used
