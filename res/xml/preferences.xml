@@ -250,14 +250,6 @@
                 android:defaultValue="false"/>
 
         <CheckBoxPreference
-                android:key="acra.enable"
-                android:title="@string/pref_disable_acra"
-                android:summaryOn="@string/pref_acra_enabled"
-                android:summaryOff="@string/pref_acra_disabled"
-                android:persistent="true"
-                android:defaultValue="true"/>
-
-        <CheckBoxPreference
                 android:key="app_log"
                 android:title="@string/pref_app_log"
                 android:summaryOn="@string/pref_app_log_enabled"
