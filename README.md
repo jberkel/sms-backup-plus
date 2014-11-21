@@ -415,7 +415,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Tasker]: http://tasker.dinglisch.net/
 [Tri-Crypt]: https://play.google.com/store/apps/details?id=com.tricrypt
 [WhatsApp-Workaround]: https://plus.google.com/+AbinashBishoyi/posts/QdPz13C525x
-[+Abinash Bishoyi]: https://plus.google.com/+AbinashBishoyi/posts/QdPz13C525
+[+AbinashBishoyi]: https://plus.google.com/+AbinashBishoyi
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
 [community]: https://plus.google.com/communities/113290889178902750997
