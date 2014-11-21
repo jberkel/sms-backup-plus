@@ -124,7 +124,8 @@ Note that WhatsApp messages are backup only, there is no way to restore them.
 
 Note: due to serveral changes to the WhatsApp encryption mechanism it is no longer possible
 to reliable back up WhatsApp messages. There exist some workarounds though using an external app
-named [Tri-Crypt][]. You can find an instruction [here][WhatsApp-Workaround].
+named [Tri-Crypt][]. You can find instructions [here][WhatsApp-Workaround] (thank you
+[+AbinashBishoyi][] !).
 
 ### <a name="3rdparty">3rd party app integration</a>
 
@@ -413,7 +414,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 [strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml
 [Tasker]: http://tasker.dinglisch.net/
 [Tri-Crypt]: https://play.google.com/store/apps/details?id=com.tricrypt
-[WhatsApp-Workaround]: https://plus.google.com/+AbinashBishoyi/posts/QdPz13C525
+[WhatsApp-Workaround]: https://plus.google.com/+AbinashBishoyi/posts/QdPz13C525x
+[+Abinash Bishoyi]: https://plus.google.com/+AbinashBishoyi/posts/QdPz13C525
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
 [community]: https://plus.google.com/communities/113290889178902750997
