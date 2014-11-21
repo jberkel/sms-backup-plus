@@ -1,6 +1,6 @@
 ## SMS Backup+
 
-[![][Icon]][MarketLink]
+[![][Icon]][PlayLink]
 [![Build Status](https://secure.travis-ci.org/jberkel/sms-backup-plus.png?branch=master)](http://travis-ci.org/jberkel/sms-backup-plus)
 
 This is a fork of the Android backup tool
@@ -42,7 +42,7 @@ To get updates more frequently join the [beta programme](#beta).
 
 ### Installation
 
-![MarketQRCode][] Install via the Android QR code link, [Google Play][MarketLink].
+![PlayQRCode][] Install via the Android QR code link, [Google Play][PlayLink].
 
 ### First steps
 
@@ -419,8 +419,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 
 [original issue list]: http://code.google.com/p/android-sms/issues/list
 [github issues]: http://github.com/jberkel/sms-backup-plus/issues
-[MarketQRCode]: http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=https://play.google.com/store/apps/details?id=com.zegoggles.smssync
-[MarketLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
+[PlayQRCode]: http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=https://play.google.com/store/apps/details?id=com.zegoggles.smssync
+[PlayLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
 [whatsapp-screenshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/whatsapp.png
