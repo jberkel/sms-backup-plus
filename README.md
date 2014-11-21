@@ -163,7 +163,6 @@ automatically be created the first time you're performing a backup.
 
 ## <a name="faq">FAQ</a>
 
-
 ### General questions
 
 #### <a name="faq-permissions">Why does it need so many permissions?</a>
@@ -202,6 +201,16 @@ of posting the full content in the issue.
 
 It might also be worth to install the current <a href="#beta">beta</a> version of SMS Backup+ to
 make sure the bug has not already been fixed.
+
+#### <a name="faq-can-you-add-feature-x">Can you add feature X ?</a>
+
+In the five years of working on this app a lot of features have been added, often as a result of
+requests by users. This has worked great initially but has made the product itself very unfocussed
+and generic. It started as a tool to back up text messages (as the name *SMS* Backup implies) but
+gradually more and more features were added (call logs, MMS, WhatsApp...). It's now at a point where
+it has become too heavy and difficult too maintain or use. The settings screen makes this obvious,
+there are just too many things to configure. If anything features should be removed at this point,
+not added. A more focussed product would be easier to maintain and use.
 
 ### Backup questions
 
@@ -251,7 +260,6 @@ a trade-off data protection vs. battery life.
 If you require more control over the backup schedule than what SMS Backup+ already
 provides you can use a 3rd party app to trigger the backup. [Tasker][] for
 example supports SMS Backup+ since version 1.0.14.
-
 
 #### <a name="faq-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
 
