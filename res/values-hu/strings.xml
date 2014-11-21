@@ -284,10 +284,6 @@
   <string name="calllog">hívásnapló</string>
   <string name="whatsapp">WhatsApp</string>
 
-  <string name="pref_disable_acra">Hibajelentés küldése</string>
-  <string name="pref_acra_enabled">Az SMS Backup+ automatikusan hibajelentést küld kényszerbezárás esetén.</string>
-  <string name="pref_acra_disabled">Letiltva</string>
-
   <string name="app_log_skip_backup_background_data">Kihagyva, mert az adatkapcsolat a háttérben le van tiltva</string>
   <string name="app_log_skip_backup_already_running">Kihagyva, mert már folyamatban van egy mentés</string>
   <string name="app_log_skip_backup_skip_messages">Az összes üzenet kihagyása</string>

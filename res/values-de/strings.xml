@@ -282,10 +282,6 @@
   <string name="ui_donation_success_message">Spende erfolgreich, Vielen Dank!</string>
   <string name="ui_donation_failure_message">Spende fehlgeschlagen: %1$s</string>
 
-  <string name="pref_disable_acra">Fehlerreport</string>
-  <string name="pref_acra_enabled">SMS Backup+ wird automatisch einen Fehlerreport nach dem Absturz senden.</string>
-  <string name="pref_acra_disabled">Deaktiviert</string>
-
   <string name="app_log_skip_backup_background_data">Übersprungen weil Hintergrunddaten deaktiviert sind.</string>
   <string name="app_log_skip_backup_already_running">Übersprungen weil die Sicherung bereits läuft.</string>
   <string name="app_log_skip_backup_skip_messages">Überspringe alle Nachrichten</string>

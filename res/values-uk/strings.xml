@@ -219,9 +219,6 @@
 <string name="mms">MMS</string>
 <string name="calllog">Журнал викликів</string>
 <string name="whatsapp">WhatsApp</string>
-<string name="pref_disable_acra">Збір звітів про помилки</string>
-<string name="pref_acra_enabled">SMS Backup+ буде автоматично надсилати звіти про помилки.</string>
-<string name="pref_acra_disabled">Вимкнено</string>
 <string name="app_log_skip_backup_background_data">Пропущено, оскільки фонову передачу даних вимкнено</string>
 <string name="app_log_skip_backup_already_running">Пропущено, оскільки резервне копіювання вже запущено</string>
 <string name="app_log_skip_backup_skip_messages">Пропустити всі повідомлення</string>

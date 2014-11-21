@@ -286,10 +286,6 @@
   <string name="calllog">통화 기록</string>
   <string name="whatsapp">WhatsApp</string>
 
-  <string name="pref_disable_acra">충돌 오류 보고중</string>
-  <string name="pref_acra_enabled">SMS Backup+ 는 자동으로 강제 종료한 후 오류 보고서를 전송할 것 입니다.</string>
-  <string name="pref_acra_disabled">비활성화</string>
-
   <string name="app_log_skip_backup_background_data">백그라운드 데이터가 비활성화 되어 있기 때문에 건너뜀</string>
   <string name="app_log_skip_backup_already_running">이미 실행중이므로 건너뜀</string>
   <string name="app_log_skip_backup_skip_messages">모든 메시지 건너뛰기</string>
