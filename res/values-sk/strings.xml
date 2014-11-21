@@ -190,8 +190,6 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="ui_dialog_donate_message">Uveďte sumu a menu:</string>
     <string name="ui_donation_success_message">Darovanie bolo úspešné. Ďakujeme</string>
     <string name="ui_donation_failure_message">Darovanie bolo neúspešné: %1$s</string>
-    <string name="pref_disable_acra">Výpis o chybách</string>
-    <string name="pref_acra_enabled">SMS Backup+ automaticky odošle správu o chybách po zatvorení</string>
     <string name="pref_acra_disabled">Vypnuté</string>
     <string name="app_log_skip_backup_background_data">Vynechané pretože prenos údajov na pozadí je vypnutý</string>
     <string name="app_log_skip_backup_already_running">Vynechané pretože zálohovanie je už spustené</string>

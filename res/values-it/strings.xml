@@ -278,8 +278,6 @@
   <string name="ui_donation_success_message">Donazione avvenuta con successo, grazie!</string>
   <string name="ui_donation_failure_message">Donazione fallita: %1$s</string>
 
-  <string name="pref_disable_acra">Rapporto sul Crash</string>
-  <string name="pref_acra_enabled">SMS Backup+ invia automaticamente un rapporto di errore dopo la chiusura forzata.</string>
   <string name="pref_acra_disabled">Disattivato</string>
 
   <string name="app_log_skip_backup_background_data">Ignorato perchè la connessione dati è disattivata</string>

@@ -277,8 +277,6 @@
   <string name="mms">彩信</string>
   <string name="calllog">通话记录</string>
 
-  <string name="pref_disable_acra">崩溃报告</string>
-  <string name="pref_acra_enabled">SMS Backup+ 将在强制退出后自动发送错误报告给作者, 以便修正问题。</string>
   <string name="pref_acra_disabled">已禁用</string>
 
   <string name="app_log_skip_backup_background_data">已跳过，因为后台数据被停用</string>

@@ -293,8 +293,6 @@
   <string name="calllog">Registre de trucades</string>
   <string name="whatsapp">WhatsApp</string>
 
-  <string name="pref_disable_acra">Informes d\'error de fallada</string>
-  <string name="pref_acra_enabled">L\'SMS Backup+ enviarà automàticament un informe d\'error després d\'un tancament forçat.</string>
   <string name="pref_acra_disabled">Inhabilitats</string>
 
   <string name="app_log_skip_backup_background_data">S\'ha omès perquè les dades en segon pla estan inhabilitades</string>

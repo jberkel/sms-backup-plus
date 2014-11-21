@@ -273,8 +273,6 @@
   <string name="mms">MMS</string>
   <string name="calllog"> Μητρώο κλήσεων </string>
 
-  <string name="pref_disable_acra"> Αναφορά σφάλματος</string>
-  <string name="pref_acra_enabled">SMS Backup+ θα στείλει αυτόματα αναφορά σφάλματος μετά το κλείσιμο του.</string>
   <string name="pref_acra_disabled">Απενεργοποιημένο</string>
 
   <string name="app_log_skip_backup_background_data"> Παραλείφθηκαν  επειδή τα δεδομένα στο παρασκήνιο είναι απενεργοποιημένα </string>

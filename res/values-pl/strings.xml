@@ -186,8 +186,6 @@
     <string name="ui_dialog_donate_message">Określ kwotę i walutę:</string>
     <string name="ui_donation_success_message">Darowizna dokonana. Dziekuję bardzo!</string>
     <string name="ui_donation_failure_message">Darowizna nieudana: %1$s</string>
-    <string name="pref_disable_acra">Zgłaszanie błędu</string>
-    <string name="pref_acra_enabled">SMS Backup+ wyśle automatycznie raport o błędzie po wymuszonym zamknięciu.</string>
     <string name="pref_acra_disabled">Wyłączone</string>
     <string name="app_log_skip_backup_background_data">Pomijam, dane w tle sa wyłączone</string>
     <string name="app_log_skip_backup_already_running">Pomijam, kopia zapasowa własnie sie wykonuje</string>

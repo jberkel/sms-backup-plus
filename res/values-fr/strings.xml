@@ -276,8 +276,6 @@
   <string name="ui_donation_success_message">Don effectué, merci !</string>
   <string name="ui_donation_failure_message">Erreur lors du don : %1$s</string>
 
-  <string name="pref_disable_acra">Rapporter les crashs</string>
-  <string name="pref_acra_enabled">SMS Backup+ va automatiquement envoyer un rapport d\'erreur après sa fermeture forcée.</string>
   <string name="pref_acra_disabled">Désactivé</string>
 
   <string name="app_log_skip_backup_background_data">Skipped because background data is disabled</string>

@@ -293,8 +293,6 @@
   <string name="calllog">Call log</string>
   <string name="whatsapp">WhatsApp</string>
 
-  <string name="pref_disable_acra">Crash error reporting</string>
-  <string name="pref_acra_enabled">SMS Backup+ will automatically send an error report after force closing.</string>
   <string name="pref_acra_disabled">Disabled</string>
 
   <string name="app_log_skip_backup_background_data">Skipped because background data is disabled</string>
