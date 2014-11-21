@@ -1,7 +1,7 @@
 ## SMS Backup+
 
 [![][Icon]][PlayLink]
-[![Build Status](https://secure.travis-ci.org/jberkel/sms-backup-plus.png?branch=master)](http://travis-ci.org/jberkel/sms-backup-plus)
+[![Build Status PNG][]][Build Status]
 
 This is a fork of the Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms), where development has
@@ -187,20 +187,21 @@ twice.
 
 #### <a name="faq-file-bug-report">I want to file a bug report, what should I do?</a>
 
-First check [github issues](https://github.com/jberkel/sms-backup-plus/issues) and see if the bug has already
-been reported. If not, create a new issue and attach the following details:
+First check [github issues][]) and see if the bug has already been reported. If not, create a new
+issue and attach the following details:
 
  * Version of SMS Backup+ used
  * Version of Android / brand of phone used
 
-If it is related to backing up / restoring you should also enable the sync log in debug mode (Advanced settings)
-and attach a relevant portion of it. The sync log is located on your SD card as "sms_backup_plus.log".
+If it is related to backing up / restoring you should also enable the sync log in debug mode
+(Advanced settings) and attach a relevant portion of it. The sync log is located on your SD card as
+"sms_backup_plus.log".
 
 To attach the sync log create a "gist" (https://gist.github.com) and link to the gist you created instead
 of posting the full content in the issue.
 
-It might also be worth to install the current <a href="#beta">beta</a> version of SMS Backup+ to make sure the
-bug has not already been fixed.
+It might also be worth to install the current <a href="#beta">beta</a> version of SMS Backup+ to
+make sure the bug has not already been fixed.
 
 ### Backup questions
 
@@ -352,15 +353,16 @@ you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and set "Adjustme
 
 ## <a name="beta">Beta testing
 
-If you want to help beta testing, join the [community][] on Google+ and follow the "Become a beta tester"
-link in the "About this community box". You will be asked to opt in to the beta program (you can leave it at any time).
+If you want to help beta testing, join the [community][] on Google+ and follow the "Become a beta
+tester" link in the "About this community box". You will be asked to opt in to the beta program (you
+can leave it at any time).
 
-Once opted in your device will automatically update to the latest beta which might have bug fixes and features not found
-in the currently released version.
+Once opted in your device will automatically update to the latest beta which might have bug fixes
+and features not found in the currently released version.
 
-Alternatively, if for some reason you don't want to join the community
-you can download an APK and install it manually from [Github releases][releases] (however, you won't get
-automatic updates this way).
+Alternatively, if for some reason you don't want to join the community you can download an APK and
+install it manually from [Github releases][releases] (however, you won't get automatic updates this
+way).
 
 ## <a name="contributing">Contributing</a>
 
@@ -378,10 +380,10 @@ I've imported some relevant issues from the [original issue list][] to [github i
 If you want to help translating the UI to other languages download and
 translate the following file, then send the translated version via email:
 
-  * [strings.xml](https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml)
+  * [strings.xml][]
 
 However, if you're already familiar with Git I'd prefer if you cloned the
-repository and send me a [pull request](http://help.github.com/pull-requests/).
+repository and send me a [pull request][].
 
 ##<a name="credits">Credits</a>
 
@@ -425,18 +427,19 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
 [whatsapp-screenshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/whatsapp.png
-[showoriginal]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/google-mail-sms-with-orange-jan.berkel-gmail.com.jpg
-[source]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/https-mail.google.com-mail-u-0-ui-2-ik-968fde0a44-view-om-th-12a94407a2104820.jpg
 [droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/
 [SMS Time fix]: http://www.appbrain.com/app/sms-time-fix/com.mattprecious.smsfix
 [converationviewoff]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/soundcloud.com-mail-settings-jan-soundcloud.com.jpg
 [smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
 [imapenableshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/enable_imap.png
 [showimap]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/show_imap.png
+[strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml
 [Tasker]: http://tasker.dinglisch.net/
-[Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
-[Getting started with 2-step verification]: http://www.google.com/support/accounts/bin/static.py?page=guide.cs&guide=1056283&topic=1056284
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
 [community]: https://plus.google.com/communities/113290889178902750997
 [releases]: https://github.com/jberkel/sms-backup-plus/releases
+[pull request]: http://help.github.com/pull-requests/
+[Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
+[Build Status PNG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.png?branch=master
+[Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
