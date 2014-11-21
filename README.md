@@ -420,7 +420,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
 [community]: https://plus.google.com/communities/113290889178902750997
 [releases]: https://github.com/jberkel/sms-backup-plus/releases
-[pull request]: http://help.github.com/pull-requests/
+[pull request]: https://help.github.com/articles/using-pull-requests/
 [Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
 [Build Status PNG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.png?branch=master
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
