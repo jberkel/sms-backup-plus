@@ -49,7 +49,7 @@ To get updates more frequently join the [beta programme](#beta).
 You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
 account or look at this [screenshot][imapenableshot]. If you use Google Apps
-make sure you select "Sign in with a Google Apps Account">
+make sure you select "Sign in with a Google Apps Account"
 ([screenshot](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/5554-emu-2.2.jpg)).
 
 After starting SMS Backup+, tap on the "Connect" check box to start the
@@ -359,7 +359,8 @@ Once opted in your device will automatically update to the latest beta which mig
 in the currently released version.
 
 Alternatively, if for some reason you don't want to join the community
-you can download an APK and install it manually from [Github releases][releases].
+you can download an APK and install it manually from [Github releases][releases] (however, you won't get
+automatic updates this way).
 
 ## <a name="contributing">Contributing</a>
 
