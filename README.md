@@ -48,9 +48,7 @@ To get updates more frequently join the [beta programme](#beta).
 
 You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
-account or look at this [screenshot][imapenableshot]. If you use Google Apps
-make sure you select "Sign in with a Google Apps Account"
-([screenshot](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/5554-emu-2.2.jpg)).
+account or look at this [screenshot][imapenableshot].
 
 After starting SMS Backup+, tap on the "Connect" check box to start the
 authorization process.
@@ -59,25 +57,12 @@ On newer Android devices you'll be presented with a list of Gmail accounts to
 be used for the backup. You'll need to give SMSBackup+ the permission to access your
 emails.
 
-On older devices a browser window will open where Gmail either prompts
-you to log in *or* (if you were already logged in) a screen asking you to give
+On older devices a browser window will open where Gmail prompts you to log in and asks you to give
 SMS Backup+ permission to access your emails.
 
-After clicking on "Grant Access" SMS Backup+ will become visible again, the
+After selecting "Grant Access" SMS Backup+ will become visible again, the
 checkbox should now be checked, indicating that the authorization process was
 successful.
-
-### Upgrading (for users of SMS Backup)
-
-You don't need to uninstall the old version in order to try out SMS Backup+.
-However make sure that "Auto backup" is disabled in both apps, otherwise you
-might end up with messages backed up multiple times, resulting in duplicates in
-Gmail.
-
-If you've used SMS Backup before you should just connect your Gmail account as
-described above (SMS Backup+ is not able to access login information stored by
-SMS Backup). Make sure you select "Skip" when asked about the initial sync,
-otherwise already backed up messages will be backed up again.
 
 ### Initial backup
 
@@ -95,12 +80,6 @@ you previously uninstalled SMS Backup+ and do not want to send your messages
 again to Gmail. Please note that any messages arrived after you last
 uninstalled SMS Backup and this initial backup won't ever be backed up to
 Gmail.
-
-After you performed your initial backup, SMS Backup+ is ready to run in the
-background and finish uploading all of your current and future messages (check
-"Auto Backup"). Make sure that you have `Background data` enabled in your
-Android `Accounts & Sync` settings
-([screenshot](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/bgdata.jpg)).
 
 ### Restoring
 
@@ -142,6 +121,10 @@ then "Backup Settings" and tick the "Backup WhatsApp" checkbox.
 
 The messages will be backed up to the "WhatsApp" label in Gmail.
 Note that WhatsApp messages are backup only, there is no way to restore them.
+
+Note: due to serveral changes to the WhatsApp encryption mechanism it is no longer possible
+to reliable back up WhatsApp messages. There exist some workarounds though using an external app
+named [Tri-Crypt][]. You can find an instruction [here][WhatsApp-Workaround].
 
 ### <a name="3rdparty">3rd party app integration</a>
 
@@ -429,6 +412,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 [showimap]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/show_imap.png
 [strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml
 [Tasker]: http://tasker.dinglisch.net/
+[Tri-Crypt]: https://play.google.com/store/apps/details?id=com.tricrypt
+[WhatsApp-Workaround]: https://plus.google.com/+AbinashBishoyi/posts/QdPz13C525
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
 [community]: https://plus.google.com/communities/113290889178902750997
