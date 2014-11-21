@@ -33,9 +33,10 @@ Tested with Android 1.5 - 4.2.x.
 
 SMS Backup+ is available for free in the Google Play Store, there will never be a pro / paid version.
 
-But if you find the app useful and want to support the development of it you can make a donation from within the app itself, using the secure Play Store payment mechanism.
+But if you find the app useful and want to support the development of it you can make a donation
+from within the app itself, using the secure Play Store payment mechanism.
 
-To get updates and participate in the beta programme join the [community][] on Google+.
+To get updates more frequently join the [beta programme](#beta).
 
 ## <a name="usage">Usage</a>
 
@@ -48,7 +49,7 @@ To get updates and participate in the beta programme join the [community][] on G
 You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
 account or look at this [screenshot][imapenableshot]. If you use Google Apps
-make sure you select "Sign in with a Google Apps Account"
+make sure you select "Sign in with a Google Apps Account">
 ([screenshot](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/5554-emu-2.2.jpg)).
 
 After starting SMS Backup+, tap on the "Connect" check box to start the
@@ -357,6 +358,9 @@ link in the "About this community box". You will be asked to opt in to the beta 
 Once opted in your device will automatically update to the latest beta which might have bug fixes and features not found
 in the currently released version.
 
+Alternatively, if for some reason you don't want to join the community
+you can download an APK and install it manually from [Github releases][releases].
+
 ## <a name="contributing">Contributing</a>
 
 ### Installation from source
@@ -434,3 +438,4 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Getting started with 2-step verification]: http://www.google.com/support/accounts/bin/static.py?page=guide.cs&guide=1056283&topic=1056284
 [Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
 [community]: https://plus.google.com/communities/113290889178902750997
+[releases]: https://github.com/jberkel/sms-backup-plus/releases
