@@ -285,6 +285,10 @@
   <string name="calllog">Gesprekkenlijst</string>
   <string name="whatsapp">WhatsApp</string>
 
+  <string name="pref_disable_acra">Crash-foutmelding</string>
+  <string name="pref_acra_enabled">SMS Backup+ zal automatisch een foutrapport sturen nadat de app gestopt is.</string>
+  <string name="pref_acra_disabled">Uitgeschakeld</string>
+
   <string name="app_log_skip_backup_background_data">Overgeslagen omdat achtergronddata uit staat</string>
   <string name="app_log_skip_backup_already_running">Overgeslagen omdat back-up al bezig is</string>
   <string name="app_log_skip_backup_skip_messages">Alle berichten overgeslagen</string>
