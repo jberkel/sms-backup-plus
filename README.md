@@ -331,33 +331,11 @@ This is a known bug: [#94](https://github.com/jberkel/sms-backup-plus/issues/94)
 Go to [Authorized Access to your Google Account][] and select "Revoke Access"
 next to "SMS Backup+".
 
-
-<a name="browser-bug"/>
-#### <a name="faq-browser">After granting access I get the message "You do do not have permission to open this page"</a>
-
-Some browsers / handsets which ship with non-standard browsers are
-currently not fully supported, there appears to be a problem which breaks
-the authorisation process, so connecting your Gmail account via XOAuth is not
-possible.
-
-Some possible workarounds:
-
-  * Use the stock Android browser for the authentication (you can switch back
-  afterwards)
-  * Install a 3rd party browser (Dolphin HD has been reported to work)
-  * Use plain text authentication (Advanced Settings - Server Settings), use
-  your Gmail address as username and supply your password
-
-#### <a name="faq-browser">After granting access, the Messaging app opens.</a>
-
-See the answer to the previous question, it's the same problem.
-
 #### <a name="faq-request-token">When connecting, I get 'Could not obtain request token...'</a>
 
 If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
-
 
 ### Device specific questions
 
