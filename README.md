@@ -417,7 +417,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [WhatsApp-Workaround]: https://plus.google.com/+AbinashBishoyi/posts/QdPz13C525x
 [+AbinashBishoyi]: https://plus.google.com/+AbinashBishoyi
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
-[Authorized Access to your Google Account]: https://www.google.com/accounts/b/0/IssuedAuthSubTokens
+[Authorized Access to your Google Account]: https://security.google.com/settings/security/permissions
 [community]: https://plus.google.com/communities/113290889178902750997
 [releases]: https://github.com/jberkel/sms-backup-plus/releases
 [pull request]: https://help.github.com/articles/using-pull-requests/
