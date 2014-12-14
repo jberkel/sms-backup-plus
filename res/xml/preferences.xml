@@ -145,12 +145,14 @@
                     android:defaultValue="-1"
                     android:persistent="true"/>
 
-            <CheckBoxPreference
-                    android:key="mark_as_read"
+            <ListPreference
+                    android:key="mark_as_read_types"
                     android:title="@string/ui_mark_as_read_label"
                     android:summary="@string/ui_mark_as_read_desc"
+                    android:entries="@array/mark_as_read_entries"
+                    android:entryValues="@array/mark_as_read_values"
                     android:persistent="true"
-                    android:defaultValue="true"/>
+                    android:defaultValue="read"/>
 
             <EditTextPreference
                     android:key="imap_folder"

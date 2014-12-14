@@ -34,6 +34,7 @@ import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
+import com.zegoggles.smssync.preferences.MarkAsReadTypes;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.utils.ThreadHelper;
 import org.apache.commons.io.IOUtils;
@@ -57,7 +58,7 @@ public class MessageConverter {
     private final Context mContext;
     private final ThreadHelper threadHelper = new ThreadHelper();
 
-    private final boolean mMarkAsRead;
+    private final MarkAsReadTypes mMarkAsReadType;
     private final PersonLookup mPersonLookup;
     private final MessageGenerator mMessageGenerator;
     private final boolean mMarkAsReadOnRestore;
@@ -67,7 +68,7 @@ public class MessageConverter {
                             PersonLookup personLookup,
                             ContactAccessor contactAccessor) {
         mContext = context;
-        mMarkAsRead = preferences.getMarkAsRead();
+        mMarkAsReadType = preferences.getMarkAsReadType();
         mPersonLookup = personLookup;
         mMarkAsReadOnRestore = preferences.getMarkAsReadOnRestore();
 
@@ -91,6 +92,25 @@ public class MessageConverter {
                 new MmsSupport(mContext.getContentResolver(), mPersonLookup));
     }
 
+    private boolean markAsSeen(DataType dataType, Map<String, String> msgMap) {
+        switch (mMarkAsReadType) {
+            case MESSAGE_STATUS:
+                switch (dataType) {
+                    case SMS:
+                        return "1".equals(msgMap.get(SmsConsts.READ));
+                    case MMS:
+                        return "1".equals(msgMap.get(MmsConsts.READ));
+                    default:
+                        return true;
+                }
+            case UNREAD:
+                return false;
+            case READ:
+            default:
+                return true;
+        }
+    }
+
     public @NotNull ConversionResult convertMessages(final Cursor cursor, DataType dataType)
             throws MessagingException {
 
@@ -106,7 +126,7 @@ public class MessageConverter {
         }
         final ConversionResult result = new ConversionResult(dataType);
         if (m != null) {
-            m.setFlag(Flag.SEEN, mMarkAsRead);
+            m.setFlag(Flag.SEEN, markAsSeen(dataType, msgMap));
             result.add(m, msgMap);
         }
 
