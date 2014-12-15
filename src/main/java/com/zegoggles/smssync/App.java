@@ -17,7 +17,7 @@
 package com.zegoggles.smssync;
 
 import android.app.Application;
-import com.fsck.k9.K9;
+import com.fsck.k9.mail.K9;
 import com.squareup.otto.Bus;
 
 public class App extends Application {

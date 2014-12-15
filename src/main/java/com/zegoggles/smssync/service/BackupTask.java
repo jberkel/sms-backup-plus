@@ -6,7 +6,7 @@ import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
+import com.fsck.k9.mail.store.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
@@ -32,8 +32,16 @@ import java.util.Locale;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.mail.DataType.*;
-import static com.zegoggles.smssync.service.state.SmsSyncState.*;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
+import static com.zegoggles.smssync.mail.DataType.Defaults;
+import static com.zegoggles.smssync.mail.DataType.MMS;
+import static com.zegoggles.smssync.mail.DataType.SMS;
+import static com.zegoggles.smssync.service.state.SmsSyncState.BACKUP;
+import static com.zegoggles.smssync.service.state.SmsSyncState.CALC;
+import static com.zegoggles.smssync.service.state.SmsSyncState.CANCELED_BACKUP;
+import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
+import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
+import static com.zegoggles.smssync.service.state.SmsSyncState.LOGIN;
 
 class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final SmsBackupService service;
@@ -254,7 +262,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                                 messages.size(), cursor.type));
                     }
 
-                    store.getFolder(cursor.type).appendMessages(messages.toArray(new Message[messages.size()]));
+                    store.getFolder(cursor.type).appendMessages(messages);
 
                     if (cursor.type == CALLLOG && calendarSyncer != null) {
                         calendarSyncer.syncCalendar(result);

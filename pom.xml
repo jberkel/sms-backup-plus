@@ -38,9 +38,10 @@
         </dependency>
 
         <dependency>
-            <groupId>com.zegoggles</groupId>
-            <artifactId>k9-imapstore</artifactId>
-            <version>0.4</version>
+            <groupId>com.fsck.k9</groupId>
+            <artifactId>mailz</artifactId>
+            <type>aar</type>
+            <version>0.0.1.bc8b2ea</version>
         </dependency>
 
         <dependency>

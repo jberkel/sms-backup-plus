@@ -87,6 +87,10 @@ class Attachment {
                 return new ByteArrayInputStream(new byte[0]);
             }
         }
+
+        @Override
+        public void setEncoding(String s) throws MessagingException {
+        }
     }
 
     private static class FileBody extends Base64Body {
@@ -103,6 +107,10 @@ class Attachment {
             } catch (FileNotFoundException e) {
                 return new ByteArrayInputStream(new byte[0]);
             }
+        }
+
+        @Override
+        public void setEncoding(String s) throws MessagingException {
         }
     }
 

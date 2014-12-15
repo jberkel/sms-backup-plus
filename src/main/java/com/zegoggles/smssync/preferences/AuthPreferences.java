@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import com.fsck.k9.mail.AuthType;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Locale;
 
 import static com.zegoggles.smssync.App.TAG;
 
@@ -154,22 +156,13 @@ public class AuthPreferences {
         if (useXOAuth()) {
             if (hasOauthTokens()) {
                 XOAuthConsumer consumer = getOAuthConsumer();
-                return String.format(IMAP_URI,
-                        ServerPreferences.Defaults.SERVER_PROTOCOL,
-                        "xoauth:" + encode(consumer.getUsername()),
-                        encode(consumer.generateXOAuthString()),
-                        serverPreferences.getServerAddress());
+                return formatUri(AuthType.XOAUTH, consumer.getUsername(), consumer.generateXOAuthString());
             } else if (hasOAuth2Tokens()) {
-                return String.format(IMAP_URI,
-                        ServerPreferences.Defaults.SERVER_PROTOCOL,
-                        "xoauth2:" + encode(getOauth2Username()),
-                        encode(generateXOAuth2Token()),
-                        serverPreferences.getServerAddress());
+                return formatUri(AuthType.XOAUTH2, getOauth2Username(), generateXOAuth2Token());
             } else {
                 Log.w(TAG, "No valid xoauth1/2 tokens");
                 return null;
             }
-
         } else {
             return String.format(IMAP_URI,
                     serverPreferences.getServerProtocol(),
@@ -177,6 +170,14 @@ public class AuthPreferences {
                     encode(getImapPassword()).replace("+", "%20"),
                     serverPreferences.getServerAddress());
         }
+    }
+
+    private String formatUri(AuthType authType, String username, String password) {
+        return String.format(IMAP_URI,
+                ServerPreferences.Defaults.SERVER_PROTOCOL,
+                authType.name().toUpperCase(Locale.US) + ":" + encode(username),
+                encode(password),
+                serverPreferences.getServerAddress());
     }
 
     private String getOauthTokenSecret() {
