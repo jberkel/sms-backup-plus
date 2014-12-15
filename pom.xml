@@ -148,7 +148,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jarsigner-plugin</artifactId>
-                        <version>1.2</version>
+                        <version>1.3.2</version>
                         <executions>
                             <execution>
                                 <id>signing</id>
@@ -178,7 +178,7 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <groupId>com.simpligility.maven.plugins</groupId>
                         <artifactId>android-maven-plugin</artifactId>
                         <inherited>true</inherited>
                         <configuration>
