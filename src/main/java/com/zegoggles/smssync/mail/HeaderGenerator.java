@@ -43,7 +43,7 @@ class HeaderGenerator {
         message.setHeader(Headers.DATATYPE, dataType.toString());
         message.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
         message.setHeader(Headers.VERSION, version);
-        message.setSentDate(sentDate);
+        message.setSentDate(sentDate, false);
         message.setInternalDate(sentDate);
         switch (dataType) {
             case SMS: setSmsHeaders(message, msgMap); break;

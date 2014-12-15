@@ -11,7 +11,7 @@ import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.FetchProfile;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.XOAuth2AuthenticationFailedException;
+import com.fsck.k9.mail.store.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +36,13 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.SMS;
-import static com.zegoggles.smssync.service.state.SmsSyncState.*;
+import static com.zegoggles.smssync.service.state.SmsSyncState.CALC;
+import static com.zegoggles.smssync.service.state.SmsSyncState.CANCELED_RESTORE;
+import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
+import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_RESTORE;
+import static com.zegoggles.smssync.service.state.SmsSyncState.LOGIN;
+import static com.zegoggles.smssync.service.state.SmsSyncState.RESTORE;
+import static com.zegoggles.smssync.service.state.SmsSyncState.UPDATING_THREADS;
 
 class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private Set<String> smsIds = new HashSet<String>();
@@ -214,7 +221,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         DataType dataType = null;
         try {
             if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
-            message.getFolder().fetch(new Message[]{message}, fp, null);
+            message.getFolder().fetch(Arrays.asList(message), fp, null);
             dataType = converter.getDataType(message);
             //only restore sms+call log for now
             switch (dataType) {

@@ -16,24 +16,25 @@
 package com.zegoggles.smssync.mail;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-import com.fsck.k9.Account;
 import com.fsck.k9.mail.FetchProfile;
+import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Folder.FolderType;
-import com.fsck.k9.mail.Folder.OpenMode;
 import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.MessageRetrievalListener;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.store.ImapResponseParser.ImapResponse;
-import com.fsck.k9.mail.store.ImapStore;
+import com.fsck.k9.mail.ssl.DefaultTrustedSocketFactory;
+import com.fsck.k9.mail.store.imap.ImapResponse;
+import com.fsck.k9.mail.store.imap.ImapStore;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,28 +44,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static java.util.Collections.sort;
 
 public class BackupImapStore extends ImapStore {
     private final Context context;
-    private final String uri;
     private final Map<DataType, BackupFolder> openFolders = new HashMap<DataType, BackupFolder>();
 
-    static {
-        // increase read timeout a bit
-        com.fsck.k9.mail.Store.SOCKET_READ_TIMEOUT = 60000 * 5;
-    }
-
     public BackupImapStore(final Context context, final String uri) throws MessagingException {
-        super(new Account(context) {
-            @Override
-            public String getStoreUri() {
-                return uri;
-            }
-        });
+        super(new BackupStoreConfig(uri),
+            new DefaultTrustedSocketFactory(context),
+            (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE));
         this.context = context;
-        this.uri = uri;
     }
 
     public BackupFolder getFolder(DataType type) throws MessagingException {
@@ -102,7 +95,7 @@ public class BackupImapStore extends ImapStore {
      * @return a uri which can be used for logging (i.e. with credentials masked)
      */
     public String getStoreUriForLogging() {
-        Uri uri = Uri.parse(this.uri);
+        Uri uri = Uri.parse(this.mStoreConfig.getStoreUri());
         String userInfo = uri.getUserInfo();
 
         if (!TextUtils.isEmpty(userInfo) && userInfo.contains(":")) {
@@ -125,13 +118,17 @@ public class BackupImapStore extends ImapStore {
                 Log.i(TAG, "Label '" + label + "' does not exist yet. Creating.");
                 folder.create(FolderType.HOLDS_MESSAGES);
             }
-            folder.open(OpenMode.READ_WRITE);
+            folder.open(Folder.OPEN_MODE_RW);
             return folder;
         } catch (IllegalArgumentException e) {
             // thrown inside K9
             Log.e(TAG, "K9 error", e);
             throw new MessagingException(e.getMessage());
         }
+    }
+
+    public String getStoreUri() {
+        return mStoreConfig.getStoreUri();
     }
 
     public class BackupFolder extends ImapFolder {
@@ -142,12 +139,12 @@ public class BackupImapStore extends ImapStore {
             this.type = type;
         }
 
-        public List<Message> getMessages(final int max, final boolean flagged, final Date since)
+        public List<ImapMessage> getMessages(final int max, final boolean flagged, final Date since)
                 throws MessagingException {
             if (LOCAL_LOGV)
                 Log.v(TAG, String.format(Locale.ENGLISH, "getMessages(%d, %b, %s)", max, flagged, since));
 
-            final List<Message> messages;
+            final List<ImapMessage> messages;
             final ImapSearcher searcher = new ImapSearcher() {
                 @Override
                 public List<ImapResponse> search() throws IOException, MessagingException {
@@ -162,10 +159,10 @@ public class BackupImapStore extends ImapStore {
                 }
             };
 
-            final Message[] msgs = search(searcher, null);
+            final List<ImapMessage> msgs = search(searcher, null);
 
-            Log.i(TAG, "Found " + msgs.length + " msgs" + (since == null ? "" : " (since " + since + ")"));
-            if (max > 0 && msgs.length > max) {
+            Log.i(TAG, "Found " + msgs.size() + " msgs" + (since == null ? "" : " (since " + since + ")"));
+            if (max > 0 && msgs.size() > max) {
                 if (LOCAL_LOGV) Log.v(TAG, "Fetching envelopes");
 
                 FetchProfile fp = new FetchProfile();
@@ -174,15 +171,14 @@ public class BackupImapStore extends ImapStore {
 
                 if (LOCAL_LOGV) Log.v(TAG, "Sorting");
                 //Debug.startMethodTracing("sorting");
-                Arrays.sort(msgs, MessageComparator.INSTANCE);
+                sort(msgs, MessageComparator.INSTANCE);
                 //Debug.stopMethodTracing();
                 if (LOCAL_LOGV) Log.v(TAG, "Sorting done");
 
-                messages = new ArrayList<Message>(max);
-                messages.addAll(Arrays.asList(msgs).subList(0, max));
+                messages = new ArrayList<ImapMessage>(max);
+                messages.addAll(msgs.subList(0, max));
             } else {
-                messages = new ArrayList<Message>(msgs.length);
-                Collections.addAll(messages, msgs);
+                messages = msgs;
             }
 
             Collections.reverse(messages);
@@ -210,6 +206,22 @@ public class BackupImapStore extends ImapStore {
                 default:
                     return String.format(Locale.ENGLISH, "(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type);
             }
+        }
+
+        // TODO should not have to override these methods, but mockito fails to generate working mocks otherwise :/
+        @Override
+        public boolean equals(Object o) {
+            return super.equals(o);
+        }
+
+        @Override
+        public void fetch(List<ImapMessage> messages, FetchProfile fp, MessageRetrievalListener<ImapMessage> listener) throws MessagingException {
+            super.fetch(messages, fp, listener);
+        }
+
+        @Override
+        public Map<String, String> appendMessages(List<? extends Message> messages) throws MessagingException {
+            return super.appendMessages(messages);
         }
     }
 

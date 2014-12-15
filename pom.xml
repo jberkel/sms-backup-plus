@@ -38,9 +38,10 @@
         </dependency>
 
         <dependency>
-            <groupId>com.zegoggles</groupId>
-            <artifactId>k9-imapstore</artifactId>
-            <version>0.4</version>
+            <groupId>com.fsck.k9.mail</groupId>
+            <artifactId>lib</artifactId>
+            <type>aar</type>
+            <version>0.0.1.e3eab38</version>
         </dependency>
 
         <dependency>
@@ -87,7 +88,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <version>1.10.17</version>
             <scope>test</scope>
         </dependency>
 

@@ -81,8 +81,7 @@ public class MessageGeneratorTest {
         assertThat(msg).isNotNull();
         assertThat(msg.getSubject()).isEqualTo("Call with Test Testor");
         assertThat(msg.getFrom()[0]).isEqualTo(me);
-        assertThat(msg.getRecipients(Message.RecipientType.TO)[0].toString()).isEqualTo("\"Test Testor\" <unknown.number@unknown.email>");
-
+        assertThat(msg.getRecipients(Message.RecipientType.TO)[0].toString()).isEqualTo("Test Testor <unknown.number@unknown.email>");
     }
 
     @Test public void testShouldGenerateMessageForCallLogIncoming() throws Exception {
@@ -90,7 +89,7 @@ public class MessageGeneratorTest {
         Message msg = generator.messageForDataType(mockCalllogMessage("1234", CallLog.Calls.INCOMING_TYPE, record), DataType.CALLLOG);
         assertThat(msg).isNotNull();
         assertThat(msg.getSubject()).isEqualTo("Call with Test Testor");
-        assertThat(msg.getFrom()[0].toString()).isEqualTo("\"Test Testor\" <unknown.number@unknown.email>");
+        assertThat(msg.getFrom()[0].toString()).isEqualTo("Test Testor <unknown.number@unknown.email>");
         assertThat(msg.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
     }
 
@@ -99,7 +98,7 @@ public class MessageGeneratorTest {
         Message msg = generator.messageForDataType(mockCalllogMessage("1234", CallLog.Calls.MISSED_TYPE, record), DataType.CALLLOG);
         assertThat(msg).isNotNull();
         assertThat(msg.getSubject()).isEqualTo("Call with Test Testor");
-        assertThat(msg.getFrom()[0].toString()).isEqualTo("\"Test Testor\" <unknown.number@unknown.email>");
+        assertThat(msg.getFrom()[0].toString()).isEqualTo("Test Testor <unknown.number@unknown.email>");
         assertThat(msg.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
     }
 
@@ -123,7 +122,7 @@ public class MessageGeneratorTest {
         assertThat(msg).isNotNull();
 
         assertThat(msg.getRecipients(Message.RecipientType.TO)[0].toString())
-                .isEqualTo("\"Test Testor\" <test@test.com>");
+                .isEqualTo("Test Testor <test@test.com>");
     }
 
     @Test public void shouldGenerateCorrectHeaders() throws Exception {
@@ -155,7 +154,7 @@ public class MessageGeneratorTest {
         assertThat(msg).isNotNull();
 
         assertThat(msg.getFrom()[0].toString())
-                .isEqualTo("\"Test Testor\" <test@test.com>");
+                .isEqualTo("Test Testor <test@test.com>");
 
         assertThat(msg.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
     }

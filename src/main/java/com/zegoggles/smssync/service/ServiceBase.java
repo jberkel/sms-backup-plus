@@ -99,7 +99,7 @@ public abstract class ServiceBase extends Service {
         if (!BackupImapStore.isValidUri(uri)) {
             throw new MessagingException("No valid IMAP URI: "+uri);
         }
-        return new BackupImapStore(this, uri);
+        return new BackupImapStore(getApplicationContext(), uri);
     }
 
     protected AuthPreferences getAuthPreferences() {

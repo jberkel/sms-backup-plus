@@ -17,7 +17,6 @@
 package com.zegoggles.smssync;
 
 import android.app.Application;
-import com.fsck.k9.K9;
 import com.squareup.otto.Bus;
 
 public class App extends Application {
@@ -27,12 +26,4 @@ public class App extends Application {
     public static final String LOG = "sms_backup_plus.log";
 
     public static final Bus bus = new Bus();
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        K9.app = this;
-        K9.DEBUG = DEBUG;
-        K9.DEBUG_PROTOCOL_IMAP = DEBUG;
-    }
 }

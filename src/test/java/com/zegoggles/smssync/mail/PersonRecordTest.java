@@ -50,10 +50,10 @@ public class PersonRecordTest {
              "\"John Appleseed (+141543432)\" <john@appleseed.com>");
 
         assertThat(record.getAddress(AddressStyle.NAME).toString()).isEqualTo(
-                "\"John Appleseed\" <john@appleseed.com>");
+                "John Appleseed <john@appleseed.com>");
 
         assertThat(record.getAddress(AddressStyle.NUMBER).toString()).isEqualTo(
-                "\"+141543432\" <john@appleseed.com>");
+                "+141543432 <john@appleseed.com>");
     }
 
     @Test
@@ -64,10 +64,10 @@ public class PersonRecordTest {
                 "\"John Appleseed (+141543432)\" <+141543432@unknown.email>");
 
         assertThat(record.getAddress(AddressStyle.NAME).toString()).isEqualTo(
-                "\"John Appleseed\" <+141543432@unknown.email>");
+                "John Appleseed <+141543432@unknown.email>");
 
         assertThat(record.getAddress(AddressStyle.NUMBER).toString()).isEqualTo(
-                "\"+141543432\" <+141543432@unknown.email>");
+                "+141543432 <+141543432@unknown.email>");
     }
 
     @Test
@@ -75,13 +75,13 @@ public class PersonRecordTest {
         PersonRecord record = new PersonRecord(1, null, "john@appleseed.com", "+141543432");
 
         assertThat(record.getAddress(AddressStyle.NAME_AND_NUMBER).toString()).isEqualTo(
-                "\"+141543432\" <john@appleseed.com>");
+                "+141543432 <john@appleseed.com>");
 
         assertThat(record.getAddress(AddressStyle.NAME).toString()).isEqualTo(
-                "\"+141543432\" <john@appleseed.com>");
+                "+141543432 <john@appleseed.com>");
 
         assertThat(record.getAddress(AddressStyle.NUMBER).toString()).isEqualTo(
-                "\"+141543432\" <john@appleseed.com>");
+                "+141543432 <john@appleseed.com>");
     }
 
     @Test
@@ -91,9 +91,9 @@ public class PersonRecordTest {
                 "\"John Appleseed (Unknown)\" <john@appleseed.com>");
 
         assertThat(record.getAddress(AddressStyle.NAME).toString()).isEqualTo(
-                "\"John Appleseed\" <john@appleseed.com>");
+                "John Appleseed <john@appleseed.com>");
 
         assertThat(record.getAddress(AddressStyle.NUMBER).toString()).isEqualTo(
-                "\"Unknown\" <john@appleseed.com>");
+                "Unknown <john@appleseed.com>");
     }
 }
