@@ -41,7 +41,7 @@
             <groupId>com.fsck.k9</groupId>
             <artifactId>mailz</artifactId>
             <type>aar</type>
-            <version>0.0.1.b7e8d1d</version>
+            <version>0.0.1.4a8f838</version>
         </dependency>
 
         <dependency>
