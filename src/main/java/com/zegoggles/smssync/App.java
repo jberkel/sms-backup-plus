@@ -21,7 +21,7 @@ import com.fsck.k9.mail.K9;
 import com.squareup.otto.Bus;
 
 public class App extends Application {
-    public static final boolean DEBUG = BuildConfig.DEBUG;
+    public static final boolean DEBUG = true; //BuildConfig.DEBUG;
     public static final boolean LOCAL_LOGV = DEBUG;
     public static final String TAG = "SMSBackup+";
     public static final String LOG = "sms_backup_plus.log";
