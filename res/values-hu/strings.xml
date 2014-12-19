@@ -183,9 +183,6 @@
   <string name="ui_dialog_brokendroidx_title">DROID X SMS hiba</string>
   <string name="ui_dialog_brokendroidx_msg">Van egy hiba a Droid X készülékekben, amely megakadályozza, hogy az alkalmazás hozzáférjen a bejövő üzenetekhez. További információkért keresse fel a gyakran ismételt kérdéseket a weboldalon.</string>
 
-  <string name="ui_dialog_enable_whatsapp_title">WhatsApp engedélyezése</string>
-  <string name="ui_dialog_enable_whatsapp_message">Az SMS Backup+ képes menteni a WhatsApp üzeneteket. Szeretné engedélyezni?</string>
-
   <string name="ui_sync">Mentés</string>
   <string name="ui_skip">Kihagyás</string>
   <string name="err_sync_requires_login_info">Nem lehet menteni bejelentkezési információk nélkül.</string>

@@ -187,11 +187,6 @@
   a esta aplicación gardar as mensaxes entrantes. Consulte as FAQ
   na páxina web para máis información.</string>
 
-  <string name="ui_dialog_enable_whatsapp_title">Habilitar WhatsApp</string>
-  <string name="ui_dialog_enable_whatsapp_message">
-      Agora SMS Backup+ tamén pode gardar as súas mensaxes de WhatsApp.
-      Desexa habilitar esta opción?</string>
-
   <string name="ui_sync">Gardar</string>
   <string name="ui_skip">Omitir</string>
   <string name="err_sync_requires_login_info">Non se pode gardar sen información de acceso.</string>

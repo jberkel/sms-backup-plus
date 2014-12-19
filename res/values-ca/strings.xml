@@ -189,11 +189,6 @@
   no permet que l\'aplicació copiï els missatges d\'entrada. Vegeu les PMFS
   al lloc web per a més informació.</string>
 
-  <string name="ui_dialog_enable_whatsapp_title">Habilita el WhatsApp</string>
-  <string name="ui_dialog_enable_whatsapp_message">
-      Ara l\'SMS Backup+ també pot copiar els missatges del WhatsApp.
-      Voleu habilitar-ho?</string>
-
   <string name="ui_sync">Copia</string>
   <string name="ui_skip">Omet</string>
   <string name="err_sync_requires_login_info">No es pot copiar sense la informació d\'inici de sessió.</string>

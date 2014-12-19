@@ -189,11 +189,6 @@
   prevents this application from backing up incoming messages. See the FAQ
   on the website for more information.</string>
 
-  <string name="ui_dialog_enable_whatsapp_title">Enable WhatsApp</string>
-  <string name="ui_dialog_enable_whatsapp_message">
-      SMS Backup+ can now also back up your WhatsApp messages.
-      Do you want to enable this?</string>
-
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
   <string name="err_sync_requires_login_info">Cannot backup without login information.</string>
@@ -354,4 +349,11 @@
   <string name="donation_error_unavailable">not available</string>
   <string name="donation_error_canceled">canceled</string>
   <string name="donation_error_already_owned">you have already donated</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">Upgrade notice</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    In order to restore your messages on Android KitKat and Lollipop you need
+    to set SMS Backup+ as your SMS app during the restore operation. You will
+    get the asked to change it back to the original setting after restoring has finished.
+  </string>
 </resources>

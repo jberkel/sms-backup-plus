@@ -183,10 +183,6 @@
   <string name="ui_dialog_brokendroidx_title">DROID X-sms-bug</string>
   <string name="ui_dialog_brokendroidx_msg">Er is een bug in Droid X waardoor deze app inkomende berichten niet kan back-uppen. Bekijk de veel gestelde vragen (FAQ) op de website voor meer informatie.</string>
 
-  <string name="ui_dialog_enable_whatsapp_title">WhatsApp inschakelen</string>
-  <string name="ui_dialog_enable_whatsapp_message">
-      SMS Backup+ kan nu ook uw WhatsApp-berichten back-uppen. Wilt u dit inschakelen?</string>
-
   <string name="ui_sync">Back-uppen</string>
   <string name="ui_skip">Overslaan</string>
   <string name="err_sync_requires_login_info">Kan niet back-uppen zonder aanmeldingsinformatie.</string>

@@ -183,11 +183,6 @@
   <string name="ui_dialog_brokendroidx_msg">들어오는 메시지를 백업하는 이 어플리케이션의 기능이 차단되는 DROID X의 버그가 있습니다. 자세한 내용은 웹 사이트의 FAQ를 참조하십시오.
 </string>
 
-  <string name="ui_dialog_enable_whatsapp_title">WhatsApp 활성화</string>
-  <string name="ui_dialog_enable_whatsapp_message">
-      이제 SMS Backup+ 은 WhatsApp 메시지들을 백업할 수 있습니다. 
-      활성화 하시겠습니까?</string>
-
   <string name="ui_sync">백업</string>
   <string name="ui_skip">건너뛰기</string>
   <string name="err_sync_requires_login_info">로그인 정보 없이는 백업할 수 없음.</string>

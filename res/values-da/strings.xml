@@ -183,11 +183,6 @@
   <string name="ui_dialog_brokendroidx_title">DROID X SMS fejl</string>
   <string name="ui_dialog_brokendroidx_msg">Der er en fejl der forhindrer beskeder i at blive backed op på Droid X. Se FAQ\'en på hjemmesiden for mere info.</string>
 
-  <string name="ui_dialog_enable_whatsapp_title">Aktiver WhatsApp</string>
-  <string name="ui_dialog_enable_whatsapp_message">
-      SMS Backup+ kan også tage backup af beskeder fra WhatsApp.
-      Vil du aktivere dette?</string>
-
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Spring over</string>
   <string name="err_sync_requires_login_info">Kan ikke tage backup uden login information.</string>

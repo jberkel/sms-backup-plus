@@ -67,6 +67,8 @@ public class Preferences {
         IMAP_SETTINGS("imap_settings"),
         DONATE("donate"),
         BACKUP_SETTINGS_SCREEN("auto_backup_settings_screen"),
+        SMS_DEFAULT_PACKAGE("sms_default_package"),
+        SMS_DEFAULT_PACKAGE_CHANGE_SEEN("sms_default_package_change_seen"),
         ;
 
         public final String key;
@@ -183,6 +185,29 @@ public class Preferences {
         } else {
             return false;
         }
+    }
+
+    public boolean setSmsDefaultPackage(String smsPackage) {
+        return preferences.edit().putString(SMS_DEFAULT_PACKAGE.key, smsPackage).commit();
+    }
+
+    public String getSmsDefaultPackage() {
+        return preferences.getString(SMS_DEFAULT_PACKAGE.key, null);
+    }
+
+    public boolean hasSeenSmsDefaultPackageChangeDialog() {
+        return preferences.contains(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key);
+    }
+
+    public boolean setSeenSmsDefaultPackageChangeDialog() {
+        return preferences.edit().putBoolean(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key, true).commit();
+    }
+
+    public void reset() {
+        preferences.edit()
+                .remove(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key)
+                .remove(SMS_DEFAULT_PACKAGE.key)
+                .commit();
     }
 
     public boolean isNotificationEnabled() {
