@@ -354,6 +354,6 @@
   <string name="ui_dialog_sms_default_package_change_msg">
     In order to restore your messages on Android KitKat and Lollipop you need
     to set SMS Backup+ as your SMS app during the restore operation. You will
-    get the asked to change it back to the original setting after restoring has finished.
+    get asked to change it back to the original setting after restoring.
   </string>
 </resources>
