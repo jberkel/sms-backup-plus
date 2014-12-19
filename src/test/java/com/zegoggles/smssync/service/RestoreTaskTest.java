@@ -5,8 +5,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
-import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.store.imap.ImapStore;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.auth.TokenRefresher;
@@ -29,7 +29,9 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(RobolectricTestRunner.class)
@@ -77,12 +79,12 @@ public class RestoreTaskTest {
     @Test
     public void shouldRestoreItems() throws Exception {
         Date now = new Date();
-        List<Message> messages = new ArrayList<Message>();
+        List<ImapStore.ImapMessage> messages = new ArrayList<ImapStore.ImapMessage>();
         ContentValues values = new ContentValues();
         values.put(SmsConsts.TYPE, SmsConsts.MESSAGE_TYPE_INBOX);
         values.put(SmsConsts.DATE, now.getTime());
 
-        Message mockMessage = mock(Message.class);
+        ImapStore.ImapMessage mockMessage = mock(ImapStore.ImapMessage.class);
         when(mockMessage.getFolder()).thenReturn(folder);
         when(converter.getDataType(mockMessage)).thenReturn(DataType.SMS);
         when(converter.messageToContentValues(mockMessage)).thenReturn(values);

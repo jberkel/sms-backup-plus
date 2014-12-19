@@ -38,10 +38,11 @@
         </dependency>
 
         <dependency>
+            <!-- https://github.com/jberkel/k-9/tree/sms-backup-plus -->
             <groupId>com.fsck.k9.mail</groupId>
             <artifactId>lib</artifactId>
             <type>aar</type>
-            <version>0.0.1.e3eab38</version>
+            <version>0.0.1.56c26ee</version>
         </dependency>
 
         <dependency>
