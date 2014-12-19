@@ -173,7 +173,10 @@ public class MainActivity extends PreferenceActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        App.bus.unregister(this);
+        try {
+            App.bus.unregister(this);
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
