@@ -145,6 +145,7 @@ automatically be created the first time you're performing a backup.
 ## <a name="faq">FAQ</a>
 
   * [I enabled the WhatsApp backup, but my messages don't get backed up!](#whatsapp-does-not-get-backed-up)
+  * [Why does SMS Backup+ ask to become the default SMS app?](#faq-default-app)
   * [Why does it need so many permissions?](#faq-permissions)
   * [I want to file a bug report, what should I do?](#faq-file-bug-report)
   * [Can you add feature X ?](#faq-can-you-add-feature-x)
@@ -291,6 +292,15 @@ reasons why this might happen:
   * You use an IMAP server with an expired / self-signed certificate
 
 You can try to set the IMAP Server Setting `Security` to `SSL (optional / trust all)`.
+
+#### <a name="faq-default-app">Why does SMS Backup+ ask to become the default SMS app?</a>
+
+Google has changed the way SMS permissions work starting with Android KitKat. In order
+to get write access to your messages an app has to be set as the default system SMS app. Before starting
+the restore operation SMS Backup+ will request your permission to be set as default app. After the
+restore has finished you will be asked to set the previous choice (usually 'Messaging')
+back as default. This last step is important, if you don't set the old default back you might lose
+new messages.
 
 #### <a name="faq-partial-restore">How do I restore the last N weeks / N messages?</a>
 
