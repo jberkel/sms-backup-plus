@@ -23,13 +23,11 @@ Main differences / improvements:
   * Call log backup (since `1.2`), with Google Calendar integration (since
   `1.3.`) and restore (since `1.4`).
 
-  * <a href="#whatsapp-support">WhatsApp message backup</a> (since `1.5.0`)
-
   * Batch size limits removed.
 
   * Works with any IMAP server (but defaults to Gmail).
 
-Tested with Android 1.5 - 4.2.x.
+Tested with Android 1.5 - 5.0.x.
 
 SMS Backup+ is available for free in the Google Play Store, there will never be a pro / paid version.
 
