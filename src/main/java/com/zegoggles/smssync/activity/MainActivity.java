@@ -971,7 +971,7 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void checkDefaultSmsApp() {
-        if (isSmsBackupDefaultSmsApp()) {
+        if (isSmsBackupDefaultSmsApp() && !SmsRestoreService.isServiceWorking()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }
