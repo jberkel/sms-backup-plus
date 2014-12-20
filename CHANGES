@@ -10,7 +10,7 @@
   * Remove duplicates for call log restoring (#479)
   * New launcher icons (Shimon Simon)
   * Bug fixes (#347 #391 #409 #499)
-  * Upgraded k9-mail
+  * Upgraded k9-mail (https://github.com/jberkel/k-9/tree/sms-backup-plus)
 
 == 1.5.5 (1531) 07-16-2013
 
