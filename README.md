@@ -110,20 +110,19 @@ If you only want to backup specific call types you can do so as well.
 
 ### <a name="whatsapp-support">WhatsApp support</a>
 
-SMS Backup+ can also transfer your WhatsApp messages to your Gmail account.
-In order for this to work you need to make sure to have "Backup conversations"
-enabled in WhatsApp (Settings - Chat Settings, see [screenshot][whatsapp-screenshot]).
+Note: due to several changes to the WhatsApp encryption mechanism it is no longer possible
+to reliably back up WhatsApp messages. There exist some workarounds though using an external app
+named [Tri-Crypt][]. You can find instructions [here][WhatsApp-Workaround] (thank you
+[+AbinashBishoyi][] !).
 
-To enable the backup in SMS Backup+, go to "Advanced Settings",
+Please don't file bug reports against this, WhatsApp backup support is no longer supported.
+
+If you still want to enable the backup in SMS Backup+, go to "Advanced Settings",
 then "Backup Settings" and tick the "Backup WhatsApp" checkbox.
 
 The messages will be backed up to the "WhatsApp" label in Gmail.
 Note that WhatsApp messages are backup only, there is no way to restore them.
 
-Note: due to several changes to the WhatsApp encryption mechanism it is no longer possible
-to reliably back up WhatsApp messages. There exist some workarounds though using an external app
-named [Tri-Crypt][]. You can find instructions [here][WhatsApp-Workaround] (thank you
-[+AbinashBishoyi][] !).
 
 ### <a name="3rdparty">3rd party app integration</a>
 
@@ -144,6 +143,14 @@ Also note that Gmail labels correspond to IMAP folders, which will
 automatically be created the first time you're performing a backup.
 
 ## <a name="faq">FAQ</a>
+
+  * [I enabled the WhatsApp backup, but my messages don't get backed up!](#whatsapp-does-not-get-backed-up)
+  * [Why does it need so many permissions?](#faq-permissions)
+  * [I want to file a bug report, what should I do?](#faq-file-bug-report)
+  * [Can you add feature X ?](#faq-can-you-add-feature-x)
+  * [Why do backed up SMS show up in my inbox?](#faq-inbox)
+  * [How can I make the app think that it has to do the backup again?](#faq-reset)
+  * [What's the difference between regular and incoming backup schedule?](#faq-schedule)
 
 ### General questions
 
@@ -273,12 +280,7 @@ This might be due to some changes in Samsung's version of Android, see [#287](ht
 
 #### <a name="whatsapp-does-not-get-backed-up">I enabled the WhatsApp backup, but my messages don't get backed up!</a>
 
-Make sure that you have WhatsApp backups enabled (Settings - Chat Settings, see [screenshot][whatsapp-screenshot]). In
-newer versions of WhatsApp this option will default to "off", so you will have to manually enable it.
-
-#### <a name="whatsapp-group-messages-do-not-get-backed-up">I enabled the WhatsApp backup, but group messages don't get backed up!</a>
-
-This is a current limitation. A future version might address this issue.
+WhatsApp backups are no longer officially supported. See [WhatsApp Support](#whatsapp-support).
 
 #### <a name="faq-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
 
