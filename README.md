@@ -120,7 +120,7 @@ then "Backup Settings" and tick the "Backup WhatsApp" checkbox.
 The messages will be backed up to the "WhatsApp" label in Gmail.
 Note that WhatsApp messages are backup only, there is no way to restore them.
 
-Note: due to serveral changes to the WhatsApp encryption mechanism it is no longer possible
+Note: due to several changes to the WhatsApp encryption mechanism it is no longer possible
 to reliably back up WhatsApp messages. There exist some workarounds though using an external app
 named [Tri-Crypt][]. You can find instructions [here][WhatsApp-Workaround] (thank you
 [+AbinashBishoyi][] !).
