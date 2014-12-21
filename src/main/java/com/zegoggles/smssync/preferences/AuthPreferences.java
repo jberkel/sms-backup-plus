@@ -15,6 +15,7 @@ import java.net.URLEncoder;
 import java.util.Locale;
 
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.preferences.ServerPreferences.Defaults.SERVER_PROTOCOL;
 
 public class AuthPreferences {
     private final Context context;
@@ -22,9 +23,13 @@ public class AuthPreferences {
     private final ServerPreferences serverPreferences;
 
     public AuthPreferences(Context context) {
+        this(context,  new ServerPreferences(context));
+    }
+
+    /* package */ AuthPreferences(Context context, ServerPreferences serverPreferences) {
         this.context = context.getApplicationContext();
+        this.serverPreferences = serverPreferences;
         this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
-        this.serverPreferences = new ServerPreferences(this.context);
     }
 
     /**
@@ -47,14 +52,14 @@ public class AuthPreferences {
      *
      * This should be in the form of:
      * <ol>
-     * <li><code>imap+ssl+://xoauth2:ENCODED_USERNAME:ENCODED_TOKEN@imap.gmail.com:993</code></li>
-     * <li><code>imap+ssl+://xoauth:ENCODED_USERNAME:ENCODED_TOKEN@imap.gmail.com:993</code></li>
-     * <li><code>imap+ssl+://ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com:993</code></li>
-     * <li><code>imap://ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com:993</code></li>
-     * <li><code>imap://ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com</code></li>
+     * <li><code>imap+ssl+://XOAUTH2:ENCODED_USERNAME:ENCODED_TOKEN@imap.gmail.com:993</code></li>
+     * <li><code>imap+ssl+://XOAUTH:ENCODED_USERNAME:ENCODED_TOKEN@imap.gmail.com:993</code></li>
+     * <li><code>imap+ssl+://PLAIN:ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com:993</code></li>
+     * <li><code>imap://PLAIN:ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com:993</code></li>
+     * <li><code>imap://PLAIN:ENCODED_USERNAME:ENCODED_PASSWOR@imap.gmail.com</code></li>
      * </ol>
      */
-    private static final String IMAP_URI = "imap%s://%s:%s@%s";
+    private static final String IMAP_URI = "imap%s://%s:%s:%s@%s";
 
     public XOAuthConsumer getOAuthConsumer() {
         return new XOAuthConsumer(
@@ -127,6 +132,10 @@ public class AuthPreferences {
         getCredentials().edit().putString(LOGIN_PASSWORD, s).commit();
     }
 
+    public void setImapUser(String s) {
+        preferences.edit().putString(LOGIN_USER, s).commit();
+    }
+
     public boolean useXOAuth() {
         return getAuthMode() == AuthMode.XOAUTH && serverPreferences.isGmail();
     }
@@ -156,26 +165,26 @@ public class AuthPreferences {
         if (useXOAuth()) {
             if (hasOauthTokens()) {
                 XOAuthConsumer consumer = getOAuthConsumer();
-                return formatUri(AuthType.XOAUTH, consumer.getUsername(), consumer.generateXOAuthString());
+                return formatUri(AuthType.XOAUTH, SERVER_PROTOCOL, consumer.getUsername(), consumer.generateXOAuthString());
             } else if (hasOAuth2Tokens()) {
-                return formatUri(AuthType.XOAUTH2, getOauth2Username(), generateXOAuth2Token());
+                return formatUri(AuthType.XOAUTH2, SERVER_PROTOCOL, getOauth2Username(), generateXOAuth2Token());
             } else {
                 Log.w(TAG, "No valid xoauth1/2 tokens");
                 return null;
             }
         } else {
-            return String.format(IMAP_URI,
+            return formatUri(AuthType.PLAIN,
                     serverPreferences.getServerProtocol(),
-                    encode(getImapUsername()),
-                    encode(getImapPassword()).replace("+", "%20"),
-                    serverPreferences.getServerAddress());
+                    getImapUsername(),
+                    getImapPassword());
         }
     }
 
-    private String formatUri(AuthType authType, String username, String password) {
+    private String formatUri(AuthType authType, String serverProtocol, String username, String password) {
         return String.format(IMAP_URI,
-                ServerPreferences.Defaults.SERVER_PROTOCOL,
-                authType.name().toUpperCase(Locale.US) + ":" + encode(username),
+                serverProtocol,
+                authType.name().toUpperCase(Locale.US),
+                encode(username),
                 encode(password),
                 serverPreferences.getServerAddress());
     }
@@ -200,6 +209,10 @@ public class AuthPreferences {
         return new Preferences(context).getDefaultType(SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
     }
 
+    /* package */ void setServerAuthMode(AuthType authType) {
+        preferences.edit().putString(AuthPreferences.SERVER_AUTHENTICATION, authType.name()).commit();
+    }
+
     // All sensitive information is stored in a separate prefs file so we can
     // backup the rest without exposing sensitive data
     private SharedPreferences getCredentials() {
@@ -215,6 +228,8 @@ public class AuthPreferences {
     }
 
     /**
+     * TODO: this should probably be handled in K9
+     *
      * <p>
      * The SASL XOAUTH2 initial client response has the following format:
      * </p>

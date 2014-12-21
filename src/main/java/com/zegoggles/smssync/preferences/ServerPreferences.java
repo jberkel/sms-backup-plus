@@ -30,14 +30,14 @@ public class ServerPreferences {
     }
 
     boolean isGmail() {
-        return "imap.gmail.com:993".equalsIgnoreCase(getServerAddress());
+        return Defaults.SERVER_ADDRESS.equalsIgnoreCase(getServerAddress());
     }
 
     static class Defaults {
         /**
          * Default value for {@link ServerPreferences#SERVER_ADDRESS}.
          */
-        private static final String SERVER_ADDRESS = "imap.gmail.com:993";
+        public static final String SERVER_ADDRESS = "imap.gmail.com:993";
         /**
          * Default value for {@link ServerPreferences#SERVER_PROTOCOL}.
          */
