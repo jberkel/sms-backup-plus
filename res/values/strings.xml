@@ -75,7 +75,7 @@
   <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
   <string name="ui_server_dialog_msg">Default for gmail is \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Security</string>
-  <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL (Required)\"."</string>
+  <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL\"."</string>
   <string name="ui_authentication_label">Authentication</string>
   <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOAuth\".</string>
   <string name="plain">Plain text</string>
