@@ -12,6 +12,9 @@ import com.zegoggles.smssync.service.exception.LocalizableException;
 import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.EnumSet;
 
 public abstract class State {
@@ -51,6 +54,21 @@ public abstract class State {
             }
             return message.append(")").toString();
         } else {
+            return null;
+        }
+    }
+
+    public String getStackTrace() {
+        Throwable throwable = exception;
+        if (throwable != null) {
+            if (throwable instanceof MessagingException && throwable.getCause() instanceof IOException) {
+                throwable = throwable.getCause();
+            }
+            final StringWriter sw = new StringWriter();
+            throwable.printStackTrace(new PrintWriter(sw));
+            return sw.toString();
+        }
+        else {
             return null;
         }
     }

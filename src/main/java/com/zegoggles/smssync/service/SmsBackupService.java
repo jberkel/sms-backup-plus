@@ -222,7 +222,10 @@ public class SmsBackupService extends ServiceBase {
             appLog(R.string.app_log_backup_failed_connectivity, state.getDetailedErrorMessage(getResources()));
         } else {
             appLog(R.string.app_log_backup_failed_general_error, state.getDetailedErrorMessage(getResources()));
-
+            String stackTrace = state.getStackTrace();
+            if (stackTrace != null) {
+                appLogDebug(stackTrace);
+            }
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
                     getString(R.string.notification_general_error),
