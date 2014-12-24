@@ -16,9 +16,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -178,6 +181,27 @@ public class AppLog {
         }
 
         return text.length() > 0;
+    }
+
+    public static String snapshotCurrentLog(String tag, int maxLines) {
+        Process logcat;
+        List<String> lines = new ArrayList<String>(50);
+        try {
+            logcat = Runtime.getRuntime().exec(new String[]{"logcat", "-d", tag+":*", "*:S"});
+            BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()), 8192);
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+            final String separator = System.getProperty("line.separator");
+            final StringBuilder log = new StringBuilder();
+            for (int i=lines.size() - Math.min(maxLines, lines.size()); i<lines.size(); i++) {
+                log.append(lines.get(i)).append(separator);
+            }
+            return log.toString();
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     static File getFile(String name) {

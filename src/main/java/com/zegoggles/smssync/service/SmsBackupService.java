@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 import android.text.format.DateFormat;
 import android.util.Log;
+import com.fsck.k9.mail.K9MailLib;
 import com.fsck.k9.mail.MessagingException;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
@@ -37,6 +38,7 @@ import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
+import com.zegoggles.smssync.utils.AppLog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -225,6 +227,10 @@ public class SmsBackupService extends ServiceBase {
             String stackTrace = state.getStackTrace();
             if (stackTrace != null) {
                 appLogDebug(stackTrace);
+                final String k9Log = AppLog.snapshotCurrentLog(K9MailLib.LOG_TAG, 20);
+                if (k9Log != null) {
+                    appLogDebug(k9Log);
+                }
             }
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
