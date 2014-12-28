@@ -243,6 +243,7 @@ class MessageGenerator {
         mHeaderGenerator.setHeaders(msg, new HashMap<String, String>(), DataType.WHATSAPP, address, record,
                 whatsapp.getTimestamp(), whatsapp.getStatus()
         );
+        msg.setUsing7bitTransport();
         return msg;
     }
 
