@@ -4,9 +4,11 @@ import android.net.Uri;
 import android.provider.CallLog;
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Message;
+import com.fsck.k9.mail.internet.MimeHeader;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
+import org.apache.james.mime4j.util.MimeUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -61,6 +65,14 @@ public class MessageGeneratorTest {
         assertThat(msg.getSubject()).isEqualTo("SMS with Test Testor");
     }
 
+    @Test public void testShouldGenerateSMSMessageWithCorrectEncoding() throws Exception {
+        PersonRecord record = new PersonRecord(1, "Test Testor", null, null);
+        Message msg = generator.messageForDataType(mockMessage("1234", record), DataType.SMS);
+        assertThat(msg.getHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING)).isEqualTo(new String[] {
+                MimeUtil.ENC_QUOTED_PRINTABLE
+        });
+    }
+
     @Test public void testShouldGenerateSubjectWithNameForMMS() throws Exception {
         PersonRecord personRecord = new PersonRecord(1, "Foo Bar", "foo@bar.com", "1234");
 
@@ -73,6 +85,19 @@ public class MessageGeneratorTest {
 
         assertThat(msg).isNotNull();
         assertThat(msg.getSubject()).isEqualTo("SMS with Foo Bar");
+    }
+
+    @Test public void testShouldGenerateMMSMessageWithCorrectEncoding() throws Exception {
+        PersonRecord personRecord = new PersonRecord(1, "Foo Bar", "foo@bar.com", "1234");
+        MmsSupport.MmsDetails details = new MmsSupport.MmsDetails(true, "foo",
+                personRecord,
+                new Address("foo@bar.com"));
+
+        when(mmsSupport.getDetails(any(Uri.class), any(AddressStyle.class))).thenReturn(details);
+        Message msg = generator.messageForDataType(mockMessage("1234", personRecord), DataType.MMS);
+        assertThat(msg.getHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING)).isEqualTo(new String[] {
+                MimeUtil.ENC_7BIT
+        });
     }
 
     @Test public void testShouldGenerateMessageForCallLogOutgoing() throws Exception {
@@ -100,6 +125,14 @@ public class MessageGeneratorTest {
         assertThat(msg.getSubject()).isEqualTo("Call with Test Testor");
         assertThat(msg.getFrom()[0].toString()).isEqualTo("Test Testor <unknown.number@unknown.email>");
         assertThat(msg.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
+    }
+
+    @Test public void testShouldGenerateCallLogMessageWithCorrectEncoding() throws Exception {
+        PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
+        Message msg = generator.messageForDataType(mockCalllogMessage("1234", CallLog.Calls.OUTGOING_TYPE, record), DataType.CALLLOG);
+        assertThat(msg.getHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING)).isEqualTo(new String[] {
+                MimeUtil.ENC_QUOTED_PRINTABLE
+        });
     }
 
     @Test public void testShouldGenerateSubjectWithNameAndNumberForSMS() throws Exception {

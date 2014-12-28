@@ -106,6 +106,7 @@ class MessageGenerator {
             sentDate = new Date();
         }
         mHeaderGenerator.setHeaders(msg, msgMap, DataType.SMS, address, record, sentDate, messageType);
+        msg.setUsing7bitTransport();
         return msg;
     }
 
@@ -151,6 +152,7 @@ class MessageGenerator {
         }
 
         msg.setBody(body);
+        msg.setUsing7bitTransport();
         return msg;
     }
 
@@ -197,6 +199,7 @@ class MessageGenerator {
             sentDate = new Date();
         }
         mHeaderGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record, sentDate, callType);
+        msg.setUsing7bitTransport();
         return msg;
     }
 
