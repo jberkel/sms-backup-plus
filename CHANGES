@@ -1,6 +1,6 @@
 == 1.5.7 (xxx) tba
 
-  * Fix 7bit encoding issue
+  * Fix 7bit encoding issue (#512)
 
 == 1.5.6 (1546) 12-22-2014
 
