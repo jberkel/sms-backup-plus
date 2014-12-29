@@ -1,4 +1,4 @@
-== 1.5.7 (xxx) tba
+== 1.5.7 (1548) 12-29-2014
 
   * Fix 7bit encoding issue (#512)
   * Fix SSL/TLS trust all stopped working (#513)
