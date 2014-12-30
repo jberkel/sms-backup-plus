@@ -42,7 +42,7 @@
             <groupId>com.fsck.k9.mail</groupId>
             <artifactId>lib</artifactId>
             <type>aar</type>
-            <version>0.0.1.2d82da2</version>
+            <version>0.0.1.694c3d1</version>
         </dependency>
 
         <dependency>
