@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.zegoggles</groupId>
     <artifactId>smsbackup-plus</artifactId>
-    <version>1.5.7-SNAPSHOT</version>
+    <version>1.5.8-SNAPSHOT</version>
     <packaging>apk</packaging>
 
     <properties>
@@ -42,7 +42,7 @@
             <groupId>com.fsck.k9.mail</groupId>
             <artifactId>lib</artifactId>
             <type>aar</type>
-            <version>0.0.1.b13cb5f</version>
+            <version>0.0.1.2d82da2</version>
         </dependency>
 
         <dependency>
