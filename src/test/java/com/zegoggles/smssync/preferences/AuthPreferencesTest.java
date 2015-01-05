@@ -28,7 +28,7 @@ public class AuthPreferencesTest {
 
         authPreferences.setImapUser("a:user");
         authPreferences.setImapPassword("password:has:colons");
-        assertThat(authPreferences.getStoreUri()).isEqualTo("imap+ssl+://PLAIN:a%3Auser:password%3Ahas%3Acolons@foo.com:993");
+        assertThat(authPreferences.getStoreUri()).isEqualTo("imap+ssl+://PLAIN:a%253Auser:password%253Ahas%253Acolons@foo.com:993");
     }
 
     @Test public void testStoreUriWithXOAuth2() throws Exception {
@@ -38,6 +38,6 @@ public class AuthPreferencesTest {
         authPreferences.setOauth2Token("user", "token");
         authPreferences.setServerAuthMode(AuthType.XOAUTH2);
 
-        assertThat(authPreferences.getStoreUri()).isEqualTo("imap+ssl+://XOAUTH2:user:dXNlcj11c2VyAWF1dGg9QmVhcmVyIHRva2VuAQE%3D@imap.gmail.com:993");
+        assertThat(authPreferences.getStoreUri()).isEqualTo("imap+ssl+://XOAUTH2:user:dXNlcj11c2VyAWF1dGg9QmVhcmVyIHRva2VuAQE%253D@imap.gmail.com:993");
     }
 }

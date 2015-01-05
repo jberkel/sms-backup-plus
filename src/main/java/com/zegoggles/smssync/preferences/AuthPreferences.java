@@ -184,8 +184,10 @@ public class AuthPreferences {
         return String.format(IMAP_URI,
                 serverProtocol,
                 authType.name().toUpperCase(Locale.US),
-                encode(username),
-                encode(password),
+                // NB: there's a bug in K9mail-library which requires double-encoding of uris
+                // https://github.com/k9mail/k-9/commit/b0d401c3b73c6b57402dc81d3cfd6488a71a1b98
+                encode(encode(username)),
+                encode(encode(password)),
                 serverPreferences.getServerAddress());
     }
 
