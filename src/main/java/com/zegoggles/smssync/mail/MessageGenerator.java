@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.fsck.k9.mail.internet.MimeMessageHelper.setBody;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.Consts.MMS_PART;
@@ -85,7 +86,7 @@ class MessageGenerator {
 
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.SMS, record));
-        msg.setBody(new TextBody(msgMap.get(SmsConsts.BODY)));
+        setBody(msg, new TextBody(msgMap.get(SmsConsts.BODY)));
 
         final int messageType = toInt(msgMap.get(SmsConsts.TYPE));
         if (SmsConsts.MESSAGE_TYPE_INBOX == messageType) {
@@ -151,7 +152,7 @@ class MessageGenerator {
             body.addBodyPart(p);
         }
 
-        msg.setBody(body);
+        setBody(msg, body);
         msg.setUsing7bitTransport();
         return msg;
     }
@@ -190,7 +191,7 @@ class MessageGenerator {
         final int duration = msgMap.get(CallLog.Calls.DURATION) == null ? 0 :
                 toInt(msgMap.get(CallLog.Calls.DURATION));
 
-        msg.setBody(new TextBody(mCallFormatter.format(callType, record.getNumber(), duration)));
+        setBody(msg, new TextBody(mCallFormatter.format(callType, record.getNumber(), duration)));
         Date sentDate;
         try {
             sentDate = new Date(Long.valueOf(msgMap.get(CallLog.Calls.DATE)));
@@ -222,9 +223,9 @@ class MessageGenerator {
                 body.addBodyPart(createTextPart(whatsapp.getFilteredText()));
             }
             body.addBodyPart(createPartFromFile(whatsapp.getMedia().getFile(), whatsapp.getMedia().getMimeType()));
-            msg.setBody(body);
+            setBody(msg, body);
         } else if (whatsapp.hasText()) {
-            msg.setBody(new TextBody(whatsapp.getFilteredText()));
+            setBody(msg, new TextBody(whatsapp.getFilteredText()));
         } else {
             // no media / no text, pointless
             return null;
