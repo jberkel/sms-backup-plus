@@ -10,7 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <platform.version>4.4_r1</platform.version>
+        <platform.version>4.4.2_r4</platform.version>
     </properties>
 
     <dependencies>
@@ -42,26 +42,26 @@
             <groupId>com.fsck.k9.mail</groupId>
             <artifactId>lib</artifactId>
             <type>aar</type>
-            <version>0.0.1.5e5882b</version>
+            <version>0.0.1.064f33b</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.jberkel.pay.me</groupId>
             <artifactId>library</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
             <type>apklib</type>
         </dependency>
 
         <dependency>
             <groupId>com.github.jberkel.whassup</groupId>
             <artifactId>library</artifactId>
-            <version>0.0.6</version>
+            <version>0.0.7</version>
         </dependency>
 
         <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>annotations</artifactId>
-            <version>9.0.4</version>
+            <version>12.0</version>
             <scope>compile</scope>
         </dependency>
 
@@ -213,14 +213,14 @@
 
     <repositories>
         <repository>
-            <id>zegoggles-releases</id>
-            <name>zeggogles releases</name>
-            <url>http://zegoggl.es:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>zegoggles-thirdparty</id>
-            <name>zeggogles releases</name>
-            <url>http://zegoggl.es:8081/nexus/content/repositories/thirdparty/</url>
+            <id>bintray</id>
+            <url>http://dl.bintray.com/jberkel/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>zegoggles-snapshots</id>
