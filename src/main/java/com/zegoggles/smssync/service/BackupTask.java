@@ -66,7 +66,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
         PersonLookup personLookup = new PersonLookup(service.getContentResolver());
 
-        this.converter = new MessageConverter(context, preferences, authPreferences.getUserEmail(), personLookup);
+        this.converter = new MessageConverter(context, preferences, authPreferences.getUserEmail(), personLookup, ContactAccessor.Get.instance());
         this.contactAccessor = ContactAccessor.Get.instance();
 
         if (preferences.isCallLogCalendarSyncEnabled()) {

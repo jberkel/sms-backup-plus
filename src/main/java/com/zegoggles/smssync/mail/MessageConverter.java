@@ -27,6 +27,7 @@ import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
+import com.fsck.k9.mail.internet.MimeUtility;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
@@ -61,7 +62,10 @@ public class MessageConverter {
     private final MessageGenerator mMessageGenerator;
     private final boolean mMarkAsReadOnRestore;
 
-    public MessageConverter(Context context, Preferences preferences, String userEmail, PersonLookup personLookup) {
+    public MessageConverter(Context context, Preferences preferences,
+                            String userEmail,
+                            PersonLookup personLookup,
+                            ContactAccessor contactAccessor) {
         mContext = context;
         mMarkAsRead = preferences.getMarkAsRead();
         mPersonLookup = personLookup;
@@ -74,7 +78,7 @@ public class MessageConverter {
         }
 
         final ContactGroup backupContactGroup = preferences.getBackupContactGroup();
-        ContactGroupIds allowedIds = ContactAccessor.Get.instance().getGroupContactIds(context.getContentResolver(), backupContactGroup);
+        ContactGroupIds allowedIds = contactAccessor.getGroupContactIds(context.getContentResolver(), backupContactGroup);
         if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
 
         mMessageGenerator = new MessageGenerator(mContext,
@@ -110,7 +114,7 @@ public class MessageConverter {
     }
 
 
-    public ContentValues messageToContentValues(final Message message)
+    public @NotNull ContentValues messageToContentValues(final Message message)
             throws IOException, MessagingException {
         if (message == null) throw new MessagingException("message is null");
 
@@ -119,7 +123,7 @@ public class MessageConverter {
             case SMS:
                 if (message.getBody() == null) throw new MessagingException("body is null");
 
-                InputStream is = message.getBody().getInputStream();
+                InputStream is = MimeUtility.decodeBody(message.getBody());
                 if (is == null) {
                     throw new MessagingException("body.getInputStream() is null for " + message.getBody());
                 }

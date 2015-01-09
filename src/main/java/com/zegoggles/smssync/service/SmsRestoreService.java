@@ -13,6 +13,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.TokenRefresher;
+import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
@@ -82,7 +83,8 @@ public class SmsRestoreService extends ServiceBase {
             MessageConverter converter = new MessageConverter(service,
                     getPreferences(),
                     getAuthPreferences().getUserEmail(),
-                    new PersonLookup(getContentResolver())
+                    new PersonLookup(getContentResolver()),
+                    ContactAccessor.Get.instance()
             );
 
             RestoreConfig config = new RestoreConfig(
