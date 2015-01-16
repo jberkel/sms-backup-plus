@@ -117,6 +117,10 @@
   <string name="ui_mark_as_read_label">Gelesen markieren (E-Mails)</string>
   <string name="ui_mark_as_read_desc">Ob Nachrichten in Gmail als gelesen markiert werden sollen oder nicht.</string>
 
+  <string name="mark_as_read_always_read">Immer als gelesen markieren</string>
+  <string name="mark_as_read_always_unread">Immer als ungelesen markieren</string>
+  <string name="mark_as_read_message_status">Benutze Nachrichtenstatus</string>
+
   <string name="ui_mark_as_read_restore_label">Gelesen markieren (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Ob alle wiederhergestellten SMS als gelesen markiert werden sollen oder nicht.</string>
 

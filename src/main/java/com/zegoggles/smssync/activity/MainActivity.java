@@ -131,6 +131,8 @@ public class MainActivity extends PreferenceActivity {
 
         checkAndDisplayDroidWarning();
 
+        preferences.migrateMarkAsRead();
+
         if (preferences.shouldShowAboutDialog()) {
             show(Dialogs.ABOUT);
         }

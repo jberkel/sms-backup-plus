@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.preferences.MarkAsReadTypes;
 
 import java.util.Locale;
 
@@ -55,7 +56,9 @@ public class Preferences {
         REFERENCE_UID("reference_uid"),
         MAIL_SUBJECT_PREFIX("mail_subject_prefix"),
         RESTORE_STARRED_ONLY("restore_starred_only"),
+        @Deprecated
         MARK_AS_READ("mark_as_read"),
+        MARK_AS_READ_TYPES("mark_as_read_types"),
         MARK_AS_READ_ON_RESTORE("mark_as_read_on_restore"),
         THIRD_PARTY_INTEGRATION("third_party_integration"),
         APP_LOG("app_log"),
@@ -161,8 +164,18 @@ public class Preferences {
         return getStringAsInt(REGULAR_TIMEOUT_SECONDS, Defaults.REGULAR_TIMEOUT_SECONDS);
     }
 
-    public boolean getMarkAsRead() {
-        return preferences.getBoolean(MARK_AS_READ.key, Defaults.MARK_AS_READ);
+    public void migrateMarkAsRead() {
+        if (preferences.contains(MARK_AS_READ.key)) {
+            SharedPreferences.Editor editor = preferences.edit();
+            boolean markAsRead = preferences.getBoolean(MARK_AS_READ.key, true);
+            editor.putString(MARK_AS_READ_TYPES.key, markAsRead ? MarkAsReadTypes.READ.name() : MarkAsReadTypes.UNREAD.name());
+            editor.remove(MARK_AS_READ.key);
+            editor.commit();
+        }
+    }
+
+    public MarkAsReadTypes getMarkAsReadType() {
+        return getDefaultType(MARK_AS_READ_TYPES.key, MarkAsReadTypes.class, MarkAsReadTypes.READ);
     }
 
     public boolean getMarkAsReadOnRestore() {
