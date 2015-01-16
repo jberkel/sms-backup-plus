@@ -1,6 +1,7 @@
 == 1.5.9 (xxx) tbd
 
   * Albanian translation (Ermal Xhelilaj)
+  * Optionally use SMS/MMS read status in backup (#508)
 
 == 1.5.8 (1549) 01-07-2015
 
