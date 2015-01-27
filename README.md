@@ -217,7 +217,7 @@ mark it as not important.
 
 Just set the label to "Inbox" instead of the default "SMS" or "Call log".
 
-#### <a name="faq-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: #6# [NO, Unknown, Mailbox; SMS, [Failure]] (or response: #6# [NO, [NONEXISTENT], unknown mailbox: SMS (failure)])</a>
+#### <a name="faq-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
 
 Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
