@@ -126,6 +126,10 @@
   <string name="ui_mark_as_read_label">Megjelölés olvasottként (email)</string>
   <string name="ui_mark_as_read_desc">Üzenetek megjelölése olvasottként Gmailben.</string>
 
+  <string name="mark_as_read_always_read">Mindig jelölje meg olvasottként</string>
+  <string name="mark_as_read_always_unread">Mindig jelölje meg olvasatlanként</string>
+  <string name="mark_as_read_message_status">Használja az üzenet állapotát</string>
+
   <string name="ui_mark_as_read_restore_label">Megjelölés olvasottként (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Visszaállított üzenetek megjelölése olvasottként.</string>
 
@@ -155,6 +159,7 @@
 
   <string name="error_wifi_only_no_connection">Nincs WiFi kapcsolat</string>
   <string name="error_no_connection">Nincs internet kapcsolat</string>
+  <string name="error_sms_provider_not_writable">Nem sikerült hozzáférni az SMS tárolóhoz</string>
 
   <string name="ui_dialog_missing_credentials_title">Bejelentkezési információk</string>
 
@@ -340,4 +345,11 @@
   <string name="donation_error_unavailable">nem elérhető</string>
   <string name="donation_error_canceled">megszakítva</string>
   <string name="donation_error_already_owned">Ön már adományozott</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">Frissítési figyelmeztetés</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    Az Android KitKat és Lollipop verzióitól kezdve az SMS Backup+ beállítja
+    magát alapértelmezett SMS alkalmazássá visszaállítás közben. A művelet
+    befejezése után vissza kell állítani az eredeti beállítást.
+  </string>
 </resources>
