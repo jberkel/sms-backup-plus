@@ -40,7 +40,7 @@ To get updates more frequently join the [beta programme](#beta).
 
 ### Installation
 
-![PlayQRCode][] Install via the Android QR code link, [Google Play][PlayLink].
+![PlayQRCode][] Install via the Android QR code link, [Google Play][PlayLink], [f-droid][].
 
 ### First steps
 
@@ -411,6 +411,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [original issue list]: http://code.google.com/p/android-sms/issues/list
 [github issues]: http://github.com/jberkel/sms-backup-plus/issues
 [PlayQRCode]: http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=https://play.google.com/store/apps/details?id=com.zegoggles.smssync
+[f-droid]: https://f-droid.org/repository/browse/?fdid=com.zegoggles.smssync
 [PlayLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
