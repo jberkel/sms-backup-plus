@@ -2,6 +2,7 @@
 
   * Albanian translation (Ermal Xhelilaj)
   * Optionally use SMS/MMS read status in backup (#508)
+  * No log entries for unknown callers (CLIR) (#532)
 
 == 1.5.8 (1549) 01-07-2015
 
