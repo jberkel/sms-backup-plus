@@ -127,6 +127,15 @@ public class MessageGeneratorTest {
         assertThat(msg.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
     }
 
+    @Test public void testShouldGenerateMessageForCallLogIncomingUnknown() throws Exception {
+        PersonRecord record = new PersonRecord(0, null, null, "-1");
+        Message msg = generator.messageForDataType(mockCalllogMessage("", CallLog.Calls.INCOMING_TYPE, record), DataType.CALLLOG);
+        assertThat(msg).isNotNull();
+        assertThat(msg.getSubject()).isEqualTo("Call with Unknown");
+        assertThat(msg.getFrom()[0].toString()).isEqualTo("Unknown <unknown.number@unknown.email>");
+        assertThat(msg.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
+    }
+
     @Test public void testShouldGenerateCallLogMessageWithCorrectEncoding() throws Exception {
         PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
         Message msg = generator.messageForDataType(mockCalllogMessage("1234", CallLog.Calls.OUTGOING_TYPE, record), DataType.CALLLOG);

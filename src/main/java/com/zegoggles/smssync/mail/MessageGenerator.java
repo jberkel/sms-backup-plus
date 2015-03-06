@@ -161,7 +161,7 @@ class MessageGenerator {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = toInt(msgMap.get(CallLog.Calls.TYPE));
 
-        if (TextUtils.isEmpty(address) || !mCallLogTypes.isTypeEnabled(callType)) {
+        if (!mCallLogTypes.isTypeEnabled(callType)) {
             if (LOCAL_LOGV) Log.v(TAG, "ignoring call log entry: " + msgMap);
             return null;
         }
