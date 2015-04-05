@@ -1,12 +1,17 @@
 package com.zegoggles.smssync.mail;
 
+import android.database.MatrixCursor;
 import android.content.ContentValues;
 import android.provider.CallLog;
+import com.fsck.k9.mail.Address;
+import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.fsck.k9.mail.internet.MimeMessage;
 import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
+import com.zegoggles.smssync.preferences.AddressStyle;
+import com.zegoggles.smssync.preferences.MarkAsReadTypes;
 import com.zegoggles.smssync.preferences.Preferences;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +24,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -95,6 +102,72 @@ public class MessageConverterTest {
         final ContentValues values = messageConverter.messageToContentValues(createCallLogMessage());
         assertThat(values.containsKey(CallLog.Calls.CACHED_NAME)).isFalse();
         assertThat(values.containsKey(CallLog.Calls.CACHED_NUMBER_TYPE)).isFalse();
+    }
+
+    @Test public void testConvertMessagesSeenFlagFromMessageStatusWithSMS() throws Exception {
+        MatrixCursor cursor = new MatrixCursor(new String[] {SmsConsts.ADDRESS, SmsConsts.READ} );
+        cursor.addRow(new Object[]{ "foo", "0" });
+        cursor.addRow(new Object[]{ "foo", "1" });
+        cursor.moveToFirst();
+
+        PersonRecord record = mock(PersonRecord.class);
+        when(personLookup.lookupPerson(any(String.class))).thenReturn(record);
+        when(record.getAddress(any(AddressStyle.class))).thenReturn(new Address("foo"));
+        when(preferences.getMarkAsReadType()).thenReturn(MarkAsReadTypes.MESSAGE_STATUS);
+
+        messageConverter = new MessageConverter(Robolectric.application,
+                preferences, "foo@example.com", personLookup, contactAccessor);
+
+        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
+        assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isFalse();
+
+        cursor.moveToNext();
+        res = messageConverter.convertMessages(cursor, DataType.SMS);
+        assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isTrue();
+    }
+
+    @Test public void testConvertMessagesSeenFlagUnreadWithSMS() throws Exception {
+        MatrixCursor cursor = new MatrixCursor(new String[] {SmsConsts.ADDRESS, SmsConsts.READ} );
+        cursor.addRow(new Object[]{ "foo", "0" });
+        cursor.addRow(new Object[]{ "foo", "1" });
+        cursor.moveToFirst();
+
+        PersonRecord record = mock(PersonRecord.class);
+        when(personLookup.lookupPerson(any(String.class))).thenReturn(record);
+        when(record.getAddress(any(AddressStyle.class))).thenReturn(new Address("foo"));
+        when(preferences.getMarkAsReadType()).thenReturn(MarkAsReadTypes.UNREAD);
+
+        messageConverter = new MessageConverter(Robolectric.application,
+                preferences, "foo@example.com", personLookup, contactAccessor);
+
+        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
+        assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isFalse();
+
+        cursor.moveToNext();
+        res = messageConverter.convertMessages(cursor, DataType.SMS);
+        assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isFalse();
+    }
+
+    @Test public void testConvertMessagesSeenFlagReadWithSMS() throws Exception {
+        MatrixCursor cursor = new MatrixCursor(new String[] {SmsConsts.ADDRESS, SmsConsts.READ} );
+        cursor.addRow(new Object[]{ "foo", "0" });
+        cursor.addRow(new Object[]{ "foo", "1" });
+        cursor.moveToFirst();
+
+        PersonRecord record = mock(PersonRecord.class);
+        when(personLookup.lookupPerson(any(String.class))).thenReturn(record);
+        when(record.getAddress(any(AddressStyle.class))).thenReturn(new Address("foo"));
+        when(preferences.getMarkAsReadType()).thenReturn(MarkAsReadTypes.READ);
+
+        messageConverter = new MessageConverter(Robolectric.application,
+                preferences, "foo@example.com", personLookup, contactAccessor);
+
+        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
+        assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isTrue();
+
+        cursor.moveToNext();
+        res = messageConverter.convertMessages(cursor, DataType.SMS);
+        assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isTrue();
     }
 
     private MimeMessage createSMSMessage() throws IOException, MessagingException {
