@@ -4,7 +4,7 @@
 
   <string name="app_description">
      Sauvegardez vos SMS dans votre compte Gmail. Ceci est une version ameliorée de l\'application "SMS Backup" de
-     Christpoh Studer ajoutant la possibilité de restaurer vos SMS sauvegardés sur votre mobile.
+     Christoph Studer ajoutant la possibilité de restaurer vos SMS sauvegardés sur votre mobile.
      Cette version est entièrement rétro-compatible avec les sauvegardes faites avec l\'ancienne version.
   </string>
 
@@ -83,7 +83,7 @@
 
   <string name="ui_imap_folder_label">Libellé Gmail</string>
   <string name="ui_imap_folder_desc">Le libellé Gmail associé aux SMS.</string>
-  <string name="ui_imap_folder_label_dialog_msg">Les SMS sauvegardés seront classés sous ce libellé.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Les SMS sauvegardés seront classés avec ce libellé dans Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Préfixe utilisé dans le sujet de l\'email</string>
   <string name="ui_mail_subject_prefix_desc">Utiliser le nom du dossier IMAP comme préfixe dans le sujet de l\'email</string>
 
@@ -102,6 +102,9 @@
   <string name="ui_backup_calllog_label">Sauvegarde du journal d\'appels</string>
   <string name="ui_backup_calllog_desc">Activer la sauvegarde du journal d\'appels</string>
 
+  <string name="ui_backup_whatsapp_label">Sauvegarder WhatsApp</string>
+  <string name="ui_backup_whatsapp_desc">Activer la sauvegarde de WhatsApp</string>
+
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Synchroniser au calendrier</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Ajouter les entrées du journal d\'appel au calendrier</string>
 
@@ -113,10 +116,19 @@
 
   <string name="ui_imap_folder_calllog_label">Label du journal d\'appels</string>
   <string name="ui_imap_folder_calllog_desc">Label Gmail pour les journaux.</string>
-  <string name="ui_imap_folder_calllog_label_dialog_msg">Les entrées sauvegardées sur Gmail auront ce label.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Les appels sauvegardées seront classés avec ce libelé dans Gmail.</string>
+
+  <string name="ui_imap_folder_whatsapp_label">Libellé WhatsApp</string>
+  <string name="ui_imap_folder_whatsapp_desc">Libellé Gmail associé à WhatsApp</string>
+  <string name="ui_imap_folder_whatsapp_label_dialog_msg">Les messages WhatsApp sauvegardés seront classés avec ce libelé dans Gmail.</string>
 
   <string name="ui_mark_as_read_label">Marquer comme lus (e-mails)</string>
   <string name="ui_mark_as_read_desc">Définir si les messages (dans Gmail) seront inscrits comme étant lus ou non.</string>
+
+  <string name="mark_as_read_always_read">Toujours marquer comme lu</string>
+  <string name="mark_as_read_always_unread">Toujours marquer comme non-lu</string>
+  <string name="mark_as_read_message_status">Utiliser le status du message</string>
+
   <string name="ui_mark_as_read_restore_label">Marquer comme lus (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Définir si les messages restaurés seront inscrits comme étant lus ou non.</string>
 
@@ -126,6 +138,7 @@
   <string name="ui_enable_auto_sync_label">Sauvegarde automatique</string>
   <string name="ui_enable_auto_sync_desc">Définir si les nouveaux SMS seront sauvegardés de façon automatique ou non.</string>
   <string name="ui_enable_auto_sync_summary">Sauvergarde automatique de %1$s.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Aucun type d \'élément à sauvegardé de sélectionné.</string>
 
   <string name="sd_card_disclaimer">La sauvegarde automatique pourrait ne pas fonctionner correctement si l\'application est installée sur la carte SD.</string>
 
@@ -145,11 +158,13 @@
 
   <string name="error_wifi_only_no_connection">Pas de connexion WiFi</string>
   <string name="error_no_connection">Pas de connexion internet</string>
+  <string name="error_sms_provider_not_writable">Impossible d\'écrire dans le fournisseur de SMS</string>
 
   <string name="ui_dialog_missing_credentials_title">Informations d\'identification</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">Vous devez d\'abord vous connecter à votre compte Gmail.</string>
   <string name="ui_dialog_missing_credentials_msg_plain">Vous devez d\'abord définir vos identifiants.</string>
+
   <string name="ui_dialog_invalid_imap_folder_title">Nom du libellé invalide</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Le nom du libellé ne peut contenir que des lettres non accentuées et des chiffres (A-Z, a-z, 0-9), \'/\'.</string>
   <string name="ui_dialog_first_sync_title">Première sauvegarde</string>
@@ -173,7 +188,7 @@
 
   <string name="ui_dialog_brokendroidx_title">Bug SMS DROID X</string>
   <string name="ui_dialog_brokendroidx_msg">Il y a un bug avec le Droid X qui
-  empêche cette application de sauvegarder les message entrants. Plus d\'informations dans FAQ
+  empêche cette application de sauvegarder les message entrants. Plus d\'informations dans la FAQ
   disponible sur le site.</string>
 
   <string name="ui_sync">Sauvegarder</string>
@@ -203,6 +218,7 @@
   <string name="call_duration_field">Durée : %1$s</string>
 
   <string name="sms_with_field">SMS avec %1$s</string>
+  <string name="whatsapp_with_field">Discussion WhatsApp avec %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Appel avec %1$s</string>
@@ -226,7 +242,7 @@
   <string name="_2h">2 h</string>
   <string name="_6h">6 h</string>
   <string name="_24h">24 h</string>
-  <string name="never">Never</string>
+  <string name="never">Jamais</string>
 
   <string name="_1min">1 min</string>
   <string name="_3mins">3 min</string>
@@ -271,21 +287,19 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Journal d\'appel</string>
-
-  <string name="ui_dialog_donate_message">Veuillez spécifier le montant ainsi que la devise :</string>
-  <string name="ui_donation_success_message">Don effectué, merci !</string>
-  <string name="ui_donation_failure_message">Erreur lors du don : %1$s</string>
+  <string name="whatsapp">WhatsApp</string>
 
   <string name="pref_acra_disabled">Désactivé</string>
 
-  <string name="app_log_skip_backup_background_data">Skipped because background data is disabled</string>
-  <string name="app_log_skip_backup_already_running">Skipped because backup already running</string>
-  <string name="app_log_skip_backup_skip_messages">Skip all messages</string>
-  <string name="app_log_skip_backup_no_items">Skipped (no items found)</string>
-  <string name="app_log_missing_credentials">Skipped (missing credentials)</string>
+  <string name="app_log_skip_backup_background_data">Ignoré car la data n\'est pas activée</string>
+  <string name="app_log_skip_backup_already_running">Ignoré car une sauvegarde est déjà en cours</string>
+  <string name="app_log_skip_backup_skip_messages">Ignorer tous les messages</string>
+  <string name="app_log_skip_backup_no_items">Ignoré (aucun élément trouvé)</string>
+  <string name="app_log_missing_credentials">Ignoré (authentification manquante)</string>
   <string name="app_log_backup_requested">Sauvegarde demandée (%1$s)</string>
   <string name="app_log_start_backup">Démarrage de la sauvegarde (%1$s)</string>
   <string name="app_log_backup_messages">Sauvegarde en cours (%1$d SMS, %2$d MMS, %3$d appels)</string>
+  <string name="app_log_backup_messages_with_config">Utiliser la configuration %1$s</string>
   <string name="app_log_backup_canceled">Sauvegarde annulée</string>
   <string name="app_log_backup_finished">Sauvegarde effectuée</string>
 
@@ -302,9 +316,45 @@
   <string name="pref_app_log_enabled">Journal stocké sur la carte SD en tant que \"sms_backup_plus.log\".</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
-  <string name="source_incoming">entrant</string>
+  <string name="pref_app_log_debug">Informations supplémentaires de débuggage</string>
+  <string name="pref_app_log_debug_summary">Activer la journalisation des informations supplémentaires de debuggage dans le journal de synchronisation</string>
+
+   <string name="source_incoming">entrant</string>
   <string name="source_regular">régulier</string>
   <string name="source_3rd_party">application tierce</string>
   <string name="source_manual">manuel</string>
   <string name="source_unknown">inconnu</string>
+
+  <string name="ui_confirm_action_label">Confirmation des actions</string>
+  <string name="ui_confirm_action_desc">Demander avant de sauvegarder ou de restaurer</string>
+  <string name="ui_dialog_confirm_action_title">Confirmer l\'action</string>
+  <string name="ui_dialog_confirm_action_msg">Êtes-vous sûr de vouloir effectuer cette action ?</string>
+
+  <string name="loading">Chargement…</string>
+  <string name="ssl_error">Erreur SSL</string>
+  <string name="ui_dialog_account_manager_token_error">
+      La clé d \'authentification n\'a pas pu être récupérée. Voulez-vous essayer la méthode d\'authentification par navigateur ?
+  </string>
+  <string name="select_google_account">Sélectionner un compte Google</string>
+
+  <!-- donation related -->
+  <string name="donate">Donnation</string>
+  <string name="donate_summary">Utilisant la méthode sécurisée de paiement du Google Play Store.</string>
+
+  <string name="ui_dialog_donate_message">Veuillez spécifier le montant ainsi que la devise :</string>
+  <string name="ui_donation_success_message">Don effectué, merci !</string>
+  <string name="ui_donation_failure_message">Erreur lors du don : %1$s</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">La facturation "in-app" n\'est pas disponible</string>
+  <string name="donation_error_unavailable">non disponible</string>
+  <string name="donation_error_canceled">annulé</string>
+  <string name="donation_error_already_owned">vous avez déjà effectué un don</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">Notification de mise-à-jour</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    Afin de restaurer vos messages sur Android KitKat et Lollipop, vous devez
+    choisir SMS Backup+ comme application par défaut pour les SMS pendant l\'opération de restauration.
+    Il vous sera ensuite demandé de redéfinir l\'application originelle après la restauration.
+  </string>
 </resources>
