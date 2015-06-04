@@ -62,7 +62,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.auth.WebAuthActivity" android:theme="@style/Theme.WebAuth"/>
+        <activity android:name=".activity.auth.OAuth2WebAuthActivity" android:theme="@style/Theme.WebAuth"/>
         <activity android:name=".activity.auth.AccountManagerAuthActivity" android:theme="@style/Theme.SmsBackupPlus"/>
         <activity android:name=".activity.donation.DonationActivity" android:theme="@style/Theme.Donation"/>
 

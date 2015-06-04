@@ -12,6 +12,7 @@ import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.MessageConverter;
@@ -97,8 +98,9 @@ public class SmsRestoreService extends ServiceBase {
                 0
             );
 
+            final AuthPreferences authPreferences = new AuthPreferences(this);
             new RestoreTask(this, converter, getContentResolver(),
-                    new TokenRefresher(service, new AuthPreferences(this))).execute(config);
+                    new TokenRefresher(service, new OAuth2Client(authPreferences.getOAuth2ClientId()), authPreferences)).execute(config);
 
         } catch (MessagingException e) {
             postError(e);

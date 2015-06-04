@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.AuthType;
+import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
 import org.apache.commons.codec.binary.Base64;
@@ -46,6 +48,7 @@ public class AuthPreferences {
     private static final String OAUTH_USER = "oauth_user";
     private static final String OAUTH2_USER = "oauth2_user";
     private static final String OAUTH2_TOKEN = "oauth2_token";
+    private static final String OAUTH2_REFRESH_TOKEN = "oauth2_refresh_token";
 
     /**
      * IMAP URI.
@@ -72,6 +75,10 @@ public class AuthPreferences {
         return getCredentials().getString(OAUTH2_TOKEN, null);
     }
 
+    public String getOauth2RefreshToken() {
+        return getCredentials().getString(OAUTH2_REFRESH_TOKEN, null);
+    }
+
     public boolean hasOauthTokens() {
         return getOauthUsername() != null &&
                 getOauthToken() != null &&
@@ -87,10 +94,12 @@ public class AuthPreferences {
         return preferences.getString(OAUTH_USER, getOauth2Username());
     }
 
+    @Deprecated
     public void setOauthUsername(String s) {
         preferences.edit().putString(OAUTH_USER, s).commit();
     }
 
+    @Deprecated
     public void setOauthTokens(String token, String secret) {
         getCredentials().edit()
                 .putString(OAUTH_TOKEN, token)
@@ -98,13 +107,29 @@ public class AuthPreferences {
                 .commit();
     }
 
-    public void setOauth2Token(String username, String token) {
+    @Deprecated
+    public boolean needsMigration() {
+        return hasOauthTokens() && !hasOAuth2Tokens();
+    }
+
+    public void setOauth2Token(String username, String accessToken, String refreshToken) {
         preferences.edit()
                 .putString(OAUTH2_USER, username)
                 .commit();
 
         getCredentials().edit()
-                .putString(OAUTH2_TOKEN, token)
+                .putString(OAUTH2_TOKEN, accessToken)
+                .commit();
+        getCredentials().edit()
+                .putString(OAUTH2_REFRESH_TOKEN, refreshToken)
+                .commit();
+    }
+
+    public void clearOAuth1Data() {
+        preferences.edit().remove(OAUTH_USER).commit();
+        getCredentials().edit()
+                .remove(OAUTH_TOKEN)
+                .remove(OAUTH_TOKEN_SECRET)
                 .commit();
     }
 
@@ -120,13 +145,17 @@ public class AuthPreferences {
                 .remove(OAUTH_TOKEN)
                 .remove(OAUTH_TOKEN_SECRET)
                 .remove(OAUTH2_TOKEN)
+                .remove(OAUTH2_REFRESH_TOKEN)
                 .commit();
 
         if (!TextUtils.isEmpty(oauth2token)) {
-            new TokenRefresher(context, this).invalidateToken(oauth2token);
+            new TokenRefresher(context, new OAuth2Client(getOAuth2ClientId()), this).invalidateToken(oauth2token);
         }
     }
 
+    public String getOAuth2ClientId() {
+        return context.getString(R.string.oauth2_client_id);
+    }
 
     public void setImapPassword(String s) {
         getCredentials().edit().putString(LOGIN_PASSWORD, s).commit();

@@ -26,11 +26,12 @@ public class TokenRefresherTest {
 
     @Mock AccountManager accountManager;
     @Mock AuthPreferences authPreferences;
+    @Mock OAuth2Client oauth2Client;
     TokenRefresher refresher;
 
     @Before public void before() {
         initMocks(this);
-        refresher = new TokenRefresher(accountManager, authPreferences);
+        refresher = new TokenRefresher(accountManager, oauth2Client, authPreferences);
     }
 
     @Test public void shouldInvalidateTokenManually() throws Exception {
@@ -106,6 +107,30 @@ public class TokenRefresherTest {
 
         refresher.refreshOAuth2Token();
 
-        verify(authPreferences).setOauth2Token("username", "newToken");
+        verify(authPreferences).setOauth2Token("username", "newToken", null);
+    }
+
+    @Test public void shouldUseOAuth2ClientWhenRefreshTokenIsPresent() throws Exception {
+        when(authPreferences.getOauth2Token()).thenReturn("token");
+        when(authPreferences.getOauth2RefreshToken()).thenReturn("refresh");
+        when(authPreferences.getUsername()).thenReturn("username");
+
+        when(oauth2Client.refreshToken("refresh")).thenReturn(new OAuth2Token("newToken", "type", null, 0, null));
+
+        refresher.refreshOAuth2Token();
+
+        verify(authPreferences).setOauth2Token("username", "newToken", "refresh");
+    }
+
+    @Test public void shouldUpdateRefreshTokenIfPresentInResponse() throws Exception {
+        when(authPreferences.getOauth2Token()).thenReturn("token");
+        when(authPreferences.getOauth2RefreshToken()).thenReturn("refresh");
+        when(authPreferences.getUsername()).thenReturn("username");
+
+        when(oauth2Client.refreshToken("refresh")).thenReturn(new OAuth2Token("newToken", "type", "newRefresh", 0, null));
+
+        refresher.refreshOAuth2Token();
+
+        verify(authPreferences).setOauth2Token("username", "newToken", "newRefresh");
     }
 }

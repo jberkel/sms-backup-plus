@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -18,12 +19,23 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.zegoggles.smssync.App;
-import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 
-public class WebAuthActivity extends Activity {
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.zegoggles.smssync.App.TAG;
+
+public class OAuth2WebAuthActivity extends Activity {
     private WebView mWebview;
     private ProgressDialog mProgress;
+
+    public static final String EXTRA_CODE = "code";
+    public static final String EXTRA_ERROR = "error";
+
+    // Success code=4/8imH8gQubRYrWu_Fpv6u4Yri5kTNEWmm_XyhytJqlJw
+    // Denied error=access_denied
+    private static final Pattern TITLE = Pattern.compile("(code|error)=(.+)\\Z");
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -51,7 +63,7 @@ public class WebAuthActivity extends Activity {
             @Override
             @TargetApi(Build.VERSION_CODES.FROYO)
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                Log.w(App.TAG, "onReceiveSslError(" + error + ")");
+                Log.w(TAG, "onReceiveSslError(" + error + ")");
                 // pre-froyo devices don't trust the cert used by google
                 // see https://knowledge.verisign.com/support/mpki-for-ssl-support/index?page=content&id=SO17511&actp=AGENT_REFERAL
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO &&
@@ -65,30 +77,43 @@ public class WebAuthActivity extends Activity {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                if (App.LOCAL_LOGV) Log.d(App.TAG, "onPageStarted(" + url + ")");
+                if (App.LOCAL_LOGV) Log.d(TAG, "onPageStarted(" + url + ")");
                 if (!isFinishing()) mProgress.show();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                if (!isFinishing()) mProgress.dismiss();
-            }
+                final String pageTitle = view.getTitle();
+                final Matcher matcher = TITLE.matcher(pageTitle);
+                if (matcher.find()) {
+                    String status = matcher.group(1);
+                    String value = matcher.group(2);
 
-            @Override
-            public boolean shouldOverrideUrlLoading(final WebView view, String url) {
-                if (url.startsWith(Consts.CALLBACK_URL)) {
-                    setResult(RESULT_OK, new Intent().setData(Uri.parse(url)));
-                    finish();
-                    return true;
-                } else {
-                    return false;
+                    if ("code".equals(status)) {
+                        onCodeReceived(value);
+                    } else if ("error".equals(status)) {
+                        onError(value);
+                    }
                 }
+                if (!isFinishing()) mProgress.dismiss();
             }
         });
         removeAllCookies();
-
         // finally load url
         mWebview.loadUrl(urlToLoad.toString());
+    }
+
+    private void onCodeReceived(String code) {
+        if (!TextUtils.isEmpty(code)) {
+            setResult(RESULT_OK, new Intent().putExtra(EXTRA_CODE, code));
+            finish();
+        }
+    }
+
+    private void onError(String error) {
+        Log.e(TAG, "onError("+error+")");
+        setResult(RESULT_OK, new Intent().putExtra(EXTRA_ERROR, error));
+        finish();
     }
 
     private void showConnectionError(final String message) {

@@ -10,6 +10,7 @@ import com.fsck.k9.mail.store.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefreshException;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
@@ -80,7 +81,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         } else {
             calendarSyncer = null;
         }
-        this.tokenRefresher = new TokenRefresher(service, authPreferences);
+        this.tokenRefresher = new TokenRefresher(service, new OAuth2Client(authPreferences.getOAuth2ClientId()), authPreferences);
     }
 
     BackupTask(SmsBackupService service,
