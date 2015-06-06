@@ -4,7 +4,8 @@
   * Optionally use SMS/MMS read status in backup (#508)
   * No log entries for unknown callers (CLIR) (#532)
   * Support OAuth2 web flow (#554)
-  * Optional K9 verbose logging
+  * Rebased K9 to current head (3c1c1e4e5)
+  * Added optional K9 verbose logging
 
 == 1.5.8 (1549) 01-07-2015
 
