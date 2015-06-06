@@ -26,12 +26,34 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
-import com.zegoggles.smssync.preferences.MarkAsReadTypes;
 
 import java.util.Locale;
 
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.*;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG_DEBUG;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.CONFIRM_ACTION;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENABLE_AUTO_BACKUP;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.FIRST_USE;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.LAST_VERSION_CODE;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.MAIL_SUBJECT_PREFIX;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ_ON_RESTORE;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ_TYPES;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.NOTIFICATIONS;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.REFERENCE_UID;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.REGULAR_TIMEOUT_SECONDS;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.RESTORE_STARRED_ONLY;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.SMS_DEFAULT_PACKAGE;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.SMS_DEFAULT_PACKAGE_CHANGE_SEEN;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.THIRD_PARTY_INTEGRATION;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 
 public class Preferences {
     private final Context context;

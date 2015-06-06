@@ -19,6 +19,7 @@ package com.zegoggles.smssync;
 import android.app.Application;
 import com.fsck.k9.mail.K9MailLib;
 import com.squareup.otto.Bus;
+import com.zegoggles.smssync.preferences.Preferences;
 
 public class App extends Application {
     public static final boolean DEBUG = BuildConfig.DEBUG;
@@ -28,12 +29,16 @@ public class App extends Application {
 
     public static final Bus bus = new Bus();
 
-    static {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        final Preferences preferences = new Preferences(this);
         K9MailLib.setDebugStatus(new K9MailLib.DebugStatus() {
             @Override
             public boolean enabled() {
-                return DEBUG;
+                return preferences.isAppLogDebug();
             }
+
             @Override
             public boolean debugSensitive() {
                 return false;
