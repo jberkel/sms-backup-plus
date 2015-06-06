@@ -1,10 +1,13 @@
 package com.zegoggles.smssync.auth;
 
+import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
+
+import static com.zegoggles.smssync.App.TAG;
 
 public class OAuth2Token {
     public final String accessToken;
@@ -30,6 +33,7 @@ public class OAuth2Token {
                 throw new IOException("Invalid JSON data: "+value);
             }
         } catch (JSONException e) {
+            Log.w(TAG, "JSON parse error", e);
             throw new IOException("Error parsing data: "+e.getMessage());
         }
     }
@@ -39,9 +43,10 @@ public class OAuth2Token {
             return new OAuth2Token(
                 object.getString("access_token"),
                 object.getString("token_type"),
-                object.getString("refresh_token"),
+                object.optString("refresh_token", null),
                 object.getInt("expires_in"), null);
         } catch (JSONException e) {
+            Log.w(TAG, "JSON parse error", e);
             throw new IOException("parse error");
         }
     }
