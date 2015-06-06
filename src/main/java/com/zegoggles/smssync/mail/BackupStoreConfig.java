@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.mail;
 
 import com.fsck.k9.mail.store.StoreConfig;
+import com.fsck.k9.mail.NetworkType;
 
 class BackupStoreConfig implements StoreConfig {
     private static final String INBOX = "INBOX";
@@ -17,7 +18,7 @@ class BackupStoreConfig implements StoreConfig {
     @Override public boolean subscribedFoldersOnly() {
         return false;
     }
-    @Override public boolean useCompression(int i) {
+    @Override public boolean useCompression(NetworkType type) {
         return false;
     }
     @Override public String getInboxFolderName() {
