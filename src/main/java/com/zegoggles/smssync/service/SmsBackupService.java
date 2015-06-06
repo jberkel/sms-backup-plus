@@ -290,6 +290,7 @@ public class SmsBackupService extends ServiceBase {
 
     @Deprecated
     private void runMigration() {
+        appLogDebug("running OAuth1 migration");
         final MigrateOAuth1TokenTask migrationTask = new MigrateOAuth1TokenTask(
                 getAuthPreferences().getOAuthConsumer(),
                 new OAuth2Client(getAuthPreferences().getOAuth2ClientId()),
