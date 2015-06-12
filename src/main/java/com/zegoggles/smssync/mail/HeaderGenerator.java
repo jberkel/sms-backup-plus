@@ -14,7 +14,7 @@ import java.util.*;
 import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
 /**
- * Generates headers for SMS, MMS, Call logs and WhatsApp messages.
+ * Generates headers for SMS, MMS, Call logs
  */
 class HeaderGenerator {
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
@@ -49,7 +49,6 @@ class HeaderGenerator {
             case SMS: setSmsHeaders(message, msgMap); break;
             case MMS: setMmsHeaders(message, msgMap); break;
             case CALLLOG: setCallLogHeaders(message, msgMap); break;
-            case WHATSAPP: setWhatsAppHeaders(message, sentDate, status); break;
         }
     }
 
@@ -77,12 +76,6 @@ class HeaderGenerator {
         message.setHeader(Headers.TYPE, msgMap.get(CallLog.Calls.TYPE));
         message.setHeader(Headers.DATE, msgMap.get(CallLog.Calls.DATE));
         message.setHeader(Headers.DURATION, msgMap.get(CallLog.Calls.DURATION));
-    }
-
-    private void setWhatsAppHeaders(Message message, Date sentDate, int status) throws MessagingException {
-        message.setHeader(Headers.DATE, String.valueOf(sentDate.getTime()));
-        message.setHeader(Headers.TYPE, String.valueOf(status));
-        message.setHeader(Headers.STATUS, String.valueOf(status));
     }
 
     private static String toGMTString(Date date) {

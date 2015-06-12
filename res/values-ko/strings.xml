@@ -100,9 +100,6 @@
   <string name="ui_backup_calllog_label">통화 기록 백업</string>
   <string name="ui_backup_calllog_desc">통화 기록 백업 활성화</string>
 
-  <string name="ui_backup_whatsapp_label">WhatsApp 메시지 백업</string>
-  <string name="ui_backup_whatsapp_desc">WhatsApp 메시지 백업 활성화</string>
-
     <string name="ui_backup_calllog_sync_calendar_enabled_label">캘린더 동기화</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">통화 기록 목록을 캘린더에추가</string>
 
@@ -115,10 +112,6 @@
   <string name="ui_imap_folder_calllog_label">통화 기록 라벨</string>
   <string name="ui_imap_folder_calllog_desc">Gmail 라벨에 통화 기록을 할당.</string>
    <string name="ui_imap_folder_calllog_label_dialog_msg">백업된 통화 기록 목록은 Gmail에서 라벨과 태그가 될 것입니다.</string>
-
-  <string name="ui_imap_folder_whatsapp_label">WhatsApp 라벨</string>
-  <string name="ui_imap_folder_whatsapp_desc">Gmail 라벨에 WhatsApp을 할당.</string>
-  <string name="ui_imap_folder_whatsapp_label_dialog_msg">백업된 WhatsApp 메시지들은 Gmail에 이 라벨로 태그 될 것입니다.</string>
 
   <string name="ui_mark_as_read_label">읽은 상태로 표시(이메일)</string>
   <string name="ui_mark_as_read_desc">Gmail에 읽은 것으로 메시지를 표시할지 여부를 지정합니다.</string>
@@ -166,7 +159,7 @@
   <string name="ui_dialog_access_token_msg">엑세스 요청중...</string>
 
   <string name="ui_dialog_access_token_error_title">인증 실패</string>
-  <string name="ui_dialog_access_token_error_msg">엑세스 토큰을 가져오지 못햇을 수 있습니다. 
+  <string name="ui_dialog_access_token_error_msg">엑세스 토큰을 가져오지 못햇을 수 있습니다.
     \"엑세스 권한 부여\" 를 선택해야 합니다..
   </string>
 
@@ -210,8 +203,6 @@
   <string name="call_duration_field">통화시간: %1$s</string>
 
   <string name="sms_with_field">%1$s 와 SMS</string>
-  <string name="whatsapp_with_field">%1$s 와 WhatsApp 채팅</string>
-  <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">%1$s 와 통화</string>
 
@@ -279,7 +270,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">통화 기록</string>
-  <string name="whatsapp">WhatsApp</string>
 
   <string name="pref_acra_disabled">비활성화</string>
 

@@ -103,9 +103,6 @@
   <string name="ui_backup_calllog_label">Hívásnapló mentése</string>
   <string name="ui_backup_calllog_desc">Hívásnapló mentésének engedélyezése</string>
 
-  <string name="ui_backup_whatsapp_label">WhatsApp mentése</string>
-  <string name="ui_backup_whatsapp_desc">WhatsApp üzenetek mentésének engedélyezése</string>
-
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Szinkronizálás naptárral</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Hívásnapló bejegyzéseinek mentése naptárba</string>
 
@@ -118,10 +115,6 @@
   <string name="ui_imap_folder_calllog_label">Hívásnapló címkéje</string>
   <string name="ui_imap_folder_calllog_desc">Hívásnapló bejegyzések mentése az itt megadott Gmail címke alá.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">A feltöltött hívásnapló bejegyzések az itt megadott címkével lesznek megjelölve Gmailben.</string>
-
-  <string name="ui_imap_folder_whatsapp_label">WhatsApp címkéje</string>
-  <string name="ui_imap_folder_whatsapp_desc">WhatsApp üzenetek mentése az itt megadott Gmail címke alá.</string>
-  <string name="ui_imap_folder_whatsapp_label_dialog_msg">A feltöltött WhatsApp üzenetek az itt megadott címkével lesznek megjelölve Gmailben.</string>
 
   <string name="ui_mark_as_read_label">Megjelölés olvasottként (email)</string>
   <string name="ui_mark_as_read_desc">Üzenetek megjelölése olvasottként Gmailben.</string>
@@ -215,7 +208,6 @@
   <string name="call_duration_field">Hossz: %1$s</string>
 
   <string name="sms_with_field">SMS: %1$s</string>
-  <string name="whatsapp_with_field">WhatsApp: %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Hívás: %1$s</string>
@@ -284,7 +276,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">hívásnapló</string>
-  <string name="whatsapp">WhatsApp</string>
 
   <string name="pref_acra_disabled">Letiltva</string>
 

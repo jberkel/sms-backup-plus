@@ -30,19 +30,15 @@ public class BackupItemsFetcher {
         this.resolver = resolver;
     }
 
-    public @NotNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
+    public
+    @NotNull
+    Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
-        switch (dataType) {
-            case WHATSAPP: return new WhatsAppItemsFetcher(context).getItems(DataType.WHATSAPP.getMaxSyncedDate(context), max);
-            default: return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
-        }
+        return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
     }
 
     public long getMostRecentTimestamp(DataType dataType) {
-        switch (dataType) {
-            case WHATSAPP: return new WhatsAppItemsFetcher(context).getMostRecentTimestamp();
-            default: return getMostRecentTimestampForQuery(queryBuilder.buildMostRecentQueryForDataType(dataType));
-        }
+        return getMostRecentTimestampForQuery(queryBuilder.buildMostRecentQueryForDataType(dataType));
     }
 
     private long getMostRecentTimestampForQuery(BackupQueryBuilder.Query query) {
@@ -58,7 +54,9 @@ public class BackupItemsFetcher {
         }
     }
 
-    private @NotNull Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
+    private
+    @NotNull
+    Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
         if (query == null) return emptyCursor();
         try {
             final Cursor cursor = resolver.query(
@@ -79,6 +77,6 @@ public class BackupItemsFetcher {
     }
 
     static Cursor emptyCursor() {
-        return new MatrixCursor(new String[] {});
+        return new MatrixCursor(new String[]{});
     }
 }

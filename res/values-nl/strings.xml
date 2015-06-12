@@ -100,9 +100,6 @@
   <string name="ui_backup_calllog_label">Gesprekkenlijst back-uppen</string>
   <string name="ui_backup_calllog_desc">Back-up van gesprekkenlijst inschakelen</string>
 
-  <string name="ui_backup_whatsapp_label">WhatsApp back-uppen</string>
-  <string name="ui_backup_whatsapp_desc">WhatsAppback-up inschakelen</string>
-
     <string name="ui_backup_calllog_sync_calendar_enabled_label">Agendasynchronisatie</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Voeg gesprekken toe aan de agenda</string>
 
@@ -115,10 +112,6 @@
   <string name="ui_imap_folder_calllog_label">Gesprekkenlijstlabel</string>
   <string name="ui_imap_folder_calllog_desc">Gmail-label voor gesprekkenlijst.</string>
    <string name="ui_imap_folder_calllog_label_dialog_msg">Geback-upte gesprekkenlijsten zullen dit label krijgen in Gmail.</string>
-
-  <string name="ui_imap_folder_whatsapp_label">WhatsApp-label</string>
-  <string name="ui_imap_folder_whatsapp_desc">Gmail-label voor WhatsApp.</string>
-  <string name="ui_imap_folder_whatsapp_label_dialog_msg">Geback-upte WhatsApp-berichten zullen dit label krijgen in Gmail.</string>
 
   <string name="ui_mark_as_read_label">Markeren als gelezen (e-mails)</string>
   <string name="ui_mark_as_read_desc">Of dat de berichten in Gmail als gelezen moeten gemarkeerd worden of niet.</string>
@@ -210,7 +203,6 @@
   <string name="call_duration_field">Tijd: %1$s</string>
 
   <string name="sms_with_field">Sms met %1$s</string>
-  <string name="whatsapp_with_field">WhatsApp-bericht met %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Oproep met %1$s</string>
@@ -279,7 +271,6 @@
   <string name="sms">Sms</string>
   <string name="mms">Mms</string>
   <string name="calllog">Gesprekkenlijst</string>
-  <string name="whatsapp">WhatsApp</string>
 
   <string name="pref_acra_disabled">Uitgeschakeld</string>
 

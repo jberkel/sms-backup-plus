@@ -102,9 +102,6 @@
   <string name="ui_backup_calllog_label">Копирај евид. позива</string>
   <string name="ui_backup_calllog_desc">Омогући копирање евиденције позива</string>
 
-  <string name="ui_backup_whatsapp_label">Копирај WhatsApp поруке</string>
-  <string name="ui_backup_whatsapp_desc">Омогући прављење резерве WhatsApp порука</string>
-
     <string name="ui_backup_calllog_sync_calendar_enabled_label">Синхронизуј календар</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Додај евиденцију позива у календар</string>
 
@@ -117,10 +114,6 @@
   <string name="ui_imap_folder_calllog_label">Етикета за евиденцију позива</string>
   <string name="ui_imap_folder_calllog_desc">Етикета која се додељује евиденцији позива.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Копирана евиденција позива ће бити означена овом етикетом у Gmail сандучету.</string>
-
-  <string name="ui_imap_folder_whatsapp_label">Етикета за WhatsApp</string>
-  <string name="ui_imap_folder_whatsapp_desc">Етикета која се додељује WhatsApp порукама.</string>
-  <string name="ui_imap_folder_whatsapp_label_dialog_msg">Копиране WhatsApp поруке ће бити означене овом етикетом у Gmail сандучету.</string>
 
   <string name="ui_mark_as_read_label">Означи пошту прочитаном</string>
   <string name="ui_mark_as_read_desc">Означи поруке у сандучету као прочитане.</string>
@@ -221,8 +214,6 @@
   <string name="call_duration_field">Трајање: %1$s</string>
 
   <string name="sms_with_field">Преписка са %1$s</string>
-  <string name="whatsapp_with_field">WhatsApp ћаскање са %1$s</string>
-  <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Разговор са %1$s</string>
 
@@ -290,7 +281,6 @@
   <string name="sms">СМС</string>
   <string name="mms">ММС</string>
   <string name="calllog">Евиденција позива</string>
-  <string name="whatsapp">WhatsApp</string>
 
   <string name="pref_acra_disabled">Онемогућено</string>
 

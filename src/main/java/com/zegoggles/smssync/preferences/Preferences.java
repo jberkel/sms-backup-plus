@@ -324,22 +324,6 @@ public class Preferences {
         }
     }
 
-    boolean isWhatsAppInstalled() {
-        try {
-            context.getPackageManager().getPackageInfo(
-                    "com.whatsapp",
-                    PackageManager.GET_META_DATA);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public boolean isWhatsAppInstalledAndPrefNotSet() {
-        return isWhatsAppInstalled() && !preferences.contains(DataType.WHATSAPP.backupEnabledPreference);
-    }
-
     <T extends Enum<T>> T getDefaultType(String pref, Class<T> tClazz, T defaultType) {
         try {
             final String s = preferences.getString(pref, null);

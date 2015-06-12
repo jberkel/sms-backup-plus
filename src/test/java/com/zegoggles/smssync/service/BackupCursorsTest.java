@@ -47,7 +47,6 @@ public class BackupCursorsTest {
         assertThat(cursors.count(SMS)).isEqualTo(1);
         assertThat(cursors.count(MMS)).isEqualTo(4);
         assertThat(cursors.count(CALLLOG)).isEqualTo(0);
-        assertThat(cursors.count(WHATSAPP)).isEqualTo(0);
         assertThat(cursors.count(null)).isEqualTo(0);
     }
 

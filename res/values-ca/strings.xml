@@ -102,9 +102,6 @@
   <string name="ui_backup_calllog_label">Còpia del registre de trucades</string>
   <string name="ui_backup_calllog_desc">Habilita la còpia del registre de trucades</string>
 
-  <string name="ui_backup_whatsapp_label">Còpia del WhatsApp</string>
-  <string name="ui_backup_whatsapp_desc">Habilita la còpia del WhatsApp</string>
-
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Sincronització del calendari</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Afegeix les entrades del registre de trucades al calendari</string>
 
@@ -117,10 +114,6 @@
   <string name="ui_imap_folder_calllog_label">Etiqueta del registre de trucades</string>
   <string name="ui_imap_folder_calllog_desc">Etiqueta de Gmail assignada al registre de trucades.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Les entrades del registre de trucades copiades es marcaran amb aquesta etiqueta a Gmail.</string>
-
-  <string name="ui_imap_folder_whatsapp_label">Etiqueta del WhatsApp</string>
-  <string name="ui_imap_folder_whatsapp_desc">Etiqueta de Gmail label assignada al WhatsApp.</string>
-  <string name="ui_imap_folder_whatsapp_label_dialog_msg">Els missatges copiats del WhatsApp es marcaran amb aquesta etiqueta a Gmail.</string>
 
   <string name="ui_mark_as_read_label">Marca com a llegits (correus electrònics)</string>
   <string name="ui_mark_as_read_desc">Marca (o no) com a llegits els missatges de Gmail.</string>
@@ -217,7 +210,6 @@
   <string name="call_duration_field">Durada: %1$s</string>
 
   <string name="sms_with_field">SMS amb %1$s</string>
-  <string name="whatsapp_with_field">Conversa de WhatsApp amb %1$s</string>
   <!-- la línia del tema ha de ser idèntica, en cas contrari s\'embolicaran els fils -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Truca amb %1$s</string>
@@ -286,8 +278,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Registre de trucades</string>
-  <string name="whatsapp">WhatsApp</string>
-
   <string name="pref_acra_disabled">Inhabilitats</string>
 
   <string name="app_log_skip_backup_background_data">S\'ha omès perquè les dades en segon pla estan inhabilitades</string>

@@ -52,13 +52,7 @@
             <type>apklib</type>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.jberkel.whassup</groupId>
-            <artifactId>library</artifactId>
-            <version>0.0.7</version>
-        </dependency>
-
-        <dependency>
+       <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>annotations</artifactId>
             <version>12.0</version>

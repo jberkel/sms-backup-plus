@@ -79,23 +79,6 @@
                     android:persistent="true"
                     android:defaultValue="true"/>
 
-            <CheckBoxPreference
-                    android:key="backup_whatsapp"
-                    android:title="@string/ui_backup_whatsapp_label"
-                    android:summary="@string/ui_backup_whatsapp_desc"
-                    android:persistent="true"
-                    android:defaultValue="false"/>
-
-            <EditTextPreference
-                    android:key="imap_folder_whatsapp"
-                    android:dependency="backup_whatsapp"
-                    android:title="@string/ui_imap_folder_whatsapp_label"
-                    android:summary="@string/ui_imap_folder_whatsapp_desc"
-                    android:singleLine="true"
-                    android:dialogMessage="@string/ui_imap_folder_whatsapp_label_dialog_msg"
-                    android:persistent="true"
-                    android:defaultValue="WhatsApp"/>
-
             <PreferenceScreen
                     android:title="@string/ui_backup_calllog_settings_label"
                     android:dependency="backup_calllog">

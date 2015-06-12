@@ -83,11 +83,6 @@ public class BackupItemsFetcherTest {
         assertThat(fetcher.getMostRecentTimestamp(CALLLOG)).isEqualTo(23L);
     }
 
-    @Test public void shouldGetMostRecentTimestampForItemTypeWhatsApp() throws Exception {
-        assertThat(fetcher.getMostRecentTimestamp(WHATSAPP)).isEqualTo(-1);
-        verifyZeroInteractions(queryBuilder);
-    }
-
     private void mockMostRecentTimestampForType(DataType type, long max) {
         MatrixCursor cursor = new MatrixCursor(new String[]{"date"});
         cursor.addRow(new Object[] { max });

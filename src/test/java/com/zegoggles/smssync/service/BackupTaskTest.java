@@ -35,7 +35,6 @@ import java.util.HashMap;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
-import static com.zegoggles.smssync.mail.DataType.WHATSAPP;
 import static com.zegoggles.smssync.service.BackupItemsFetcher.emptyCursor;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -148,7 +147,6 @@ public class BackupTaskTest {
         verify(store).getFolder(SMS);
         verify(store, never()).getFolder(MMS);
         verify(store, never()).getFolder(CALLLOG);
-        verify(store, never()).getFolder(WHATSAPP);
     }
 
     @Test public void shouldCloseImapFolderAfterBackup() throws Exception {

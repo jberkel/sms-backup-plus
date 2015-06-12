@@ -3,7 +3,7 @@
   <string name="app_name">SMS Backup+</string>
 
   <string name="app_description">
-      Brug Gmail til at lave backup af dine SMS\'er. Dette er en forbedret version af applicationen "SMS Backup" 
+      Brug Gmail til at lave backup af dine SMS\'er. Dette er en forbedret version af applicationen "SMS Backup"
       af Christoph Studer, som understøtter genetablering af backuppen. Den er fuld bagudkompatibel med SMS Backup.
   </string>
 
@@ -100,9 +100,6 @@
   <string name="ui_backup_calllog_label">Backup opkalds log</string>
   <string name="ui_backup_calllog_desc">Aktiver opkalds log backup</string>
 
-  <string name="ui_backup_whatsapp_label">Backup WhatsApp</string>
-  <string name="ui_backup_whatsapp_desc">Aktiver WhatsApp backup</string>
-
     <string name="ui_backup_calllog_sync_calendar_enabled_label">Kalender sync</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Tilføj opkald til kalender</string>
 
@@ -115,10 +112,6 @@
   <string name="ui_imap_folder_calllog_label">Opkalds log etiket</string>
   <string name="ui_imap_folder_calllog_desc">Gmail etiket til opkalds log.</string>
    <string name="ui_imap_folder_calllog_label_dialog_msg">Opkald vil få denne etiket når de backes op til Gmail.</string>
-
-  <string name="ui_imap_folder_whatsapp_label">WhatsApp etiket</string>
-  <string name="ui_imap_folder_whatsapp_desc">Gmail etiket til WhatsApp.</string>
-  <string name="ui_imap_folder_whatsapp_label_dialog_msg">Beskeder fra WhatsApp får denne etiket når de backes op til Gmail.</string>
 
   <string name="ui_mark_as_read_label">Marker som læst (emails)</string>
   <string name="ui_mark_as_read_desc">Skal beskeder i Gmail markeres som læst eller ej.</string>
@@ -168,7 +161,7 @@
   <string name="ui_dialog_access_token_msg">Forespørger om adgang…</string>
 
   <string name="ui_dialog_access_token_error_title">Kunne ikke få adgang</string>
-      
+
   <string name="ui_dialog_access_token_error_msg">Kunne ikke få adgang. Husk at vælg \"Tillad adgang\".</string>
 
   <string name="ui_dialog_connect_msg">Et browser vindue vil blive åbnet. Du vil blive bedt om at logge ind på din Gmail konto, for at give %1$s adgang til dine emails</string>
@@ -189,7 +182,7 @@
   <string name="menu_info">Om</string>
   <string name="menu_reset">Nulstil</string>
   <string name="ui_dialog_reset_title">Nulstil synkronisering</string>
-  <string name="ui_dialog_reset_message">Vil du nulstille synkroniseringen? 
+  <string name="ui_dialog_reset_message">Vil du nulstille synkroniseringen?
       Du kan stadig vælge at springe beskeder over senere. </string>
   <string name="all_messages">Alle</string>
 
@@ -211,7 +204,6 @@
   <string name="call_duration_field">Varighed: %1$s</string>
 
   <string name="sms_with_field">SMS med  %1$s</string>
-  <string name="whatsapp_with_field">WhatsApp chat med %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Opkald med %1$s</string>
@@ -280,7 +272,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Opkalds log</string>
-  <string name="whatsapp">WhatsApp</string>
 
   <string name="pref_acra_disabled">Deaktiveret</string>
 

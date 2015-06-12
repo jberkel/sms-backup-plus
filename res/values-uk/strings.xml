@@ -79,8 +79,6 @@
 <string name="ui_backup_mms_not_supported">Резервне копіювання MMS не підтримується на цій платформі.</string>
 <string name="ui_backup_calllog_label">Збереження журналу викликів</string>
 <string name="ui_backup_calllog_desc">Дозволити резервне копіювання журналу викликів</string>
-<string name="ui_backup_whatsapp_label">Збереження WhatsApp</string>
-<string name="ui_backup_whatsapp_desc">Ввімкнути резервне копіювання WhatsApp повідомлень</string>
 <string name="ui_backup_calllog_sync_calendar_enabled_label">Синхронізація до календаря</string>
 <string name="ui_backup_calllog_sync_calendar_enabled_desc">Зберігати журнал викликів до календаря</string>
 <string name="ui_backup_calllog_types_label">Типи викликів</string>
@@ -90,9 +88,6 @@
 <string name="ui_imap_folder_calllog_label">Мітки для журналу викликів</string>
 <string name="ui_imap_folder_calllog_desc">Мітки Gmail для журналу викликів.</string>
 <string name="ui_imap_folder_calllog_label_dialog_msg">Збережені записи журналу викликів будуть позначені цією міткою в Gmail.</string>
-<string name="ui_imap_folder_whatsapp_label">Мітки WhatsApp</string>
-<string name="ui_imap_folder_whatsapp_desc">Мітки Gmail пов’язані з WhatsApp</string>
-<string name="ui_imap_folder_whatsapp_label_dialog_msg">Збережені повідомлення WhatsApp будуть позначені цією міткою в Gmail.</string>
 <string name="ui_mark_as_read_label">Позначити як прочитані (електроні листи)</string>
 <string name="ui_mark_as_read_desc">Позначати повідомлення в Gmail як прочитані.</string>
 <string name="ui_mark_as_read_restore_label">Позначити як прочитане (SMS)</string>
@@ -159,7 +154,6 @@
 <string name="call_number_field">Номер: %1$s</string>
 <string name="call_duration_field">Тривалість: %1$s</string>
 <string name="sms_with_field">SMS з %1$s</string>
-<string name="whatsapp_with_field">WhatsApp діалог з %1$s</string>
 
 <!-- the subject line needs to be identical otherwise threading will be messed up -->
 <string name="mms_with_field">@string/sms_with_field</string>
@@ -216,7 +210,6 @@
 <string name="sms">SMS</string>
 <string name="mms">MMS</string>
 <string name="calllog">Журнал викликів</string>
-<string name="whatsapp">WhatsApp</string>
 <string name="pref_acra_disabled">Вимкнено</string>
 <string name="app_log_skip_backup_background_data">Пропущено, оскільки фонову передачу даних вимкнено</string>
 <string name="app_log_skip_backup_already_running">Пропущено, оскільки резервне копіювання вже запущено</string>

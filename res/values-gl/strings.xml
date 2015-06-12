@@ -4,7 +4,7 @@
 
   <string name="app_description">
      Use GMail para gardar os seus SMS. Esta é unha versión mellorada da aplicación "SMS Backup" de
-     Christoph Studer que permite reestablecer os SMS ao teléfono. 
+     Christoph Studer que permite reestablecer os SMS ao teléfono.
      É completamente compatible con SMS Backup.
   </string>
 
@@ -102,9 +102,6 @@
   <string name="ui_backup_calllog_label">Gardar historial de chamadas</string>
   <string name="ui_backup_calllog_desc">Habilitar o gardado do historial de chamadas</string>
 
-  <string name="ui_backup_whatsapp_label">Backup WhatsApp</string>
-  <string name="ui_backup_whatsapp_desc">Enable WhatsApp backup</string>
-
     <string name="ui_backup_calllog_sync_calendar_enabled_label">Calendar sync</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Add call log entries to calendar</string>
 
@@ -117,10 +114,6 @@
   <string name="ui_imap_folder_calllog_label">Etiqueta do historial de chamadas</string>
   <string name="ui_imap_folder_calllog_desc">Etiqueta de GMail que se asignará ao historial de chamadas.</string>
    <string name="ui_imap_folder_calllog_label_dialog_msg">As entradas do historial de chamadas serán clasificados con esta etiqueta en GMail.</string>
-
-  <string name="ui_imap_folder_whatsapp_label">Etiqueta de WhatsApp</string>
-  <string name="ui_imap_folder_whatsapp_desc">Etiqueta de GMail asignada ao WhatsApp.</string>
-  <string name="ui_imap_folder_whatsapp_label_dialog_msg">As mensaxes gardadas de WhatsApp serán clasificadas con esta etiqueta en GMail.</string>
 
   <string name="ui_mark_as_read_label">Marcar como lidas (correo)</string>
   <string name="ui_mark_as_read_desc">Marcaranse ou non como lidas as mensaxes en GMail.</string>
@@ -157,7 +150,7 @@
   <string name="ui_dialog_missing_credentials_title">Información de inicio de sesión</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">Primeiro debe conectar a súa conta de GMail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Primeiro debe indicar o seu 
+  <string name="ui_dialog_missing_credentials_msg_plain">Primeiro debe indicar o seu
   nome de usuario e contrasinal.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Nome de etiqueta non válido</string>
@@ -215,7 +208,6 @@
   <string name="call_duration_field">Duración: %1$s</string>
 
   <string name="sms_with_field">SMS con %1$s</string>
-  <string name="whatsapp_with_field">Conversa de WhatsApp con %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Conversa de voz con %1$s</string>
@@ -284,7 +276,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Historial de chamadas</string>
-  <string name="whatsapp">WhatsApp</string>
 
   <string name="pref_acra_disabled">Desactivado</string>
 

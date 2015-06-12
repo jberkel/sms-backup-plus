@@ -77,8 +77,6 @@
   <string name="ui_backup_mms_not_supported">Krijimi i kopjes rezervë të MMS-ve nuk mbështet në këtë platformë.</string>
   <string name="ui_backup_calllog_label">Krijoni kopje rezervë të ditarit të thirrjeve</string>
   <string name="ui_backup_calllog_desc">Aktivizoni krijimin e kopjes rezervë të ditarit të thirrjeve</string>
-  <string name="ui_backup_whatsapp_label">Krijoni kopje rezervë të WhatsApp</string>
-  <string name="ui_backup_whatsapp_desc">Aktivizoni krijimin e kopjes rezervë të WhatsApp</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Sinkronizim i kalendarit</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Shtoni shënime të ditarit të thirrjeve në kalendar</string>
   <string name="ui_backup_calllog_types_label">Tipet e thirrjeve</string>
@@ -88,9 +86,6 @@
   <string name="ui_imap_folder_calllog_label">Etiketa e ditarit të thirrjeve</string>
   <string name="ui_imap_folder_calllog_desc">Etiketa e Gmail e caktuar për ditarin e thirrjeve.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Shënimet e ruajtura rezervë të ditarit të thirrjeve do të etiketohen me këtë etiketë në Gmail.</string>
-  <string name="ui_imap_folder_whatsapp_label">Etiketë WhatsApp</string>
-  <string name="ui_imap_folder_whatsapp_desc">Etiketë e Gmail-it caktuar WhatsApp-it.</string>
-  <string name="ui_imap_folder_whatsapp_label_dialog_msg">Mesazhet e ruajtura rezervë të WhatsApp-it do të shënohen me këtë etiketë në Gmail.</string>
   <string name="ui_mark_as_read_label">Shënoni si të lexuara (e-maile)</string>
   <string name="ui_mark_as_read_desc">Nëse do të shënohen mesazhet në Gmail si të lexuara apo jo.</string>
   <string name="ui_mark_as_read_restore_label">Shënoni si të lexuara (SMS)</string>
@@ -161,7 +156,6 @@
   <string name="call_number_field">Numri: %1$s</string>
   <string name="call_duration_field">Kohëzgjatja: %1$s</string>
   <string name="sms_with_field">SMS me %1$s</string>
-  <string name="whatsapp_with_field">WhatsApp chat me %1$s</string>
   <!-- linja e subjektit duhet të jetë identike përndryshe rrjedhat do të ngatërrohen-->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Thirrje me %1$s</string>
@@ -212,7 +206,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Ditari i thirrjeve</string>
-  <string name="whatsapp">WhatsApp</string>
   <string name="pref_acra_disabled">I Çaktivizuar</string>
   <string name="app_log_skip_backup_background_data">U anashkalua sepse të dhënat e sfondit janë të çaktivizuara</string>
   <string name="app_log_skip_backup_already_running">U anashkalua sepse krijimi i kopjes rezervë është tashmë duke punuar</string>

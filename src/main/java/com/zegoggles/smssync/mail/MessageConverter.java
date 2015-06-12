@@ -115,15 +115,7 @@ public class MessageConverter {
             throws MessagingException {
 
         final Map<String, String> msgMap = getMessageMap(cursor);
-        final Message m;
-        switch (dataType) {
-            case WHATSAPP:
-                m = mMessageGenerator.messageFromMapWhatsApp(cursor);
-                break;
-            default:
-                m = mMessageGenerator.messageForDataType(msgMap, dataType);
-                break;
-        }
+        final Message m = mMessageGenerator.messageForDataType(msgMap, dataType);
         final ConversionResult result = new ConversionResult(dataType);
         if (m != null) {
             m.setFlag(Flag.SEEN, markAsSeen(dataType, msgMap));
