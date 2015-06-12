@@ -52,6 +52,7 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.*;
 
 public class SmsBackupService extends ServiceBase {
     private static final int BACKUP_ID = 1;
+    private static final int NOTIFICATION_ID_WARNING = 1;
 
     @Nullable private static SmsBackupService service;
     @NotNull private BackupState mState = new BackupState();
@@ -96,6 +97,8 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void backup(BackupType backupType, boolean skip) {
+        getNotifier().cancel(NOTIFICATION_ID_WARNING);
+
         try {
             // set initial state
             mState = new BackupState(INITIAL, 0, 0, backupType, null, null);
@@ -220,6 +223,7 @@ public class SmsBackupService extends ServiceBase {
 
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
+                    NOTIFICATION_ID_WARNING,
                     getString(R.string.notification_auth_failure),
                     getString(getAuthPreferences().useXOAuth() ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain));
             }
@@ -230,6 +234,7 @@ public class SmsBackupService extends ServiceBase {
 
             if (shouldNotifyUser(state)) {
                 notifyUser(android.R.drawable.stat_sys_warning,
+                    NOTIFICATION_ID_WARNING,
                     getString(R.string.notification_general_error),
                     state.getErrorMessage(getResources()));
             }
@@ -263,7 +268,7 @@ public class SmsBackupService extends ServiceBase {
         }
     }
 
-    protected void notifyUser(int icon, String title, String text) {
+    protected void notifyUser(int icon, int notificationId, String title, String text) {
         Notification n = new Notification(icon,
                 getString(R.string.app_name),
                 System.currentTimeMillis());
@@ -273,7 +278,7 @@ public class SmsBackupService extends ServiceBase {
                 text,
                 getPendingIntent());
 
-        getNotifier().notify(0, n);
+        getNotifier().notify(notificationId, n);
     }
 
     protected Alarms getAlarms() {
