@@ -111,19 +111,8 @@ If you only want to backup specific call types you can do so as well.
 
 ### <a name="whatsapp-support">WhatsApp support</a>
 
-Note: due to several changes to the WhatsApp encryption mechanism it is no longer possible
-to reliably back up WhatsApp messages. There exist some workarounds though using an external app
-named [Tri-Crypt][]. You can find instructions [here][WhatsApp-Workaround] (thank you
-[+AbinashBishoyi][] !).
-
-Please don't file bug reports against this, WhatsApp backup support is no longer supported.
-
-If you still want to enable the backup in SMS Backup+, go to "Advanced Settings",
-then "Backup Settings" and tick the "Backup WhatsApp" checkbox.
-
-The messages will be backed up to the "WhatsApp" label in Gmail.
-Note that WhatsApp messages are backup only, there is no way to restore them.
-
+Please don't file bug reports against this, WhatsApp backup support is no longer supported or
+included in the latest version.
 
 ### <a name="3rdparty">3rd party app integration</a>
 
@@ -282,7 +271,7 @@ This might be due to some changes in Samsung's version of Android, see [#287](ht
 
 #### <a name="whatsapp-does-not-get-backed-up">I enabled the WhatsApp backup, but my messages don't get backed up!</a>
 
-WhatsApp backups are no longer officially supported. See [WhatsApp Support](#whatsapp-support).
+WhatsApp backups are no longer supported. See [WhatsApp Support](#whatsapp-support).
 
 #### <a name="faq-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
 
@@ -416,7 +405,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [PlayLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
 [smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
-[whatsapp-screenshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/whatsapp.png
 [droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/
 [SMS Time fix]: http://www.appbrain.com/app/sms-time-fix/com.mattprecious.smsfix
 [converationviewoff]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/soundcloud.com-mail-settings-jan-soundcloud.com.jpg
@@ -426,8 +414,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml
 [Tasker]: http://tasker.dinglisch.net/
 [Tri-Crypt]: https://play.google.com/store/apps/details?id=com.tricrypt
-[WhatsApp-Workaround]: https://plus.google.com/+AbinashBishoyi/posts/QdPz13C525x
-[+AbinashBishoyi]: https://plus.google.com/+AbinashBishoyi
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
 [Authorized Access to your Google Account]: https://security.google.com/settings/security/permissions
 [community]: https://plus.google.com/communities/113290889178902750997

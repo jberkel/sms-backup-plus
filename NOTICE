@@ -1,22 +1,25 @@
-Android SMS Backup+
+SMS Backup+
 Copyright 2010, 2011, 2012, 2013, 2014, 2015 Jan Berkel <jan.berkel@gmail.com>
+https://github.com/jberkel/sms-backup-plus
 
 Original SMS Backup code
 Copyright 2009 Christoph Studer <chstuder@gmail.com>
+https://code.google.com/p/android-sms/
 
 Otto - An event bus by Square
-Copyright 2012 Square, Inc.
+Copyright 2015 Square, Inc.
 Copyright 2010 Google, Inc.
+https://github.com/square/otto
 
 Contains code from the oauth-signpost project
-http://code.google.com/p/oauth-signpost/
 Copyright 2010 Matthias Käppler <m.kaeppler@gmail.com>
+https://code.google.com/p/oauth-signpost/
 
 Portions of this software were developed by Google Inc. and The Creators of k9mail.
-http://code.google.com/p/k9mail/
+https://code.google.com/p/k9mail/
 
 Parts of this software were created by The Android Open Source Project.
-http://source.android.com/download
+https://source.android.com/
 
 The status icons were designed by iTweek and ncrow:
 http://itweek.deviantart.com/
