@@ -6,7 +6,6 @@
   * Support OAuth2 web flow (#554)
   * Rebased K9 to current head (https://github.com/k9mail/k-9/commit/3c1c1e4e5821434375c781503cb64044fef65791)
   * Added optional K9 verbose logging
-  * Support for XOAUTH2 web flow (#554)
   * Update and improve French translation (#555)
   * Dismiss "Could Not Connect" notification at next scheduled backup (#562)
   * Removed WhatsApp backup code (#564)
