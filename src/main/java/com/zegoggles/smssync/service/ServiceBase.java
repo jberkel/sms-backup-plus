@@ -62,7 +62,13 @@ public abstract class ServiceBase extends Service {
     public void onCreate() {
         super.onCreate();
         if (new Preferences(this).isAppLogEnabled()) {
-            this.appLog = new AppLog(DateFormat.getDateFormatOrder(this));
+            char[] format;
+            try {
+                format = DateFormat.getDateFormatOrder(this);
+            } catch (IllegalArgumentException e) {
+                format = new char[] { DateFormat.DATE };
+            }
+            this.appLog = new AppLog(format);
         }
         App.bus.register(this);
     }
