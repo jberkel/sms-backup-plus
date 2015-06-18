@@ -656,7 +656,8 @@ public class MainActivity extends PreferenceActivity {
                         .setNegativeButton(android.R.string.cancel, null)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                authPreferences.clearOauthData();
+                                authPreferences.clearOAuth1Data();
+                                authPreferences.clearOauth2Data();
                                 DataType.clearLastSyncData(MainActivity.this);
                                 updateConnected();
                             }

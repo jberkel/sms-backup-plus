@@ -43,9 +43,9 @@ public class AuthPreferences {
      */
     public static final String LOGIN_PASSWORD = "login_password";
     public static final String SERVER_AUTHENTICATION = "server_authentication";
-    private static final String OAUTH_TOKEN = "oauth_token";
-    private static final String OAUTH_TOKEN_SECRET = "oauth_token_secret";
-    private static final String OAUTH_USER = "oauth_user";
+    @Deprecated private static final String OAUTH_TOKEN = "oauth_token";
+    @Deprecated private static final String OAUTH_TOKEN_SECRET = "oauth_token_secret";
+    @Deprecated private static final String OAUTH_USER = "oauth_user";
     private static final String OAUTH2_USER = "oauth2_user";
     private static final String OAUTH2_TOKEN = "oauth2_token";
     private static final String OAUTH2_REFRESH_TOKEN = "oauth2_refresh_token";
@@ -64,6 +64,7 @@ public class AuthPreferences {
      */
     private static final String IMAP_URI = "imap%s://%s:%s:%s@%s";
 
+    @Deprecated
     public XOAuthConsumer getOAuthConsumer() {
         return new XOAuthConsumer(
                 getOauthUsername(),
@@ -79,6 +80,7 @@ public class AuthPreferences {
         return getCredentials().getString(OAUTH2_REFRESH_TOKEN, null);
     }
 
+    @Deprecated
     public boolean hasOauthTokens() {
         return getOauthUsername() != null &&
                 getOauthToken() != null &&
@@ -94,20 +96,6 @@ public class AuthPreferences {
         return preferences.getString(OAUTH_USER, getOauth2Username());
     }
 
-    @Deprecated
-    public void setOauthUsername(String s) {
-        preferences.edit().putString(OAUTH_USER, s).commit();
-    }
-
-    @Deprecated
-    public void setOauthTokens(String token, String secret) {
-        getCredentials().edit()
-                .putString(OAUTH_TOKEN, token)
-                .putString(OAUTH_TOKEN_SECRET, secret)
-                .commit();
-    }
-
-    @Deprecated
     public boolean needsMigration() {
         return hasOauthTokens() && !hasOAuth2Tokens();
     }
@@ -125,6 +113,7 @@ public class AuthPreferences {
                 .commit();
     }
 
+    @Deprecated
     public void clearOAuth1Data() {
         preferences.edit().remove(OAUTH_USER).commit();
         getCredentials().edit()
@@ -133,17 +122,14 @@ public class AuthPreferences {
                 .commit();
     }
 
-   public void clearOauthData() {
+   public void clearOauth2Data() {
         final String oauth2token = getOauth2Token();
 
         preferences.edit()
-                .remove(OAUTH_USER)
                 .remove(OAUTH2_USER)
                 .commit();
 
         getCredentials().edit()
-                .remove(OAUTH_TOKEN)
-                .remove(OAUTH_TOKEN_SECRET)
                 .remove(OAUTH2_TOKEN)
                 .remove(OAUTH2_REFRESH_TOKEN)
                 .commit();
@@ -220,14 +206,17 @@ public class AuthPreferences {
                 serverPreferences.getServerAddress());
     }
 
+    @Deprecated
     private String getOauthTokenSecret() {
         return getCredentials().getString(OAUTH_TOKEN_SECRET, null);
     }
 
+    @Deprecated
     private String getOauthToken() {
         return getCredentials().getString(OAUTH_TOKEN, null);
     }
 
+    @Deprecated
     private String getOauthUsername() {
         return preferences.getString(OAUTH_USER, null);
     }
