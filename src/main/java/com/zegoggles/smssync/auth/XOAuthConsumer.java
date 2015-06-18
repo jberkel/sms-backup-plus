@@ -169,7 +169,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
         }
 
         try {
-            HttpUriRequest request = (HttpUriRequest) sign(post);
+            HttpUriRequest request = (HttpUriRequest) sign(post).unwrap();
             final HttpClient httpClient = new DefaultHttpClient();
             final HttpResponse response = httpClient.execute(request);
 
@@ -182,7 +182,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
                 Object value = tokener.nextValue();
 
                 if (value instanceof JSONObject) {
-                    return ((JSONObject)value).getString("refresh_token");
+                    return ((JSONObject)value).optString("refresh_token", null);
                 } else {
                     Log.w(TAG, "invalid response from server: " + responseString);
                 }
