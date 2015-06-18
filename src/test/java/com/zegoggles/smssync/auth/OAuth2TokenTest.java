@@ -25,6 +25,18 @@ public class OAuth2TokenTest {
         assertThat(token.expiresIn).isEqualTo(3920);
     }
 
+    @Test public void testFromJSONWithMissingFields() throws Exception {
+        final String response = "{\n" +
+                "  \"access_token\":\"1/fFAGRNJru1FTz70BzhT3Zg\",\n" +
+                "}";
+        final OAuth2Token token = OAuth2Token.fromJSON(response);
+
+        assertThat(token.accessToken).isEqualTo("1/fFAGRNJru1FTz70BzhT3Zg");
+        assertThat(token.tokenType).isNull();
+        assertThat(token.refreshToken).isNull();
+        assertThat(token.expiresIn).isEqualTo(-1);
+    }
+
     @Test public void testFromJSONWithoutRefreshToken() throws Exception {
         final String response = "{\n" +
                 "  \"access_token\":\"1/fFAGRNJru1FTz70BzhT3Zg\",\n" +

@@ -42,9 +42,10 @@ public class OAuth2Token {
         try {
             return new OAuth2Token(
                 object.getString("access_token"),
-                object.getString("token_type"),
+                object.optString("token_type", null),
                 object.optString("refresh_token", null),
-                object.getInt("expires_in"), null);
+                object.optInt("expires_in", -1),
+                null);
         } catch (JSONException e) {
             Log.w(TAG, "JSON parse error", e);
             throw new IOException("parse error");
