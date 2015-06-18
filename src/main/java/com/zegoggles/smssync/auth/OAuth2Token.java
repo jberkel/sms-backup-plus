@@ -54,10 +54,14 @@ public class OAuth2Token {
 
     @Override
     public String toString() {
+        return getTokenForLogging();
+    }
+
+    public String getTokenForLogging() {
         return "Token{" +
-                "accessToken='" + accessToken + '\'' +
+                "accessToken='" + (accessToken != null ? accessToken.replaceAll(".", "X") : null) + '\'' +
                 ", tokenType='" + tokenType + '\'' +
-                ", refreshToken='" + refreshToken + '\'' +
+                ", refreshToken='" + (refreshToken != null ? refreshToken.replaceAll(".", "X") : null) + '\'' +
                 ", expiresIn=" + expiresIn +
                 ", userName='" + userName + '\'' +
                 '}';

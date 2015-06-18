@@ -52,4 +52,10 @@ public class OAuth2TokenTest {
         assertThat(token.refreshToken).isNull();
         assertThat(token.expiresIn).isEqualTo(3920);
     }
+
+    @Test public void testTokenForLogging() throws Exception {
+        OAuth2Token token = new OAuth2Token("secret", "type", "secret", 100, "Test");
+        assertThat(token.getTokenForLogging()).doesNotContain("secret");
+        assertThat(token.toString()).doesNotContain("secret");
+    }
 }

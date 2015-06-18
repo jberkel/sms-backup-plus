@@ -129,7 +129,7 @@ public class OAuth2Client {
         if (responseCode == HttpsURLConnection.HTTP_OK) {
             OAuth2Token token = parseResponse(connection.getInputStream());
             String username = getUsernameFromContacts(token);
-            Log.d(TAG, "got token " + token+ ", username="+username);
+            Log.d(TAG, "got token " + token.getTokenForLogging()+ ", username="+username);
 
             return new OAuth2Token(token.accessToken, token.tokenType, token.refreshToken, token.expiresIn, username);
         } else {
