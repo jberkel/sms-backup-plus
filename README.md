@@ -5,7 +5,7 @@
 
 _NOTE_: The app has been removed from the the Google Play Store 
 because of an unspecified "intellectual property policy violation", probably
-related to the app icon. Until this is resolved please use install the [apk][] manually or from [f-droid][].
+related to the app icon. Until this is resolved please install the [apk][] manually or from [f-droid][].
 See [#580](https://github.com/jberkel/sms-backup-plus/issues/580) for more information.
 
 This is a fork of the Android backup tool
