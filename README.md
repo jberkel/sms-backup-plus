@@ -3,11 +3,6 @@
 [![][Icon]][PlayLink]
 [![Build Status PNG][]][Build Status]
 
-_NOTE_: The app has been removed from the the Google Play Store 
-because of an unspecified "intellectual property policy violation", probably
-related to the app icon. Until this is resolved please install the [apk][] manually or from [f-droid][].
-See [#580](https://github.com/jberkel/sms-backup-plus/issues/580) for more information.
-
 This is a fork of the Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms), where development has
 stopped a while ago. It uses Gmail to perform SMS, MMS and call log backups over
