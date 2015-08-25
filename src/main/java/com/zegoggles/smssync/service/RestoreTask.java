@@ -121,16 +121,14 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                         service.clearCache();
                     }
                 }
+                if (smsIds.size() > 0) {
+                    updateAllThreads();
+                }
             } else {
                 Log.d(TAG, "nothing to restore");
             }
 
             final int restoredCount = smsIds.size() + callLogIds.size();
-            if (restoredCount > 0) {
-                publishProgress(UPDATING_THREADS);
-                updateAllThreads();
-            }
-
             return new RestoreState(isCancelled() ? CANCELED_RESTORE : FINISHED_RESTORE,
                     currentRestoredItem,
                     itemsToRestoreCount,
@@ -142,6 +140,9 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             return transition(ERROR, e);
         } catch (MessagingException e) {
             Log.e(TAG, "error", e);
+            if (smsIds.size() > 0) {
+                updateAllThreads();
+            }
             return transition(ERROR, e);
         } catch (IllegalStateException e) {
             // usually memory problems (Couldn't init cursor window)
@@ -327,6 +328,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         // thread dates + states might be wrong, we need to force a full update
         // unfortunately there's no direct way to do that in the SDK, but passing a
         // negative conversation id to delete should to the trick
+        publishProgress(UPDATING_THREADS);
         Log.d(TAG, "updating threads");
         resolver.delete(Uri.parse("content://sms/conversations/-1"), null, null);
         Log.d(TAG, "finished");
