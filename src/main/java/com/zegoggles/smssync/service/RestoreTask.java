@@ -121,9 +121,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                         service.clearCache();
                     }
                 }
-                if (smsIds.size() > 0) {
-                    updateAllThreads();
-                }
+                updateAllThreadsIfAnySmsRestored();
             } else {
                 Log.d(TAG, "nothing to restore");
             }
@@ -140,9 +138,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             return transition(ERROR, e);
         } catch (MessagingException e) {
             Log.e(TAG, "error", e);
-            if (smsIds.size() > 0) {
-                updateAllThreads();
-            }
+            updateAllThreadsIfAnySmsRestored();
             return transition(ERROR, e);
         } catch (IllegalStateException e) {
             // usually memory problems (Couldn't init cursor window)
@@ -322,6 +318,12 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             c.close();
         }
         return exists;
+    }
+
+    private void updateAllThreadsIfAnySmsRestored() {
+        if (smsIds.size() > 0) {
+            updateAllThreads();
+        }
     }
 
     private void updateAllThreads() {
