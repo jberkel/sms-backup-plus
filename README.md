@@ -113,7 +113,7 @@ If you only want to backup specific call types you can do so as well.
 
 Please don't file bug reports against this, WhatsApp backup support is no longer supported or
 included in the latest version. If you really need it you can manually install an older version which still includes the feature,
-[1.5.9-BETA6](https://github.com/jberkel/sms-backup-plus/releases/tag/1.5.9-BETA6).
+[1.5.9-BETA5](https://github.com/jberkel/sms-backup-plus/releases/tag/1.5.9-BETA5).
 
 ### <a name="3rdparty">3rd party app integration</a>
 
