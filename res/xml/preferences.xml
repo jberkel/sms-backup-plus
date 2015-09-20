@@ -208,7 +208,7 @@
                     android:summary="@string/ui_max_items_per_restore_desc"
                     android:entries="@array/max_items_per_restore_entries"
                     android:entryValues="@array/max_items_per_restore_values"
-                    android:defaultValue="-1"
+                    android:defaultValue="500"
                     android:persistent="true"/>
 
             <CheckBoxPreference

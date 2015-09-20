@@ -90,7 +90,7 @@
    <string name="ui_max_items_per_sync_label">Количество SMS для сохранения</string>
   <string name="ui_max_items_per_sync_desc">Максимальное количество SMS для сохранения.</string>
   <string name="ui_max_items_per_restore_label">Количество SMS для восстановления</string>
-  <string name="ui_max_items_per_restore_desc">Максимальное количество SMS для восстановления.</string>
+  <string name="ui_max_items_per_restore_desc">Количество новейших SMS для восстановления.</string>
 
 
   <string name="ui_restore_starred_only_label">Отмеченные SMS</string>

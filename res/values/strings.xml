@@ -90,7 +90,7 @@
   <string name="ui_max_items_per_sync_label">Items per backup</string>
   <string name="ui_max_items_per_sync_desc">Maximum number of items per backup.</string>
   <string name="ui_max_items_per_restore_label">Items per restore</string>
-  <string name="ui_max_items_per_restore_desc">Maximum number of restored messages.</string>
+  <string name="ui_max_items_per_restore_desc">Number of latest messages to restore.</string>
 
   <string name="ui_restore_starred_only_label">Starred items</string>
   <string name="ui_restore_starred_only_desc">Only restore starred items.</string>
