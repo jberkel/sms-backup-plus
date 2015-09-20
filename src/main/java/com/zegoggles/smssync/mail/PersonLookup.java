@@ -64,7 +64,7 @@ public class PersonLookup {
                 record = new PersonRecord(
                     id,
                     c.getString(c.getColumnIndex(PHONE_PROJECTION[1])),
-                    getPrimaryEmail(id, number),
+                    getPrimaryEmail(id),
                     number
                 );
 
@@ -81,7 +81,7 @@ public class PersonLookup {
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     @SuppressWarnings("deprecation")
-    private String getPrimaryEmail(final long personId, final String number) {
+    private String getPrimaryEmail(final long personId) {
         if (personId <= 0) {
             return null;
         }

@@ -16,6 +16,12 @@ public class PersonRecord {
     private final long _id;
     private final String name, email, number;
 
+    /**
+     * @param id the id of the record
+     * @param name email name
+     * @param email the actual email address
+     * @param number the telephone number
+     */
     public PersonRecord(long id, String name, String email, String number) {
         this._id = id;
         this.name = sanitize(name);
@@ -28,22 +34,22 @@ public class PersonRecord {
     }
 
     public Address getAddress(AddressStyle style) {
+        final String name;
         switch (style) {
             case NUMBER:
-                return new Address(getEmail(), getNumber());
+                name = getNumber(); break;
             case NAME_AND_NUMBER:
-                return new Address(getEmail(),
-                        name == null ? getNumber() :
-                                String.format(Locale.ENGLISH, "%s (%s)", getName(), getNumber()));
+                name = getNameWithNumber(); break;
             case NAME:
-                return new Address(getEmail(), getName());
+                name = getName(); break;
             default:
-                return new Address(getEmail());
+                name = null;
         }
+        return new Address(getEmail(), name, !isEmailUnknown());
     }
 
     public String getEmail() {
-        return isUnknown() || TextUtils.isEmpty(email) ? getUnknownEmail(number) : email;
+        return isEmailUnknown() ? getUnknownEmail(number) : email;
     }
 
     public String getId() {
@@ -64,6 +70,14 @@ public class PersonRecord {
 
     public String toString() {
         return String.format(Locale.ENGLISH, "[name=%s email=%s id=%d]", getName(), email, _id);
+    }
+
+    private boolean isEmailUnknown() {
+        return isUnknown() || TextUtils.isEmpty(email);
+    }
+
+    private String getNameWithNumber() {
+        return name != null ? String.format(Locale.ENGLISH, "%s (%s)", getName(), getNumber()) : getNumber();
     }
 
     private static String getUnknownEmail(String number) {

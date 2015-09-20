@@ -1,3 +1,10 @@
+== 1.5.10 (1555) tbd
+
+  * Fixed unquoted blank in local part of email address (#595)
+  * Updated Korean translation (#592)
+  * Updated notification images
+  * Rebased K9 to current head (https://github.com/k9mail/k-9/commit/952da74b0e2559feb23994a42d3f929baea22d81)
+
 == 1.5.10 (1554) 08-20-2015
 
   * New app icons (#580, Simon Shimon)
