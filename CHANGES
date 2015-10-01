@@ -1,5 +1,6 @@
 == 1.5.11 (1555) tbd
 
+  * Improve restore experience (#586)
   * Fixed unquoted blank in local part of email address (#595)
   * Updated Korean translation (#592)
   * Updated notification images
