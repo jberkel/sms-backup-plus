@@ -135,7 +135,7 @@ automatically be created the first time you're performing a backup.
 
 ## <a name="faq">FAQ</a>
 
-  * [I enabled the WhatsApp backup, but my messages don't get backed up!](#whatsapp-does-not-get-backed-up)
+  * [Automatic backup does not work / stopped working](#faq-automatic-backup)
   * [Why does SMS Backup+ ask to become the default SMS app?](#faq-default-app)
   * [Why does it need so many permissions?](#faq-permissions)
   * [I want to file a bug report, what should I do?](#faq-file-bug-report)
@@ -194,6 +194,15 @@ there are just too many things to configure. If anything features should be remo
 not added. A more focussed product would be easier to maintain and use.
 
 ### Backup questions
+
+#### <a name="faq-automatic-backup">Automatic backup does not work / stopped working</a>
+
+If the automatic backup does not work first make sure that a manually
+initiated backup works as expected. There seem to be some problems with
+automatic backups; a fix will be to change the current backup logic to use
+Android's built-in SyncManager: see github tickets [507][] and [572][].
+
+This change will be part of the next major version ([1.6.0][], no release date yet).
 
 #### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>
 
@@ -269,10 +278,6 @@ to Gmail it won't get modified or deleted by the app.
 #### <a name="sms-as-calls">My messages get backed up as calls!</a>
 
 This might be due to some changes in Samsung's version of Android, see [#287](https://github.com/jberkel/sms-backup-plus/issues/287).
-
-#### <a name="whatsapp-does-not-get-backed-up">I enabled the WhatsApp backup, but my messages don't get backed up!</a>
-
-WhatsApp backups are no longer supported. See [WhatsApp Support](#whatsapp-support).
 
 #### <a name="faq-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
 
@@ -425,3 +430,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Build Status PNG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.png?branch=master
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
 [564]: https://github.com/jberkel/sms-backup-plus/issues/564
+[507]: https://github.com/jberkel/sms-backup-plus/issues/507
+[572]: https://github.com/jberkel/sms-backup-plus/issues/572
+[1.6.0]: https://github.com/jberkel/sms-backup-plus/milestones/1.6.0
