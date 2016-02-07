@@ -52,7 +52,14 @@
             <type>apklib</type>
         </dependency>
 
-       <dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>support-v4</artifactId>
+            <version>r7</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>annotations</artifactId>
             <version>12.0</version>
@@ -100,7 +107,7 @@
             <plugin>
                 <groupId>com.simpligility.maven.plugins</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>4.3.0</version>
+                <version>4.4.1</version>
                 <configuration>
                   <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
                   <assetsDirectory>${project.basedir}/assets</assetsDirectory>

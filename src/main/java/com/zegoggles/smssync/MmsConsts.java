@@ -16,41 +16,16 @@
 package com.zegoggles.smssync;
 
 
+import android.provider.Telephony;
+
 /**
- * Contains MMS content provider constants. These values are copied from
- * com.android.provider.telephony.*
+ * See {@link Telephony.BaseMmsColumns}.
  */
 public interface MmsConsts {
-
-    String ID = "_id";
-
-    @SuppressWarnings("UnusedDeclaration")
-    String MESSAGE_ID = "m_id";
-
-    String READ = "read";
-
-    @SuppressWarnings("UnusedDeclaration")
-    String SUBJECT = "sub";
-
-    String DATE = "date";
-
-    String THREAD_ID = "thread_id";
-
     String INSERT_ADDRESS_TOKEN = "insert-address-token";
-
-    String TYPE = "m_type";
 
     String DELIVERY_REPORT = "134"; // 0x86
 
-    @SuppressWarnings("UnusedDeclaration")
-    int MESSAGE_BOX_INBOX = 1;
-    @SuppressWarnings("UnusedDeclaration")
-    int MESSAGE_BOX_SENT = 2;
-
-    @SuppressWarnings("UnusedDeclaration")
-    int TO = 0x97;
-    @SuppressWarnings("UnusedDeclaration")
-    int FROM = 0x89;
-
+    @Deprecated
     String LEGACY_HEADER = "mms";
 }

@@ -1,14 +1,14 @@
 package com.zegoggles.smssync.mail;
 
-import android.database.MatrixCursor;
 import android.content.ContentValues;
+import android.database.MatrixCursor;
 import android.provider.CallLog;
+import android.provider.Telephony;
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
 import com.fsck.k9.mail.internet.MimeMessage;
-import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.MarkAsReadTypes;
@@ -66,20 +66,20 @@ public class MessageConverterTest {
 
         final MimeMessage mimeMessage = new MimeMessage(new ByteArrayInputStream(message.getBytes()), true);
         final ContentValues values = messageConverter.messageToContentValues(mimeMessage);
-        assertThat(values.getAsString(SmsConsts.ADDRESS)).isNull();
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.ADDRESS)).isNull();
     }
 
     @Test public void testMessageToContentValuesWithSMS() throws Exception {
         final ContentValues values = messageConverter.messageToContentValues(createSMSMessage());
-        assertThat(values.getAsString(SmsConsts.ADDRESS)).isEqualTo("+121332");
-        assertThat(values.getAsString(SmsConsts.TYPE)).isEqualTo("2");
-        assertThat(values.getAsString(SmsConsts.PROTOCOL)).isNull();
-        assertThat(values.getAsString(SmsConsts.SERVICE_CENTER)).isNull();
-        assertThat(values.getAsString(SmsConsts.DATE)).isEqualTo("1420759456762");
-        assertThat(values.getAsString(SmsConsts.STATUS)).isEqualTo("-1");
-        assertThat(values.getAsString(SmsConsts.THREAD_ID)).isNull();
-        assertThat(values.getAsString(SmsConsts.READ)).isEqualTo("1");
-        assertThat(values.getAsString(SmsConsts.BODY)).isEqualTo("DasßAsß");
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.ADDRESS)).isEqualTo("+121332");
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.TYPE)).isEqualTo("2");
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.PROTOCOL)).isNull();
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.SERVICE_CENTER)).isNull();
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.DATE)).isEqualTo("1420759456762");
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.STATUS)).isEqualTo("-1");
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.THREAD_ID)).isNull();
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.READ)).isEqualTo("1");
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.BODY)).isEqualTo("DasßAsß");
     }
 
 
@@ -105,7 +105,7 @@ public class MessageConverterTest {
     }
 
     @Test public void testConvertMessagesSeenFlagFromMessageStatusWithSMS() throws Exception {
-        MatrixCursor cursor = new MatrixCursor(new String[] {SmsConsts.ADDRESS, SmsConsts.READ} );
+        MatrixCursor cursor = new MatrixCursor(new String[] {Telephony.TextBasedSmsColumns.ADDRESS, Telephony.TextBasedSmsColumns.READ} );
         cursor.addRow(new Object[]{ "foo", "0" });
         cursor.addRow(new Object[]{ "foo", "1" });
         cursor.moveToFirst();
@@ -127,7 +127,7 @@ public class MessageConverterTest {
     }
 
     @Test public void testConvertMessagesSeenFlagUnreadWithSMS() throws Exception {
-        MatrixCursor cursor = new MatrixCursor(new String[] {SmsConsts.ADDRESS, SmsConsts.READ} );
+        MatrixCursor cursor = new MatrixCursor(new String[] {Telephony.TextBasedSmsColumns.ADDRESS, Telephony.TextBasedSmsColumns.READ} );
         cursor.addRow(new Object[]{ "foo", "0" });
         cursor.addRow(new Object[]{ "foo", "1" });
         cursor.moveToFirst();
@@ -149,7 +149,7 @@ public class MessageConverterTest {
     }
 
     @Test public void testConvertMessagesSeenFlagReadWithSMS() throws Exception {
-        MatrixCursor cursor = new MatrixCursor(new String[] {SmsConsts.ADDRESS, SmsConsts.READ} );
+        MatrixCursor cursor = new MatrixCursor(new String[] {Telephony.TextBasedSmsColumns.ADDRESS, Telephony.TextBasedSmsColumns.READ} );
         cursor.addRow(new Object[]{ "foo", "0" });
         cursor.addRow(new Object[]{ "foo", "1" });
         cursor.moveToFirst();

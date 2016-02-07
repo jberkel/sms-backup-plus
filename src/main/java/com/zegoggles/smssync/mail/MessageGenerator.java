@@ -3,6 +3,7 @@ package com.zegoggles.smssync.mail;
 import android.content.Context;
 import android.net.Uri;
 import android.provider.CallLog;
+import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.Address;
@@ -13,8 +14,6 @@ import com.fsck.k9.mail.internet.MimeMessage;
 import com.fsck.k9.mail.internet.MimeMultipart;
 import com.fsck.k9.mail.internet.TextBody;
 import com.zegoggles.smssync.Consts;
-import com.zegoggles.smssync.MmsConsts;
-import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.CallLogTypes;
@@ -73,7 +72,7 @@ class MessageGenerator {
     }
 
     private @Nullable Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
-        final String address = msgMap.get(SmsConsts.ADDRESS);
+        final String address = msgMap.get(Telephony.TextBasedSmsColumns.ADDRESS);
         if (TextUtils.isEmpty(address)) return null;
 
         PersonRecord record = mPersonLookup.lookupPerson(address);
@@ -81,10 +80,10 @@ class MessageGenerator {
 
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.SMS, record));
-        setBody(msg, new TextBody(msgMap.get(SmsConsts.BODY)));
+        setBody(msg, new TextBody(msgMap.get(Telephony.TextBasedSmsColumns.BODY)));
 
-        final int messageType = toInt(msgMap.get(SmsConsts.TYPE));
-        if (SmsConsts.MESSAGE_TYPE_INBOX == messageType) {
+        final int messageType = toInt(msgMap.get(Telephony.TextBasedSmsColumns.TYPE));
+        if (Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX == messageType) {
             // Received message
             msg.setFrom(record.getAddress(mAddressStyle));
             msg.setRecipient(Message.RecipientType.TO, mUserAddress);
@@ -96,7 +95,7 @@ class MessageGenerator {
 
         Date sentDate;
         try {
-            sentDate = new Date(Long.valueOf(msgMap.get(SmsConsts.DATE)));
+            sentDate = new Date(Long.valueOf(msgMap.get(Telephony.TextBasedSmsColumns.DATE)));
         } catch (NumberFormatException n) {
             Log.e(TAG, "error parsing date", n);
             sentDate = new Date();
@@ -109,7 +108,7 @@ class MessageGenerator {
     private @Nullable Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
         if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
-        final Uri mmsUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(MmsConsts.ID));
+        final Uri mmsUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(Telephony.BaseMmsColumns._ID));
         MmsSupport.MmsDetails details = mMmsSupport.getDetails(mmsUri, mAddressStyle);
 
         if (details.isEmpty()) {
@@ -134,7 +133,7 @@ class MessageGenerator {
 
         Date sentDate;
         try {
-            sentDate = new Date(1000 * Long.valueOf(msgMap.get(MmsConsts.DATE)));
+            sentDate = new Date(1000 * Long.valueOf(msgMap.get(Telephony.BaseMmsColumns.DATE)));
         } catch (NumberFormatException n) {
             Log.e(TAG, "error parsing date", n);
             sentDate = new Date();

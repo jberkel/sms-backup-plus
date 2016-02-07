@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CallLog;
+import android.provider.Telephony;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.FetchProfile;
@@ -15,7 +16,6 @@ import com.fsck.k9.mail.store.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
-import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.auth.TokenRefreshException;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
@@ -247,15 +247,15 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private void importSms(final Message message) throws IOException, MessagingException {
         if (LOCAL_LOGV) Log.v(TAG, "importSms(" + message + ")");
         final ContentValues values = converter.messageToContentValues(message);
-        final Integer type = values.getAsInteger(SmsConsts.TYPE);
+        final Integer type = values.getAsInteger(Telephony.TextBasedSmsColumns.TYPE);
 
         // only restore inbox messages and sent messages - otherwise sms might get sent on restore
-        if (type != null && (type == SmsConsts.MESSAGE_TYPE_INBOX || type == SmsConsts.MESSAGE_TYPE_SENT) && !smsExists(values)) {
+        if (type != null && (type == Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX || type == Telephony.TextBasedSmsColumns.MESSAGE_TYPE_SENT) && !smsExists(values)) {
 
             final Uri uri = resolver.insert(Consts.SMS_PROVIDER, values);
             if (uri != null) {
                 smsIds.add(uri.getLastPathSegment());
-                Long timestamp = values.getAsLong(SmsConsts.DATE);
+                Long timestamp = values.getAsLong(Telephony.TextBasedSmsColumns.DATE);
 
                 if (timestamp != null && SMS.getMaxSyncedDate(service) < timestamp) {
                     SMS.setMaxSyncedDate(service, timestamp);
@@ -305,9 +305,9 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             new String[] {"_id" },
             "date = ? AND address = ? AND type = ?",
             new String[] {
-                values.getAsString(SmsConsts.DATE),
-                values.getAsString(SmsConsts.ADDRESS),
-                values.getAsString(SmsConsts.TYPE)
+                values.getAsString(Telephony.TextBasedSmsColumns.DATE),
+                values.getAsString(Telephony.TextBasedSmsColumns.ADDRESS),
+                values.getAsString(Telephony.TextBasedSmsColumns.TYPE)
             },
             null
         );

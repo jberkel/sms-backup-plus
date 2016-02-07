@@ -2,10 +2,10 @@ package com.zegoggles.smssync.mail;
 
 import android.net.Uri;
 import android.provider.CallLog;
+import android.provider.Telephony;
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.internet.MimeHeader;
-import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import org.apache.james.mime4j.util.MimeUtil;
@@ -172,8 +172,8 @@ public class MessageGeneratorTest {
         Map<String, String> map = mockMessage("1234", record);
 
         Date date = new Date();
-        map.put(SmsConsts.DATE, String.valueOf(date.getTime()));
-        map.put(SmsConsts.TYPE, "0");
+        map.put(Telephony.TextBasedSmsColumns.DATE, String.valueOf(date.getTime()));
+        map.put(Telephony.TextBasedSmsColumns.TYPE, "0");
 
         Message msg = generator.messageForDataType(map, DataType.SMS);
         assertThat(msg).isNotNull();
@@ -190,7 +190,7 @@ public class MessageGeneratorTest {
     @Test public void shouldGenerateCorrectToHeaderWhenUserisRecipient() throws Exception {
         PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
         Map<String, String> map = mockMessage("1234", record);
-        map.put(SmsConsts.TYPE, "1");
+        map.put(Telephony.TextBasedSmsColumns.TYPE, "1");
 
         Message msg = generator.messageForDataType(map, DataType.SMS);
         assertThat(msg).isNotNull();
@@ -220,7 +220,7 @@ public class MessageGeneratorTest {
         );
         PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
         Map<String, String> map = mockMessage("1234", record);
-        map.put(SmsConsts.TYPE, "1");
+        map.put(Telephony.TextBasedSmsColumns.TYPE, "1");
 
         when(groupIds.contains(record)).thenReturn(false);
         assertThat(generator.messageForDataType(map, DataType.SMS)).isNull();
@@ -230,7 +230,7 @@ public class MessageGeneratorTest {
 
     private Map<String, String> mockMessage(String address, PersonRecord record) {
         Map<String, String> map = new HashMap<String, String>();
-        map.put(SmsConsts.ADDRESS, address);
+        map.put(Telephony.TextBasedSmsColumns.ADDRESS, address);
         when(personLookup.lookupPerson(eq(address))).thenReturn(record);
         return map;
     }

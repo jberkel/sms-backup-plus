@@ -5,10 +5,10 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.provider.Telephony;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.store.imap.ImapStore;
 import com.zegoggles.smssync.Consts;
-import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
@@ -81,8 +81,8 @@ public class RestoreTaskTest {
         Date now = new Date();
         List<ImapStore.ImapMessage> messages = new ArrayList<ImapStore.ImapMessage>();
         ContentValues values = new ContentValues();
-        values.put(SmsConsts.TYPE, SmsConsts.MESSAGE_TYPE_INBOX);
-        values.put(SmsConsts.DATE, now.getTime());
+        values.put(Telephony.TextBasedSmsColumns.TYPE, Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX);
+        values.put(Telephony.TextBasedSmsColumns.DATE, now.getTime());
 
         ImapStore.ImapMessage mockMessage = mock(ImapStore.ImapMessage.class);
         when(mockMessage.getFolder()).thenReturn(folder);

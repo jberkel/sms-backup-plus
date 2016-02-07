@@ -19,6 +19,7 @@ package com.zegoggles.smssync.service;
 import android.app.Notification;
 import android.content.Intent;
 import android.net.NetworkInfo;
+import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
@@ -48,7 +49,9 @@ import java.util.EnumSet;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
-import static com.zegoggles.smssync.service.state.SmsSyncState.*;
+import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
+import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
+import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
 
 public class SmsBackupService extends ServiceBase {
     private static final int BACKUP_ID = 1;
@@ -247,14 +250,11 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void notifyAboutBackup(BackupState state) {
-        if (notification == null) {
-            notification = createNotification(R.string.status_backup);
-        }
-        notification.setLatestEventInfo(this,
-            getString(R.string.status_backup),
-            state.getNotificationLabel(getResources()),
-            getPendingIntent());
-
+        NotificationCompat.Builder builder = createNotification(R.string.status_backup);
+        notification = builder.setContentTitle(getString(R.string.status_backup))
+                .setContentText(state.getNotificationLabel(getResources()))
+                .setContentIntent(getPendingIntent())
+                .getNotification();
         startForeground(BACKUP_ID, notification);
     }
 
@@ -269,15 +269,16 @@ public class SmsBackupService extends ServiceBase {
     }
 
     protected void notifyUser(int icon, int notificationId, String title, String text) {
-        Notification n = new Notification(icon,
-                getString(R.string.app_name),
-                System.currentTimeMillis());
-        n.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL;
-        n.setLatestEventInfo(this,
-                title,
-                text,
-                getPendingIntent());
-
+        Notification n = new NotificationCompat.Builder(this)
+                .setSmallIcon(icon)
+                .setWhen(System.currentTimeMillis())
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true)
+                .setContentText(text)
+                .setTicker(getString(R.string.app_name))
+                .setContentTitle(title)
+                .setContentIntent(getPendingIntent())
+                .getNotification();
         getNotifier().notify(notificationId, n);
     }
 

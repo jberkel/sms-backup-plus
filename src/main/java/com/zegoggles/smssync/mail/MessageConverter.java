@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.provider.CallLog;
+import android.provider.Telephony;
 import android.util.Log;
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Flag;
@@ -29,7 +30,6 @@ import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.MimeUtility;
 import com.zegoggles.smssync.MmsConsts;
-import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
@@ -97,9 +97,9 @@ public class MessageConverter {
             case MESSAGE_STATUS:
                 switch (dataType) {
                     case SMS:
-                        return "1".equals(msgMap.get(SmsConsts.READ));
+                        return "1".equals(msgMap.get(Telephony.TextBasedSmsColumns.READ));
                     case MMS:
-                        return "1".equals(msgMap.get(MmsConsts.READ));
+                        return "1".equals(msgMap.get(Telephony.BaseMmsColumns.READ));
                     default:
                         return true;
                 }
@@ -141,15 +141,15 @@ public class MessageConverter {
                 }
                 final String body = IOUtils.toString(is);
                 final String address = Headers.get(message, Headers.ADDRESS);
-                values.put(SmsConsts.BODY, body);
-                values.put(SmsConsts.ADDRESS, address);
-                values.put(SmsConsts.TYPE, Headers.get(message, Headers.TYPE));
-                values.put(SmsConsts.PROTOCOL, Headers.get(message, Headers.PROTOCOL));
-                values.put(SmsConsts.SERVICE_CENTER, Headers.get(message, Headers.SERVICE_CENTER));
-                values.put(SmsConsts.DATE, Headers.get(message, Headers.DATE));
-                values.put(SmsConsts.STATUS, Headers.get(message, Headers.STATUS));
-                values.put(SmsConsts.THREAD_ID, threadHelper.getThreadId(mContext, address));
-                values.put(SmsConsts.READ,
+                values.put(Telephony.TextBasedSmsColumns.BODY, body);
+                values.put(Telephony.TextBasedSmsColumns.ADDRESS, address);
+                values.put(Telephony.TextBasedSmsColumns.TYPE, Headers.get(message, Headers.TYPE));
+                values.put(Telephony.TextBasedSmsColumns.PROTOCOL, Headers.get(message, Headers.PROTOCOL));
+                values.put(Telephony.TextBasedSmsColumns.SERVICE_CENTER, Headers.get(message, Headers.SERVICE_CENTER));
+                values.put(Telephony.TextBasedSmsColumns.DATE, Headers.get(message, Headers.DATE));
+                values.put(Telephony.TextBasedSmsColumns.STATUS, Headers.get(message, Headers.STATUS));
+                values.put(Telephony.TextBasedSmsColumns.THREAD_ID, threadHelper.getThreadId(mContext, address));
+                values.put(Telephony.TextBasedSmsColumns.READ,
                         mMarkAsReadOnRestore ? "1" : Headers.get(message, Headers.READ));
                 break;
             case CALLLOG:

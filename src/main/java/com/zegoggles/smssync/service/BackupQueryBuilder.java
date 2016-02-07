@@ -3,11 +3,11 @@ package com.zegoggles.smssync.service;
 import android.content.Context;
 import android.net.Uri;
 import android.provider.CallLog;
+import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.MmsConsts;
-import com.zegoggles.smssync.SmsConsts;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,9 @@ import java.util.Set;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.mail.DataType.*;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
+import static com.zegoggles.smssync.mail.DataType.MMS;
+import static com.zegoggles.smssync.mail.DataType.SMS;
 
 class BackupQueryBuilder {
     private final Context context;
@@ -53,7 +55,7 @@ class BackupQueryBuilder {
 
         Query(Uri uri, String[] projection, String selection, String[] selectionArgs, int max) {
             this(uri, projection, selection, selectionArgs,
-                    max > 0 ? SmsConsts.DATE + " LIMIT "+max : SmsConsts.DATE);
+                    max > 0 ? Telephony.TextBasedSmsColumns.DATE + " LIMIT "+max : Telephony.TextBasedSmsColumns.DATE);
         }
     }
 
@@ -71,17 +73,17 @@ class BackupQueryBuilder {
             case MMS:
                 return new Query(
                     Consts.MMS_PROVIDER,
-                    new String[] {MmsConsts.DATE },
+                    new String[] {Telephony.BaseMmsColumns.DATE },
                     null,
                     null,
-                    MmsConsts.DATE + " DESC LIMIT 1");
+                    Telephony.BaseMmsColumns.DATE + " DESC LIMIT 1");
             case SMS:
                 return new Query(
                     Consts.SMS_PROVIDER,
-                    new String[]{SmsConsts.DATE},
-                    SmsConsts.TYPE + " <> ?",
-                    new String[]{String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)},
-                    SmsConsts.DATE + " DESC LIMIT 1");
+                    new String[]{Telephony.TextBasedSmsColumns.DATE},
+                    Telephony.TextBasedSmsColumns.TYPE + " <> ?",
+                    new String[]{String.valueOf(Telephony.TextBasedSmsColumns.MESSAGE_TYPE_DRAFT)},
+                    Telephony.TextBasedSmsColumns.DATE + " DESC LIMIT 1");
             case CALLLOG:
                 return new Query(
                     Consts.CALLLOG_PROVIDER,
@@ -99,12 +101,12 @@ class BackupQueryBuilder {
             null,
             String.format(Locale.ENGLISH,
                 "%s > ? AND %s <> ? %s",
-                    SmsConsts.DATE,
-                    SmsConsts.TYPE,
+                    Telephony.TextBasedSmsColumns.DATE,
+                    Telephony.TextBasedSmsColumns.TYPE,
                     groupSelection(SMS, groupIds)).trim(),
             new String[] {
                 String.valueOf(SMS.getMaxSyncedDate(context)),
-                String.valueOf(SmsConsts.MESSAGE_TYPE_DRAFT)
+                String.valueOf(Telephony.TextBasedSmsColumns.MESSAGE_TYPE_DRAFT)
             },
             max);
     }
@@ -119,8 +121,8 @@ class BackupQueryBuilder {
             Consts.MMS_PROVIDER,
             null,
             String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s",
-                    SmsConsts.DATE,
-                    MmsConsts.TYPE,
+                    Telephony.BaseMmsColumns.DATE,
+                    Telephony.BaseMmsColumns.MESSAGE_TYPE,
                     groupSelection(DataType.MMS, group)).trim(),
             new String[] {
                 String.valueOf(maxSynced),
@@ -150,9 +152,9 @@ class BackupQueryBuilder {
 
         if (LOCAL_LOGV) Log.v(TAG, "only selecting contacts matching " + ids);
         return String.format(Locale.ENGLISH, " AND (%s = %d OR %s IN (%s))",
-            SmsConsts.TYPE,
-            SmsConsts.MESSAGE_TYPE_SENT,
-            SmsConsts.PERSON,
+            Telephony.TextBasedSmsColumns.TYPE,
+            Telephony.TextBasedSmsColumns.MESSAGE_TYPE_SENT,
+            Telephony.TextBasedSmsColumns.PERSON,
             TextUtils.join(",", ids.toArray(new Long[ids.size()])));
     }
 }

@@ -1,10 +1,9 @@
 package com.zegoggles.smssync.mail;
 
 import android.provider.CallLog;
+import android.provider.Telephony;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.internet.MimeMessage;
-import com.zegoggles.smssync.MmsConsts;
-import com.zegoggles.smssync.SmsConsts;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,14 +54,14 @@ public class HeaderGeneratorTest {
 
         PersonRecord person = new PersonRecord(0, null, null, null);
 
-        map.put(SmsConsts.ID, "someId");
-        map.put(SmsConsts.TYPE, "type");
-        map.put(SmsConsts.DATE, "date");
-        map.put(SmsConsts.THREAD_ID, "tid");
-        map.put(SmsConsts.READ, "read");
-        map.put(SmsConsts.STATUS, "status");
-        map.put(SmsConsts.PROTOCOL, "protocol");
-        map.put(SmsConsts.SERVICE_CENTER, "svc");
+        map.put(android.provider.BaseColumns._ID, "someId");
+        map.put(Telephony.TextBasedSmsColumns.TYPE, "type");
+        map.put(Telephony.TextBasedSmsColumns.DATE, "date");
+        map.put(Telephony.TextBasedSmsColumns.THREAD_ID, "tid");
+        map.put(Telephony.TextBasedSmsColumns.READ, "read");
+        map.put(Telephony.TextBasedSmsColumns.STATUS, "status");
+        map.put(Telephony.TextBasedSmsColumns.PROTOCOL, "protocol");
+        map.put(Telephony.TextBasedSmsColumns.SERVICE_CENTER, "svc");
 
         generator.setHeaders(message, map, DataType.SMS, "1234", person, sent, 0);
 
@@ -103,11 +102,11 @@ public class HeaderGeneratorTest {
 
         PersonRecord person = new PersonRecord(0, null, null, null);
 
-        map.put(MmsConsts.ID, "id");
-        map.put(MmsConsts.TYPE, "type");
-        map.put(MmsConsts.THREAD_ID, "tid");
-        map.put(MmsConsts.DATE, "date");
-        map.put(MmsConsts.READ, "read");
+        map.put(Telephony.BaseMmsColumns._ID, "id");
+        map.put(Telephony.BaseMmsColumns.MESSAGE_TYPE, "type");
+        map.put(Telephony.BaseMmsColumns.THREAD_ID, "tid");
+        map.put(Telephony.BaseMmsColumns.DATE, "date");
+        map.put(Telephony.BaseMmsColumns.READ, "read");
 
         generator.setHeaders(message, map, DataType.MMS, "1234", person, sent, 0);
 

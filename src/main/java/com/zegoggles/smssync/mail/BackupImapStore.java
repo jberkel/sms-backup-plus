@@ -18,6 +18,7 @@ package com.zegoggles.smssync.mail;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.FetchProfile;
@@ -31,7 +32,6 @@ import com.fsck.k9.mail.ssl.TrustedSocketFactory;
 import com.fsck.k9.mail.store.imap.ImapResponse;
 import com.fsck.k9.mail.store.imap.ImapStore;
 import com.zegoggles.smssync.MmsConsts;
-import com.zegoggles.smssync.SmsConsts;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -200,8 +200,8 @@ public class BackupImapStore extends ImapStore {
                             String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
                                     Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
                                     Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
-                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), SmsConsts.MESSAGE_TYPE_INBOX,
-                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), SmsConsts.MESSAGE_TYPE_SENT);
+                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX,
+                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), Telephony.TextBasedSmsColumns.MESSAGE_TYPE_SENT);
                 case MMS:
                     return
                             String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",

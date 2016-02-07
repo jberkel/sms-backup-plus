@@ -1,15 +1,18 @@
 package com.zegoggles.smssync.mail;
 
 import android.provider.CallLog;
+import android.provider.Telephony;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import com.zegoggles.smssync.MmsConsts;
-import com.zegoggles.smssync.SmsConsts;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
@@ -53,22 +56,22 @@ class HeaderGenerator {
     }
 
     private void setSmsHeaders(Message message, Map<String,String> msgMap) throws MessagingException {
-        message.setHeader(Headers.ID, msgMap.get(SmsConsts.ID));
-        message.setHeader(Headers.TYPE, msgMap.get(SmsConsts.TYPE));
-        message.setHeader(Headers.DATE, msgMap.get(SmsConsts.DATE));
-        message.setHeader(Headers.THREAD_ID, msgMap.get(SmsConsts.THREAD_ID));
-        message.setHeader(Headers.READ, msgMap.get(SmsConsts.READ));
-        message.setHeader(Headers.STATUS, msgMap.get(SmsConsts.STATUS));
-        message.setHeader(Headers.PROTOCOL, msgMap.get(SmsConsts.PROTOCOL));
-        message.setHeader(Headers.SERVICE_CENTER, msgMap.get(SmsConsts.SERVICE_CENTER));
+        message.setHeader(Headers.ID, msgMap.get(Telephony.BaseMmsColumns._ID));
+        message.setHeader(Headers.TYPE, msgMap.get(Telephony.TextBasedSmsColumns.TYPE));
+        message.setHeader(Headers.DATE, msgMap.get(Telephony.TextBasedSmsColumns.DATE));
+        message.setHeader(Headers.THREAD_ID, msgMap.get(Telephony.TextBasedSmsColumns.THREAD_ID));
+        message.setHeader(Headers.READ, msgMap.get(Telephony.TextBasedSmsColumns.READ));
+        message.setHeader(Headers.STATUS, msgMap.get(Telephony.TextBasedSmsColumns.STATUS));
+        message.setHeader(Headers.PROTOCOL, msgMap.get(Telephony.TextBasedSmsColumns.PROTOCOL));
+        message.setHeader(Headers.SERVICE_CENTER, msgMap.get(Telephony.TextBasedSmsColumns.SERVICE_CENTER));
     }
 
     private void setMmsHeaders(Message message, Map<String,String> msgMap) throws MessagingException {
-        message.setHeader(Headers.ID, msgMap.get(MmsConsts.ID));
-        message.setHeader(Headers.TYPE, msgMap.get(MmsConsts.TYPE));
-        message.setHeader(Headers.DATE, msgMap.get(MmsConsts.DATE));
-        message.setHeader(Headers.THREAD_ID, msgMap.get(MmsConsts.THREAD_ID));
-        message.setHeader(Headers.READ, msgMap.get(MmsConsts.READ));
+        message.setHeader(Headers.ID, msgMap.get(Telephony.BaseMmsColumns._ID));
+        message.setHeader(Headers.TYPE, msgMap.get(Telephony.BaseMmsColumns.MESSAGE_TYPE));
+        message.setHeader(Headers.DATE, msgMap.get(Telephony.BaseMmsColumns.DATE));
+        message.setHeader(Headers.THREAD_ID, msgMap.get(Telephony.BaseMmsColumns.THREAD_ID));
+        message.setHeader(Headers.READ, msgMap.get(Telephony.BaseMmsColumns.READ));
     }
 
     private void setCallLogHeaders(Message message, Map<String,String> msgMap) throws MessagingException {
