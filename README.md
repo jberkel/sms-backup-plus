@@ -194,7 +194,7 @@ it has become too heavy and difficult too maintain or use. The settings screen m
 there are just too many things to configure. If anything features should be removed at this point,
 not added. A more focussed product would be easier to maintain and use.
 
-#### <a name=faq-restore-MMS">Are there any plans to support restoring of MMS?</a>
+#### <a name="faq-restore-MMS">Are there any plans to support restoring of MMS?</a>
 
 No, for a variety of reasons: MMS are highly carrier-dependent, documentation is lacking and the
 Android Emulator does not support them.
