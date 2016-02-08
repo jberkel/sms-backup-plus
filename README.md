@@ -139,7 +139,8 @@ automatically be created the first time you're performing a backup.
   * [Why does SMS Backup+ ask to become the default SMS app?](#faq-default-app)
   * [Why does it need so many permissions?](#faq-permissions)
   * [I want to file a bug report, what should I do?](#faq-file-bug-report)
-  * [Can you add feature X ?](#faq-can-you-add-feature-x)
+  * [Can you add feature X?](#faq-can-you-add-feature-x)
+  * [Are there any plans to support restoring of MMS?](#faq-restore-MMS)
   * [Why do backed up SMS show up in my inbox?](#faq-inbox)
   * [How can I make the app think that it has to do the backup again?](#faq-reset)
   * [What's the difference between regular and incoming backup schedule?](#faq-schedule)
@@ -183,7 +184,7 @@ of posting the full content in the issue.
 It might also be worth to install the current <a href="#beta">beta</a> version of SMS Backup+ to
 make sure the bug has not already been fixed.
 
-#### <a name="faq-can-you-add-feature-x">Can you add feature X ?</a>
+#### <a name="faq-can-you-add-feature-x">Can you add feature X?</a>
 
 In the five years of working on this app a lot of features have been added, often as a result of
 requests by users. This has worked great initially but has made the product itself very unfocussed
@@ -192,6 +193,13 @@ gradually more and more features were added (call logs, MMS, WhatsApp...). It's 
 it has become too heavy and difficult too maintain or use. The settings screen makes this obvious,
 there are just too many things to configure. If anything features should be removed at this point,
 not added. A more focussed product would be easier to maintain and use.
+
+#### <a name=faq-restore-MMS">Are there any plans to support restoring of MMS?</a>
+
+No, for a variety of reasons: MMS are highly carrier-dependent, documentation is lacking and the
+Android Emulator does not support them.
+
+However SMS Backup+ is open source; patches are more than welcome.
 
 ### Backup questions
 
