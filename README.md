@@ -143,6 +143,7 @@ automatically be created the first time you're performing a backup.
   * [Backup questions](#faq-backup)
     * [Automatic backup does not work / stopped working](#faq-backup-automatic-backup)
     * [I get the one of following errors during backup/restore: Command: SELECT "SMS"; response:...](#faq-backup-show-imap)
+    * [Only received messages are backed up, not the ones I sent](#faq-backup-only-received)
     * [How can I make the app think that it has to do the backup again?](#faq-backup-reset)
     * [Why do backed up SMS show up in my inbox?](#faq-backup-inbox)
     * [I want the backed up messages to show up in my Gmail inbox!](#faq-backup-to-inbox)
@@ -238,6 +239,11 @@ matters!).
 
 Select "Reset" from the menu, and confirm that you want to reset the current
 sync state. All messages on the phone will be backed up on the next run.
+
+#### <a name="faq-backup-only-received">Only received messages are backed up, not the ones I sent</a>
+
+Do you use Google Voice to send messages? There is an open issue: [516][]. It could also be
+a [device specific problem](#faq-device-specific).
 
 #### <a name="faq-backup-inbox">Why do backed up SMS show up in my inbox?</a>
 
@@ -462,7 +468,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
 [Build Status PNG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.png?branch=master
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
-[564]: https://github.com/jberkel/sms-backup-plus/issues/564
 [507]: https://github.com/jberkel/sms-backup-plus/issues/507
+[516]: https://github.com/jberkel/sms-backup-plus/issues/516
+[564]: https://github.com/jberkel/sms-backup-plus/issues/564
 [572]: https://github.com/jberkel/sms-backup-plus/issues/572
 [1.6.0]: https://github.com/jberkel/sms-backup-plus/milestones/1.6.0
