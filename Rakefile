@@ -97,12 +97,7 @@ namespace :doc do
       END
       out.write(template)
     end
-
-    case Config::CONFIG['host_os']
-      when /darwin/
-        puts "Launching: open #{outfile}"
-        sh "open", outfile
-     end
+    sh "open", outfile
   end
 end
 

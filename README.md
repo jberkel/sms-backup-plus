@@ -135,38 +135,39 @@ automatically be created the first time you're performing a backup.
 
 ## <a name="faq">FAQ</a>
 
-  * [Automatic backup does not work / stopped working](#faq-automatic-backup)
-  * [Why does SMS Backup+ ask to become the default SMS app?](#faq-default-app)
-  * [Why does it need so many permissions?](#faq-permissions)
-  * [I want to file a bug report, what should I do?](#faq-file-bug-report)
-  * [Can you add feature X?](#faq-can-you-add-feature-x)
-  * [Are there any plans to support restoring of MMS?](#faq-restore-MMS)
-  * [Why do backed up SMS show up in my inbox?](#faq-inbox)
-  * [How can I make the app think that it has to do the backup again?](#faq-reset)
-  * [What's the difference between regular and incoming backup schedule?](#faq-schedule)
+  * [General questions](#faq-general)
+    * [I want to file a bug report, what should I do?](#faq-general-file-bug-report)
+    * [Can you add feature X?](#faq-general-can-you-add-feature-x)
+    * [Why does it need so many permissions?](#faq-general-permissions)
+    * [When updating the app I get 'Package file was not signed correctly'](#faq-general-package-not-signed)
+  * [Backup questions](#faq-backup)
+    * [Automatic backup does not work / stopped working](#faq-backup-automatic-backup)
+    * [I get the one of following errors during backup/restore: Command: SELECT "SMS"; response:...](#faq-backup-show-imap)
+    * [How can I make the app think that it has to do the backup again?](#faq-backup-reset)
+    * [Why do backed up SMS show up in my inbox?](#faq-backup-inbox)
+    * [I want the backed up messages to show up in my Gmail inbox!](#faq-backup-to-inbox)
+    * [What's the difference between regular and incoming backup schedule?](#faq-backup-schedule)
+    * [I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.](#faq-backup-scheduling)
+    * [The app saves only 100 SMS/MMS per contact!](#faq-backup-gmail-100)
+    * [In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.](#faq-backup-threading)
+    * [When I delete a text locally, will it delete the saved copy on Gmail?](#faq-backup-does-it-sync)
+    * [My messages get backed up as calls!](#faq-backup-sms-as-calls)
+    * [I get the error "Trust anchor for certification path not found"](#faq-backup-untrusted-certificate)
+  * [Restore questions](#faq-restore)
+    * [Why does SMS Backup+ ask to become the default SMS app?](#faq-restore-default-app)
+    * [Are there any plans to support restoring of MMS?](#faq-restore-MMS)
+    * [I'm not able to restore all of my 20000 messages!](#faq-restore-many-messages)
+    * [How do I restore the last N weeks / N messages?](#faq-restore-partial)
+    * [The timestamps of the restored messages is wrong / the messages are not restored in the right order](#faq-restore-reversed)
+  * [Authentication questions](#faq-authentication)
+    * [How can I revoke the app's access to my Gmail account?](#faq-authentication-revoke-access)
+    * [When connecting, I get 'Could not obtain request token...'](#faq-authentication-request-token)
+  * [Device specific questions](#faq-device-specific)
+    * [I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!](#faq-device-specific-droidx-received)
 
-### General questions
+### <a name="faq-general">General questions</a>
 
-#### <a name="faq-permissions">Why does it need so many permissions?</a>
-
-  * Read contacts - Needed to map phone numbers to names and email addresses
-  * Your messages (read / write SMS) - Needed for backup+restore
-  * Prevent phone from sleeping - needed to keep network active during a backup
-  * Modify calendar events - needed for the call log backup to GCal
-  * Send email to guests - this refers to calendar invitations (which are not created by the app)
-  * Storage (modify/delete SD card contents) - this is needed for caching
-  * Find accounts on the device - used for authentication
-  * Use accounts on the device - used for authentication
-  * Google Play billing service - used for in-app donations
-  * Run at startup - used to enable automatic backups after reboot
-
-#### <a name="faq-package-not-signed">When updating the app I get 'Package file was not signed correctly'</a>
-
-Try uninstalling the app, then installing the new version. Make sure to select
-"Skip" when doing the first backup, otherwise messages will get backed up
-twice.
-
-#### <a name="faq-file-bug-report">I want to file a bug report, what should I do?</a>
+#### <a name="faq-general-file-bug-report">I want to file a bug report, what should I do?</a>
 
 First check [github issues][] to see if the bug has already been reported. If not, create a new
 issue and attach the following details:
@@ -184,9 +185,9 @@ of posting the full content in the issue.
 It might also be worth to install the current <a href="#beta">beta</a> version of SMS Backup+ to
 make sure the bug has not already been fixed.
 
-#### <a name="faq-can-you-add-feature-x">Can you add feature X?</a>
+#### <a name="faq-general-can-you-add-feature-x">Can you add feature X?</a>
 
-In the five years of working on this app a lot of features have been added, often as a result of
+Over the years a lot of features have been added, often as a result of
 requests by users. This has worked great initially but has made the product itself very unfocussed
 and generic. It started as a tool to back up text messages (as the name *SMS* Backup implies) but
 gradually more and more features were added (call logs, MMS, WhatsApp...). It's now at a point where
@@ -194,16 +195,28 @@ it has become too heavy and difficult too maintain or use. The settings screen m
 there are just too many things to configure. If anything features should be removed at this point,
 not added. A more focussed product would be easier to maintain and use.
 
-#### <a name="faq-restore-MMS">Are there any plans to support restoring of MMS?</a>
+#### <a name="faq-general-permissions">Why does it need so many permissions?</a>
 
-No, for a variety of reasons: MMS are highly carrier-dependent, documentation is lacking and the
-Android Emulator does not support them.
+  * Read contacts - Needed to map phone numbers to names and email addresses
+  * Your messages (read / write SMS) - Needed for backup+restore
+  * Prevent phone from sleeping - needed to keep network active during a backup
+  * Modify calendar events - needed for the call log backup to GCal
+  * Send email to guests - this refers to calendar invitations (which are not created by the app)
+  * Storage (modify/delete SD card contents) - this is needed for caching
+  * Find accounts on the device - used for authentication
+  * Use accounts on the device - used for authentication
+  * Google Play billing service - used for in-app donations
+  * Run at startup - used to enable automatic backups after reboot
 
-However SMS Backup+ is open source; patches are more than welcome.
+#### <a name="faq-general-package-not-signed">When updating the app I get 'Package file was not signed correctly'</a>
 
-### Backup questions
+Try uninstalling the app, then installing the new version. Make sure to select
+"Skip" when doing the first backup, otherwise messages will get backed up
+twice.
 
-#### <a name="faq-automatic-backup">Automatic backup does not work / stopped working</a>
+### <a name="faq-backup">Backup questions</a>
+
+#### <a name="faq-backup-automatic-backup">Automatic backup does not work / stopped working</a>
 
 If the automatic backup does not work first make sure that a manually
 initiated backup works as expected. There seem to be some problems with
@@ -212,7 +225,21 @@ Android's built-in SyncManager: see github tickets [507][] and [572][].
 
 This change will be part of the next major version ([1.6.0][], no release date yet).
 
-#### <a name="faq-inbox">Why do backed up SMS show up in my inbox?</a>
+#### <a name="faq-backup-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
+
+Make sure you have the "Show IMAP" option checked in the Gmail label settings:
+
+![Screenshot][showimap]
+
+If this is the case make sure that the label name is set correctly (capitalization
+matters!).
+
+#### <a name="faq-backup-reset">How can I make the app think that it has to do the backup again?</a>
+
+Select "Reset" from the menu, and confirm that you want to reset the current
+sync state. All messages on the phone will be backed up on the next run.
+
+#### <a name="faq-backup-inbox">Why do backed up SMS show up in my inbox?</a>
 
 This is probably related to Gmail's automatic priority inbox filing.
 A workaround is to set up a filter with "subject: SMS with", let the filter
@@ -225,21 +252,7 @@ mark it as not important.
 
 Just set the label to "Inbox" instead of the default "SMS" or "Call log".
 
-#### <a name="faq-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
-
-Make sure you have the "Show IMAP" option checked in the Gmail label settings:
-
-![Screenshot][showimap]
-
-If this is the case make sure that the label name is set correctly (capitalization
-matters!).
-
-#### <a name="faq-reset">How can I make the app think that it has to do the backup again?</a>
-
-Select "Reset" from the menu, and confirm that you want to reset the current
-sync state. All messages on the phone will be backed up on the next run.
-
-#### <a name="faq-schedule">What's the difference between regular and incoming backup schedule?</a>
+#### <a name="faq-backup-schedule">What's the difference between regular and incoming backup schedule?</a>
 
 Incoming backup schedule is used for incoming messages. 3 minutes here means
 that any incoming SMS will trigger a backup after 3 minutes. It is a full
@@ -253,13 +266,13 @@ means that the device will try to backup all messages every 2 hours.
 Fewer updates performed by the app means less energy consumed, so there's
 a trade-off data protection vs. battery life.
 
-#### <a name="faq-scheduling">I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
+#### <a name="faq-backup-scheduling">I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
 
 If you require more control over the backup schedule than what SMS Backup+ already
 provides you can use a 3rd party app to trigger the backup. [Tasker][] for
 example supports SMS Backup+ since version 1.0.14.
 
-#### <a name="faq-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
+#### <a name="faq-backup-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
 
 This seems to be a limitation of Gmail. After the first hundred or so SMS being
 backed up, Gmail will cease to properly thread many of the conversations.
@@ -270,24 +283,23 @@ together.
 A way around this is to do a full backup 100 SMS at a time (see `Advanced
 settings`).
 
-#### <a name="faq-threading">In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.</a>
+#### <a name="faq-backup-threading">In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.</a>
 
 It's a Gmail feature, but you can disable it.
 In Gmail settings, set conversation view to `off`
 ([screenshot][converationviewoff]).
 
-
 <a name="faq-delete"/>
-#### <a name="faq-does-it-sync">When I delete a text locally, will it delete the saved copy on Gmail?</a>
+#### <a name="faq-backup-does-it-sync">When I delete a text locally, will it delete the saved copy on Gmail?</a>
 
 No. SMS Backup+ does not do a "real" sync, once the text has been transferred
 to Gmail it won't get modified or deleted by the app.
 
-#### <a name="sms-as-calls">My messages get backed up as calls!</a>
+#### <a name="faq-backup-sms-as-calls">My messages get backed up as calls!</a>
 
 This might be due to some changes in Samsung's version of Android, see [#287](https://github.com/jberkel/sms-backup-plus/issues/287).
 
-#### <a name="faq-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
+#### <a name="faq-backup-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
 
 This means that it is impossible to establish a trusted connection with the IMAP server. A few
 reasons why this might happen:
@@ -297,7 +309,9 @@ reasons why this might happen:
 
 You can try to set the IMAP Server Setting `Security` to `SSL (optional / trust all)`.
 
-#### <a name="faq-default-app">Why does SMS Backup+ ask to become the default SMS app?</a>
+### <a name="faq-restore">Restore questions</a>
+
+#### <a name="faq-restore-default-app">Why does SMS Backup+ ask to become the default SMS app?</a>
 
 Google has changed the way SMS permissions work starting with Android KitKat. In order
 to get write access to your messages an app has to be set as the default system SMS app. Before starting
@@ -306,7 +320,18 @@ restore has finished you will be asked to set the previous choice (usually 'Mess
 back as default. This last step is important, if you don't set the old default back you might lose
 new messages.
 
-#### <a name="faq-partial-restore">How do I restore the last N weeks / N messages?</a>
+#### <a name="faq-restore-MMS">Are there any plans to support restoring of MMS?</a>
+
+No, for a variety of reasons: MMS are highly carrier-dependent, documentation is lacking and the
+Android Emulator does not support them.
+
+However SMS Backup+ is open source; patches are more than welcome.
+
+#### <a name="faq-restore-many-messages">I'm not able to restore all of my 20000 messages!</a>
+
+SMS Backup has not been designed to restore many thousands of messages. See the question "[How do I restore the last N weeks / N messages?](#faq-restore-partial)" for a way around that.
+
+#### <a name="faq-restore-partial">How do I restore the last N weeks / N messages?</a>
 
 If you have a lot of messages backed up (let's say over 5000) restoring can be
 very slow, especially if you're only interested in the most recent messages.
@@ -318,26 +343,26 @@ only keep a few hundred or so messages in the SMS label.
 Next time you restore it will only restore those messages and it will be a lot
 faster.
 
-#### <a name="restore-reversed">The timestamps of the restored messages is wrong / the messages are not restored in the right order</a>
+#### <a name="faq-restore-reversed">The timestamps of the restored messages is wrong / the messages are not restored in the right order</a>
 
 This is a known bug: [#94](https://github.com/jberkel/sms-backup-plus/issues/94)
 
-### Authentication questions
+### <a name="faq-authentication">Authentication questions</a>
 
-#### <a name="faq-revoke-access">How can I revoke SMS Backup+ access</a>
+#### <a name="faq-authentication-revoke-access">How can I revoke the app's access to my Gmail account?</a>
 
 Go to [Authorized Access to your Google Account][] and select "Revoke Access"
 next to "SMS Backup+".
 
-#### <a name="faq-request-token">When connecting, I get 'Could not obtain request token...'</a>
+#### <a name="faq-authentication-request-token">When connecting, I get 'Could not obtain request token...'</a>
 
 If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
 
-### Device specific questions
+### <a name="faq-device-specific">Device specific questions</a>
 
-#### <a name="droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
+#### <a name="faq-device-specific-droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
 
 It's a known SMS bug in the latest OTA 2.2 update ([details][droidbug]). As a workaround
 you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and set "Adjustment Method" to "Use Phone's Time".
