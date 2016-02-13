@@ -196,6 +196,9 @@ it has become too heavy and difficult too maintain or use. The settings screen m
 there are just too many things to configure. If anything features should be removed at this point,
 not added. A more focussed product would be easier to maintain and use.
 
+Right now, SMS Backup+ is in maintenance mode; no new features will be added. Existing bugs will of
+course be addressed.
+
 #### <a name="faq-general-permissions">Why does it need so many permissions?</a>
 
   * Read contacts - Needed to map phone numbers to names and email addresses
