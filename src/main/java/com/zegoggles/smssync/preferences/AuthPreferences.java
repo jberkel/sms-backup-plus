@@ -178,10 +178,7 @@ public class AuthPreferences {
 
     public String getStoreUri() {
         if (useXOAuth()) {
-            if (hasOauthTokens()) {
-                XOAuthConsumer consumer = getOAuthConsumer();
-                return formatUri(AuthType.XOAUTH, SERVER_PROTOCOL, consumer.getUsername(), consumer.generateXOAuthString());
-            } else if (hasOAuth2Tokens()) {
+            if (hasOAuth2Tokens()) {
                 return formatUri(AuthType.XOAUTH2, SERVER_PROTOCOL, getOauth2Username(), generateXOAuth2Token());
             } else {
                 Log.w(TAG, "No valid xoauth1/2 tokens");

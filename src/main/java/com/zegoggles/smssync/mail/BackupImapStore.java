@@ -29,7 +29,10 @@ import com.fsck.k9.mail.MessageRetrievalListener;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.ssl.DefaultTrustedSocketFactory;
 import com.fsck.k9.mail.ssl.TrustedSocketFactory;
+import com.fsck.k9.mail.store.imap.ImapFolder;
+import com.fsck.k9.mail.store.imap.ImapMessage;
 import com.fsck.k9.mail.store.imap.ImapResponse;
+import com.fsck.k9.mail.store.imap.ImapSearcher;
 import com.fsck.k9.mail.store.imap.ImapStore;
 import com.zegoggles.smssync.MmsConsts;
 import org.jetbrains.annotations.NotNull;
@@ -158,7 +161,7 @@ public class BackupImapStore extends ImapStore {
                             .append(' ')
                             .append(getQuery())
                             .append(" UNDELETED");
-                    if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.format(since));
+                    if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.get().format(since));
                     if (flagged) sb.append(" FLAGGED");
 
                     return executeSimpleCommand(sb.toString().trim());

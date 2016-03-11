@@ -42,7 +42,7 @@
             <groupId>com.fsck.k9.mail</groupId>
             <artifactId>lib</artifactId>
             <type>aar</type>
-            <version>0.0.1.996179a</version>
+            <version>0.0.1.f2ef921</version>
         </dependency>
 
         <dependency>
@@ -232,7 +232,7 @@
         <repository>
             <id>zegoggles-snapshots</id>
             <name>zeggogles snapshots</name>
-            <url>http://zegoggl.es:8081/nexus/content/repositories/snapshots/</url>
+            <url>https://zegoggl.es/nexus/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>

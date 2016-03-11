@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.internet.MimeMessage;
-import com.fsck.k9.mail.store.XOAuth2AuthenticationFailedException;
+import com.fsck.k9.mail.store.imap.XOAuth2AuthenticationFailedException;
 import com.zegoggles.smssync.auth.TokenRefreshException;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.contacts.ContactAccessor;

@@ -7,7 +7,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.provider.Telephony;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.store.imap.ImapStore;
+import com.fsck.k9.mail.store.imap.ImapMessage;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
@@ -79,12 +79,12 @@ public class RestoreTaskTest {
     @Test
     public void shouldRestoreItems() throws Exception {
         Date now = new Date();
-        List<ImapStore.ImapMessage> messages = new ArrayList<ImapStore.ImapMessage>();
+        List<ImapMessage> messages = new ArrayList<ImapMessage>();
         ContentValues values = new ContentValues();
         values.put(Telephony.TextBasedSmsColumns.TYPE, Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX);
         values.put(Telephony.TextBasedSmsColumns.DATE, now.getTime());
 
-        ImapStore.ImapMessage mockMessage = mock(ImapStore.ImapMessage.class);
+        ImapMessage mockMessage = mock(ImapMessage.class);
         when(mockMessage.getFolder()).thenReturn(folder);
         when(converter.getDataType(mockMessage)).thenReturn(DataType.SMS);
         when(converter.messageToContentValues(mockMessage)).thenReturn(values);

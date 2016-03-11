@@ -30,6 +30,7 @@ class BackupStoreConfig implements StoreConfig {
     @Override public String getDraftsFolderName() {
         return null;
     }
+    @Override public void setArchiveFolderName(String s) { }
     @Override public void setDraftsFolderName(String s) { }
     @Override public void setTrashFolderName(String s) { }
     @Override public void setSpamFolderName(String s) { }
