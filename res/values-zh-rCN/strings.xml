@@ -118,6 +118,10 @@
   <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
 
+  <string name="mark_as_read_always_read">始终标记为已读</string>
+  <string name="mark_as_read_always_unread">始终标记为未读</string>
+  <string name="mark_as_read_message_status">使用信息的状态</string>
+
   <string name="ui_mark_as_read_restore_label">标记为已读 (短信)</string>
   <string name="ui_mark_as_read_restore_desc">是否将还原的短信标记为已读。</string>
 
@@ -127,6 +131,7 @@
   <string name="ui_enable_auto_sync_label">自动备份</string>
   <string name="ui_enable_auto_sync_desc">是否自动备份新短信。</string>
   <string name="ui_enable_auto_sync_summary">自动备份 %1$s</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">未选择需备份的项目类型。</string>
 
   <string name="sd_card_disclaimer">当本程序安装在 SD 卡中时，自动备份可能无法正常工作。</string>
 
@@ -146,6 +151,7 @@
 
   <string name="error_wifi_only_no_connection">无 Wifi 连接</string>
   <string name="error_no_connection">没有互联网连接</string>
+  <string name="error_sms_provider_not_writable">短信提供方无法写入</string>
 
   <string name="ui_dialog_missing_credentials_title">登录信息</string>
 
@@ -204,11 +210,10 @@
   <string name="call_incoming_text">自 %1$s 的已接来电</string>
   <string name="call_outgoing_text">至 %1$s 的已拨电话</string>
 
-  <string name="call_number_field">号码：%1$s</string>
-  <string name="call_duration_field">时长：%1$s</string>
+  <string name="call_number_field">总数：%1$s</string>
+  <string name="call_duration_field">用时：%1$s</string>
 
   <string name="sms_with_field">与 %1$s 的短信记录</string>
-  <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">与 %1$s 的通话记录</string>
 
@@ -287,6 +292,7 @@
   <string name="app_log_backup_requested">备份请求 (%1$s)</string>
   <string name="app_log_start_backup">开始备份 (%1$s)</string>
   <string name="app_log_backup_messages">正在备份 (%1$d 条短信, %2$d 条彩信, %3$d 条通话记录)</string>
+  <string name="app_log_backup_messages_with_config">使用配置：%1$s</string>
   <string name="app_log_backup_canceled">备份已取消</string>
   <string name="app_log_backup_finished">备份已完成</string>
 
@@ -302,6 +308,9 @@
   <string name="pref_app_log">同步记录</string>
   <string name="pref_app_log_enabled">记录会保存在 SD 卡中，名称为“sms_backup_plus.log”</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="pref_app_log_debug">额外调试信息</string>
+  <string name="pref_app_log_debug_summary">在同步记录中启用额外调试记录</string>
 
   <string name="source_incoming">收到新消息</string>
   <string name="source_regular">定时</string>
@@ -334,4 +343,10 @@
   <string name="donation_error_unavailable">不可用</string>
   <string name="donation_error_canceled">已取消</string>
   <string name="donation_error_already_owned">您已经捐赠过了</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">升级通知</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+   为了能够在 Android KitKat 和 Lollipop 中恢复信息，您需要在恢复时将
+   SMS Backup+ 设置为短信应用。当信息恢复完成时，您会被询问将此恢复为原设置。
+  </string>
 </resources>
