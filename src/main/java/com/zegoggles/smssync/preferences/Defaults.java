@@ -23,4 +23,6 @@ class Defaults {
     public static final int MAX_ITEMS_PER_SYNC = -1;
     public static final int MAX_ITEMS_PER_RESTORE = -1;
     public static final boolean MARK_AS_READ_ON_RESTORE = true;
+
+    private Defaults() {}
 }

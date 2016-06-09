@@ -135,6 +135,8 @@ public enum DataType {
         public static final String MAX_SYNCED_DATE_SMS = "max_synced_date";
         public static final String MAX_SYNCED_DATE_MMS = "max_synced_date_mms";
         public static final String MAX_SYNCED_DATE_CALLLOG = "max_synced_date_calllog";
+
+        private PreferenceKeys() {}
     }
 
     /**
@@ -152,5 +154,7 @@ public enum DataType {
         public static final boolean SMS_RESTORE_ENABLED      = true;
         public static final boolean MMS_RESTORE_ENABLED      = false;
         public static final boolean CALLLOG_RESTORE_ENABLED  = true;
+
+        private Defaults() {}
     }
 }

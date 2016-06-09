@@ -63,5 +63,9 @@ public final class Consts {
                 SKU_DONATION_2,
                 SKU_DONATION_3,
         };
+
+        private Billing() {}
     }
+
+    private Consts() {}
 }

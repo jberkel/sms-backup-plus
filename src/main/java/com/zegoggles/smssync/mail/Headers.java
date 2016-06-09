@@ -23,6 +23,8 @@ public final class Headers {
     public static final String REFERENCES = "References";
     public static final String MESSAGE_ID = "Message-ID";
 
+    private Headers() {}
+
     public static String get(Message msg, String header) {
         try {
             String[] hdrs = msg.getHeader(header);
