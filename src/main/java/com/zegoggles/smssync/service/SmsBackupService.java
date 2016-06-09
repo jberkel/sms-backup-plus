@@ -294,6 +294,9 @@ public class SmsBackupService extends ServiceBase {
         return mState.transition(newState, e);
     }
 
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated
     private void runMigration() {
         appLogDebug("running OAuth1 migration");

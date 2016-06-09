@@ -26,6 +26,9 @@ public interface MmsConsts {
 
     String DELIVERY_REPORT = "134"; // 0x86
 
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated
     String LEGACY_HEADER = "mms";
 }
