@@ -20,20 +20,6 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.ServerPreferences.Defaults.SERVER_PROTOCOL;
 
 public class AuthPreferences {
-    private final Context context;
-    private final SharedPreferences preferences;
-    private final ServerPreferences serverPreferences;
-
-    public AuthPreferences(Context context) {
-        this(context,  new ServerPreferences(context));
-    }
-
-    /* package */ AuthPreferences(Context context, ServerPreferences serverPreferences) {
-        this.context = context.getApplicationContext();
-        this.serverPreferences = serverPreferences;
-        this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
-    }
-
     /**
      * Preference key containing the Google account username.
      */
@@ -63,6 +49,20 @@ public class AuthPreferences {
      * </ol>
      */
     private static final String IMAP_URI = "imap%s://%s:%s:%s@%s";
+
+    private final Context context;
+    private final SharedPreferences preferences;
+    private final ServerPreferences serverPreferences;
+
+    public AuthPreferences(Context context) {
+        this(context,  new ServerPreferences(context));
+    }
+
+    /* package */ AuthPreferences(Context context, ServerPreferences serverPreferences) {
+        this.context = context.getApplicationContext();
+        this.serverPreferences = serverPreferences;
+        this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
+    }
 
     @Deprecated
     public XOAuthConsumer getOAuthConsumer() {
