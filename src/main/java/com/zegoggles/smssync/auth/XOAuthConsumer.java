@@ -72,12 +72,13 @@ import static oauth.signpost.OAuth.percentEncode;
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
     private static final String MAC_NAME = "HmacSHA1";
     private static final String ANONYMOUS = "anonymous";
+    private static final String ERROR = "error";
 
     // Scopes as defined in http://code.google.com/apis/accounts/docs/OAuth.html#prepScope
     private static final String GMAIL_SCOPE = "https://mail.google.com/";
     private static final String CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
-    private static final String DEFAULT_SCOPE  = GMAIL_SCOPE + " " + CONTACTS_SCOPE;
 
+    private static final String DEFAULT_SCOPE  = GMAIL_SCOPE + " " + CONTACTS_SCOPE;
     // endpoints
     private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/thin?max-results=1";
     private static final String REQUEST_TOKEN_URL = "https://www.google.com/accounts/OAuthGetRequestToken" +
@@ -220,16 +221,16 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
             HttpGet get = new HttpGet(sign(CONTACTS_URL));
             return extractEmail(httpClient.execute(get));
         } catch (OAuthException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return null;
         } catch (SAXException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return null;
         } catch (IOException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return null;
         } catch (ParserConfigurationException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return null;
         }
     }

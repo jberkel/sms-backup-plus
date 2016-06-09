@@ -31,6 +31,7 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.Consts.MMS_PART;
 
 class MessageGenerator {
+    private static final String ERROR_PARSING_DATE = "error parsing date";
     private final Context mContext;
     private final HeaderGenerator mHeaderGenerator;
     private final Address mUserAddress;
@@ -97,7 +98,7 @@ class MessageGenerator {
         try {
             sentDate = new Date(Long.valueOf(msgMap.get(Telephony.TextBasedSmsColumns.DATE)));
         } catch (NumberFormatException n) {
-            Log.e(TAG, "error parsing date", n);
+            Log.e(TAG, ERROR_PARSING_DATE, n);
             sentDate = new Date();
         }
         mHeaderGenerator.setHeaders(msg, msgMap, DataType.SMS, address, record, sentDate, messageType);
@@ -135,7 +136,7 @@ class MessageGenerator {
         try {
             sentDate = new Date(1000 * Long.valueOf(msgMap.get(Telephony.BaseMmsColumns.DATE)));
         } catch (NumberFormatException n) {
-            Log.e(TAG, "error parsing date", n);
+            Log.e(TAG, ERROR_PARSING_DATE, n);
             sentDate = new Date();
         }
         final int msg_box = toInt(msgMap.get("msg_box"));
@@ -190,7 +191,7 @@ class MessageGenerator {
         try {
             sentDate = new Date(Long.valueOf(msgMap.get(CallLog.Calls.DATE)));
         } catch (NumberFormatException n) {
-            Log.e(TAG, "error parsing date", n);
+            Log.e(TAG, ERROR_PARSING_DATE, n);
             sentDate = new Date();
         }
         mHeaderGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record, sentDate, callType);

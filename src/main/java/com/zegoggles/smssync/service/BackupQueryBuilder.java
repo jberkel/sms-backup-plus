@@ -22,6 +22,7 @@ import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 
 class BackupQueryBuilder {
+    private static final String DESC_LIMIT_1 = " DESC LIMIT 1";
     private final Context context;
 
     // only query for needed fields
@@ -76,21 +77,21 @@ class BackupQueryBuilder {
                     new String[] {Telephony.BaseMmsColumns.DATE },
                     null,
                     null,
-                    Telephony.BaseMmsColumns.DATE + " DESC LIMIT 1");
+                    Telephony.BaseMmsColumns.DATE + DESC_LIMIT_1);
             case SMS:
                 return new Query(
                     Consts.SMS_PROVIDER,
                     new String[]{Telephony.TextBasedSmsColumns.DATE},
                     Telephony.TextBasedSmsColumns.TYPE + " <> ?",
                     new String[]{String.valueOf(Telephony.TextBasedSmsColumns.MESSAGE_TYPE_DRAFT)},
-                    Telephony.TextBasedSmsColumns.DATE + " DESC LIMIT 1");
+                    Telephony.TextBasedSmsColumns.DATE + DESC_LIMIT_1);
             case CALLLOG:
                 return new Query(
                     Consts.CALLLOG_PROVIDER,
                     new String[]{CallLog.Calls.DATE},
                     null,
                     null,
-                    CallLog.Calls.DATE + " DESC LIMIT 1");
+                    CallLog.Calls.DATE + DESC_LIMIT_1);
             default:
                 return null;
         }
