@@ -43,8 +43,17 @@ public class AuthPreferences {
      */
     public static final String LOGIN_PASSWORD = "login_password";
     public static final String SERVER_AUTHENTICATION = "server_authentication";
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated private static final String OAUTH_TOKEN = "oauth_token";
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated private static final String OAUTH_TOKEN_SECRET = "oauth_token_secret";
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated private static final String OAUTH_USER = "oauth_user";
     private static final String OAUTH2_USER = "oauth2_user";
     private static final String OAUTH2_TOKEN = "oauth2_token";
@@ -64,6 +73,9 @@ public class AuthPreferences {
      */
     private static final String IMAP_URI = "imap%s://%s:%s:%s@%s";
 
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated
     public XOAuthConsumer getOAuthConsumer() {
         return new XOAuthConsumer(
@@ -80,6 +92,9 @@ public class AuthPreferences {
         return getCredentials().getString(OAUTH2_REFRESH_TOKEN, null);
     }
 
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated
     public boolean hasOauthTokens() {
         return getOauthUsername() != null &&
@@ -113,6 +128,9 @@ public class AuthPreferences {
                 .commit();
     }
 
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated
     public void clearOAuth1Data() {
         preferences.edit().remove(OAUTH_USER).commit();
@@ -203,16 +221,25 @@ public class AuthPreferences {
                 serverPreferences.getServerAddress());
     }
 
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated
     private String getOauthTokenSecret() {
         return getCredentials().getString(OAUTH_TOKEN_SECRET, null);
     }
 
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated
     private String getOauthToken() {
         return getCredentials().getString(OAUTH_TOKEN, null);
     }
 
+    /**
+     * @deprecated kept for backwards compatibility
+     */
     @Deprecated
     private String getOauthUsername() {
         return preferences.getString(OAUTH_USER, null);

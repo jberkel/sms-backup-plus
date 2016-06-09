@@ -68,6 +68,9 @@ import static oauth.signpost.OAuth.ENCODING;
 import static oauth.signpost.OAuth.OAUTH_SIGNATURE;
 import static oauth.signpost.OAuth.percentEncode;
 
+/**
+ * @deprecated This class is deprecated and is kept for backwards compatibility
+ */
 @Deprecated
 public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
     private static final String MAC_NAME = "HmacSHA1";
