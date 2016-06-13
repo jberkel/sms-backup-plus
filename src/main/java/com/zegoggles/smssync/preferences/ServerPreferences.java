@@ -7,10 +7,6 @@ import android.preference.PreferenceManager;
 public class ServerPreferences {
     private final SharedPreferences preferences;
 
-    public ServerPreferences(Context context) {
-        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
-    }
-
     /**
      * Preference key containing the server address
      */
@@ -20,6 +16,9 @@ public class ServerPreferences {
      */
     private static final String SERVER_PROTOCOL = "server_protocol";
 
+    public ServerPreferences(Context context) {
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    }
 
     String getServerAddress() {
         return preferences.getString(SERVER_ADDRESS, Defaults.SERVER_ADDRESS);

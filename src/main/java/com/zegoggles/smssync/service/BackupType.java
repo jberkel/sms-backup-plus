@@ -10,13 +10,13 @@ public enum BackupType {
     UNKNOWN(R.string.source_unknown),
     MANUAL(R.string.source_manual);
 
+    public static final String EXTRA = "com.zegoggles.smssync.BackupTypeAsString";
+
     public final int resId;
 
     BackupType(int resId) {
         this.resId = resId;
     }
-
-    public static final String EXTRA = "com.zegoggles.smssync.BackupTypeAsString";
 
     public static BackupType fromIntent(Intent intent) {
         if (intent.hasExtra(EXTRA)) {

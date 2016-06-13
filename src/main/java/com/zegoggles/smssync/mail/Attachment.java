@@ -24,6 +24,11 @@ import java.io.UnsupportedEncodingException;
 import static com.zegoggles.smssync.App.TAG;
 
 class Attachment {
+    // RFC2231 encoding from geronimo-javamail
+    private static final String MIME_SPECIALS = "()<>@,;:\\\"/[]?=" + "\t ";
+    private static final String RFC2231_SPECIALS = "*'%" + MIME_SPECIALS;
+    private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
+
     public static MimeBodyPart createTextPart(String text) throws MessagingException {
         return new MimeBodyPart(new TextBody(text));
     }
@@ -113,11 +118,6 @@ class Attachment {
         public void setEncoding(String s) throws MessagingException {
         }
     }
-
-    // RFC2231 encoding from geronimo-javamail
-    private static final String MIME_SPECIALS = "()<>@,;:\\\"/[]?=" + "\t ";
-    private static final String RFC2231_SPECIALS = "*'%" + MIME_SPECIALS;
-    private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
     protected static String encodeRFC2231(String key, String value) {
         StringBuilder buf = new StringBuilder();
