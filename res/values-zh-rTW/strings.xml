@@ -118,6 +118,10 @@
   <string name="ui_mark_as_read_label">標為已讀取 (電郵)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中將訊息標為已讀取。</string>
 
+  <string name="mark_as_read_always_read">始終標爲已讀取</string>
+  <string name="mark_as_read_always_unread">始終標爲未讀取</string>
+  <string name="mark_as_read_message_status">使用訊息的狀態</string>
+
   <string name="ui_mark_as_read_restore_label">標為已讀取 (簡訊)</string>
   <string name="ui_mark_as_read_restore_desc">是否將所有已還原的簡訊標為已讀取。</string>
 
@@ -127,6 +131,7 @@
   <string name="ui_enable_auto_sync_label">自動備份</string>
   <string name="ui_enable_auto_sync_desc">是否自動備份新簡訊。</string>
   <string name="ui_enable_auto_sync_summary">自動備份 %1$s。</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">未選擇需備份的項目類型</string>
 
   <string name="sd_card_disclaimer">當此程式安裝在 SD 卡中時，自動備份可能會無法有效運作。</string>
 
@@ -146,6 +151,7 @@
 
   <string name="error_wifi_only_no_connection">沒有 Wifi 網絡</string>
   <string name="error_no_connection">沒有互聯網連接</string>
+  <string name="error_sms_provider_not_writable">簡訊提供方不可寫</string>
 
   <string name="ui_dialog_missing_credentials_title">登入訊息</string>
 
@@ -204,11 +210,10 @@
   <string name="call_incoming_text">自 %1$s 的已接來電</string>
   <string name="call_outgoing_text">至 %1$s 的撥出電話</string>
 
-  <string name="call_number_field">號碼: %1$s</string>
-  <string name="call_duration_field">時長: %1$s</string>
+  <string name="call_number_field">總數: %1$s</string>
+  <string name="call_duration_field">耗時: %1$s</string>
 
   <string name="sms_with_field">與 %1$s 的簡訊記錄</string>
-  <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">與 %1$s 的通話記錄</string>
 
@@ -287,8 +292,9 @@
   <string name="app_log_backup_requested">備份請求 (%1$s)</string>
   <string name="app_log_start_backup">正在開始備份 (%1$s)</string>
   <string name="app_log_backup_messages">正在備份 (%1$d 條簡訊, %2$d 條 MMS, %3$d 個通話記錄)</string>
+  <string name="app_log_backup_messages_with_config">使用配置: %1$s</string>
   <string name="app_log_backup_canceled">備份已取消</string>
-  <string name="app_log_backup_finished">備份結束</string>
+  <string name="app_log_backup_finished">備份完成</string>
 
   <string name="app_log_backup_failed_authentication">驗證錯誤: %1$s</string>
   <string name="app_log_backup_failed_general_error">一般錯誤: %1$s</string>
@@ -302,6 +308,9 @@
   <string name="pref_app_log">同步處理記錄</string>
   <string name="pref_app_log_enabled">記錄會被保存在 SD 卡上，命名為“sms_backup_plus.log”。</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="pref_app_log_debug">額外調試資訊</string>
+  <string name="pref_app_log_debug_summary">在同步記錄中啓用額外調試記錄</string>
 
   <string name="source_incoming">接收到新訊息</string>
   <string name="source_regular">定時</string>
@@ -334,4 +343,10 @@
   <string name="donation_error_unavailable">不可用</string>
   <string name="donation_error_canceled">已取消</string>
   <string name="donation_error_already_owned">您已經捐贈過了</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">升級通知</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    爲了能夠在 Android KitKat 和 Lollipop 中還原訊息，您需要在還原時將
+    SMS Backup+ 設定爲簡訊應用程式。當訊息還原完成時，您會被詢問將此還原爲原設定。
+  </string>
 </resources>
