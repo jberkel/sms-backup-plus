@@ -22,6 +22,7 @@ import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 class HeaderGenerator {
     private static final String REFERENCE_UID_TEMPLATE = "<%s.%s@sms-backup-plus.local>";
     private static final String MSG_ID_TEMPLATE        = "<%s@sms-backup-plus.local>";
+    private static final String UTF_8 = "UTF-8";
 
     private final String reference;
     private final String version;
@@ -103,11 +104,11 @@ class HeaderGenerator {
         try {
             final MessageDigest digest = MessageDigest.getInstance("MD5");
 
-            digest.update(Long.toString(sent.getTime()).getBytes("UTF-8"));
+            digest.update(Long.toString(sent.getTime()).getBytes(UTF_8));
             if (address != null) {
-                digest.update(address.getBytes("UTF-8"));
+                digest.update(address.getBytes(UTF_8));
             }
-            digest.update(Integer.toString(type).getBytes("UTF-8"));
+            digest.update(Integer.toString(type).getBytes(UTF_8));
 
             final StringBuilder sb = new StringBuilder();
             for (byte b : digest.digest()) {

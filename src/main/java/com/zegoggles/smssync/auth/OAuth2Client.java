@@ -104,6 +104,7 @@ public class OAuth2Client {
      */
     private static final String CODE = "code";
     private static final String REFRESH_TOKEN = "refresh_token";
+    private static final String ERROR = "error";
 
     private final String clientId;
 
@@ -212,13 +213,13 @@ public class OAuth2Client {
             }
 
         } catch (SAXException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return null;
         } catch (IOException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return null;
         } catch (ParserConfigurationException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return null;
         }
     }

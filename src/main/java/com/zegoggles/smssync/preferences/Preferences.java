@@ -56,6 +56,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.THIRD_PARTY_INT
 import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 
 public class Preferences {
+    private static final String ERROR = "error";
     private final Context context;
     private final SharedPreferences preferences;
 
@@ -261,7 +262,7 @@ public class Preferences {
                     PackageManager.GET_META_DATA);
             return "" + (code ? pInfo.versionCode : pInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return null;
         }
     }
@@ -276,7 +277,7 @@ public class Preferences {
 
             return (pInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             return false;
         }
     }
@@ -300,7 +301,7 @@ public class Preferences {
                     PackageManager.GET_META_DATA);
             code = pInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             code = -1;
         }
 

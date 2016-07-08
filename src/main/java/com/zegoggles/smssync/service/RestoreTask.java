@@ -45,6 +45,7 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.RESTORE;
 import static com.zegoggles.smssync.service.state.SmsSyncState.UPDATING_THREADS;
 
 class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
+    private static final String ERROR = "error";
     private Set<String> smsIds = new HashSet<String>();
     private Set<String> callLogIds = new HashSet<String>();
     private Set<String> uids = new HashSet<String>();
@@ -135,14 +136,14 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         } catch (XOAuth2AuthenticationFailedException e) {
             return handleAuthError(config, currentRestoredItem, e);
         } catch (AuthenticationFailedException e) {
-            return transition(ERROR, e);
+            return transition(SmsSyncState.ERROR, e);
         } catch (MessagingException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
             updateAllThreadsIfAnySmsRestored();
-            return transition(ERROR, e);
+            return transition(SmsSyncState.ERROR, e);
         } catch (IllegalStateException e) {
             // usually memory problems (Couldn't init cursor window)
-            return transition(ERROR, e);
+            return transition(SmsSyncState.ERROR, e);
         } finally {
             imapStore.closeFolders();
         }
@@ -168,7 +169,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         } else {
             Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
         }
-        return transition(ERROR, e);
+        return transition(SmsSyncState.ERROR, e);
     }
 
     private void publishProgress(SmsSyncState smsSyncState) {
@@ -234,12 +235,12 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             }
 
         } catch (MessagingException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
         } catch (IllegalArgumentException e) {
             // http://code.google.com/p/android/issues/detail?id=2916
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
         } catch (IOException e) {
-            Log.e(TAG, "error", e);
+            Log.e(TAG, ERROR, e);
         }
         return dataType;
     }

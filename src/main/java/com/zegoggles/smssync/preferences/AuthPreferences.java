@@ -20,6 +20,11 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.ServerPreferences.Defaults.SERVER_PROTOCOL;
 
 public class AuthPreferences {
+    private static final String UTF_8 = "UTF-8";
+    private final Context context;
+    private final SharedPreferences preferences;
+    private final ServerPreferences serverPreferences;
+
     /**
      * Preference key containing the Google account username.
      */
@@ -49,10 +54,6 @@ public class AuthPreferences {
      * </ol>
      */
     private static final String IMAP_URI = "imap%s://%s:%s:%s@%s";
-
-    private final Context context;
-    private final SharedPreferences preferences;
-    private final ServerPreferences serverPreferences;
 
     public AuthPreferences(Context context) {
         this(context,  new ServerPreferences(context));
@@ -266,7 +267,7 @@ public class AuthPreferences {
         final String token = getOauth2Token();
         final String formatted = "user=" + username + "\001auth=Bearer " + token + "\001\001";
         try {
-            return new String(Base64.encodeBase64(formatted.getBytes("UTF-8")), "UTF-8");
+            return new String(Base64.encodeBase64(formatted.getBytes(UTF_8)), UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -274,7 +275,7 @@ public class AuthPreferences {
 
     private static String encode(String s) {
         try {
-            return s == null ? "" : URLEncoder.encode(s, "UTF-8");
+            return s == null ? "" : URLEncoder.encode(s, UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
