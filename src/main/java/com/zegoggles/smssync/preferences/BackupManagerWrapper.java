@@ -11,6 +11,8 @@ import static com.zegoggles.smssync.App.TAG;
 public class BackupManagerWrapper {
     static Boolean available = null;
 
+    private BackupManagerWrapper() {}
+
     static boolean available() {
         if (available == null) {
             try {

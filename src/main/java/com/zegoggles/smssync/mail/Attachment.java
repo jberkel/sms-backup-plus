@@ -29,6 +29,8 @@ class Attachment {
     private static final String RFC2231_SPECIALS = "*'%" + MIME_SPECIALS;
     private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
+    private Attachment() {}
+
     public static MimeBodyPart createTextPart(String text) throws MessagingException {
         return new MimeBodyPart(new TextBody(text));
     }

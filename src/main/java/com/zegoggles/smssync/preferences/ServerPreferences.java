@@ -41,5 +41,7 @@ public class ServerPreferences {
          * Default value for {@link ServerPreferences#SERVER_PROTOCOL}.
          */
         public static final String SERVER_PROTOCOL = "+ssl+";
+
+        private Defaults() {}
     }
 }

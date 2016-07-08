@@ -39,6 +39,8 @@ public interface CalendarAccessor {
     public static class Get {
         private static CalendarAccessor sCalendarAccessor;
 
+        private Get() {}
+
         public static CalendarAccessor instance(ContentResolver resolver) {
             final  int sdkVersion = Build.VERSION.SDK_INT;
             if (sCalendarAccessor == null) {

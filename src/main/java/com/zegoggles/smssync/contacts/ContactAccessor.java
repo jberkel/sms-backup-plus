@@ -54,6 +54,9 @@ public interface ContactAccessor {
 
     public static class Get {
         private static ContactAccessor sContactAccessor;
+
+        private Get() {}
+
         public static ContactAccessor instance() {
             final int sdkVersion = Build.VERSION.SDK_INT;
             if (sContactAccessor == null) {
