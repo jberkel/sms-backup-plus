@@ -26,13 +26,11 @@ public final class Headers {
     private Headers() {}
 
     public static String get(Message msg, String header) {
-        try {
-            String[] hdrs = msg.getHeader(header);
-            if (hdrs != null && hdrs.length > 0) {
-                return hdrs[0];
-            }
-        } catch (MessagingException ignored) {
+        String[] hdrs = msg.getHeader(header);
+        if (hdrs.length > 0) {
+            return hdrs[0];
+        } else {
+            return null;
         }
-        return null;
     }
 }

@@ -102,7 +102,6 @@ class MessageGenerator {
             sentDate = new Date();
         }
         mHeaderGenerator.setHeaders(msg, msgMap, DataType.SMS, address, record, sentDate, messageType);
-        msg.setUsing7bitTransport();
         return msg;
     }
 
@@ -141,14 +140,13 @@ class MessageGenerator {
         }
         final int msg_box = toInt(msgMap.get("msg_box"));
         mHeaderGenerator.setHeaders(msg, msgMap, DataType.MMS, details.address, details.getRecipient(), sentDate, msg_box);
-        MimeMultipart body = new MimeMultipart();
+        MimeMultipart body = MimeMultipart.newInstance();
 
         for (BodyPart p : mMmsSupport.getMMSBodyParts(Uri.withAppendedPath(mmsUri, MMS_PART))) {
             body.addBodyPart(p);
         }
 
         setBody(msg, body);
-        msg.setUsing7bitTransport();
         return msg;
     }
 
@@ -195,7 +193,6 @@ class MessageGenerator {
             sentDate = new Date();
         }
         mHeaderGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record, sentDate, callType);
-        msg.setUsing7bitTransport();
         return msg;
     }
 

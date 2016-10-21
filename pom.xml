@@ -42,7 +42,7 @@
             <groupId>com.fsck.k9.mail</groupId>
             <artifactId>lib</artifactId>
             <type>aar</type>
-            <version>0.0.1.f2ef921</version>
+            <version>0.0.1.75bb293</version>
         </dependency>
 
         <dependency>
@@ -107,13 +107,13 @@
             <plugin>
                 <groupId>com.simpligility.maven.plugins</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>4.4.1</version>
+                <version>4.4.3</version>
                 <configuration>
                   <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
                   <assetsDirectory>${project.basedir}/assets</assetsDirectory>
                   <resourceDirectory>${project.basedir}/res</resourceDirectory>
                   <sdk>
-                     <platform>21</platform>
+                     <platform>24</platform>
                   </sdk>
                   <undeployBeforeDeploy>true</undeployBeforeDeploy>
                   <lint>
@@ -227,6 +227,11 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+
+        <repository>
+            <id>android-local</id>
+            <url>file:///${env.ANDROID_HOME}/extras/android/m2repository</url>
         </repository>
 
         <repository>
