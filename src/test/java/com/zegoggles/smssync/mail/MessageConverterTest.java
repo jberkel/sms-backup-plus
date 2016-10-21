@@ -64,7 +64,7 @@ public class MessageConverterTest {
                 "\n" +
                 "Some Text";
 
-        final MimeMessage mimeMessage = new MimeMessage(new ByteArrayInputStream(message.getBytes()), true);
+        final MimeMessage mimeMessage = MimeMessage.parseMimeMessage(new ByteArrayInputStream(message.getBytes()), true);
         final ContentValues values = messageConverter.messageToContentValues(mimeMessage);
         assertThat(values.getAsString(Telephony.TextBasedSmsColumns.ADDRESS)).isNull();
     }
@@ -194,7 +194,7 @@ public class MessageConverterTest {
                 "\n" +
                 "Das=C3=9FAs=C3=9F";
 
-        return new MimeMessage(new ByteArrayInputStream(message.getBytes()), true);
+        return MimeMessage.parseMimeMessage(new ByteArrayInputStream(message.getBytes()), true);
     }
 
     private MimeMessage createCallLogMessage() throws IOException, MessagingException {
@@ -219,6 +219,6 @@ public class MessageConverterTest {
                 "\n" +
                 "+12121 (missed call)";
 
-        return new MimeMessage(new ByteArrayInputStream(message.getBytes()), true);
+        return MimeMessage.parseMimeMessage(new ByteArrayInputStream(message.getBytes()), true);
     }
 }

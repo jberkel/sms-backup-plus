@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,6 +24,7 @@ public class ConversionResultTest {
     @Test public void shouldAddMessage() throws Exception {
         ConversionResult result = new ConversionResult(DataType.SMS);
         Message message = mock(Message.class);
+        when(message.getHeader(anyString())).thenReturn(new String[] {});
         Map<String, String> map = new HashMap<String, String>();
         result.add(message, map);
         assertThat(result.isEmpty()).isFalse();
