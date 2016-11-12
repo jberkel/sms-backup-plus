@@ -379,16 +379,17 @@ you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and set "Adjustme
 
 ## <a name="beta">Beta testing
 
-If you want to help beta testing, join the [community][] on Google+ and follow the "Become a beta
-tester" link in the "About this community box". You will be asked to opt in to the beta program (you
-can leave it at any time).
+If you want to help beta testing, follow the instructions [here][beta-link]. You will be asked to opt in
+to the beta program (you can leave it at any time).
 
 Once opted in your device will automatically update to the latest beta which might have bug fixes
 and features not found in the currently released version.
 
-Alternatively, if for some reason you don't want to join the community you can download an APK and
-install it manually from [Github releases][releases] (however, you won't get automatic updates this
-way).
+Alternatively you can download an APK and install it manually from [Github releases][releases]
+(however, you won't get automatic updates this way).
+
+There is a also a [community][] on Google+ where SMS Backup+ is discussed, it is no longer required
+to join it in order to get automatic updates.
 
 ## <a name="contributing">Contributing</a>
 
@@ -466,6 +467,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
 [Authorized Access to your Google Account]: https://security.google.com/settings/security/permissions
 [community]: https://plus.google.com/communities/113290889178902750997
+[beta-link]: https://play.google.com/apps/testing/com.zegoggles.smssync
 [releases]: https://github.com/jberkel/sms-backup-plus/releases
 [pull request]: https://help.github.com/articles/using-pull-requests/
 [Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
