@@ -103,7 +103,7 @@
   <string name="ui_backup_calllog_desc">Activer la sauvegarde du journal d\'appels</string>
 
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Synchroniser au calendrier</string>
-  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Ajouter les entrées du journal d\'appel au calendrier</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Ajouter les entrées du journal d\'appels au calendrier</string>
 
   <string name="ui_backup_calllog_types_label">Types d\'appels</string>
   <string name="ui_backup_calllog_types_desc">Types d\'appels à sauvegarder</string>
@@ -253,7 +253,7 @@
   <string name="ui_backup_settings_label">Paramètres de sauvegarde</string>
   <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
 
-  <string name="ui_backup_calllog_settings_label">Paramètres de sauvegarde du journal d\'appel</string>
+  <string name="ui_backup_calllog_settings_label">Paramètres de sauvegarde du journal d\'appels</string>
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">Paramètres de sauvegarde automatique</string>
@@ -273,12 +273,12 @@
   <string name="ui_restore_mms_label">Restaurer les MMS</string>
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
-  <string name="ui_restore_calllog_label">Restaurer le journal d\'appel</string>
+  <string name="ui_restore_calllog_label">Restaurer le journal d\'appels</string>
   <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
-  <string name="calllog">Journal d\'appel</string>
+  <string name="calllog">Journal d\'appels</string>
 
   <string name="pref_acra_disabled">Désactivé</string>
 
