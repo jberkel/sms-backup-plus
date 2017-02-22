@@ -241,6 +241,10 @@
   <string name="_1min">1 min</string>
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
+  
+  <string name="_1s">1 s</string>
+  <string name="_2s">2 s</string>
+  <string name="_5s">5 s</string>
 
   <string name="ssl_required">SSL</string>
   <string name="ssl_optional">SSL (trust all)</string>

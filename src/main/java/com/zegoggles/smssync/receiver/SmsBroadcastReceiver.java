@@ -28,8 +28,11 @@ import com.zegoggles.smssync.utils.AppLog;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
+import android.telephony.TelephonyManager;
+
 public class SmsBroadcastReceiver extends BroadcastReceiver {
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String PHONE_STATE = "android.intent.action.PHONE_STATE";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -39,6 +42,12 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             bootup(context);
         } else if (SMS_RECEIVED.equals(intent.getAction())) {
             incomingSMS(context);
+        } else if (PHONE_STATE.equals(intent.getAction())){
+                TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                int callState = tm.getCallState();
+                if (callState==TelephonyManager.CALL_STATE_IDLE) {
+                    incomingCall(context);
+                }
         }
     }
 
@@ -55,6 +64,14 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             getAlarms(context).scheduleIncomingBackup();
         } else {
             Log.i(TAG, "Received SMS but not set up to back up.");
+        }
+    }
+
+    private void incomingCall(Context context) {
+        if (shouldSchedule(context)) {
+            getAlarms(context).scheduleIncomingBackup();
+        } else {
+            Log.i(TAG, "Made/Received Call but not set up to back up.");
         }
     }
 
