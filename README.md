@@ -1,6 +1,9 @@
-## SMS Backup+
+## SMS Backup+ ![Icon][]
 
-[![][Icon]][PlayLink]
+<a href="https://play.google.com/store/apps/details?id=com.zegoggles.smssync">
+    <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="40pt"/>
+</a>
+
 [![Build Status PNG][]][Build Status]
 
 This is a fork of the Android backup tool
