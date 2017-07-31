@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+      Brug Gmail til at lave backup af dine SMS\'er. Dette er en forbedret version af applicationen "SMS Backup"
+      af Christoph Studer, som understøtter genetablering af backuppen. Den er fuld bagudkompatibel med SMS Backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Backup</string>
+  <string name="ui_sync_button_label_canceling">Stopper</string>
+  <string name="ui_sync_button_label_syncing">Stop</string>
+
+  <string name="ui_restore_button_label_idle">Genetabler</string>
+  <string name="ui_restore_button_label_restoring">Stop</string>
+
+  <string name="status_idle">Venter</string>
+  <string name="status_idle_details">Sidste backup tidspunkt: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">aldrig</string>
+
+  <string name="status_working">Arbejder</string>
+
+  <string name="status_backup">Backup igang</string>
+  <string name="status_restore">Genetablerer</string>
+
+  <string name="status_backup_details"><xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> emner kopieret\u2026</string>
+  <string name="status_restore_details">Genetablerede <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> emner\u2026</string>
+  <string name="status_login_details">Logger ind\u2026</string>
+  <string name="status_updating_threads">Opdaterer tråde\u2026</string>
+  <string name="status_done">Færdig</string>
+  <string name="status_backup_done_details_max_per_sync">Det maksimale antal på %1$d emner per backup er nået. Genstart backup fo at fortsætte.</string>
+  <string name="status_backup_done_details_noitems">Ingen emner at kopiere.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Kopierede <xliff:g id="total_items">%1$d</xliff:g> emne.</item>
+    <item quantity="other">Kopierede <xliff:g id="total_items">%1$d</xliff:g> emner.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Genetablerede <xliff:g id="total_items">%1$d</xliff:g> item (%2$d dups).</item>
+    <item quantity="other">Genetablerede <xliff:g id="total_items">%1$d</xliff:g> items (%2$d dups).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d emner genetableret.</string>
+
+  <string name="status_unknown_error">Fejl</string>
+  <string name="notification_general_error">SMSBackup+ fejl</string>
+
+  <string name="status_unknown_error_details">Fejl under backup/genetablering:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Login fejl</string>
+  <string name="notification_auth_failure">SMSBackup+ login fejl</string>
+  <string name="status_auth_failure_details_xoauth">XOAuth autorisations fejl. Kontroller at IMAP er aktiveret under dine Gmail konto indstillinger.</string>
+  <string name="status_auth_failure_details_plain">IMAP autorisations fejl.
+  Kontroller at login og password er korrekt.</string>
+  <string name="status_calc_details">Beregner\u2026</string>
+  <string name="status_canceled">Anulleret</string>
+  <string name="status_canceled_details">%1$d/%2$d emner kopieret.</string>
+  <string name="status_gmail_temp_error">Midlertidig Gmail IMAP fejl. Prøv igen senere.</string>
+
+  <string name="ui_settings_advanced_label">Avancerede indstillinger</string>
+  <string name="ui_settings_advanced_desc">Indstil avancerede indstillinger.</string>
+  <string name="ui_settings_advanced_server_label">IMAP server indstillinger</string>
+  <string name="ui_settings_advanced_server_desc">Undgå ændringer med mindre du ved hvad du laver!</string>
+
+  <string name="imap_settings">IMAP indstillinger</string>
+  <string name="ui_login_label">Brugernavn</string>
+  <string name="ui_login_desc">Din IMAP konto/e-mail adresse.</string>
+  <string name="ui_login_dialog_msg">ADVARSEL: Ændring af brugernavn kan få integrationen til ikke at virke når der bruges XOAuth.</string>
+  <string name="ui_password_label">Password</string>
+  <string name="ui_password_desc">Dit IMAP konto password. Bruges kun når XOAuth er deaktiveret.</string>
+  <string name="ui_password_dialog_msg">Kodeordet er kun lagret på denne enhed og bruges kun login.</string>
+  <string name="ui_server_label">Server adresse</string>
+  <string name="ui_server_desc">Adressen og porten på den server der skal sync\'es til.</string>
+  <string name="ui_server_dialog_msg">Standard for gmail er \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Sikkerhed</string>
+  <string name="ui_protocol_desc">Sikkerheds protokollen til serveren. Standard for gmail er \"SSL (Required)\"."</string>
+  <string name="ui_authentication_label">Autentificering</string>
+  <string name="ui_authentication_desc">Autentificerings metoden. Standard for gmail er \"XOAuth\".</string>
+  <string name="plain">Klar tekst</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Gmail label</string>
+  <string name="ui_imap_folder_desc">Gmail label til SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">SMS beskeder der er backed op bliver tagged med denne label i Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">E-mail emne prefix</string>
+  <string name="ui_mail_subject_prefix_desc">Brug IMAP folder navn som prefix i e-mail emne feltet.</string>
+
+  <string name="ui_max_items_per_sync_label">Emner per backup</string>
+  <string name="ui_max_items_per_sync_desc">Max antal af emner per backup.</string>
+  <string name="ui_max_items_per_restore_label">Emner per genskabelse</string>
+  <string name="ui_max_items_per_restore_desc">Max antal af emner per genskabelse.</string>
+
+  <string name="ui_restore_starred_only_label">Stjerne markerede emner</string>
+  <string name="ui_restore_starred_only_desc">Genskab kun emner der er markeret med stjerne.</string>
+
+  <string name="ui_backup_mms_label">Backup MMS</string>
+  <string name="ui_backup_mms_desc">Aktiver MMS backup</string>
+  <string name="ui_backup_mms_not_supported">MMS backup er ikke supporteret på denn platform.</string>
+
+  <string name="ui_backup_calllog_label">Backup opkalds log</string>
+  <string name="ui_backup_calllog_desc">Aktiver opkalds log backup</string>
+
+    <string name="ui_backup_calllog_sync_calendar_enabled_label">Kalender sync</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Tilføj opkald til kalender</string>
+
+  <string name="ui_backup_calllog_types_label">Opkalds typer</string>
+  <string name="ui_backup_calllog_types_desc">Hvilke opkalds typer skal logges</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Ingen</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Hvilken kalender der bruges til opkalds logs</string>
+
+  <string name="ui_imap_folder_calllog_label">Opkalds log etiket</string>
+  <string name="ui_imap_folder_calllog_desc">Gmail etiket til opkalds log.</string>
+   <string name="ui_imap_folder_calllog_label_dialog_msg">Opkald vil få denne etiket når de backes op til Gmail.</string>
+
+  <string name="ui_mark_as_read_label">Marker som læst (emails)</string>
+  <string name="ui_mark_as_read_desc">Skal beskeder i Gmail markeres som læst eller ej.</string>
+
+  <string name="ui_mark_as_read_restore_label">Marker som læst (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Skal genskabte beskeder markeres som læst eller ej.</string>
+
+  <string name="ui_email_address_style_label">Email adresse stil</string>
+  <string name="ui_email_address_style_desc">Formatet på email adresser</string>
+
+  <string name="ui_enable_auto_sync_label">Auto backup</string>
+  <string name="ui_enable_auto_sync_desc">Aktiver automatisk backup af SMS\'er eller ej</string>
+  <string name="ui_enable_auto_sync_summary">Automatisk backup %1$s.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Ingen emne typer valgt.</string>
+
+  <string name="sd_card_disclaimer">Automatisk backup vil sikkert ikke virke når app\'en er installeret på SD kortet.</string>
+
+  <string name="ui_enable_auto_sync_bg_data">Du skal også aktivere baggrundsdata.</string>
+
+  <string name="ui_auto_backup_schedule_label">Almindeligt interval</string>
+  <string name="ui_auto_backup_schedule_desc">Hvor ofte bliver der backed op</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Interval for indkomne beskeder</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Hvor hurtigt skal der indkomne beskeder backes op</string>
+
+  <string name="ui_wifi_only_label">WiFi krævet</string>
+  <string name="ui_wifi_only_desc">Aktiver kun backup over WiFi</string>
+
+  <string name="ui_notifications_label">Notifikationer</string>
+  <string name="ui_notifications_desc">Baggrunds notifikationer</string>
+
+  <string name="error_wifi_only_no_connection">Ingen WiFi forbindelse</string>
+  <string name="error_no_connection">Ingen internet forbindelse</string>
+  <string name="error_sms_provider_not_writable">Kan ikke skrive til SMS provider</string>
+
+  <string name="ui_dialog_missing_credentials_title">Login information</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Du skal først oprette forbindelse til din Gmail konto.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Du skal først sætte brugernavn og password.</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">Ugyldigt etiket navn</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Etiketten må ikke indeholde mellemrum i starten eller slutningen.</string>
+  <string name="ui_dialog_first_sync_title">Første backup</string>
+  <string name="ui_dialog_first_sync_msg">Foretag backup af de SMS\'er der er på telefonen nu, eller spring over?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Foretag backup af de SMS\'er der er på telefonen nu, eller spring over?\n\nBemærk: Backuppen vil blive splittet op i bunker af %1$d beskeder.</string>
+  <string name="ui_dialog_request_token_msg">Kontakter Google…</string>
+  <string name="ui_dialog_access_token_msg">Forespørger om adgang…</string>
+
+  <string name="ui_dialog_access_token_error_title">Kunne ikke få adgang</string>
+
+  <string name="ui_dialog_access_token_error_msg">Kunne ikke få adgang. Husk at vælg \"Tillad adgang\".</string>
+
+  <string name="ui_dialog_connect_msg">Et browser vindue vil blive åbnet. Du vil blive bedt om at logge ind på din Gmail konto, for at give %1$s adgang til dine emails</string>
+  <string name="ui_dialog_connect_token_error">Kunne ikke få svar fra Google. Kontroller at der er netværksforbindelse og at tiden og tidszonen er indstillet korrekt.</string>
+  <string name="ui_dialog_disconnect_msg">Er du sikker? Du skal bagefter gen-autorisere kontoen og dine synkroniseringen vil blive nulstillet.</string>
+
+  <string name="ui_dialog_upgrade_title">Opgraderings information</string>
+  <string name="ui_dialog_upgrade_msg">
+      SMS Backup+ er fuldt kompatibelt med SMS Backup. Men du skal sikre dig at \"Auto backup\" kun er slået til i en af apps\'ne, ellers risikerer du dubletter. Vælg også \"Spring over\" ved første synkronisering af beskedder på telefonen, hvor der allerede er backed beskeder op.
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS fejl</string>
+  <string name="ui_dialog_brokendroidx_msg">Der er en fejl der forhindrer beskeder i at blive backed op på Droid X. Se FAQ\'en på hjemmesiden for mere info.</string>
+
+  <string name="ui_sync">Backup</string>
+  <string name="ui_skip">Spring over</string>
+  <string name="err_sync_requires_login_info">Kan ikke tage backup uden login information.</string>
+  <string name="menu_info">Om</string>
+  <string name="menu_reset">Nulstil</string>
+  <string name="ui_dialog_reset_title">Nulstil synkronisering</string>
+  <string name="ui_dialog_reset_message">Vil du nulstille synkroniseringen?
+      Du kan stadig vælge at springe beskeder over senere. </string>
+  <string name="all_messages">Alle</string>
+
+  <string name="gmail_needs_connecting">Tryk for at forbinde til din Gmail konto (påkrævet).</string>
+  <string name="gmail_already_connected">Forbundet som %1$s.</string>
+
+  <string name="ui_connected_label">Forbind</string>
+  <string name="ui_connected_desc">Din konto skal være forbundet.</string>
+
+  <string name="call_incoming">indkomne opkald</string>
+  <string name="call_outgoing">udgående opkald</string>
+  <string name="call_missed">ubesvarede opkald</string>
+
+  <string name="call_missed_text">Ubesvaret opkald fra %1$s</string>
+  <string name="call_incoming_text">Opkald fra %1$s</string>
+  <string name="call_outgoing_text">Opkald til %1$s</string>
+
+  <string name="call_number_field">Nummer: %1$s</string>
+  <string name="call_duration_field">Varighed: %1$s</string>
+
+  <string name="sms_with_field">SMS med  %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">Opkald med %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Backup af følgende kontakter</string>
+  <string name="ui_backup_contact_group_desc">Tag kun backup af en specifik gruppe</string>
+
+  <string name="everybody">Alle</string>
+
+  <string name="call_type_everything">Alt</string>
+  <string name="call_type_incoming">Kun indgående opkald</string>
+  <string name="call_type_outgoing">Kun udgående opkald</string>
+  <string name="call_type_incoming_outgoing">Indkomne &amp; Udgående</string>
+  <string name="call_type_missed">Kun ubesvarede opkald</string>
+
+  <string name="email_address_style_name">Navn</string>
+  <string name="email_address_style_name_and_number">Navn (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 t</string>
+  <string name="_2h">2 t</string>
+  <string name="_6h">6 t</string>
+  <string name="_24h">24 t</string>
+  <string name="never">Aldrig</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="ssl_required">SSL (Påkrævet)</string>
+  <string name="ssl_optional">SSL (Valgfri)</string>
+  <string name="tls_required">TLS (Påkrævet)</string>
+  <string name="tls_optional">TLS (Valgfri)</string>
+  <string name="none">Ingen</string>
+
+  <string name="ui_third_party_integration_label">3. parts integration</string>
+  <string name="ui_third_party_integration_desc">Tillad andre apps at trigge backup via Broadcast intents.</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">Backup indstillinger</string>
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+
+  <string name="ui_backup_calllog_settings_label">Opkalds log indstillinger</string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+
+  <string name="auto_backup_settings">Auto backup indstillinger</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label">Nulstil indstillinger</string>
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+
+  <string name="ui_backup_sms_label">Backup SMS</string>
+  <string name="ui_backup_sms_desc">Aktiver SMS backup</string>
+
+  <string name="ui_restore_sms_label">Genetabler SMS</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">(Funktionen er ikke tilgængelig endnu)</string>
+
+  <string name="ui_restore_mms_label">Genetabler MMS</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label">Genetabler opkalds log</string>
+  <string name="ui_restore_calllog_desc"/>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">Opkalds log</string>
+
+  <string name="pref_acra_disabled">Deaktiveret</string>
+
+  <string name="app_log_skip_backup_background_data">Sprunget over fordi baggrunds data er deaktiveret</string>
+  <string name="app_log_skip_backup_already_running">Sprunget over fordi backup allerede er igang</string>
+  <string name="app_log_skip_backup_skip_messages">Spring alle beskeder over</string>
+  <string name="app_log_skip_backup_no_items">Sprunget over (ingen emner fundet)</string>
+  <string name="app_log_missing_credentials">Sprunget over (mangler login info)</string>
+  <string name="app_log_backup_requested">Backup aktiveret (%1$s)</string>
+  <string name="app_log_start_backup">Starter backup (%1$s)</string>
+  <string name="app_log_backup_messages">Backer op (%1$d SMS, %2$d MMS, %3$d opkalds log)</string>
+  <string name="app_log_backup_messages_with_config">Bruger konfiguration: %1$s</string>
+  <string name="app_log_backup_canceled">Backup anulleret</string>
+  <string name="app_log_backup_finished">Backup færdig</string>
+
+  <string name="app_log_backup_failed_authentication">Autentifiserings fejl: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Generel fejl: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Ingen forbindelse. Backup sprunget over</string>
+  <string name="app_log_scheduled_next_sync">Næste backup er planlagt til: %1$s</string>
+  <string name="app_log_no_next_sync">Ingen ny backup planlagt</string>
+
+  <string name="menu_view_log">Vis log</string>
+  <string name="app_log_empty">Loggen er tom. Aktiver den i \"Avancerede indstillinger\".</string>
+
+  <string name="pref_app_log">Synk log</string>
+  <string name="pref_app_log_enabled">Loggen er gemt på SD kortet som \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="pref_app_log_debug">Ekstra debug information</string>
+  <string name="pref_app_log_debug_summary">Aktiverer ekstra debug logning i loggen.</string>
+
+  <string name="source_incoming">indkomne</string>
+  <string name="source_regular">almindelig</string>
+  <string name="source_3rd_party">3. parts</string>
+  <string name="source_manual">manuel</string>
+  <string name="source_unknown">ukendt</string>
+
+  <string name="ui_confirm_action_label">Bekræft handlinger</string>
+  <string name="ui_confirm_action_desc">Spørg for backup og genetablering</string>
+  <string name="ui_dialog_confirm_action_title">Bekræft handling</string>
+  <string name="ui_dialog_confirm_action_msg">Er du sikker på at du vil udføre denne handling?</string>
+
+  <string name="loading">Loader…</string>
+  <string name="ssl_error">SSL fejl</string>
+  <string name="ui_dialog_account_manager_token_error">
+      Kunne ikke få en token fra systemet. Vil du prøve at autentifisere igennem browseren?
+  </string>
+  <string name="select_google_account">Vælg en google konto</string>
+
+  <!-- donation related -->
+  <string name="donate">Donering</string>
+  <string name="donate_summary">Ved brug af sikker betaling gennem Google Play.</string>
+
+  <string name="ui_dialog_donate_message">Vælg beløb:</string>
+  <string name="ui_donation_success_message">Donationen er gennemført. Tak for hjælpen!</string>
+  <string name="ui_donation_failure_message">Donationen fejlede: %1$s</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">I-app køb er ikke tilgængelig</string>
+  <string name="donation_error_unavailable">ikke tilgængelig</string>
+  <string name="donation_error_canceled">anulleret</string>
+  <string name="donation_error_already_owned">du har allerede doneret</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="TypographyEllipsis" severity="ignore"/>
+    <issue id="TypographyDashes" severity="ignore"/>
+    <issue id="Typos" severity="ignore"/>
+
+    <issue id="MissingTranslation" severity="ignore"/>
+    <issue id="MissingQuantity" severity="ignore"/>
+    <issue id="UnusedQuantity" severity="ignore"/>
+    <issue id="ContentDescription" severity="ignore"/>
+
+    <issue id="UselessParent">
+      <ignore path="res/layout/status.xml"/>
+    </issue>
+
+    <issue id="OldTargetApi" severity="ignore"/>
+    <issue id="ExportedReceiver" severity="ignore"/>
+    <issue id="SetJavaScriptEnabled" severity="ignore"/>
+
+    <issue id="InlinedApi" severity="ignore"/>
+    <issue id="PluralsCandidate" severity="ignore"/>
+
+    <issue id="NewApi">
+        <ignore path="target/classes/com/github/jberkel/pay/me/validator/DefaultSignatureValidator.class"/>
+        <ignore path="target/classes/com/github/jberkel/pay/me/IabHelper.class"/>
+    </issue>
+
+    <!-- for older android devices we need to store in /drawable -->
+    <issue id="IconLocation" severity="ignore"/>
+    <issue id="IconDuplicatesConfig" severity="ignore"/>
+    <issue id="IconDensities" severity="ignore"/>
+    <issue id="IconMissingDensityFolder" severity="ignore"/>
+    <issue id="LintError" severity="ignore"/>
+</lint>

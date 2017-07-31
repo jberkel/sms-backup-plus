@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Készítsen biztonsági mentést az SMS-eidről a Gmail fiókjába.
+     Ez az alkalmazás a Christoph Studer által készített "SMS Backup"
+     továbbfejlesztett változata, amely vissza is tudja állítani az
+     SMS-eket a telefonra, egyúttal visszafelé teljesen kompatibilis
+     az SMS Backuppal.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Mentés</string>
+  <string name="ui_sync_button_label_canceling">Leállítás</string>
+  <string name="ui_sync_button_label_syncing">Megszakítás</string>
+
+  <string name="ui_restore_button_label_idle">Visszaállítás</string>
+  <string name="ui_restore_button_label_restoring">Megszakítás</string>
+
+  <string name="status_idle">Várakozás</string>
+  <string name="status_idle_details">Utolsó mentés: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">nincs</string>
+
+  <string name="status_working">Folyamatban</string>
+
+  <string name="status_backup">Biztonsági mentés</string>
+  <string name="status_restore">Visszaállítás</string>
+
+  <string name="status_backup_details"><xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elem mentése kész\u2026</string>
+  <string name="status_restore_details"><xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elem visszaállítása kész\u2026</string>
+  <string name="status_login_details">Bejelentkezés\u2026</string>
+  <string name="status_updating_threads">Beszélgetések frissítése\u2026</string>
+  <string name="status_done">Kész</string>
+  <string name="status_backup_done_details_max_per_sync">A mentésenkénti maximum %1$d elem feltöltése megtörtént. Indítsa újra a mentést a folytatáshoz.</string>
+  <string name="status_backup_done_details_noitems">Nincs mit menteni.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one"><xliff:g id="total_items">%1$d</xliff:g> elem mentése sikeres volt.</item>
+    <item quantity="other"><xliff:g id="total_items">%1$d</xliff:g> elem mentése sikeres volt.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one"><xliff:g id="total_items">%1$d</xliff:g> elem visszaállítása sikeres volt (%2$d ütközés).</item>
+    <item quantity="other"><xliff:g id="total_items">%1$d</xliff:g> elem visszaállítása sikeres volt (%2$d ütközés).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d elem visszaállítása sikeres volt.</string>
+
+  <string name="status_unknown_error">Hiba</string>
+  <string name="notification_general_error">SMS Backup+ hiba</string>
+
+  <string name="status_unknown_error_details">Hiba történt a mentés/visszaállítás során:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Bejelentkezési hiba</string>
+  <string name="notification_auth_failure">SMS Backup+ bejelentkezési hiba</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth bejelentkezési hiba. Győződjön meg róla, hogy engedélyezte az IMAP-alapú hozzáférést a Gmail fiókja beállításaiban.</string>
+  <string name="status_auth_failure_details_plain">IMAP bejelentkezési hiba. Győződjön meg róla, hogy a bejelentkezési nevet és jelszót helyesen adta meg.</string>
+  <string name="status_calc_details">Számítás\u2026</string>
+  <string name="status_canceled">Megszakítva</string>
+  <string name="status_canceled_details">%1$d/%2$d elem mentése sikeres volt.</string>
+  <string name="status_gmail_temp_error">Ideiglenes Gmail IMAP hiba, próbálja újra később.</string>
+
+  <string name="ui_settings_advanced_label">Haladó beállítások</string>
+  <string name="ui_settings_advanced_desc">Haladó beállítások módosítása.</string>
+  <string name="ui_settings_advanced_server_label">IMAP kiszolgáló beállítások</string>
+  <string name="ui_settings_advanced_server_desc">Ne módosítson semmit, hacsak nem tudja, hogy mit csinál!</string>
+
+  <string name="imap_settings">IMAP beállítások</string>
+  <string name="ui_login_label">Felhasználónév</string>
+  <string name="ui_login_desc">Az Ön IMAP-fiókja/e-mail cím.</string>
+  <string name="ui_login_dialog_msg">FIGYELEM: A felhasználónév megváltoztatása problémákat okozhat XOAuth használata esetén.</string>
+  <string name="ui_password_label">Jelszó</string>
+  <string name="ui_password_desc">Az IMAP-fiókjának jelszava. XOAuth használata esetén hagyja üresen.</string>
+  <string name="ui_password_dialog_msg">Az alkalmazás a jelszót a készüléken tárolja és csak a bejelentkezéskor használja azt.</string>
+  <string name="ui_server_label">Kiszolgáló címe</string>
+  <string name="ui_server_desc">A kiszolgáló címe és portszáma, amellyel szinkronizálni szeretne.</string>
+  <string name="ui_server_dialog_msg">Alapértelmezett cím Gmailhez: \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Biztonság</string>
+  <string name="ui_protocol_desc">A kiszolgáló által használt biztonsági protokoll. Alapértelmezett érték Gmailhez: \"SSL (kötelező)\"."</string>
+  <string name="ui_authentication_label">Hitelesítés</string>
+  <string name="ui_authentication_desc">Hitelesítési metódus. Alapértelmezett érték Gmailhez: \"XOAuth\".</string>
+  <string name="plain">Nyílt szöveg</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Gmail címke</string>
+  <string name="ui_imap_folder_desc">SMS-ek mentése az itt megadott címke alá.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Az elmentett SMS üzenetek a megadott címkével lesznek megjelölve Gmailben.</string>
+  <string name="ui_mail_subject_prefix_label">Email tárgy előtag</string>
+  <string name="ui_mail_subject_prefix_desc">IMAP mappa nevének használata előtagként az üzenetek tárgyában</string>
+
+  <string name="ui_max_items_per_sync_label">Elemek száma mentésenként</string>
+  <string name="ui_max_items_per_sync_desc">Egy mentés során legfeljebb ennyi elem kerül feltöltésre.</string>
+  <string name="ui_max_items_per_restore_label">Elemek száma visszaállításonként</string>
+  <string name="ui_max_items_per_restore_desc">Legfeljebb a ennyi elem visszaállítása.</string>
+
+  <string name="ui_restore_starred_only_label">Csillagozott elemek</string>
+  <string name="ui_restore_starred_only_desc">Csak a csillagozott elemek visszaállítása.</string>
+
+  <string name="ui_backup_mms_label">MMS-ek mentése</string>
+  <string name="ui_backup_mms_desc">MMS-ek mentésének engedélyezése</string>
+  <string name="ui_backup_mms_not_supported">Az MMS-ek mentése nem támogatott ezen a platformon.</string>
+
+  <string name="ui_backup_calllog_label">Hívásnapló mentése</string>
+  <string name="ui_backup_calllog_desc">Hívásnapló mentésének engedélyezése</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Szinkronizálás naptárral</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Hívásnapló bejegyzéseinek mentése naptárba</string>
+
+  <string name="ui_backup_calllog_types_label">Hívástípusok</string>
+  <string name="ui_backup_calllog_types_desc">Feltöltendő hívástípusok</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Nincs</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">A hívásnapló mentése ebbe a naptárba</string>
+
+  <string name="ui_imap_folder_calllog_label">Hívásnapló címkéje</string>
+  <string name="ui_imap_folder_calllog_desc">Hívásnapló bejegyzések mentése az itt megadott Gmail címke alá.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">A feltöltött hívásnapló bejegyzések az itt megadott címkével lesznek megjelölve Gmailben.</string>
+
+  <string name="ui_mark_as_read_label">Megjelölés olvasottként (email)</string>
+  <string name="ui_mark_as_read_desc">Üzenetek megjelölése olvasottként Gmailben.</string>
+
+  <string name="mark_as_read_always_read">Mindig jelölje meg olvasottként</string>
+  <string name="mark_as_read_always_unread">Mindig jelölje meg olvasatlanként</string>
+  <string name="mark_as_read_message_status">Használja az üzenet állapotát</string>
+
+  <string name="ui_mark_as_read_restore_label">Megjelölés olvasottként (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Visszaállított üzenetek megjelölése olvasottként.</string>
+
+  <string name="ui_email_address_style_label">Email cím stílusa</string>
+  <string name="ui_email_address_style_desc">Az email címek formátuma</string>
+
+  <string name="ui_enable_auto_sync_label">Automatikus mentés</string>
+  <string name="ui_enable_auto_sync_desc">Új SMS-ek automatikus mentése.</string>
+  <string name="ui_enable_auto_sync_summary">%1$s automatikus mentése.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Nincs mentésre kijelölt elem.</string>
+
+  <string name="sd_card_disclaimer">Az automatikus mentés nem működik megbízhatóan, ha az alkalmazás az SD-kártyára van telepítve.</string>
+
+  <string name="ui_enable_auto_sync_bg_data">Engedélyeznie kell az adatkapcsolatot a háttérben.</string>
+
+  <string name="ui_auto_backup_schedule_label">Rendszeres ütemezés</string>
+  <string name="ui_auto_backup_schedule_desc">Mentés rendszeres ütemezése</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Bejövő ütemezés</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Bejövő üzenetek mentésének ütemezése (a beérkezés után)</string>
+
+  <string name="ui_wifi_only_label">Csak WiFi-n</string>
+  <string name="ui_wifi_only_desc">Mentés csak WiFi-kapcsolat esetén</string>
+
+  <string name="ui_notifications_label">Értesítések</string>
+  <string name="ui_notifications_desc">Értesítések a háttérben</string>
+
+  <string name="error_wifi_only_no_connection">Nincs WiFi kapcsolat</string>
+  <string name="error_no_connection">Nincs internet kapcsolat</string>
+  <string name="error_sms_provider_not_writable">Nem sikerült hozzáférni az SMS tárolóhoz</string>
+
+  <string name="ui_dialog_missing_credentials_title">Bejelentkezési információk</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Először kapcsolódnia kell a Gmail fiókjához.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Először meg kell adnia a felhasználói nevét és jelszavát.</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">Érvénytelen címke név</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">A címke neve nem tartalmazhat szóközt (az elején vagy a végén).</string>
+  <string name="ui_dialog_first_sync_title">Első mentés</string>
+  <string name="ui_dialog_first_sync_msg">Menti vagy kihagyja a készüléken tárolt üzeneteket?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Menti vagy kihagyja a készüléken tárolt üzeneteket?\n\nMegjegyzés: A mentés %1$d üzenetenként kötegelve fog történni.</string>
+  <string name="ui_dialog_request_token_msg">Kapcsolat felvétele a Google-lal\u2026</string>
+  <string name="ui_dialog_access_token_msg">Hozzáférés kérése\u2026</string>
+
+  <string name="ui_dialog_access_token_error_title">Sikertelen jóváhagyás</string>
+  <string name="ui_dialog_access_token_error_msg">Nem sikerült megszerezni a hozzáférési tokent. Győződjön meg róla, hogy a \"Hozzáférés engedélyezése\" opciót választja.
+  </string>
+
+  <string name="ui_dialog_connect_msg">Egy böngésző ablak fog megnyílni, amiben be kell jelentkeznie a Gmail fiókjával és engedélyeznie kell az %1$s számára a hozzáférést az emailjeihez.</string>
+  <string name="ui_dialog_connect_token_error">Nem sikerült a Google hozzáférési token megszerzése. Győződjön meg róla, hogy a van élő internet kapcsolata, és a készüléken az idő, illetve az időzóna megfelelően van beállítva.</string>
+  <string name="ui_dialog_disconnect_msg">Biztos benne? A kapcsolat bontása után újra jóvá kell hagynia hozzáférést a fiókjával és a helyi biztonsági mentés állapota is alaphelyzetbe kerül.</string>
+
+  <string name="ui_dialog_upgrade_title">Frissítési információk</string>
+  <string name="ui_dialog_upgrade_msg">Az SMS Backup+ visszafelé kompatibilis az SMS Backuppal. Mindazonáltal bizonyosodjon meg róla, hogy az \"Automatikus mentés\" csak az egyik alkalmazásban aktív, különben előfordulhatnak ismétlődések a mentett üzenetek között. Ezen kívül válassza a \"Kihagyás\" opciót az első mentéskor, ha már korábban készült biztonsági mentés az üzenetekről.</string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS hiba</string>
+  <string name="ui_dialog_brokendroidx_msg">Van egy hiba a Droid X készülékekben, amely megakadályozza, hogy az alkalmazás hozzáférjen a bejövő üzenetekhez. További információkért keresse fel a gyakran ismételt kérdéseket a weboldalon.</string>
+
+  <string name="ui_sync">Mentés</string>
+  <string name="ui_skip">Kihagyás</string>
+  <string name="err_sync_requires_login_info">Nem lehet menteni bejelentkezési információk nélkül.</string>
+  <string name="menu_info">Névjegy</string>
+  <string name="menu_reset">Alaphelyzet</string>
+  <string name="ui_dialog_reset_title">Alaphelyzetbe állítás</string>
+  <string name="ui_dialog_reset_message">Biztosan alaphelyzetbe állítja a jelenleg szinkronizált állapotot? Később még mindig választhatja a készüléken tárolt üzenetek kihagyását.</string>
+  <string name="all_messages">Mind</string>
+
+  <string name="gmail_needs_connecting">Érintse meg, hogy bejelentkezzen a Gmail fiókjával (kötelező).</string>
+  <string name="gmail_already_connected">%1$s néven bejelentkezve.</string>
+
+  <string name="ui_connected_label">Bejelentkezés</string>
+  <string name="ui_connected_desc">Be kell jelentkeznie a fiókjával.</string>
+
+  <string name="call_incoming">bejövő hívás</string>
+  <string name="call_outgoing">kimenő hívás</string>
+  <string name="call_missed">nem fogadott hívás</string>
+
+  <string name="call_missed_text">Nem fogadott hívás: %1$s</string>
+  <string name="call_incoming_text">Bejövő hívás: %1$s</string>
+  <string name="call_outgoing_text">Kimenő hívás: %1$s</string>
+
+  <string name="call_number_field">Telefonszám: %1$s</string>
+  <string name="call_duration_field">Hossz: %1$s</string>
+
+  <string name="sms_with_field">SMS: %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">Hívás: %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Szűrés névjegyekre</string>
+  <string name="ui_backup_contact_group_desc">Csak a megadott címtár csoporthoz tartozó elemek mentése</string>
+
+  <string name="everybody">Mindenki</string>
+
+  <string name="call_type_everything">Minden</string>
+  <string name="call_type_incoming">Csak bejövő hívások</string>
+  <string name="call_type_outgoing">Csak kimenő hívások</string>
+  <string name="call_type_incoming_outgoing">Bejövő és kimenő hívások</string>
+  <string name="call_type_missed">Csak nem fogadott hívások</string>
+
+  <string name="email_address_style_name">Név</string>
+  <string name="email_address_style_name_and_number">Név (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 óra</string>
+  <string name="_2h">2 óra</string>
+  <string name="_6h">6 óra</string>
+  <string name="_24h">24 óra</string>
+  <string name="never">Soha</string>
+
+  <string name="_1min">1 perc</string>
+  <string name="_3mins">3 perc</string>
+  <string name="_30mins">30 perc</string>
+
+  <string name="ssl_required">SSL (kötelező)</string>
+  <string name="ssl_optional">SSL (opcionális)</string>
+  <string name="tls_required">TLS (kötelező)</string>
+  <string name="tls_optional">TLS (opcionális)</string>
+  <string name="none">Nincs</string>
+
+  <string name="ui_third_party_integration_label">Külső integráció</string>
+  <string name="ui_third_party_integration_desc">Engedélyezi más alkalmazások számára, hogy mentést kezdeményezzenek broadcast intentek által</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">Mentési beállítások</string>
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+
+  <string name="ui_backup_calllog_settings_label">Hívásnapló beállítások</string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+
+  <string name="auto_backup_settings">Automatikus mentés beállítások</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label">Visszaállítási beállítások</string>
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+
+  <string name="ui_backup_sms_label">SMS-ek mentése</string>
+  <string name="ui_backup_sms_desc">Engedélyezi az SMS-ek mentését</string>
+
+  <string name="ui_restore_sms_label">SMS-ek visszaállítása</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">(A funkció még nem elérhető)</string>
+
+  <string name="ui_restore_mms_label">MMS-ek visszaállítása</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label">Hívásnapló visszaállítása</string>
+  <string name="ui_restore_calllog_desc">Engedélyezi a hívásnapló bejegyzések visszaállítását</string>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">hívásnapló</string>
+
+  <string name="pref_acra_disabled">Letiltva</string>
+
+  <string name="app_log_skip_backup_background_data">Kihagyva, mert az adatkapcsolat a háttérben le van tiltva</string>
+  <string name="app_log_skip_backup_already_running">Kihagyva, mert már folyamatban van egy mentés</string>
+  <string name="app_log_skip_backup_skip_messages">Az összes üzenet kihagyása</string>
+  <string name="app_log_skip_backup_no_items">Kihagyva (nincs mit menteni)</string>
+  <string name="app_log_missing_credentials">Kihagyva (hiányzó jogosultságok)</string>
+  <string name="app_log_backup_requested">Mentés kérvényezve (%1$s)</string>
+  <string name="app_log_start_backup">Mentés indítása (%1$s)</string>
+  <string name="app_log_backup_messages">Mentés (%1$d SMS, %2$d MMS, %3$d hívásnapló bejegyzés)</string>
+  <string name="app_log_backup_messages_with_config">Konfiguráció: %1$s</string>
+  <string name="app_log_backup_canceled">Mentés leállítva</string>
+  <string name="app_log_backup_finished">Mentés kész</string>
+
+  <string name="app_log_backup_failed_authentication">Hitelesítési hiba: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Általános hiba: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Mentés kihagyva, nincs kapcsolat</string>
+  <string name="app_log_scheduled_next_sync">Következő mentés ütemezve: %1$s</string>
+  <string name="app_log_no_next_sync">Nincs új mentés ütemezve</string>
+
+  <string name="menu_view_log">Napló megtekintése</string>
+  <string name="app_log_empty">A napló üres. A naplózást bekapcsolhatja a \"Haladó beállítások\" alatt.</string>
+
+  <string name="pref_app_log">Szinkronizálás naplózása</string>
+  <string name="pref_app_log_enabled">A napló az SD-kártyán az \"sms_backup_plus.log\" nevű fájlban van.</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="pref_app_log_debug">Extra hibakeresési információ</string>
+  <string name="pref_app_log_debug_summary">Engedélyezi az extra hibakeresési adatok mentését a szinkronizációs naplóba</string>
+
+  <string name="source_incoming">bejövő</string>
+  <string name="source_regular">rendszeres</string>
+  <string name="source_3rd_party">külső</string>
+  <string name="source_manual">kézi</string>
+  <string name="source_unknown">ismeretlen</string>
+
+  <string name="ui_confirm_action_label">Megerősítés</string>
+  <string name="ui_confirm_action_desc">Megerősítés kérése mentés vagy visszaállítás előtt</string>
+  <string name="ui_dialog_confirm_action_title">Megerősítés</string>
+  <string name="ui_dialog_confirm_action_msg">Biztosan végrehajtja a kért műveletet?</string>
+
+  <string name="loading">Betöltés…</string>
+  <string name="ssl_error">SSL hiba</string>
+  <string name="ui_dialog_account_manager_token_error">Nem sikerült hitelesíteni az előre beállított fiókkal. Szeretné megpróbálni a böngészős bejelentkezést?</string>
+  <string name="select_google_account">Válasszon Google-fiókot</string>
+
+  <!-- donation related -->
+  <string name="donate">Támogatás</string>
+  <string name="donate_summary">Biztonságosan Google Play Áruház rendszerén keresztül.</string>
+
+  <string name="ui_dialog_donate_message">Adja meg az összeget:</string>
+  <string name="ui_donation_success_message">Az adományozás sikeres volt, köszönjük!</string>
+  <string name="ui_donation_failure_message">Az adományozás sikertelen: %1$s</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">Az alkalmazáson belüli számlázás nem elérhető</string>
+  <string name="donation_error_unavailable">nem elérhető</string>
+  <string name="donation_error_canceled">megszakítva</string>
+  <string name="donation_error_already_owned">Ön már adományozott</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">Frissítési figyelmeztetés</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    Az Android KitKat és Lollipop verzióitól kezdve az SMS Backup+ beállítja
+    magát alapértelmezett SMS alkalmazássá visszaállítás közben. A művelet
+    befejezése után vissza kell állítani az eredeti beállítást.
+  </string>
+</resources>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+    Gmail을 사용하여 당신의 SMS를 백업하세요.
+    이 앱은 휴대전화로 SMS 복원을 지원하는 Christoph Studer의 "SMS Backup"의 개선된 버전입니다.
+    이 앱은 SMS Backup 과 완벽하게 호환됩니다.
+  </string>
+
+  <string name="ui_sync_button_label_idle">백업</string>
+  <string name="ui_sync_button_label_canceling">중지 중</string>
+  <string name="ui_sync_button_label_syncing">중지</string>
+
+  <string name="ui_restore_button_label_idle">복원</string>
+  <string name="ui_restore_button_label_restoring">중지</string>
+
+  <string name="status_idle">대기</string>
+  <string name="status_idle_details">마지막 항목 백업됨: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">안함</string>
+
+  <string name="status_working">동작 중</string>
+
+  <string name="status_backup">백업 중</string>
+  <string name="status_restore">복원 중</string>
+
+  <string name="status_backup_details">백업된 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 항목들\u2026</string>
+  <string name="status_restore_details">복원된 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 항목들\u2026</string>
+  <string name="status_login_details">로그인 중\u2026</string>
+  <string name="status_updating_threads">스레드 업데이트 중\u2026</string>
+  <string name="status_done">완료</string>
+  <string name="status_backup_done_details_max_per_sync">백업 당 %1$d 항목 최대치에 도달했습니다. 백업을 재시작하여 계속합니다.</string>
+  <string name="status_backup_done_details_noitems">백업할 항목이 없습니다.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">성공적으로 <xliff:g id="total_items">%1$d</xliff:g> 항목이 백업됨.</item>
+    <item quantity="other">성공적으로 <xliff:g id="total_items">%1$d</xliff:g> 항목들이 백업됨.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">성공적으로 <xliff:g id="total_items">%1$d</xliff:g> 항목이 복원됨 (%2$d 중복).</item>
+    <item quantity="other">성공적으로 <xliff:g id="total_items">%1$d</xliff:g> 항목들이 복원됨 (%2$d 중복).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d 항목이 성공적으로 복원됨.</string>
+
+  <string name="status_unknown_error">오류</string>
+  <string name="notification_general_error">SMSBackup+ 오류</string>
+
+  <string name="status_unknown_error_details">백업/복원 중 다음과 같은 오류가 발생:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">로그인 오류</string>
+  <string name="notification_auth_failure">SMSBackup+ 로그인 오류</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth 인증 오류. Gmail 계정 설정에서 IMAP를 활성화하였는지 확인하십시오.</string>
+  <string name="status_auth_failure_details_plain">IMAP 인증 오류.
+  아이디와 비밀번호가 정확한지 확인하십시오.</string>
+  <string name="status_calc_details">계산 중\u2026</string>
+  <string name="status_canceled">취소됨</string>
+  <string name="status_canceled_details">%1$d/%2$d 항목들이 성공적으로 백업됨.</string>
+  <string name="status_gmail_temp_error">일시적인 Gmail IMAP 오류, 나중에 다시 시도하세요.</string>
+
+  <string name="ui_settings_advanced_label">고급 설정</string>
+  <string name="ui_settings_advanced_desc">고급 설정을 설정합니다.</string>
+  <string name="ui_settings_advanced_server_label">IMAP 서버 설정</string>
+  <string name="ui_settings_advanced_server_desc">무슨 일을 하고 있는지 잘 모른다면 바꾸지 마세요!</string>
+
+  <string name="imap_settings">IMAP 설정</string>
+  <string name="ui_login_label">사용자 이름</string>
+  <string name="ui_login_desc">당신의 IMAP 계정/이메일 주소.</string>
+  <string name="ui_login_dialog_msg">경고: 사용자 이름을 바꾸면 XOAuth가 오작동하게 될 수 있습니다.</string>
+  <string name="ui_password_label">비밀번호</string>
+  <string name="ui_password_desc">당신의 IMAP 계정 비밀번호. XOAuth가 비활성화되었을 때에만 사용함.</string>
+  <string name="ui_password_dialog_msg">비밀번호가 이 장치에 저장되었으며 로그인 시에만 사용됩니다.</string>
+  <string name="ui_server_label">서버 주소</string>
+  <string name="ui_server_desc">동기화 할 서버의 주소(포트 번호 포함).</string>
+  <string name="ui_server_dialog_msg">Gmail의 기본값은 \"imap.gmail.com:993\" 입니다</string>
+  <string name="ui_protocol_label">보안</string>
+  <string name="ui_protocol_desc">서버의 보안 프로토콜. Gmail의 기본값은 \"SSL\"입니다.</string>
+  <string name="ui_authentication_label">인증</string>
+  <string name="ui_authentication_desc">인증 방식. Gmail의 기본값은 \"XOAuth\" 입니다.</string>
+  <string name="plain">일반 텍스트</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Gmail 라벨</string>
+  <string name="ui_imap_folder_desc">SMS에 할당될 Gmail 라벨.</string>
+  <string name="ui_imap_folder_label_dialog_msg">백업된 SMS 메시지는 Gmail 안에서 이 라벨이 붙을 것입니다.</string>
+  <string name="ui_mail_subject_prefix_label">이메일 제목 접두사</string>
+  <string name="ui_mail_subject_prefix_desc">이메일 제목에 IMAP 폴더 이름을 접두사로 사용</string>
+
+  <string name="ui_max_items_per_sync_label">백업 당 항목</string>
+  <string name="ui_max_items_per_sync_desc">백업 당 최대 항목 개수.</string>
+  <string name="ui_max_items_per_restore_label">복원 당 항목</string>
+  <string name="ui_max_items_per_restore_desc">복원할 메시지의 최대 개수.</string>
+
+  <string name="ui_restore_starred_only_label">별표된 항목들</string>
+  <string name="ui_restore_starred_only_desc">별표된 항목만 복원.</string>
+
+  <string name="ui_backup_mms_label">MMS 백업</string>
+  <string name="ui_backup_mms_desc">MMS 백업 활성화</string>
+  <string name="ui_backup_mms_not_supported">이 플랫폼에서는 MMS 백업이 지원되지 않습니다.</string>
+
+  <string name="ui_backup_calllog_label">통화 기록 백업</string>
+  <string name="ui_backup_calllog_desc">통화 기록 백업 활성화</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">캘린더 동기화</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">통화 기록 목록을 캘린더에 추가</string>
+
+  <string name="ui_backup_calllog_types_label">통화 종류</string>
+  <string name="ui_backup_calllog_types_desc">백업할 통화의 종류</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">없음</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">통화 기록을 위해 사용할 캘린더</string>
+
+  <string name="ui_imap_folder_calllog_label">통화 기록 라벨</string>
+  <string name="ui_imap_folder_calllog_desc">통화 기록에 할당될 Gmail 라벨.</string>
+   <string name="ui_imap_folder_calllog_label_dialog_msg">백업된 통화 기록 목록은 Gmail 안에서 이 라벨이 붙을 것입니다.</string>
+
+  <string name="ui_mark_as_read_label">읽은 상태로 표시(이메일)</string>
+  <string name="ui_mark_as_read_desc">Gmail에 읽은 것으로 메시지를 표시할지 여부를 지정합니다.</string>
+
+  <string name="mark_as_read_always_read">항상 읽은 상태로 표시</string>
+  <string name="mark_as_read_always_unread">항상 읽지 않은 상태로 표시</string>
+  <string name="mark_as_read_message_status">메시지 상태를 사용</string>
+
+  <string name="ui_mark_as_read_restore_label">읽은 상태로 표시 (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">복원된 SMS를 읽은 상태로 표시할지 여부를 지정합니다.</string>
+
+  <string name="ui_email_address_style_label">이메일 주소 스타일</string>
+  <string name="ui_email_address_style_desc">이메일 주소의 형식</string>
+
+  <string name="ui_enable_auto_sync_label">자동 백업</string>
+  <string name="ui_enable_auto_sync_desc">새로 도착한 SMS를 자동으로 백업할지 여부를 지정합니다.</string>
+  <string name="ui_enable_auto_sync_summary">%1$s를 자동으로 백업함.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">백업할 종목이 선택되지 않음.</string>
+
+  <string name="sd_card_disclaimer">자동백업은 앱이 SD 카드에 설치되었을 때 작동하지 않을 수 있습니다.</string>
+
+  <string name="ui_enable_auto_sync_bg_data">백그라운드 데이터를 사용하도록 설정해야 합니다.</string>
+
+  <string name="ui_auto_backup_schedule_label">정기 스케쥴</string>
+  <string name="ui_auto_backup_schedule_desc">SMS를 백업할 시간 간격</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">수신 시 스케쥴</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">들어오는 SMS를 백업할 시기 (도착 후부터)</string>
+
+  <string name="ui_wifi_only_label">Wifi 필요</string>
+  <string name="ui_wifi_only_desc">Wifi 에 연결되었을 때만 백업</string>
+
+  <string name="ui_notifications_label">알림</string>
+  <string name="ui_notifications_desc">백그라운드 알림</string>
+
+  <string name="error_wifi_only_no_connection">Wifi 연결 없음</string>
+  <string name="error_no_connection">인터넷 연결 없음</string>
+  <string name="error_sms_provider_not_writable">SMS 제공자에 기록할 수 없음</string>
+
+  <string name="ui_dialog_missing_credentials_title">로그인 정보</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Gmail 계정에 먼저 연결해야 합니다.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">먼저 사용자 이름과 암호를 설정해야 합니다.</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">부적합한 라벨 이름</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">라벨 이름은 공백을 포함하여서는 안 됨 (처음과 끝).</string>
+  <string name="ui_dialog_first_sync_title">최초 백업</string>
+  <string name="ui_dialog_first_sync_msg">장치에 저장된 모든 메시지를 백업할까요, 건너뛸까요?</string>
+  <string name="ui_dialog_first_sync_msg_batched">장치에 저장된 모든 메시지를 백업할까요, 건너뛸까요?\n\n주의: 백업은 %1$d 개씩의 메시지로 분할되어 일괄처리됩니다.</string>
+  <string name="ui_dialog_request_token_msg">Google에 연결 중...</string>
+  <string name="ui_dialog_access_token_msg">액세스 요청 중...</string>
+
+  <string name="ui_dialog_access_token_error_title">인증 실패</string>
+  <string name="ui_dialog_access_token_error_msg">액세스 토큰을 가져오지 못했습니다.
+    \"액세스 권한 부여\" 를 선택해야 합니다.
+  </string>
+
+  <string name="ui_dialog_connect_msg">브라우저 창이 열려서 이메일에 %1$s 접근을 승인하기 위해 Gmail에 로그인하라고 할 것입니다.</string>
+  <string name="ui_dialog_connect_token_error">Google로부터 토큰을 받아오지 못했습니다. 네트워크 연결이 활성화되었는지 확인하고 시간과 시간대 설정이 올바르게 되었는지 확인하십시오.</string>
+  <string name="ui_dialog_disconnect_msg">확실한가요? 연결을 해제하고 난 후에는 계정을 재인증해야 하고 로컬 동기화 상태가 초기화될 것입니다.</string>
+
+  <string name="ui_dialog_upgrade_title">업그레이드 정보</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+는 SMS Backup과 완벽하게 호환됩니다. 그러나 \"자동 백업\"이 한 앱에서만 활성화되어 있는지 확인하십시오, 그렇지 않으면 중복된 결과를 얻을 수 있습니다. 또한, 휴대 전화에 있는 메시지가 이미 이전에 백업되었다면 당신은 첫 번째 동기화에 대해 \"건너뛰기\"를 선택해야 합니다.
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X SMS 버그</string>
+  <string name="ui_dialog_brokendroidx_msg">들어오는 메시지를 백업하는 이 앱의 기능이
+    차단되는 DROID X의 버그가 있습니다.
+    자세한 내용은 웹 사이트의 FAQ를 참조하십시오.</string>
+
+  <string name="ui_sync">백업</string>
+  <string name="ui_skip">건너뛰기</string>
+  <string name="err_sync_requires_login_info">로그인 정보 없이는 백업할 수 없음.</string>
+  <string name="menu_info">정보</string>
+  <string name="menu_reset">초기화</string>
+  <string name="ui_dialog_reset_title">현재 동기화 상태를 초기화</string>
+  <string name="ui_dialog_reset_message">현재 동기화 상태를 초기화하시겠습니까?
+   나중에 모든 메시지를 건너뛰라고 선택할 수 있습니다.</string>
+  <string name="all_messages">모두</string>
+
+  <string name="gmail_needs_connecting">탭하여 당신의 Gmail 계정에 연결 (필수).</string>
+  <string name="gmail_already_connected">%1$s로 연결되었습니다.</string>
+
+  <string name="ui_connected_label">연결</string>
+  <string name="ui_connected_desc">당신의 계정은 연결을 필요로 합니다.</string>
+
+  <string name="call_incoming">수신 통화</string>
+  <string name="call_outgoing">발신 통화</string>
+  <string name="call_missed">부재중 통화</string>
+
+  <string name="call_missed_text">%1$s로부터 온 부재중 통화</string>
+  <string name="call_incoming_text">%1$s로부터 온 통화</string>
+  <string name="call_outgoing_text">%1$s에게 건 통화</string>
+
+  <string name="call_number_field">번호: %1$s</string>
+  <string name="call_duration_field">통화시간: %1$s</string>
+
+  <string name="sms_with_field">%1$s와 SMS</string>
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">%1$s와 통화</string>
+
+  <string name="ui_backup_contact_group_label">백업할 연락처</string>
+  <string name="ui_backup_contact_group_desc">특정 그룹의 항목만 백업</string>
+
+  <string name="everybody">모두</string>
+
+  <string name="call_type_everything">전부</string>
+  <string name="call_type_incoming">수신 통화만</string>
+  <string name="call_type_outgoing">발신 통화만</string>
+  <string name="call_type_incoming_outgoing">수신 &amp; 발신</string>
+  <string name="call_type_missed">부재중 통화만</string>
+
+  <string name="email_address_style_name">이름</string>
+  <string name="email_address_style_name_and_number">이름 (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 시간</string>
+  <string name="_2h">2 시간</string>
+  <string name="_6h">6 시간</string>
+  <string name="_24h">24 시간</string>
+  <string name="never">안함</string>
+
+  <string name="_1min">1 분</string>
+  <string name="_3mins">3 분</string>
+  <string name="_30mins">30 분</string>
+
+  <string name="ssl_required">SSL</string>
+  <string name="ssl_optional">SSL (모두 신뢰)</string>
+  <string name="tls_required">TLS</string>
+  <string name="tls_optional">TLS (모두 신뢰)</string>
+  <string name="none">없음</string>
+
+  <string name="ui_third_party_integration_label">제3자 앱 통합</string>
+  <string name="ui_third_party_integration_desc">다른 앱이 브로드캐스트 인텐트를 통해 백업을 실행할 수 있도록 허용</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">백업 설정</string>
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+
+  <string name="ui_backup_calllog_settings_label">통화 기록 설정</string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+
+  <string name="auto_backup_settings">자동 백업 설정</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label">복원 설정</string>
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+
+  <string name="ui_backup_sms_label">SMS 백업</string>
+  <string name="ui_backup_sms_desc">SMS 백업 활성화</string>
+
+  <string name="ui_restore_sms_label">SMS 복원</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">(아직 지원하지 않는 기능)</string>
+
+  <string name="ui_restore_mms_label">MMS 복원</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label">통화 기록 복원</string>
+  <string name="ui_restore_calllog_desc"/>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">통화 기록</string>
+
+  <string name="pref_acra_disabled">비활성화</string>
+
+  <string name="app_log_skip_backup_background_data">백그라운드 데이터가 비활성이기 때문에 건너뜀</string>
+  <string name="app_log_skip_backup_already_running">백업이 이미 실행 중이므로 건너뜀</string>
+  <string name="app_log_skip_backup_skip_messages">모든 메시지 건너뛰기</string>
+  <string name="app_log_skip_backup_no_items">생략 (항목을 찾을 수 없음)</string>
+  <string name="app_log_missing_credentials">생략 (자격 증명 누락)</string>
+  <string name="app_log_backup_requested">백업 요청됨 (%1$s)</string>
+  <string name="app_log_start_backup">백업 시작 중 (%1$s)</string>
+  <string name="app_log_backup_messages">백업 중 (%1$d SMS, %2$d MMS, %3$d 통화 기록)</string>
+  <string name="app_log_backup_messages_with_config">사용된 설정: %1$s</string>
+  <string name="app_log_backup_canceled">백업 취소됨</string>
+  <string name="app_log_backup_finished">백업 완료됨</string>
+
+  <string name="app_log_backup_failed_authentication">인증 에러: %1$s</string>
+  <string name="app_log_backup_failed_general_error">일반적인 에러: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">백업 생략, 연결 없음</string>
+  <string name="app_log_scheduled_next_sync">다음 백업 예정: %1$s</string>
+  <string name="app_log_no_next_sync">새로운 백업 예정 없음</string>
+
+  <string name="menu_view_log">기록 보기</string>
+  <string name="app_log_empty">기록이 없습니다. \"고급 설정\"에서 활성화하세요.</string>
+
+  <string name="pref_app_log">동기화 기록</string>
+  <string name="pref_app_log_enabled">SD카드에 \"sms_backup_plus.log\"로 저장됩니다.</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="pref_app_log_debug">추가 디버그 정보</string>
+  <string name="pref_app_log_debug_summary">동기화 기록에 추가 디버그 기록을 활성화</string>
+
+  <string name="source_incoming">도착</string>
+  <string name="source_regular">일반</string>
+  <string name="source_3rd_party">제3자</string>
+  <string name="source_manual">수동</string>
+  <string name="source_unknown">알 수 없음</string>
+
+  <string name="ui_confirm_action_label">작업 확인</string>
+  <string name="ui_confirm_action_desc">백업이나 복원을 수행하기 전에 질문</string>
+  <string name="ui_dialog_confirm_action_title">작업 확인</string>
+  <string name="ui_dialog_confirm_action_msg">정말 이 작업을 수행하길 원하십니까?</string>
+
+  <string name="loading">로딩…</string>
+  <string name="ssl_error">SSL 오류</string>
+  <string name="ui_dialog_account_manager_token_error">
+      시스템으로부터 토큰을 받아오지 못했습니다. 브라우저에서 인증을 시도하시겠습니까?
+  </string>
+  <string name="select_google_account">Google 계정 선택</string>
+
+  <!-- donation related -->
+  <string name="donate">기부</string>
+  <string name="donate_summary">암호화된 Google 플레이 스토어 앱 내부 결제 사용.</string>
+
+  <string name="ui_dialog_donate_message">금액을 지정해 주십시오:</string>
+  <string name="ui_donation_success_message">기부가 완료되었습니다. 감사합니다!</string>
+  <string name="ui_donation_failure_message">기부 실패: %1$s</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">앱 내부 결제를 사용할 수 없습니다</string>
+  <string name="donation_error_unavailable">사용할 수 없습니다</string>
+  <string name="donation_error_canceled">취소됨</string>
+  <string name="donation_error_already_owned">이미 기부하셨습니다</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">업그레이드 주의 사항</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    안드로이드 킷캣이나 롤리팝에서 메시지를 복원하려면 복원 작업 동안 SMS Backup+를
+    SMS 앱으로 설정해야 합니다. 복원이 완료된 후에 원래의 설정으로 돌려 놓을 건지 
+    물어 볼 것입니다.
+  </string>
+</resources>

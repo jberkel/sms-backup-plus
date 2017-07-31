@@ -9,15 +9,11 @@
   </string>
 
   <string name="ui_sync_button_label_idle">Copia de seguridad</string>
-  <string name="ui_sync_button_label_done">Copia de seguridad</string>
   <string name="ui_sync_button_label_canceling">Deteniendo</string>
-  <string name="ui_sync_button_label_error">Copia de seguridad</string>
   <string name="ui_sync_button_label_syncing">Parar</string>
 
   <string name="ui_restore_button_label_idle">Restaurar</string>
-  <string name="ui_restore_button_label_done">Restaurar</string>
   <string name="ui_restore_button_label_restoring">Parar</string>
-  <string name="ui_restore_button_label_error">Restaurar</string>
 
   <string name="status_idle">Inactivo</string>
   <string name="status_idle_details">Última copia de seguridad: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -49,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d elementos restaurados con éxito.</string>
 
   <string name="status_unknown_error">Error</string>
-  <string name="notification_unknown_error">Error de SMSBackup+</string>
+  <string name="notification_general_error">Error de SMSBackup+</string>
 
   <string name="status_unknown_error_details">Error durante la copia de seguridad/restauración:\n</string>
   <string name="status_auth_failure">Error al iniciar la sesión</string>
@@ -61,10 +57,7 @@
   <string name="status_calc_details">Calculando\u2026</string>
   <string name="status_canceled">Cancelado</string>
   <string name="status_canceled_details">%1$d/%2$d elementos han sido respaldados.</string>
-  <string name="status_folder_error">Error de etiqueta</string>
-  <string name="status_folder_error_details">No se pudo acceder o crear la etiqueta/carpeta.<xliff:g id="error_description">%1$s</xliff:g></string>
 
-  <string name="ui_settings_label">Configuración</string>
   <string name="ui_settings_advanced_label">Configuración avanzada</string>
   <string name="ui_settings_advanced_desc">Establecer preferencias avanzadas.</string>
   <string name="ui_settings_advanced_server_label">Configuración del servidor</string>
@@ -145,8 +138,6 @@
   <string name="ui_dialog_missing_credentials_msg_plain">Necesita configurar su nombre de usuario y contraseña en primer lugar.</string>
 
 
-  <string name="ui_dialog_sync_data_reset_title">Restablecimiento de datos de copia de seguridad</string>
-  <string name="ui_dialog_sync_data_reset_msg">Backup data has been reset. Please reconnect your account and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.</string>
 
 
   <string name="ui_dialog_invalid_imap_folder_title">Nombre de la etiqueta no válido</string>
@@ -154,8 +145,6 @@
   <string name="ui_dialog_first_sync_title">Primera copia de seguridad</string>
   <string name="ui_dialog_first_sync_msg">Copia de seguridad o saltarse todos los mensajes almacenados actualmente en este dispositivo?\n\nNota: La copia de seguridad se dividirá en lotes de %1$d mensajes.</string>
   <string name="ui_dialog_first_sync_msg_batched">¿Copia de seguridad o saltarse todos los mensajes almacenados actualmente en este dispositivo?\n\nNota: La copia de seguridad se dividirá en lotes de %1$d mensajes.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">Primera copia de seguridad</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">La primera copia de seguridad tiene que ser iniciada manualmente. ¿Desea realizar una copia de seguridad ahora?</string>
   <string name="ui_dialog_request_token_msg">Obteniendo token de solicitud...</string>
   <string name="ui_dialog_access_token_msg">Solicitando acceso...</string>
 
@@ -180,10 +169,7 @@
 
   <string name="ui_sync">Copia de seguridad</string>
   <string name="ui_skip">Saltar</string>
-  <string name="err_could_not_create_folder">No se pudo crear la etiqueta.</string>
-  <string name="err_first_sync_needs_skip_flag">Error interno: Primera copia de seguridad sin indicación de si se deben saltar los mensajes o no.</string>
   <string name="err_sync_requires_login_info">No se puede realizar copia de seguridad sin la información de inicio de sesión.</string>
-  <string name="err_communication_error">Error general de comunicación.</string>
   <string name="menu_info">Acerca de</string>
   <string name="menu_reset">Reinicializar</string>
   <string name="ui_dialog_reset_title">Reinicializar el estado actual de sincronización</string>
@@ -191,7 +177,6 @@
   estado actual de sincronización? Es possible elejir de saltar todos los mensajes más tarde.</string>
   <string name="all_messages">Todo</string>
 
-  <string name="gmail_connected_fail">Error de autenticación de Gmail</string>
   <string name="gmail_needs_connecting">Toque para conectar su cuenta de Gmail (requerido).</string>
   <string name="gmail_already_connected">Cuenta de Gmail conectada (toque para desconectar).</string>
 

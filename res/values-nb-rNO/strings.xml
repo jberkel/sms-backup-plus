@@ -3,21 +3,17 @@
   <string name="app_name">SMS Backup+</string>
 
   <string name="app_description">
-     Bruk Gmail for å ta en sikkerhetskopi av dine meldinger. Dette er en forbedret versjon av 
+     Bruk Gmail for å ta en sikkerhetskopi av dine meldinger. Dette er en forbedret versjon av
      applikasjonen "SMS Backup" av Christoph Studer som støtter gjenoppretting av meldinger
      til telefonen. Den er fult kompatibel med SMS Backup.
   </string>
 
   <string name="ui_sync_button_label_idle">Sikkerhetskop.</string>
-  <string name="ui_sync_button_label_done">Sikkerhetskop.</string>
   <string name="ui_sync_button_label_canceling">Stopper</string>
-  <string name="ui_sync_button_label_error">Sikkerhetskop.</string>
   <string name="ui_sync_button_label_syncing">Stopp</string>
 
   <string name="ui_restore_button_label_idle">Gjenopprett</string>
-  <string name="ui_restore_button_label_done">Gjenopprett</string>
   <string name="ui_restore_button_label_restoring">Stopp</string>
-  <string name="ui_restore_button_label_error">Gjenopprett</string>
 
   <string name="status_idle">Uvirksom</string>
   <string name="status_idle_details">Siste sikkerhetskopiering: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -49,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d deler gjenopprettet.</string>
 
   <string name="status_unknown_error">Feil</string>
-  <string name="notification_unknown_error">SMSBackup+ feil</string>
+  <string name="notification_general_error">SMSBackup+ feil</string>
 
   <string name="status_unknown_error_details">Feil ved sikkerhetskopiering/gjenoppretting:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Innloggingsfeil</string>
@@ -61,11 +57,8 @@
   <string name="status_calc_details">Beregner\u2026</string>
   <string name="status_canceled">Avbrutt</string>
   <string name="status_canceled_details">%1$d/%2$d deler gjenopprettet.</string>
-  <string name="status_folder_error">Etikettfeil</string>
-  <string name="status_folder_error_details">Kunne ikke nå eller opprette etikett/mappe.</string>
   <string name="status_gmail_temp_error">Midlertidig Gmail IMAP feil, vennligst prøv igjen senere.</string>
 
-  <string name="ui_settings_label">Innstillinger</string>
   <string name="ui_settings_advanced_label">Avanserte innstillinger</string>
   <string name="ui_settings_advanced_desc">Gjør avanserte innstillinger.</string>
   <string name="ui_settings_advanced_server_label">Tjenerinnstillinger</string>
@@ -97,7 +90,7 @@
   <string name="ui_max_items_per_sync_label">Deler per sikkerhetskopiering</string>
   <string name="ui_max_items_per_sync_desc">Maksimalt antall deler per sikkerhetskopiering.</string>
   <string name="ui_max_items_per_restore_label">Deler per gjenoppretting</string>
-  <string name="ui_max_items_per_restore_desc">Maksimalt antall deler per gjenoppretting.</string>  
+  <string name="ui_max_items_per_restore_desc">Maksimalt antall deler per gjenoppretting.</string>
 
   <string name="ui_restore_starred_only_label">Stjernemerkede meldinger</string>
   <string name="ui_restore_starred_only_desc">Kun gjenopprett stjernemerkede meldinger.</string>
@@ -139,7 +132,6 @@
 
   <string name="ui_enable_auto_sync_bg_data">Du må også aktivere bakgrunnsdata.</string>
 
-  <string name="ui_backup_schedule_label">Tidsplan</string>
   <string name="ui_auto_backup_schedule_label">Vanlig tidsplan</string>
   <string name="ui_auto_backup_schedule_desc">Når meldinger skal sikkerhetskopieres.</string>
 
@@ -158,20 +150,14 @@
   <string name="ui_dialog_missing_credentials_title">Innloggingsinformasjon</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">Du må koble til en Gmail konto først.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Du må angi 
+  <string name="ui_dialog_missing_credentials_msg_plain">Du må angi
   brukernavn og passord først.</string>
 
-  <string name="ui_dialog_sync_data_reset_title">Tilbakestill data om sikkerhetskopiering</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      Data om sikkerhetskopiering er tilbakestilt. Vennligst koble din konto på nytt og foreta en manuell sikkerhetskopiering. Du kan da velge hvilke meldinger som skal sikkerhetskopieres.
-  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Ugyldig etikett navn</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Etikett navn kan ikke inneholde mellomrom på begynnelsen eller slutten.</string>
   <string name="ui_dialog_first_sync_title">Første sikkerhetskopiering</string>
   <string name="ui_dialog_first_sync_msg">Sikkerhetskopier eller hopp over alle meldinger på denne enheten?</string>
   <string name="ui_dialog_first_sync_msg_batched">Sikkerhetskopier eller hopp over alle meldinger på denne enheten?\n\nVarsel: Sikkerhetskopiering vil deles i samlinger med %1$d meldinger.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">Første sikkerhetskopiering</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">Første sikkerhetskopiering må startes manuelt. Vil du foreta en sikkerhetskopiering nå?</string>
   <string name="ui_dialog_request_token_msg">Kontaker Google...</string>
   <string name="ui_dialog_access_token_msg">Spør om tilgang...</string>
 
@@ -190,24 +176,20 @@
   </string>
 
   <string name="ui_dialog_brokendroidx_title">DROID X SMS feil</string>
-  <string name="ui_dialog_brokendroidx_msg">Det er en feil i Droid X som 
-  forhindrer denne applikasjonen fra å sikkerhetskopiere innkommende 
+  <string name="ui_dialog_brokendroidx_msg">Det er en feil i Droid X som
+  forhindrer denne applikasjonen fra å sikkerhetskopiere innkommende
   meldinger. Se FAQ på nettsiden for mer informasjon.</string>
 
   <string name="ui_sync">Sikkerhetskopier</string>
   <string name="ui_skip">Hopp over</string>
-  <string name="err_could_not_create_folder">Kunne ikke opprette etikett.</string>
-  <string name="err_first_sync_needs_skip_flag">Intern feil: Første sikkerhetskopiering uten informasjon om å hoppe over meldinger eller ikke.</string>
   <string name="err_sync_requires_login_info">Kan ikke sikkerhetskopiere uten innloggings-informasjon.</string>
-  <string name="err_communication_error">Generell kommunikasjons feil.</string>
   <string name="menu_info">Om</string>
   <string name="menu_reset">Tilbakestill</string>
   <string name="ui_dialog_reset_title">Tilbakestill nåværende synkroniserings-status</string>
-  <string name="ui_dialog_reset_message">Vil du tilbakestille synkroniserings-status? Du kan velge 
+  <string name="ui_dialog_reset_message">Vil du tilbakestille synkroniserings-status? Du kan velge
   å hoppe over alle meldinger senere.</string>
   <string name="all_messages">Alle</string>
 
-  <string name="gmail_connected_fail">Gmail autorisasjons feil</string>
   <string name="gmail_needs_connecting">Velg for å koble til Gmail konto (påkrevd).</string>
   <string name="gmail_already_connected">Koblet til som %1$s.</string>
 
@@ -224,7 +206,6 @@
 
   <string name="call_number_field">Nummer: %1$s</string>
   <string name="call_duration_field">Lengde: %1$s</string>
-  <string name="calllog_settings">Anropslogg innstillinger</string>
 
   <string name="sms_with_field">Melding med %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->

@@ -9,15 +9,11 @@
   </string>
 
   <string name="ui_sync_button_label_idle">Backup</string>
-  <string name="ui_sync_button_label_done">Backup</string>
   <string name="ui_sync_button_label_canceling">Stopping</string>
-  <string name="ui_sync_button_label_error">Backup</string>
   <string name="ui_sync_button_label_syncing">Stop</string>
 
   <string name="ui_restore_button_label_idle">Restore</string>
-  <string name="ui_restore_button_label_done">Restore</string>
   <string name="ui_restore_button_label_restoring">Stop</string>
-  <string name="ui_restore_button_label_error">Restore</string>
 
   <string name="status_idle">Idle</string>
   <string name="status_idle_details">Last item backed up: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -49,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d items successfully restored.</string>
 
   <string name="status_unknown_error">Error</string>
-  <string name="notification_unknown_error">SMSBackup+ error</string>
+  <string name="notification_general_error">SMSBackup+ error</string>
 
   <string name="status_unknown_error_details">Error during backup/restore:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Login error</string>
@@ -61,11 +57,8 @@
   <string name="status_calc_details">Calculating\u2026</string>
   <string name="status_canceled">Canceled</string>
   <string name="status_canceled_details">%1$d/%2$d items successfully backed up.</string>
-  <string name="status_folder_error">Label error</string>
-  <string name="status_folder_error_details">Could not access or create the label/folder.</string>
   <string name="status_gmail_temp_error">Temporary Gmail IMAP error, try again later.</string>
 
-  <string name="ui_settings_label">Settings</string>
   <string name="ui_settings_advanced_label">Advanced settings</string>
   <string name="ui_settings_advanced_desc">Set advanced preferences.</string>
   <string name="ui_settings_advanced_server_label">IMAP server settings</string>
@@ -82,9 +75,9 @@
   <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
   <string name="ui_server_dialog_msg">Default for gmail is \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Security</string>
-  <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL (Required)\"."</string>
+  <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL\"."</string>
   <string name="ui_authentication_label">Authentication</string>
-  <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOauth\".</string>
+  <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOAuth\".</string>
   <string name="plain">Plain text</string>
   <string name="xoauth">XOAuth</string>
 
@@ -97,7 +90,7 @@
   <string name="ui_max_items_per_sync_label">Items per backup</string>
   <string name="ui_max_items_per_sync_desc">Maximum number of items per backup.</string>
   <string name="ui_max_items_per_restore_label">Items per restore</string>
-  <string name="ui_max_items_per_restore_desc">Maximum number of restored messages.</string>
+  <string name="ui_max_items_per_restore_desc">Number of latest messages to restore.</string>
 
   <string name="ui_restore_starred_only_label">Starred items</string>
   <string name="ui_restore_starred_only_desc">Only restore starred items.</string>
@@ -120,10 +113,14 @@
 
   <string name="ui_imap_folder_calllog_label">Call log label</string>
   <string name="ui_imap_folder_calllog_desc">Gmail label assigned to call log.</string>
-  <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
+   <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
 
   <string name="ui_mark_as_read_label">Mark as read (emails)</string>
   <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
+
+  <string name="mark_as_read_always_read">Always mark as read</string>
+  <string name="mark_as_read_always_unread">Always mark as unread</string>
+  <string name="mark_as_read_message_status">Use message status</string>
 
   <string name="ui_mark_as_read_restore_label">Mark as read (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Whether to mark all restored SMS as read or not.</string>
@@ -134,12 +131,12 @@
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
   <string name="ui_enable_auto_sync_summary">Automatically backup %1$s.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">No item type to backup selected.</string>
 
   <string name="sd_card_disclaimer">Auto backup might not work reliably when app is installed on SD card.</string>
 
   <string name="ui_enable_auto_sync_bg_data">You will also need to enable background data.</string>
 
-  <string name="ui_backup_schedule_label">Schedule</string>
   <string name="ui_auto_backup_schedule_label">Regular schedule</string>
   <string name="ui_auto_backup_schedule_desc">When to backup SMS</string>
 
@@ -154,6 +151,7 @@
 
   <string name="error_wifi_only_no_connection">No Wifi connection</string>
   <string name="error_no_connection">No internet connection</string>
+  <string name="error_sms_provider_not_writable">Cannot write to SMS provider</string>
 
   <string name="ui_dialog_missing_credentials_title">Login information</string>
 
@@ -161,19 +159,13 @@
   <string name="ui_dialog_missing_credentials_msg_plain">You need to set your
   username and password first.</string>
 
-  <string name="ui_dialog_sync_data_reset_title">Backup data reset</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      Backup data has been reset. Please reconnect your account and perform a manual backup. You will be able to decide whether to backup or skip messages stored on this device.
-  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Invalid label name</string>
-  <string name="ui_dialog_invalid_imap_folder_msg">The label name may not spaces (at the beginning or end).</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">The label name may not contain spaces (at the beginning or end).</string>
   <string name="ui_dialog_first_sync_title">First backup</string>
   <string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?</string>
   <string name="ui_dialog_first_sync_msg_batched">Backup or skip all messages currently stored on this device?\n\nNote: The backup will be split into batches of %1$d messages.</string>
-  <string name="ui_dialog_need_first_manual_sync_title">First backup</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">The first backup needs to be initiated manually. Would you like to perform a backup now?</string>
-  <string name="ui_dialog_request_token_msg">Contacting Google...</string>
-  <string name="ui_dialog_access_token_msg">Requesting access...</string>
+  <string name="ui_dialog_request_token_msg">Contacting Google…</string>
+  <string name="ui_dialog_access_token_msg">Requesting access…</string>
 
   <string name="ui_dialog_access_token_error_title">Authorisation failure</string>
   <string name="ui_dialog_access_token_error_msg">Could not obtain access token. Make sure you select
@@ -196,10 +188,7 @@
 
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
-  <string name="err_could_not_create_folder">Could not create label.</string>
-  <string name="err_first_sync_needs_skip_flag">Internal error: First backup without indication whether to skip messages or not.</string>
   <string name="err_sync_requires_login_info">Cannot backup without login information.</string>
-  <string name="err_communication_error">General communication error.</string>
   <string name="menu_info">About</string>
   <string name="menu_reset">Reset</string>
   <string name="ui_dialog_reset_title">Reset current sync state</string>
@@ -207,7 +196,6 @@
   state? You can still choose to skip all messages later.</string>
   <string name="all_messages">All</string>
 
-  <string name="gmail_connected_fail">Gmail authentication failure</string>
   <string name="gmail_needs_connecting">Tap to connect your Gmail account (required).</string>
   <string name="gmail_already_connected">Connected as %1$s.</string>
 
@@ -224,10 +212,8 @@
 
   <string name="call_number_field">Number: %1$s</string>
   <string name="call_duration_field">Duration: %1$s</string>
-  <string name="calllog_settings">Call log settings</string>
 
   <string name="sms_with_field">SMS with %1$s</string>
-  <!-- the subject line needs to be identical otherwise threading will be messed up -->
   <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Call with %1$s</string>
 
@@ -256,10 +242,10 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="ssl_required">SSL (Required)</string>
-  <string name="ssl_optional">SSL (Optional)</string>
-  <string name="tls_required">TLS (Required)</string>
-  <string name="tls_optional">TLS (Optional)</string>
+  <string name="ssl_required">SSL</string>
+  <string name="ssl_optional">SSL (trust all)</string>
+  <string name="tls_required">TLS</string>
+  <string name="tls_optional">TLS (trust all)</string>
   <string name="none">None</string>
 
   <string name="ui_third_party_integration_label">3rd party integration</string>
@@ -296,16 +282,6 @@
   <string name="mms">MMS</string>
   <string name="calllog">Call log</string>
 
-  <string name="ui_dialog_donate_prepare_message">Preparing donation, please wait...</string>
-  <string name="ui_dialog_donate_message">Please specify amount and currency:</string>
-  <string name="ui_donation_success_message">Donation successful, thank you!</string>
-  <string name="ui_donation_failure_message">Donation failed: %1$s</string>
-  <string name="ui_donation_canceled_message">Donation canceled</string>
-  <string name="ui_donation_prompt_currency">Currency</string>
-  <string name="ui_donation_oh_noez_no_network">Sorry, you need to be connected to the internet in order to make a donation.</string>
-
-  <string name="pref_disable_acra">Crash error reporting</string>
-  <string name="pref_acra_enabled">SMS Backup+ will automatically send an error report after force closing.</string>
   <string name="pref_acra_disabled">Disabled</string>
 
   <string name="app_log_skip_backup_background_data">Skipped because background data is disabled</string>
@@ -316,11 +292,12 @@
   <string name="app_log_backup_requested">Backup requested (%1$s)</string>
   <string name="app_log_start_backup">Starting backup (%1$s)</string>
   <string name="app_log_backup_messages">Backing up (%1$d SMS, %2$d MMS, %3$d call log)</string>
+  <string name="app_log_backup_messages_with_config">Using config: %1$s</string>
   <string name="app_log_backup_canceled">Backup canceled</string>
   <string name="app_log_backup_finished">Backup finished</string>
 
   <string name="app_log_backup_failed_authentication">Authentication error: %1$s</string>
-  <string name="app_log_backup_failed_messaging">General error: %1$s</string>
+  <string name="app_log_backup_failed_general_error">General error: %1$s</string>
   <string name="app_log_backup_failed_connectivity">Backup skipped, no connectivity</string>
   <string name="app_log_scheduled_next_sync">Next backup scheduled for: %1$s</string>
   <string name="app_log_no_next_sync">No new backup scheduled</string>
@@ -332,9 +309,45 @@
   <string name="pref_app_log_enabled">Log is stored on SD card as \"sms_backup_plus.log\".</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
+  <string name="pref_app_log_debug">Extra debug information</string>
+  <string name="pref_app_log_debug_summary">Enables extra debug logging in sync log</string>
+
   <string name="source_incoming">incoming</string>
   <string name="source_regular">regular</string>
   <string name="source_3rd_party">3rd party</string>
   <string name="source_manual">manual</string>
   <string name="source_unknown">unknown</string>
+
+  <string name="ui_confirm_action_label">Confirm actions</string>
+  <string name="ui_confirm_action_desc">Ask before performing backup or restore</string>
+  <string name="ui_dialog_confirm_action_title">Confirm Action</string>
+  <string name="ui_dialog_confirm_action_msg">Are you sure want to perform the action?</string>
+
+  <string name="loading">Loading…</string>
+  <string name="ssl_error">SSL error</string>
+  <string name="ui_dialog_account_manager_token_error">
+      Could not get token from system. Do you want to try the browser authentication method?
+  </string>
+  <string name="select_google_account">Select a Google account</string>
+
+  <!-- donation related -->
+  <string name="donate">Donate</string>
+  <string name="donate_summary">Using secure Google Play Store in-app payment.</string>
+
+  <string name="ui_dialog_donate_message">Please specify amount:</string>
+  <string name="ui_donation_success_message">Donation successful, thank you!</string>
+  <string name="ui_donation_failure_message">Donation failed: %1$s</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">In-app billing is not available</string>
+  <string name="donation_error_unavailable">not available</string>
+  <string name="donation_error_canceled">canceled</string>
+  <string name="donation_error_already_owned">you have already donated</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">Upgrade notice</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    In order to restore your messages on Android KitKat and Lollipop you need
+    to set SMS Backup+ as your SMS app during the restore operation. You will
+    get asked to change it back to the original setting after restoring.
+  </string>
 </resources>

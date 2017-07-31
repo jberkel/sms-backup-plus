@@ -1,6 +1,7 @@
+*.*~
 *.keystore
-bin
 gen
+classes
 local.properties
 *.iml
 *.ipr
@@ -13,3 +14,10 @@ nbproject
 mmssms.db
 com.zegoggles.smssync_preferences.xml
 app_parts
+target
+out
+proguard.cfg
+proguard-project.txt
+gen-external-apklibs/
+.gradle
+build

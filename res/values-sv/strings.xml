@@ -9,15 +9,11 @@
   </string>
 
   <string name="ui_sync_button_label_idle">Säkerhetskopiera</string>
-  <string name="ui_sync_button_label_done">Säkerhetskopiera</string>
   <string name="ui_sync_button_label_canceling">Stoppar</string>
-  <string name="ui_sync_button_label_error">Säkerhetskopiera</string>
   <string name="ui_sync_button_label_syncing">Stopp</string>
 
   <string name="ui_restore_button_label_idle">Återställ</string>
-  <string name="ui_restore_button_label_done">Återställ</string>
   <string name="ui_restore_button_label_restoring">Stopp</string>
-  <string name="ui_restore_button_label_error">Återställ</string>
 
   <string name="status_idle">Overksam</string>
   <string name="status_idle_details">Senaste säkerhetskopiering: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
@@ -49,7 +45,7 @@
   <string name="status_restore_canceled_details">%1$d/%2$d poster återställdes.</string>
 
   <string name="status_unknown_error">Fel</string>
-  <string name="notification_unknown_error">SMSBackup+ error</string>
+  <string name="notification_general_error">SMSBackup+ error</string>
 
   <string name="status_unknown_error_details">Fel under säkerhetskopiering/återställning:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Inloggningsfel</string>
@@ -61,11 +57,8 @@
   <string name="status_calc_details">Beräknar\u2026</string>
   <string name="status_canceled">Avbruten</string>
   <string name="status_canceled_details">%1$d/%2$d poster säkerhetskopierades.</string>
-  <string name="status_folder_error">Etikettfel</string>
-  <string name="status_folder_error_details">Kunde inte få tillgång till eller skapa etikett/mapp.</string>
   <string name="status_gmail_temp_error">Tillfälligt Gmail IMAP-fel, försök igen senare.</string>
 
-  <string name="ui_settings_label">Inställningar</string>
   <string name="ui_settings_advanced_label">Avancerad inställningar</string>
   <string name="ui_settings_advanced_desc">Ställ in avancerade inställningar.</string>
   <string name="ui_settings_advanced_server_label">Serverinställningar</string>
@@ -155,12 +148,6 @@
   <string name="ui_dialog_missing_credentials_msg_plain">Du måste ange användarnamn
   och lösenord först.</string>
 
-  <string name="ui_dialog_sync_data_reset_title">Backup data reset</string>
-  <string name="ui_dialog_sync_data_reset_msg">
-      Backupinformation har nollställts. Återanslut ditt konto och genomför en
-      manuell säkerhetskopiering. Du kommer att få välja om du vill kopiera
-      eller hoppa över meddelanden som finns på den här telefonen.
-  </string>
   <string name="ui_dialog_invalid_imap_folder_title">Ogiltig etikett</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Etiketten får inte innehålla mellanslag (i början eller slutet).</string>
   <string name="ui_dialog_first_sync_title">Första säkerhetskopieringen</string>
@@ -169,8 +156,6 @@
       Kopiera eller hoppa över alla meddelanden som finns på den här telefonen?\n\n
       Obs: Säkerhetskopieringen kommer att delas upp i omgångar om %1$d meddelanden.
   </string>
-  <string name="ui_dialog_need_first_manual_sync_title">Första säkerhetskopieringen</string>
-  <string name="ui_dialog_need_first_manual_sync_msg">Den första säkerhetskopiering måste genomföras manuellt. Vill du göra detta nu?</string>
   <string name="ui_dialog_request_token_msg">Kontaktar Google...</string>
   <string name="ui_dialog_access_token_msg">Begär åtkomst...</string>
 
@@ -197,17 +182,13 @@
 
   <string name="ui_sync">Säkerhetskopiera</string>
   <string name="ui_skip">Hoppa över</string>
-  <string name="err_could_not_create_folder">Kunde inte skapa etikett.</string>
-  <string name="err_first_sync_needs_skip_flag">Internal error: First backup without indication whether to skip messages or not.</string>
   <string name="err_sync_requires_login_info">Kan inte säkerhetskopiera utan inloggningsuppgifter.</string>
-  <string name="err_communication_error">Allmänt kommunikationsfel</string>
   <string name="menu_info">Om</string>
   <string name="menu_reset">Nollställ</string>
   <string name="ui_dialog_reset_title">Nollställ synkronisering</string>
   <string name="ui_dialog_reset_message">Vill du nollställa synkroniseringen? Du kan fortfarande välja att hoppa över meddelanden senare.</string>
   <string name="all_messages">Alla</string>
 
-  <string name="gmail_connected_fail">Gmail autentiseringsfel</string>
   <string name="gmail_needs_connecting">Tryck för att ansluta till ditt Gmail-konto (krävs).</string>
   <string name="gmail_already_connected">Ansluten som %1$s (tryck för att koppla från).</string>
 
@@ -216,7 +197,7 @@
 
   <string name="call_incoming">Inkommande samtal</string>
   <string name="call_outgoing">Utgående samtal</string>
-  <string name="call_missed">Missage samtal</string>
+  <string name="call_missed">Missade samtal</string>
 
   <string name="call_missed_text">Missat samtal från %1$s</string>
   <string name="call_incoming_text">Samtal från %1$s</string>
@@ -224,7 +205,6 @@
 
   <string name="call_number_field">Nummer: %1$s</string>
   <string name="call_duration_field">Samtalstid: %1$s</string>
-  <string name="calllog_settings">Inställningar för samtalshistorik</string>
 
   <string name="sms_with_field">SMS med %1$s</string>
   <string name="mms_with_field">SMS med %1$s</string>

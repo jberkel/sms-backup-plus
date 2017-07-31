@@ -14,6 +14,18 @@
     <item>-1</item>
   </string-array>
 
+  <string-array name="mark_as_read_entries">
+    <item>@string/mark_as_read_always_read</item>
+    <item>@string/mark_as_read_always_unread</item>
+    <item>@string/mark_as_read_message_status</item>
+  </string-array>
+
+  <string-array name="mark_as_read_values">
+    <item>read</item>
+    <item>unread</item>
+    <item>message_status</item>
+  </string-array>
+
   <string-array name="max_items_per_restore_entries">
     <item>100</item>
     <item>200</item>

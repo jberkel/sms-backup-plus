@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+  <string name="app_description">Përdor Gmail për të krijuar një kopje rezervë të SMS-ve tuaja. Ky është një version i përmirësuar i "SMS Backup" nga Christoph Studer i cili mbështet rikthimin e SMS-ve prapa në telefon. Ky është i prapapërpuethshëm plotësisht me SMS Backup.</string>
+  <string name="ui_sync_button_label_idle">Kopje Rezervë</string>
+  <string name="ui_sync_button_label_canceling">Duke Ndaluar</string>
+  <string name="ui_sync_button_label_syncing">Ndalo</string>
+  <string name="ui_restore_button_label_idle">Rikthim</string>
+  <string name="ui_restore_button_label_restoring">Ndalo</string>
+  <string name="status_idle">I qetë</string>
+  <string name="status_idle_details">Shënimi i fundit i ruajtur rezervë:<xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">kurrë</string>
+  <string name="status_working">Duke punuar</string>
+  <string name="status_backup">Duke krijuar kopjen rezervë</string>
+  <string name="status_restore">Duke rikthyer</string>
+  <string name="status_backup_details">Të ruajtura rezervë<xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> shënime\u2026</string>
+  <string name="status_restore_details">Të rikthyera<xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> shënime\u2026</string>
+  <string name="status_login_details">Duke hyrë\u2026</string>
+  <string name="status_updating_threads">Duke përditësuar rrymat\u2026</string>
+  <string name="status_done">E kryer</string>
+  <string name="status_backup_done_details_max_per_sync">Maksimumi i %1$d shënimeve për kopje rezervë është arritur. Rifilloni krijimin e kopjes rezervë për të vazhduar.</string>
+  <string name="status_backup_done_details_noitems">Nuk ka shënime për tu ruajtur rezervë.</string>
+  <plurals name="status_backup_done_details">
+    <item quantity="one">U ruajtën rezervë me sukses<xliff:g id="total_items">%1$d</xliff:g> shënime.</item>
+    <item quantity="other">U ruajtën rezervë me sukses<xliff:g id="total_items">%1$d</xliff:g> shënime.</item>
+  </plurals>
+  <plurals name="status_restore_done_details">
+    <item quantity="one">U rikthyen me sukses<xliff:g id="total_items">%1$d</xliff:g> shënime (%2$d dups).</item>
+    <item quantity="other">U rikthyen me sukses<xliff:g id="total_items">%1$d</xliff:g> shënime (%2$d dups).</item>
+  </plurals>
+  <string name="status_restore_canceled_details">%1$d/%2$d shënime u rikthyen me sukses.</string>
+  <string name="status_unknown_error">Gabim</string>
+  <string name="notification_general_error">Gabim SMSBackup+</string>
+  <string name="status_unknown_error_details">Gabim gjatë krijimit të kopjes rezervë/rikthimit:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Gabim në hyrje</string>
+  <string name="notification_auth_failure">Gabim në hyrje SMSBackup+</string>
+  <string name="status_auth_failure_details_xoauth">Gabim autorizimi XOAuth. Ju lutemi siguroheni që keni aktivizuar IMAP në aranzhimin e llogarisë tuaj të Gmail.</string>
+  <string name="status_auth_failure_details_plain">Gabim autorizimi IMAP.
+  Sigurohuni që hyrja dhe fjalëkalimi të jenë të vendosura në rregull.</string>
+  <string name="status_calc_details">Duke Përllogaritur\u2026</string>
+  <string name="status_canceled">I Anulluar</string>
+  <string name="status_canceled_details">%1$d/%2$d shënime u ruajtën reservë me sukses.</string>
+  <string name="status_gmail_temp_error">Gabim i përkohshëm Gmail IMAP, provoni përsëri më vonë.</string>
+  <string name="ui_settings_advanced_label">Aranzhimet e avancuara</string>
+  <string name="ui_settings_advanced_desc">Vendosni preferencat e avancuara.</string>
+  <string name="ui_settings_advanced_server_label">Aranzhimet e serverit IMAP</string>
+  <string name="ui_settings_advanced_server_desc">Mos e ndryshoni përvec se jeni duke e ditur cfarë po bëni!</string>
+  <string name="imap_settings">Aranzhimet e IMAP</string>
+  <string name="ui_login_label">Emri i Përdoruesit</string>
+  <string name="ui_login_desc">Llogaria juaj e IMAP/adresa juaj e e-mail.</string>
+  <string name="ui_login_dialog_msg">Kujdes: Ndryshimi i emrit të përdoruesit mund të prishi punë gjatë përdorimit të XOAuth.</string>
+  <string name="ui_password_label">Fjalëkalimi</string>
+  <string name="ui_password_desc">Fjalëkalimi i llogarisë suaj IMAP. Përdoret vetën kur XOAuth është jo aktiv.</string>
+  <string name="ui_password_dialog_msg">Fjalëkalimi është ruajtur në këtë pajisje dhe përdoret vetëm për hyrje.</string>
+  <string name="ui_server_label">Adresa e serverit</string>
+  <string name="ui_server_desc">Adresa e serverit që ju dëshironi të sinkronizoni të përfshijë. portën e tij.</string>
+  <string name="ui_server_dialog_msg">Konfigurimi fillestar për Gmail është \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">Siguria</string>
+  <string name="ui_protocol_desc">Protokolli i sigurisë së serverit. Konfigurimi fillestar për gmail është \"SSL\"."</string>
+  <string name="ui_authentication_label">Verifikim</string>
+  <string name="ui_authentication_desc">Metoda e verifikimit. Konfigurimi fillestar për gmail është \"XOAuth\".</string>
+  <string name="plain">Tekst i thjeshtë</string>
+  <string name="xoauth">XOAuth</string>
+  <string name="ui_imap_folder_label">etiketë Gmail</string>
+  <string name="ui_imap_folder_desc">etiketë e Gmail caktuar SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Mesazhet SMS e ruajtura rezervë do të shënohen me këtë etiketë në Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">Prefiksi i subjektit të Email-it</string>
+  <string name="ui_mail_subject_prefix_desc">Përdorni emrin e dosjes së IMAP si prefiks në subjektin e emailit</string>
+  <string name="ui_max_items_per_sync_label">Shënime për kopje rezervë</string>
+  <string name="ui_max_items_per_sync_desc">Numri maksimal i shënimeve për kopje rezervë.</string>
+  <string name="ui_max_items_per_restore_label">Shënime për rikthim</string>
+  <string name="ui_max_items_per_restore_desc">Numri maksimal i mesazheve të rikthyera.</string>
+  <string name="ui_restore_starred_only_label">Shënimet e yllëzuara</string>
+  <string name="ui_restore_starred_only_desc">Rikthe vetëm shënimet e yllëzuara.</string>
+  <string name="ui_backup_mms_label">Krijo kopje rezervë të MMS-ve</string>
+  <string name="ui_backup_mms_desc">Aktivizoni krijimin e kopjes rezervë të MMS-ve</string>
+  <string name="ui_backup_mms_not_supported">Krijimi i kopjes rezervë të MMS-ve nuk mbështet në këtë platformë.</string>
+  <string name="ui_backup_calllog_label">Krijoni kopje rezervë të ditarit të thirrjeve</string>
+  <string name="ui_backup_calllog_desc">Aktivizoni krijimin e kopjes rezervë të ditarit të thirrjeve</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Sinkronizim i kalendarit</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Shtoni shënime të ditarit të thirrjeve në kalendar</string>
+  <string name="ui_backup_calllog_types_label">Tipet e thirrjeve</string>
+  <string name="ui_backup_calllog_types_desc">Cilat tipe thirrjesh të ruhen rezervë</string>
+  <string name="ui_backup_calllog_sync_calendar_label">Asnjë</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Kalendari i përdorur për ditarin e thirrjeve</string>
+  <string name="ui_imap_folder_calllog_label">Etiketa e ditarit të thirrjeve</string>
+  <string name="ui_imap_folder_calllog_desc">Etiketa e Gmail e caktuar për ditarin e thirrjeve.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Shënimet e ruajtura rezervë të ditarit të thirrjeve do të etiketohen me këtë etiketë në Gmail.</string>
+  <string name="ui_mark_as_read_label">Shënoni si të lexuara (e-maile)</string>
+  <string name="ui_mark_as_read_desc">Nëse do të shënohen mesazhet në Gmail si të lexuara apo jo.</string>
+  <string name="ui_mark_as_read_restore_label">Shënoni si të lexuara (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Nëse do të shënohen të gjitha SMS-të e rikthyera si të lexuara apo jo.</string>
+  <string name="ui_email_address_style_label">Stili i adreses së e-mailit</string>
+  <string name="ui_email_address_style_desc">Formati i adresave të emailit</string>
+  <string name="ui_enable_auto_sync_label">Kopje rezervë automatike</string>
+  <string name="ui_enable_auto_sync_desc">Nëse do të krijoi kopje të reja rezervë të SMS-ve apo jo.</string>
+  <string name="ui_enable_auto_sync_summary">Krijimi i kopjes rezervë automatike %1$s.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Nuk është përzgjedhur tip shënimi për tu ruajtur rezervë.</string>
+  <string name="sd_card_disclaimer">Krijimi automatik i kopjes rezervë mund të mos punoj sic duhet kur programi është i instaluar në kartën SD.</string>
+  <string name="ui_enable_auto_sync_bg_data">Gjithashtu do t\'ju duhet të aktivizoni të dhënat në sfond.</string>
+  <string name="ui_auto_backup_schedule_label">Planifikim i rregullt</string>
+  <string name="ui_auto_backup_schedule_desc">Kur të krijoni kopje rezervë të SMS-ve</string>
+  <string name="ui_auto_backup_incoming_schedule_label">Planifikimi i gjurmëve hyrëse</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Kur të krijoni kopje rezervë të SMS-ve hyrëse (mbas ardhjes)</string>
+  <string name="ui_wifi_only_label">Kerkon Wifi</string>
+  <string name="ui_wifi_only_desc">Krijoni kopjen rezervë vetëm kur jeni të lidhur me Wifi</string>
+  <string name="ui_notifications_label">Njoftimet</string>
+  <string name="ui_notifications_desc">Njoftimet në sfond</string>
+  <string name="error_wifi_only_no_connection">Nuk ka lidhje Wifi</string>
+  <string name="error_no_connection">Nuk ka lidhje me internet</string>
+  <string name="error_sms_provider_not_writable">Nuk mund të shkruaj tek shërbyesi i SMS-ve</string>
+  <string name="ui_dialog_missing_credentials_title">Informacion hyrjeje</string>
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Ju duhet të lidhni fillimisht llogarinë tuaj të Gmail-it.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Ju duhet të vendosni fillimisht
+  emrin tuaj të përdoruesit dhe fjalëkalimin.</string>
+  <string name="ui_dialog_invalid_imap_folder_title">Emër etikete jo i saktë</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Emri i etiketës mund të mos përmbajë hapsira (në fillim ose fund).</string>
+  <string name="ui_dialog_first_sync_title">Kopja rezervë e parë</string>
+  <string name="ui_dialog_first_sync_msg">Krijoni kopje rezervë ose anashkaloni gjithë mesazhet e ruajtura në këtë pajisje?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Krijoni kopje rezervë ose i anashkaloni të gjitha mesazhet të ruajtura aktualisht në pajisje?\n\nVini re: Kopja rezervë do të ndahet në grumbuj %1$d mesazhesh.</string>
+  <string name="ui_dialog_request_token_msg">Duke kontaktuar Google…</string>
+  <string name="ui_dialog_access_token_msg">Duke kërkuar akses…</string>
+  <string name="ui_dialog_access_token_error_title">Gabim verifikimi</string>
+  <string name="ui_dialog_access_token_error_msg">Nuk mund të marri shenjën e aksesit. Sigurohuni të zgjidhni
+    \"Siguro akses\".
+  </string>
+  <string name="ui_dialog_connect_msg">Një dritare shfletuesi do të hapet, duke ju kërkuar të futeni në Gmail për të siguruar %1$s akses në e-mailet tuaja.</string>
+  <string name="ui_dialog_connect_token_error">Nuk mund të marri shenjën e kërkesës nga Google. Sigurohuni që lidhja me rrjetin është aktive dhe koha / zona e kohës është konfiguruar saktë.</string>
+  <string name="ui_dialog_disconnect_msg">Jeni të sigurtë? Ju do të keni nevojë të riautorizoni llogarinë tuaj mbas i keni shkëputur si dhe gjendja e sinkronizimit lokal do të rivendoset.</string>
+  <string name="ui_dialog_upgrade_title">Informacion përditësimi</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ është i prapapërpuethshëm plotësisht me SMS Backup. Megjithatë sigurohuni që \"krijimi i kopjes rezervë automatike\" është i aktivizuar vetëm në njërin program, përndryshe do të hasni kopje identike. Gjithashtu ju duhet të përzgjidhni \"Tejkalo\" mesazhet për sinkronizimin tuaj të parë nëse mesazhet në telefon janë tashmë të ruajtura rezervë që më parë.\</string>
+  <string name="ui_dialog_brokendroidx_title">Mangësi e SMS të DROID X</string>
+  <string name="ui_dialog_brokendroidx_msg">Ka një mangësi tek Droid X e cila
+  nuk e lejon këtë program të krijoi kopje rezervë të mesazheve hyrëse. Shikoni FAQ
+  në faqen e internetit për më shumë informacion.</string>
+  <string name="ui_sync">Kopje rezervë</string>
+  <string name="ui_skip">Anashkalo</string>
+  <string name="err_sync_requires_login_info">Nuk mund të krijoj kopje rezervë pa informacionin e hyrjes.</string>
+  <string name="menu_info">Rreth</string>
+  <string name="menu_reset">Rivendos</string>
+  <string name="ui_dialog_reset_title">Rivendosni gjendjen aktuale të sinkronizimit</string>
+  <string name="ui_dialog_reset_message">Dëshironi të rivendosni gjendjen aktuale të sinkronizimit?
+  Ju mund akoma të zgjidhni të tejkaloni të gjitha mesazhet më vonë.</string>
+  <string name="all_messages">Të gjitha</string>
+  <string name="gmail_needs_connecting">Trokitni për tu lidhur me llogarinë tuaj të Gmail (e kërkuar).</string>
+  <string name="gmail_already_connected">E lidhur si %1$s.</string>
+  <string name="ui_connected_label">Lidh</string>
+  <string name="ui_connected_desc">Llogaria juaj ka nevojë të lidhet.</string>
+  <string name="call_incoming">thirrje hyrëse</string>
+  <string name="call_outgoing">thirrje dalëse</string>
+  <string name="call_missed">thirrje e humbur</string>
+  <string name="call_missed_text">Thirrje e humbur nga %1$s</string>
+  <string name="call_incoming_text">Thirrje nga %1$s</string>
+  <string name="call_outgoing_text">E thirrur %1$s</string>
+  <string name="call_number_field">Numri: %1$s</string>
+  <string name="call_duration_field">Kohëzgjatja: %1$s</string>
+  <string name="sms_with_field">SMS me %1$s</string>
+  <!-- linja e subjektit duhet të jetë identike përndryshe rrjedhat do të ngatërrohen-->
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">Thirrje me %1$s</string>
+  <string name="ui_backup_contact_group_label">Kontakte për tu ruajtur rezervë</string>
+  <string name="ui_backup_contact_group_desc">Vetëm shënimet e kopjuara rezervë nga një grup specifik</string>
+  <string name="everybody">Cilido</string>
+  <string name="call_type_everything">Gjithçka</string>
+  <string name="call_type_incoming">Vetëm thirrjet hyrëse</string>
+  <string name="call_type_outgoing">Vetëm thirrjet dalëse</string>
+  <string name="call_type_incoming_outgoing">Hyrëse &amp; Dalëse</string>
+  <string name="call_type_missed">Vetëm thirrjet e humbura</string>
+  <string name="email_address_style_name">Emri</string>
+  <string name="email_address_style_name_and_number">Emri (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+  <string name="_1h">1 orë</string>
+  <string name="_2h">2 orë</string>
+  <string name="_6h">6 orë</string>
+  <string name="_24h">24 orë</string>
+  <string name="never">Kurrë</string>
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+  <string name="ssl_required">SSL</string>
+  <string name="ssl_optional">SSL (besoni të gjitha)</string>
+  <string name="tls_required">TLS</string>
+  <string name="tls_optional">TLS (besoni të gjitha)</string>
+  <string name="none">Asnjë</string>
+  <string name="ui_third_party_integration_label">integrim i dorës së tretë</string>
+  <string name="ui_third_party_integration_desc">Lejoni programet e tjera të tërheqin kopje rezervë nëpërmjet qëllimeve transmetuese</string>
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">Aranzhimet e kopjes rezervë</string>
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+  <string name="ui_backup_calllog_settings_label">Aranzhimet e ditarit të thirrjeve</string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+  <string name="auto_backup_settings">Aranzhimet e kopjes rezervë automatike</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+  <string name="ui_restore_settings_label">Aranzhimet e rikthimit</string>
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+  <string name="ui_backup_sms_label">Kopjoni rezervë SMS</string>
+  <string name="ui_backup_sms_desc">Aktivizoni kopjen rezervë SMS</string>
+  <string name="ui_restore_sms_label">Riktheni SMS</string>
+  <string name="ui_restore_sms_desc" />
+  <string name="ui_feature_not_available_yet">(Tipar akoma i padisponueshëm)</string>
+  <string name="ui_restore_mms_label">Riktheni MMS</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+  <string name="ui_restore_calllog_label">Riktheni ditarin e thirrjeve</string>
+  <string name="ui_restore_calllog_desc" />
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">Ditari i thirrjeve</string>
+  <string name="pref_acra_disabled">I Çaktivizuar</string>
+  <string name="app_log_skip_backup_background_data">U anashkalua sepse të dhënat e sfondit janë të çaktivizuara</string>
+  <string name="app_log_skip_backup_already_running">U anashkalua sepse krijimi i kopjes rezervë është tashmë duke punuar</string>
+  <string name="app_log_skip_backup_skip_messages">Anashkalo të gjithë mesazhet</string>
+  <string name="app_log_skip_backup_no_items">E anashkaluar (nuk u gjetën shënime)</string>
+  <string name="app_log_missing_credentials">E anashkaluar (mungojnë kredencialet)</string>
+  <string name="app_log_backup_requested">Krijim i kopjes rezervë u kërkua (%1$s)</string>
+  <string name="app_log_start_backup">Duke filluar krijimin e kopjes rezervë (%1$s)</string>
+  <string name="app_log_backup_messages">Duke krijuar kopjen rezervë (%1$d SMS, %2$d MMS, %3$d ditari i thirrjeve)</string>
+  <string name="app_log_backup_messages_with_config">Duke përdorur konfigurimin: %1$s</string>
+  <string name="app_log_backup_canceled">Krijimi i kopjes rezervë u anullua</string>
+  <string name="app_log_backup_finished">Krijimi i kopjes rezervë mbaroi</string>
+  <string name="app_log_backup_failed_authentication">Gabim verifikimi: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Gabim i përgjithshëm: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Krijimi i kopjes rezervë u anashkalua, nuk ka lidhje</string>
+  <string name="app_log_scheduled_next_sync">Next backup scheduled for: %1$s</string>
+  <string name="app_log_no_next_sync">Nuk ka krijim të ri të kopjes rezervë të planifikuar</string>
+  <string name="menu_view_log">Shihni ditarin</string>
+  <string name="app_log_empty">Ditari është bosh. Aktivizoheni tek \"Aranzhimet e avancuara\".</string>
+  <string name="pref_app_log">Sinkronizoni ditarin</string>
+  <string name="pref_app_log_enabled">Ditari është i ruajtur në kartën SD si \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_debug">Informacion rregullimi ekstra</string>
+  <string name="pref_app_log_debug_summary">Aktivizon shënimin e rregullimeve ekstra në ditarin e sinkronizimit</string>
+  <string name="source_incoming">hyrëse</string>
+  <string name="source_regular">të rregullta</string>
+  <string name="source_3rd_party">të dorës së tretë</string>
+  <string name="source_manual">manuale</string>
+  <string name="source_unknown">e panjohur</string>
+  <string name="ui_confirm_action_label">Konfirmoni veprimet</string>
+  <string name="ui_confirm_action_desc">Pyesni përpara se të filloni krijimin e kopjes rezervë apo rikthimin</string>
+  <string name="ui_dialog_confirm_action_title">Konfirmoni Veprimet</string>
+  <string name="ui_dialog_confirm_action_msg">A jeni të sigurtë nëse doni të kryeni keto veprime?</string>
+  <string name="loading">Duke u ngarkuar…</string>
+  <string name="ssl_error">gabim SSL</string>
+  <string name="ui_dialog_account_manager_token_error">
+      Nuk mund të marrë shenjën nga sistemi. Dëshironi të provoni metodën e verifikimit me shfletues?
+  </string>
+  <string name="select_google_account">Zgjidhni një llogari Google</string>
+  <!-- donation related -->
+  <string name="donate">Dhuroni</string>
+  <string name="donate_summary">Duke përdorur pagesën e sigurtë në-program të Google Play Store.</string>
+  <string name="ui_dialog_donate_message">Ju lutemi zgjidhni shumën:</string>
+  <string name="ui_donation_success_message">Dhurimi i suksesshëm, faleminderit!</string>
+  <string name="ui_donation_failure_message">Dhurimi dështoi: %1$s</string>
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">faturimi në-program nuk është i pranishëm</string>
+  <string name="donation_error_unavailable">I pa disponueshëm</string>
+  <string name="donation_error_canceled">I anulluar</string>
+  <string name="donation_error_already_owned">ju keni dhuruar njëherë</string>
+  <string name="ui_dialog_sms_default_package_change_title">Njoftim përmirësimi</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    Në rast të rikthmit të mesazheve tuaja në Android KitKat dhe Lollipop ju nevojitet
+    të vendosni SMS Backup+ si programin tuaj fillestar të SMS përgjatë proçesit të rikthimit. Ju do të
+    pyeteni të ndryshoni përsëri aranzhimet si në fillim mbas rikthimit.
+  </string>
+</resources>

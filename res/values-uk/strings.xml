@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_name">SMS Backup+</string>
+<string name="app_description">Використовуйте пошту Gmail для резервного копіювання SMS. Це покращена версія програми \"SMS Backup\" Крістофа Студера, яка підтримує відновлення SMS у телефоні. Вона повністю сумісна з \"SMS Backup\".</string>
+<string name="ui_sync_button_label_idle">Створити</string>
+<string name="ui_sync_button_label_canceling">Зупинка</string>
+<string name="ui_sync_button_label_syncing">Зупинити</string>
+<string name="ui_restore_button_label_idle">Відновити</string>
+<string name="ui_restore_button_label_restoring">Зупинити</string>
+<string name="status_idle">Очікую</string>
+<string name="status_idle_details">Востаннє: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+<string name="status_idle_details_never">ніколи</string>
+<string name="status_working">Виконується</string>
+<string name="status_backup">Резервне копіювання</string>
+<string name="status_restore">Відновлення</string>
+<string name="status_backup_details">Збережено <xliff:g id="backed_up_items">%1$d</xliff:g> из <xliff:g id="total_items">%2$d</xliff:g> елементів\u2026</string>
+<string name="status_restore_details">Відновлено <xliff:g id="backed_up_items">%1$d</xliff:g> из <xliff:g id="total_items">%2$d</xliff:g> елементів\u2026</string>
+<string name="status_login_details">Триває вхід\u2026</string>
+<string name="status_updating_threads">Оновлення\u2026</string>
+<string name="status_done">Готово</string>
+<string name="status_backup_done_details_max_per_sync">Досягнуто максимальну кількість елементів (%1$d) на одну резервну копію. Для продовження виконайте резервне копіювання знову.</string>
+<string name="status_backup_done_details_noitems">Немає нічого для резервного копіювання.</string>
+<plurals name="status_backup_done_details">
+	<item quantity="one">Вдало збережено <xliff:g id="total_items">%1$d</xliff:g> елемент.</item>
+<item quantity="few">Вдало збережено <xliff:g id="total_items">%1$d</xliff:g> елементів.</item>
+<item quantity="other">Вдало збережено <xliff:g id="total_items">%1$d</xliff:g> елемент.</item>
+</plurals>
+<plurals name="status_restore_done_details">
+<item quantity="one">Вдало відновлено <xliff:g id="total_items">%1$d</xliff:g> елемент (%2$d повторів).</item>
+<item quantity="few">Вдало відновлено <xliff:g id="total_items">%1$d</xliff:g> елементів (%2$d повторів).</item>
+<item quantity="other">Вдало відновлено <xliff:g id="total_items">%1$d</xliff:g> елементів (%2$d повторів).</item>
+</plurals>
+<string name="status_restore_canceled_details">Вдало відновлено %1$d/%2$d елементів.</string>
+<string name="status_unknown_error">Помилка</string>
+<string name="notification_general_error">Помилка SMSBackup+</string>
+<string name="status_unknown_error_details">Помилка під час збереження/відновлення
+<xliff:g id="error_description">%1$s</xliff:g></string>
+<string name="status_auth_failure">Помилка входу</string>
+<string name="notification_auth_failure">Помилка входу SMSBackup+</string>
+<string name="status_auth_failure_details_xoauth">Помилка авторизації XOAuth. Будь ласка, переконайтеся, що ви вмикнули IMAP в налаштуваннях Gmail.</string>
+<string name="status_auth_failure_details_plain">Помилка авторизації IMAP. Переконайтеся, що логін і пароль введені правильно.</string>
+<string name="status_calc_details">Обробка\u2026</string>
+<string name="status_canceled">Скасовано</string>
+<string name="status_canceled_details">Вдало збережено %1$d/%2$d елементів.</string>
+<string name="status_gmail_temp_error">Тимчасова помилка Gmail IMAP, будь ласка, повторіть спробу пізніше.</string>
+<string name="ui_settings_advanced_label">Розширені налаштування</string>
+<string name="ui_settings_advanced_desc">Налаштування розкладу, сповіщень, журналу тощо.</string>
+<string name="ui_settings_advanced_server_label">Налаштування серверу IMAP</string>
+<string name="ui_settings_advanced_server_desc">Не змінюйте налаштування, якщо ви не знаєте, що ви робите!</string>
+<string name="imap_settings">Налаштування IMAP</string>
+<string name="ui_login_label">Ім’я користувача</string>
+<string name="ui_login_desc">IMAP логін або адреса електронної пошти.</string>
+<string name="ui_login_dialog_msg">УВАГА: Зміна зміна логіну викликати проблеми при використанні XOAuth.</string>
+<string name="ui_password_label">Пароль</string>
+<string name="ui_password_desc">Пароль до вашого облікового запису IMAP. Використовується лише якщо XOAuth відключено.</string>
+<string name="ui_password_dialog_msg">Пароль зберігається на цьому пристрої і використовується лише для входу.</string>
+<string name="ui_server_label">Адреса серверу</string>
+<string name="ui_server_desc">Адреса і порт серверу для синхронізації.</string>
+<string name="ui_server_dialog_msg">Типово для Gmail є \"imap.gmail.com:993\"</string>
+<string name="ui_protocol_label">Безпека</string>
+<string name="ui_protocol_desc">Протокол безпеки на сервері. Типово для Gmail є \"SSL (обов’язково)\".</string>
+<string name="ui_authentication_label">Автентифікація</string>
+<string name="ui_authentication_desc">Метод перевірки автентичності. Типово для Gmail є \"XOAuth\".</string>
+<string name="plain">Звичайний текст</string>
+<string name="xoauth">XOAuth</string>
+<string name="ui_imap_folder_label">Мітки Gmail</string>
+<string name="ui_imap_folder_desc">Мітки Gmail для SMS.</string>
+<string name="ui_imap_folder_label_dialog_msg">Збережені SMS повідомлення будуть позначені цією міткою в Gmail.</string>
+<string name="ui_mail_subject_prefix_label">Тема електронного листа</string>
+<string name="ui_mail_subject_prefix_desc">Використання назви IMAP-тек як префікс теми листа</string>
+<string name="ui_max_items_per_sync_label">Елементів для резервної копії</string>
+<string name="ui_max_items_per_sync_desc">Максимальна кількість елементів для резервної копії.</string>
+<string name="ui_max_items_per_restore_label">Елементів для відновлення</string>
+<string name="ui_max_items_per_restore_desc">Максимальна кількість елементів для відновлення.</string>
+<string name="ui_restore_starred_only_label">Позначені елементи</string>
+<string name="ui_restore_starred_only_desc">Відновлення лише позначених елементів.</string>
+<string name="ui_backup_mms_label">Збереження MMS</string>
+<string name="ui_backup_mms_desc">Дозволити резервне копіювання MMS повідомлень</string>
+<string name="ui_backup_mms_not_supported">Резервне копіювання MMS не підтримується на цій платформі.</string>
+<string name="ui_backup_calllog_label">Збереження журналу викликів</string>
+<string name="ui_backup_calllog_desc">Дозволити резервне копіювання журналу викликів</string>
+<string name="ui_backup_calllog_sync_calendar_enabled_label">Синхронізація до календаря</string>
+<string name="ui_backup_calllog_sync_calendar_enabled_desc">Зберігати журнал викликів до календаря</string>
+<string name="ui_backup_calllog_types_label">Типи викликів</string>
+<string name="ui_backup_calllog_types_desc">Які типи викликів зберігати</string>
+<string name="ui_backup_calllog_sync_calendar_label">Немає</string>
+<string name="ui_backup_calllog_sync_calendar_desc">Який календар використовувати для збереження журналів викликів</string>
+<string name="ui_imap_folder_calllog_label">Мітки для журналу викликів</string>
+<string name="ui_imap_folder_calllog_desc">Мітки Gmail для журналу викликів.</string>
+<string name="ui_imap_folder_calllog_label_dialog_msg">Збережені записи журналу викликів будуть позначені цією міткою в Gmail.</string>
+<string name="ui_mark_as_read_label">Позначити як прочитані (електроні листи)</string>
+<string name="ui_mark_as_read_desc">Позначати повідомлення в Gmail як прочитані.</string>
+<string name="ui_mark_as_read_restore_label">Позначити як прочитане (SMS)</string>
+<string name="ui_mark_as_read_restore_desc">Позначати SMS повідомлення в Gmail як прочитані.</string>
+<string name="ui_email_address_style_label">Стиль адреси електронної пошти</string>
+<string name="ui_email_address_style_desc">Формат адреси електронної пошти</string>
+<string name="ui_enable_auto_sync_label">Автоматичне резервне копіювання</string>
+<string name="ui_enable_auto_sync_desc">Використовувати автоматичне резервне копіювання нових SMS чи ні?</string>
+<string name="ui_enable_auto_sync_summary">Автоматично збережено %1$s.</string>
+<string name="ui_enable_auto_sync_no_enabled_summary">Не обрано тип елементу для резервного копіювання.</string>
+<string name="sd_card_disclaimer">Автоматичне резервне копіювання може ненадійно працювати, коли програма встановлена ​​на SD-картку.</string>
+<string name="ui_enable_auto_sync_bg_data">Ви маєте включити фонову передачу даних.</string>
+<string name="ui_auto_backup_schedule_label">Постійний розклад</string>
+<string name="ui_auto_backup_schedule_desc">Коли зберігати SMS повідомлення</string>
+<string name="ui_auto_backup_incoming_schedule_label">Вхідний розклад</string>
+<string name="ui_auto_backup_incoming_schedule_desc">Коли зберігати вхідні SMS повідомлення (після отримання)</string>
+<string name="ui_wifi_only_label">Вимагати WiFi</string>
+<string name="ui_wifi_only_desc">Резервне копіювання лише при підключенні до WiFi мережі</string>
+<string name="ui_notifications_label">Сповіщення</string>
+<string name="ui_notifications_desc">Відображати фонові сповіщення</string>
+<string name="error_wifi_only_no_connection">Немає WiFi з’єднання</string>
+<string name="error_no_connection">Немає підключення до інтернету</string>
+<string name="error_sms_provider_not_writable">Не можливо записати до sms-провайдера</string>
+<string name="ui_dialog_missing_credentials_title">Інформація про вхід</string>
+<string name="ui_dialog_missing_credentials_msg_xoauth">Перш за все вам необхідно підключити ваш обліковий запис Gmail.</string>
+<string name="ui_dialog_missing_credentials_msg_plain">Спочатку потрібно встановити ваше ім’я користувача та пароль.</string>
+<string name="ui_dialog_invalid_imap_folder_title">Невірна назва мітки</string>
+<string name="ui_dialog_invalid_imap_folder_msg">Назва мітки не може містити пробіли (на початку або в кінці).</string>
+<string name="ui_dialog_first_sync_title">Перша резервна копія</string>
+<string name="ui_dialog_first_sync_msg">Зберігти або пропустити всі попередні повідомлення на цьому пристрої?</string>
+<string name="ui_dialog_first_sync_msg_batched">Збереження або пропуск всіх попередніх повідомлень, які зберігаються на цьому пристрої?
+
+Примітка: резервні копії буде розподілено на частина по %1$d повідомлень.</string>
+<string name="ui_dialog_request_token_msg">З’єднання з Google\u2026</string>
+<string name="ui_dialog_access_token_msg">Запит доступу\u2026</string>
+<string name="ui_dialog_access_token_error_title">Помилка авторизації</string>
+<string name="ui_dialog_access_token_error_msg">Не можливо отримати доступ. Переконайтеся, що ви надали доступ застосунку.</string>
+<string name="ui_dialog_connect_msg">В вікні переглядачу тенет надайте доступ застосунку %1$s до вашої пошти.</string>
+<string name="ui_dialog_connect_token_error">Не вдалося з’єднатися з Google. Переконайтеся, що мережеве з’єднання встановлено і час та часовий пояс налаштовані правильно.</string>
+<string name="ui_dialog_disconnect_msg">Ви впевнені? Після відключення потрібно буде повторно надати доступ до вашої пошти. Стан синхронізації буде скинуто.</string>
+<string name="ui_dialog_upgrade_title">Інформація про сумісність</string>
+<string name="ui_dialog_upgrade_msg">
+   SMS Backup+ є повністю сумісною SMS Backup. Однак переконайтеся, що \"Автоматичне резервне копіювання\" включено лише в одному застосунку, в іншому випадку ви можете отримати дублікати. Також ви маєте обрати \"Проминути\" в повідомлені для першої синхронізації, якщо повідомлення на телефоні вже були збережені раніше.</string>
+<string name="ui_dialog_brokendroidx_title">Помилки на DROID X</string>
+<string name="ui_dialog_brokendroidx_msg">Існує помилка збереження вхідних повідомлень в Droid X. Будь ласка, перегляньте довідку на веб-сайті для детальної інформації.</string>
+<string name="ui_sync">Резервне копіювання</string>
+<string name="ui_skip">Проминути</string>
+<string name="err_sync_requires_login_info">Не можливо виконати резервне копіювання без входу до системи.</string>
+<string name="menu_info">Про програму</string>
+<string name="menu_reset">Скинути</string>
+<string name="ui_dialog_reset_title">Скидання поточного стану синхронізації</string>
+<string name="ui_dialog_reset_message">Ви бажаєте скинути поточний стан синхронізації? Ви можете обрати пропуск всіх повідомлень пізніше.</string>
+<string name="all_messages">Всі</string>
+<string name="gmail_needs_connecting">Натисніть, для підключення до Gmail рахунку (обов’язково).</string>
+<string name="gmail_already_connected">Підключений як %1$s.</string>
+<string name="ui_connected_label">Підключення</string>
+<string name="ui_connected_desc">Ваш обліковий запис має бути підключений.</string>
+<string name="call_incoming">вхідний виклик</string>
+<string name="call_outgoing">вихідий виклик</string>
+<string name="call_missed">пропущений виклик</string>
+<string name="call_missed_text">пропущений виклик від %1$s</string>
+<string name="call_incoming_text">Виклик від %1$s</string>
+<string name="call_outgoing_text">Викликається %1$s</string>
+<string name="call_number_field">Номер: %1$s</string>
+<string name="call_duration_field">Тривалість: %1$s</string>
+<string name="sms_with_field">SMS з %1$s</string>
+
+<!-- the subject line needs to be identical otherwise threading will be messed up -->
+<string name="mms_with_field">@string/sms_with_field</string>
+<string name="call_with_field">Виклик з %1$s</string>
+<string name="ui_backup_contact_group_label">Контакти для резервного копіювання</string>
+<string name="ui_backup_contact_group_desc">Резервнє копіювання елементів з певної групи</string>
+<string name="everybody">Всі</string>
+<string name="call_type_everything">Всі</string>
+<string name="call_type_incoming">Лише вхідні</string>
+<string name="call_type_outgoing">Лише вихідні</string>
+<string name="call_type_incoming_outgoing">Вхідні та вихідні</string>
+<string name="call_type_missed">Лише пропущені</string>
+<string name="email_address_style_name">Ім’я</string>
+<string name="email_address_style_name_and_number">Ім’я (+380 12 3456789)</string>
+<string name="email_address_style_number">+380 12 3456789</string>
+<string name="_1h">1 година</string>
+<string name="_2h">2 години</string>
+<string name="_6h">6 годин</string>
+<string name="_24h">24 години</string>
+<string name="never">Ніколи</string>
+<string name="_1min">1 хвилина</string>
+<string name="_3mins">3 хвилини</string>
+<string name="_30mins">30 хвилин</string>
+<string name="ssl_required">SSL (обов’язково)</string>
+<string name="ssl_optional">SSL (необов’язково)</string>
+<string name="tls_required">TLS (обов’язково)</string>
+<string name="tls_optional">TLS (необов’язково)</string>
+<string name="none">Немає</string>
+
+<string name="ui_third_party_integration_label">Інтеграції</string>
+<string name="ui_third_party_integration_desc">Дозволити іншим застосункам запуск резервного копіювання за допомогою трансляції намірів</string>
+
+<string name="ui_backup_settings_label">Резервне копіювання</string>
+<!-- <string name="ui_backup_settings_desc">Параметри резервного копіювання</string> -->
+
+<string name="ui_backup_calllog_settings_label">Налаштування журналу викликів</string>
+<!-- <string name="ui_backup_calllog_settings_desc">Налаштування журналу викликів</string> -->
+
+<string name="auto_backup_settings">Налаштування автоматичного резервного копіювання</string>
+<string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+<string name="ui_restore_settings_label">Відновлення</string>
+<!-- <string name="ui_restore_settings_desc">Параметри відновлення з резервної копії</string> -->
+
+<string name="ui_backup_sms_label">Збереження SMS</string>
+<string name="ui_backup_sms_desc">Включити резервне копіювання SMS</string>
+<string name="ui_restore_sms_label">Відновлення SMS</string>
+<string name="ui_restore_sms_desc"></string>
+<string name="ui_feature_not_available_yet">(Функція ще не доступна)</string>
+<string name="ui_restore_mms_label">Відновлення MMS</string>
+<string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+<string name="ui_restore_calllog_label">Відновлення журналу викликів</string>
+<string name="ui_restore_calllog_desc"></string>
+<string name="sms">SMS</string>
+<string name="mms">MMS</string>
+<string name="calllog">Журнал викликів</string>
+<string name="pref_acra_disabled">Вимкнено</string>
+<string name="app_log_skip_backup_background_data">Пропущено, оскільки фонову передачу даних вимкнено</string>
+<string name="app_log_skip_backup_already_running">Пропущено, оскільки резервне копіювання вже запущено</string>
+<string name="app_log_skip_backup_skip_messages">Пропустити всі повідомлення</string>
+<string name="app_log_skip_backup_no_items">Пропущені (елементів не знайдено)</string>
+<string name="app_log_missing_credentials">Пропущені (відсутні дані)</string>
+<string name="app_log_backup_requested">Запит на резервне копіювання (%1$s)</string>
+<string name="app_log_start_backup">Запуск резервного копіювання (%1$s)</string>
+<string name="app_log_backup_messages">Резервне копіювання (%1$d SMS, %2$d MMS, журнал викликів %3$d)</string>
+<string name="app_log_backup_messages_with_config">Конфігурація: %1$s</string>
+<string name="app_log_backup_canceled">Резервне копіювання скасовано</string>
+<string name="app_log_backup_finished">Резервне копіювання завершено</string>
+<string name="app_log_backup_failed_authentication">Помилка автентифікації: %1$s</string>
+<string name="app_log_backup_failed_general_error">Загальна помилка: %1$s</string>
+<string name="app_log_backup_failed_connectivity">Резервне копіювання пропущено, немає підключення</string>
+<string name="app_log_scheduled_next_sync">Наступне резервне копіювання заплановано: %1$s</string>
+<string name="app_log_no_next_sync">Немає запланованих резервних копій</string>
+<string name="menu_view_log">Перегляд журналу</string>
+<string name="app_log_empty">Журнал порожній. Увімкніть його в \"Додаткових налаштуваннях\".</string>
+<string name="pref_app_log">Синхронізація журналу</string>
+<string name="pref_app_log_enabled">Журнал зберігається на SD-картку як \"sms_backup_plus.log\".</string>
+<string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+<string name="pref_app_log_debug">Додаткова інформація зневадження</string>
+<string name="pref_app_log_debug_summary">Додати додаткову інформацію зневадження до журналу синхронізації</string>
+<string name="source_incoming">вхідні</string>
+<string name="source_regular">регулярні</string>
+<string name="source_3rd_party">сторонні</string>
+<string name="source_manual">ручні</string>
+<string name="source_unknown">невідомо</string>
+<string name="ui_confirm_action_label">Підтвердження дій</string>
+<string name="ui_confirm_action_desc">Запитати, перш ніж виконувати резервне копіювання або відновлення</string>
+<string name="ui_dialog_confirm_action_title">Підтвердження дії</string>
+<string name="ui_dialog_confirm_action_msg">Ви впевнені, що хочете виконати дію?</string>
+<string name="loading">Завантаження\u2026</string>
+<string name="ssl_error">Помилка SSL</string>
+<string name="ui_dialog_account_manager_token_error">Не вдалося отримати маркер з системи. Бажаєте спробувати метод автентифікації переглядача тенет?</string>
+<string name="select_google_account">Оберіть Google-акаунт</string>
+
+<!-- donation related -->
+<string name="donate">Віддячити</string>
+<string name="donate_summary">Скориставшись безпечною оплатою Google Play безпосередньо з додатку.</string>
+<string name="ui_dialog_donate_message">Будь ласка, оберіть суму та валюту:</string>
+<string name="ui_donation_success_message">Дякуємо за підтримку!</string>
+<string name="ui_donation_failure_message">Сталася помилка: %1$s</string>
+
+<!-- purchase errors -->
+<string name="donation_error_iab_unavailable">Білінг в додатку недоступний</string>
+<string name="donation_error_unavailable">недоступний</string>
+<string name="donation_error_canceled">скасовано</string>
+<string name="donation_error_already_owned">ви вже здаровували</string>
+</resources>
