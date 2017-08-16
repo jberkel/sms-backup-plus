@@ -46,6 +46,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.sufficientlysecure</groupId>
+            <artifactId>openpgp-api</artifactId>
+            <type>aar</type>
+            <version>8.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.jberkel.pay.me</groupId>
             <artifactId>library</artifactId>
             <version>0.0.4</version>
@@ -221,6 +228,17 @@
         <repository>
             <id>bintray</id>
             <url>https://dl.bintray.com/jberkel/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>bintray-openpgp</id>
+            <url>https://dl.bintray.com/sufficientlysecure/maven/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
