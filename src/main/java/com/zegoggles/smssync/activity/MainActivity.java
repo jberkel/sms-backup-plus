@@ -97,6 +97,11 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_R
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.REGULAR_TIMEOUT_SECONDS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_PROVIDER;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_KEYS;
+
+import org.openintents.openpgp.util.OpenPgpAppPreference;
+import org.openintents.openpgp.util.OpenPgpKeyPreference;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -121,6 +126,9 @@ public class MainActivity extends PreferenceActivity {
     private StatusPreference statusPref;
     private OAuth2Client oauth2Client;
 
+    private OpenPgpAppPreference pgp_prov;
+    private OpenPgpKeyPreference pgp_keys;
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -143,6 +151,8 @@ public class MainActivity extends PreferenceActivity {
         if (preferences.shouldShowUpgradeMessage()) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
         setPreferenceListeners(version >= MIN_VERSION_BACKUP);
 
+        updateEncryption(null);
+
         checkAndDisplayDroidWarning();
 
         preferences.migrateMarkAsRead();
@@ -155,6 +165,35 @@ public class MainActivity extends PreferenceActivity {
 
         setupStrictMode();
         App.bus.register(this);
+    }
+
+    private void updateEncryption(String new_prov) {
+        boolean enableOtherOptions;
+        pgp_prov = (OpenPgpAppPreference)findPreference(ENCRYPTION_PROVIDER.key);
+        pgp_keys = (OpenPgpKeyPreference)findPreference(ENCRYPTION_KEYS.key);
+
+        if (new_prov == null) { //we aren't given a new value, load the old one
+            new_prov = pgp_prov.getValue();
+        }
+
+        if(!new_prov.isEmpty()) {
+            String prov_simplename = pgp_prov.getEntryByValue(new_prov);
+            if (prov_simplename == null) {
+                pgp_prov.setSummary(getString(R.string.ui_encryption_missingprov));
+                enableOtherOptions = false;
+            } else {
+                pgp_prov.setSummary(getString(R.string.ui_encryption_prov) + prov_simplename);
+                pgp_keys.setOpenPgpProvider(new_prov);
+                enableOtherOptions = true;
+            }
+        } else {
+            pgp_prov.setSummary(getString(R.string.ui_encryption_noprov));
+            enableOtherOptions = false;
+        }
+
+        //find other options and set enabled to enableOtherOptions
+        pgp_keys.setEnabled(enableOtherOptions);
+        return;
     }
 
     @Override
@@ -223,6 +262,11 @@ public class MainActivity extends PreferenceActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data + ")");
         if (resultCode == RESULT_CANCELED) return;
+
+        if (pgp_keys.handleOnActivityResult(requestCode, resultCode, data)) {
+            // handled by OpenPgpKeyPreference
+            return;
+        }
 
         switch (requestCode) {
             case REQUEST_CHANGE_DEFAULT_SMS_PACKAGE: {
@@ -834,6 +878,14 @@ public class MainActivity extends PreferenceActivity {
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         authPreferences.setImapPassword(newValue.toString());
+                        return true;
+                    }
+                });
+
+       findPreference(ENCRYPTION_PROVIDER.key)
+               .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                   public boolean onPreferenceChange(Preference preference, Object newValue) {
+						updateEncryption(newValue.toString());
                         return true;
                     }
                 });

@@ -220,6 +220,20 @@
 
         </PreferenceScreen>
 
+        <PreferenceScreen
+            android:key="encryption"
+            android:title="@string/ui_encryption_title"
+            android:summary="@string/ui_encryption_desc">
+            <org.openintents.openpgp.util.OpenPgpAppPreference
+                android:key="openpgp_provider_list"
+                android:title="@string/ui_encryption_selectprov"
+                android:summary="@string/ui_encryption_noprov"
+                android:defaultValue=""/>
+            <org.openintents.openpgp.util.OpenPgpKeyPreference
+                android:key="pgp_keys"
+                android:title="Select Keys"/>
+        </PreferenceScreen>
+
         <CheckBoxPreference
                 android:key="notifications"
                 android:title="@string/ui_notifications_label"

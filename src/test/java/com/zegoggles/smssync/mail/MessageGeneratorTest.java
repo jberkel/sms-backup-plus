@@ -48,7 +48,8 @@ public class MessageGeneratorTest {
                 personLookup,
                 false,
                 null,
-                mmsSupport
+                mmsSupport,
+                null
         );
     }
 
@@ -216,7 +217,8 @@ public class MessageGeneratorTest {
                 personLookup,
                 false,
                 groupIds,
-                mmsSupport
+                mmsSupport,
+                null
         );
         PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
         Map<String, String> map = mockMessage("1234", record);

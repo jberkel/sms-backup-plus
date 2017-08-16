@@ -23,6 +23,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
@@ -37,6 +38,8 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CA
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CONFIRM_ACTION;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.ENABLE_AUTO_BACKUP;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_PROVIDER;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_KEYS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.FIRST_USE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.LAST_VERSION_CODE;
@@ -78,6 +81,8 @@ public class Preferences {
         WIFI_ONLY("wifi_only"),
         REFERENCE_UID("reference_uid"),
         MAIL_SUBJECT_PREFIX("mail_subject_prefix"),
+        ENCRYPTION_PROVIDER("openpgp_provider_list"),
+        ENCRYPTION_KEYS("pgp_keys"),
         RESTORE_STARRED_ONLY("restore_starred_only"),
         @Deprecated
         MARK_AS_READ("mark_as_read"),
@@ -211,6 +216,26 @@ public class Preferences {
                 return false;
             }
         }
+        return true;
+    }
+
+    public String getEncryptionProvider() {
+        return preferences.getString(ENCRYPTION_PROVIDER.key, "");
+    }
+
+    public long[] getEncryptionKeyID() {
+        long[] retval = new long[1];
+        retval[0] = preferences.getLong(ENCRYPTION_KEYS.key, 0);
+        return retval;
+    }
+
+    public boolean isEncryptionAvailable() {
+		if (TextUtils.isEmpty(getEncryptionProvider()))
+            return false;
+
+        if (getEncryptionKeyID()[0] == 0)
+            return false;
+
         return true;
     }
 

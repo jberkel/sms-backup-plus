@@ -50,6 +50,8 @@ import java.util.Random;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
+import org.openintents.openpgp.util.OpenPgpServiceConnection;
+
 public class MessageConverter {
     //ContactsContract.CommonDataKinds.Email.CONTENT_URI
     public static final Uri ECLAIR_CONTENT_URI =
@@ -66,7 +68,8 @@ public class MessageConverter {
     public MessageConverter(Context context, Preferences preferences,
                             String userEmail,
                             PersonLookup personLookup,
-                            ContactAccessor contactAccessor) {
+                            ContactAccessor contactAccessor,
+                            OpenPgpServiceConnection serviceConnection) {
         mContext = context;
         mMarkAsReadType = preferences.getMarkAsReadType();
         mPersonLookup = personLookup;
@@ -89,7 +92,8 @@ public class MessageConverter {
                 mPersonLookup,
                 preferences.getMailSubjectPrefix(),
                 allowedIds,
-                new MmsSupport(mContext.getContentResolver(), mPersonLookup));
+                new MmsSupport(mContext.getContentResolver(), mPersonLookup),
+                serviceConnection);
     }
 
     private boolean markAsSeen(DataType dataType, Map<String, String> msgMap) {

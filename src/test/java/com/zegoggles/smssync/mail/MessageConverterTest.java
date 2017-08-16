@@ -41,7 +41,7 @@ public class MessageConverterTest {
         initMocks(this);
         BinaryTempFileBody.setTempDirectory(Robolectric.application.getCacheDir());
         messageConverter = new MessageConverter(Robolectric.application,
-                preferences, "foo@example.com", personLookup, contactAccessor);
+                preferences, "foo@example.com", personLookup, contactAccessor, null);
     }
 
     @Test(expected = MessagingException.class)
@@ -116,7 +116,7 @@ public class MessageConverterTest {
         when(preferences.getMarkAsReadType()).thenReturn(MarkAsReadTypes.MESSAGE_STATUS);
 
         messageConverter = new MessageConverter(Robolectric.application,
-                preferences, "foo@example.com", personLookup, contactAccessor);
+                preferences, "foo@example.com", personLookup, contactAccessor, null);
 
         ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isFalse();
@@ -138,7 +138,7 @@ public class MessageConverterTest {
         when(preferences.getMarkAsReadType()).thenReturn(MarkAsReadTypes.UNREAD);
 
         messageConverter = new MessageConverter(Robolectric.application,
-                preferences, "foo@example.com", personLookup, contactAccessor);
+                preferences, "foo@example.com", personLookup, contactAccessor, null);
 
         ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isFalse();
@@ -160,7 +160,7 @@ public class MessageConverterTest {
         when(preferences.getMarkAsReadType()).thenReturn(MarkAsReadTypes.READ);
 
         messageConverter = new MessageConverter(Robolectric.application,
-                preferences, "foo@example.com", personLookup, contactAccessor);
+                preferences, "foo@example.com", personLookup, contactAccessor, null);
 
         ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isTrue();
