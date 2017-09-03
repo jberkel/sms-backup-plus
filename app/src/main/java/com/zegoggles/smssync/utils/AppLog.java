@@ -37,11 +37,11 @@ public class AppLog {
 
     private AppLog(String name, char[] format) {
         for (char c : format) {
-            if (c == DateFormat.MONTH) {
+            if (c == 'M') {
                 dateFormat = "MM-dd kk:mm";
                 break;
             }
-            if (c == DateFormat.DATE) {
+            if (c == 'd') {
                 dateFormat = "dd-MM kk:mm";
                 break;
             }

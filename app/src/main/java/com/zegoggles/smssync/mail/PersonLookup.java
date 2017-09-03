@@ -34,7 +34,7 @@ public class PersonLookup {
     private final Map<String, PersonRecord> mPeopleCache =
             new LinkedHashMap<String, PersonRecord>(MAX_PEOPLE_CACHE_SIZE + 1, .75F, true) {
                 @Override
-                public boolean removeEldestEntry(Map.Entry<String, PersonRecord> eldest) {
+                public boolean removeEldestEntry(Entry<String, PersonRecord> eldest) {
                     return size() > MAX_PEOPLE_CACHE_SIZE;
                 }
             };
