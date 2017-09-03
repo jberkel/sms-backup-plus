@@ -70,8 +70,8 @@ public class CalendarAccessorPost40Test {
         assertThat(cv.getAsString(Events.DESCRIPTION)).isEqualTo("Desc");
         assertThat(cv.getAsLong(Events.DTSTART)).isEqualTo(when.getTime());
         assertThat(cv.getAsLong(Events.DTEND)).isGreaterThan(when.getTime());
-        assertThat(cv.getAsInteger(Events.ACCESS_LEVEL)).isEqualTo(CalendarContract.Events.ACCESS_DEFAULT);
-        assertThat(cv.getAsInteger(Events.STATUS)).isEqualTo(CalendarContract.Events.STATUS_CONFIRMED);
+        assertThat(cv.getAsInteger(Events.ACCESS_LEVEL)).isEqualTo(Events.ACCESS_DEFAULT);
+        assertThat(cv.getAsInteger(Events.STATUS)).isEqualTo(Events.STATUS_CONFIRMED);
         assertThat(cv.getAsLong(Events.CALENDAR_ID)).isEqualTo(12L);
         assertThat(cv.getAsString(Events.EVENT_TIMEZONE)).isEqualTo(Time.getCurrentTimezone());
     }

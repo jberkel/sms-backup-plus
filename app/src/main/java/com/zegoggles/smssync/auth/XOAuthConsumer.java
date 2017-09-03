@@ -265,7 +265,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
     private String base64(byte[] data) {
         try {
             return new String(Base64.encodeBase64(data), "UTF-8");
-        } catch (java.io.UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }
