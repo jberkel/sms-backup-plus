@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     使用 Gmail 來備份您的簡訊。這款程式支援簡訊還原功能，
+     是 Christoph Studer 設計的 SMS Backup 的增強版本。
+     此程式與 SMS Backup 完全向下兼容。
+  </string>
+
+  <string name="ui_sync_button_label_idle">備份</string>
+  <string name="ui_sync_button_label_canceling">正在停止</string>
+  <string name="ui_sync_button_label_syncing">停止</string>
+
+  <string name="ui_restore_button_label_idle">還原</string>
+  <string name="ui_restore_button_label_restoring">停止</string>
+
+  <string name="status_idle">閒置</string>
+  <string name="status_idle_details">上一次備份於: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">從未備份</string>
+
+  <string name="status_working">正在進行</string>
+
+  <string name="status_backup">正在備份</string>
+  <string name="status_restore">正在還原</string>
+
+  <string name="status_backup_details">已經備份 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 個條目\u2026</string>
+  <string name="status_restore_details">已經還原 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 個條目\u2026</string>
+  <string name="status_login_details">正在登入\u2026</string>
+  <string name="status_updating_threads">正在重新整理會話\u2026</string>
+  <string name="status_done">完成</string>
+  <string name="status_backup_done_details_max_per_sync">達到每次最多備份 %1$d 條的限制。重新啟動備份以繼續。</string>
+  <string name="status_backup_done_details_noitems">沒有需要備份的內容。</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">成功備份了 <xliff:g id="total_items">%1$d</xliff:g> 個項目。</item>
+    <item quantity="other">成功備份了 <xliff:g id="total_items">%1$d</xliff:g> 個項目。</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">成功還原了 <xliff:g id="total_items">%1$d</xliff:g> 個項目 (有 %2$d 條重複)。</item>
+    <item quantity="other">成功還原了 <xliff:g id="total_items">%1$d</xliff:g> 個項目 (有 %2$d 條重複)。</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">成功還原了 %1$d/%2$d 個項目。</string>
+
+  <string name="status_unknown_error">錯誤</string>
+  <string name="notification_general_error">SMSBackup+ 出錯</string>
+
+  <string name="status_unknown_error_details">備份/還原時出錯：\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">登入出錯</string>
+  <string name="notification_auth_failure">SMS Backup+ 登入出錯</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth 驗證出錯。請確認您已經在 Gmail 賬戶設定中開啟 IMAP。</string>
+  <string name="status_auth_failure_details_plain">IMAP 驗證出錯。
+  請確認您的登入名稱和密碼填寫正確。</string>
+  <string name="status_calc_details">正在計算\u2026</string>
+  <string name="status_canceled">已取消</string>
+  <string name="status_canceled_details">成功備份了 %1$d/%2$d 個項目。</string>
+  <string name="status_gmail_temp_error">Gmail IMAP 臨時性錯誤，請稍候再試。</string>
+
+  <string name="ui_settings_advanced_label">進階設定</string>
+  <string name="ui_settings_advanced_desc">設定進階參數。</string>
+  <string name="ui_settings_advanced_server_label">IMAP 伺服器設定</string>
+  <string name="ui_settings_advanced_server_desc">除非你知道該怎麼做，否則請勿變更這些設定！</string>
+
+  <string name="imap_settings">IMAP 設定</string>
+  <string name="ui_login_label">登入名稱</string>
+  <string name="ui_login_desc">您的 IMAP 帳戶/電郵地址。</string>
+  <string name="ui_login_dialog_msg">警告：使用 XOAuth 時變更登入名稱可能會重設你的所有備份狀態。</string>
+  <string name="ui_password_label">密碼</string>
+  <string name="ui_password_desc">您的 IMAP 帳戶密碼。僅當 XOAuth 被禁用時使用。</string>
+  <string name="ui_password_dialog_msg">密碼只會儲存在這台設備上，並且僅會做登入之用。</string>
+  <string name="ui_server_label">伺服器地址</string>
+  <string name="ui_server_desc">你想要進行同步的伺服器地址及其連接埠。</string>
+  <string name="ui_server_dialog_msg">Gmail 的預設伺服器為 \"imap.gmail.com:993\"</string>
+  <string name="ui_protocol_label">安全性</string>
+  <string name="ui_protocol_desc">伺服器的安全協議。Gmail 的預設為 \"SSL (必需)\"。</string>
+  <string name="ui_authentication_label">身份驗證</string>
+  <string name="ui_authentication_desc">身份驗證方法。Gmail 的預設為 \"XOAuth\"。</string>
+  <string name="plain">純文本</string>
+  <string name="xoauth">XOAuth</string>
+
+  <string name="ui_imap_folder_label">Gmail 標籤</string>
+  <string name="ui_imap_folder_desc">套用到簡訊的 Gmail 標籤。</string>
+  <string name="ui_imap_folder_label_dialog_msg">備份的簡訊將會在 Gmail 中套用此標籤。</string>
+  <string name="ui_mail_subject_prefix_label">電郵主旨前綴</string>
+  <string name="ui_mail_subject_prefix_desc">使用 IMAP 資料夾名稱作為電郵主旨的前綴。</string>
+
+  <string name="ui_max_items_per_sync_label">每次備份項目數</string>
+  <string name="ui_max_items_per_sync_desc">每次備份的最大項目數量。</string>
+  <string name="ui_max_items_per_restore_label">每次還原項目數</string>
+  <string name="ui_max_items_per_restore_desc">每次還原的最大項目數量。</string>
+
+  <string name="ui_restore_starred_only_label">已加星號的項目</string>
+  <string name="ui_restore_starred_only_desc">僅還原已加星號的項目。</string>
+
+  <string name="ui_backup_mms_label">備份 MMS</string>
+  <string name="ui_backup_mms_desc">啟用 MMS 備份</string>
+  <string name="ui_backup_mms_not_supported">尚未支援此平台的 MMS 備份。</string>
+
+  <string name="ui_backup_calllog_label">備份通話記錄</string>
+  <string name="ui_backup_calllog_desc">啟用通話記錄備份</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">日曆同步處理</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">將通話記錄條目附加在日曆中</string>
+
+  <string name="ui_backup_calllog_types_label">通話類型</string>
+  <string name="ui_backup_calllog_types_desc">需要備份何種類型的通話記錄</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">無</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">用於通話記錄的日曆</string>
+
+  <string name="ui_imap_folder_calllog_label">通話記錄標籤</string>
+  <string name="ui_imap_folder_calllog_desc">套用到通話記錄的 Gmail 標籤。</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">備份的通話記錄將會在 Gmail 中套用此標籤。</string>
+
+  <string name="ui_mark_as_read_label">標為已讀取 (電郵)</string>
+  <string name="ui_mark_as_read_desc">是否在 Gmail 中將訊息標為已讀取。</string>
+
+  <string name="mark_as_read_always_read">始終標爲已讀取</string>
+  <string name="mark_as_read_always_unread">始終標爲未讀取</string>
+  <string name="mark_as_read_message_status">使用訊息的狀態</string>
+
+  <string name="ui_mark_as_read_restore_label">標為已讀取 (簡訊)</string>
+  <string name="ui_mark_as_read_restore_desc">是否將所有已還原的簡訊標為已讀取。</string>
+
+  <string name="ui_email_address_style_label">電郵地址樣式</string>
+  <string name="ui_email_address_style_desc">電郵地址的格式</string>
+
+  <string name="ui_enable_auto_sync_label">自動備份</string>
+  <string name="ui_enable_auto_sync_desc">是否自動備份新簡訊。</string>
+  <string name="ui_enable_auto_sync_summary">自動備份 %1$s。</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">未選擇需備份的項目類型</string>
+
+  <string name="sd_card_disclaimer">當此程式安裝在 SD 卡中時，自動備份可能會無法有效運作。</string>
+
+  <string name="ui_enable_auto_sync_bg_data">您將同時需要開啟背景資料。</string>
+
+  <string name="ui_auto_backup_schedule_label">定時調度計劃</string>
+  <string name="ui_auto_backup_schedule_desc">何時備份簡訊</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">新訊息調度計畫</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">在接收到新訊息後一段時間進行備份</string>
+
+  <string name="ui_wifi_only_label">需要 Wifi</string>
+  <string name="ui_wifi_only_desc">僅在連接到 Wifi 網路時才進行備份</string>
+
+  <string name="ui_notifications_label">通知</string>
+  <string name="ui_notifications_desc">後台通知</string>
+
+  <string name="error_wifi_only_no_connection">沒有 Wifi 網絡</string>
+  <string name="error_no_connection">沒有互聯網連接</string>
+  <string name="error_sms_provider_not_writable">簡訊提供方不可寫</string>
+
+  <string name="ui_dialog_missing_credentials_title">登入訊息</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">您需要首先連接到您的 Gmail 帳戶。</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">您需要首先設定你的
+  登入名稱與密碼。</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">無效的標籤名稱</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">標籤名稱的開頭或結尾不能為空格。</string>
+  <string name="ui_dialog_first_sync_title">首次備份</string>
+  <string name="ui_dialog_first_sync_msg">備份還是跳過儲存在當前設備上的所有訊息？</string>
+  <string name="ui_dialog_first_sync_msg_batched">備份還是跳過儲存在當前設備上的所有訊息？\n\n注意：這次備份將會以每批次 %1$d 條訊息進行。</string>
+  <string name="ui_dialog_request_token_msg">正在聯絡 Google...</string>
+  <string name="ui_dialog_access_token_msg">正在請求存取...</string>
+
+  <string name="ui_dialog_access_token_error_title">驗證失敗</string>
+  <string name="ui_dialog_access_token_error_msg">無法取得存取權限。請確認您選擇了
+    \"授予存取權限\"。
+  </string>
+
+  <string name="ui_dialog_connect_msg">將會開啟一個瀏覽器視窗，提示您登入到 Gmail 並為 %1$s 授予訪問您的電郵的權限。</string>
+  <string name="ui_dialog_connect_token_error">無法從 Google 取得權限。請確認此設備已經連接到網絡。</string>
+  <string name="ui_dialog_disconnect_msg">您確定嗎？斷開後您將需要重新認證帳戶，並且本地同步處理狀態將被重設。</string>
+
+  <string name="ui_dialog_upgrade_title">升級訊息</string>
+  <string name="ui_dialog_upgrade_msg">
+   SMS Backup+ 與 SMS Backup 程式完全向下兼容。但是請確定您只在其中一款程式中開啟“自動備份”，否則將會出現重複備份。如果您已經對設備中的簡訊進行過備份，首次備份時應該選取“跳過”訊息。
+  </string>
+
+  <string name="ui_dialog_brokendroidx_title">DROID X 簡訊缺陷</string>
+  <string name="ui_dialog_brokendroidx_msg">在 Droid X 中存在一個
+  缺陷，其會阻止本程式備份新接收到的簡訊。請從網站上查看 FAQ
+  瞭解更多訊息。</string>
+
+  <string name="ui_sync">備份</string>
+  <string name="ui_skip">跳過</string>
+  <string name="err_sync_requires_login_info">沒有登入訊息的情況下無法進行備份。</string>
+  <string name="menu_info">關於</string>
+  <string name="menu_reset">重設</string>
+  <string name="ui_dialog_reset_title">重設當前同步處理狀態</string>
+  <string name="ui_dialog_reset_message">您是否要重設當前的同步處理
+  狀態？您仍舊可以在之後選擇跳過所有訊息。</string>
+  <string name="all_messages">全部</string>
+
+  <string name="gmail_needs_connecting">輕觸以連接到您的 Gmail 帳戶 (必需)。</string>
+  <string name="gmail_already_connected">已經作為 %1$s 連接。</string>
+
+  <string name="ui_connected_label">連接</string>
+  <string name="ui_connected_desc">您的帳戶需要被連接。</string>
+
+  <string name="call_incoming">已接來電</string>
+  <string name="call_outgoing">撥出電話</string>
+  <string name="call_missed">未接來電</string>
+
+  <string name="call_missed_text">自 %1$s 的未接來電</string>
+  <string name="call_incoming_text">自 %1$s 的已接來電</string>
+  <string name="call_outgoing_text">至 %1$s 的撥出電話</string>
+
+  <string name="call_number_field">總數: %1$s</string>
+  <string name="call_duration_field">耗時: %1$s</string>
+
+  <string name="sms_with_field">與 %1$s 的簡訊記錄</string>
+  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="call_with_field">與 %1$s 的通話記錄</string>
+
+  <string name="ui_backup_contact_group_label">需要備份的聯絡人</string>
+  <string name="ui_backup_contact_group_desc">僅備份來自指定聯絡人群組的條目</string>
+
+  <string name="everybody">所有人</string>
+
+  <string name="call_type_everything">所有通話</string>
+  <string name="call_type_incoming">僅已接來電</string>
+  <string name="call_type_outgoing">僅撥出電話</string>
+  <string name="call_type_incoming_outgoing">已接來電和撥出電話</string>
+  <string name="call_type_missed">僅未接來電</string>
+
+  <string name="email_address_style_name">姓名</string>
+  <string name="email_address_style_name_and_number">姓名 (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 小時</string>
+  <string name="_2h">2 小時</string>
+  <string name="_6h">6 小時</string>
+  <string name="_24h">24 小時</string>
+  <string name="never">停用</string>
+
+  <string name="_1min">1 分鐘</string>
+  <string name="_3mins">3 分鐘</string>
+  <string name="_30mins">30 分鐘</string>
+
+  <string name="ssl_required">SSL (必需)</string>
+  <string name="ssl_optional">SSL (可選)</string>
+  <string name="tls_required">TLS (必需)</string>
+  <string name="tls_optional">TLS (可選)</string>
+  <string name="none">無</string>
+
+  <string name="ui_third_party_integration_label">第三方集成</string>
+  <string name="ui_third_party_integration_desc">允許其他程式採用廣播 Intent 機制觸發備份</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">備份設定</string>
+  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+
+  <string name="ui_backup_calllog_settings_label">通話記錄設定</string>
+  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+
+  <string name="auto_backup_settings">自動備份設定</string>
+  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+
+  <string name="ui_restore_settings_label">還原設定</string>
+  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+
+  <string name="ui_backup_sms_label">備份簡訊</string>
+  <string name="ui_backup_sms_desc">開啟簡訊備份</string>
+
+  <string name="ui_restore_sms_label">還原簡訊</string>
+  <string name="ui_restore_sms_desc"/>
+
+  <string name="ui_feature_not_available_yet">(功能暫時不可用)</string>
+
+  <string name="ui_restore_mms_label">還原 MMS</string>
+  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
+
+  <string name="ui_restore_calllog_label">還原通話記錄</string>
+  <string name="ui_restore_calllog_desc"/>
+
+  <string name="sms">簡訊</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">通話記錄</string>
+
+  <string name="pref_acra_disabled">已停用</string>
+
+  <string name="app_log_skip_backup_background_data">已跳過，由於背景數據被停用</string>
+  <string name="app_log_skip_backup_already_running">已跳過，由於備份已在進行中</string>
+  <string name="app_log_skip_backup_skip_messages">跳過所有訊息</string>
+  <string name="app_log_skip_backup_no_items">已跳過 (沒有找到項目)</string>
+  <string name="app_log_missing_credentials">已跳過 (授權丟失)</string>
+  <string name="app_log_backup_requested">備份請求 (%1$s)</string>
+  <string name="app_log_start_backup">正在開始備份 (%1$s)</string>
+  <string name="app_log_backup_messages">正在備份 (%1$d 條簡訊, %2$d 條 MMS, %3$d 個通話記錄)</string>
+  <string name="app_log_backup_messages_with_config">使用配置: %1$s</string>
+  <string name="app_log_backup_canceled">備份已取消</string>
+  <string name="app_log_backup_finished">備份完成</string>
+
+  <string name="app_log_backup_failed_authentication">驗證錯誤: %1$s</string>
+  <string name="app_log_backup_failed_general_error">一般錯誤: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">備份已跳過，無網絡連接</string>
+  <string name="app_log_scheduled_next_sync">下次備份調度開始於: %1$s</string>
+  <string name="app_log_no_next_sync">沒有新的備份計劃</string>
+
+  <string name="menu_view_log">查看記錄</string>
+  <string name="app_log_empty">記錄為空。請在“進階設定”中開啟此功能。</string>
+
+  <string name="pref_app_log">同步處理記錄</string>
+  <string name="pref_app_log_enabled">記錄會被保存在 SD 卡上，命名為“sms_backup_plus.log”。</string>
+  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+
+  <string name="pref_app_log_debug">額外調試資訊</string>
+  <string name="pref_app_log_debug_summary">在同步記錄中啓用額外調試記錄</string>
+
+  <string name="source_incoming">接收到新訊息</string>
+  <string name="source_regular">定時</string>
+  <string name="source_3rd_party">第三方</string>
+  <string name="source_manual">手動</string>
+  <string name="source_unknown">未知</string>
+
+  <string name="ui_confirm_action_label">確認操作</string>
+  <string name="ui_confirm_action_desc">進行備份/還原操作前進行詢問</string>
+  <string name="ui_dialog_confirm_action_title">確認操作</string>
+  <string name="ui_dialog_confirm_action_msg">您確認要執行此操作麼？</string>
+
+  <string name="loading">正在加載...</string>
+  <string name="ssl_error">SSL 出錯</string>
+  <string name="ui_dialog_account_manager_token_error">
+      無法從系統取得令牌。您是否願意嘗試一下瀏覽器驗證方式？
+  </string>
+  <string name="select_google_account">選擇一個 Google 賬戶</string>
+
+  <!-- donation related -->
+  <string name="donate">捐贈</string>
+  <string name="donate_summary">使用安全的 Google Play 商店應用內支付。</string>
+
+  <string name="ui_dialog_donate_message">請指定金額：</string>
+  <string name="ui_donation_success_message">捐贈成功，謝謝您！</string>
+  <string name="ui_donation_failure_message">捐贈失敗：%1$s</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">應用內付費功能不可用</string>
+  <string name="donation_error_unavailable">不可用</string>
+  <string name="donation_error_canceled">已取消</string>
+  <string name="donation_error_already_owned">您已經捐贈過了</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">升級通知</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    爲了能夠在 Android KitKat 和 Lollipop 中還原訊息，您需要在還原時將
+    SMS Backup+ 設定爲簡訊應用程式。當訊息還原完成時，您會被詢問將此還原爲原設定。
+  </string>
+</resources>
