@@ -343,6 +343,7 @@
   <string name="donation_error_unavailable">not available</string>
   <string name="donation_error_canceled">canceled</string>
   <string name="donation_error_already_owned">you have already donated</string>
+  <string name="donation_unspecified_error">unspecified error: %1$d</string>
 
   <string name="ui_dialog_sms_default_package_change_title">Upgrade notice</string>
   <string name="ui_dialog_sms_default_package_change_msg">
