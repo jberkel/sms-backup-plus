@@ -184,7 +184,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
                     message = getString(R.string.donation_error_canceled);
                     break;
                 default:
-                    message = getString(R.string.donation_unspecified_error,    responseCode);
+                    message = getString(R.string.donation_unspecified_error, responseCode);
             }
             Toast.makeText(this,
                     getString(R.string.ui_donation_failure_message, message),
