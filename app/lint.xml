@@ -13,8 +13,6 @@
       <ignore path="res/layout/status.xml"/>
     </issue>
 
-    <issue id="GoogleAppIndexingUrlError" severity="ignore"/>
-
     <issue id="TrustAllX509TrustManager" severity="ignore"/>
 
     <issue id="OldTargetApi" severity="ignore"/>
