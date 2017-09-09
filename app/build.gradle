@@ -8,12 +8,10 @@ android {
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.zegoggles.smssync"
-        /*
-        minSdkVersion 5
+        minSdkVersion 9
         targetSdkVersion 10
         versionCode 1556
         versionName "1.5.11"
-        */
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -72,3 +70,25 @@ dependencies {
     testCompile 'com.squareup:fest-android:1.0.5'
     testCompile 'org.mockito:mockito-all:1.10.17'
 }
+
+task checkVersion {
+    doFirst {
+        //  # make sure new version is propagated everywhere
+        if (!(new File('CHANGES').text.contains(android.defaultConfig.versionName))) {
+            throw new RuntimeException("CHANGES not updated")
+        }
+        if (!(new File('app/src/main/assets/about.html').text.contains("SMS Backup+ $android.defaultConfig.versionName"))) {
+            throw new RuntimeException("about.html not updated")
+        }
+    }
+
+}
+
+task(tag(type: Exec) {
+    executable "sh"
+    args "-c", """
+        git commit --allow-empty -a -m 'Release $android.defaultConfig.versionName' &&
+        git tag $android.defaultConfig.versionName &&
+        git push --tags origin master
+    """
+}).dependsOn(checkVersion)
