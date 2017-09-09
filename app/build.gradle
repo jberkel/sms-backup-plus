@@ -55,7 +55,9 @@ android {
 
 dependencies {
     compile('oauth.signpost:signpost-commonshttp4:1.2.1.2') {
-        exclude module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents', module: 'httpcore'
+        exclude group: 'commons-codec', module: 'commons-codec'
     }
     compile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
     compile 'com.google.android:support-v4:r7'
