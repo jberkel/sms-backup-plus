@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zegoggles.smssync"
-    android:versionName="1.5.11"
-    android:versionCode="1556"
-    android:description="@string/app_description"
-    >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+          package="com.zegoggles.smssync"
+          android:versionName="1.5.11"
+          android:versionCode="1556"
+          android:description="@string/app_description"
+>
 
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
@@ -51,18 +51,26 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
 
-            <!-- handle gmail oauth callbacks -->
+        <activity android:name=".activity.auth.OAuth2WebAuthActivity"/>
+
+        <!-- launchMode=singleTask:
+            The system creates the activity at the root of a new task and routes the intent to it.
+            However, if an instance of the activity already exists, the system routes the intent to existing
+            instance through a call to its onNewIntent() method, rather than creating a new one. -->
+        <activity android:name=".activity.auth.RedirectReceiverActivity" android:launchMode="singleTask">
+            <!-- handle oauth browser callbacks (legacy auth support) -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <action android:name="android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="smssync" android:host="gmail"/>
+                <data android:scheme="com.zegoggles.smssync" android:path="/oauth2redirect"
+                      tools:ignore="GoogleAppIndexingUrlError"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.auth.OAuth2WebAuthActivity" android:theme="@style/Theme.WebAuth"/>
         <activity android:name=".activity.auth.AccountManagerAuthActivity" android:theme="@style/Theme.SmsBackupPlus"/>
         <activity android:name=".activity.donation.DonationActivity" android:theme="@style/Theme.Donation"/>
 

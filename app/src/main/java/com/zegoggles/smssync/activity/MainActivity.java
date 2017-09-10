@@ -47,6 +47,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.BuildConfig;
@@ -80,6 +81,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.MMS;
@@ -159,7 +161,7 @@ public class MainActivity extends PreferenceActivity {
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume()");
+        Log.d(TAG, "MainActivity: onResume()");
 
         super.onResume();
         initCalendars();
@@ -222,7 +224,10 @@ public class MainActivity extends PreferenceActivity {
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data + ")");
-        if (resultCode == RESULT_CANCELED) return;
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, R.string.ui_dialog_access_token_error_msg, LENGTH_LONG).show();
+            return;
+        }
 
         switch (requestCode) {
             case REQUEST_CHANGE_DEFAULT_SMS_PACKAGE: {

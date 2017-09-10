@@ -169,7 +169,7 @@
 
   <string name="ui_dialog_access_token_error_title">Authorisation failure</string>
   <string name="ui_dialog_access_token_error_msg">Could not obtain access token. Make sure you select
-    \"Grant access\".
+    \"Allow\".
   </string>
 
   <string name="ui_dialog_connect_msg">A browser window will open, prompting you to log into Gmail to grant %1$s access to your emails.</string>

@@ -32,6 +32,19 @@ public class OAuth2Client {
     public static final String TOKEN_URL = "https://www.googleapis.com/oauth2/v3/token";
 
     /**
+     * When choosing a URI scheme to associate with the app, apps MUST use a
+     * URI scheme based on a domain name under their control, expressed in
+     * reverse order, as recommended by Section 3.8 of [RFC7595] for
+     * private-use URI schemes.
+     *
+     * For more details, see
+     * <a href="https://tools.ietf.org/html/draft-ietf-oauth-native-apps-12#page-8">
+     *     OAuth 2.0 for Native Apps
+     * </a>
+     */
+    public static final Uri REDIRECT_URL = Uri.parse("com.zegoggles.smssync:/oauth2redirect");
+
+    /**
      * For installed applications, use a value of code, indicating that the Google OAuth 2.0 endpoint should return an authorization code.
      */
     private static final String RESPONSE_TYPE = "response_type";
@@ -91,7 +104,6 @@ public class OAuth2Client {
     private static final String CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
     private static final String DEFAULT_SCOPE  = GMAIL_SCOPE + " " + CONTACTS_SCOPE;
 
-    private static final String REDIRECT_OOB = "urn:ietf:wg:oauth:2.0:oob";
     private static final String CONTACTS_URL = "https://www.google.com/m8/feeds/contacts/default/thin?max-results=1";
 
     /**
@@ -121,7 +133,7 @@ public class OAuth2Client {
                 .appendQueryParameter(SCOPE, DEFAULT_SCOPE)
                 .appendQueryParameter(CLIENT_ID, clientId)
                 .appendQueryParameter(RESPONSE_TYPE, "code")
-                .appendQueryParameter(REDIRECT_URI, REDIRECT_OOB).build();
+                .appendQueryParameter(REDIRECT_URI, REDIRECT_URL.toString()).build();
     }
 
     public OAuth2Token getToken(String code) throws IOException {
@@ -179,7 +191,7 @@ public class OAuth2Client {
         final Uri uri = Uri.parse(TOKEN_URL)
             .buildUpon()
             .appendQueryParameter(GRANT_TYPE, AUTHORIZATION_CODE)
-            .appendQueryParameter(REDIRECT_URI, REDIRECT_OOB)
+            .appendQueryParameter(REDIRECT_URI, REDIRECT_URL.toString())
             .appendQueryParameter(CLIENT_ID, clientId)
             .appendQueryParameter(CODE, code)
             .build();
