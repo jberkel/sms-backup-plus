@@ -84,6 +84,9 @@ public class OAuth2WebAuthActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 final String pageTitle = view.getTitle();
+                if (pageTitle == null) {
+                    return;
+                }
                 final Matcher matcher = TITLE.matcher(pageTitle);
                 if (matcher.find()) {
                     String status = matcher.group(1);
