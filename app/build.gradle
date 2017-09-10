@@ -73,12 +73,13 @@ dependencies {
 }
 
 task checkVersion {
+    def versionName = android.defaultConfig.versionName
     doFirst {
         //  # make sure new version is propagated everywhere
-        if (!(new File('CHANGES').text.contains(android.defaultConfig.versionName))) {
+        if (!(new File('CHANGES').text.contains(versionName))) {
             throw new RuntimeException("CHANGES not updated")
         }
-        if (!(new File('app/src/main/assets/about.html').text.contains("SMS Backup+ $android.defaultConfig.versionName"))) {
+        if (!(new File('app/src/main/assets/about.html').text.contains("SMS Backup+ $versionName"))) {
             throw new RuntimeException("about.html not updated")
         }
     }
