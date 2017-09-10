@@ -1,5 +1,6 @@
 ---
-title: SMS Backkup+
+title: Home
+layout: default
 ---
 
-# SMS Backup+
+# Home
