@@ -1,5 +1,6 @@
 theme: minima
 permalink: pretty
+title: SMS Backup+
 description: open-source backup app for Android, supports SMS / MMS / call logs
 author: Jan Berkel
 github_username: jberkel
