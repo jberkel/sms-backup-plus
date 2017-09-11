@@ -8,3 +8,7 @@ twitter_username: jberkel
 google_analytics: UA-106148913-1
 header_pages:
   - privacy-policy.md
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
