@@ -1,4 +1,7 @@
 theme: minima
 permalink: pretty
+description: open-source backup app for Android, supports SMS / MMS / call logs
+author: Jan Berkel
+github_username: jberkel
+twitter_username: jberkel
 google_analytics: UA-106148913-1
-
