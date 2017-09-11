@@ -69,6 +69,7 @@ dependencies {
     compile 'com.intellij:annotations:12.0'
     compile 'com.fsck.k9.mail:lib:0.0.1.75bb293'
     compile 'com.android.billingclient:billing:dp-1'
+    compile 'org.sufficientlysecure:openpgp-api:12.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.4.2'
