@@ -231,7 +231,7 @@
                 android:defaultValue=""/>
             <org.openintents.openpgp.util.OpenPgpKeyPreference
                 android:key="pgp_keys"
-                android:title="Select Keys"/>
+                android:title="@string/ui_encryption_selkeys"/>
         </PreferenceScreen>
 
         <CheckBoxPreference
