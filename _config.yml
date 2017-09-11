@@ -13,3 +13,6 @@ exclude:
   - Makefile
   - Gemfile
   - Gemfile.lock
+
+plugins:
+  - jekyll-feed

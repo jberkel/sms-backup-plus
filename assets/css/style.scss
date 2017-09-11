@@ -3,6 +3,11 @@
 
 @import "{{ site.theme }}";
 
+h1,h2 {
+    padding-top: 25px;
+    padding-bottom: 10px;
+}
+
 .links li {
     list-style: none;
     font-size: 35px;
@@ -17,4 +22,21 @@
     font-weight: light;
     color: $grey-color;
     font-size:15px;
+}
+
+
+table.table {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.table > tbody > tr > td {
+    vertical-align: top;
+    padding: 8px;
+    border-top: 1px solid $grey-color-light;
+}
+
+th {
+    text-align: left;
+    padding: 8px;
 }
