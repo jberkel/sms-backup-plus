@@ -1,5 +1,7 @@
 == 1.5.11 (1555) tbd
 
+  * Replaced pay-me with Play Billing Library
+  * Gradle build support (#638)
   * Improve restore experience (#586)
   * Fixed unquoted blank in local part of email address (#595)
   * Updated Korean translation (#592)
