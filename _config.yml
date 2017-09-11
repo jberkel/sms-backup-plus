@@ -10,5 +10,6 @@ header_pages:
   - privacy-policy.md
 
 exclude:
+  - Makefile
   - Gemfile
   - Gemfile.lock
