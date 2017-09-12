@@ -5,7 +5,7 @@ layout: default
 
 # Privacy Policy for [SMS Backup+][playstore-url]
 
-## Policy Summary (tl;dnr)
+## Summary (tl;dnr)
 
 SMS Backup+ is a tool to help you back up your text messages and call log
 information to an email account.
@@ -14,13 +14,13 @@ To function properly it needs to have full access to various types of
 private data stored on your phone as well as your email account .
 
 Your data is accessed and then transferred to a place of your choice, usually
-to your Gmail account. SMS Backup+ does not store private data on your
+your Gmail account. SMS Backup+ does not store private data on your
 phone nor does it send it to any other service except the one defined by you.
 
 Your usage data is not shared with anybody, there are no ads, analytics or other type of
 tracking code embedded in the application.
 
-The full [source code][github-url] is public and has been reviewed by
+The full [source code][github-url] is public and has been peer-reviewed by
 many independent developers over the span of several years.
 
 ## Access to personal information
@@ -78,13 +78,13 @@ To ensure your phone runs the exact version of the code as published,
 install SMS Backup+ via the alternative store [F-Droid][f-droid-url].
 
 Alternatively build the package from the source code yourself,
-[instructions](installation-from-source) and help are available online.
+[instructions and help](installation-from-source) are available online.
 
 ## Changes
 
 Updates to this privacy policy will be posted at
 [this address][this-policy-url], update notifications are made available as
-[RSS feed][rss-feed].
+[Atom feed][atom-feed].
 
 ## Contact
 
@@ -149,7 +149,7 @@ marked with ⚠ are classified as “[dangerous permission][normal-and-dangerous
 [contributors]: https://github.com/jberkel/sms-backup-plus/graphs/contributors
 [code-license]: https://github.com/jberkel/sms-backup-plus/blob/master/COPYING
 [this-policy-url]: http://jberkel.github.io/sms-backup-plus/privacy-policy
-[rss-feed]: http://jberkel.github.io/sms-backup-plus/feed.xml
+[atom-feed]: http://jberkel.github.io/sms-backup-plus/feed.xml
 [normal-and-dangerous-permissions]:https://developer.android.com/guide/topics/permissions/requesting.html#normal-dangerous
 [github-url]: https://github.com/jberkel/sms-backup-plus
 [f-droid-url]: https://f-droid.org/packages/com.zegoggles.smssync/
