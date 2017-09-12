@@ -40,6 +40,8 @@ from within the app itself, using the secure Play Store payment mechanism.
 To get updates more frequently join the [beta programme](#beta) or download the latest beta manually
 from [releases][].
 
+Also make sure to read the [Privacy Policy][privacy-policy].
+
 ## <a name="usage">Usage</a>
 
 ### Installation
@@ -450,6 +452,7 @@ repository and send me a [pull request][].
 
 This application is released under the terms of the [Apache License, Version 2.0][].
 
+[privacy-policy]: https://jberkel.github.io/sms-backup-plus/privacy-policy/
 [apk]: https://github.com/jberkel/sms-backup-plus/releases/download/1.5.9/smsbackup-plus-1.5.9-market.apk
 [original issue list]: http://code.google.com/p/android-sms/issues/list
 [github issues]: http://github.com/jberkel/sms-backup-plus/issues
@@ -467,7 +470,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml
 [Tasker]: http://tasker.dinglisch.net/
 [Tri-Crypt]: https://play.google.com/store/apps/details?id=com.tricrypt
-[Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/res/drawable/ic_launcher.png
+[Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/app/src/main/res/drawable/ic_launcher.png
 [Authorized Access to your Google Account]: https://security.google.com/settings/security/permissions
 [community]: https://plus.google.com/communities/113290889178902750997
 [beta-link]: https://play.google.com/apps/testing/com.zegoggles.smssync
