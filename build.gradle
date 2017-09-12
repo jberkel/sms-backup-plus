@@ -10,12 +10,8 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven {
-            url "https://maven.google.com"
-        }
-        maven {
-            url "https://dl.bintray.com/jberkel/maven"
-        }
+        maven { url "https://maven.google.com" }
+        maven { url "https://dl.bintray.com/jberkel/maven" }
     }
 }
 
