@@ -78,7 +78,7 @@ To ensure your phone runs the exact version of the code as published,
 install SMS Backup+ via the alternative store [F-Droid][f-droid-url].
 
 Alternatively build the package from the source code yourself,
-[instructions and help](installation-from-source) are available online.
+[instructions and help][installation-from-source] are available online.
 
 ## Changes
 
