@@ -91,7 +91,7 @@ Updates to this privacy policy will be posted at
 For any other questions regarding the privacy of your data please contact
 me directly.
 
-Contact information as listed in the [Googe Play][playstore-url]:
+Contact information as listed in [Google Play][playstore-url]:
 
     Jan Berkel
     Hinkeläcker Str. 35
