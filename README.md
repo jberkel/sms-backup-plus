@@ -1,7 +1,8 @@
 ## SMS Backup+ ![Icon][]
 
 <a href="https://play.google.com/store/apps/details?id=com.zegoggles.smssync">
-    <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="40pt"/>
+    <img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/> </a> &nbsp; <a href="https://f-droid.org/packages/com.zegoggles.smssync/">
+    <img alt="Get it on F-Droid" src="https://jberkel.github.io/sms-backup-plus/assets/img/f-droid-badge.svg" height="80pt"/>
 </a>
 
 [![Build Status PNG][]][Build Status]
