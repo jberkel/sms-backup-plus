@@ -1,4 +1,4 @@
-# SMS Backup+ ![Icon][] [![Build Status PNG][]][Build Status]
+# SMS Backup+ ![Icon][] [![Build Status SVG][]][Build Status]
 
 <a href="https://play.google.com/store/apps/details?id=com.zegoggles.smssync">
     <img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/> </a> &nbsp; <a href="https://f-droid.org/packages/com.zegoggles.smssync/">
@@ -474,7 +474,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [releases]: https://github.com/jberkel/sms-backup-plus/releases
 [pull request]: https://help.github.com/articles/using-pull-requests/
 [Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
-[Build Status PNG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.png?branch=master
+[Build Status SVG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.svg?branch=master
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
 [507]: https://github.com/jberkel/sms-backup-plus/issues/507
 [516]: https://github.com/jberkel/sms-backup-plus/issues/516
