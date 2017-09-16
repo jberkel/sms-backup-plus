@@ -45,10 +45,6 @@ Also make sure to read the [Privacy Policy][privacy-policy].
 
 ## <a name="usage">Usage</a>
 
-### Installation
-
-![PlayQRCode][] Install via the Android QR code link, [Google Play][PlayLink], [f-droid][].
-
 ### First steps
 
 You need to have an IMAP account or a Gmail account with IMAP enabled. See the
