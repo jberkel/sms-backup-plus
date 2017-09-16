@@ -11,4 +11,5 @@ jdk: oraclejdk8
 script:
   - mvn -q android:lint
   - mvn -q test
+  - mvn -q clean
   - ./gradlew build
