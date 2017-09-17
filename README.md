@@ -397,7 +397,7 @@ to join it in order to get automatic updates.
 
 ### Installation from source
 
-    $ git clone git://github.com/jberkel/sms-backup-plus.git
+    $ git clone https://github.com/jberkel/sms-backup-plus.git
     $ cd sms-backup-plus
     $ ./gradlew assembleRelease
     $ adb install app/build/outputs/apk/app-release-unsigned.apk
