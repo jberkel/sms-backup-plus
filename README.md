@@ -19,7 +19,7 @@ Main differences / improvements:
   older versions of SMS Backup. Note: MMS are currently not restored.
 
   * XOAuth2: SMS Backup+ will never ask you for your Gmail password. Instead it
-  uses [XOAuth2](http://code.google.com/apis/gmail/oauth/) to get access to your
+  uses [XOAuth2](https://developers.google.com/gmail/imap/xoauth2-protocol) to get access to your
   data. You can revoke the access rights at any time.
 
   * MMS backup support (since `1.1`), only available on Android 2.x
