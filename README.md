@@ -414,7 +414,7 @@ translate the following file, then send the translated version via email:
 However, if you're already familiar with Git I'd prefer if you cloned the
 repository and send me a [pull request][].
 
-##<a name="credits">Credits</a>
+## <a name="credits">Credits</a>
 
   * [Christoph Studer](http://studer.tv/) Original author of SMS Backup
   * [Ben Dodson](http://github.com/bjdodson) - Contacts 2.0 / MMS support
@@ -441,11 +441,11 @@ repository and send me a [pull request][].
   * Mads Andreasen - Danish translation
   * sHa - Ukrainian translation
 
-##<a name="screenhots">Screenshots</a>
+## <a name="screenhots">Screenshots</a>
 
 ![SMS Backup+ screenshot][smsbackupshot]
 
-##<a name="license">License</a>
+## <a name="license">License</a>
 
 This application is released under the terms of the [Apache License, Version 2.0][].
 
