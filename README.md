@@ -399,8 +399,8 @@ to join it in order to get automatic updates.
 
     $ git clone git://github.com/jberkel/sms-backup-plus.git
     $ cd sms-backup-plus
-    $ mvn install
-    $ adb install target/smsbackup-plus-1.x.y-SNAPSHOT.apk
+    $ ./gradlew assembleRelease
+    $ adb install app/build/outputs/apk/app-release-unsigned.apk
 
 I've imported some relevant issues from the [original issue list][] to [github issues][].
 
