@@ -18,8 +18,8 @@ Main differences / improvements:
   phone. This even works for users who have already created their backups with
   older versions of SMS Backup. Note: MMS are currently not restored.
 
-  * XOAuth: SMS Backup+ will never ask you for your Gmail password. Instead it
-  uses [XOAuth](http://code.google.com/apis/gmail/oauth/) to get access to your
+  * XOAuth2: SMS Backup+ will never ask you for your Gmail password. Instead it
+  uses [XOAuth2](http://code.google.com/apis/gmail/oauth/) to get access to your
   data. You can revoke the access rights at any time.
 
   * MMS backup support (since `1.1`), only available on Android 2.x
@@ -31,7 +31,7 @@ Main differences / improvements:
 
   * Works with any IMAP server (but defaults to Gmail).
 
-Tested with Android 2.x - 6.0.x.
+Tested with Android 2.3.x - 8.0.x.
 
 SMS Backup+ is available for free in the Google Play Store, there will never be a pro / paid version.
 
@@ -469,7 +469,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [community]: https://plus.google.com/communities/113290889178902750997
 [beta-link]: https://play.google.com/apps/testing/com.zegoggles.smssync
 [releases]: https://github.com/jberkel/sms-backup-plus/releases
-[pull request]: https://help.github.com/articles/using-pull-requests/
+[pull request]: https://help.github.com/articles/about-pull-requests/
 [Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
 [Build Status SVG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.svg?branch=master
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
