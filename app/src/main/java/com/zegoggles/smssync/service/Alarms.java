@@ -20,7 +20,15 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
+
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.JobTrigger;
+import com.firebase.jobdispatcher.Trigger;
 import com.zegoggles.smssync.preferences.Preferences;
 
 import java.util.UUID;
@@ -35,6 +43,7 @@ public class Alarms {
 
     private final Preferences mPreferences;
     private Context mContext;
+    private FirebaseJobDispatcher firebaseJobDispatcher;
 
     public Alarms(Context context) {
         this(context.getApplicationContext(), new Preferences(context));
@@ -43,57 +52,73 @@ public class Alarms {
     Alarms(Context context, Preferences preferences) {
         mContext = context.getApplicationContext();
         mPreferences = preferences;
+        firebaseJobDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
     }
 
-    public long scheduleIncomingBackup() {
+    public Job scheduleIncomingBackup() {
         return scheduleBackup(mPreferences.getIncomingTimeoutSecs(), INCOMING, false);
     }
 
-    public long scheduleRegularBackup() {
+    public Job scheduleRegularBackup() {
         return scheduleBackup(mPreferences.getRegularTimeoutSecs(), REGULAR, false);
     }
 
-    public long scheduleBootupBackup() {
+    public Job scheduleBootupBackup() {
         return scheduleBackup(BOOT_BACKUP_DELAY, REGULAR, false);
     }
 
-    public long scheduleImmediateBackup() {
+    public Job scheduleImmediateBackup() {
         return scheduleBackup(-1, BROADCAST_INTENT, true);
     }
 
     public void cancel() {
-        getAlarmManager(mContext).cancel(createPendingIntent(mContext, UNKNOWN));
+        firebaseJobDispatcher.cancelAll();
     }
 
-    private long scheduleBackup(int inSeconds, BackupType backupType, boolean force) {
+    private Job scheduleBackup(int inSeconds, BackupType backupType, boolean force) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "scheduleBackup(" + mContext + ", " + inSeconds + ", " + backupType + ", " + force + ")");
         }
 
         if (force || (mPreferences.isEnableAutoSync() && inSeconds > 0)) {
-            final long atTime = System.currentTimeMillis() + (inSeconds * 1000l);
-            getAlarmManager(mContext).set(AlarmManager.RTC_WAKEUP, atTime, createPendingIntent(mContext, backupType));
+
+            Job job = getJob(firebaseJobDispatcher, inSeconds, backupType);
+            firebaseJobDispatcher.schedule(job);
+
             if (LOCAL_LOGV) {
                 Log.v(TAG, "Scheduled backup due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
             }
-            return atTime;
+            return job;
         } else {
             if (LOCAL_LOGV) Log.v(TAG, "Not scheduling backup because auto sync is disabled.");
-            return -1;
+            return null;
         }
     }
 
-    private static AlarmManager getAlarmManager(Context ctx) {
-        return (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-    }
+    private Job getJob(FirebaseJobDispatcher dispatcher, int inSeconds, BackupType backupType)
+    {
+        JobTrigger trigger;
+        if (inSeconds <= 0)
+        {
+            trigger = Trigger.NOW;
+        }
+        else
+        {
+            trigger = Trigger.executionWindow(inSeconds, inSeconds);
+        }
 
-    private static PendingIntent createPendingIntent(Context ctx, BackupType backupType) {
-        final UUID uuid = UUID.randomUUID();
+        int constraint = mPreferences.isWifiOnly() ? Constraint.ON_UNMETERED_NETWORK : Constraint.ON_ANY_NETWORK;
+        Bundle extras = new Bundle();
+        extras.putString(BackupType.EXTRA, backupType.name());
+        Job.Builder job = dispatcher.newJobBuilder()
+            .setReplaceCurrent(false)
+            .setTrigger(trigger)
+            .setConstraints(constraint)
+            .setTag(backupType.name())
+            .setExtras(extras)
+            .setService(SmsJobService.class)
+            ;
 
-        final Intent intent = (new Intent(ctx, SmsBackupService.class))
-            .setAction(backupType.name() + "-" + uuid.toString()) // create fresh pending intent
-            .putExtra(BackupType.EXTRA, backupType.name());
-
-        return PendingIntent.getService(ctx, 0, intent, 0);
+        return job.build();
     }
 }
