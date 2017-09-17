@@ -464,7 +464,7 @@ This application is released under the terms of the [Apache License, Version 2.0
 [smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
 [imapenableshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/enable_imap.png
 [showimap]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/show_imap.png
-[strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/res/values/strings.xml
+[strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/app/src/main/res/values/strings.xml
 [Tasker]: http://tasker.dinglisch.net/
 [Tri-Crypt]: https://play.google.com/store/apps/details?id=com.tricrypt
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/app/src/main/res/drawable/ic_launcher.png
