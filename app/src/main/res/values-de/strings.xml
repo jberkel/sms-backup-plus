@@ -78,7 +78,7 @@
   <string name="ui_authentication_label">Authentifizierung</string>
   <string name="ui_authentication_desc">Authentifizierungsmethode. Standard für Gmail ist \"XOauth\".</string>
   <string name="plain">Klartext</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail-Label</string>
   <string name="ui_imap_folder_desc">Gmail-Label für SMS.</string>

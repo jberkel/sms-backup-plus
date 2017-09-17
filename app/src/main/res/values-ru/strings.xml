@@ -79,7 +79,7 @@
   <string name="ui_authentication_label">Авторизация</string>
   <string name="ui_authentication_desc">Метод авторизации. По умолчанию для gmail «XOauth».</string>
   <string name="plain">Обычный текст</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Ярлык Gmail</string>
   <string name="ui_imap_folder_desc">Ярлык Gmail для SMS.</string>

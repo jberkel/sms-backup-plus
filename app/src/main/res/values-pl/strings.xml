@@ -52,7 +52,7 @@
     <string name="ui_authentication_label">Uwierzytelnienie</string>
     <string name="ui_authentication_desc">Metoda uwierzytelniania. Domyślnie dla gmail jest \"XOauth\".</string>
     <string name="plain">Zwykły tekst</string>
-    <string name="xoauth">XOAuth</string>
+    <string name="xoauth">XOAuth2</string>
     <string name="ui_imap_folder_label">Etykieta Gmail</string>
     <string name="ui_imap_folder_desc">Etykieta gmail oznaczająca SMSy.</string>
     <string name="ui_imap_folder_label_dialog_msg">Kopie zapasowe SMS będą oznaczone tą etykietą w Gmailu.</string>

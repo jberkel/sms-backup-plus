@@ -77,7 +77,7 @@
   <string name="ui_authentication_label">Přihlášení</string>
   <string name="ui_authentication_desc">Přihlašovací metoda. Výchozí pro GMail je \"XOauth\".</string>
   <string name="plain">Prostý text</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">GMail složka</string>
   <string name="ui_imap_folder_desc">GMail složka pro SMS.</string>

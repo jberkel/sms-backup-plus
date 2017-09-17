@@ -78,7 +78,7 @@
   <string name="ui_authentication_label">Autenticazione</string>
   <string name="ui_authentication_desc">Il metodo di autenticazione. Il predefinito per gmail è \"XOauth\".</string>
   <string name="plain">Testo semplice</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Etichetta Gmail</string>
   <string name="ui_imap_folder_desc">Etichetta Gmail assegnata agli SMS.</string>

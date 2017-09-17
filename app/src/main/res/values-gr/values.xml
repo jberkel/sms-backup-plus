@@ -78,7 +78,7 @@
   <string name="ui_authentication_label">Πιστοποίηση</string>
   <string name="ui_authentication_desc">Μέθοδος πιστοποίησης. Default for gmail is \"XOAuth\".</string>
   <string name="plain">Απλό κείμενο</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label"> Ετικέτα Gmail</string>
   <string name="ui_imap_folder_desc"> Η ετικέτα Gmail που ανατέθηκε σε SMS.</string>
