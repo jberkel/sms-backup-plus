@@ -450,10 +450,8 @@ repository and send me a [pull request][].
 This application is released under the terms of the [Apache License, Version 2.0][].
 
 [privacy-policy]: https://jberkel.github.io/sms-backup-plus/privacy-policy/
-[apk]: https://github.com/jberkel/sms-backup-plus/releases/download/1.5.9/smsbackup-plus-1.5.9-market.apk
 [original issue list]: http://code.google.com/p/android-sms/issues/list
 [github issues]: http://github.com/jberkel/sms-backup-plus/issues
-[PlayQRCode]: http://chart.apis.google.com/chart?cht=qr&chs=100x100&chl=https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [f-droid]: https://f-droid.org/repository/browse/?fdid=com.zegoggles.smssync
 [PlayLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
@@ -466,7 +464,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [showimap]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/show_imap.png
 [strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/app/src/main/res/values/strings.xml
 [Tasker]: http://tasker.dinglisch.net/
-[Tri-Crypt]: https://play.google.com/store/apps/details?id=com.tricrypt
 [Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/app/src/main/res/drawable/ic_launcher.png
 [Authorized Access to your Google Account]: https://security.google.com/settings/security/permissions
 [community]: https://plus.google.com/communities/113290889178902750997
