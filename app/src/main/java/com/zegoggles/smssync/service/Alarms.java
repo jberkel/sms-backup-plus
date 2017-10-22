@@ -18,6 +18,8 @@ package com.zegoggles.smssync.service;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -69,7 +71,7 @@ public class Alarms {
         firebaseJobDispatcher.cancelAll();
     }
 
-    private Job scheduleBackup(int inSeconds, BackupType backupType, boolean force) {
+    @Nullable private Job scheduleBackup(int inSeconds, BackupType backupType, boolean force) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "scheduleBackup(" + inSeconds + ", " + backupType + ", " + force + ")");
         }
@@ -88,11 +90,10 @@ public class Alarms {
         }
     }
 
-    private Job getJob(FirebaseJobDispatcher dispatcher, int inSeconds, BackupType backupType)
-    {
+    @NonNull private Job getJob(FirebaseJobDispatcher dispatcher, int inSeconds, BackupType backupType) {
         final JobTrigger trigger = inSeconds <= 0 ? Trigger.NOW : Trigger.executionWindow(inSeconds, inSeconds);
         final int constraint = mPreferences.isWifiOnly() ? Constraint.ON_UNMETERED_NETWORK : Constraint.ON_ANY_NETWORK;
-        Bundle extras = new Bundle();
+        final Bundle extras = new Bundle();
         extras.putString(BackupType.EXTRA, backupType.name());
         return dispatcher.newJobBuilder()
             .setReplaceCurrent(false)
