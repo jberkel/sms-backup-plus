@@ -16,13 +16,9 @@
 
 package com.zegoggles.smssync.service;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
@@ -31,11 +27,11 @@ import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.Trigger;
 import com.zegoggles.smssync.preferences.Preferences;
 
-import java.util.UUID;
-
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.service.BackupType.*;
+import static com.zegoggles.smssync.service.BackupType.BROADCAST_INTENT;
+import static com.zegoggles.smssync.service.BackupType.INCOMING;
+import static com.zegoggles.smssync.service.BackupType.REGULAR;
 
 
 public class Alarms {
@@ -97,28 +93,17 @@ public class Alarms {
 
     private Job getJob(FirebaseJobDispatcher dispatcher, int inSeconds, BackupType backupType)
     {
-        JobTrigger trigger;
-        if (inSeconds <= 0)
-        {
-            trigger = Trigger.NOW;
-        }
-        else
-        {
-            trigger = Trigger.executionWindow(inSeconds, inSeconds);
-        }
-
-        int constraint = mPreferences.isWifiOnly() ? Constraint.ON_UNMETERED_NETWORK : Constraint.ON_ANY_NETWORK;
+        final JobTrigger trigger = inSeconds <= 0 ? Trigger.NOW : Trigger.executionWindow(inSeconds, inSeconds);
+        final int constraint = mPreferences.isWifiOnly() ? Constraint.ON_UNMETERED_NETWORK : Constraint.ON_ANY_NETWORK;
         Bundle extras = new Bundle();
         extras.putString(BackupType.EXTRA, backupType.name());
-        Job.Builder job = dispatcher.newJobBuilder()
+        return dispatcher.newJobBuilder()
             .setReplaceCurrent(false)
             .setTrigger(trigger)
             .setConstraints(constraint)
             .setTag(backupType.name())
             .setExtras(extras)
             .setService(SmsJobService.class)
-            ;
-
-        return job.build();
+            .build();
     }
 }

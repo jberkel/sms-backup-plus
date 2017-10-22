@@ -1,14 +1,8 @@
 package com.zegoggles.smssync.service;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.Trigger;
@@ -16,19 +10,12 @@ import com.zegoggles.smssync.preferences.Preferences;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.shadows.ShadowAlarmManager;
 import org.robolectric.shadows.ShadowPackageManager;
-import org.robolectric.shadows.ShadowPendingIntent;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.robolectric.Shadows.shadowOf;
@@ -53,9 +40,6 @@ public class AlarmsTest {
         ri.isDefault = true;
 
         pm.addResolveInfoForIntent(executeIntent, ri);
-
-            //new ResolveInfo().apply { serviceInfo = ServiceInfo().apply { enabled = true } });
-
         alarms = new Alarms(RuntimeEnvironment.application, preferences);
     }
 
@@ -96,20 +80,15 @@ public class AlarmsTest {
 
     private void verifyJobScheduled(Job job, int scheduled, String expectedType)
     {
-        if (scheduled <= 0)
-        {
+        if (scheduled <= 0) {
             assertThat(job.getTrigger() instanceof JobTrigger.ImmediateTrigger);
-        }
-        else
-        {
+        } else {
             assertThat(job.getTrigger() instanceof JobTrigger.ExecutionWindowTrigger);
             JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) job.getTrigger();
             JobTrigger.ExecutionWindowTrigger testTrigger = Trigger.executionWindow(scheduled, scheduled);
             assertThat(trigger.getWindowEnd()).isEqualTo(testTrigger.getWindowEnd());
             assertThat(trigger.getWindowStart()).isEqualTo(testTrigger.getWindowStart());
         }
-
         assertThat(job.getTag()).isEqualTo(expectedType);
-
     }
 }
