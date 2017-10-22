@@ -9,6 +9,4 @@ android:
 jdk: oraclejdk8
 
 script:
-  - mvn -q android:lint
-  - mvn -q test
   - ./gradlew build
