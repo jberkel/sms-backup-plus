@@ -38,15 +38,13 @@ public class Alarms {
     private static final int BOOT_BACKUP_DELAY = 60;
 
     private final Preferences mPreferences;
-    private Context mContext;
     private FirebaseJobDispatcher firebaseJobDispatcher;
 
     public Alarms(Context context) {
-        this(context.getApplicationContext(), new Preferences(context));
+        this(context, new Preferences(context));
     }
 
     Alarms(Context context, Preferences preferences) {
-        mContext = context.getApplicationContext();
         mPreferences = preferences;
         firebaseJobDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
     }
@@ -73,12 +71,11 @@ public class Alarms {
 
     private Job scheduleBackup(int inSeconds, BackupType backupType, boolean force) {
         if (LOCAL_LOGV) {
-            Log.v(TAG, "scheduleBackup(" + mContext + ", " + inSeconds + ", " + backupType + ", " + force + ")");
+            Log.v(TAG, "scheduleBackup(" + inSeconds + ", " + backupType + ", " + force + ")");
         }
 
         if (force || (mPreferences.isEnableAutoSync() && inSeconds > 0)) {
-
-            Job job = getJob(firebaseJobDispatcher, inSeconds, backupType);
+            final Job job = getJob(firebaseJobDispatcher, inSeconds, backupType);
             firebaseJobDispatcher.schedule(job);
 
             if (LOCAL_LOGV) {
