@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -42,8 +44,6 @@ import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import com.zegoggles.smssync.tasks.MigrateOAuth1TokenTask;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 import java.util.EnumSet;
@@ -60,9 +60,9 @@ public class SmsBackupService extends ServiceBase {
     private static final int NOTIFICATION_ID_WARNING = 1;
 
     @Nullable private static SmsBackupService service;
-    @NotNull private BackupState mState = new BackupState();
+    @NonNull private BackupState mState = new BackupState();
 
-    @Override @NotNull
+    @Override @NonNull
     public BackupState getState() {
         return mState;
     }

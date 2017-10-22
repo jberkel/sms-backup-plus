@@ -20,6 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.FetchProfile;
@@ -36,7 +37,6 @@ import com.fsck.k9.mail.store.imap.ImapResponse;
 import com.fsck.k9.mail.store.imap.ImapSearcher;
 import com.fsck.k9.mail.store.imap.ImapStore;
 import com.zegoggles.smssync.MmsConsts;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URI;
@@ -121,7 +121,7 @@ public class BackupImapStore extends ImapStore {
         return mTrustedSocketFactory;
     }
 
-    private @NotNull BackupFolder createAndOpenFolder(DataType type, @NotNull String label) throws MessagingException {
+    private @NonNull BackupFolder createAndOpenFolder(DataType type, @NonNull String label) throws MessagingException {
         try {
             BackupFolder folder = new BackupFolder(this, label, type);
             if (!folder.exists()) {

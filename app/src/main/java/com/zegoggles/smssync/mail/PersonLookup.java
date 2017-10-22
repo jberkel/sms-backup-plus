@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -48,7 +48,7 @@ public class PersonLookup {
 
     /* Look up a person */
     @SuppressWarnings("deprecation")
-    public @NotNull PersonRecord lookupPerson(final String address) {
+    public @NonNull PersonRecord lookupPerson(final String address) {
         if (TextUtils.isEmpty(address)) {
             return new PersonRecord(0, null, null, "-1");
         } else if (!mPeopleCache.containsKey(address)) {

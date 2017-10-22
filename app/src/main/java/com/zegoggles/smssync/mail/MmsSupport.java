@@ -3,6 +3,7 @@ package com.zegoggles.smssync.mail;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.Address;
@@ -13,7 +14,6 @@ import com.fsck.k9.mail.internet.TextBody;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.preferences.AddressStyle;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ class MmsSupport {
 
 
         public MmsDetails(boolean inbound,
-                          @NotNull List<String> recipients,
+                          @NonNull List<String> recipients,
                           List<PersonRecord> records,
                           List<Address> addresses) {
 

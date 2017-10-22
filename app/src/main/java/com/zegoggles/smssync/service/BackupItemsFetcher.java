@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteException;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -19,9 +19,9 @@ public class BackupItemsFetcher {
     private final ContentResolver resolver;
     private final BackupQueryBuilder queryBuilder;
 
-    public BackupItemsFetcher(@NotNull Context context,
-                              @NotNull ContentResolver resolver,
-                              @NotNull BackupQueryBuilder queryBuilder) {
+    public BackupItemsFetcher(@NonNull Context context,
+                              @NonNull ContentResolver resolver,
+                              @NonNull BackupQueryBuilder queryBuilder) {
         if (resolver == null) throw new IllegalArgumentException("resolver cannot be null");
         if (queryBuilder == null) throw new IllegalArgumentException("queryBuilder cannot be null");
 
@@ -31,7 +31,7 @@ public class BackupItemsFetcher {
     }
 
     public
-    @NotNull
+    @NonNull
     Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
         return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
@@ -55,7 +55,7 @@ public class BackupItemsFetcher {
     }
 
     private
-    @NotNull
+    @NonNull
     Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
         if (query == null) return emptyCursor();
         try {

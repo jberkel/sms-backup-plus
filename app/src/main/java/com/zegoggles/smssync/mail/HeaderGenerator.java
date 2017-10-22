@@ -2,9 +2,9 @@ package com.zegoggles.smssync.mail;
 
 import android.provider.CallLog;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import org.jetbrains.annotations.NotNull;
 
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
@@ -36,7 +36,7 @@ class HeaderGenerator {
                            final Map<String, String> msgMap,
                            final DataType dataType,
                            final String address,
-                           final @NotNull PersonRecord contact,
+                           final @NonNull PersonRecord contact,
                            final Date sentDate,
                            final int status) throws MessagingException {
 

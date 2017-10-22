@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.Address;
@@ -19,8 +21,6 @@ import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.CallLogTypes;
 import com.zegoggles.smssync.preferences.Preferences;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 import java.util.Locale;
@@ -197,7 +197,7 @@ class MessageGenerator {
         return msg;
     }
 
-    private String getSubject(@NotNull DataType type, @NotNull PersonRecord record) {
+    private String getSubject(@NonNull DataType type, @NonNull PersonRecord record) {
         return mPrefix ?
                 String.format(Locale.ENGLISH, "[%s] %s", type.getFolder(PreferenceManager.getDefaultSharedPreferences(mContext)), record.getName()) :
                 mContext.getString(type.withField, record.getName());
