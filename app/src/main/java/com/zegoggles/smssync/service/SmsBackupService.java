@@ -26,6 +26,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
+
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.JobTrigger;
 import com.fsck.k9.mail.MessagingException;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
@@ -262,10 +265,12 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void scheduleNextBackup() {
-        final long nextSync = getAlarms().scheduleRegularBackup();
-        if (nextSync >= 0) {
+        final Job nextSync = getAlarms().scheduleRegularBackup();
+        if (nextSync != null) {
+            JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();
+            Date date = new Date(System.currentTimeMillis() + (trigger.getWindowStart() * 1000));
             appLog(R.string.app_log_scheduled_next_sync,
-                    DateFormat.format("kk:mm", new Date(nextSync)));
+                    DateFormat.format("kk:mm", date));
         } else {
             appLog(R.string.app_log_no_next_sync);
         }
