@@ -79,7 +79,7 @@ public class Alarms {
             firebaseJobDispatcher.schedule(job);
 
             if (LOCAL_LOGV) {
-                Log.v(TAG, "Scheduled backup due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
+                Log.v(TAG, "Scheduled backup job " + job + " due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
             }
             return job;
         } else {
