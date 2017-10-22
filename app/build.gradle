@@ -71,7 +71,7 @@ dependencies {
     compile 'com.android.billingclient:billing:dp-1'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.4.2'
+    testCompile 'org.robolectric:robolectric:3.5'
     testCompile 'org.robolectric:shadows-httpclient:3.0'
     testCompile 'com.squareup:fest-android:1.0.5'
     testCompile 'org.mockito:mockito-all:1.10.17'
