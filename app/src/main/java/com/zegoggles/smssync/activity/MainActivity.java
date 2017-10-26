@@ -48,6 +48,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.BuildConfig;
@@ -167,6 +169,7 @@ public class MainActivity extends PreferenceActivity {
         initCalendars();
         initGroups();
 
+        checkPlayServices();
         updateLastBackupTimes();
         updateAutoBackupSummary();
         updateAutoBackupEnabledSummary();
@@ -291,6 +294,19 @@ public class MainActivity extends PreferenceActivity {
 
     }
 
+    private void checkPlayServices() {
+        if (!isPlayServiceAvailable()) {
+            final CheckBoxPreference autoBackupPref = (CheckBoxPreference) findPreference(ENABLE_AUTO_BACKUP.key);
+            autoBackupPref.setChecked(false);
+            autoBackupPref.setEnabled(false);
+        }
+    }
+
+    private boolean isPlayServiceAvailable() {
+        return false;
+//        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS;
+    }
+
     private void updateLastBackupTimes() {
         for (DataType type : DataType.values()) {
             findPreference(type.backupEnabledPreference).setSummary(
@@ -315,6 +331,9 @@ public class MainActivity extends PreferenceActivity {
     }
 
     protected String getEnabledBackupSummary() {
+        if (!isPlayServiceAvailable()) {
+            return getString(R.string.ui_enable_auto_sync_not_available);
+        }
         final List<String> enabled = new ArrayList<String>();
         for (DataType dataType : DataType.enabled(preferences.preferences)) {
             enabled.add(getString(dataType.resId));

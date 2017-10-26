@@ -113,6 +113,7 @@ public class Preferences {
     }
 
     public boolean isAppLogDebug() {
+
         return  isAppLogEnabled() &&
                 preferences.getBoolean(APP_LOG_DEBUG.key, false);
     }
