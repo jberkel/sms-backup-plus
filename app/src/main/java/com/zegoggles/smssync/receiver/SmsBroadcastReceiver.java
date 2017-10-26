@@ -22,7 +22,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.service.BackupJobs;
 import com.zegoggles.smssync.utils.AppLog;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -44,7 +44,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     private void bootup(Context context) {
         if (shouldSchedule(context)) {
-            getAlarms(context).scheduleBootupBackup();
+            getAlarms(context).scheduleBootup();
         } else {
             Log.i(TAG, "Received bootup but not set up to back up.");
         }
@@ -52,7 +52,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     private void incomingSMS(Context context) {
         if (shouldSchedule(context)) {
-            getAlarms(context).scheduleIncomingBackup();
+            getAlarms(context).scheduleIncoming();
         } else {
             Log.i(TAG, "Received SMS but not set up to back up.");
         }
@@ -87,8 +87,8 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
-    protected Alarms getAlarms(Context context) {
-        return new Alarms(context);
+    protected BackupJobs getAlarms(Context context) {
+        return new BackupJobs(context);
     }
 
     protected Preferences getPreferences(Context context) {

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.service.BackupJobs;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(RobolectricTestRunner.class)
 public class SmsBroadcastReceiverTest {
     Context context;
-    @Mock Alarms alarms;
+    @Mock
+    BackupJobs alarms;
     @Mock Preferences preferences;
     @Mock AuthPreferences authPreferences;
     SmsBroadcastReceiver receiver;
@@ -27,7 +28,7 @@ public class SmsBroadcastReceiverTest {
         initMocks(this);
         context = RuntimeEnvironment.application;
         receiver = new SmsBroadcastReceiver() {
-            @Override protected Alarms getAlarms(Context context) {
+            @Override protected BackupJobs getAlarms(Context context) {
                 return alarms;
             }
 
@@ -44,13 +45,13 @@ public class SmsBroadcastReceiverTest {
     @Test public void shouldScheduleBootupBackupAfterBootup() throws Exception {
         mockScheduled();
         receiver.onReceive(context, new Intent().setAction(Intent.ACTION_BOOT_COMPLETED));
-        verify(alarms, times(1)).scheduleBootupBackup();
+        verify(alarms, times(1)).scheduleBootup();
     }
 
     @Test public void shouldScheduleIncomingBackupAfterIncomingMessage() throws Exception {
         mockScheduled();
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
-        verify(alarms, times(1)).scheduleIncomingBackup();
+        verify(alarms, times(1)).scheduleIncoming();
     }
 
     @Test public void shouldNotScheduleIfAutoSyncIsDisabled() throws Exception {

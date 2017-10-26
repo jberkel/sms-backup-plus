@@ -59,7 +59,7 @@ public class SmsBackupServiceTest {
     @Mock AuthPreferences authPreferences;
     @Mock Preferences preferences;
     @Mock BackupTask backupTask;
-    @Mock Alarms alarms;
+    @Mock BackupJobs alarms;
 
     @Before public void before() {
         initMocks(this);
@@ -68,7 +68,7 @@ public class SmsBackupServiceTest {
             @Override public Context getApplicationContext() { return RuntimeEnvironment.application; }
             @Override public Resources getResources() { return getApplicationContext().getResources(); }
             @Override protected BackupTask getBackupTask() { return backupTask; }
-            @Override protected Alarms getAlarms() { return alarms; }
+            @Override protected BackupJobs getAlarms() { return alarms; }
             @Override protected Preferences getPreferences() { return preferences; }
             @Override protected AuthPreferences getAuthPreferences() { return authPreferences; }
             @Override protected void notifyUser(int icon, int notificationId, String title, String text) {
@@ -190,7 +190,7 @@ public class SmsBackupServiceTest {
 
         service.backupStateChanged(service.transition(SmsSyncState.FINISHED_BACKUP, null));
 
-        verify(alarms).scheduleRegularBackup();
+        verify(alarms).scheduleRegular();
 
         assertThat(shadowOf(service).isStoppedBySelf());
         assertThat(shadowOf(service).isForegroundStopped());

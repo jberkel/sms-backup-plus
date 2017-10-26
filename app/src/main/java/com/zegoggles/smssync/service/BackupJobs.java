@@ -36,42 +36,42 @@ import static com.zegoggles.smssync.service.BackupType.INCOMING;
 import static com.zegoggles.smssync.service.BackupType.REGULAR;
 
 
-public class Alarms {
+public class BackupJobs {
     private static final int BOOT_BACKUP_DELAY = 60;
 
     private final Preferences mPreferences;
     private FirebaseJobDispatcher firebaseJobDispatcher;
 
-    public Alarms(Context context) {
+    public BackupJobs(Context context) {
         this(context, new Preferences(context));
     }
 
-    Alarms(Context context, Preferences preferences) {
+    BackupJobs(Context context, Preferences preferences) {
         mPreferences = preferences;
         firebaseJobDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
     }
 
-    public Job scheduleIncomingBackup() {
-        return scheduleBackup(mPreferences.getIncomingTimeoutSecs(), INCOMING, false);
+    public Job scheduleIncoming() {
+        return schedule(mPreferences.getIncomingTimeoutSecs(), INCOMING, false);
     }
 
-    public Job scheduleRegularBackup() {
-        return scheduleBackup(mPreferences.getRegularTimeoutSecs(), REGULAR, false);
+    public Job scheduleRegular() {
+        return schedule(mPreferences.getRegularTimeoutSecs(), REGULAR, false);
     }
 
-    public Job scheduleBootupBackup() {
-        return scheduleBackup(BOOT_BACKUP_DELAY, REGULAR, false);
+    public Job scheduleBootup() {
+        return schedule(BOOT_BACKUP_DELAY, REGULAR, false);
     }
 
-    public Job scheduleImmediateBackup() {
-        return scheduleBackup(-1, BROADCAST_INTENT, true);
+    public Job scheduleImmediate() {
+        return schedule(-1, BROADCAST_INTENT, true);
     }
 
     public void cancel() {
         firebaseJobDispatcher.cancelAll();
     }
 
-    @Nullable private Job scheduleBackup(int inSeconds, BackupType backupType, boolean force) {
+    @Nullable private Job schedule(int inSeconds, BackupType backupType, boolean force) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "scheduleBackup(" + inSeconds + ", " + backupType + ", " + force + ")");
         }

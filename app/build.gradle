@@ -69,7 +69,7 @@ dependencies {
     compile 'com.android.billingclient:billing:dp-1'
     compile 'com.firebase:firebase-jobdispatcher:0.8.4'
     compile 'com.google.android.gms:play-services-base:9.8.0'
-
+    compile 'com.android.support:support-annotations:25.0.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.5'

@@ -265,7 +265,7 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void scheduleNextBackup() {
-        final Job nextSync = getAlarms().scheduleRegularBackup();
+        final Job nextSync = getAlarms().scheduleRegular();
         if (nextSync != null) {
             JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();
             Date date = new Date(System.currentTimeMillis() + (trigger.getWindowStart() * 1000));
@@ -290,8 +290,8 @@ public class SmsBackupService extends ServiceBase {
         getNotifier().notify(notificationId, n);
     }
 
-    protected Alarms getAlarms() {
-        return new Alarms(this);
+    protected BackupJobs getAlarms() {
+        return new BackupJobs(this);
     }
 
     public static boolean isServiceWorking() {

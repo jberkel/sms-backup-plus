@@ -48,8 +48,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.BuildConfig;
@@ -68,7 +66,7 @@ import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.BackupManagerWrapper;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
-import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.service.BackupJobs;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
@@ -814,7 +812,7 @@ public class MainActivity extends PreferenceActivity {
                                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                 PackageManager.DONT_KILL_APP);
 
-                        if (!isEnabled) new Alarms(MainActivity.this).cancel();
+                        if (!isEnabled) new BackupJobs(MainActivity.this).cancel();
                         return true;
                     }
                 });

@@ -21,10 +21,10 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-public class AlarmsTest {
-    Alarms alarms;
+public class BackupJobsTest {
+    private BackupJobs subject;
 
-    @Mock Preferences preferences;
+    @Mock private Preferences preferences;
 
     @Before public void before() {
         initMocks(this);
@@ -40,42 +40,42 @@ public class AlarmsTest {
         ri.isDefault = true;
 
         pm.addResolveInfoForIntent(executeIntent, ri);
-        alarms = new Alarms(RuntimeEnvironment.application, preferences);
+        subject = new BackupJobs(RuntimeEnvironment.application, preferences);
     }
 
-    @Test public void shouldScheduleImmediateBackup() throws Exception {
-        Job job = alarms.scheduleImmediateBackup();
+    @Test public void shouldScheduleImmediate() throws Exception {
+        Job job = subject.scheduleImmediate();
         verifyJobScheduled(job, -1, "BROADCAST_INTENT");
     }
 
-    @Test public void shouldScheduleRegularBackup() throws Exception {
+    @Test public void shouldScheduleRegular() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.getRegularTimeoutSecs()).thenReturn(2000);
-        Job job = alarms.scheduleRegularBackup();
+        Job job = subject.scheduleRegular();
         verifyJobScheduled(job, 2000, "REGULAR");
     }
 
-    @Test public void shouldScheduleBootBackup() throws Exception {
+    @Test public void shouldScheduleBoot() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
-        Job job = alarms.scheduleBootupBackup();
+        Job job = subject.scheduleBootup();
         verifyJobScheduled(job, 60, "REGULAR");
     }
 
-    @Test public void shouldScheduleIncomingBackup() throws Exception {
+    @Test public void shouldScheduleIncoming() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.getIncomingTimeoutSecs()).thenReturn(2000);
-        Job job = alarms.scheduleIncomingBackup();
+        Job job = subject.scheduleIncoming();
         verifyJobScheduled(job, 2000, "INCOMING");
     }
 
     @Test public void shouldNotScheduleRegularBackupIfAutoBackupIsDisabled() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(false);
-        assertThat(alarms.scheduleRegularBackup()).isEqualTo(null);
+        assertThat(subject.scheduleRegular()).isEqualTo(null);
     }
 
     @Test public void shouldNotScheduleIncomingBackupIfAutoBackupIsDisabled() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(false);
-        assertThat(alarms.scheduleIncomingBackup()).isEqualTo(null);
+        assertThat(subject.scheduleIncoming()).isEqualTo(null);
     }
 
     private void verifyJobScheduled(Job job, int scheduled, String expectedType)
