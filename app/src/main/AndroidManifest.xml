@@ -144,6 +144,5 @@
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAI15zt2oJAvxMu4s5SaHisDyYsduKd2jq_-XnAug" />
-
     </application>
 </manifest>

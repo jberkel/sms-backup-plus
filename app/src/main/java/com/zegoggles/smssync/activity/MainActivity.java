@@ -58,6 +58,7 @@ import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
+import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
@@ -293,16 +294,11 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void checkPlayServices() {
-        if (!isPlayServiceAvailable()) {
+        if (!GooglePlayServices.isAvailable(this)) {
             final CheckBoxPreference autoBackupPref = (CheckBoxPreference) findPreference(ENABLE_AUTO_BACKUP.key);
             autoBackupPref.setChecked(false);
             autoBackupPref.setEnabled(false);
         }
-    }
-
-    private boolean isPlayServiceAvailable() {
-        return false;
-//        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS;
     }
 
     private void updateLastBackupTimes() {
@@ -328,8 +324,8 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    protected String getEnabledBackupSummary() {
-        if (!isPlayServiceAvailable()) {
+    String getEnabledBackupSummary() {
+        if (!GooglePlayServices.isAvailable(this)) {
             return getString(R.string.ui_enable_auto_sync_not_available);
         }
         final List<String> enabled = new ArrayList<String>();
