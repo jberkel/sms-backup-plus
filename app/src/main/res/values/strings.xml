@@ -131,7 +131,6 @@
   <string name="ui_enable_auto_sync_label">Auto backup</string>
   <string name="ui_enable_auto_sync_desc">Whether to automatically backup new SMS or not.</string>
   <string name="ui_enable_auto_sync_summary">Automatically backup %1$s.</string>
-  <string name="ui_enable_auto_sync_not_available">Disabled, requires Google Play Services.</string>
   <string name="ui_enable_auto_sync_no_enabled_summary">No item type to backup selected.</string>
 
   <string name="sd_card_disclaimer">Auto backup might not work reliably when app is installed on SD card.</string>
