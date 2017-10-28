@@ -5,23 +5,25 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.JobValidator;
+import com.firebase.jobdispatcher.ObservedUri;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowAlarmManager;
 import org.robolectric.shadows.ShadowPendingIntent;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
@@ -63,6 +65,16 @@ public class AlarmManagerDriverTest {
     public void testScheduleJobWithoutTrigger() throws Exception {
         final Job job = jobBuilder().build();
         final int result = subject.schedule(job);
+        assertThat(result).isEqualTo(SCHEDULE_RESULT_SUCCESS);
+        assertAlarmScheduled("UNKNOWN");
+    }
+
+    @Test
+    public void testScheduleJobWithUnknownTrigger() throws Exception {
+        final Job job = jobBuilder()
+            .setTrigger(Trigger.contentUriTrigger(Collections.singletonList(new ObservedUri(Uri.parse("foo://bar"), 0))))
+            .build();
+        final int result = subject.schedule(job);
         assertThat(result).isEqualTo(SCHEDULE_RESULT_UNSUPPORTED_TRIGGER);
     }
 
@@ -73,7 +85,7 @@ public class AlarmManagerDriverTest {
         ShadowAlarmManager.ScheduledAlarm nextScheduledAlarm = shadow.getNextScheduledAlarm();
 
         assertThat(nextScheduledAlarm.type).isEqualTo(AlarmManager.RTC_WAKEUP);
-        assertThat(nextScheduledAlarm.triggerAtTime).isGreaterThan(System.currentTimeMillis());
+        assertThat(nextScheduledAlarm.triggerAtTime).isGreaterThan(0);
 
         PendingIntent pendingIntent = nextScheduledAlarm.operation;
         ShadowPendingIntent shadowPendingIntent = shadowOf(pendingIntent);

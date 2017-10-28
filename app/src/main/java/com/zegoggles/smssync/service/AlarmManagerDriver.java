@@ -54,13 +54,12 @@ class AlarmManagerDriver implements Driver, JobValidator {
         Log.d(TAG, "AlarmManagerDriver: schedule " +job);
 
         final JobTrigger trigger = job.getTrigger();
-        if (trigger instanceof JobTrigger.ExecutionWindowTrigger) {
-            JobTrigger.ExecutionWindowTrigger executionWindowTrigger = (JobTrigger.ExecutionWindowTrigger) trigger;
+        final long atTime = scheduleTime(trigger);
 
-            final long atTime = System.currentTimeMillis() + (executionWindowTrigger.getWindowStart() * 1000L);
+        if (atTime > 0) {
             final BackupType backupType = BackupType.fromName(job.getTag());
-
             alarmManager.set(RTC_WAKEUP, atTime, createPendingIntent(context, backupType));
+
             return SCHEDULE_RESULT_SUCCESS;
         } else {
             return SCHEDULE_RESULT_UNSUPPORTED_TRIGGER;
@@ -121,5 +120,16 @@ class AlarmManagerDriver implements Driver, JobValidator {
                 .putExtra(BackupType.EXTRA, backupType.name());
 
         return PendingIntent.getService(ctx, 0, intent, 0);
+    }
+
+    private static long scheduleTime(JobTrigger trigger) {
+        if (trigger instanceof  JobTrigger.ImmediateTrigger) {
+            return System.currentTimeMillis();
+        } else if (trigger instanceof JobTrigger.ExecutionWindowTrigger) {
+            JobTrigger.ExecutionWindowTrigger executionWindowTrigger = (JobTrigger.ExecutionWindowTrigger) trigger;
+            return System.currentTimeMillis() + (executionWindowTrigger.getWindowStart() * 1000L);
+        } else {
+            return -1;
+        }
     }
 }
