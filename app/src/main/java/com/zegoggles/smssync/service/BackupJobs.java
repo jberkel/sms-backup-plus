@@ -27,8 +27,10 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.Trigger;
+import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.preferences.Preferences;
 
+import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.BROADCAST_INTENT;
@@ -48,7 +50,7 @@ public class BackupJobs {
 
     BackupJobs(Context context, Preferences preferences) {
         mPreferences = preferences;
-        firebaseJobDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+        firebaseJobDispatcher = new FirebaseJobDispatcher(GooglePlayServices.isAvailable(context) ? new GooglePlayDriver(context) : new AlarmManagerDriver());
     }
 
     public Job scheduleIncoming() {
@@ -78,10 +80,14 @@ public class BackupJobs {
 
         if (force || (mPreferences.isEnableAutoSync() && inSeconds > 0)) {
             final Job job = getJob(firebaseJobDispatcher, inSeconds, backupType);
-            firebaseJobDispatcher.schedule(job);
 
-            if (LOCAL_LOGV) {
-                Log.v(TAG, "Scheduled backup job " + job + " due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
+            final int result = firebaseJobDispatcher.schedule(job);
+            if (result == SCHEDULE_RESULT_SUCCESS) {
+                if (LOCAL_LOGV) {
+                    Log.v(TAG, "Scheduled backup job " + job + " due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
+                }
+            } else {
+                Log.w(TAG, "Error scheduling job: "+result);
             }
             return job;
         } else {

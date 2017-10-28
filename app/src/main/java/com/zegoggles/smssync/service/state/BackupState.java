@@ -35,7 +35,7 @@ public class BackupState extends State {
                 ", itemsToSync=" + itemsToSync +
                 ", backupType=" + backupType +
                 ", exception=" + exception +
-                ", state =" + state +
+                ", state=" + state +
                 '}';
     }
 

@@ -168,7 +168,6 @@ public class MainActivity extends PreferenceActivity {
         initCalendars();
         initGroups();
 
-        checkPlayServices();
         updateLastBackupTimes();
         updateAutoBackupSummary();
         updateAutoBackupEnabledSummary();
@@ -293,14 +292,6 @@ public class MainActivity extends PreferenceActivity {
 
     }
 
-    private void checkPlayServices() {
-        if (!GooglePlayServices.isAvailable(this)) {
-            final CheckBoxPreference autoBackupPref = (CheckBoxPreference) findPreference(ENABLE_AUTO_BACKUP.key);
-            autoBackupPref.setChecked(false);
-            autoBackupPref.setEnabled(false);
-        }
-    }
-
     private void updateLastBackupTimes() {
         for (DataType type : DataType.values()) {
             findPreference(type.backupEnabledPreference).setSummary(
@@ -325,9 +316,6 @@ public class MainActivity extends PreferenceActivity {
     }
 
     String getEnabledBackupSummary() {
-        if (!GooglePlayServices.isAvailable(this)) {
-            return getString(R.string.ui_enable_auto_sync_not_available);
-        }
         final List<String> enabled = new ArrayList<String>();
         for (DataType dataType : DataType.enabled(preferences.preferences)) {
             enabled.add(getString(dataType.resId));
