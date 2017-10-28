@@ -7,7 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import static android.content.pm.PackageManager.GET_RESOLVED_FILTER;
+import static android.content.pm.PackageManager.GET_SIGNATURES;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static com.zegoggles.smssync.App.TAG;
 
@@ -21,14 +21,16 @@ public class GooglePlayServices {
         final PackageManager packageManager = context.getPackageManager();
 
         try {
-            packageManager.getPackageInfo(COM_ANDROID_VENDING, GET_UNINSTALLED_PACKAGES|GET_RESOLVED_FILTER);
+            packageManager.getPackageInfo(COM_ANDROID_VENDING, GET_UNINSTALLED_PACKAGES|GET_SIGNATURES);
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, "Google Play Store is missing");
             return false;
         }
 
         try {
-            final PackageInfo info = packageManager.getPackageInfo(COM_GOOGLE_ANDROID_GMS, GET_RESOLVED_FILTER);
+            final PackageInfo info = packageManager.getPackageInfo(COM_GOOGLE_ANDROID_GMS, GET_SIGNATURES);
+            // TODO: check signatures
+
             if (info.versionCode < MIN_GMS_VERSION) {
                 Log.w(TAG, "Google Play Services out of date: "+ info.versionCode);
                 return false;
