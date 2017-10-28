@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.Message;
@@ -28,7 +29,6 @@ import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +60,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final TokenRefresher tokenRefresher;
     private final OpenPgpServiceConnection mServiceConnection;
 
-    BackupTask(@NotNull SmsBackupService service) {
+    BackupTask(@NonNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
         this.service = service;
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(service);

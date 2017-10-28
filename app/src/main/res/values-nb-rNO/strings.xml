@@ -79,7 +79,7 @@
   <string name="ui_authentication_label">Autentisering</string>
   <string name="ui_authentication_desc">Autentisering metoden. Standart for Gmail er \"XOauth\".</string>
   <string name="plain">Ren tekst</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail etikett</string>
   <string name="ui_imap_folder_desc">Gmail etikett for meldinger.</string>

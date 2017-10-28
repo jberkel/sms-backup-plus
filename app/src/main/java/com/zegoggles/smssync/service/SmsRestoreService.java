@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
@@ -20,8 +22,6 @@ import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.service.exception.SmsProviderNotWritableException;
 import com.zegoggles.smssync.service.state.RestoreState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -35,10 +35,10 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 public class SmsRestoreService extends ServiceBase {
     private static final int RESTORE_ID = 2;
 
-    @NotNull private RestoreState mState = new RestoreState();
+    @NonNull private RestoreState mState = new RestoreState();
     @Nullable private static SmsRestoreService service;
 
-    @Override @NotNull
+    @Override @NonNull
     public RestoreState getState() {
         return mState;
     }

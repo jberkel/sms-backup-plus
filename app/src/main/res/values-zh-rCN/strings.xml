@@ -79,7 +79,7 @@
   <string name="ui_authentication_label">验证</string>
   <string name="ui_authentication_desc">身份验证方法。Gmail 默认设置为“XOAuth”。</string>
   <string name="plain">纯文本</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail 标签</string>
   <string name="ui_imap_folder_desc">应用到短信的 Gmail 标签。</string>

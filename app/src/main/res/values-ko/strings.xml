@@ -79,7 +79,7 @@
   <string name="ui_authentication_label">인증</string>
   <string name="ui_authentication_desc">인증 방식. Gmail의 기본값은 \"XOAuth\" 입니다.</string>
   <string name="plain">일반 텍스트</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail 라벨</string>
   <string name="ui_imap_folder_desc">SMS에 할당될 Gmail 라벨.</string>

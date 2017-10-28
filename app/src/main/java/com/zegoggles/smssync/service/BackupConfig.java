@@ -1,9 +1,9 @@
 package com.zegoggles.smssync.service;
 
+import android.support.annotation.NonNull;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 
@@ -17,13 +17,13 @@ public class BackupConfig {
     public final boolean debug;
     public final EnumSet<DataType> typesToBackup;
 
-    public BackupConfig(@NotNull BackupImapStore imapStore,
+    public BackupConfig(@NonNull BackupImapStore imapStore,
                         int currentTry,
                         boolean skip,
                         int maxItemsPerSync,
-                        @NotNull ContactGroup groupToBackup,
-                        @NotNull BackupType backupType,
-                        @NotNull EnumSet<DataType> typesToBackup,
+                        @NonNull ContactGroup groupToBackup,
+                        @NonNull BackupType backupType,
+                        @NonNull EnumSet<DataType> typesToBackup,
                         boolean debug) {
         if (imapStore == null) throw new IllegalArgumentException("need imapstore");
         if (typesToBackup == null || typesToBackup.isEmpty()) throw new IllegalArgumentException("need to specify types to backup");

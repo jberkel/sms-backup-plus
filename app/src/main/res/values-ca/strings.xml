@@ -79,7 +79,7 @@
   <string name="ui_authentication_label">Autentificació</string>
   <string name="ui_authentication_desc">Mètode d\'autentificació. El predeterminat de Gmail és \"XOAuth\".</string>
   <string name="plain">Text net</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
   <string name="ui_imap_folder_desc">Etiqueta de Gmail assignada als SMS.</string>

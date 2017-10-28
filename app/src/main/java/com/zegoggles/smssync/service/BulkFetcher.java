@@ -1,10 +1,10 @@
 package com.zegoggles.smssync.service;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -16,7 +16,7 @@ public class BulkFetcher {
         this.itemsFetcher = itemsFetcher;
     }
 
-    public @NotNull BackupCursors fetch(final @NotNull EnumSet<DataType> types,
+    public @NonNull BackupCursors fetch(final @NonNull EnumSet<DataType> types,
                                         final @Nullable ContactGroupIds groups,
                                         final int maxItems) {
 

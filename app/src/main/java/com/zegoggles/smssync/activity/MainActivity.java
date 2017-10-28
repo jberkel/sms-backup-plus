@@ -263,10 +263,6 @@ public class MainActivity extends PreferenceActivity {
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data + ")");
-        if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(this, R.string.ui_dialog_access_token_error_msg, LENGTH_LONG).show();
-            return;
-        }
 
         if (pgp_keys.handleOnActivityResult(requestCode, resultCode, data)) {
             // handled by OpenPgpKeyPreference
@@ -283,6 +279,11 @@ public class MainActivity extends PreferenceActivity {
                 break;
             }
             case REQUEST_WEB_AUTH: {
+                if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, R.string.ui_dialog_access_token_error_msg, LENGTH_LONG).show();
+                    return;
+                }
+
                 final String code = data.getStringExtra(OAuth2WebAuthActivity.EXTRA_CODE);
                 if (!TextUtils.isEmpty(code)) {
                     show(Dialogs.ACCESS_TOKEN);

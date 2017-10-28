@@ -14,7 +14,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 10
         versionCode 1557
-        versionName "1.5.11"
+        versionName "1.5.11-beta4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -66,13 +66,12 @@ dependencies {
     }
     compile 'com.google.android:support-v4:r7'
     compile 'com.squareup:otto:1.3.8'
-    compile 'com.intellij:annotations:12.0'
-    compile 'com.fsck.k9.mail:lib:0.0.1.75bb293'
+    compile 'com.github.jberkel:k-9:75bb293984'
     compile 'com.android.billingclient:billing:dp-1'
     compile 'org.sufficientlysecure:openpgp-api:12.0'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.4.2'
+    testCompile 'org.robolectric:robolectric:3.5'
     testCompile 'org.robolectric:shadows-httpclient:3.0'
     testCompile 'com.squareup:fest-android:1.0.5'
     testCompile 'org.mockito:mockito-all:1.10.17'

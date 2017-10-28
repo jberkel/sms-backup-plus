@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.FetchProfile;
@@ -25,7 +26,6 @@ import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         cancel(false);
     }
 
-    @NotNull protected RestoreState doInBackground(RestoreConfig... params) {
+    @NonNull protected RestoreState doInBackground(RestoreConfig... params) {
         if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
         RestoreConfig config = params[0];
 

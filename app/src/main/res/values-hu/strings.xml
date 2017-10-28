@@ -80,7 +80,7 @@
   <string name="ui_authentication_label">Hitelesítés</string>
   <string name="ui_authentication_desc">Hitelesítési metódus. Alapértelmezett érték Gmailhez: \"XOAuth\".</string>
   <string name="plain">Nyílt szöveg</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail címke</string>
   <string name="ui_imap_folder_desc">SMS-ek mentése az itt megadott címke alá.</string>

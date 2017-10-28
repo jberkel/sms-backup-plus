@@ -27,6 +27,8 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -39,8 +41,6 @@ import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -95,7 +95,7 @@ public abstract class ServiceBase extends Service {
         return START_NOT_STICKY;
     }
 
-    public abstract @NotNull State getState();
+    public abstract @NonNull State getState();
 
     public boolean isWorking() {
         return getState().isRunning();
@@ -189,7 +189,7 @@ public abstract class ServiceBase extends Service {
         return (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
-    protected @NotNull NotificationCompat.Builder createNotification(int resId) {
+    protected @NonNull NotificationCompat.Builder createNotification(int resId) {
         return new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setTicker(getString(resId))

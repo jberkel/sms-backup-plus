@@ -79,7 +79,7 @@
   <string name="ui_authentication_label">Authentication</string>
   <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOAuth\".</string>
   <string name="plain">Plain text</string>
-  <string name="xoauth">XOAuth</string>
+  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail label</string>
   <string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>

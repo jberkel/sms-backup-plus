@@ -23,6 +23,7 @@ import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Flag;
@@ -38,7 +39,6 @@ import com.zegoggles.smssync.preferences.MarkAsReadTypes;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.utils.ThreadHelper;
 import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -115,7 +115,7 @@ public class MessageConverter {
         }
     }
 
-    public @NotNull ConversionResult convertMessages(final Cursor cursor, DataType dataType)
+    public @NonNull ConversionResult convertMessages(final Cursor cursor, DataType dataType)
             throws MessagingException {
 
         final Map<String, String> msgMap = getMessageMap(cursor);
@@ -130,7 +130,7 @@ public class MessageConverter {
     }
 
 
-    public @NotNull ContentValues messageToContentValues(final Message message)
+    public @NonNull ContentValues messageToContentValues(final Message message)
             throws IOException, MessagingException {
         if (message == null) throw new MessagingException("message is null");
 
