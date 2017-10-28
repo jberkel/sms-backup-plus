@@ -16,6 +16,7 @@
 
 package com.zegoggles.smssync.service;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,7 +51,9 @@ public class BackupJobs {
 
     BackupJobs(Context context, Preferences preferences) {
         mPreferences = preferences;
-        firebaseJobDispatcher = new FirebaseJobDispatcher(GooglePlayServices.isAvailable(context) ? new GooglePlayDriver(context) : new AlarmManagerDriver());
+        firebaseJobDispatcher = new FirebaseJobDispatcher(GooglePlayServices.isAvailable(context) ?
+            new GooglePlayDriver(context) :
+            new AlarmManagerDriver(context));
     }
 
     public Job scheduleIncoming() {
@@ -79,7 +82,7 @@ public class BackupJobs {
         }
 
         if (force || (mPreferences.isEnableAutoSync() && inSeconds > 0)) {
-            final Job job = getJob(firebaseJobDispatcher, inSeconds, backupType);
+            final Job job = createJob(firebaseJobDispatcher.newJobBuilder(), inSeconds, backupType);
 
             final int result = firebaseJobDispatcher.schedule(job);
             if (result == SCHEDULE_RESULT_SUCCESS) {
@@ -96,12 +99,12 @@ public class BackupJobs {
         }
     }
 
-    @NonNull private Job getJob(FirebaseJobDispatcher dispatcher, int inSeconds, BackupType backupType) {
+    @NonNull private Job createJob(Job.Builder builder, int inSeconds, BackupType backupType) {
         final JobTrigger trigger = inSeconds <= 0 ? Trigger.NOW : Trigger.executionWindow(inSeconds, inSeconds);
         final int constraint = mPreferences.isWifiOnly() ? Constraint.ON_UNMETERED_NETWORK : Constraint.ON_ANY_NETWORK;
         final Bundle extras = new Bundle();
         extras.putString(BackupType.EXTRA, backupType.name());
-        return dispatcher.newJobBuilder()
+        return builder
             .setReplaceCurrent(false)
             .setTrigger(trigger)
             .setConstraints(constraint)
