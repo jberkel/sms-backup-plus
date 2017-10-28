@@ -25,6 +25,10 @@ import static com.zegoggles.smssync.App.TAG;
 
 
 public class SmsJobService extends JobService {
+    /**
+     * @return {@code true} if there is more work remaining in the worker thread, {@code false} if the
+     * job was completed.
+     */
     @Override
     public boolean onStartJob(JobParameters job) {
         if (LOCAL_LOGV) {
@@ -36,6 +40,9 @@ public class SmsJobService extends JobService {
         return true;
     }
 
+    /**
+     * @return true if the job should be retried
+     */
     @Override
     public boolean onStopJob(JobParameters job) {
         if (LOCAL_LOGV) {
