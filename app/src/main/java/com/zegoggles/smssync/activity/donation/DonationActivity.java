@@ -232,7 +232,10 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
                 } else {
                     l.userDonationState(resultCode == BILLING_UNAVAILABLE ? NOT_AVAILABLE : UNKNOWN);
                 }
-                helper.endConnection();
+                try {
+                    helper.endConnection();
+                } catch (Exception ignored) {
+                }
             }
             public void onBillingServiceDisconnected() {
             }
