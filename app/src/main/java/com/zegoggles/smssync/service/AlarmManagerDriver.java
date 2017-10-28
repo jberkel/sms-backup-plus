@@ -58,7 +58,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
             JobTrigger.ExecutionWindowTrigger executionWindowTrigger = (JobTrigger.ExecutionWindowTrigger) trigger;
 
             final long atTime = System.currentTimeMillis() + (executionWindowTrigger.getWindowStart() * 1000L);
-            final BackupType backupType = getBackupType(job.getTag());
+            final BackupType backupType = BackupType.fromName(job.getTag());
 
             alarmManager.set(RTC_WAKEUP, atTime, createPendingIntent(context, backupType));
             return SCHEDULE_RESULT_SUCCESS;
@@ -70,7 +70,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
     @Override
     public int cancel(String tag) {
         Log.d(TAG, "cancel " +tag);
-        alarmManager.cancel(createPendingIntent(context, getBackupType(tag)));
+        alarmManager.cancel(createPendingIntent(context, BackupType.fromName(tag)));
         return CANCEL_RESULT_SUCCESS;
     }
 
@@ -125,17 +125,5 @@ class AlarmManagerDriver implements Driver, JobValidator {
                 .putExtra(BackupType.EXTRA, backupType.name());
 
         return PendingIntent.getService(ctx, 0, intent, 0);
-    }
-
-    private static BackupType getBackupType(String tag) {
-        if (tag == null) {
-            return UNKNOWN;
-        } else {
-            try {
-                return BackupType.valueOf(tag);
-            } catch (IllegalArgumentException e) {
-                return UNKNOWN;
-            }
-        }
     }
 }

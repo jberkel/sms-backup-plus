@@ -21,15 +21,19 @@ public enum BackupType {
     public static BackupType fromIntent(Intent intent) {
         if (intent.hasExtra(EXTRA)) {
             final String name = intent.getStringExtra(EXTRA);
-            for (BackupType type : values()) {
-                if (type.name().equals(name)) {
-                    return type;
-                }
-            }
-            return UNKNOWN;
+            return fromName(name);
         } else {
             return UNKNOWN;
         }
+    }
+
+    public static BackupType fromName(String name) {
+        for (BackupType type : values()) {
+            if (type.name().equals(name)) {
+                return type;
+            }
+        }
+        return UNKNOWN;
     }
 
     public boolean isBackground() {
