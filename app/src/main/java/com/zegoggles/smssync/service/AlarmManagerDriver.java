@@ -35,6 +35,7 @@ import static com.firebase.jobdispatcher.FirebaseJobDispatcher.CANCEL_RESULT_SUC
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_UNSUPPORTED_TRIGGER;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.service.BackupType.UNKNOWN;
 
 /**
  * Simple driver to emulate old AlarmManager backup scheduling behaviour.
@@ -43,7 +44,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
     private final AlarmManager alarmManager;
     private final Context context;
 
-    public AlarmManagerDriver(Context context) {
+    AlarmManagerDriver(Context context) {
         this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         this.context = context.getApplicationContext();
     }
@@ -57,7 +58,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
             JobTrigger.ExecutionWindowTrigger executionWindowTrigger = (JobTrigger.ExecutionWindowTrigger) trigger;
 
             final long atTime = System.currentTimeMillis() + (executionWindowTrigger.getWindowStart() * 1000L);
-            final BackupType backupType = BackupType.valueOf(job.getTag());
+            final BackupType backupType = getBackupType(job.getTag());
 
             alarmManager.set(RTC_WAKEUP, atTime, createPendingIntent(context, backupType));
             return SCHEDULE_RESULT_SUCCESS;
@@ -69,7 +70,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
     @Override
     public int cancel(String tag) {
         Log.d(TAG, "cancel " +tag);
-        alarmManager.cancel(createPendingIntent(context, BackupType.valueOf(tag)));
+        alarmManager.cancel(createPendingIntent(context, getBackupType(tag)));
         return CANCEL_RESULT_SUCCESS;
     }
 
@@ -78,7 +79,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
         Log.d(TAG, "cancelAll");
         // Matching intents based on Intent#filterEquals():
         // That is, if their action, data, type, class, and categories are the same.
-        alarmManager.cancel(createPendingIntent(context, BackupType.UNKNOWN));
+        alarmManager.cancel(createPendingIntent(context, UNKNOWN));
         return CANCEL_RESULT_SUCCESS;
     }
 
@@ -124,5 +125,17 @@ class AlarmManagerDriver implements Driver, JobValidator {
                 .putExtra(BackupType.EXTRA, backupType.name());
 
         return PendingIntent.getService(ctx, 0, intent, 0);
+    }
+
+    private static BackupType getBackupType(String tag) {
+        if (tag == null) {
+            return UNKNOWN;
+        } else {
+            try {
+                return BackupType.valueOf(tag);
+            } catch (IllegalArgumentException e) {
+                return UNKNOWN;
+            }
+        }
     }
 }
