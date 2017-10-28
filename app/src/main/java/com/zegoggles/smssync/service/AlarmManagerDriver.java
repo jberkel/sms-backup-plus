@@ -123,7 +123,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
     }
 
     private static long scheduleTime(JobTrigger trigger) {
-        if (trigger instanceof  JobTrigger.ImmediateTrigger) {
+        if (trigger instanceof JobTrigger.ImmediateTrigger) {
             return System.currentTimeMillis();
         } else if (trigger instanceof JobTrigger.ExecutionWindowTrigger) {
             JobTrigger.ExecutionWindowTrigger executionWindowTrigger = (JobTrigger.ExecutionWindowTrigger) trigger;
