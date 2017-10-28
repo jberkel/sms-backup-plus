@@ -90,10 +90,11 @@ public class BackupJobs {
                 if (LOCAL_LOGV) {
                     Log.v(TAG, "Scheduled backup job " + job + " due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
                 }
+                return job;
             } else {
                 Log.w(TAG, "Error scheduling job: "+result);
+                return null;
             }
-            return job;
         } else {
             if (LOCAL_LOGV) Log.v(TAG, "Not scheduling backup because auto sync is disabled.");
             return null;
