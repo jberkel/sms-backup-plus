@@ -52,7 +52,8 @@ public class BackupJobs {
 
     BackupJobs(Context context, Preferences preferences) {
         mPreferences = preferences;
-        firebaseJobDispatcher = new FirebaseJobDispatcher(GooglePlayServices.isAvailable(context) ?
+        firebaseJobDispatcher = new FirebaseJobDispatcher(
+            !mPreferences.isUseOldScheduler() && GooglePlayServices.isAvailable(context) ?
             new GooglePlayDriver(context) :
             new AlarmManagerDriver(context));
     }

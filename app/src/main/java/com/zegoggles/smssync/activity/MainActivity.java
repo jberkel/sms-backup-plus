@@ -58,7 +58,6 @@ import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
-import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;

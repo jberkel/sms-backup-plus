@@ -312,6 +312,9 @@
   <string name="pref_app_log_debug">Extra debug information</string>
   <string name="pref_app_log_debug_summary">Enables extra debug logging in sync log</string>
 
+  <string name="pref_use_old_scheduler">Old backup scheduler</string>
+  <string name="pref_use_old_scheduler_summary">Force use of old backup scheduler</string>
+
   <string name="source_incoming">incoming</string>
   <string name="source_regular">regular</string>
   <string name="source_3rd_party">3rd party</string>

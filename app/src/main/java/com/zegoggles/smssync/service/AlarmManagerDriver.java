@@ -51,7 +51,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
 
     @Override
     public int schedule(Job job) {
-        Log.d(TAG, "schedule " +job);
+        Log.d(TAG, "AlarmManagerDriver: schedule " +job);
 
         final JobTrigger trigger = job.getTrigger();
         if (trigger instanceof JobTrigger.ExecutionWindowTrigger) {
@@ -69,14 +69,14 @@ class AlarmManagerDriver implements Driver, JobValidator {
 
     @Override
     public int cancel(String tag) {
-        Log.d(TAG, "cancel " +tag);
+        Log.d(TAG, "AlarmManagerDriver: cancel " +tag);
         alarmManager.cancel(createPendingIntent(context, BackupType.fromName(tag)));
         return CANCEL_RESULT_SUCCESS;
     }
 
     @Override
     public int cancelAll() {
-        Log.d(TAG, "cancelAll");
+        Log.d(TAG, "AlarmManagerDriver: cancelAll");
         // Matching intents based on Intent#filterEquals():
         // That is, if their action, data, type, class, and categories are the same.
         alarmManager.cancel(createPendingIntent(context, UNKNOWN));
@@ -85,7 +85,6 @@ class AlarmManagerDriver implements Driver, JobValidator {
 
     @Override
     public JobValidator getValidator() {
-        Log.d(TAG, "getValidator");
         return this;
     }
 
@@ -96,7 +95,6 @@ class AlarmManagerDriver implements Driver, JobValidator {
 
     @Override
     public List<String> validate(JobParameters jobParameters) {
-        Log.d(TAG, "validate: "+jobParameters);
         return null;
     }
 
@@ -105,7 +103,6 @@ class AlarmManagerDriver implements Driver, JobValidator {
      */
     @Override
     public List<String> validate(JobTrigger jobTrigger) {
-        Log.d(TAG, "validate "+jobTrigger);
         return null;
     }
 
@@ -114,7 +111,6 @@ class AlarmManagerDriver implements Driver, JobValidator {
      */
     @Override
     public List<String> validate(RetryStrategy retryStrategy) {
-        Log.d(TAG, "validate "+retryStrategy);
         return null;
     }
 
