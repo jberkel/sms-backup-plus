@@ -18,8 +18,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(RobolectricTestRunner.class)
 public class SmsBroadcastReceiverTest {
     Context context;
-    @Mock
-    BackupJobs backupJobs;
+    @Mock BackupJobs backupJobs;
     @Mock Preferences preferences;
     @Mock AuthPreferences authPreferences;
     SmsBroadcastReceiver receiver;
