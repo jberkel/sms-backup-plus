@@ -421,7 +421,7 @@ repository and send me a [pull request][].
   * [Felix Knecht](https://github.com/dicer) - Call log backup code
   * [Michael Scharfstein](https://github.com/smike) - Call log calendar ICS support
   * [k9mail](https://github.com/k9mail/k-9/) IMAP library, with some modifications ([k9mail/sms-backup-plus](https://github.com/jberkel/k-9/tree/sms-backup-plus))
-  * [signpost](https://github.com/kaeppler/signpost) Signpost OAuth library
+  * [signpost](https://github.com/mttkay/signpost) Natthias Käppler, Signpost OAuth library
   * Shimon Simon (new icon designs)
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
   * [skolima](https://github.com/skolima) - Polish translation
