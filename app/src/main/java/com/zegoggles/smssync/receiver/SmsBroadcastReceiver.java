@@ -44,7 +44,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     private void bootup(Context context) {
         if (shouldSchedule(context)) {
-            getAlarms(context).scheduleBootup();
+            getBackupJobs(context).scheduleBootup();
         } else {
             Log.i(TAG, "Received bootup but not set up to back up.");
         }
@@ -52,7 +52,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     private void incomingSMS(Context context) {
         if (shouldSchedule(context)) {
-            getAlarms(context).scheduleIncoming();
+            getBackupJobs(context).scheduleIncoming();
         } else {
             Log.i(TAG, "Received SMS but not set up to back up.");
         }
@@ -87,7 +87,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
-    protected BackupJobs getAlarms(Context context) {
+    protected BackupJobs getBackupJobs(Context context) {
         return new BackupJobs(context);
     }
 

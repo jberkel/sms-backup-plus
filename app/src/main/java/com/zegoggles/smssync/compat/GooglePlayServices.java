@@ -14,7 +14,7 @@ import static com.zegoggles.smssync.App.TAG;
 public class GooglePlayServices {
     private static final String COM_GOOGLE_ANDROID_GMS = "com.google.android.gms";
     private static final String COM_ANDROID_VENDING = "com.android.vending";
-    private static final int MIN_GMS_VERSION = 9877000; // GMS 9.8.0
+    private static final int MIN_GMS_VERSION = 9256030; // 9256030  9.2.56 (030-124593566)
 
     @SuppressLint("PackageManagerGetSignatures")
     public static boolean isAvailable(Context context) {
