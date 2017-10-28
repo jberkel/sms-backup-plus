@@ -15,7 +15,6 @@
 package com.zegoggles.smssync.service;
 
 import android.content.Intent;
-
 import android.util.Log;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
@@ -26,6 +25,15 @@ import static com.zegoggles.smssync.App.TAG;
 
 public class SmsJobService extends JobService {
     /**
+     * The entry point to your Job. Implementations should offload work to another thread of execution
+     * as soon as possible because this runs on the main thread. If work was offloaded, call {@link
+     * JobService#jobFinished(JobParameters, boolean)} to notify the scheduling service that the work
+     * is completed.
+     *
+     * <p>If a job with the same service and tag was rescheduled during execution {@link
+     * #onStopJob(JobParameters)} will be called and the wakelock will be released. Please
+     * make sure that all reschedule requests happen at the end of the job.
+     *
      * @return {@code true} if there is more work remaining in the worker thread, {@code false} if the
      * job was completed.
      */

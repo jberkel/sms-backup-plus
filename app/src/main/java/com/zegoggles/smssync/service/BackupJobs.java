@@ -16,7 +16,6 @@
 
 package com.zegoggles.smssync.service;
 
-import android.app.AlarmManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
