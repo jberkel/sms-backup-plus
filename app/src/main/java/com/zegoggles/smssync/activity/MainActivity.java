@@ -277,10 +277,8 @@ public class MainActivity extends PreferenceActivity {
         if (LOCAL_LOGV) {
             Log.v(TAG, "autoBackupChanged("+event+")");
         }
-        final ComponentName componentName = new ComponentName(MainActivity.this, SmsBroadcastReceiver.class);
-
         getPackageManager().setComponentEnabledSetting(
-                componentName,
+                new ComponentName(this, SmsBroadcastReceiver.class),
                 event.autoBackupEnabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
                 DONT_KILL_APP);
 
