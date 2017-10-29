@@ -34,6 +34,7 @@ import static android.app.AlarmManager.RTC_WAKEUP;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.CANCEL_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_UNSUPPORTED_TRIGGER;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.UNKNOWN;
 
@@ -51,7 +52,9 @@ class AlarmManagerDriver implements Driver, JobValidator {
 
     @Override
     public int schedule(Job job) {
-        Log.d(TAG, "AlarmManagerDriver: schedule " +job);
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "AlarmManagerDriver: schedule " +job);
+        }
 
         final JobTrigger trigger = job.getTrigger();
         final long atTime = scheduleTime(trigger);
@@ -61,20 +64,25 @@ class AlarmManagerDriver implements Driver, JobValidator {
 
             return SCHEDULE_RESULT_SUCCESS;
         } else {
+            Log.w(TAG, "unsupported trigger for job "+job);
             return SCHEDULE_RESULT_UNSUPPORTED_TRIGGER;
         }
     }
 
     @Override
     public int cancel(String tag) {
-        Log.d(TAG, "AlarmManagerDriver: cancel " +tag);
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "AlarmManagerDriver: cancel " +tag);
+        }
         alarmManager.cancel(createPendingIntent(context, BackupType.fromName(tag)));
         return CANCEL_RESULT_SUCCESS;
     }
 
     @Override
     public int cancelAll() {
-        Log.d(TAG, "AlarmManagerDriver: cancelAll");
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "AlarmManagerDriver: cancelAll");
+        }
         // Matching intents based on Intent#filterEquals():
         // That is, if their action, data, type, class, and categories are the same.
         alarmManager.cancel(createPendingIntent(context, UNKNOWN));

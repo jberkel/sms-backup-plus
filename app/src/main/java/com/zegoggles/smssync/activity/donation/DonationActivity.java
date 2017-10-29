@@ -34,6 +34,7 @@ import static com.android.billingclient.api.BillingClient.BillingResponse.ITEM_U
 import static com.android.billingclient.api.BillingClient.BillingResponse.OK;
 import static com.android.billingclient.api.BillingClient.BillingResponse.USER_CANCELED;
 import static com.android.billingclient.api.BillingClient.SkuType.INAPP;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.Consts.Billing.ALL_SKUS;
 import static com.zegoggles.smssync.Consts.Billing.DONATION_PREFIX;
@@ -219,13 +220,17 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
         final BillingClient helper = BillingClient.newBuilder(c).setListener(new PurchasesUpdatedListener() {
             @Override
             public void onPurchasesUpdated(int responseCode, List<Purchase> purchases) {
-                Log.d(TAG, "onPurchasesUpdated("+responseCode+")");
+                if (LOCAL_LOGV) {
+                    Log.v(TAG, "onPurchasesUpdated(" + responseCode + ")");
+                }
             }
         }).build();
         helper.startConnection(new BillingClientStateListener() {
             @Override
-            public void onBillingSetupFinished(int resultCode) {
-                Log.d(TAG, "checkUserHasDonated: onBillingSetupFinished("+resultCode+")");
+            public void onBillingSetupFinished(@BillingResponse int resultCode) {
+                if (LOCAL_LOGV) {
+                    Log.v(TAG, "checkUserHasDonated: onBillingSetupFinished("+resultCode+")");
+                }
                 if (resultCode == OK) {
                     Purchase.PurchasesResult result = helper.queryPurchases(INAPP);
                     if (result.getResponseCode() == OK) {
