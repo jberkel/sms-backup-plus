@@ -23,6 +23,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
@@ -44,6 +46,7 @@ import com.zegoggles.smssync.utils.AppLog;
 
 import java.util.Locale;
 
+import static android.net.ConnectivityManager.TYPE_WIFI;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static java.util.Locale.ENGLISH;
@@ -206,10 +209,29 @@ public abstract class ServiceBase extends Service {
     }
 
     protected boolean isConnectedViaWifi() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return isConnectedViaWifi_SDK21();
+        } else {
+            return isConnectedViaWifi_pre_SDK21();
+        }
+    }
+
+    private boolean isConnectedViaWifi_pre_SDK21() {
         WifiManager wifiManager = getWifiManager();
         return (wifiManager != null &&
                 wifiManager.isWifiEnabled() &&
-                getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null &&
-                getConnectivityManager().getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected());
+                getConnectivityManager().getNetworkInfo(TYPE_WIFI) != null &&
+                getConnectivityManager().getNetworkInfo(TYPE_WIFI).isConnected());
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private boolean isConnectedViaWifi_SDK21() {
+        for (Network network : getConnectivityManager().getAllNetworks()) {
+            final NetworkInfo networkInfo = getConnectivityManager().getNetworkInfo(network);
+            if (networkInfo.getType() == TYPE_WIFI && networkInfo.isConnectedOrConnecting()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
