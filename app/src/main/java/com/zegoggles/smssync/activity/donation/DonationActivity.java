@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+import android.support.annotation.Nullable;
 import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClient.BillingResponse;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.Purchase;
@@ -51,7 +53,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
         billingClient = BillingClient.newBuilder(this).setListener(this).build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
-            public void onBillingSetupFinished(int resultCode) {
+            public void onBillingSetupFinished(@BillingResponse int resultCode) {
                 Log.d(TAG, "onBillingSetupFinished(" + resultCode + ")" + Thread.currentThread().getName());
                 switch (resultCode) {
                     case OK:
@@ -81,7 +83,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
     }
 
     @Override
-    public void onSkuDetailsResponse(int responseCode, List<SkuDetails> details) {
+    public void onSkuDetailsResponse(@BillingResponse int responseCode, List<SkuDetails> details) {
         log("onSkuDetailsResponse(" + responseCode + ", " + details + ")");
 
         if (responseCode != OK) {
@@ -167,7 +169,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
     }
 
     @Override
-    public void onPurchasesUpdated(int responseCode, List<Purchase> purchases) {
+    public void onPurchasesUpdated(@BillingResponse int responseCode, @Nullable List<Purchase> purchases) {
         log("onIabPurchaseFinished(" + responseCode + ", " + purchases);
         if (responseCode == OK) {
             Toast.makeText(this,
