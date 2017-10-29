@@ -14,12 +14,14 @@ import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.donation.DonationActivity.DonationStatusListener.State;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -46,7 +48,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        billingClient = new BillingClient.Builder(this).setListener(this).build();
+        billingClient = BillingClient.newBuilder(this).setListener(this).build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(int resultCode) {
@@ -79,16 +81,16 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
     }
 
     @Override
-    public void onSkuDetailsResponse(SkuDetails.SkuDetailsResult result) {
-        log("onQueryInventoryFinished(" + result + ", " + result + ")");
+    public void onSkuDetailsResponse(int responseCode, List<SkuDetails> details) {
+        log("onSkuDetailsResponse(" + responseCode + ", " + details + ")");
 
-        if (result.getResponseCode() != OK) {
-            Log.w(TAG, "failed to query inventory: " + result);
+        if (responseCode != OK) {
+            Log.w(TAG, "failed to query inventory: " + responseCode);
             return;
         }
 
         List<SkuDetails> skuDetailsList = new ArrayList<SkuDetails>();
-        for (SkuDetails d : result.getSkuDetailsList()) {
+        for (SkuDetails d : details) {
             if (d.getSku().startsWith(DONATION_PREFIX)) {
                 skuDetailsList.add(d);
             }
@@ -102,9 +104,10 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
     }
 
     private void queryAvailableSkus() {
-        List<String> moreSkus = new ArrayList<String>();
-        Collections.addAll(moreSkus, ALL_SKUS);
-        billingClient.querySkuDetailsAsync(INAPP, moreSkus, DonationActivity.this);
+        billingClient.querySkuDetailsAsync(SkuDetailsParams.newBuilder()
+                .setType(INAPP)
+                .setSkusList(Arrays.asList(ALL_SKUS))
+                .build(), DonationActivity.this);
     }
 
     private void showSelectDialog(List<SkuDetails> skuDetails) {
@@ -141,7 +144,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
                 } else {
                     selectedSku = skus.get(which).getSku();
                 }
-                billingClient.launchBillingFlow(DonationActivity.this,  new BillingFlowParams.Builder()
+                billingClient.launchBillingFlow(DonationActivity.this, BillingFlowParams.newBuilder()
                         .setType(INAPP)
                         .setSku(selectedSku)
                         .build()
@@ -211,7 +214,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
     }
 
     public static void checkUserHasDonated(Context c, final DonationStatusListener l) {
-        final BillingClient helper = new BillingClient.Builder(c).setListener(new PurchasesUpdatedListener() {
+        final BillingClient helper = BillingClient.newBuilder(c).setListener(new PurchasesUpdatedListener() {
             @Override
             public void onPurchasesUpdated(int responseCode, List<Purchase> purchases) {
                 Log.d(TAG, "onPurchasesUpdated("+responseCode+")");
