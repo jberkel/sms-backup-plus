@@ -82,6 +82,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.widget.Toast.LENGTH_LONG;
+import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.MMS;
@@ -250,10 +251,14 @@ public class MainActivity extends PreferenceActivity {
                 break;
             }
             case REQUEST_PICK_ACCOUNT: {
-                if (AccountManagerAuthActivity.ACTION_ADD_ACCOUNT.equals(data.getAction())) {
-                    handleAccountManagerAuth(data);
-                } else if (AccountManagerAuthActivity.ACTION_FALLBACKAUTH.equals(data.getAction())) {
-                    handleFallbackAuth();
+                if (resultCode == RESULT_OK && data != null) {
+                    if (AccountManagerAuthActivity.ACTION_ADD_ACCOUNT.equals(data.getAction())) {
+                        handleAccountManagerAuth(data);
+                    } else if (AccountManagerAuthActivity.ACTION_FALLBACKAUTH.equals(data.getAction())) {
+                        handleFallbackAuth();
+                    }
+                } else if (LOCAL_LOGV) {
+                    Log.v(TAG, "request canceled, result="+resultCode);
                 }
                 break;
             }
