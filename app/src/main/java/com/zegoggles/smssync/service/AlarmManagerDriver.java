@@ -57,8 +57,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
         final long atTime = scheduleTime(trigger);
 
         if (atTime > 0) {
-            final BackupType backupType = BackupType.fromName(job.getTag());
-            alarmManager.set(RTC_WAKEUP, atTime, createPendingIntent(context, backupType));
+            alarmManager.set(RTC_WAKEUP, atTime, createPendingIntent(context, BackupType.fromName(job.getTag())));
 
             return SCHEDULE_RESULT_SUCCESS;
         } else {

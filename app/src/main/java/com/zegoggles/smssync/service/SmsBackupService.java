@@ -73,6 +73,7 @@ public class SmsBackupService extends ServiceBase {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LOCAL_LOGV) Log.v(TAG, "SmsBackupService#onCreate");
         service = this;
     }
 

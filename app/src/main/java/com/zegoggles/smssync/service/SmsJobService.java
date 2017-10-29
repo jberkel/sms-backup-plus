@@ -18,12 +18,32 @@ import android.content.Intent;
 import android.util.Log;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
+import com.squareup.otto.Subscribe;
+import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.service.state.BackupState;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 
 public class SmsJobService extends JobService {
+    private Map<String, JobParameters> jobs = new HashMap<String, JobParameters>();
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        App.bus.register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        App.bus.unregister(this);
+    }
+
     /**
      * The entry point to your Job. Implementations should offload work to another thread of execution
      * as soon as possible because this runs on the main thread. If work was offloaded, call {@link
@@ -38,13 +58,12 @@ public class SmsJobService extends JobService {
      * job was completed.
      */
     @Override
-    public boolean onStartJob(JobParameters job) {
+    public boolean onStartJob(JobParameters jobParameters) {
         if (LOCAL_LOGV) {
-            Log.v(TAG, "onStartJob(" + job + ", extras=" + job.getExtras() + ")");
+            Log.v(TAG, "onStartJob(" + jobParameters + ", extras=" + jobParameters.getExtras() + ")");
         }
-        final Intent intent = new Intent(this, SmsBackupService.class);
-        intent.putExtras(job.getExtras());
-        startService(intent);
+        startService(new Intent(this, SmsBackupService.class).putExtras(jobParameters.getExtras()));
+        jobs.put(jobParameters.getTag(), jobParameters);
         return true;
     }
 
@@ -52,10 +71,25 @@ public class SmsJobService extends JobService {
      * @return true if the job should be retried
      */
     @Override
-    public boolean onStopJob(JobParameters job) {
+    public boolean onStopJob(JobParameters jobParameters) {
         if (LOCAL_LOGV) {
-            Log.v(TAG, "onStopJob(" + job + ", extras=" + job.getExtras() + ")");
+            Log.v(TAG, "onStopJob(" + jobParameters + ", extras=" + jobParameters.getExtras() + ")");
         }
         return false;
+    }
+
+    @Subscribe
+    public void backupStateChanged(BackupState state) {
+        if (!state.isFinished()) {
+            return;
+        }
+
+        final JobParameters jobParameters = jobs.remove(state.backupType.name());
+        if (jobParameters != null) {
+            Log.v(TAG, "jobFinished("+jobParameters+")");
+            jobFinished(jobParameters, false);
+        } else {
+            Log.w(TAG, "unknown job for state "+state);
+        }
     }
 }
