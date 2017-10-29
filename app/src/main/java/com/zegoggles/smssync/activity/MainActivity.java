@@ -273,6 +273,24 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
+    @Subscribe public void autoBackupChanged(final AutoBackupChangedEvent event) {
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "autoBackupChanged("+event+")");
+        }
+        final ComponentName componentName = new ComponentName(MainActivity.this, SmsBroadcastReceiver.class);
+
+        getPackageManager().setComponentEnabledSetting(
+                componentName,
+                event.autoBackupEnabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
+                DONT_KILL_APP);
+
+        if (event.autoBackupEnabled) {
+            getBackupJobs().scheduleFirstRegular();
+        } else {
+            getBackupJobs().cancel();
+        }
+    }
+
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
         dismiss(Dialogs.ACCESS_TOKEN);
         if (event.valid()) {
@@ -376,7 +394,7 @@ public class MainActivity extends PreferenceActivity {
                 WIFI_ONLY.key);
     }
 
-    private void addSummaryListener(final Runnable r, String... prefs) {
+    private void addSummaryListener(final Runnable runnable, String... prefs) {
         for (String p : prefs) {
             findPreference(p).setOnPreferenceChangeListener(
                     new OnPreferenceChangeListener() {
@@ -384,7 +402,7 @@ public class MainActivity extends PreferenceActivity {
                             new Handler().post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    r.run();
+                                    runnable.run();
                                     onContentChanged();
                                 }
                             });
@@ -793,7 +811,7 @@ public class MainActivity extends PreferenceActivity {
         findPreference(ENABLE_AUTO_BACKUP.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        autoBackupWillChange((Boolean) newValue);
+                        App.bus.post(new AutoBackupChangedEvent((Boolean) newValue));
                         return true;
                     }
                 });
@@ -884,22 +902,6 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    private void autoBackupWillChange(boolean autoBackupEnabled) {
-        if (LOCAL_LOGV) {
-            Log.v(TAG, "autoBackupWillChange("+autoBackupEnabled+")");
-        }
-        final ComponentName componentName = new ComponentName(MainActivity.this, SmsBroadcastReceiver.class);
-
-        getPackageManager().setComponentEnabledSetting(
-                componentName,
-                autoBackupEnabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
-                DONT_KILL_APP);
-
-        if (!autoBackupEnabled) {
-            getBackupJobs().cancel();
-        }
-    }
-
     private BackupJobs getBackupJobs() {
         return new BackupJobs(this);
     }
@@ -986,6 +988,14 @@ public class MainActivity extends PreferenceActivity {
     private void checkDefaultSmsApp() {
         if (isSmsBackupDefaultSmsApp() && !SmsRestoreService.isServiceWorking()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
+        }
+    }
+
+    public static class AutoBackupChangedEvent {
+        final boolean autoBackupEnabled;
+
+        AutoBackupChangedEvent(boolean autoBackupEnabled) {
+            this.autoBackupEnabled = autoBackupEnabled;
         }
     }
 }

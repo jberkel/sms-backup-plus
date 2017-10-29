@@ -31,6 +31,7 @@ import com.firebase.jobdispatcher.Trigger;
 import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.preferences.Preferences;
 
+import static com.firebase.jobdispatcher.FirebaseJobDispatcher.CANCEL_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -61,6 +62,10 @@ public class BackupJobs {
         return schedule(mPreferences.getIncomingTimeoutSecs(), INCOMING, false);
     }
 
+    public Job scheduleFirstRegular() {
+        return schedule(mPreferences.getRegularTimeoutSecs(), REGULAR, true);
+    }
+
     public Job scheduleRegular() {
         return schedule(mPreferences.getRegularTimeoutSecs(), REGULAR, false);
     }
@@ -74,7 +79,14 @@ public class BackupJobs {
     }
 
     public void cancel() {
-        firebaseJobDispatcher.cancelAll();
+        final int result = firebaseJobDispatcher.cancelAll();
+        if (result == CANCEL_RESULT_SUCCESS) {
+            if (LOCAL_LOGV) {
+                Log.v(TAG, "cancel()");
+            }
+        } else {
+            Log.w(TAG, "unable to cancel jobs: "+result);
+        }
     }
 
     @Nullable private Job schedule(int inSeconds, BackupType backupType, boolean force) {
