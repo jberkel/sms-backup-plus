@@ -26,6 +26,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
+
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.JobTrigger;
 import com.fsck.k9.mail.MessagingException;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
@@ -70,6 +73,7 @@ public class SmsBackupService extends ServiceBase {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LOCAL_LOGV) Log.v(TAG, "SmsBackupService#onCreate");
         service = this;
     }
 
@@ -262,10 +266,12 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void scheduleNextBackup() {
-        final long nextSync = getAlarms().scheduleRegularBackup();
-        if (nextSync >= 0) {
+        final Job nextSync = getBackupJobs().scheduleRegular();
+        if (nextSync != null) {
+            JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();
+            Date date = new Date(System.currentTimeMillis() + (trigger.getWindowStart() * 1000));
             appLog(R.string.app_log_scheduled_next_sync,
-                    DateFormat.format("kk:mm", new Date(nextSync)));
+                    DateFormat.format("kk:mm", date));
         } else {
             appLog(R.string.app_log_no_next_sync);
         }
@@ -285,8 +291,8 @@ public class SmsBackupService extends ServiceBase {
         getNotifier().notify(notificationId, n);
     }
 
-    protected Alarms getAlarms() {
-        return new Alarms(this);
+    protected BackupJobs getBackupJobs() {
+        return new BackupJobs(this);
     }
 
     public static boolean isServiceWorking() {

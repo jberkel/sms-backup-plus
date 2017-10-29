@@ -46,6 +46,7 @@ import java.util.Locale;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static java.util.Locale.ENGLISH;
 
 public abstract class ServiceBase extends Service {
     @Nullable private PowerManager.WakeLock mWakeLock;
@@ -172,8 +173,9 @@ public abstract class ServiceBase extends Service {
 
     protected void appLogDebug(String message, Object... args) {
         if (getPreferences().isAppLogDebug() && appLog != null) {
-            String formatted = String.format(Locale.ENGLISH, message, args);
-            appLog.append(formatted);
+            appLog.append(String.format(ENGLISH, message, args));
+        } else if (LOCAL_LOGV) {
+            Log.v(App.TAG, "AppLog: "+String.format(ENGLISH, message, args));
         }
     }
 

@@ -76,19 +76,24 @@
 
         <service android:name=".service.SmsBackupService" android:exported="false"/>
         <service android:name=".service.SmsRestoreService" android:exported="false"/>
+        <service android:name=".service.SmsJobService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
 
         <receiver android:name=".receiver.SmsBroadcastReceiver" android:enabled="true">
-          <intent-filter>
-            <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-            <action android:name="android.intent.action.BOOT_COMPLETED"/>
-          </intent-filter>
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
         </receiver>
 
         <receiver android:name=".receiver.BackupBroadcastReceiver" android:enabled="true">
-          <intent-filter>
-            <action android:name="com.zegoggles.smssync.BACKUP"/>
-            <category android:name="android.intent.category.DEFAULT"/>
-          </intent-filter>
+            <intent-filter>
+                <action android:name="com.zegoggles.smssync.BACKUP"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </receiver>
 
         <!-- BroadcastReceiver that listens for incoming SMS messages -->
@@ -139,6 +144,5 @@
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAI15zt2oJAvxMu4s5SaHisDyYsduKd2jq_-XnAug" />
-
     </application>
 </manifest>

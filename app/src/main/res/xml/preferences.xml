@@ -9,6 +9,7 @@
 
     <CheckBoxPreference
             android:key="enable_auto_sync"
+            android:dependency="connected"
             android:title="@string/ui_enable_auto_sync_label"
             android:summary="@string/ui_enable_auto_sync_desc"
             android:persistent="true"
@@ -16,7 +17,8 @@
 
     <PreferenceScreen
             android:key="auto_backup_settings_screen"
-            android:title="@string/ui_auto_backup_settings_label">
+            android:title="@string/ui_auto_backup_settings_label"
+            android:dependency="enable_auto_sync">
 
         <ListPreference
                 android:key="auto_backup_schedule"
@@ -47,6 +49,13 @@
                 android:key="third_party_integration"
                 android:title="@string/ui_third_party_integration_label"
                 android:summary="@string/ui_third_party_integration_desc"
+                android:persistent="true"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="use_old_scheduler"
+                android:title="@string/pref_use_old_scheduler"
+                android:summary="@string/pref_use_old_scheduler_summary"
                 android:persistent="true"
                 android:defaultValue="false"/>
     </PreferenceScreen>

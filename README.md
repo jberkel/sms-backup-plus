@@ -417,14 +417,14 @@ repository and send me a [pull request][].
 ## <a name="credits">Credits</a>
 
   * [Christoph Studer](http://studer.tv/) Original author of SMS Backup
-  * [Ben Dodson](http://github.com/bjdodson) - Contacts 2.0 / MMS support
-  * [Felix Knecht](http://github.com/dicer) - Call log backup code
-  * [Michael Scharfstein](http://github.com/smike) - Call log calendar ICS support
-  * [k9mail](http://code.google.com/p/k9mail/) IMAP library, with some modifications ([k9mail/sms-backup-plus](https://github.com/jberkel/k-9/tree/sms-backup-plus))
-  * [signpost](http://github.com/kaeppler/signpost) Signpost OAuth library
+  * [Ben Dodson](https://github.com/bjdodson) - Contacts 2.0 / MMS support
+  * [Felix Knecht](https://github.com/dicer) - Call log backup code
+  * [Michael Scharfstein](https://github.com/smike) - Call log calendar ICS support
+  * [k9mail](https://github.com/k9mail/k-9/) IMAP library, with some modifications ([k9mail/sms-backup-plus](https://github.com/jberkel/k-9/tree/sms-backup-plus))
+  * [signpost](https://github.com/mttkay/signpost) Natthias Käppler, Signpost OAuth library
   * Shimon Simon (new icon designs)
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
-  * [skolima](http://github.com/skolima) - Polish translation
+  * [skolima](https://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
   * Gabriele Ravanetti / [Patryk Rzucidlo](http://www.ptkdev.it/) / [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
   * Harun Sahin - Turkish translation
@@ -438,7 +438,7 @@ repository and send me a [pull request][].
   * Yunsu Choi - Korean translation
   * Javier Pico - Galician translation
   * Ferran Rius - Catalan translation
-  * Mads Andreasen - Danish translation
+  * [Mads Andreasen](https://github.com/MadsAndreasen) - Danish translation, initial JobDispatcher code
   * sHa - Ukrainian translation
 
 ## <a name="screenhots">Screenshots</a>

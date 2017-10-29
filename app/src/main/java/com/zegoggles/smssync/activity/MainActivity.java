@@ -66,7 +66,7 @@ import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.BackupManagerWrapper;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
-import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.service.BackupJobs;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
@@ -314,7 +314,7 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    protected String getEnabledBackupSummary() {
+    String getEnabledBackupSummary() {
         final List<String> enabled = new ArrayList<String>();
         for (DataType dataType : DataType.enabled(preferences.preferences)) {
             enabled.add(getString(dataType.resId));
@@ -795,7 +795,7 @@ public class MainActivity extends PreferenceActivity {
                                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                                 PackageManager.DONT_KILL_APP);
 
-                        if (!isEnabled) new Alarms(MainActivity.this).cancel();
+                        if (!isEnabled) new BackupJobs(MainActivity.this).cancel();
                         return true;
                     }
                 });
