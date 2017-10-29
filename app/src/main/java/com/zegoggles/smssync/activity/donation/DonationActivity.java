@@ -213,11 +213,11 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
             UNKNOWN,
             NOT_AVAILABLE
         }
-        void userDonationState(State s);
+        void userDonationState(State state);
     }
 
-    public static void checkUserHasDonated(Context c, final DonationStatusListener l) {
-        final BillingClient helper = BillingClient.newBuilder(c).setListener(new PurchasesUpdatedListener() {
+    public static void checkUserHasDonated(Context context, final DonationStatusListener listener) {
+        final BillingClient helper = BillingClient.newBuilder(context).setListener(new PurchasesUpdatedListener() {
             @Override
             public void onPurchasesUpdated(int responseCode, List<Purchase> purchases) {
                 if (LOCAL_LOGV) {
@@ -234,13 +234,12 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
                 if (resultCode == OK) {
                     Purchase.PurchasesResult result = helper.queryPurchases(INAPP);
                     if (result.getResponseCode() == OK) {
-                        final State s = userHasDonated(result.getPurchasesList()) ? DONATED : NOT_DONATED;
-                        l.userDonationState(s);
+                        listener.userDonationState(userHasDonated(result.getPurchasesList()) ? DONATED : NOT_DONATED);
                     } else {
-                        l.userDonationState(UNKNOWN);
+                        listener.userDonationState(UNKNOWN);
                     }
                 } else {
-                    l.userDonationState(resultCode == BILLING_UNAVAILABLE ? NOT_AVAILABLE : UNKNOWN);
+                    listener.userDonationState(resultCode == BILLING_UNAVAILABLE ? NOT_AVAILABLE : UNKNOWN);
                 }
                 try {
                     helper.endConnection();

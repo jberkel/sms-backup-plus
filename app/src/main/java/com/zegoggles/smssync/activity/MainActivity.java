@@ -912,8 +912,8 @@ public class MainActivity extends PreferenceActivity {
         try {
             DonationActivity.checkUserHasDonated(this, new DonationActivity.DonationStatusListener() {
                 @Override
-                public void userDonationState(State s) {
-                    switch (s) {
+                public void userDonationState(State state) {
+                    switch (state) {
                         case NOT_AVAILABLE:
                         case DONATED:
                             Preference donate = getPreferenceScreen().findPreference(DONATE.key);
