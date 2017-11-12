@@ -87,7 +87,7 @@ public class SmsJobService extends JobService {
         final JobParameters jobParameters = jobs.remove(state.backupType.name());
         if (jobParameters != null) {
             Log.v(TAG, "jobFinished("+jobParameters+")");
-            jobFinished(jobParameters, false);
+            jobFinished(jobParameters, state.isError());
         } else {
             Log.w(TAG, "unknown job for state "+state);
         }

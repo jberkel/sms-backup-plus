@@ -115,7 +115,7 @@ public class SmsBackupService extends ServiceBase {
             if (!skip) {
                 checkCredentials();
                 checkBackgroundDataSettings(backupType);
-                checkConnectivity();
+                checkConnectivity(backupType);
             }
 
             appLog(R.string.app_log_start_backup, backupType);
@@ -172,7 +172,12 @@ public class SmsBackupService extends ServiceBase {
         }
     }
 
-    private void checkConnectivity() throws ConnectivityException {
+    private void checkConnectivity(BackupType backupType) throws ConnectivityException {
+        if (backupType != MANUAL && !getPreferences().isUseOldScheduler()) {
+            Log.d(TAG, "skipping connectivity check, running with new scheduler");
+            return;
+        }
+
         NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
         if (active == null || !active.isConnectedOrConnecting()) {
             throw new NoConnectionException();

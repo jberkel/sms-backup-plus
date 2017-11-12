@@ -83,6 +83,7 @@ public class SmsBackupServiceTest {
         when(authPreferences.getStoreUri()).thenReturn("imap+ssl+://xoauth:foooo@imap.gmail.com:993");
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
         when(preferences.getBackupContactGroup()).thenReturn(ContactGroup.EVERYBODY);
+        when(preferences.isUseOldScheduler()).thenReturn(true);
     }
 
     @After public void after() {
@@ -118,6 +119,17 @@ public class SmsBackupServiceTest {
 
         verifyZeroInteractions(backupTask);
         assertThat(service.getState().exception).isExactlyInstanceOf(NoConnectionException.class);
+    }
+
+    @Test public void shouldNotCheckForConnectivityBeforeBackingUpWithNewScheduler() throws Exception {
+        when(preferences.isUseOldScheduler()).thenReturn(false);
+
+        Intent intent = new Intent();
+        intent.putExtra(BackupType.EXTRA, BackupType.REGULAR.name());
+        shadowConnectivityManager.setActiveNetworkInfo(null);
+        shadowConnectivityManager.setBackgroundDataSetting(true);
+        service.handleIntent(intent);
+        verify(backupTask).execute(any(BackupConfig.class));
     }
 
     @Test public void shouldCheckForWifiConnectivity() throws Exception {

@@ -26,13 +26,15 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
-import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.preferences.Preferences;
 
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.CANCEL_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
+import static com.firebase.jobdispatcher.Lifetime.FOREVER;
+import static com.firebase.jobdispatcher.Lifetime.UNTIL_NEXT_BOOT;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.BROADCAST_INTENT;
@@ -71,7 +73,12 @@ public class BackupJobs {
     }
 
     public Job scheduleBootup() {
-        return schedule(BOOT_BACKUP_DELAY, REGULAR, false);
+        if (mPreferences.isUseOldScheduler()) {
+            return schedule(BOOT_BACKUP_DELAY, REGULAR, false);
+        } else {
+            // assume jobs are persistent
+            return null;
+        }
     }
 
     public Job scheduleImmediate() {
@@ -119,10 +126,12 @@ public class BackupJobs {
         final Bundle extras = new Bundle();
         extras.putString(BackupType.EXTRA, backupType.name());
         return builder
-            .setReplaceCurrent(false)
+            .setReplaceCurrent(true)
             .setTrigger(trigger)
+            .setRecurring(backupType == REGULAR)
             .setConstraints(constraint)
-            .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
+            .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
+            .setLifetime(backupType == REGULAR ? FOREVER : UNTIL_NEXT_BOOT)
             .setTag(backupType.name())
             .setExtras(extras)
             .setService(SmsJobService.class)

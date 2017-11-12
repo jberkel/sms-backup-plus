@@ -55,10 +55,18 @@ public class BackupJobsTest {
         verifyJobScheduled(job, 2000, "REGULAR");
     }
 
-    @Test public void shouldScheduleBoot() throws Exception {
+    @Test public void shouldScheduleBootForOldScheduler() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.isUseOldScheduler()).thenReturn(true);
         Job job = subject.scheduleBootup();
         verifyJobScheduled(job, 60, "REGULAR");
+    }
+
+    @Test public void shouldNotScheduleBootForNewScheduler() throws Exception {
+        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.isUseOldScheduler()).thenReturn(false);
+        Job job = subject.scheduleBootup();
+        assertThat(job).isNull();
     }
 
     @Test public void shouldScheduleIncoming() throws Exception {
@@ -78,8 +86,8 @@ public class BackupJobsTest {
         assertThat(subject.scheduleIncoming()).isEqualTo(null);
     }
 
-    private void verifyJobScheduled(Job job, int scheduled, String expectedType)
-    {
+    private void verifyJobScheduled(Job job, int scheduled, String expectedType) {
+        assertThat(job).isNotNull();
         if (scheduled <= 0) {
             assertThat(job.getTrigger() instanceof JobTrigger.ImmediateTrigger);
         } else {
