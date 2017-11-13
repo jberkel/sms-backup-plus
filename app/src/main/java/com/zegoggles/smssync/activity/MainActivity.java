@@ -183,6 +183,8 @@ public class MainActivity extends PreferenceActivity {
         initCalendars();
         initGroups();
 
+        updateAutoBackupEnabledSummary();
+        updateAutoBackupScheduleSummary();
         updateLastBackupTimes();
         updateBackupContactGroupLabelFromPref();
         updateCallLogCalendarLabelFromPref();
@@ -195,7 +197,6 @@ public class MainActivity extends PreferenceActivity {
         updateImapSettings(!authPreferences.useXOAuth());
         checkUserDonationStatus();
         App.bus.register(statusPref);
-        App.bus.post(new AutoBackupSettingsChangedEvent());
     }
 
     @Override protected void onPause() {
@@ -285,20 +286,21 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    @Subscribe public void autoBackupChanged(final AutoBackupChangedEvent event) {
+    @Subscribe public void autoBackupEnabledChanged(final AutoBackupEnabledChangedEvent event) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "autoBackupChanged("+event+")");
         }
         getPackageManager().setComponentEnabledSetting(
-                new ComponentName(this, SmsBroadcastReceiver.class),
-                event.autoBackupEnabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
-                DONT_KILL_APP);
+            new ComponentName(this, SmsBroadcastReceiver.class),
+            event.autoBackupEnabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
+            DONT_KILL_APP);
+        rescheduleJobs();
+    }
 
-        if (event.autoBackupEnabled) {
-            backupJobs.scheduleRegular();
-        } else {
-            backupJobs.cancel();
-        }
+    @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
+        updateAutoBackupEnabledSummary();
+        updateAutoBackupScheduleSummary();
+        rescheduleJobs();
     }
 
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
@@ -309,6 +311,21 @@ public class MainActivity extends PreferenceActivity {
         } else {
             show(Dialogs.ACCESS_TOKEN_ERROR);
         }
+    }
+
+    private void rescheduleJobs() {
+        backupJobs.cancelRegular();
+        if (preferences.isEnableAutoSync()) {
+            backupJobs.scheduleRegular();
+        }
+    }
+
+    private void updateAutoBackupEnabledSummary() {
+        findPreference(ENABLE_AUTO_BACKUP.key).setSummary(summarizeAutoBackupSettings());
+    }
+
+    private void updateAutoBackupScheduleSummary() {
+        findPreference(BACKUP_SETTINGS_SCREEN.key).setSummary(summarizeBackupScheduleSettings());
     }
 
     private void onAuthenticated() {
@@ -336,15 +353,6 @@ public class MainActivity extends PreferenceActivity {
 
     private ConnectivityManager getConnectivityManager() {
         return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-    }
-
-
-    @Subscribe public void updateAutoBackupEnabledSummary(AutoBackupSettingsChangedEvent event) {
-        findPreference(ENABLE_AUTO_BACKUP.key).setSummary(summarizeAutoBackupSettings());
-    }
-
-    @Subscribe public void updateAutoBackupScheduleSummary(AutoBackupSettingsChangedEvent event) {
-        findPreference(BACKUP_SETTINGS_SCREEN.key).setSummary(summarizeBackupScheduleSettings());
     }
 
     String summarizeAutoBackupSettings() {
@@ -415,8 +423,7 @@ public class MainActivity extends PreferenceActivity {
             SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
             username = prefs.getString(AuthPreferences.LOGIN_USER, getString(R.string.ui_login_label));
         }
-        Preference pref = findPreference(AuthPreferences.LOGIN_USER);
-        pref.setTitle(username);
+        findPreference(AuthPreferences.LOGIN_USER).setTitle(username);
     }
 
     private void updateBackupContactGroupLabelFromPref() {
@@ -437,14 +444,12 @@ public class MainActivity extends PreferenceActivity {
 
     private void updateImapFolderLabelFromPref() {
         String imapFolder = SMS.getFolder(preferences.preferences);
-        Preference pref = findPreference(SMS.folderPreference);
-        pref.setTitle(imapFolder);
+        findPreference(SMS.folderPreference).setTitle(imapFolder);
     }
 
     private void updateImapCallogFolderLabelFromPref() {
         String imapFolder = CALLLOG.getFolder(preferences.preferences);
-        Preference pref = findPreference(CALLLOG.folderPreference);
-        pref.setTitle(imapFolder);
+        findPreference(CALLLOG.folderPreference).setTitle(imapFolder);
     }
 
     private void initGroups() {
@@ -812,7 +817,7 @@ public class MainActivity extends PreferenceActivity {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                App.bus.post(new AutoBackupChangedEvent((Boolean) newValue));
+                                App.bus.post(new AutoBackupEnabledChangedEvent((Boolean) newValue));
                             }
                         });
                         return true;
@@ -990,10 +995,10 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    public static class AutoBackupChangedEvent {
+    public static class AutoBackupEnabledChangedEvent {
         final boolean autoBackupEnabled;
 
-        AutoBackupChangedEvent(boolean autoBackupEnabled) {
+        AutoBackupEnabledChangedEvent(boolean autoBackupEnabled) {
             this.autoBackupEnabled = autoBackupEnabled;
         }
     }

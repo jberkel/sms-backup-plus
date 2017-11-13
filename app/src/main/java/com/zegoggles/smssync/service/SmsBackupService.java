@@ -223,8 +223,7 @@ public class SmsBackupService extends ServiceBase {
             appLogDebug(state.toString());
             appLog(state.isCanceled() ? R.string.app_log_backup_canceled : R.string.app_log_backup_finished);
 
-            if (state.backupType == BackupType.REGULAR) {
-                Log.d(TAG, "scheduling next backup");
+            if (getPreferences().isUseOldScheduler() && state.backupType == BackupType.REGULAR) {
                 scheduleNextBackup();
             }
             stopForeground(true);
@@ -271,6 +270,7 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void scheduleNextBackup() {
+        Log.d(TAG, "scheduling next backup");
         final Job nextSync = getBackupJobs().scheduleRegular();
         if (nextSync != null) {
             JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();

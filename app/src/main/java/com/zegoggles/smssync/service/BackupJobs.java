@@ -72,6 +72,9 @@ public class BackupJobs {
         if (mPreferences.isUseOldScheduler()) {
             return schedule(BOOT_BACKUP_DELAY, REGULAR, false);
         } else {
+            if (LOCAL_LOGV) {
+                Log.v(TAG, "not scheduling bootup backup (using new scheduler)");
+            }
             // assume jobs are persistent
             return null;
         }
@@ -81,11 +84,12 @@ public class BackupJobs {
         return schedule(-1, BROADCAST_INTENT, true);
     }
 
-    public void cancel() {
-        final int result = firebaseJobDispatcher.cancelAll();
+
+    public void cancelRegular() {
+        final int result = firebaseJobDispatcher.cancel(REGULAR.name());
         if (result == CANCEL_RESULT_SUCCESS) {
             if (LOCAL_LOGV) {
-                Log.v(TAG, "cancel()");
+                Log.v(TAG, "cancelRegular()");
             }
         } else {
             Log.w(TAG, "unable to cancel jobs: "+result);
