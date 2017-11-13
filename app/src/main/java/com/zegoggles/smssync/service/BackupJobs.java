@@ -64,10 +64,6 @@ public class BackupJobs {
         return schedule(mPreferences.getIncomingTimeoutSecs(), INCOMING, false);
     }
 
-    public Job scheduleFirstRegular() {
-        return schedule(mPreferences.getRegularTimeoutSecs(), REGULAR, true);
-    }
-
     public Job scheduleRegular() {
         return schedule(mPreferences.getRegularTimeoutSecs(), REGULAR, false);
     }

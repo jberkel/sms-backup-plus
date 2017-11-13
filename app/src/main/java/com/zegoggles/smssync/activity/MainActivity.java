@@ -107,9 +107,10 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
+@SuppressWarnings("deprecation")
 public class MainActivity extends PreferenceActivity {
-    public static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
-    public static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
+    private static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
+    private static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
 
     private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
@@ -125,10 +126,14 @@ public class MainActivity extends PreferenceActivity {
     private Preferences preferences;
     private StatusPreference statusPref;
     private OAuth2Client oauth2Client;
+    private Handler handler;
+    private BackupJobs backupJobs;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        handler = new Handler();
+        backupJobs = new BackupJobs(this);
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         preferences = new Preferences(this);
@@ -160,6 +165,14 @@ public class MainActivity extends PreferenceActivity {
 
         setupStrictMode();
         App.bus.register(this);
+
+        addPreferenceListener(new AutoBackupSettingsChangedEvent(),
+            INCOMING_TIMEOUT_SECONDS.key,
+            REGULAR_TIMEOUT_SECONDS.key,
+            WIFI_ONLY.key);
+        for (DataType dataType : DataType.values()) {
+            addPreferenceListener(new AutoBackupSettingsChangedEvent(),  dataType.backupEnabledPreference);
+        }
     }
 
     @Override
@@ -171,8 +184,6 @@ public class MainActivity extends PreferenceActivity {
         initGroups();
 
         updateLastBackupTimes();
-        updateAutoBackupSummary();
-        updateAutoBackupEnabledSummary();
         updateBackupContactGroupLabelFromPref();
         updateCallLogCalendarLabelFromPref();
         updateImapFolderLabelFromPref();
@@ -184,6 +195,7 @@ public class MainActivity extends PreferenceActivity {
         updateImapSettings(!authPreferences.useXOAuth());
         checkUserDonationStatus();
         App.bus.register(statusPref);
+        App.bus.post(new AutoBackupSettingsChangedEvent());
     }
 
     @Override protected void onPause() {
@@ -283,9 +295,9 @@ public class MainActivity extends PreferenceActivity {
                 DONT_KILL_APP);
 
         if (event.autoBackupEnabled) {
-            getBackupJobs().scheduleFirstRegular();
+            backupJobs.scheduleRegular();
         } else {
-            getBackupJobs().cancel();
+            backupJobs.cancel();
         }
     }
 
@@ -326,18 +338,16 @@ public class MainActivity extends PreferenceActivity {
         return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
-    private void updateAutoBackupEnabledSummary() {
-        findPreference(ENABLE_AUTO_BACKUP.key).setSummary(getEnabledBackupSummary());
-        for (DataType t : DataType.values()) {
-            addSummaryListener(new Runnable() {
-                public void run() {
-                    updateAutoBackupEnabledSummary();
-                }
-            }, t.backupEnabledPreference);
-        }
+
+    @Subscribe public void updateAutoBackupEnabledSummary(AutoBackupSettingsChangedEvent event) {
+        findPreference(ENABLE_AUTO_BACKUP.key).setSummary(summarizeAutoBackupSettings());
     }
 
-    String getEnabledBackupSummary() {
+    @Subscribe public void updateAutoBackupScheduleSummary(AutoBackupSettingsChangedEvent event) {
+        findPreference(BACKUP_SETTINGS_SCREEN.key).setSummary(summarizeBackupScheduleSettings());
+    }
+
+    String summarizeAutoBackupSettings() {
         final List<String> enabled = new ArrayList<String>();
         for (DataType dataType : DataType.enabled(preferences.preferences)) {
             enabled.add(getString(dataType.resId));
@@ -357,8 +367,7 @@ public class MainActivity extends PreferenceActivity {
         return summary.toString();
     }
 
-    private void updateAutoBackupSummary() {
-        final Preference autoBackup = findPreference(BACKUP_SETTINGS_SCREEN.key);
+    private String summarizeBackupScheduleSettings() {
         final StringBuilder summary = new StringBuilder();
 
         final ListPreference regSchedule = (ListPreference)
@@ -380,27 +389,18 @@ public class MainActivity extends PreferenceActivity {
                     .append(findPreference(WIFI_ONLY.key).getTitle())
                     .append(")");
         }
-
-        autoBackup.setSummary(summary.toString());
-
-        addSummaryListener(new Runnable() {
-            public void run() {
-                updateAutoBackupSummary();
-            }
-        }, INCOMING_TIMEOUT_SECONDS.key,
-                REGULAR_TIMEOUT_SECONDS.key,
-                WIFI_ONLY.key);
+        return summary.toString();
     }
 
-    private void addSummaryListener(final Runnable runnable, String... prefs) {
-        for (String p : prefs) {
-            findPreference(p).setOnPreferenceChangeListener(
+    private void addPreferenceListener(final Object event, String... prefKeys) {
+        for (String prefKey : prefKeys) {
+            findPreference(prefKey).setOnPreferenceChangeListener(
                     new OnPreferenceChangeListener() {
                         public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                            new Handler().post(new Runnable() {
+                            handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    runnable.run();
+                                    App.bus.post(event);
                                     onContentChanged();
                                 }
                             });
@@ -726,7 +726,7 @@ public class MainActivity extends PreferenceActivity {
             default:
                 return null;
         }
-        return createMessageDialog(id, title, msg);
+        return createMessageDialog(title, msg);
     }
 
     private void reset() {
@@ -734,7 +734,7 @@ public class MainActivity extends PreferenceActivity {
         preferences.reset();
     }
 
-    private Dialog createMessageDialog(final int id, String title, String msg) {
+    private Dialog createMessageDialog(String title, String msg) {
         return new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(msg)
@@ -808,8 +808,13 @@ public class MainActivity extends PreferenceActivity {
 
         findPreference(ENABLE_AUTO_BACKUP.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        App.bus.post(new AutoBackupChangedEvent((Boolean) newValue));
+                    public boolean onPreferenceChange(Preference preference, final Object newValue) {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                App.bus.post(new AutoBackupChangedEvent((Boolean) newValue));
+                            }
+                        });
                         return true;
                     }
                 });
@@ -898,10 +903,6 @@ public class MainActivity extends PreferenceActivity {
             });
             return false;
         }
-    }
-
-    private BackupJobs getBackupJobs() {
-        return new BackupJobs(this);
     }
 
     private void checkUserDonationStatus() {
@@ -995,5 +996,8 @@ public class MainActivity extends PreferenceActivity {
         AutoBackupChangedEvent(boolean autoBackupEnabled) {
             this.autoBackupEnabled = autoBackupEnabled;
         }
+    }
+
+    private static class AutoBackupSettingsChangedEvent {
     }
 }

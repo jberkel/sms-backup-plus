@@ -22,12 +22,12 @@ public class MainActivityTest {
     }
 
     @Test public void shouldDisplaySummaryOfEnabledBackupTypesDefault() throws Exception {
-        assertThat(activity.getEnabledBackupSummary()).isEqualTo("Automatically backup SMS, MMS. You will also need to enable background data.");
+        assertThat(activity.summarizeAutoBackupSettings()).isEqualTo("Automatically backup SMS, MMS. You will also need to enable background data.");
     }
 
     @Test public void shouldDisplaySummaryOfEnabledBackupTypesNothingSelected() throws Exception {
         for (DataType t : DataType.values()) t.setBackupEnabled(PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application), false);
-        assertThat(activity.getEnabledBackupSummary()).isEqualTo(
+        assertThat(activity.summarizeAutoBackupSettings()).isEqualTo(
             activity.getString(R.string.ui_enable_auto_sync_no_enabled_summary)
         );
     }
