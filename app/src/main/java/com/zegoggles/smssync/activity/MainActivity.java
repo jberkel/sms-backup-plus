@@ -164,6 +164,7 @@ public class MainActivity extends PreferenceActivity {
             INCOMING_TIMEOUT_SECONDS.key,
             REGULAR_TIMEOUT_SECONDS.key,
             WIFI_ONLY.key,
+            ENABLE_AUTO_BACKUP.key,
             USE_OLD_SCHEDULER.key);
         for (DataType dataType : DataType.values()) {
             addPreferenceListener(new AutoBackupSettingsChangedEvent(),  dataType.backupEnabledPreference);
@@ -795,19 +796,6 @@ public class MainActivity extends PreferenceActivity {
             );
         }
 
-        findPreference(ENABLE_AUTO_BACKUP.key)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                App.bus.post(new AutoBackupEnabledChangedEvent((Boolean) newValue));
-                            }
-                        });
-                        return true;
-                    }
-                });
-
         findPreference(AuthPreferences.SERVER_AUTHENTICATION)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -976,13 +964,6 @@ public class MainActivity extends PreferenceActivity {
     private void checkDefaultSmsApp() {
         if (isSmsBackupDefaultSmsApp() && !SmsRestoreService.isServiceWorking()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
-        }
-    }
-
-    public static class AutoBackupEnabledChangedEvent {
-        public final boolean autoBackupEnabled;
-        AutoBackupEnabledChangedEvent(boolean autoBackupEnabled) {
-            this.autoBackupEnabled = autoBackupEnabled;
         }
     }
 

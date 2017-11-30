@@ -56,7 +56,7 @@ public class BackupJobsTest {
     }
 
     @Test public void shouldScheduleContentUriTrigger() throws Exception {
-        Job job = subject.scheduleTriggerJob();
+        Job job = subject.scheduleContentTriggerJob();
         assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ContentUriTrigger.class);
     }
 

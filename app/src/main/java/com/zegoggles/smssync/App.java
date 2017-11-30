@@ -74,32 +74,26 @@ public class App extends Application {
             }
         });
 
-
-        getContentResolver().registerContentObserver(Uri.parse("content://sms"), true, new ContentObserver(new Handler()) {
-            @Override
-            public void onChange(boolean selfChange) {
-                onChange(selfChange, null);
-            }
-
-            @Override
-            public void onChange(boolean selfChange, Uri uri) {
-                System.err.println("onChange "  + uri);
-            }
-        });
+        if (DEBUG) {
+            getContentResolver().registerContentObserver(Consts.SMS_PROVIDER, true, new ContentObserver(new Handler()) {
+                @Override
+                public void onChange(boolean selfChange) {
+                    onChange(selfChange, null);
+                }
+                @Override
+                public void onChange(boolean selfChange, Uri uri) {
+                    Log.v(TAG, "onChange " + uri);
+                }
+            });
+        }
 
         bus.register(this);
     }
 
-    @Subscribe
-    public void autoBackupEnabledChanged(final MainActivity.AutoBackupEnabledChangedEvent event) {
-        if (LOCAL_LOGV) {
-            Log.v(TAG, "autoBackupChanged("+event+")");
-        }
-        setIncomingBroadcastReceiversEnabled(event.autoBackupEnabled);
-        rescheduleJobs();
-    }
-
     @Subscribe public void autoBackupSettingsChanged(final MainActivity.AutoBackupSettingsChangedEvent event) {
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "autoBackupSettingsChanged("+event+")");
+        }
         setIncomingBroadcastReceiversEnabled(preferences.isUseOldScheduler() && preferences.isEnableAutoSync());
         rescheduleJobs();
     }
@@ -117,8 +111,14 @@ public class App extends Application {
 
     private void rescheduleJobs() {
         backupJobs.cancelRegular();
+        backupJobs.cancelContentTrigger();
+
         if (preferences.isEnableAutoSync()) {
             backupJobs.scheduleRegular();
+
+            if (!preferences.isUseOldScheduler()) {
+                backupJobs.scheduleContentTriggerJob();
+            }
         }
     }
 }

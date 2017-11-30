@@ -21,13 +21,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.ObservedUri;
-import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.preferences.Preferences;
@@ -51,6 +49,7 @@ import static com.zegoggles.smssync.service.BackupType.REGULAR;
 
 public class BackupJobs {
     private static final int BOOT_BACKUP_DELAY = 60;
+    private static final String CONTENT_TRIGGER_TAG = "contentTrigger";
 
     private final Preferences mPreferences;
     private FirebaseJobDispatcher firebaseJobDispatcher;
@@ -75,7 +74,7 @@ public class BackupJobs {
         return schedule(mPreferences.getRegularTimeoutSecs(), REGULAR, false);
     }
 
-    public Job scheduleTriggerJob() {
+    public Job scheduleContentTriggerJob() {
         return schedule(createTriggerJob(firebaseJobDispatcher.newJobBuilder()));
     }
 
@@ -95,11 +94,20 @@ public class BackupJobs {
         return schedule(-1, BROADCAST_INTENT, true);
     }
 
+
     public void cancelRegular() {
-        final int result = firebaseJobDispatcher.cancel(REGULAR.name());
+        cancel(REGULAR.name());
+    }
+
+    public void cancelContentTrigger() {
+        cancel(CONTENT_TRIGGER_TAG);
+    }
+
+    private void cancel(String tag) {
+        final int result = firebaseJobDispatcher.cancel(tag);
         if (result == CANCEL_RESULT_SUCCESS) {
             if (LOCAL_LOGV) {
-                Log.v(TAG, "cancelRegular()");
+                Log.v(TAG, "cance("+tag+")");
             }
         } else {
             Log.w(TAG, "unable to cancel jobs: "+result);
@@ -126,6 +134,9 @@ public class BackupJobs {
     }
 
     private Job schedule(Job job) {
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "schedule "+job.getTag());
+        }
         final int result = firebaseJobDispatcher.schedule(job);
         if (result == SCHEDULE_RESULT_SUCCESS) {
             return job;
@@ -134,7 +145,6 @@ public class BackupJobs {
             return null;
         }
     }
-
 
     @NonNull private Job createJob(Job.Builder builder, int inSeconds, BackupType backupType) {
         final JobTrigger trigger = inSeconds <= 0 ? Trigger.NOW : Trigger.executionWindow(inSeconds, inSeconds);
@@ -168,7 +178,7 @@ public class BackupJobs {
             .setConstraints(constraint)
             .setRetryStrategy(DEFAULT_EXPONENTIAL)
             .setLifetime(FOREVER)
-            .setTag(backupType.name())
+            .setTag(CONTENT_TRIGGER_TAG)
             .setExtras(extras)
             .setService(SmsJobService.class)
             .build();
