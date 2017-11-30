@@ -135,7 +135,7 @@ public class BackupJobs {
 
     private Job schedule(Job job) {
         if (LOCAL_LOGV) {
-            Log.v(TAG, "schedule "+job.getTag());
+            Log.v(TAG, "schedule job " + job.getTag());
         }
         final int result = firebaseJobDispatcher.schedule(job);
         if (result == SCHEDULE_RESULT_SUCCESS) {

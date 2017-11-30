@@ -222,10 +222,7 @@ public class SmsBackupService extends ServiceBase {
         } else {
             appLogDebug(state.toString());
             appLog(state.isCanceled() ? R.string.app_log_backup_canceled : R.string.app_log_backup_finished);
-
-            if (getPreferences().isUseOldScheduler() && state.backupType == BackupType.REGULAR) {
-                scheduleNextBackup();
-            }
+            scheduleNextBackup(state);
             stopForeground(true);
             stopSelf();
         }
@@ -269,16 +266,26 @@ public class SmsBackupService extends ServiceBase {
         startForeground(BACKUP_ID, notification);
     }
 
-    private void scheduleNextBackup() {
-        Log.d(TAG, "scheduling next backup");
-        final Job nextSync = getBackupJobs().scheduleRegular();
-        if (nextSync != null) {
-            JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();
-            Date date = new Date(System.currentTimeMillis() + (trigger.getWindowStart() * 1000));
-            appLog(R.string.app_log_scheduled_next_sync,
-                    DateFormat.format("kk:mm", date));
-        } else {
-            appLog(R.string.app_log_no_next_sync);
+    private void scheduleNextBackup(BackupState state) {
+        switch (state.backupType) {
+            case REGULAR:
+                if (getPreferences().isUseOldScheduler()) {
+                    final Job nextSync = getBackupJobs().scheduleRegular();
+                    if (nextSync != null) {
+                        JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();
+                        Date date = new Date(System.currentTimeMillis() + (trigger.getWindowStart() * 1000));
+                        appLog(R.string.app_log_scheduled_next_sync,
+                                DateFormat.format("kk:mm", date));
+                    } else {
+                        appLog(R.string.app_log_no_next_sync);
+                    }
+                }
+                break;
+            case INCOMING:
+                if (!getPreferences().isUseOldScheduler()) {
+                    getBackupJobs().scheduleContentTriggerJob();
+                }
+            default: break;
         }
     }
 
