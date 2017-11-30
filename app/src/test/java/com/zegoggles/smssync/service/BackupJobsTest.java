@@ -55,6 +55,11 @@ public class BackupJobsTest {
         verifyJobScheduled(job, 2000, "REGULAR");
     }
 
+    @Test public void shouldScheduleContentUriTrigger() throws Exception {
+        Job job = subject.scheduleTriggerJob();
+        assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ContentUriTrigger.class);
+    }
+
     @Test public void shouldScheduleBootForOldScheduler() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.isUseOldScheduler()).thenReturn(true);
@@ -89,9 +94,9 @@ public class BackupJobsTest {
     private void verifyJobScheduled(Job job, int scheduled, String expectedType) {
         assertThat(job).isNotNull();
         if (scheduled <= 0) {
-            assertThat(job.getTrigger() instanceof JobTrigger.ImmediateTrigger);
+            assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ImmediateTrigger.class);
         } else {
-            assertThat(job.getTrigger() instanceof JobTrigger.ExecutionWindowTrigger);
+            assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ExecutionWindowTrigger.class);
             JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) job.getTrigger();
             JobTrigger.ExecutionWindowTrigger testTrigger = Trigger.executionWindow(scheduled, scheduled);
             assertThat(trigger.getWindowEnd()).isEqualTo(testTrigger.getWindowEnd());

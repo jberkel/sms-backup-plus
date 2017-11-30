@@ -78,5 +78,6 @@ public class SmsBroadcastReceiverTest {
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.isFirstBackup()).thenReturn(false);
+        when(preferences.isUseOldScheduler()).thenReturn(true);
     }
 }

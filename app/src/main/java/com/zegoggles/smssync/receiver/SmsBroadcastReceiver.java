@@ -64,7 +64,9 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         final boolean autoSync = preferences.isEnableAutoSync();
         final boolean loginInformationSet = getAuthPreferences(context).isLoginInformationSet();
         final boolean firstBackup = preferences.isFirstBackup();
-        final boolean schedule = (autoSync && loginInformationSet && !firstBackup);
+        final boolean usesOldScheduler = preferences.isUseOldScheduler();
+
+        final boolean schedule = (autoSync &&  usesOldScheduler && loginInformationSet && !firstBackup );
 
         if (!schedule) {
             final String message = new StringBuilder()

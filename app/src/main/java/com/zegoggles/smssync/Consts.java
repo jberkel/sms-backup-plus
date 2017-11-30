@@ -23,6 +23,7 @@ import android.provider.CallLog;
  * Class containing application wide constants.
  */
 public final class Consts {
+    private Consts() {}
 
     /**
      * Key in the intent extras for indication whether all unsynced messages should
@@ -30,42 +31,28 @@ public final class Consts {
      */
     public static final String KEY_SKIP_MESSAGES = "com.zegoggles.smssync.SkipMessages";
 
-    /**
-     * Key in the intent extras for storing the previously set default sms provider,
-     * allowing it to be restored after the restore finishes.
-     */
-    public static final String KEY_DEFAULT_SMS_PROVIDER = "com.zegoggles.smssync.DefaultSmsProvider";
 
-    /**
-     * OAuth callback
-     */
-    public static final String CALLBACK_URL = "smssync://gmail";
-
-
+    /** {@link android.provider.Telephony.Mms#CONTENT_URI} */
     public static final Uri MMS_PROVIDER     = Uri.parse("content://mms");
     public static final String MMS_PART      = "part";
-    public static final Uri SMS_PROVIDER     = Uri.parse("content://sms");
+
+    /** {@link android.provider.Telephony.Sms#CONTENT_URI} */
+    public static final Uri SMS_PROVIDER     =  Uri.parse("content://sms");
     public static final Uri CALLLOG_PROVIDER = CallLog.Calls.CONTENT_URI;
 
     public static class Billing {
-        public static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCNglCUwSijU3RAODpyY" +
-                "fZLYxwF/OveAxYgVKWYlJDf8KBhO3T81BrQHDVACmaLpBfS+uL7RrIb9PMk8RNewE8EAOLNXANnqbbV+8U54K7GX2N" +
-                "wFMIBZ4tV52G6yEhWkKx/+JMLdhM5U8FutaFCdmdkDrz3IVGB5HD8c1mmopcqcQIDAQAB";
+        private Billing() {}
 
         public static final String DONATION_PREFIX = "donation.";
 
-        public static final String SKU_DONATION_1 = "donation.1";
-        public static final String SKU_DONATION_2 = "donation.2";
-        public static final String SKU_DONATION_3 = "donation.3";
+        static final String SKU_DONATION_1 = "donation.1";
+        static final String SKU_DONATION_2 = "donation.2";
+        static final String SKU_DONATION_3 = "donation.3";
 
         public static final String[] ALL_SKUS = new String[]{
                 SKU_DONATION_1,
                 SKU_DONATION_2,
                 SKU_DONATION_3,
         };
-
-        private Billing() {}
     }
-
-    private Consts() {}
 }

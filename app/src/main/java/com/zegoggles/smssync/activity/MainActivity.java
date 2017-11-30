@@ -20,7 +20,6 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -64,8 +63,6 @@ import com.zegoggles.smssync.preferences.AuthMode;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.BackupManagerWrapper;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
-import com.zegoggles.smssync.service.BackupJobs;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
@@ -80,9 +77,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-import static android.content.pm.PackageManager.DONT_KILL_APP;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -101,6 +95,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOU
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.REGULAR_TIMEOUT_SECONDS;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.USE_OLD_SCHEDULER;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 
 /**
@@ -127,13 +122,11 @@ public class MainActivity extends PreferenceActivity {
     private StatusPreference statusPref;
     private OAuth2Client oauth2Client;
     private Handler handler;
-    private BackupJobs backupJobs;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         handler = new Handler();
-        backupJobs = new BackupJobs(this);
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         preferences = new Preferences(this);
@@ -162,6 +155,7 @@ public class MainActivity extends PreferenceActivity {
         }
 
         checkDefaultSmsApp();
+        checkGCM();
 
         setupStrictMode();
         App.bus.register(this);
@@ -169,7 +163,8 @@ public class MainActivity extends PreferenceActivity {
         addPreferenceListener(new AutoBackupSettingsChangedEvent(),
             INCOMING_TIMEOUT_SECONDS.key,
             REGULAR_TIMEOUT_SECONDS.key,
-            WIFI_ONLY.key);
+            WIFI_ONLY.key,
+            USE_OLD_SCHEDULER.key);
         for (DataType dataType : DataType.values()) {
             addPreferenceListener(new AutoBackupSettingsChangedEvent(),  dataType.backupEnabledPreference);
         }
@@ -286,21 +281,9 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    @Subscribe public void autoBackupEnabledChanged(final AutoBackupEnabledChangedEvent event) {
-        if (LOCAL_LOGV) {
-            Log.v(TAG, "autoBackupChanged("+event+")");
-        }
-        getPackageManager().setComponentEnabledSetting(
-            new ComponentName(this, SmsBroadcastReceiver.class),
-            event.autoBackupEnabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
-            DONT_KILL_APP);
-        rescheduleJobs();
-    }
-
     @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
         updateAutoBackupEnabledSummary();
         updateAutoBackupScheduleSummary();
-        rescheduleJobs();
     }
 
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
@@ -310,13 +293,6 @@ public class MainActivity extends PreferenceActivity {
             onAuthenticated();
         } else {
             show(Dialogs.ACCESS_TOKEN_ERROR);
-        }
-    }
-
-    private void rescheduleJobs() {
-        backupJobs.cancelRegular();
-        if (preferences.isEnableAutoSync()) {
-            backupJobs.scheduleRegular();
         }
     }
 
@@ -489,6 +465,14 @@ public class MainActivity extends PreferenceActivity {
             return false;
         } else {
             return true;
+        }
+    }
+
+    private void checkGCM() {
+        if (!App.gcmAvailable) {
+            final Preference preference = findPreference(USE_OLD_SCHEDULER.key);
+            preference.setEnabled(false);
+            preference.setSummary(getString(R.string.pref_use_old_scheduler_no_gcm_summary));
         }
     }
 
@@ -996,13 +980,12 @@ public class MainActivity extends PreferenceActivity {
     }
 
     public static class AutoBackupEnabledChangedEvent {
-        final boolean autoBackupEnabled;
-
+        public final boolean autoBackupEnabled;
         AutoBackupEnabledChangedEvent(boolean autoBackupEnabled) {
             this.autoBackupEnabled = autoBackupEnabled;
         }
     }
 
-    private static class AutoBackupSettingsChangedEvent {
+    public static class AutoBackupSettingsChangedEvent {
     }
 }

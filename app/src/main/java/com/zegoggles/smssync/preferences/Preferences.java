@@ -314,8 +314,7 @@ public class Preferences {
 
         int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, -1);
         if (lastSeenCode < code) {
-            preferences.edit().putInt(LAST_VERSION_CODE.key, code).commit();
-            return true;
+            return preferences.edit().putInt(LAST_VERSION_CODE.key, code).commit();
         } else {
             return false;
         }
@@ -325,7 +324,11 @@ public class Preferences {
         return preferences.getBoolean(USE_OLD_SCHEDULER.key, false);
     }
 
-    boolean isOldSmsBackupInstalled() {
+    public boolean setUseOldScheduler(boolean enabled) {
+        return preferences.edit().putBoolean(USE_OLD_SCHEDULER.key, enabled).commit();
+    }
+
+    private boolean isOldSmsBackupInstalled() {
         try {
             context.getPackageManager().getPackageInfo(
                     "tv.studer.smssync",

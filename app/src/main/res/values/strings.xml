@@ -314,6 +314,7 @@
 
   <string name="pref_use_old_scheduler">Old backup scheduler</string>
   <string name="pref_use_old_scheduler_summary">Force use of old backup scheduler</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Google Play Services not available</string>
 
   <string name="source_incoming">incoming</string>
   <string name="source_regular">regular</string>

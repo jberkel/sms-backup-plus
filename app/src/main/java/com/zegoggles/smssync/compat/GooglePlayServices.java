@@ -23,7 +23,6 @@ public class GooglePlayServices {
         try {
             packageManager.getPackageInfo(COM_ANDROID_VENDING, GET_UNINSTALLED_PACKAGES|GET_SIGNATURES);
         } catch (PackageManager.NameNotFoundException e) {
-            Log.w(TAG, "Google Play Store is missing");
             return false;
         }
 
