@@ -55,11 +55,11 @@ public class App extends Application {
         preferences = new Preferences(this);
         backupJobs = new BackupJobs(this);
 
-        if (!gcmAvailable) {
+        if (gcmAvailable) {
+            setIncomingSmsBroadcastReceiverEnabled(false);
+        } else {
             Log.v(TAG, "Google Play Services not available, forcing use of old scheduler");
             preferences.setUseOldScheduler(true);
-        } else {
-            setIncomingBroadcastReceiversEnabled(false);
         }
 
         K9MailLib.setDebugStatus(new K9MailLib.DebugStatus() {
@@ -74,7 +74,7 @@ public class App extends Application {
             }
         });
 
-        if (DEBUG) {
+        if (gcmAvailable && DEBUG) {
             getContentResolver().registerContentObserver(Consts.SMS_PROVIDER, true, new ContentObserver(new Handler()) {
                 @Override
                 public void onChange(boolean selfChange) {
@@ -82,7 +82,7 @@ public class App extends Application {
                 }
                 @Override
                 public void onChange(boolean selfChange, Uri uri) {
-                    Log.v(TAG, "onChange " + uri);
+                    Log.v(TAG, "onChange: " + uri);
                 }
             });
         }
@@ -93,19 +93,18 @@ public class App extends Application {
         if (LOCAL_LOGV) {
             Log.v(TAG, "autoBackupSettingsChanged("+event+")");
         }
-        setIncomingBroadcastReceiversEnabled(preferences.isUseOldScheduler() && preferences.isEnableAutoSync());
+        setIncomingSmsBroadcastReceiverEnabled(preferences.isUseOldScheduler() && preferences.isEnableAutoSync());
         rescheduleJobs();
     }
 
-    private void setIncomingBroadcastReceiversEnabled(boolean enabled) {
+    private void setIncomingSmsBroadcastReceiverEnabled(boolean enabled) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "setIncomingBroadcastReceiversEnabled("+enabled+")");
         }
-        final ComponentName componentName = new ComponentName(this, SmsBroadcastReceiver.class);
-        final int flagEnabled =  enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
         // NB: changes made via setComponentEnabledSetting are persisted across reboots
-        getPackageManager().setComponentEnabledSetting(componentName,
-            flagEnabled,
+        getPackageManager().setComponentEnabledSetting(
+            new ComponentName(this, SmsBroadcastReceiver.class),
+            enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
             DONT_KILL_APP /* apply setting without restart */);
     }
 
