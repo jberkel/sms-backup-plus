@@ -91,6 +91,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receiver.UpdateReceiver" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
+
         <receiver android:name=".receiver.BackupBroadcastReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="com.zegoggles.smssync.BACKUP"/>
