@@ -86,7 +86,6 @@ public class App extends Application {
                 }
             });
         }
-
         bus.register(this);
     }
 
@@ -104,14 +103,14 @@ public class App extends Application {
         }
         final ComponentName componentName = new ComponentName(this, SmsBroadcastReceiver.class);
         final int flagEnabled =  enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
+        // NB: changes made via setComponentEnabledSetting are persisted across reboots
         getPackageManager().setComponentEnabledSetting(componentName,
             flagEnabled,
             DONT_KILL_APP /* apply setting without restart */);
     }
 
     private void rescheduleJobs() {
-        backupJobs.cancelRegular();
-        backupJobs.cancelContentTrigger();
+        backupJobs.cancelAll();
 
         if (preferences.isEnableAutoSync()) {
             backupJobs.scheduleRegular();

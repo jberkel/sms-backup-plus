@@ -35,18 +35,10 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + context + "," + intent + ")");
 
-        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            bootup(context);
-        } else if (SMS_RECEIVED.equals(intent.getAction())) {
+        if (SMS_RECEIVED.equals(intent.getAction())) {
             incomingSMS(context);
-        }
-    }
-
-    private void bootup(Context context) {
-        if (shouldSchedule(context)) {
-            getBackupJobs(context).scheduleBootup();
         } else {
-            Log.i(TAG, "Received bootup but not set up to back up.");
+            Log.w(TAG, "unhandled intent: "+intent);
         }
     }
 
@@ -64,17 +56,14 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         final boolean autoSync = preferences.isEnableAutoSync();
         final boolean loginInformationSet = getAuthPreferences(context).isLoginInformationSet();
         final boolean firstBackup = preferences.isFirstBackup();
-        final boolean usesOldScheduler = preferences.isUseOldScheduler();
 
-        final boolean schedule = (autoSync &&  usesOldScheduler && loginInformationSet && !firstBackup );
+        final boolean schedule = (autoSync && loginInformationSet && !firstBackup);
 
         if (!schedule) {
-            final String message = new StringBuilder()
-                .append("Not set up to back up. ")
-                .append("autoSync=").append(autoSync)
-                .append(", loginInfoSet=").append(loginInformationSet)
-                .append(", firstBackup=").append(firstBackup)
-                .toString();
+            final String message = "Not set up to back up. " +
+                    "autoSync=" + autoSync +
+                    ", loginInfoSet=" + loginInformationSet +
+                    ", firstBackup=" + firstBackup;
 
             log(context, message, preferences.isAppLogDebug());
         }

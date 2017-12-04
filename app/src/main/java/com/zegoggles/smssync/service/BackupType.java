@@ -39,4 +39,5 @@ public enum BackupType {
     public boolean isBackground() {
         return this != MANUAL;
     }
+    public boolean isRecurring() { return this == REGULAR; }
 }

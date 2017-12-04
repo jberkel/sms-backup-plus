@@ -27,7 +27,6 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.ObservedUri;
 import com.firebase.jobdispatcher.Trigger;
-import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.preferences.Preferences;
 
 import java.util.Collections;
@@ -40,8 +39,10 @@ import static com.firebase.jobdispatcher.Lifetime.FOREVER;
 import static com.firebase.jobdispatcher.Lifetime.UNTIL_NEXT_BOOT;
 import static com.firebase.jobdispatcher.ObservedUri.Flags.FLAG_NOTIFY_FOR_DESCENDANTS;
 import static com.firebase.jobdispatcher.RetryStrategy.DEFAULT_EXPONENTIAL;
+import static com.firebase.jobdispatcher.Trigger.NOW;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.Consts.SMS_PROVIDER;
 import static com.zegoggles.smssync.service.BackupType.BROADCAST_INTENT;
 import static com.zegoggles.smssync.service.BackupType.INCOMING;
 import static com.zegoggles.smssync.service.BackupType.REGULAR;
@@ -75,7 +76,7 @@ public class BackupJobs {
     }
 
     public Job scheduleContentTriggerJob() {
-        return schedule(createTriggerJob(firebaseJobDispatcher.newJobBuilder()));
+        return schedule(createContentUriTriggerJob());
     }
 
     public Job scheduleBootup() {
@@ -94,12 +95,16 @@ public class BackupJobs {
         return schedule(-1, BROADCAST_INTENT, true);
     }
 
+    public void cancelAll() {
+        cancelRegular();
+        cancelContentUriTrigger();
+    }
 
     public void cancelRegular() {
         cancel(REGULAR.name());
     }
 
-    public void cancelContentTrigger() {
+    private void cancelContentUriTrigger() {
         cancel(CONTENT_TRIGGER_TAG);
     }
 
@@ -107,7 +112,7 @@ public class BackupJobs {
         final int result = firebaseJobDispatcher.cancel(tag);
         if (result == CANCEL_RESULT_SUCCESS) {
             if (LOCAL_LOGV) {
-                Log.v(TAG, "cance("+tag+")");
+                Log.v(TAG, "cancel("+tag+")");
             }
         } else {
             Log.w(TAG, "unable to cancel jobs: "+result);
@@ -120,10 +125,11 @@ public class BackupJobs {
         }
 
         if (force || (mPreferences.isEnableAutoSync() && inSeconds > 0)) {
-            final Job job = createJob(firebaseJobDispatcher.newJobBuilder(), inSeconds, backupType);
+            final Job job = createJob(inSeconds, backupType);
             if (schedule(job) != null) {
                 if (LOCAL_LOGV) {
-                    Log.v(TAG, "Scheduled backup job " + job + " due " + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
+                    Log.v(TAG, "Scheduled backup job " + job + ", tag: " + job.getTag() + " due " +
+                            "" + (inSeconds > 0 ? "in " + inSeconds + " seconds" : "now"));
                 }
             }
             return job;
@@ -146,41 +152,34 @@ public class BackupJobs {
         }
     }
 
-    @NonNull private Job createJob(Job.Builder builder, int inSeconds, BackupType backupType) {
-        final JobTrigger trigger = inSeconds <= 0 ? Trigger.NOW : Trigger.executionWindow(inSeconds, inSeconds);
-        final int constraint = mPreferences.isWifiOnly() ? ON_UNMETERED_NETWORK : ON_ANY_NETWORK;
-        final Bundle extras = new Bundle();
-        extras.putString(BackupType.EXTRA, backupType.name());
-        return builder
-            .setReplaceCurrent(true)
-            .setTrigger(trigger)
-            .setRecurring(backupType == REGULAR)
-            .setConstraints(constraint)
-            .setRetryStrategy(DEFAULT_EXPONENTIAL)
-            .setLifetime(backupType == REGULAR ? FOREVER : UNTIL_NEXT_BOOT)
-            .setTag(backupType.name())
-            .setExtras(extras)
-            .setService(SmsJobService.class)
+    @NonNull private Job createJob(int inSeconds, BackupType backupType) {
+        return createBuilder(backupType)
+            .setTrigger(inSeconds <= 0 ? NOW : Trigger.executionWindow(inSeconds, inSeconds))
+            .setRecurring(backupType.isRecurring())
+            .setLifetime(backupType.isRecurring() ? FOREVER : UNTIL_NEXT_BOOT)
             .build();
     }
 
-    @NonNull private Job createTriggerJob(Job.Builder builder) {
-        final ObservedUri observedUri = new ObservedUri(Consts.SMS_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS);
+    @NonNull private Job createContentUriTriggerJob() {
+        final ObservedUri observedUri = new ObservedUri(SMS_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS);
         final JobTrigger trigger = Trigger.contentUriTrigger(Collections.singletonList(observedUri));
-        final int constraint = mPreferences.isWifiOnly() ? ON_UNMETERED_NETWORK : ON_ANY_NETWORK;
-        final BackupType backupType = INCOMING;
-        final Bundle extras = new Bundle();
-        extras.putString(BackupType.EXTRA, backupType.name());
-        return builder
-            .setReplaceCurrent(true)
+        return createBuilder(INCOMING)
             .setTrigger(trigger)
             .setRecurring(false) // needs to be rescheduled after run
-            .setConstraints(constraint)
-            .setRetryStrategy(DEFAULT_EXPONENTIAL)
             .setLifetime(FOREVER)
             .setTag(CONTENT_TRIGGER_TAG)
-            .setExtras(extras)
-            .setService(SmsJobService.class)
             .build();
+    }
+
+    private Job.Builder createBuilder(BackupType backupType) {
+        final Bundle extras = new Bundle();
+        extras.putString(BackupType.EXTRA, backupType.name());
+        return firebaseJobDispatcher.newJobBuilder()
+            .setReplaceCurrent(true)
+            .setService(SmsJobService.class)
+            .setExtras(extras)
+            .setTag(backupType.name())
+            .setConstraints(mPreferences.isWifiOnly() ? ON_UNMETERED_NETWORK : ON_ANY_NETWORK)
+            .setRetryStrategy(DEFAULT_EXPONENTIAL);
     }
 }

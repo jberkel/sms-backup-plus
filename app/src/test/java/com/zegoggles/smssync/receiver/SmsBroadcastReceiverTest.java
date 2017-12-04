@@ -41,12 +41,6 @@ public class SmsBroadcastReceiverTest {
         };
     }
 
-    @Test public void shouldScheduleBootupBackupAfterBootup() throws Exception {
-        mockScheduled();
-        receiver.onReceive(context, new Intent().setAction(Intent.ACTION_BOOT_COMPLETED));
-        verify(backupJobs, times(1)).scheduleBootup();
-    }
-
     @Test public void shouldScheduleIncomingBackupAfterIncomingMessage() throws Exception {
         mockScheduled();
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));

@@ -192,7 +192,7 @@ public class SmsBackupServiceTest {
         assertThat(backupConfig.skip).isFalse();
     }
 
-    @Test public void shouldScheduleNextBackupAfterFinished() throws Exception {
+    @Test public void shouldScheduleNextRegularBackupAfterFinished() throws Exception {
         shadowConnectivityManager.setBackgroundDataSetting(true);
         Intent intent = new Intent();
         intent.putExtra(BackupType.EXTRA, BackupType.REGULAR.name());
@@ -206,6 +206,16 @@ public class SmsBackupServiceTest {
 
         assertThat(shadowOf(service).isStoppedBySelf());
         assertThat(shadowOf(service).isForegroundStopped());
+    }
+
+    @Test public void shouldScheduleNextContentTriggerAfterIncomingFinished() {
+        when(preferences.isUseOldScheduler()).thenReturn(false);
+
+        Intent intent = new Intent();
+        intent.putExtra(BackupType.EXTRA, BackupType.INCOMING.name());
+        service.handleIntent(intent);
+
+        verify(backupJobs).scheduleContentTriggerJob();
     }
 
     @Test public void shouldCheckForValidStore() throws Exception {
@@ -232,8 +242,7 @@ public class SmsBackupServiceTest {
         assertThat(shadowOf(service).isForegroundStopped());
     }
 
-    @Test
-    public void testPreferencesAreSingletons() throws Exception {
+    @Test public void testPreferencesAreSingletons() throws Exception {
         final SharedPreferences p1 = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application);
         final SharedPreferences p2 = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application);
         assertThat(p1).isSameAs(p2);

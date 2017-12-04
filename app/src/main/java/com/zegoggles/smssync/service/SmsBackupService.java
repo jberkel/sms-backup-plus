@@ -26,7 +26,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
-
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.fsck.k9.mail.MessagingException;
@@ -279,7 +278,7 @@ public class SmsBackupService extends ServiceBase {
                     } else {
                         appLog(R.string.app_log_no_next_sync);
                     }
-                }
+                } // else job already persisted
                 break;
             case INCOMING:
                 if (!getPreferences().isUseOldScheduler()) {
