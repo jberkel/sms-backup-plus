@@ -60,16 +60,23 @@ public class BackupJobsTest {
         assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ContentUriTrigger.class);
     }
 
-    @Test public void shouldScheduleBootForOldScheduler() throws Exception {
+    @Test public void shouldScheduleRegularJobAfterBootForOldScheduler() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.isUseOldScheduler()).thenReturn(true);
         Job job = subject.scheduleBootup();
         verifyJobScheduled(job, 60, "REGULAR");
     }
 
-    @Test public void shouldNotScheduleBootForNewScheduler() throws Exception {
+    @Test public void shouldScheduleContentTriggerJobAfterBootForNewScheduler() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.isUseOldScheduler()).thenReturn(false);
+        Job job = subject.scheduleBootup();
+        assertThat(job).isNotNull();
+        assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ContentUriTrigger.class);
+    }
+
+    @Test public void shouldCancelAllJobsAfterBootIfAutoBackupDisabled() throws Exception {
+        when(preferences.isEnableAutoSync()).thenReturn(false);
         Job job = subject.scheduleBootup();
         assertThat(job).isNull();
     }

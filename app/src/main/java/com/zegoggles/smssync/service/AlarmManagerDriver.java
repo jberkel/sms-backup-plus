@@ -19,6 +19,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.Job;
@@ -51,7 +52,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
     }
 
     @Override
-    public int schedule(Job job) {
+    public int schedule(@NonNull Job job) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "AlarmManagerDriver: schedule " +job);
         }
@@ -70,7 +71,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
     }
 
     @Override
-    public int cancel(String tag) {
+    public int cancel(@NonNull String tag) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "AlarmManagerDriver: cancel " +tag);
         }
@@ -90,7 +91,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
     }
 
     @Override
-    public JobValidator getValidator() {
+    public @NonNull JobValidator getValidator() {
         return this;
     }
 
