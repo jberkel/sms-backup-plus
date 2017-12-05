@@ -15,6 +15,7 @@
 package com.zegoggles.smssync.service;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
@@ -61,12 +62,14 @@ public class SmsJobService extends JobService {
      */
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
+        final Bundle extras = jobParameters.getExtras();
         if (LOCAL_LOGV) {
-            Log.v(TAG, "onStartJob(" + jobParameters + ", extras=" + jobParameters.getExtras() + ")");
+            Log.v(TAG, "onStartJob(" + jobParameters + ", extras=" + extras + ")");
         }
         if (shouldRun(jobParameters)) {
-            startService(new Intent(this, SmsBackupService.class).putExtras(jobParameters.getExtras()));
-            jobs.put(jobParameters.getTag(), jobParameters);
+            startService(new Intent(this, SmsBackupService.class).putExtras(extras));
+            final String backupType = extras == null ? jobParameters.getTag() : extras.getString(BackupType.EXTRA);
+            jobs.put(backupType, jobParameters);
         } else {
             Log.d(TAG, "skipping run");
         }
@@ -92,7 +95,7 @@ public class SmsJobService extends JobService {
 
         final JobParameters jobParameters = jobs.remove(state.backupType.name());
         if (jobParameters != null) {
-            Log.v(TAG, "jobFinished("+jobParameters+")");
+            Log.v(TAG, "jobFinished("+jobParameters+", isError="+state.isError()+")");
             jobFinished(jobParameters, state.isError());
         } else {
             Log.w(TAG, "unknown job for state "+state);

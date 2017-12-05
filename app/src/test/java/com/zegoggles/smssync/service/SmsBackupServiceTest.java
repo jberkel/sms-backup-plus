@@ -215,6 +215,8 @@ public class SmsBackupServiceTest {
         intent.putExtra(BackupType.EXTRA, BackupType.INCOMING.name());
         service.handleIntent(intent);
 
+        service.backupStateChanged(service.transition(SmsSyncState.FINISHED_BACKUP, null));
+
         verify(backupJobs).scheduleContentTriggerJob();
     }
 

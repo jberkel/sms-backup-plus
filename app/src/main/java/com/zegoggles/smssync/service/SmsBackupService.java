@@ -281,7 +281,7 @@ public class SmsBackupService extends ServiceBase {
                 } // else job already persisted
                 break;
             case INCOMING:
-                if (!getPreferences().isUseOldScheduler()) {
+                if (!getPreferences().isUseOldScheduler() && !state.isError()) {
                     getBackupJobs().scheduleContentTriggerJob();
                 }
             default: break;

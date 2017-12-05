@@ -186,7 +186,7 @@ public class BackupJobs {
             .setExtras(extras)
             .setTag(backupType.name())
             .setConstraints(preferences.isWifiOnly() ? ON_UNMETERED_NETWORK : ON_ANY_NETWORK)
-            // initial_backoff * 2 ^ (num_failures - 1) = [ 60, 120, 240, 480, 960, 1920, ... ]
-            .setRetryStrategy(firebaseJobDispatcher.newRetryStrategy(RETRY_POLICY_EXPONENTIAL, 60, 900));
+            // initial_backoff * 2 ^ (num_failures - 1) = [ 30, 60, 120, 240, 480, ... ]
+            .setRetryStrategy(firebaseJobDispatcher.newRetryStrategy(RETRY_POLICY_EXPONENTIAL,  30, 300));
     }
 }
