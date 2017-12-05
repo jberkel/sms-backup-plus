@@ -26,6 +26,7 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.ObservedUri;
+import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.zegoggles.smssync.preferences.Preferences;
 
@@ -39,6 +40,7 @@ import static com.firebase.jobdispatcher.Lifetime.FOREVER;
 import static com.firebase.jobdispatcher.Lifetime.UNTIL_NEXT_BOOT;
 import static com.firebase.jobdispatcher.ObservedUri.Flags.FLAG_NOTIFY_FOR_DESCENDANTS;
 import static com.firebase.jobdispatcher.RetryStrategy.DEFAULT_EXPONENTIAL;
+import static com.firebase.jobdispatcher.RetryStrategy.RETRY_POLICY_EXPONENTIAL;
 import static com.firebase.jobdispatcher.Trigger.NOW;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -184,6 +186,7 @@ public class BackupJobs {
             .setExtras(extras)
             .setTag(backupType.name())
             .setConstraints(preferences.isWifiOnly() ? ON_UNMETERED_NETWORK : ON_ANY_NETWORK)
-            .setRetryStrategy(DEFAULT_EXPONENTIAL);
+            // initial_backoff * 2 ^ (num_failures - 1) = [ 60, 120, 240, 480, 960, 1920, ... ]
+            .setRetryStrategy(firebaseJobDispatcher.newRetryStrategy(RETRY_POLICY_EXPONENTIAL, 60, 900));
     }
 }
