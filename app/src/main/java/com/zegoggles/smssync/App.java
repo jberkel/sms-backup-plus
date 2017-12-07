@@ -28,6 +28,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.receiver.BootReceiver;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
 import com.zegoggles.smssync.service.BackupJobs;
 
@@ -56,7 +57,7 @@ public class App extends Application {
         backupJobs = new BackupJobs(this);
 
         if (gcmAvailable) {
-            setIncomingSmsBroadcastReceiverEnabled(false);
+            setBroadcastReceiversEnabled(false);
         } else {
             Log.v(TAG, "Google Play Services not available, forcing use of old scheduler");
             preferences.setUseOldScheduler(true);
@@ -93,17 +94,23 @@ public class App extends Application {
         if (LOCAL_LOGV) {
             Log.v(TAG, "autoBackupSettingsChanged("+event+")");
         }
-        setIncomingSmsBroadcastReceiverEnabled(preferences.isUseOldScheduler() && preferences.isEnableAutoSync());
+        setBroadcastReceiversEnabled(preferences.isUseOldScheduler() && preferences.isEnableAutoSync());
         rescheduleJobs();
     }
 
-    private void setIncomingSmsBroadcastReceiverEnabled(boolean enabled) {
+
+    private void setBroadcastReceiversEnabled(boolean enabled) {
+        enableOrDisableComponent(enabled, SmsBroadcastReceiver.class);
+        enableOrDisableComponent(enabled, BootReceiver.class);
+    }
+
+    private void enableOrDisableComponent(boolean enabled, Class<?> component) {
         if (LOCAL_LOGV) {
-            Log.v(TAG, "setIncomingBroadcastReceiversEnabled("+enabled+")");
+            Log.v(TAG, "enableComponent("+enabled+", "+component.getSimpleName()+")");
         }
         // NB: changes made via setComponentEnabledSetting are persisted across reboots
         getPackageManager().setComponentEnabledSetting(
-            new ComponentName(this, SmsBroadcastReceiver.class),
+            new ComponentName(this, component),
             enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED,
             DONT_KILL_APP /* apply setting without restart */);
     }
@@ -114,7 +121,7 @@ public class App extends Application {
         if (preferences.isEnableAutoSync()) {
             backupJobs.scheduleRegular();
 
-            if (!preferences.isUseOldScheduler()) {
+            if (preferences.getIncomingTimeoutSecs() > 0 && !preferences.isUseOldScheduler()) {
                 backupJobs.scheduleContentTriggerJob();
             }
         }

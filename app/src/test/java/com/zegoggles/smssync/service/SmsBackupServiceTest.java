@@ -208,18 +208,6 @@ public class SmsBackupServiceTest {
         assertThat(shadowOf(service).isForegroundStopped());
     }
 
-    @Test public void shouldScheduleNextContentTriggerAfterIncomingFinished() {
-        when(preferences.isUseOldScheduler()).thenReturn(false);
-
-        Intent intent = new Intent();
-        intent.putExtra(BackupType.EXTRA, BackupType.INCOMING.name());
-        service.handleIntent(intent);
-
-        service.backupStateChanged(service.transition(SmsSyncState.FINISHED_BACKUP, null));
-
-        verify(backupJobs).scheduleContentTriggerJob();
-    }
-
     @Test public void shouldCheckForValidStore() throws Exception {
         when(authPreferences.getStoreUri()).thenReturn("invalid");
         Intent intent = new Intent();

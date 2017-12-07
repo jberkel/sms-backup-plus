@@ -39,7 +39,6 @@ import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_S
 import static com.firebase.jobdispatcher.Lifetime.FOREVER;
 import static com.firebase.jobdispatcher.Lifetime.UNTIL_NEXT_BOOT;
 import static com.firebase.jobdispatcher.ObservedUri.Flags.FLAG_NOTIFY_FOR_DESCENDANTS;
-import static com.firebase.jobdispatcher.RetryStrategy.DEFAULT_EXPONENTIAL;
 import static com.firebase.jobdispatcher.RetryStrategy.RETRY_POLICY_EXPONENTIAL;
 import static com.firebase.jobdispatcher.Trigger.NOW;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -52,7 +51,7 @@ import static com.zegoggles.smssync.service.BackupType.REGULAR;
 
 public class BackupJobs {
     private static final int BOOT_BACKUP_DELAY = 60;
-    private static final String CONTENT_TRIGGER_TAG = "contentTrigger";
+    static final String CONTENT_TRIGGER_TAG = "contentTrigger";
 
     private final Preferences preferences;
     private FirebaseJobDispatcher firebaseJobDispatcher;
@@ -69,7 +68,7 @@ public class BackupJobs {
             new GooglePlayDriver(context));
     }
 
-    public Job scheduleIncoming() {
+    public @Nullable Job scheduleIncoming() {
         return schedule(preferences.getIncomingTimeoutSecs(), INCOMING, false);
     }
 
@@ -77,11 +76,11 @@ public class BackupJobs {
         return schedule(preferences.getRegularTimeoutSecs(), REGULAR, false);
     }
 
-    public Job scheduleContentTriggerJob() {
+    public @Nullable Job scheduleContentTriggerJob() {
         return schedule(createContentUriTriggerJob());
     }
 
-    public Job scheduleBootup() {
+    public @Nullable Job scheduleBootup() {
         if (!preferences.isEnableAutoSync()) {
             Log.d(TAG, "auto backup no longer enabled, canceling all jobs");
             cancelAll();
@@ -89,15 +88,12 @@ public class BackupJobs {
         } else if (preferences.isUseOldScheduler()) {
             return schedule(BOOT_BACKUP_DELAY, REGULAR, false);
         } else {
-            if (LOCAL_LOGV) {
-                Log.v(TAG, "not scheduling bootup backup (using new scheduler)");
-            }
-            // assume regular jobs are persistent
-            return scheduleContentTriggerJob();
+            // everything else should be persistent by GCM
+            return null;
         }
     }
 
-    public Job scheduleImmediate() {
+    public @Nullable Job scheduleImmediate() {
         return schedule(-1, BROADCAST_INTENT, true);
     }
 
@@ -171,7 +167,7 @@ public class BackupJobs {
         final JobTrigger trigger = Trigger.contentUriTrigger(Collections.singletonList(observedUri));
         return createBuilder(INCOMING)
             .setTrigger(trigger)
-            .setRecurring(false) // needs to be rescheduled after run
+            .setRecurring(true)
             .setLifetime(FOREVER)
             .setTag(CONTENT_TRIGGER_TAG)
             .build();
@@ -185,8 +181,20 @@ public class BackupJobs {
             .setService(SmsJobService.class)
             .setExtras(extras)
             .setTag(backupType.name())
-            .setConstraints(preferences.isWifiOnly() ? ON_UNMETERED_NETWORK : ON_ANY_NETWORK)
-            // initial_backoff * 2 ^ (num_failures - 1) = [ 30, 60, 120, 240, 480, ... ]
-            .setRetryStrategy(firebaseJobDispatcher.newRetryStrategy(RETRY_POLICY_EXPONENTIAL,  30, 300));
+            .setRetryStrategy(defaultRetryStrategy())
+            .setConstraints(jobConstraints(backupType));
+    }
+
+    private int[] jobConstraints(BackupType backupType) {
+        switch (backupType) {
+            case BROADCAST_INTENT: return new int[0];
+            default:
+                return preferences.isWifiOnly() ? new int[] { ON_UNMETERED_NETWORK } : new int[] { ON_ANY_NETWORK };
+        }
+    }
+
+    // initial_backoff * 2 ^ (num_failures - 1) = [ 30, 60, 120, 240, 480, ... ]
+    private RetryStrategy defaultRetryStrategy() {
+        return firebaseJobDispatcher.newRetryStrategy(RETRY_POLICY_EXPONENTIAL,  30, 300);
     }
 }

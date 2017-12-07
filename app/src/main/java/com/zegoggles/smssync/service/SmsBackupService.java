@@ -53,6 +53,7 @@ import java.util.EnumSet;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
+import static com.zegoggles.smssync.service.BackupType.REGULAR;
 import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
@@ -266,26 +267,17 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private void scheduleNextBackup(BackupState state) {
-        switch (state.backupType) {
-            case REGULAR:
-                if (getPreferences().isUseOldScheduler()) {
-                    final Job nextSync = getBackupJobs().scheduleRegular();
-                    if (nextSync != null) {
-                        JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();
-                        Date date = new Date(System.currentTimeMillis() + (trigger.getWindowStart() * 1000));
-                        appLog(R.string.app_log_scheduled_next_sync,
-                                DateFormat.format("kk:mm", date));
-                    } else {
-                        appLog(R.string.app_log_no_next_sync);
-                    }
-                } // else job already persisted
-                break;
-            case INCOMING:
-                if (!getPreferences().isUseOldScheduler() && !state.isError()) {
-                    getBackupJobs().scheduleContentTriggerJob();
-                }
-            default: break;
-        }
+        if (state.backupType == REGULAR && getPreferences().isUseOldScheduler()) {
+            final Job nextSync = getBackupJobs().scheduleRegular();
+            if (nextSync != null) {
+                JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();
+                Date date = new Date(System.currentTimeMillis() + (trigger.getWindowStart() * 1000));
+                appLog(R.string.app_log_scheduled_next_sync,
+                        DateFormat.format("kk:mm", date));
+            } else {
+                appLog(R.string.app_log_no_next_sync);
+            }
+        } // else job already persisted
     }
 
     protected void notifyUser(int icon, int notificationId, String title, String text) {

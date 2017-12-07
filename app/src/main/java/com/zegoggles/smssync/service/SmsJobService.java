@@ -66,14 +66,27 @@ public class SmsJobService extends JobService {
         if (LOCAL_LOGV) {
             Log.v(TAG, "onStartJob(" + jobParameters + ", extras=" + extras + ")");
         }
-        if (shouldRun(jobParameters)) {
+
+        if (wasTriggeredByContentUri(jobParameters)) {
+            if (LOCAL_LOGV) {
+                Log.v(TAG, "scheduling follow-up job for content triggered job "+jobParameters);
+            }
+            new BackupJobs(this).scheduleIncoming();
+            jobFinished(jobParameters, false);
+            return false;
+        } else if (shouldRun(jobParameters)) {
             startService(new Intent(this, SmsBackupService.class).putExtras(extras));
             final String backupType = extras == null ? jobParameters.getTag() : extras.getString(BackupType.EXTRA);
             jobs.put(backupType, jobParameters);
+            return true;
         } else {
             Log.d(TAG, "skipping run");
+            return false;
         }
-        return true;
+    }
+
+    private boolean wasTriggeredByContentUri(JobParameters jobParameters) {
+        return BackupJobs.CONTENT_TRIGGER_TAG.equals(jobParameters.getTag());
     }
 
     /**

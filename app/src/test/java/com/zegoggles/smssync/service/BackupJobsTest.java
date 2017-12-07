@@ -3,6 +3,7 @@ package com.zegoggles.smssync.service;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.Trigger;
@@ -67,12 +68,11 @@ public class BackupJobsTest {
         verifyJobScheduled(job, 60, "REGULAR");
     }
 
-    @Test public void shouldScheduleContentTriggerJobAfterBootForNewScheduler() throws Exception {
+    @Test public void shouldScheduleNothingAfterBootForNewScheduler() throws Exception {
         when(preferences.isEnableAutoSync()).thenReturn(true);
         when(preferences.isUseOldScheduler()).thenReturn(false);
         Job job = subject.scheduleBootup();
-        assertThat(job).isNotNull();
-        assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ContentUriTrigger.class);
+        assertThat(job).isNull();
     }
 
     @Test public void shouldCancelAllJobsAfterBootIfAutoBackupDisabled() throws Exception {
@@ -110,5 +110,12 @@ public class BackupJobsTest {
             assertThat(trigger.getWindowStart()).isEqualTo(testTrigger.getWindowStart());
         }
         assertThat(job.getTag()).isEqualTo(expectedType);
+
+        if ("BROADCAST_INTENT".equals(expectedType)) {
+            assertThat(job.getConstraints()).isEmpty();
+        } else {
+            assertThat(job.getConstraints()).contains(Constraint.ON_ANY_NETWORK);
+        }
+
     }
 }
