@@ -40,7 +40,7 @@
     <item quantity="one">Επιτυχής αποκατάσταση <xliff:g id="total_items">%1$d</xliff:g> αντικειμένου (%2$d dups).</item>
     <item quantity="other"> Επιτυχής αποκατάσταση <xliff:g id="total_items">%1$d</xliff:g> αντικειμένου (%2$d dups).</item>
   </plurals>
- 
+
   <string name="status_restore_canceled_details">%1$d/%2$d αντικείμενα επαναφέρθηκαν επιτυχώς.</string>
 
   <string name="status_unknown_error">Error</string>
@@ -310,8 +310,6 @@
   <string name="ui_dialog_confirm_action_title">Επιβεβαίωση Ενεργειών</string>
   <string name="ui_dialog_confirm_action_msg"> Είστε βέβαιοι ότι θέλετε να εκτελέσετε την ενέργεια;</string>
 
-  <string name="loading"> Φόρτωση …</string>
-  <string name="ssl_error">SSL σφάλμα</string>
   <string name="ui_dialog_account_manager_token_error">
       Δεν μπόρεσα να πάρω δείγμα από το σύστημα. Θέλετε να δοκιμάσετε τη μέθοδο ελέγχου ταυτότητας του προγράμματος περιήγησης;
   </string>

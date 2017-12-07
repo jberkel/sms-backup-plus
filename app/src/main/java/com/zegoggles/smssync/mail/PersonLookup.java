@@ -19,9 +19,6 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.MessageConverter.ECLAIR_CONTENT_URI;
 
 public class PersonLookup {
-    private static final boolean NEW_CONTACT_API = Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.ECLAIR;
-
     private static final String[] PHONE_PROJECTION = getPhoneProjection();
     // PhoneLookup.CONTENT_FILTER_URI
     private static final Uri ECLAIR_CONTENT_FILTER_URI =
@@ -43,7 +40,6 @@ public class PersonLookup {
 
     public PersonLookup(ContentResolver resolver) {
         mResolver = resolver;
-        Log.d(TAG, String.format(Locale.ENGLISH, "using %s contacts API", NEW_CONTACT_API ? "new" : "old"));
     }
 
     /* Look up a person */
@@ -52,20 +48,18 @@ public class PersonLookup {
         if (TextUtils.isEmpty(address)) {
             return new PersonRecord(0, null, null, "-1");
         } else if (!mPeopleCache.containsKey(address)) {
-            Uri personUri = Uri.withAppendedPath(NEW_CONTACT_API ? ECLAIR_CONTENT_FILTER_URI :
-                    android.provider.Contacts.Phones.CONTENT_FILTER_URL, Uri.encode(address));
+            Uri personUri = Uri.withAppendedPath(ECLAIR_CONTENT_FILTER_URI, Uri.encode(address));
 
             Cursor c = mResolver.query(personUri, PHONE_PROJECTION, null, null, null);
             final PersonRecord record;
             if (c != null && c.moveToFirst()) {
                 long id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
-                String number = NEW_CONTACT_API ? address : c.getString(c.getColumnIndex(PHONE_PROJECTION[2]));
 
                 record = new PersonRecord(
                     id,
                     c.getString(c.getColumnIndex(PHONE_PROJECTION[1])),
                     getPrimaryEmail(id),
-                    number
+                        address
                 );
 
             } else {
@@ -88,27 +82,12 @@ public class PersonLookup {
         String primaryEmail = null;
 
         // Get all e-mail addresses for that person.
-        Cursor c;
-        int columnIndex;
-        if (NEW_CONTACT_API) {
-            c = mResolver.query(
-                    ECLAIR_CONTENT_URI,
-                    new String[]{ContactsContract.CommonDataKinds.Email.DATA},
-                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{String.valueOf(personId)},
-                    ContactsContract.CommonDataKinds.Email.IS_PRIMARY + " DESC");
-            columnIndex = c != null ? c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA) : -1;
-        } else {
-            c = mResolver.query(
-                    android.provider.Contacts.ContactMethods.CONTENT_EMAIL_URI,
-                    new String[]{
-                            android.provider.Contacts.ContactMethods.DATA
-                    },
-                    android.provider.Contacts.ContactMethods.PERSON_ID + " = ?",
-                    new String[]{String.valueOf(personId)},
-                    android.provider.Contacts.ContactMethods.ISPRIMARY + " DESC");
-
-            columnIndex = c != null ? c.getColumnIndex(android.provider.Contacts.ContactMethods.DATA) : -1;
-        }
+        Cursor c = mResolver.query(
+            ECLAIR_CONTENT_URI,
+                new String[]{ContactsContract.CommonDataKinds.Email.DATA},
+                ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{String.valueOf(personId)},
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY + " DESC");
+        int columnIndex = c != null ? c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA) : -1;
 
         // Loop over cursor and find a Gmail address for that person.
         // If there is none, pick first e-mail address.
@@ -131,18 +110,12 @@ public class PersonLookup {
     private static boolean isGmailAddress(String email) {
         return email != null &&
                 (email.toLowerCase(Locale.ENGLISH).endsWith("gmail.com") ||
-                        email.toLowerCase(Locale.ENGLISH).endsWith("googlemail.com"));
+                 email.toLowerCase(Locale.ENGLISH).endsWith("googlemail.com"));
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     @SuppressWarnings("deprecation")
     private static String[] getPhoneProjection() {
-        return NEW_CONTACT_API ?
-                new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME} :
-                new String[]{
-                        android.provider.Contacts.Phones.PERSON_ID,
-                        android.provider.Contacts.People.NAME,
-                        android.provider.Contacts.Phones.NUMBER
-                };
+        return new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME};
     }
 }

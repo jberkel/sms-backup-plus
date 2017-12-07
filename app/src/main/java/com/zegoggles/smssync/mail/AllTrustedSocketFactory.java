@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.mail;
 
+import android.annotation.SuppressLint;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.ssl.TrustedSocketFactory;
 
@@ -14,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+@SuppressLint("TrustAllX509TrustManager")
 class AllTrustedSocketFactory implements TrustedSocketFactory {
     public static TrustedSocketFactory INSTANCE = new AllTrustedSocketFactory();
 

@@ -61,7 +61,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
                         queryAvailableSkus();
                         break;
                     default:
-                        String message = getString(BILLING_UNAVAILABLE);
+                        String message = getString(R.string.donation_error_iab_unavailable);
                         Toast.makeText(DonationActivity.this, message, Toast.LENGTH_LONG).show();
                         Log.w(TAG, "Problem setting up in-app billing: " + resultCode);
                         finish();

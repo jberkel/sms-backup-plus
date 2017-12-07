@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.service;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -30,9 +31,7 @@ public class BackupItemsFetcher {
         this.resolver = resolver;
     }
 
-    public
-    @NonNull
-    Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
+    public @NonNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
         return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
     }
@@ -54,9 +53,8 @@ public class BackupItemsFetcher {
         }
     }
 
-    private
-    @NonNull
-    Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
+    @SuppressLint("Recycle")
+    private @NonNull Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
         if (query == null) return emptyCursor();
         try {
             final Cursor cursor = resolver.query(

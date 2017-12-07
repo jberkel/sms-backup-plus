@@ -319,8 +319,6 @@
   <string name="ui_dialog_confirm_action_title">Confirmació de l\'acció</string>
   <string name="ui_dialog_confirm_action_msg">Segur que voleu realitzar l\'acció?</string>
 
-  <string name="loading">S\'està carregant…</string>
-  <string name="ssl_error">Error d\'SSL</string>
   <string name="ui_dialog_account_manager_token_error">
       No s\'ha pogut obtenir el testimoni del sistema. Voleu intentar el mètode d\'autentificació pel navegador?
   </string>

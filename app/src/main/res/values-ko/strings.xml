@@ -322,8 +322,6 @@
   <string name="ui_dialog_confirm_action_title">작업 확인</string>
   <string name="ui_dialog_confirm_action_msg">정말 이 작업을 수행하길 원하십니까?</string>
 
-  <string name="loading">로딩…</string>
-  <string name="ssl_error">SSL 오류</string>
   <string name="ui_dialog_account_manager_token_error">
       시스템으로부터 토큰을 받아오지 못했습니다. 브라우저에서 인증을 시도하시겠습니까?
   </string>
@@ -346,7 +344,7 @@
   <string name="ui_dialog_sms_default_package_change_title">업그레이드 주의 사항</string>
   <string name="ui_dialog_sms_default_package_change_msg">
     안드로이드 킷캣이나 롤리팝에서 메시지를 복원하려면 복원 작업 동안 SMS Backup+를
-    SMS 앱으로 설정해야 합니다. 복원이 완료된 후에 원래의 설정으로 돌려 놓을 건지 
+    SMS 앱으로 설정해야 합니다. 복원이 완료된 후에 원래의 설정으로 돌려 놓을 건지
     물어 볼 것입니다.
   </string>
 </resources>

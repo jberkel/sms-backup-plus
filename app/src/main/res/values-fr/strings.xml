@@ -321,8 +321,6 @@
   <string name="ui_dialog_confirm_action_title">Confirmer l\'action</string>
   <string name="ui_dialog_confirm_action_msg">Êtes-vous sûr de vouloir effectuer cette action ?</string>
 
-  <string name="loading">Chargement…</string>
-  <string name="ssl_error">Erreur SSL</string>
   <string name="ui_dialog_account_manager_token_error">
       La clé d \'authentification n\'a pas pu être récupérée. Voulez-vous essayer la méthode d\'authentification par navigateur ?
   </string>

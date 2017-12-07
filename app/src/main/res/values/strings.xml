@@ -327,8 +327,6 @@
   <string name="ui_dialog_confirm_action_title">Confirm Action</string>
   <string name="ui_dialog_confirm_action_msg">Are you sure want to perform the action?</string>
 
-  <string name="loading">Loading…</string>
-  <string name="ssl_error">SSL error</string>
   <string name="ui_dialog_account_manager_token_error">
       Could not get token from system. Do you want to try the browser authentication method?
   </string>

@@ -26,7 +26,7 @@ public class TokenRefresher {
     private AuthPreferences authPreferences;
 
     public TokenRefresher(Context context, OAuth2Client oauth2Client, AuthPreferences authPreferences) {
-        this(Build.VERSION.SDK_INT >= 5 ? AccountManager.get(context) : null, oauth2Client, authPreferences);
+        this(AccountManager.get(context), oauth2Client, authPreferences);
     }
 
     TokenRefresher(@Nullable AccountManager accountManager, OAuth2Client oauth2Client,

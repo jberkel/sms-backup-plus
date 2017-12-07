@@ -243,8 +243,6 @@
 <string name="ui_confirm_action_desc">Запитати, перш ніж виконувати резервне копіювання або відновлення</string>
 <string name="ui_dialog_confirm_action_title">Підтвердження дії</string>
 <string name="ui_dialog_confirm_action_msg">Ви впевнені, що хочете виконати дію?</string>
-<string name="loading">Завантаження\u2026</string>
-<string name="ssl_error">Помилка SSL</string>
 <string name="ui_dialog_account_manager_token_error">Не вдалося отримати маркер з системи. Бажаєте спробувати метод автентифікації переглядача тенет?</string>
 <string name="select_google_account">Оберіть Google-акаунт</string>
 

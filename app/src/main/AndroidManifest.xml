@@ -30,9 +30,6 @@
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
 
-    <uses-sdk android:minSdkVersion="9"
-              android:targetSdkVersion="10"/>
-
     <supports-screens android:smallScreens="true"/>
 
     <application android:icon="@drawable/ic_launcher"
@@ -79,7 +76,9 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".receiver.SmsBroadcastReceiver" android:enabled="true">
+        <receiver android:name=".receiver.SmsBroadcastReceiver"
+                  android:enabled="true"
+                  android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
@@ -97,7 +96,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.BackupBroadcastReceiver" android:enabled="true">
+        <receiver android:name=".receiver.BackupBroadcastReceiver" android:enabled="true" tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.zegoggles.smssync.BACKUP"/>
                 <category android:name="android.intent.category.DEFAULT"/>

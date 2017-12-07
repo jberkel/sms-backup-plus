@@ -323,8 +323,6 @@
   <string name="ui_dialog_confirm_action_title">確認操作</string>
   <string name="ui_dialog_confirm_action_msg">您確認要執行此操作麼？</string>
 
-  <string name="loading">正在加載...</string>
-  <string name="ssl_error">SSL 出錯</string>
   <string name="ui_dialog_account_manager_token_error">
       無法從系統取得令牌。您是否願意嘗試一下瀏覽器驗證方式？
   </string>

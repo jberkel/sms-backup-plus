@@ -239,8 +239,6 @@
   <string name="ui_confirm_action_desc">Pyesni përpara se të filloni krijimin e kopjes rezervë apo rikthimin</string>
   <string name="ui_dialog_confirm_action_title">Konfirmoni Veprimet</string>
   <string name="ui_dialog_confirm_action_msg">A jeni të sigurtë nëse doni të kryeni keto veprime?</string>
-  <string name="loading">Duke u ngarkuar…</string>
-  <string name="ssl_error">gabim SSL</string>
   <string name="ui_dialog_account_manager_token_error">
       Nuk mund të marrë shenjën nga sistemi. Dëshironi të provoni metodën e verifikimit me shfletues?
   </string>

@@ -314,8 +314,6 @@
   <string name="ui_dialog_confirm_action_title">Confirmar Acción</string>
   <string name="ui_dialog_confirm_action_msg">Está seguro que desexa realizar esta acción?</string>
 
-  <string name="loading">Cargando…</string>
-  <string name="ssl_error">Erro de SSL</string>
   <string name="ui_dialog_account_manager_token_error">
       Non se puido obter o identificador do sistema. Desexa intentar a autenticación dende o navegador?
   </string>
