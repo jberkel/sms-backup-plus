@@ -26,6 +26,7 @@ import org.robolectric.shadows.ShadowPendingIntent;
 import java.util.Collections;
 import java.util.List;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_UNSUPPORTED_TRIGGER;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -93,7 +94,7 @@ public class AlarmManagerDriverTest {
         ComponentName component = shadowPendingIntent.getSavedIntent().getComponent();
         assertThat(component.getPackageName()).isEqualTo("com.zegoggles.smssync");
         assertThat(component.getClassName()).isEqualTo("com.zegoggles.smssync.service.SmsBackupService");
-        assertThat(shadowPendingIntent.getFlags()).isEqualTo(0);
+        assertThat(shadowPendingIntent.getFlags()).isEqualTo(FLAG_UPDATE_CURRENT);
         assertThat(shadowPendingIntent.getSavedIntent().getAction()).isNotEmpty();
 
         assertThat(shadowPendingIntent.getSavedIntent().getStringExtra(BackupType.EXTRA))

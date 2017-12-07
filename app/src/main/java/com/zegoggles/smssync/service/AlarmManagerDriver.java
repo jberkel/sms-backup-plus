@@ -29,9 +29,9 @@ import com.firebase.jobdispatcher.JobValidator;
 import com.firebase.jobdispatcher.RetryStrategy;
 
 import java.util.List;
-import java.util.UUID;
 
 import static android.app.AlarmManager.RTC_WAKEUP;
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.CANCEL_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_UNSUPPORTED_TRIGGER;
@@ -75,6 +75,8 @@ class AlarmManagerDriver implements Driver, JobValidator {
         if (LOCAL_LOGV) {
             Log.v(TAG, "AlarmManagerDriver: cancel " +tag);
         }
+        // Matching intents based on Intent#filterEquals():
+        // That is, if their action, data, type, class, and categories are the same.
         alarmManager.cancel(createPendingIntent(context, BackupType.fromName(tag)));
         return CANCEL_RESULT_SUCCESS;
     }
@@ -84,9 +86,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
         if (LOCAL_LOGV) {
             Log.v(TAG, "AlarmManagerDriver: cancelAll");
         }
-        // Matching intents based on Intent#filterEquals():
-        // That is, if their action, data, type, class, and categories are the same.
-        alarmManager.cancel(createPendingIntent(context, UNKNOWN));
+        cancel(BackupType.REGULAR.name());
         return CANCEL_RESULT_SUCCESS;
     }
 
@@ -122,12 +122,11 @@ class AlarmManagerDriver implements Driver, JobValidator {
     }
 
     private static PendingIntent createPendingIntent(Context ctx, BackupType backupType) {
-        final UUID uuid = UUID.randomUUID();
         final Intent intent = (new Intent(ctx, SmsBackupService.class))
-                .setAction(backupType.name() + "-" + uuid.toString()) // create fresh pending intent
-                .putExtra(BackupType.EXTRA, backupType.name());
+            .setAction(backupType.name())
+            .putExtra(BackupType.EXTRA, backupType.name());
 
-        return PendingIntent.getService(ctx, 0, intent, 0);
+        return PendingIntent.getService(ctx, 0, intent, FLAG_UPDATE_CURRENT);
     }
 
     private static long scheduleTime(JobTrigger trigger) {
