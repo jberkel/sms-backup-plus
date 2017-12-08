@@ -24,7 +24,6 @@ import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
-import com.zegoggles.smssync.preferences.DataTypePreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
@@ -54,7 +53,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final Preferences preferences;
     private final ContactAccessor contactAccessor;
     private final TokenRefresher tokenRefresher;
-
 
     BackupTask(@NonNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
@@ -108,8 +106,11 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         App.bus.register(this);
     }
 
-    @Subscribe public void userCanceled(UserCanceled canceled) {
-        cancel(false);
+    @Subscribe public void canceled(CancelEvent cancelEvent) {
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "canceled("+cancelEvent+")");
+        }
+        cancel(cancelEvent.mayInterruptIfRunning());
     }
 
     @Override protected BackupState doInBackground(BackupConfig... params) {

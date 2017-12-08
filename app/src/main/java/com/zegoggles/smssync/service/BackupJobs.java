@@ -56,7 +56,7 @@ public class BackupJobs {
     static final String CONTENT_TRIGGER_TAG = "contentTrigger";
 
     private final Preferences preferences;
-    private FirebaseJobDispatcher firebaseJobDispatcher;
+    private final FirebaseJobDispatcher firebaseJobDispatcher;
 
     public BackupJobs(Context context) {
         this(context, new Preferences(context));
@@ -65,7 +65,7 @@ public class BackupJobs {
     BackupJobs(Context context, Preferences preferences) {
         this.preferences = preferences;
         firebaseJobDispatcher = new FirebaseJobDispatcher(
-            this.preferences.isUseOldScheduler() ?
+            preferences.isUseOldScheduler() ?
             new AlarmManagerDriver(context) :
             new GooglePlayDriver(context));
     }

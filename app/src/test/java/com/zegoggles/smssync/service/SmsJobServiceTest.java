@@ -21,12 +21,17 @@ public class SmsJobServiceTest {
         smsJobService = setupService(SmsJobService.class);
     }
 
-    @Test
-    public void testOnStartJob() {
+    @Test public void testOnStartJob() {
         final JobParameters jobParameters = mock(JobParameters.class);;
         when(jobParameters.getTag()).thenReturn(BackupJobs.CONTENT_TRIGGER_TAG);
 
         boolean moreWork = smsJobService.onStartJob(jobParameters);
         assertThat(moreWork).isFalse();
+    }
+
+    @Test public void testOnStopJob() {
+        final JobParameters jobParameters = mock(JobParameters.class);
+        boolean shouldRetry = smsJobService.onStopJob(jobParameters);
+        assertThat(shouldRetry).isFalse();
     }
 }

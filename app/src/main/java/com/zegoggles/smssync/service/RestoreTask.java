@@ -72,8 +72,8 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         App.bus.register(this);
     }
 
-    @Subscribe public void userCanceled(UserCanceled canceled) {
-        cancel(false);
+    @Subscribe public void canceled(CancelEvent canceled) {
+        cancel(canceled.mayInterruptIfRunning());
     }
 
     @NonNull protected RestoreState doInBackground(RestoreConfig... params) {
@@ -193,7 +193,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
 
     @Override
     protected void onCancelled() {
-        Log.d(TAG, "restore canceled by user");
+        Log.d(TAG, "restore cancelled");
         post(transition(CANCELED_RESTORE, null));
         App.bus.unregister(this);
     }

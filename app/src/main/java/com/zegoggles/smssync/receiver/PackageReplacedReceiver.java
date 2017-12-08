@@ -11,13 +11,13 @@ import com.zegoggles.smssync.preferences.Preferences;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
-public class UpdateReceiver extends BroadcastReceiver {
+public class PackageReplacedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + context + "," + intent + ")");
 
         if (Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())) {
-            Log.d(TAG, "updating to version " + new Preferences(context).getVersion(true));
+            Log.d(TAG, "now installed version: " + new Preferences(context).getVersion(true));
             //  just post event and let application handle the rest
             App.bus.post(new AutoBackupSettingsChangedEvent());
         } else {

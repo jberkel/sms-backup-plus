@@ -30,6 +30,7 @@ import java.util.Map;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.service.BackupType.REGULAR;
+import static com.zegoggles.smssync.service.CancelEvent.Origin.SYSTEM;
 
 
 public class SmsJobService extends JobService {
@@ -71,8 +72,7 @@ public class SmsJobService extends JobService {
             if (LOCAL_LOGV) {
                 Log.v(TAG, "scheduling follow-up job for content triggered job "+jobParameters);
             }
-            new BackupJobs(this).scheduleIncoming();
-            jobFinished(jobParameters, false);
+            getBackupJobs().scheduleIncoming();
             return false;
         } else if (shouldRun(jobParameters)) {
             startService(new Intent(this, SmsBackupService.class).putExtras(extras));
@@ -85,11 +85,11 @@ public class SmsJobService extends JobService {
         }
     }
 
-    private boolean wasTriggeredByContentUri(JobParameters jobParameters) {
-        return BackupJobs.CONTENT_TRIGGER_TAG.equals(jobParameters.getTag());
-    }
-
     /**
+     * Called when the scheduling engine has decided to interrupt the execution of a running job, most
+     * likely because the runtime constraints associated with the job are no longer satisfied. The job
+     * must stop execution.
+     *
      * @return true if the job should be retried
      */
     @Override
@@ -97,6 +97,7 @@ public class SmsJobService extends JobService {
         if (LOCAL_LOGV) {
             Log.v(TAG, "onStopJob(" + jobParameters + ", extras=" + jobParameters.getExtras() + ")");
         }
+        App.bus.post(new CancelEvent(SYSTEM));
         return false;
     }
 
@@ -117,17 +118,25 @@ public class SmsJobService extends JobService {
         }
     }
 
+    private boolean wasTriggeredByContentUri(JobParameters jobParameters) {
+        return BackupJobs.CONTENT_TRIGGER_TAG.equals(jobParameters.getTag());
+    }
+
     private boolean shouldRun(JobParameters jobParameters) {
         if (BackupType.fromName(jobParameters.getTag()) == REGULAR) {
             final Preferences prefs = new Preferences(this);
             final boolean autoBackupEnabled = prefs.isEnableAutoSync();
             if (!autoBackupEnabled) {
                 // was disabled in meantime, cancel
-                new BackupJobs(this).cancelRegular();
+                getBackupJobs().cancelRegular();
             }
             return autoBackupEnabled;
         } else {
             return true;
         }
+    }
+
+    private BackupJobs getBackupJobs() {
+        return new BackupJobs(this);
     }
 }

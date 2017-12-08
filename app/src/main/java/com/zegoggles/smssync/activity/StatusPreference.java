@@ -15,7 +15,7 @@ import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
-import com.zegoggles.smssync.service.UserCanceled;
+import com.zegoggles.smssync.service.CancelEvent;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
@@ -58,7 +58,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
                 // Sync button will be restored on next status update.
                 mBackupButton.setText(R.string.ui_sync_button_label_canceling);
                 mBackupButton.setEnabled(false);
-                App.bus.post(new UserCanceled());
+                App.bus.post(new CancelEvent());
             }
         } else if (v == mRestoreButton) {
             if (LOCAL_LOGV) Log.v(TAG, "restore");
@@ -67,7 +67,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
             } else {
                 mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
                 mRestoreButton.setEnabled(false);
-                App.bus.post(new UserCanceled());
+                App.bus.post(new CancelEvent());
             }
         }
     }
