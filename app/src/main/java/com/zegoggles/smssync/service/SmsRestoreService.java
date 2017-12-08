@@ -73,8 +73,8 @@ public class SmsRestoreService extends ServiceBase {
         if (isWorking()) return;
 
         try {
-            final boolean restoreCallLog = CALLLOG.isRestoreEnabled(getPreferences().preferences);
-            final boolean restoreSms     = SMS.isRestoreEnabled(getPreferences().preferences);
+            final boolean restoreCallLog = getPreferences().getDataTypePreferences().isRestoreEnabled(CALLLOG);
+            final boolean restoreSms     = getPreferences().getDataTypePreferences().isRestoreEnabled(SMS);
 
             if (restoreSms && !canWriteToSmsProvider()) {
                 postError(new SmsProviderNotWritableException());

@@ -24,13 +24,14 @@ import android.util.Log;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.JobTrigger;
 import com.firebase.jobdispatcher.ObservedUri;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
+import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.Preferences;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.firebase.jobdispatcher.Constraint.ON_ANY_NETWORK;
 import static com.firebase.jobdispatcher.Constraint.ON_UNMETERED_NETWORK;
@@ -43,6 +44,7 @@ import static com.firebase.jobdispatcher.RetryStrategy.RETRY_POLICY_EXPONENTIAL;
 import static com.firebase.jobdispatcher.Trigger.NOW;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.Consts.CALLLOG_PROVIDER;
 import static com.zegoggles.smssync.Consts.SMS_PROVIDER;
 import static com.zegoggles.smssync.service.BackupType.BROADCAST_INTENT;
 import static com.zegoggles.smssync.service.BackupType.INCOMING;
@@ -163,14 +165,21 @@ public class BackupJobs {
     }
 
     private @NonNull Job createContentUriTriggerJob() {
-        final ObservedUri observedUri = new ObservedUri(SMS_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS);
-        final JobTrigger trigger = Trigger.contentUriTrigger(Collections.singletonList(observedUri));
         return createBuilder(INCOMING)
-            .setTrigger(trigger)
+            .setTrigger(Trigger.contentUriTrigger(observedUris()))
             .setRecurring(true)
             .setLifetime(FOREVER)
             .setTag(CONTENT_TRIGGER_TAG)
             .build();
+    }
+
+    private @NonNull List<ObservedUri> observedUris() {
+        List<ObservedUri> observedUris = new ArrayList<ObservedUri>();
+        observedUris.add(new ObservedUri(SMS_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS));
+        if (preferences.getDataTypePreferences().isBackupEnabled(DataType.CALLLOG) && preferences.isCallLogBackupAfterCallEnabled()) {
+            observedUris.add(new ObservedUri(CALLLOG_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS));
+        }
+        return observedUris;
     }
 
     private @NonNull Job.Builder createBuilder(BackupType backupType) {

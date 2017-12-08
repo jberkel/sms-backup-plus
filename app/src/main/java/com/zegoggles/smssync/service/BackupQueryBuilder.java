@@ -1,9 +1,6 @@
 package com.zegoggles.smssync.service;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.provider.CallLog;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
@@ -13,6 +10,7 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
 
 import java.util.Locale;
 import java.util.Set;
@@ -35,9 +33,9 @@ class BackupQueryBuilder {
         CallLog.Calls.DATE,
         CallLog.Calls.TYPE
     };
-    private final SharedPreferences preferences;
+    private final DataTypePreferences preferences;
 
-    public BackupQueryBuilder(SharedPreferences preferences) {
+    BackupQueryBuilder(DataTypePreferences preferences) {
         this.preferences = preferences;
     }
 
@@ -108,14 +106,14 @@ class BackupQueryBuilder {
                     Telephony.TextBasedSmsColumns.TYPE,
                     groupSelection(SMS, groupIds)).trim(),
             new String[] {
-                String.valueOf(SMS.getMaxSyncedDate(preferences)),
+                String.valueOf(preferences.getMaxSyncedDate(SMS)),
                 String.valueOf(Telephony.TextBasedSmsColumns.MESSAGE_TYPE_DRAFT)
             },
             max);
     }
 
     private Query getQueryForMMS(@Nullable ContactGroupIds group, int max) {
-        long maxSynced = MMS.getMaxSyncedDate(preferences);
+        long maxSynced = preferences.getMaxSyncedDate(MMS);
         if (maxSynced > 0) {
             // NB: max synced date is stored in seconds since epoch in database
             maxSynced = (long) (maxSynced / 1000d);
@@ -140,7 +138,7 @@ class BackupQueryBuilder {
             CALLLOG_PROJECTION,
             String.format(Locale.ENGLISH, "%s > ?", CallLog.Calls.DATE),
             new String[] {
-                String.valueOf(CALLLOG.getMaxSyncedDate(preferences))
+                String.valueOf(preferences.getMaxSyncedDate(CALLLOG))
             },
             max);
     }

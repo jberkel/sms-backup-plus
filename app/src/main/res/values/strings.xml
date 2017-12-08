@@ -113,7 +113,10 @@
 
   <string name="ui_imap_folder_calllog_label">Call log label</string>
   <string name="ui_imap_folder_calllog_desc">Gmail label assigned to call log.</string>
-   <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
+
+  <string name="ui_backup_calllog_after_call_label">Backup after call</string>
+  <string name="ui_backup_calllog_after_call_desc">Automatically backup after incoming/outgoing call (uses Incoming schedule).</string>
 
   <string name="ui_mark_as_read_label">Mark as read (emails)</string>
   <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
@@ -205,10 +208,14 @@
   <string name="call_incoming">incoming call</string>
   <string name="call_outgoing">outgoing call</string>
   <string name="call_missed">missed call</string>
+  <string name="call_rejected">incoming call, rejected</string>
+  <string name="call_voicemail">incoming call, voicemail</string>
 
   <string name="call_missed_text">Missed call from %1$s</string>
   <string name="call_incoming_text">Call from %1$s</string>
   <string name="call_outgoing_text">Called %1$s</string>
+  <string name="call_rejected_text">Rejected call from %1$s</string>
+  <string name="call_voicemail_text">Call from %1$s (voicemail)</string>
 
   <string name="call_number_field">Number: %1$s</string>
   <string name="call_duration_field">Duration: %1$s</string>
@@ -253,16 +260,12 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Backup settings</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
-
   <string name="ui_backup_calllog_settings_label">Call log settings</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">Auto backup settings</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Restore settings</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">Backup SMS</string>
   <string name="ui_backup_sms_desc">Enable SMS backup</string>

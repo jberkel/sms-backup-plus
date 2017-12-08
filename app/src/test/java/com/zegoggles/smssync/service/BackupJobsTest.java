@@ -6,7 +6,9 @@ import android.content.pm.ServiceInfo;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobTrigger;
+import com.firebase.jobdispatcher.ObservedUri;
 import com.firebase.jobdispatcher.Trigger;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,10 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowPackageManager;
 
+import static com.firebase.jobdispatcher.ObservedUri.Flags.FLAG_NOTIFY_FOR_DESCENDANTS;
+import static com.zegoggles.smssync.Consts.CALLLOG_PROVIDER;
+import static com.zegoggles.smssync.Consts.SMS_PROVIDER;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -26,6 +32,7 @@ public class BackupJobsTest {
     private BackupJobs subject;
 
     @Mock private Preferences preferences;
+    @Mock private DataTypePreferences dataTypePreferences;
 
     @Before public void before() {
         initMocks(this);
@@ -42,6 +49,7 @@ public class BackupJobsTest {
 
         pm.addResolveInfoForIntent(executeIntent, ri);
         subject = new BackupJobs(RuntimeEnvironment.application, preferences);
+        when(preferences.getDataTypePreferences()).thenReturn(dataTypePreferences);
     }
 
     @Test public void shouldScheduleImmediate() throws Exception {
@@ -56,9 +64,26 @@ public class BackupJobsTest {
         verifyJobScheduled(job, 2000, "REGULAR");
     }
 
-    @Test public void shouldScheduleContentUriTrigger() throws Exception {
+    @Test public void shouldScheduleContentUriTriggerForSMS() throws Exception {
         Job job = subject.scheduleContentTriggerJob();
         assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ContentUriTrigger.class);
+
+        JobTrigger.ContentUriTrigger contentUriTrigger = (JobTrigger.ContentUriTrigger) job.getTrigger();
+        assertThat(contentUriTrigger.getUris()).containsExactly(new ObservedUri(SMS_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS));
+    }
+
+    @Test public void shouldScheduleContentUriTriggerForCallLogIfEnabled() throws Exception {
+        when(preferences.isCallLogBackupAfterCallEnabled()).thenReturn(true);
+        when(dataTypePreferences.isBackupEnabled(CALLLOG)).thenReturn(true);
+
+        Job job = subject.scheduleContentTriggerJob();
+        assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ContentUriTrigger.class);
+
+        JobTrigger.ContentUriTrigger contentUriTrigger = (JobTrigger.ContentUriTrigger) job.getTrigger();
+        assertThat(contentUriTrigger.getUris()).contains(
+            new ObservedUri(SMS_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS),
+            new ObservedUri(CALLLOG_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS)
+        );
     }
 
     @Test public void shouldScheduleRegularJobAfterBootForOldScheduler() throws Exception {
@@ -116,6 +141,5 @@ public class BackupJobsTest {
         } else {
             assertThat(job.getConstraints()).contains(Constraint.ON_ANY_NETWORK);
         }
-
     }
 }

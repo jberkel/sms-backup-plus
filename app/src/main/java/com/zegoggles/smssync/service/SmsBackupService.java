@@ -18,9 +18,7 @@ package com.zegoggles.smssync.service;
 
 import android.app.Notification;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -152,8 +150,7 @@ public class SmsBackupService extends ServiceBase {
     }
 
     private EnumSet<DataType> getEnabledBackupTypes() throws BackupDisabledException {
-        final SharedPreferences preferences =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        EnumSet<DataType> dataTypes = DataType.enabled(preferences);
+        EnumSet<DataType> dataTypes = getPreferences().getDataTypePreferences().enabled();
         if (dataTypes.isEmpty()) {
             throw new BackupDisabledException();
         }

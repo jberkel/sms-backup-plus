@@ -33,6 +33,7 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG_DEBUG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CONFIRM_ACTION;
@@ -59,7 +60,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 public class Preferences {
     private static final String ERROR = "error";
     private final Context context;
-    public final SharedPreferences preferences;
+    private final SharedPreferences preferences;
 
     public Preferences(Context context) {
         this(context.getApplicationContext(),
@@ -79,6 +80,7 @@ public class Preferences {
         MAX_ITEMS_PER_RESTORE ("max_items_per_restore"),
         CALLLOG_SYNC_CALENDAR ("backup_calllog_sync_calendar"),
         CALLLOG_SYNC_CALENDAR_ENABLED ("backup_calllog_sync_calendar_enabled"),
+        CALLLOG_BACKUP_AFTER_CALL ("backup_calllog_after_call"),
         BACKUP_CONTACT_GROUP("backup_contact_group"),
         CONNECTED("connected"),
         WIFI_ONLY("wifi_only"),
@@ -105,10 +107,16 @@ public class Preferences {
         ;
 
         public final String key;
-        private Keys(String key) {
+        Keys(String key) {
             this.key = key;
         }
     }
+    private static final String CALLLOG_TYPES = "backup_calllog_types";
+
+    public SharedPreferences getSharedPreferences() {
+        return preferences;
+    }
+    public DataTypePreferences getDataTypePreferences() { return new DataTypePreferences(preferences); };
 
     public boolean isAppLogEnabled() {
         return preferences.getBoolean(APP_LOG.key, false);
@@ -128,9 +136,16 @@ public class Preferences {
                     preferences.getBoolean(CALLLOG_SYNC_CALENDAR_ENABLED.key, false);
     }
 
+    public boolean isCallLogBackupAfterCallEnabled() {
+        return preferences.getBoolean(CALLLOG_BACKUP_AFTER_CALL.key, false);
+    }
 
     public int getCallLogCalendarId() {
         return getStringAsInt(CALLLOG_SYNC_CALENDAR, -1);
+    }
+
+    public  CallLogTypes getCallLogType() {
+        return getDefaultType(CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
     }
 
     public boolean isRestoreStarredOnly() {

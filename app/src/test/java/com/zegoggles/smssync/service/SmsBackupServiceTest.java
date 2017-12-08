@@ -2,16 +2,15 @@ package com.zegoggles.smssync.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.exception.BackupDisabledException;
 import com.zegoggles.smssync.service.exception.NoConnectionException;
@@ -32,6 +31,7 @@ import org.robolectric.shadows.ShadowNetworkInfo;
 import org.robolectric.shadows.ShadowWifiManager;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -58,6 +58,7 @@ public class SmsBackupServiceTest {
 
     @Mock AuthPreferences authPreferences;
     @Mock Preferences preferences;
+    @Mock DataTypePreferences dataTypePreferences;
     @Mock BackupTask backupTask;
     @Mock BackupJobs backupJobs;
 
@@ -84,6 +85,8 @@ public class SmsBackupServiceTest {
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
         when(preferences.getBackupContactGroup()).thenReturn(ContactGroup.EVERYBODY);
         when(preferences.isUseOldScheduler()).thenReturn(true);
+        when(preferences.getDataTypePreferences()).thenReturn(dataTypePreferences);
+        when(dataTypePreferences.enabled()).thenReturn(EnumSet.of(DataType.SMS));
     }
 
     @After public void after() {
@@ -165,10 +168,8 @@ public class SmsBackupServiceTest {
     }
 
     @Test public void shouldCheckForEnabledDataTypes() throws Exception {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application);
-        for (DataType type : DataType.values()) {
-            type.setBackupEnabled(preferences, false);
-        }
+        when(dataTypePreferences.enabled()).thenReturn(EnumSet.noneOf(DataType.class));
+
         Intent intent = new Intent();
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
         shadowConnectivityManager.setBackgroundDataSetting(true);
@@ -232,14 +233,6 @@ public class SmsBackupServiceTest {
         assertThat(shadowOf(service).isForegroundStopped());
     }
 
-    @Test public void testPreferencesAreSingletons() throws Exception {
-        final SharedPreferences p1 = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application);
-        final SharedPreferences p2 = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application);
-        assertThat(p1).isSameAs(p2);
-
-        p1.edit().putString("a", "b").commit();
-        assertThat(p2.getString("a", null)).isEqualTo("b");
-    }
 
     private void assertNotificationShown(String title, String message) {
         assertThat(sentNotifications).hasSize(1);

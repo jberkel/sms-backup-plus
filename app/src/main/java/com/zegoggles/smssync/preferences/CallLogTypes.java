@@ -9,12 +9,6 @@ public enum CallLogTypes {
     OUTGOING,
     INCOMING_OUTGOING;
 
-    private static final String CALLLOG_TYPES = "backup_calllog_types";
-
-    public  static CallLogTypes getCallLogType(Preferences preferences) {
-        return preferences.getDefaultType(CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
-    }
-
     public boolean isTypeEnabled(int type) {
         switch (this) {
             case OUTGOING:

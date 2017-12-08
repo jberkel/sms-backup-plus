@@ -16,7 +16,7 @@ public class CallFormatter {
     public String format(int callType, String number, int duration) {
         final StringBuilder text = new StringBuilder();
 
-        if (callType != CallLog.Calls.MISSED_TYPE) {
+        if (callType != CallLog.Calls.MISSED_TYPE && callType != CallLog.Calls.REJECTED_TYPE) {
             text.append(duration)
                     .append("s")
                     .append(" (").append(formattedCallDuration(duration)).append(")")
@@ -53,16 +53,33 @@ public class CallFormatter {
 
     public String callTypeString(int callType, String name) {
         if (name == null) {
-            return mResources.getString(
-                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing :
-                            callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming :
-                                    R.string.call_missed);
+            return mResources.getString(mapCallType(callType));
         } else {
-            return mResources.getString(
-                    callType == CallLog.Calls.OUTGOING_TYPE ? R.string.call_outgoing_text :
-                            callType == CallLog.Calls.INCOMING_TYPE ? R.string.call_incoming_text :
-                                    R.string.call_missed_text,
-                    name);
+            return mResources.getString(mapTextCallType(callType), name);
+        }
+    }
+
+    private int mapCallType(int callType) {
+        switch (callType) {
+            case CallLog.Calls.OUTGOING_TYPE: return R.string.call_outgoing;
+            case CallLog.Calls.INCOMING_TYPE: return R.string.call_incoming;
+            case CallLog.Calls.MISSED_TYPE: return R.string.call_missed;
+            case CallLog.Calls.REJECTED_TYPE: return R.string.call_rejected;
+            case CallLog.Calls.VOICEMAIL_TYPE: return R.string.call_voicemail;
+            default:
+                return R.string.call_incoming;
+        }
+    }
+
+    private int mapTextCallType(int callType) {
+        switch (callType) {
+            case CallLog.Calls.OUTGOING_TYPE: return R.string.call_outgoing_text;
+            case CallLog.Calls.INCOMING_TYPE: return R.string.call_incoming_text;
+            case CallLog.Calls.MISSED_TYPE: return R.string.call_missed_text;
+            case CallLog.Calls.REJECTED_TYPE: return R.string.call_rejected_text;
+            case CallLog.Calls.VOICEMAIL_TYPE: return R.string.call_voicemail_text;
+            default:
+                return R.string.call_incoming_text;
         }
     }
 }

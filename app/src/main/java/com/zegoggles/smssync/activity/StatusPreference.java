@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.SmsBackupService;
@@ -38,10 +37,12 @@ class StatusPreference extends Preference implements View.OnClickListener {
 
     private ProgressBar mProgressBar;
     private MainActivity mainActivity;
+    private final Preferences preferences;
 
-    public StatusPreference(MainActivity mainActivity) {
+    public StatusPreference(Preferences preferences, MainActivity mainActivity) {
         super(mainActivity);
         this.mainActivity = mainActivity;
+        this.preferences = preferences;
         setSelectable(false);
         setOrder(0);
     }
@@ -173,7 +174,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
     private void finishedBackup(BackupState state) {
         int backedUpCount = state.currentSyncedItems;
         String text = null;
-        if (backedUpCount == new Preferences(getContext(), getSharedPreferences()).getMaxItemsPerSync()) {
+        if (backedUpCount == preferences.getMaxItemsPerSync()) {
             text = getContext().getString(R.string.status_backup_done_details_max_per_sync, backedUpCount);
         } else if (backedUpCount > 0) {
             text = getContext().getResources().getQuantityString(R.plurals.status_backup_done_details, backedUpCount,
@@ -197,7 +198,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
     }
 
     private void idle() {
-        mSyncDetailsLabel.setText(mainActivity.getLastSyncText(DataType.getMostRecentSyncedDate(getSharedPreferences())));
+        mSyncDetailsLabel.setText(mainActivity.getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
         mStatusLabel.setText(R.string.status_idle);
     }
 

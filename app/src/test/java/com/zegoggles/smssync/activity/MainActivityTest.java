@@ -14,10 +14,10 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class MainActivityTest {
-    MainActivity activity;
+    private MainActivity activity;
 
     @Before public void before() {
-        activity = Robolectric.buildActivity(MainActivity.class).create().get();
+        activity = Robolectric.setupActivity(MainActivity.class);
         PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application).edit().clear().commit();
     }
 
@@ -26,7 +26,9 @@ public class MainActivityTest {
     }
 
     @Test public void shouldDisplaySummaryOfEnabledBackupTypesNothingSelected() throws Exception {
-        for (DataType t : DataType.values()) t.setBackupEnabled(PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application), false);
+        for (DataType t : DataType.values()) {
+            activity.preferences.getDataTypePreferences().setBackupEnabled(false, t);
+        }
         assertThat(activity.summarizeAutoBackupSettings()).isEqualTo(
             activity.getString(R.string.ui_enable_auto_sync_no_enabled_summary)
         );

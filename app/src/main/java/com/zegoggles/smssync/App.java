@@ -21,6 +21,7 @@ import android.content.ComponentName;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
+import android.provider.CallLog;
 import android.util.Log;
 import com.fsck.k9.mail.K9MailLib;
 import com.squareup.otto.Bus;
@@ -76,16 +77,8 @@ public class App extends Application {
         });
 
         if (gcmAvailable && DEBUG) {
-            getContentResolver().registerContentObserver(Consts.SMS_PROVIDER, true, new ContentObserver(new Handler()) {
-                @Override
-                public void onChange(boolean selfChange) {
-                    onChange(selfChange, null);
-                }
-                @Override
-                public void onChange(boolean selfChange, Uri uri) {
-                    Log.v(TAG, "onChange: " + uri);
-                }
-            });
+            getContentResolver().registerContentObserver(Consts.SMS_PROVIDER, true, new LoggingContentObserver());
+            getContentResolver().registerContentObserver(Consts.CALLLOG_PROVIDER, true, new LoggingContentObserver());
         }
         bus.register(this);
     }
@@ -124,6 +117,18 @@ public class App extends Application {
             if (preferences.getIncomingTimeoutSecs() > 0 && !preferences.isUseOldScheduler()) {
                 backupJobs.scheduleContentTriggerJob();
             }
+        }
+    }
+
+    private static class LoggingContentObserver extends ContentObserver {
+        LoggingContentObserver() {
+            super(new Handler());
+        }
+        @Override public void onChange(boolean selfChange) {
+            onChange(selfChange, null);
+        }
+        @Override public void onChange(boolean selfChange, Uri uri) {
+            Log.v(TAG, "onChange("+selfChange+", " + uri+")");
         }
     }
 }

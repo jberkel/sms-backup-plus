@@ -100,14 +100,14 @@
                         android:singleLine="true"
                         android:dialogMessage="@string/ui_imap_folder_calllog_label_dialog_msg"
                         android:persistent="true"
-                        android:defaultValue="Call log"/>
+                        android:defaultValue="@string/imap_folder_calllog_default"/>
 
                 <ListPreference
                         android:key="backup_calllog_types"
                         android:dependency="backup_calllog"
                         android:title="@string/ui_backup_calllog_types_label"
                         android:persistent="true"
-                        android:defaultValue="everything"
+                        android:defaultValue="@string/call_type_everything_value"
                         android:summary="@string/ui_backup_calllog_types_desc"
                         android:entries="@array/backup_calllog_types_entries"
                         android:entryValues="@array/backup_calllog_types_values"/>
@@ -126,6 +126,14 @@
                         android:persistent="true"
                         android:defaultValue="-1"
                         android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
+
+                <CheckBoxPreference
+                        android:key="backup_calllog_after_call"
+                        android:dependency="enable_auto_sync"
+                        android:title="@string/ui_backup_calllog_after_call_label"
+                        android:persistent="true"
+                        android:defaultValue="false"
+                        android:summary="@string/ui_backup_calllog_after_call_desc"/>
             </PreferenceScreen>
 
             <ListPreference
@@ -144,7 +152,7 @@
                     android:entries="@array/mark_as_read_entries"
                     android:entryValues="@array/mark_as_read_values"
                     android:persistent="true"
-                    android:defaultValue="read"/>
+                    android:defaultValue="@string/read"/>
 
             <EditTextPreference
                     android:key="imap_folder"
@@ -153,7 +161,7 @@
                     android:singleLine="true"
                     android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
                     android:persistent="true"
-                    android:defaultValue="SMS"/>
+                    android:defaultValue="@string/imap_folder_default"/>
 
             <ListPreference
                     android:key="backup_contact_group"
@@ -167,7 +175,7 @@
                     android:summary="@string/ui_email_address_style_desc"
                     android:entries="@array/email_address_style_entries"
                     android:entryValues="@array/email_address_style_values"
-                    android:defaultValue="name"
+                    android:defaultValue="@string/name"
                     android:persistent="true"/>
 
             <CheckBoxPreference
@@ -217,7 +225,7 @@
                     android:summary="@string/ui_max_items_per_restore_desc"
                     android:entries="@array/max_items_per_restore_entries"
                     android:entryValues="@array/max_items_per_restore_values"
-                    android:defaultValue="500"
+                    android:defaultValue="@string/max_items_per_restore_default"
                     android:persistent="true"/>
 
             <CheckBoxPreference
@@ -269,7 +277,7 @@
                     android:summary="@string/ui_authentication_desc"
                     android:entries="@array/server_authentication_entries"
                     android:entryValues="@array/server_authentication_values"
-                    android:defaultValue="xoauth"
+                    android:defaultValue="@string/xoauth_value"
                     android:persistent="true"/>
 
             <PreferenceCategory
@@ -283,7 +291,7 @@
                         android:summary="@string/ui_server_desc"
                         android:singleLine="true"
                         android:dialogMessage="@string/ui_server_dialog_msg"
-                        android:defaultValue="imap.gmail.com:993"
+                        android:defaultValue="@string/default_server_address"
                         android:persistent="true"/>
 
                 <ListPreference
@@ -292,7 +300,7 @@
                         android:summary="@string/ui_protocol_desc"
                         android:entries="@array/server_protocol_entries"
                         android:entryValues="@array/server_protocol_entryValues"
-                        android:defaultValue="+ssl+"
+                        android:defaultValue="@string/plus_ssl_plus"
                         android:persistent="true"/>
 
                 <EditTextPreference

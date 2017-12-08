@@ -56,7 +56,7 @@ public abstract class ServiceBase extends Service {
     @Nullable private WifiManager.WifiLock mWifiLock;
 
     private AppLog appLog;
-    @Nullable protected Notification notification;
+    @Nullable Notification notification;
 
     @Override
     public IBinder onBind(Intent arg0) {

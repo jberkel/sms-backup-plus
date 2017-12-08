@@ -63,7 +63,8 @@ public class MessageConverter {
     private final MessageGenerator mMessageGenerator;
     private final boolean mMarkAsReadOnRestore;
 
-    public MessageConverter(Context context, Preferences preferences,
+    public MessageConverter(Context context,
+                            Preferences preferences,
                             String userEmail,
                             PersonLookup personLookup,
                             ContactAccessor contactAccessor) {
@@ -89,7 +90,9 @@ public class MessageConverter {
                 mPersonLookup,
                 preferences.getMailSubjectPrefix(),
                 allowedIds,
-                new MmsSupport(mContext.getContentResolver(), mPersonLookup));
+                new MmsSupport(mContext.getContentResolver(), mPersonLookup),
+                preferences.getCallLogType(),
+                preferences.getDataTypePreferences());
     }
 
     private boolean markAsSeen(DataType dataType, Map<String, String> msgMap) {

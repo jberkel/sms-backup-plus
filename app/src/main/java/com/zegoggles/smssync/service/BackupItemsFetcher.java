@@ -2,7 +2,6 @@ package com.zegoggles.smssync.service;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteException;
@@ -16,18 +15,15 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class BackupItemsFetcher {
-    private final Context context;
     private final ContentResolver resolver;
     private final BackupQueryBuilder queryBuilder;
 
-    public BackupItemsFetcher(@NonNull Context context,
-                              @NonNull ContentResolver resolver,
-                              @NonNull BackupQueryBuilder queryBuilder) {
+    BackupItemsFetcher(@NonNull ContentResolver resolver,
+                       @NonNull BackupQueryBuilder queryBuilder) {
         if (resolver == null) throw new IllegalArgumentException("resolver cannot be null");
         if (queryBuilder == null) throw new IllegalArgumentException("queryBuilder cannot be null");
 
         this.queryBuilder = queryBuilder;
-        this.context = context;
         this.resolver = resolver;
     }
 

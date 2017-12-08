@@ -18,7 +18,6 @@ package com.zegoggles.smssync.mail;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -37,6 +36,8 @@ import com.fsck.k9.mail.store.imap.ImapResponse;
 import com.fsck.k9.mail.store.imap.ImapSearcher;
 import com.fsck.k9.mail.store.imap.ImapStore;
 import com.zegoggles.smssync.MmsConsts;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 
 import java.io.IOException;
 import java.net.URI;
@@ -57,20 +58,18 @@ import static com.zegoggles.smssync.App.TAG;
 import static java.util.Collections.sort;
 
 public class BackupImapStore extends ImapStore {
-    private final Context context;
     private final Map<DataType, BackupFolder> openFolders = new HashMap<DataType, BackupFolder>();
 
     public BackupImapStore(final Context context, final String uri) throws MessagingException {
         super(new BackupStoreConfig(uri),
                 getTrustedSocketFactory(context, uri),
                 (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE));
-        this.context = context;
     }
 
-    public BackupFolder getFolder(DataType type) throws MessagingException {
+    public BackupFolder getFolder(DataType type, DataTypePreferences preferences) throws MessagingException {
         BackupFolder folder = openFolders.get(type);
         if (folder == null) {
-            String label = type.getFolder(PreferenceManager.getDefaultSharedPreferences(context));
+            String label = preferences.getFolder(type);
             if (label == null) throw new IllegalStateException("label is null");
 
             folder = createAndOpenFolder(type, label);
@@ -106,6 +105,7 @@ public class BackupImapStore extends ImapStore {
 
         if (!TextUtils.isEmpty(userInfo) && userInfo.contains(":")) {
             String[] parts = userInfo.split(":", 2);
+            //noinspection ReplaceAllDot
             userInfo = parts[0]+":"+(parts[1].replaceAll(".", "X"));
             String host = uri.getHost();
             if (uri.getPort() != -1) {
@@ -144,7 +144,7 @@ public class BackupImapStore extends ImapStore {
     public class BackupFolder extends ImapFolder {
         private final DataType type;
 
-        public BackupFolder(ImapStore store, String name, DataType type) {
+        BackupFolder(ImapStore store, String name, DataType type) {
             super(store, name);
             this.type = type;
         }

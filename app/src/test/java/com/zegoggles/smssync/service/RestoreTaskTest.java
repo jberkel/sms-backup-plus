@@ -4,9 +4,7 @@ package com.zegoggles.smssync.service;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.provider.Telephony;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.store.imap.ImapMessage;
@@ -15,6 +13,8 @@ import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,8 +40,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class RestoreTaskTest {
     RestoreTask task;
     RestoreConfig config;
-    Context context;
-    SharedPreferences preferences;
     @Mock BackupImapStore store;
     @Mock BackupImapStore.BackupFolder folder;
     @Mock SmsRestoreService service;
@@ -56,12 +54,11 @@ public class RestoreTaskTest {
         config = new RestoreConfig(store, 0, true, false, false, -1, 0);
         when(service.getApplicationContext()).thenReturn(RuntimeEnvironment.application);
         when(service.getState()).thenReturn(state);
+        when(service.getPreferences()).thenReturn(new Preferences(RuntimeEnvironment.application));
 
-        when(store.getFolder(any(DataType.class))).thenReturn(folder);
+        when(store.getFolder(any(DataType.class), any(DataTypePreferences.class))).thenReturn(folder);
 
         task = new RestoreTask(service, converter, resolver, tokenRefresher);
-        context = RuntimeEnvironment.application;
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Test public void shouldAcquireAndReleaseLocksDuringRestore() throws Exception {
@@ -102,7 +99,7 @@ public class RestoreTaskTest {
         verify(resolver).insert(Consts.SMS_PROVIDER, values);
         verify(resolver).delete(Uri.parse("content://sms/conversations/-1"), null, null);
 
-        assertThat(DataType.SMS.getMaxSyncedDate(preferences)).isEqualTo(now.getTime());
+        assertThat(service.getPreferences().getDataTypePreferences().getMaxSyncedDate(DataType.SMS)).isEqualTo(now.getTime());
         assertThat(task.getSmsIds()).containsExactly("123");
 
         verify(store).closeFolders();

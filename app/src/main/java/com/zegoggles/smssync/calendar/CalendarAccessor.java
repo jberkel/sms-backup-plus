@@ -2,6 +2,7 @@ package com.zegoggles.smssync.calendar;
 
 import android.content.ContentResolver;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import java.util.Date;
 import java.util.Map;
@@ -13,7 +14,7 @@ public interface CalendarAccessor {
      * @param calendarId the calendar id to enable syncing for.
      * @return if sync was enabled
      */
-    public boolean enableSync(long calendarId);
+    boolean enableSync(long calendarId);
 
     /**
      * Adds an event to a calendar.
@@ -25,7 +26,7 @@ public interface CalendarAccessor {
      * @param description a description for the calendar event
      * @return if the event was added
      */
-    public boolean addEntry(long calendarId, Date when, int duration, String title, String description);
+    boolean addEntry(long calendarId, @NonNull Date when, int duration, @NonNull String title, String description);
 
     /**
      * Finds a list of calendars available on the phone.
@@ -33,28 +34,28 @@ public interface CalendarAccessor {
      *
      * @return a Map relating the id of the calendars found to their names.
      */
-    public Map<String, String> getCalendars();
+    @NonNull Map<String, String> getCalendars();
 
 
-    public static class Get {
-        private static CalendarAccessor sCalendarAccessor;
+    class Get {
+        private static CalendarAccessor calendarAccessor;
 
         private Get() {}
 
         public static CalendarAccessor instance(ContentResolver resolver) {
             final  int sdkVersion = Build.VERSION.SDK_INT;
-            if (sCalendarAccessor == null) {
+            if (calendarAccessor == null) {
                 try {
                     if (sdkVersion < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                        sCalendarAccessor = new CalendarAccessorPre40(resolver);
+                        calendarAccessor = new CalendarAccessorPre40(resolver);
                     } else {
-                        sCalendarAccessor = new CalendarAccessorPost40(resolver);
+                        calendarAccessor = new CalendarAccessorPost40(resolver);
                     }
                 } catch (Exception e) {
                     throw new IllegalStateException(e);
                 }
             }
-            return sCalendarAccessor;
+            return calendarAccessor;
         }
     }
 }

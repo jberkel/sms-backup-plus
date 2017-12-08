@@ -1,5 +1,7 @@
 == 1.5.11 (1555) tbd
 
+  * Call logs: support rejected / voicemail
+  * Optionally trigger a backup after incoming/outgoing calls
   * Use JobManager to run backups in the background (#572, #810, #822)
   * Replaced WebView auth with browser (#767)
   * Replaced pay-me with Play Billing Library

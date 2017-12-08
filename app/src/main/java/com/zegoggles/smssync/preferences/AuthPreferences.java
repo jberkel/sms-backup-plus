@@ -241,7 +241,7 @@ public class AuthPreferences {
         return credentials;
     }
 
-    private String getImapUsername() {
+    public String getImapUsername() {
         return preferences.getString(LOGIN_USER, null);
     }
 

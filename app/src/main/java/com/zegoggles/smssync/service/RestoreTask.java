@@ -2,11 +2,9 @@ package com.zegoggles.smssync.service;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.provider.CallLog;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
@@ -24,12 +22,13 @@ import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
+import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +39,6 @@ import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.service.state.SmsSyncState.CALC;
 import static com.zegoggles.smssync.service.state.SmsSyncState.CANCELED_RESTORE;
-import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_RESTORE;
 import static com.zegoggles.smssync.service.state.SmsSyncState.LOGIN;
 import static com.zegoggles.smssync.service.state.SmsSyncState.RESTORE;
@@ -56,17 +54,17 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private final ContentResolver resolver;
     private final MessageConverter converter;
     private final TokenRefresher tokenRefresher;
-    private final SharedPreferences preferences;
+    private final Preferences preferences;
 
-    public RestoreTask(SmsRestoreService service,
-                       MessageConverter converter,
-                       ContentResolver resolver,
-                       TokenRefresher tokenRefresher) {
+    RestoreTask(SmsRestoreService service,
+                MessageConverter converter,
+                ContentResolver resolver,
+                TokenRefresher tokenRefresher) {
         this.service = service;
         this.converter = converter;
         this.resolver = resolver;
         this.tokenRefresher = tokenRefresher;
-        this.preferences = PreferenceManager.getDefaultSharedPreferences(service.getApplicationContext());
+        this.preferences = service.getPreferences();
     }
 
     @Override
@@ -107,10 +105,10 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             final List<Message> msgs = new ArrayList<Message>();
 
             if (config.restoreSms) {
-                msgs.addAll(imapStore.getFolder(SMS).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+                msgs.addAll(imapStore.getFolder(SMS, preferences.getDataTypePreferences()).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
             }
             if (config.restoreCallLog) {
-                msgs.addAll(imapStore.getFolder(CALLLOG).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+                msgs.addAll(imapStore.getFolder(CALLLOG, preferences.getDataTypePreferences()).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
             }
 
             final int itemsToRestoreCount = config.maxRestore <= 0 ? msgs.size() : Math.min(msgs.size(), config.maxRestore);
@@ -177,11 +175,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     }
 
     private void publishProgress(SmsSyncState smsSyncState) {
-        publishProgress(smsSyncState, null);
-    }
-
-    private void publishProgress(SmsSyncState smsSyncState, Exception exception) {
-        publishProgress(transition(smsSyncState, exception));
+        publishProgress(transition(smsSyncState, null));
     }
 
     private RestoreState transition(SmsSyncState smsSyncState, Exception exception) {
@@ -224,7 +218,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         DataType dataType = null;
         try {
             if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
-            message.getFolder().fetch(Arrays.asList(message), fp, null);
+            message.getFolder().fetch(Collections.singletonList(message), fp, null);
             dataType = converter.getDataType(message);
             //only restore sms+call log for now
             switch (dataType) {
@@ -262,8 +256,8 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                 smsIds.add(uri.getLastPathSegment());
                 Long timestamp = values.getAsLong(Telephony.TextBasedSmsColumns.DATE);
 
-                if (timestamp != null && SMS.getMaxSyncedDate(preferences) < timestamp) {
-                    SMS.setMaxSyncedDate(preferences, timestamp);
+                if (timestamp != null && preferences.getDataTypePreferences().getMaxSyncedDate(SMS) < timestamp) {
+                    preferences.getDataTypePreferences().setMaxSyncedDate(SMS, timestamp);
                 }
 
                 if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);

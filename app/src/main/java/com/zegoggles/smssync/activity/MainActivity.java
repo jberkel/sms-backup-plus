@@ -35,7 +35,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
@@ -85,6 +84,7 @@ import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_SETTINGS_SCREEN;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CONNECTED;
@@ -117,8 +117,8 @@ public class MainActivity extends PreferenceActivity {
     }
     private Actions mActions;
 
+    Preferences preferences;
     private AuthPreferences authPreferences;
-    private Preferences preferences;
     private StatusPreference statusPref;
     private OAuth2Client oauth2Client;
     private Handler handler;
@@ -132,7 +132,7 @@ public class MainActivity extends PreferenceActivity {
         preferences = new Preferences(this);
         addPreferencesFromResource(R.xml.preferences);
 
-        statusPref = new StatusPreference(this);
+        statusPref = new StatusPreference(preferences, this);
         statusPref.setOrder(-1);
         getPreferenceScreen().addPreference(statusPref);
 
@@ -161,11 +161,12 @@ public class MainActivity extends PreferenceActivity {
         App.bus.register(this);
 
         addPreferenceListener(new AutoBackupSettingsChangedEvent(),
+            ENABLE_AUTO_BACKUP.key,
             INCOMING_TIMEOUT_SECONDS.key,
             REGULAR_TIMEOUT_SECONDS.key,
             WIFI_ONLY.key,
-            ENABLE_AUTO_BACKUP.key,
-            USE_OLD_SCHEDULER.key);
+            USE_OLD_SCHEDULER.key,
+            CALLLOG_BACKUP_AFTER_CALL.key);
         for (DataType dataType : DataType.values()) {
             addPreferenceListener(new AutoBackupSettingsChangedEvent(),  dataType.backupEnabledPreference);
         }
@@ -323,7 +324,7 @@ public class MainActivity extends PreferenceActivity {
     private void updateLastBackupTimes() {
         for (DataType type : DataType.values()) {
             findPreference(type.backupEnabledPreference).setSummary(
-                getLastSyncText(type.getMaxSyncedDate(preferences.preferences))
+                getLastSyncText(preferences.getDataTypePreferences().getMaxSyncedDate(type))
             );
         }
     }
@@ -334,7 +335,7 @@ public class MainActivity extends PreferenceActivity {
 
     String summarizeAutoBackupSettings() {
         final List<String> enabled = new ArrayList<String>();
-        for (DataType dataType : DataType.enabled(preferences.preferences)) {
+        for (DataType dataType : preferences.getDataTypePreferences().enabled()) {
             enabled.add(getString(dataType.resId));
         }
         StringBuilder summary = new StringBuilder();
@@ -397,8 +398,10 @@ public class MainActivity extends PreferenceActivity {
 
     private void updateUsernameLabel(String username) {
         if (username == null) {
-            SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
-            username = prefs.getString(AuthPreferences.LOGIN_USER, getString(R.string.ui_login_label));
+            username = authPreferences.getImapUsername();
+            if (username == null) {
+                username = getString(R.string.ui_login_label);
+            }
         }
         findPreference(AuthPreferences.LOGIN_USER).setTitle(username);
     }
@@ -420,12 +423,12 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void updateImapFolderLabelFromPref() {
-        String imapFolder = SMS.getFolder(preferences.preferences);
+        String imapFolder = preferences.getDataTypePreferences().getFolder(SMS);
         findPreference(SMS.folderPreference).setTitle(imapFolder);
     }
 
     private void updateImapCallogFolderLabelFromPref() {
-        String imapFolder = CALLLOG.getFolder(preferences.preferences);
+        String imapFolder = preferences.getDataTypePreferences().getFolder(CALLLOG);
         findPreference(CALLLOG.folderPreference).setTitle(imapFolder);
     }
 
@@ -677,7 +680,7 @@ public class MainActivity extends PreferenceActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 authPreferences.clearOAuth1Data();
                                 authPreferences.clearOauth2Data();
-                                DataType.clearLastSyncData(preferences.preferences);
+                                preferences.getDataTypePreferences().clearLastSyncData();
                                 updateConnected();
                             }
                         }).create();
@@ -720,7 +723,7 @@ public class MainActivity extends PreferenceActivity {
     }
 
     private void reset() {
-        DataType.clearLastSyncData(preferences.preferences);
+        preferences.getDataTypePreferences().clearLastSyncData();
         preferences.reset();
     }
 
@@ -787,7 +790,7 @@ public class MainActivity extends PreferenceActivity {
 
     private void setPreferenceListeners(boolean backup) {
         if (backup) {
-            PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(
+            preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(
                     new SharedPreferences.OnSharedPreferenceChangeListener() {
                         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                             BackupManagerWrapper.dataChanged(MainActivity.this);

@@ -16,7 +16,7 @@ public class ServerPreferences {
      */
     private static final String SERVER_PROTOCOL = "server_protocol";
 
-    public ServerPreferences(Context context) {
+    ServerPreferences(Context context) {
         this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
