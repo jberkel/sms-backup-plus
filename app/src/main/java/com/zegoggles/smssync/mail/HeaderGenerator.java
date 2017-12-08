@@ -27,7 +27,7 @@ class HeaderGenerator {
     private final String reference;
     private final String version;
 
-    public HeaderGenerator(String reference, String version) {
+    HeaderGenerator(String reference, String version) {
         this.version = version;
         this.reference = reference;
     }
