@@ -969,7 +969,4 @@ public class MainActivity extends PreferenceActivity {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }
-
-    public static class AutoBackupSettingsChangedEvent {
-    }
 }

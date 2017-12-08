@@ -21,12 +21,11 @@ import android.content.ComponentName;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
-import android.provider.CallLog;
 import android.util.Log;
 import com.fsck.k9.mail.K9MailLib;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.zegoggles.smssync.activity.MainActivity;
+import com.zegoggles.smssync.activity.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.BootReceiver;
@@ -83,14 +82,13 @@ public class App extends Application {
         bus.register(this);
     }
 
-    @Subscribe public void autoBackupSettingsChanged(final MainActivity.AutoBackupSettingsChangedEvent event) {
+    @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "autoBackupSettingsChanged("+event+")");
         }
         setBroadcastReceiversEnabled(preferences.isUseOldScheduler() && preferences.isEnableAutoSync());
         rescheduleJobs();
     }
-
 
     private void setBroadcastReceiversEnabled(boolean enabled) {
         enableOrDisableComponent(enabled, SmsBroadcastReceiver.class);
