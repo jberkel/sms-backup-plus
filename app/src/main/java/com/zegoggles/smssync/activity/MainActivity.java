@@ -36,6 +36,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.provider.Telephony;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -80,7 +81,6 @@ import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
-import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_SETTINGS_SCREEN;
@@ -104,9 +104,6 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
  */
 @SuppressWarnings("deprecation")
 public class MainActivity extends PreferenceActivity {
-    private static final int MIN_VERSION_MMS = Build.VERSION_CODES.ECLAIR;
-    private static final int MIN_VERSION_BACKUP = Build.VERSION_CODES.FROYO;
-
     private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
     private static final int REQUEST_WEB_AUTH = 3;
@@ -136,15 +133,8 @@ public class MainActivity extends PreferenceActivity {
         statusPref.setOrder(-1);
         getPreferenceScreen().addPreference(statusPref);
 
-        int version = Build.VERSION.SDK_INT;
-        if (version < MIN_VERSION_MMS) {
-            CheckBoxPreference backupMms = (CheckBoxPreference) findPreference(MMS.backupEnabledPreference);
-            backupMms.setEnabled(false);
-            backupMms.setChecked(false);
-            backupMms.setSummary(R.string.ui_backup_mms_not_supported);
-        }
         if (preferences.shouldShowUpgradeMessage()) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
-        setPreferenceListeners(version >= MIN_VERSION_BACKUP);
+        setPreferenceListeners();
 
         checkAndDisplayDroidWarning();
 
@@ -234,7 +224,7 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data + ")");
 
@@ -253,7 +243,7 @@ public class MainActivity extends PreferenceActivity {
                     return;
                 }
 
-                final String code = data.getStringExtra(OAuth2WebAuthActivity.EXTRA_CODE);
+                final String code = data == null ? null : data.getStringExtra(OAuth2WebAuthActivity.EXTRA_CODE);
                 if (!TextUtils.isEmpty(code)) {
                     show(Dialogs.ACCESS_TOKEN);
                     new OAuth2CallbackTask(oauth2Client).execute(code);
@@ -788,16 +778,14 @@ public class MainActivity extends PreferenceActivity {
         findPreference(IMAP_SETTINGS.key).setEnabled(enabled);
     }
 
-    private void setPreferenceListeners(boolean backup) {
-        if (backup) {
-            preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(
-                    new SharedPreferences.OnSharedPreferenceChangeListener() {
-                        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                            BackupManagerWrapper.dataChanged(MainActivity.this);
-                        }
+    private void setPreferenceListeners() {
+        preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
+                    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                        BackupManagerWrapper.dataChanged(MainActivity.this);
                     }
-            );
-        }
+                }
+        );
 
         findPreference(AuthPreferences.SERVER_AUTHENTICATION)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
