@@ -228,7 +228,7 @@ public abstract class ServiceBase extends Service {
     private boolean isConnectedViaWifi_SDK21() {
         for (Network network : getConnectivityManager().getAllNetworks()) {
             final NetworkInfo networkInfo = getConnectivityManager().getNetworkInfo(network);
-            if (networkInfo.getType() == TYPE_WIFI && networkInfo.isConnectedOrConnecting()) {
+            if (networkInfo != null && networkInfo.getType() == TYPE_WIFI && networkInfo.isConnectedOrConnecting()) {
                 return true;
             }
         }
