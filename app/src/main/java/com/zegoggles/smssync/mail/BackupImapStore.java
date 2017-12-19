@@ -18,7 +18,6 @@ package com.zegoggles.smssync.mail;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,7 +25,6 @@ import com.fsck.k9.mail.FetchProfile;
 import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Folder.FolderType;
 import com.fsck.k9.mail.Message;
-import com.fsck.k9.mail.MessageRetrievalListener;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.ssl.DefaultTrustedSocketFactory;
 import com.fsck.k9.mail.ssl.TrustedSocketFactory;
@@ -35,9 +33,7 @@ import com.fsck.k9.mail.store.imap.ImapMessage;
 import com.fsck.k9.mail.store.imap.ImapResponse;
 import com.fsck.k9.mail.store.imap.ImapSearcher;
 import com.fsck.k9.mail.store.imap.ImapStore;
-import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.preferences.DataTypePreferences;
-import com.zegoggles.smssync.preferences.Preferences;
 
 import java.io.IOException;
 import java.net.URI;
@@ -49,13 +45,14 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.mail.Headers.DATATYPE;
 import static java.util.Collections.sort;
+import static java.util.Locale.ENGLISH;
 
 public class BackupImapStore extends ImapStore {
     private final Map<DataType, BackupFolder> openFolders = new HashMap<DataType, BackupFolder>();
@@ -152,20 +149,13 @@ public class BackupImapStore extends ImapStore {
         public List<ImapMessage> getMessages(final int max, final boolean flagged, final Date since)
                 throws MessagingException {
             if (LOCAL_LOGV)
-                Log.v(TAG, String.format(Locale.ENGLISH, "getMessages(%d, %b, %s)", max, flagged, since));
+                Log.v(TAG, String.format(ENGLISH, "getMessages(%d, %b, %s)", max, flagged, since));
 
             final List<ImapMessage> messages;
             final ImapSearcher searcher = new ImapSearcher() {
                 @Override
                 public List<ImapResponse> search() throws IOException, MessagingException {
-                    final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
-                            .append(' ')
-                            .append(getQuery())
-                            .append(" UNDELETED");
-                    if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.get().format(since));
-                    if (flagged) sb.append(" FLAGGED");
-
-                    return executeSimpleCommand(sb.toString().trim());
+                    return executeSimpleCommand(buildSearchQuery(type, since, flagged));
                 }
             };
 
@@ -196,42 +186,14 @@ public class BackupImapStore extends ImapStore {
             return messages;
         }
 
-        private String getQuery() {
-            switch (type) {
-            /* MMS/SMS are special cases since we need to support legacy backup headers */
-                case SMS:
-                    return
-                            String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
-                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
-                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
-                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX,
-                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), Telephony.TextBasedSmsColumns.MESSAGE_TYPE_SENT);
-                case MMS:
-                    return
-                            String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",
-                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
-                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
-                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), MmsConsts.LEGACY_HEADER);
-
-                default:
-                    return String.format(Locale.ENGLISH, "(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type);
-            }
-        }
-
-        // TODO should not have to override these methods, but mockito fails to generate working mocks otherwise :/
-        @Override
-        public boolean equals(Object o) {
-            return super.equals(o);
-        }
-
-        @Override
-        public void fetch(List<ImapMessage> messages, FetchProfile fp, MessageRetrievalListener<ImapMessage> listener) throws MessagingException {
-            super.fetch(messages, fp, listener);
-        }
-
-        @Override
-        public Map<String, String> appendMessages(List<? extends Message> messages) throws MessagingException {
-            return super.appendMessages(messages);
+        private String buildSearchQuery(DataType dataType, Date since, boolean flagged) {
+            final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
+                    .append(' ')
+                    .append(String.format(ENGLISH, "(HEADER %s \"%s\")", DATATYPE.toUpperCase(ENGLISH), dataType))
+                    .append(" UNDELETED");
+            if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.get().format(since));
+            if (flagged) sb.append(" FLAGGED");
+            return sb.toString().trim();
         }
     }
 

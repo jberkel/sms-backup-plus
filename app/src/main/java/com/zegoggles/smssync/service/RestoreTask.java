@@ -134,7 +134,8 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                     currentRestoredItem,
                     itemsToRestoreCount,
                     restoredCount,
-                    uids.size() - restoredCount, null, null);
+                    Math.max(0, uids.size() - restoredCount),
+                    null, null);
         } catch (XOAuth2AuthenticationFailedException e) {
             return handleAuthError(config, currentRestoredItem, e);
         } catch (AuthenticationFailedException e) {
@@ -249,7 +250,10 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         final Integer type = values.getAsInteger(Telephony.TextBasedSmsColumns.TYPE);
 
         // only restore inbox messages and sent messages - otherwise sms might get sent on restore
-        if (type != null && (type == Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX || type == Telephony.TextBasedSmsColumns.MESSAGE_TYPE_SENT) && !smsExists(values)) {
+        if (type != null &&
+              (type == Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX ||
+               type == Telephony.TextBasedSmsColumns.MESSAGE_TYPE_SENT) &&
+            !smsExists(values)) {
 
             final Uri uri = resolver.insert(Consts.SMS_PROVIDER, values);
             if (uri != null) {

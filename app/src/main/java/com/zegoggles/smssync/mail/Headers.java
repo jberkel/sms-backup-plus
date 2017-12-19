@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.mail;
 
+import android.support.annotation.Nullable;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 
@@ -7,7 +8,9 @@ public final class Headers {
     // private headers
     public static final String ID             = "X-smssync-id";
     public static final String ADDRESS        = "X-smssync-address";
+    /** {@link DataType} SMS, MMS, CALLLOG */
     public static final String DATATYPE       = "X-smssync-datatype";
+    /** Subtype, value is datatype specific  */
     public static final String TYPE           = "X-smssync-type";
     public static final String DATE           = "X-smssync-date";
     public static final String THREAD_ID      = "X-smssync-thread";
@@ -25,7 +28,7 @@ public final class Headers {
 
     private Headers() {}
 
-    public static String get(Message msg, String header) {
+    public static @Nullable String get(Message msg, String header) {
         String[] hdrs = msg.getHeader(header);
         if (hdrs.length > 0) {
             return hdrs[0];

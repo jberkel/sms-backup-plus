@@ -30,7 +30,6 @@ import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.MimeUtility;
-import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
@@ -176,23 +175,15 @@ public class MessageConverter {
         return values;
     }
 
-    public DataType getDataType(Message message) {
+    public DataType getDataType(Message message) throws MessagingException {
         final String dataTypeHeader = Headers.get(message, Headers.DATATYPE);
-        final String typeHeader = Headers.get(message, Headers.TYPE);
-        //we have two possible header sets here
-        //legacy:  there is Headers.DATATYPE .Headers.TYPE
-        //         contains either the string "mms" or an integer which is the internal type of the sms
-        //current: there IS a Headers.DATATYPE containing a string representation of Headers.DataType
-        //         Headers.TYPE then contains the type of the sms, mms or calllog entry
-        //The current header set was introduced in version 1.2.00
         if (dataTypeHeader == null) {
-            return MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
-        } else {
-            try {
-                return DataType.valueOf(dataTypeHeader.toUpperCase(Locale.ENGLISH));
-            } catch (IllegalArgumentException e) {
-                return DataType.SMS; // whateva
-            }
+            throw new MessagingException("Datatype header is missing");
+        }
+        try {
+            return DataType.valueOf(dataTypeHeader.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException e) {
+            throw new MessagingException("Invalid header: "+dataTypeHeader, e);
         }
     }
 

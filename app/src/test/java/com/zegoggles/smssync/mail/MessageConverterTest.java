@@ -49,8 +49,8 @@ public class MessageConverterTest {
         messageConverter.messageToContentValues(null);
     }
 
-    @Test
-    public void testMessageToContentValuesWithUnknownMessageTypeGetParsedAsSMS() throws Exception {
+    @Test(expected = MessagingException.class)
+    public void testMessageToContentValuesWithUnknownMessageTypeThrowsException() throws Exception {
         final String message = "Subject: Call with +12121\n" +
                 "From: +12121 <+12121@unknown.email>\n" +
                 "To: test@example.com\n" +
@@ -65,8 +65,7 @@ public class MessageConverterTest {
                 "Some Text";
 
         final MimeMessage mimeMessage = MimeMessage.parseMimeMessage(new ByteArrayInputStream(message.getBytes()), true);
-        final ContentValues values = messageConverter.messageToContentValues(mimeMessage);
-        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.ADDRESS)).isNull();
+        messageConverter.messageToContentValues(mimeMessage);
     }
 
     @Test public void testMessageToContentValuesWithSMS() throws Exception {
