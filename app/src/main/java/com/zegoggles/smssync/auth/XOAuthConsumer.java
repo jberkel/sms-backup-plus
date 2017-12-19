@@ -16,6 +16,7 @@
 package com.zegoggles.smssync.auth;
 
 import android.content.Context;
+import android.util.Base64;
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
@@ -24,7 +25,6 @@ import oauth.signpost.exception.OAuthException;
 import oauth.signpost.http.HttpParameters;
 import oauth.signpost.http.HttpRequest;
 import oauth.signpost.signature.SignatureBaseString;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
+import static android.util.Base64.NO_WRAP;
 import static com.zegoggles.smssync.App.TAG;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static oauth.signpost.OAuth.ENCODING;
@@ -88,7 +89,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
 
     private String mUsername;
 
-    public XOAuthConsumer(String username) {
+    XOAuthConsumer(String username) {
         super(ANONYMOUS, ANONYMOUS);
         this.mUsername = username;
     }
@@ -102,7 +103,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
         return generateXOAuthString(mUsername);
     }
 
-    public String generateXOAuthString(final String username) {
+    private String generateXOAuthString(final String username) {
         if (username == null) throw new IllegalArgumentException("username is null");
 
         try {
@@ -132,7 +133,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
                 }
             }
 
-            return base64(sasl.toString().getBytes(ENCODING));
+            return Base64.encodeToString(sasl.toString().getBytes(ENCODING), NO_WRAP);
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         } catch (Exception e) {
@@ -259,15 +260,7 @@ public class XOAuthConsumer extends CommonsHttpOAuthConsumer {
         mac.init(key);
 
         String sbs = new SignatureBaseString(request, requestParameters).generate();
-        return base64(mac.doFinal(sbs.getBytes(ENCODING)));
-    }
-
-    private String base64(byte[] data) {
-        try {
-            return new String(Base64.encodeBase64(data), "UTF-8");
-        } catch (java.io.UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return Base64.encodeToString(mac.doFinal(sbs.getBytes(ENCODING)), NO_WRAP);
     }
 
     private static class FeedHandler extends DefaultHandler {

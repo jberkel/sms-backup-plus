@@ -3,19 +3,21 @@ package com.zegoggles.smssync.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import com.fsck.k9.mail.AuthType;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.auth.XOAuthConsumer;
-import org.apache.commons.codec.binary.Base64;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
 
+import static android.util.Base64.NO_WRAP;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.ServerPreferences.Defaults.SERVER_PROTOCOL;
 
@@ -266,12 +268,12 @@ public class AuthPreferences {
      * @see <a href="https://developers.google.com/google-apps/gmail/xoauth2_protocol#the_sasl_xoauth2_mechanism">
      *      The SASL XOAUTH2 Mechanism</a>
      */
-    private String generateXOAuth2Token() {
+    private @NonNull String generateXOAuth2Token() {
         final String username = getOauth2Username();
         final String token = getOauth2Token();
         final String formatted = "user=" + username + "\001auth=Bearer " + token + "\001\001";
         try {
-            return new String(Base64.encodeBase64(formatted.getBytes(UTF_8)), UTF_8);
+            return Base64.encodeToString(formatted.getBytes(UTF_8), NO_WRAP);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

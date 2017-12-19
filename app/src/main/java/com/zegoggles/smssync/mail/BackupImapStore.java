@@ -100,7 +100,7 @@ public class BackupImapStore extends ImapStore {
      * @return a uri which can be used for logging (i.e. with credentials masked)
      */
     public String getStoreUriForLogging() {
-        Uri uri = Uri.parse(this.mStoreConfig.getStoreUri());
+        Uri uri = Uri.parse(mStoreConfig.getStoreUri());
         String userInfo = uri.getUserInfo();
 
         if (!TextUtils.isEmpty(userInfo) && userInfo.contains(":")) {
@@ -197,7 +197,7 @@ public class BackupImapStore extends ImapStore {
         }
 
         private String getQuery() {
-            switch (this.type) {
+            switch (type) {
             /* MMS/SMS are special cases since we need to support legacy backup headers */
                 case SMS:
                     return

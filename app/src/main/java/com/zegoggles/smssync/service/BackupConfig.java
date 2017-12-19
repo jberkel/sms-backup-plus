@@ -17,14 +17,14 @@ public class BackupConfig {
     public final boolean debug;
     public final EnumSet<DataType> typesToBackup;
 
-    public BackupConfig(@NonNull BackupImapStore imapStore,
-                        int currentTry,
-                        boolean skip,
-                        int maxItemsPerSync,
-                        @NonNull ContactGroup groupToBackup,
-                        @NonNull BackupType backupType,
-                        @NonNull EnumSet<DataType> typesToBackup,
-                        boolean debug) {
+    BackupConfig(@NonNull BackupImapStore imapStore,
+                 int currentTry,
+                 boolean skip,
+                 int maxItemsPerSync,
+                 @NonNull ContactGroup groupToBackup,
+                 @NonNull BackupType backupType,
+                 @NonNull EnumSet<DataType> typesToBackup,
+                 boolean debug) {
         if (imapStore == null) throw new IllegalArgumentException("need imapstore");
         if (typesToBackup == null || typesToBackup.isEmpty()) throw new IllegalArgumentException("need to specify types to backup");
         if (currentTry < 0) throw new IllegalArgumentException("currentTry < 0");
