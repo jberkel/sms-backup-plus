@@ -58,7 +58,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
                 // Sync button will be restored on next status update.
                 mBackupButton.setText(R.string.ui_sync_button_label_canceling);
                 mBackupButton.setEnabled(false);
-                App.bus.post(new CancelEvent());
+                App.post(new CancelEvent());
             }
         } else if (v == mRestoreButton) {
             if (LOCAL_LOGV) Log.v(TAG, "restore");
@@ -67,7 +67,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
             } else {
                 mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
                 mRestoreButton.setEnabled(false);
-                App.bus.post(new CancelEvent());
+                App.post(new CancelEvent());
             }
         }
     }

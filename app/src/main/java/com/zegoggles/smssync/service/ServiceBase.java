@@ -75,14 +75,14 @@ public abstract class ServiceBase extends Service {
             }
             this.appLog = new AppLog(format);
         }
-        App.bus.register(this);
+        App.register(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (appLog != null) appLog.close();
-        App.bus.unregister(this);
+        App.unregister(this);
         notification = null;
     }
 

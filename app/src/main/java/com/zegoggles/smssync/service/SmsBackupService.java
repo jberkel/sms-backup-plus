@@ -190,7 +190,7 @@ public class SmsBackupService extends ServiceBase {
 
     private void moveToState(BackupState state) {
         backupStateChanged(state);
-        App.bus.post(state);
+        App.post(state);
     }
 
     @Override

@@ -39,13 +39,13 @@ public class SmsJobService extends JobService {
     @Override
     public void onCreate() {
         super.onCreate();
-        App.bus.register(this);
+        App.register(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        App.bus.unregister(this);
+        App.unregister(this);
     }
 
     /**
@@ -97,7 +97,7 @@ public class SmsJobService extends JobService {
         if (LOCAL_LOGV) {
             Log.v(TAG, "onStopJob(" + jobParameters + ", extras=" + jobParameters.getExtras() + ")");
         }
-        App.bus.post(new CancelEvent(SYSTEM));
+        App.post(new CancelEvent(SYSTEM));
         return false;
     }
 

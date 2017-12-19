@@ -42,7 +42,7 @@ public class App extends Application {
     public static final String TAG = "SMSBackup+";
     public static final String LOG = "sms_backup_plus.log";
 
-    public static final Bus bus = new Bus();
+    private static final Bus bus = new Bus();
     /** Google Play Services present on this device? */
     public static boolean gcmAvailable;
 
@@ -79,7 +79,7 @@ public class App extends Application {
             getContentResolver().registerContentObserver(Consts.SMS_PROVIDER, true, new LoggingContentObserver());
             getContentResolver().registerContentObserver(Consts.CALLLOG_PROVIDER, true, new LoggingContentObserver());
         }
-        bus.register(this);
+        register(this);
     }
 
     @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
@@ -88,6 +88,23 @@ public class App extends Application {
         }
         setBroadcastReceiversEnabled(preferences.isUseOldScheduler() && preferences.isEnableAutoSync());
         rescheduleJobs();
+    }
+
+
+    public static void register(Object listener) {
+        bus.register(listener);
+    }
+
+    public static void post(Object event) {
+        bus.post(event);
+    }
+
+    public static void unregister(Object listener) {
+        try {
+            bus.unregister(listener);
+        } catch (IllegalArgumentException ignored) {
+            Log.w(TAG, ignored);
+        }
     }
 
     private void setBroadcastReceiversEnabled(boolean enabled) {

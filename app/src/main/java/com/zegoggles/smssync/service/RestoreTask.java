@@ -69,7 +69,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
 
     @Override
     protected void onPreExecute() {
-        App.bus.register(this);
+        App.register(this);
     }
 
     @Subscribe public void canceled(CancelEvent canceled) {
@@ -188,14 +188,14 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
             post(result);
         }
-        App.bus.unregister(this);
+        App.unregister(this);
     }
 
     @Override
     protected void onCancelled() {
         Log.d(TAG, "restore cancelled");
         post(transition(CANCELED_RESTORE, null));
-        App.bus.unregister(this);
+        App.unregister(this);
     }
 
     @Override
@@ -207,7 +207,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
 
     private void post(RestoreState changed) {
         if (changed == null) return;
-        App.bus.post(changed);
+        App.post(changed);
     }
 
     private DataType importMessage(Message message) {

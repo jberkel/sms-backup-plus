@@ -108,7 +108,7 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     private void postError(Exception exception) {
-        App.bus.post(mState.transition(ERROR, exception));
+        App.post(mState.transition(ERROR, exception));
     }
 
     private void asyncClearCache() {

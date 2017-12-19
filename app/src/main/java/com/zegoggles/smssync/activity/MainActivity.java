@@ -148,7 +148,7 @@ public class MainActivity extends PreferenceActivity {
         checkGCM();
 
         setupStrictMode();
-        App.bus.register(this);
+        App.register(this);
 
         addPreferenceListener(new AutoBackupSettingsChangedEvent(),
             ENABLE_AUTO_BACKUP.key,
@@ -183,19 +183,19 @@ public class MainActivity extends PreferenceActivity {
 
         updateImapSettings(!authPreferences.useXOAuth());
         checkUserDonationStatus();
-        App.bus.register(statusPref);
+        App.register(statusPref);
     }
 
     @Override protected void onPause() {
         super.onPause();
-        App.bus.unregister(statusPref);
+        App.unregister(statusPref);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         try {
-            App.bus.unregister(this);
+            App.unregister(this);
         } catch (Exception ignored) {
         }
     }
@@ -376,7 +376,7 @@ public class MainActivity extends PreferenceActivity {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    App.bus.post(event);
+                                    App.post(event);
                                     onContentChanged();
                                 }
                             });

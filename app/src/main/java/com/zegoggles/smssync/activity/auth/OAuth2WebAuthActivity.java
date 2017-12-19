@@ -18,7 +18,7 @@ public class OAuth2WebAuthActivity extends Activity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         final Uri urlToLoad = getIntent().getData();
-        App.bus.register(this);
+        App.register(this);
 
         startActivity(new Intent(Intent.ACTION_VIEW, urlToLoad));
     }
@@ -45,7 +45,7 @@ public class OAuth2WebAuthActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            App.bus.unregister(this);
+            App.unregister(this);
         } catch (Exception ignored) {
         }
     }

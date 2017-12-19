@@ -38,7 +38,7 @@ public class RedirectReceiverActivity extends Activity {
             final String code = intent.getData().getQueryParameter("code");
             final String error = intent.getData().getQueryParameter("error");
 
-            App.bus.post(new BrowserAuthResult(code, error));
+            App.post(new BrowserAuthResult(code, error));
         }
         finish();
     }

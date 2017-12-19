@@ -19,7 +19,7 @@ public class PackageReplacedReceiver extends BroadcastReceiver {
         if (Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())) {
             Log.d(TAG, "now installed version: " + new Preferences(context).getVersion(true));
             //  just post event and let application handle the rest
-            App.bus.post(new AutoBackupSettingsChangedEvent());
+            App.post(new AutoBackupSettingsChangedEvent());
         } else {
             Log.w(TAG, "unhandled intent: "+intent);
         }

@@ -103,7 +103,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
     @Override
     protected void onPreExecute() {
-        App.bus.register(this);
+        App.register(this);
     }
 
     @Subscribe public void canceled(CancelEvent cancelEvent) {
@@ -229,18 +229,18 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         if (result != null) {
             post(result);
         }
-        App.bus.unregister(this);
+        App.unregister(this);
     }
 
     @Override
     protected void onCancelled() {
         post(transition(CANCELED_BACKUP, null));
-        App.bus.unregister(this);
+        App.unregister(this);
     }
 
     private void post(BackupState state) {
         if (state == null) return;
-        App.bus.post(state);
+        App.post(state);
     }
 
     private BackupState backupCursors(BackupCursors cursors, BackupImapStore store, BackupType backupType, int itemsToSync)
