@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.mail;
 
 import android.annotation.SuppressLint;
+import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.ssl.DefaultTrustedSocketFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,9 +77,12 @@ public class BackupImapStoreTest {
         assertThat(store.getStoreUriForLogging()).isEqualTo("imap://xoauth:XXXXX@imap.gmail.com:456");
     }
 
-    @Test public void shouldHaveToStringWithObfuscatedStoreURIWithoutUserInfo() throws Exception {
-        BackupImapStore store = new BackupImapStore(RuntimeEnvironment.application, "imap://imap.gmail.com:1234");
-        assertThat(store.getStoreUriForLogging()).isEqualTo("imap://imap.gmail.com:1234");
+    @Test(expected = MessagingException.class) public void shouldThrowExceptionIfUsernameIsMissing() throws Exception {
+        new BackupImapStore(RuntimeEnvironment.application, "imap://imap.gmail.com:1234");
+    }
+
+    @Test(expected = MessagingException.class) public void shouldThrowExceptionIfPasswordIsMissing() throws Exception {
+        new BackupImapStore(RuntimeEnvironment.application, "imap://plain:foo:@imap.gmail.com:1234");
     }
 
     @Test public void shouldHaveToStringWithStoreUriForLogging() throws Exception {
