@@ -20,7 +20,6 @@ import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.donation.DonationActivity.DonationStatusListener.State;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,10 +43,8 @@ import static com.zegoggles.smssync.activity.donation.DonationActivity.DonationS
 import static com.zegoggles.smssync.activity.donation.DonationActivity.DonationStatusListener.State.UNKNOWN;
 
 public class DonationActivity extends Activity implements SkuDetailsResponseListener, PurchasesUpdatedListener {
-
     private static boolean DEBUG_IAB = BuildConfig.DEBUG;
-
-    private com.android.billingclient.api.BillingClient billingClient;
+    private @Nullable BillingClient billingClient;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +75,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (billingClient != null) {
-            billingClient = null;
-        }
+        billingClient = null;
     }
 
     @Override
@@ -107,6 +102,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
     }
 
     private void queryAvailableSkus() {
+        if (billingClient == null) return;
         billingClient.querySkuDetailsAsync(SkuDetailsParams.newBuilder()
                 .setType(INAPP)
                 .setSkusList(Arrays.asList(ALL_SKUS))
@@ -114,6 +110,7 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
     }
 
     private void showSelectDialog(List<SkuDetails> skuDetails) {
+        if (billingClient == null) return;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         final List<SkuDetails> skus = new ArrayList<SkuDetails>(skuDetails);
