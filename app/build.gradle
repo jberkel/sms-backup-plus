@@ -14,7 +14,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 10
         versionCode 1560
-        versionName "1.5.11-beta6"
+        versionName "1.5.11-beta7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
