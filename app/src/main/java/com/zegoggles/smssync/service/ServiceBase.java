@@ -182,7 +182,7 @@ public abstract class ServiceBase extends Service {
         }
     }
 
-    protected NotificationManager getNotifier() {
+    NotificationManager getNotifier() {
         return (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
     }
 
@@ -194,7 +194,7 @@ public abstract class ServiceBase extends Service {
         return (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
-    protected @NonNull NotificationCompat.Builder createNotification(int resId) {
+    @NonNull NotificationCompat.Builder createNotification(int resId) {
         return new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setTicker(getString(resId))
@@ -202,13 +202,13 @@ public abstract class ServiceBase extends Service {
                 .setOngoing(true);
     }
 
-    protected PendingIntent getPendingIntent() {
+    PendingIntent getPendingIntent() {
         return PendingIntent.getActivity(this, 0,
             new Intent(this, MainActivity.class),
             PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    protected boolean isConnectedViaWifi() {
+    boolean isConnectedViaWifi() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return isConnectedViaWifi_SDK21();
         } else {
