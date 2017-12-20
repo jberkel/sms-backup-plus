@@ -35,7 +35,7 @@
                 android:summary="@string/ui_auto_backup_incoming_schedule_desc"
                 android:entries="@array/auto_backup_incoming_schedule_entries"
                 android:entryValues="@array/auto_backup_incoming_schedule_values"
-                android:defaultValue="180"
+                android:defaultValue="60"
                 android:persistent="true"/>
 
         <CheckBoxPreference
