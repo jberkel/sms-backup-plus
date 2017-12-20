@@ -1,5 +1,6 @@
 == 1.5.11 (1555) tbd
 
+  * Retry connection timeouts more aggressively
   * Call logs: support rejected / voicemail
   * Optionally trigger a backup after incoming/outgoing calls
   * Use JobManager to run backups in the background (#572, #810, #822)
