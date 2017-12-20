@@ -1,5 +1,6 @@
 == 1.5.11 (1555) tbd
 
+  * Simplify IMAP search logic to prevent timeouts
   * Retry connection timeouts more aggressively
   * Call logs: support rejected / voicemail
   * Optionally trigger a backup after incoming/outgoing calls
