@@ -96,7 +96,6 @@
 
   <string name="ui_backup_mms_label">Backup MMS</string>
   <string name="ui_backup_mms_desc">Abilita backup MMS</string>
-  <string name="ui_backup_mms_not_supported">Il backup MMS non è supportato su questa piattaforma.</string>
 
   <string name="ui_backup_calllog_label">Backup registro chiamate</string>
   <string name="ui_imap_folder_calllog_desc">Etichetta Gmail assegnata al registro chiamate.</string>

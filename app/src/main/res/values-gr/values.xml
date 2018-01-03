@@ -96,7 +96,6 @@
 
   <string name="ui_backup_mms_label">Αποθήκευση MMS</string>
   <string name="ui_backup_mms_desc">Ενέργοποίηση Αποθήκευσης MMS</string>
-  <string name="ui_backup_mms_not_supported">Η αποθήκευση MMS δεν υποστηρίζεται από αυτή την πλατφόρμα.</string>
 
   <string name="ui_backup_calllog_label">Αποθήκευση κλήσεων</string>
   <string name="ui_backup_calllog_desc">Ενεργοποίηση Αποθήκευσης κλήσεων</string>

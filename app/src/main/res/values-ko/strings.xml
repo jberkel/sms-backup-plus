@@ -97,7 +97,6 @@
 
   <string name="ui_backup_mms_label">MMS 백업</string>
   <string name="ui_backup_mms_desc">MMS 백업 활성화</string>
-  <string name="ui_backup_mms_not_supported">이 플랫폼에서는 MMS 백업이 지원되지 않습니다.</string>
 
   <string name="ui_backup_calllog_label">통화 기록 백업</string>
   <string name="ui_backup_calllog_desc">통화 기록 백업 활성화</string>

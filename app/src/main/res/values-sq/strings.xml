@@ -74,7 +74,6 @@
   <string name="ui_restore_starred_only_desc">Rikthe vetëm shënimet e yllëzuara.</string>
   <string name="ui_backup_mms_label">Krijo kopje rezervë të MMS-ve</string>
   <string name="ui_backup_mms_desc">Aktivizoni krijimin e kopjes rezervë të MMS-ve</string>
-  <string name="ui_backup_mms_not_supported">Krijimi i kopjes rezervë të MMS-ve nuk mbështet në këtë platformë.</string>
   <string name="ui_backup_calllog_label">Krijoni kopje rezervë të ditarit të thirrjeve</string>
   <string name="ui_backup_calllog_desc">Aktivizoni krijimin e kopjes rezervë të ditarit të thirrjeve</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Sinkronizim i kalendarit</string>

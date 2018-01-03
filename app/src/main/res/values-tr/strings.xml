@@ -96,7 +96,6 @@
 
   <string name="ui_backup_mms_label">MMS\'leri Yedekle</string>
   <string name="ui_backup_mms_desc">MMS yedeklemeyi etkinleştir(beta)</string>
-  <string name="ui_backup_mms_not_supported">MMS yedekleme bu platformda desteklenmiyor.</string>
 
   <string name="ui_mark_as_read_label">Okundu olarak işaretle (eposta)</string>
   <string name="ui_mark_as_read_desc">Gmailde mesajların okunup okunmadığına bakmaksızın okundu olarak işaretle.</string>

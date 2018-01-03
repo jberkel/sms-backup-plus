@@ -97,7 +97,6 @@
 
   <string name="ui_backup_mms_label">備份 MMS</string>
   <string name="ui_backup_mms_desc">啟用 MMS 備份</string>
-  <string name="ui_backup_mms_not_supported">尚未支援此平台的 MMS 備份。</string>
 
   <string name="ui_backup_calllog_label">備份通話記錄</string>
   <string name="ui_backup_calllog_desc">啟用通話記錄備份</string>

@@ -97,7 +97,6 @@
 
   <string name="ui_backup_mms_label">Копирај ММС</string>
   <string name="ui_backup_mms_desc">Омогући копирање ММС порука</string>
-  <string name="ui_backup_mms_not_supported">Прављење резервне копије ММС порука није подржано на овој платформи.</string>
 
   <string name="ui_backup_calllog_label">Копирај евид. позива</string>
   <string name="ui_backup_calllog_desc">Омогући копирање евиденције позива</string>

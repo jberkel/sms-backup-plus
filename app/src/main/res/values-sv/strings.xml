@@ -97,7 +97,6 @@
 
   <string name="ui_backup_mms_label">Backup av MMS</string>
   <string name="ui_backup_mms_desc">Aktivera säkerhetskopiering av MMS</string>
-  <string name="ui_backup_mms_not_supported">Säkerhetskopiering av MMS stöds inte på den här plattformen.</string>
 
   <string name="ui_backup_calllog_label">Backup av samtalshistorik</string>
   <string name="ui_backup_calllog_desc">Aktivera säkerhetskopiering av samtalshistorik (beta)</string>

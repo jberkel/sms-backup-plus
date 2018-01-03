@@ -66,7 +66,6 @@
     <string name="ui_restore_starred_only_desc">Przywróć tylko wiadomości z gwiazdką.</string>
     <string name="ui_backup_mms_label">Kopia zapasowa MMS-ów</string>
     <string name="ui_backup_mms_desc">Włącz kopię zapasową dla MMS-ów</string>
-    <string name="ui_backup_mms_not_supported">Kopia zapasowa MMS-ów nie jest obsługiwana przez tą platformę.</string>
     <string name="ui_backup_calllog_label">Kopia zapasowa historii połączeń</string>
     <string name="ui_backup_calllog_desc">Włącz kopię dla historii połączeń</string>
     <string name="ui_backup_calllog_sync_calendar_enabled_label">Synchronizuj z kalendarzem</string>

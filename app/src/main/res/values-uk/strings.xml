@@ -76,7 +76,6 @@
 <string name="ui_restore_starred_only_desc">Відновлення лише позначених елементів.</string>
 <string name="ui_backup_mms_label">Збереження MMS</string>
 <string name="ui_backup_mms_desc">Дозволити резервне копіювання MMS повідомлень</string>
-<string name="ui_backup_mms_not_supported">Резервне копіювання MMS не підтримується на цій платформі.</string>
 <string name="ui_backup_calllog_label">Збереження журналу викликів</string>
 <string name="ui_backup_calllog_desc">Дозволити резервне копіювання журналу викликів</string>
 <string name="ui_backup_calllog_sync_calendar_enabled_label">Синхронізація до календаря</string>

@@ -95,7 +95,6 @@
 
   <string name="ui_backup_mms_label">Backup MMS</string>
   <string name="ui_backup_mms_desc">Aktiver MMS backup</string>
-  <string name="ui_backup_mms_not_supported">MMS backup er ikke supporteret på denn platform.</string>
 
   <string name="ui_backup_calllog_label">Backup opkalds log</string>
   <string name="ui_backup_calllog_desc">Aktiver opkalds log backup</string>

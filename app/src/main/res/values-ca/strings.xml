@@ -97,7 +97,6 @@
 
   <string name="ui_backup_mms_label">Còpia d\'MMS</string>
   <string name="ui_backup_mms_desc">Habilita la còpia d\'MMS</string>
-  <string name="ui_backup_mms_not_supported">La còpia d\'MMS no és compatible amb aquesta plataforma.</string>
 
   <string name="ui_backup_calllog_label">Còpia del registre de trucades</string>
   <string name="ui_backup_calllog_desc">Habilita la còpia del registre de trucades</string>

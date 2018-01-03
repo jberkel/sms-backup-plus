@@ -98,7 +98,6 @@
 
   <string name="ui_backup_mms_label">Сохранять MMS</string>
   <string name="ui_backup_mms_desc">Включить сохранение MMS</string>
-  <string name="ui_backup_mms_not_supported">Сохранение MMS не поддерживается на этом устройстве.</string>
 
   <string name="ui_backup_calllog_label">Сохранять журнал вызовов</string>
   <string name="ui_backup_calllog_desc">Включить сохранение журнала вызовов (экспериментально)</string>

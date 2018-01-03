@@ -98,7 +98,6 @@
 
   <string name="ui_backup_mms_label">MMS-ek mentése</string>
   <string name="ui_backup_mms_desc">MMS-ek mentésének engedélyezése</string>
-  <string name="ui_backup_mms_not_supported">Az MMS-ek mentése nem támogatott ezen a platformon.</string>
 
   <string name="ui_backup_calllog_label">Hívásnapló mentése</string>
   <string name="ui_backup_calllog_desc">Hívásnapló mentésének engedélyezése</string>

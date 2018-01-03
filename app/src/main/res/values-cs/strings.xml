@@ -95,7 +95,6 @@
 
   <string name="ui_backup_mms_label">Zálohuj MMS</string>
   <string name="ui_backup_mms_desc">Povolit zálohu MMS</string>
-  <string name="ui_backup_mms_not_supported">Záloha MMS není na této platformě podporována.</string>
 
   <string name="ui_backup_calllog_label">Zálohuj výpis volání</string>
   <string name="ui_backup_calllog_desc">Polovit zálohu výpisu volání (beta)</string>

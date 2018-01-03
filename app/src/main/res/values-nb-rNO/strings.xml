@@ -97,7 +97,6 @@
 
   <string name="ui_backup_mms_label">Sikkerhetskopier MMS</string>
   <string name="ui_backup_mms_desc">Aktiver MMS sikkerhetskopiering</string>
-  <string name="ui_backup_mms_not_supported">MMS sikkerhetskopiering er ikke støttet på denne enheten.</string>
 
   <string name="ui_backup_calllog_label">Sikkerhetskopier samtalelogg</string>
   <string name="ui_backup_calllog_desc">Aktiver sikkerhetskopiering av samtalelogg (beta).</string>

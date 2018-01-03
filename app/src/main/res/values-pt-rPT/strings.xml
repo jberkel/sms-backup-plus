@@ -73,7 +73,6 @@
   <string name="ui_restore_starred_only_desc">Restaurar apenas mensagens marcadas com estrela.</string>
   <string name="ui_backup_mms_label">Cópia de MMS</string>
   <string name="ui_backup_mms_desc">Ativar cópia de segurança de MMS</string>
-  <string name="ui_backup_mms_not_supported">Cópia de MMS não suportada nesta plataforma.</string>
   <string name="ui_backup_calllog_label">Cópia do registo de chamadas</string>
   <string name="ui_backup_calllog_desc">Ativar a cópia de segurança do registo de chamadas (Em teste)</string>
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Sincronizar com Calendário</string>

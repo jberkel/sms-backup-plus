@@ -97,7 +97,6 @@
 
   <string name="ui_backup_mms_label">备份彩信</string>
   <string name="ui_backup_mms_desc">启用彩信备份</string>
-  <string name="ui_backup_mms_not_supported">您的设备不支持备份彩信。</string>
 
   <string name="ui_backup_calllog_label">备份通话记录</string>
   <string name="ui_backup_calllog_desc">启用通话记录备份</string>
