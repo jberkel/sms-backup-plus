@@ -1,4 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.zegoggles.smssync.activity.StatusPreference
+            android:selectable="false"
+            android:layout="@layout/status"/>
 
     <CheckBoxPreference
             android:key="connected"

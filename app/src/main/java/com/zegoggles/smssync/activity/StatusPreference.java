@@ -1,9 +1,12 @@
 package com.zegoggles.smssync.activity;
 
-import android.preference.Preference;
+import android.content.Context;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceViewHolder;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -21,12 +24,13 @@ import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import com.zegoggles.smssync.service.state.State;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
-class StatusPreference extends Preference implements View.OnClickListener {
-    private View mView;
-
+public class StatusPreference extends Preference implements View.OnClickListener {
     private Button mBackupButton;
     private Button mRestoreButton;
 
@@ -36,15 +40,22 @@ class StatusPreference extends Preference implements View.OnClickListener {
     private TextView mSyncDetailsLabel;
 
     private ProgressBar mProgressBar;
-    private MainActivity mainActivity;
     private final Preferences preferences;
 
-    public StatusPreference(Preferences preferences, MainActivity mainActivity) {
-        super(mainActivity);
-        this.mainActivity = mainActivity;
-        this.preferences = preferences;
-        setSelectable(false);
-        setOrder(0);
+    @SuppressWarnings("unused")
+    public StatusPreference(Context context) {
+        this(context, null);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public StatusPreference(Context context, AttributeSet attrs) {
+        this(context, attrs, 0, 0);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public StatusPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        this.preferences = new Preferences(context);
     }
 
     @Override
@@ -52,7 +63,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
         if (v == mBackupButton) {
             if (!SmsBackupService.isServiceWorking()) {
                 if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
-                mainActivity.performAction(MainActivity.Actions.Backup);
+                App.post(MainActivity.Actions.Backup);
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
                 // Sync button will be restored on next status update.
@@ -63,7 +74,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
         } else if (v == mRestoreButton) {
             if (LOCAL_LOGV) Log.v(TAG, "restore");
             if (!SmsRestoreService.isServiceWorking()) {
-                mainActivity.performAction(MainActivity.Actions.Restore);
+                App.post(MainActivity.Actions.Restore);
             } else {
                 mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
                 mRestoreButton.setEnabled(false);
@@ -73,29 +84,39 @@ class StatusPreference extends Preference implements View.OnClickListener {
     }
 
     @Override
-    public View getView(View convertView, ViewGroup parent) {
-        if (mView == null) {
-            mView = mainActivity.getLayoutInflater().inflate(R.layout.status, parent, false);
-            mBackupButton = (Button) mView.findViewById(R.id.sync_button);
-            mBackupButton.setOnClickListener(this);
+    public void onAttached() {
+        super.onAttached();
+        App.register(this);
+    }
 
-            mRestoreButton = (Button) mView.findViewById(R.id.restore_button);
-            mRestoreButton.setOnClickListener(this);
+    @Override
+    public void onDetached() {
+        super.onDetached();
+        App.unregister(this);
+    }
 
-            mStatusIcon = (ImageView) mView.findViewById(R.id.status_icon);
-            mStatusLabel  = (TextView) mView.findViewById(R.id.status_label);
-            View mSyncDetails = mView.findViewById(R.id.details_sync);
-            mSyncDetailsLabel = (TextView) mSyncDetails.findViewById(R.id.details_sync_label);
-            mProgressBar = (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress);
+    @Override
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
 
-            idle();
-        }
-        return mView;
+        mBackupButton = (Button) holder.findViewById(R.id.sync_button);
+        mBackupButton.setOnClickListener(this);
+
+        mRestoreButton = (Button) holder.findViewById(R.id.restore_button);
+        mRestoreButton.setOnClickListener(this);
+
+        mStatusIcon = (ImageView) holder.findViewById(R.id.status_icon);
+        mStatusLabel  = (TextView) holder.findViewById(R.id.status_label);
+        View mSyncDetails = holder.findViewById(R.id.details_sync);
+        mSyncDetailsLabel = (TextView) mSyncDetails.findViewById(R.id.details_sync_label);
+        mProgressBar = (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress);
+
+        idle();
     }
 
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "restoreStateChanged:" + newState);
-        if (mView == null) return;
+        if (mBackupButton == null) return;
 
         stateChanged(newState);
         switch (newState.state) {
@@ -128,7 +149,7 @@ class StatusPreference extends Preference implements View.OnClickListener {
 
     @Subscribe public void backupStateChanged(final BackupState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "backupStateChanged:"+newState);
-        if (mView == null || newState.backupType.isBackground()) return;
+        if (mBackupButton == null || newState.backupType.isBackground()) return;
 
         stateChanged(newState);
 
@@ -198,8 +219,14 @@ class StatusPreference extends Preference implements View.OnClickListener {
     }
 
     private void idle() {
-        mSyncDetailsLabel.setText(mainActivity.getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
+        mSyncDetailsLabel.setText(getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
         mStatusLabel.setText(R.string.status_idle);
+    }
+
+    private String getLastSyncText(final long lastSync) {
+        return getContext().getString(R.string.status_idle_details,
+                lastSync < 0 ? getContext().getString(R.string.status_idle_details_never) :
+                        DateFormat.getDateTimeInstance().format(new Date(lastSync)));
     }
 
     private void stateChanged(State state) {

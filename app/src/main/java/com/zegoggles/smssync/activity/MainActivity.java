@@ -30,16 +30,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceActivity;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.CheckBoxPreference;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.Preference.OnPreferenceChangeListener;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceScreen;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -102,8 +106,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
-@SuppressWarnings("deprecation")
-public class MainActivity extends PreferenceActivity {
+public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
     private static final int REQUEST_WEB_AUTH = 3;
@@ -116,25 +119,25 @@ public class MainActivity extends PreferenceActivity {
 
     Preferences preferences;
     private AuthPreferences authPreferences;
-    private StatusPreference statusPref;
     private OAuth2Client oauth2Client;
     private Handler handler;
+    private PreferenceFragmentCompat preferenceFragment;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        setContentView(R.layout.main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         handler = new Handler();
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         preferences = new Preferences(this);
-        addPreferencesFromResource(R.xml.preferences);
+        preferenceFragment = (PreferenceFragmentCompat) getSupportFragmentManager().findFragmentById(R.id.preferences);
 
-        statusPref = new StatusPreference(preferences, this);
-        statusPref.setOrder(-1);
-        getPreferenceScreen().addPreference(statusPref);
-
-        if (preferences.shouldShowUpgradeMessage()) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
         setPreferenceListeners();
+        if (preferences.shouldShowUpgradeMessage()) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
 
         checkAndDisplayDroidWarning();
 
@@ -183,12 +186,6 @@ public class MainActivity extends PreferenceActivity {
 
         updateImapSettings(!authPreferences.useXOAuth());
         checkUserDonationStatus();
-        App.register(statusPref);
-    }
-
-    @Override protected void onPause() {
-        super.onPause();
-        App.unregister(statusPref);
     }
 
     @Override
@@ -202,7 +199,7 @@ public class MainActivity extends PreferenceActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        android.view.MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
@@ -304,7 +301,7 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    String getLastSyncText(final long lastSync) {
+    private String getLastSyncText(final long lastSync) {
         return getString(R.string.status_idle_details,
                 lastSync < 0 ? getString(R.string.status_idle_details_never) :
                 DateFormat.getDateTimeInstance().format(new Date(lastSync)));
@@ -437,6 +434,10 @@ public class MainActivity extends PreferenceActivity {
         findPreference(CALLLOG_SYNC_CALENDAR_ENABLED.key).setEnabled(enabled);
     }
 
+    private Preference findPreference(String key) {
+        return preferenceFragment.findPreference(key);
+    }
+
     private void initiateRestore() {
         if (checkLoginInformation()) {
             startRestore();
@@ -470,7 +471,8 @@ public class MainActivity extends PreferenceActivity {
         }
     }
 
-    void performAction(Actions act) {
+    @Subscribe
+    public void performAction(Actions act) {
         performAction(act, preferences.confirmAction());
     }
 
@@ -881,9 +883,10 @@ public class MainActivity extends PreferenceActivity {
                     switch (state) {
                         case NOT_AVAILABLE:
                         case DONATED:
-                            Preference donate = getPreferenceScreen().findPreference(DONATE.key);
+                            PreferenceScreen screen = preferenceFragment.getPreferenceScreen();
+                            Preference donate = screen.findPreference(DONATE.key);
                             if (donate != null) {
-                                getPreferenceScreen().removePreference(donate);
+                                screen.removePreference(donate);
                             }
                     }
                 }

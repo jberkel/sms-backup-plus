@@ -1,5 +1,8 @@
 <resources>
-    <style name="Theme.SmsBackupPlus" parent="android:Theme.Black"/>
-    <style name="Theme.Donation" parent="android:Theme.Translucent.NoTitleBar"/>
-    <style name="Theme.WebAuth" parent="android:Theme.Translucent.NoTitleBar"/>
+
+    <style name="Theme" parent="Theme.AppCompat.NoActionBar"/>
+
+    <style name="Theme.SmsBackupPlus">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
 </resources>
