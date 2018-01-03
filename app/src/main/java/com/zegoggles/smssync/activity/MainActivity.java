@@ -19,6 +19,7 @@ package com.zegoggles.smssync.activity;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,6 +33,7 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
@@ -81,6 +83,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -106,7 +109,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
     private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
     private static final int REQUEST_WEB_AUTH = 3;
@@ -711,6 +714,19 @@ public class MainActivity extends AppCompatActivity {
                 return null;
         }
         return createMessageDialog(title, msg);
+    }
+
+    @Override
+    public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen preferenceScreen) {
+        SMSBackupPreferenceFragment fragment = new SMSBackupPreferenceFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Bundle args = new Bundle();
+        args.putString(ARG_PREFERENCE_ROOT, preferenceScreen.getKey());
+        fragment.setArguments(args);
+        ft.replace(R.id.preferences, fragment, preferenceScreen.getKey());
+        ft.addToBackStack(preferenceScreen.getKey());
+        ft.commit();
+        return true;
     }
 
     private void reset() {

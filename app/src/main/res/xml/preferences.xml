@@ -19,9 +19,9 @@
             android:defaultValue="false"/>
 
     <PreferenceScreen
-            android:key="auto_backup_settings_screen"
-            android:title="@string/ui_auto_backup_settings_label"
-            android:dependency="enable_auto_sync">
+            android:key="screen_auto_backup_settings"
+            android:dependency="enable_auto_sync"
+            android:title="@string/ui_auto_backup_settings_label">
 
         <ListPreference
                 android:key="auto_backup_schedule"
@@ -64,10 +64,12 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+            android:key="screen_advanced_settings"
             android:title="@string/ui_settings_advanced_label"
             android:summary="@string/ui_settings_advanced_desc">
 
         <PreferenceScreen
+                android:key="screen_backup_settings"
                 android:title="@string/ui_backup_settings_label">
 
             <CheckBoxPreference
@@ -92,6 +94,7 @@
                     android:defaultValue="true"/>
 
             <PreferenceScreen
+                    android:key="screen_calllog_settings"
                     android:title="@string/ui_backup_calllog_settings_label"
                     android:dependency="backup_calllog">
 
@@ -132,7 +135,6 @@
 
                 <CheckBoxPreference
                         android:key="backup_calllog_after_call"
-                        android:dependency="enable_auto_sync"
                         android:title="@string/ui_backup_calllog_after_call_label"
                         android:persistent="true"
                         android:defaultValue="false"
@@ -191,6 +193,7 @@
         </PreferenceScreen>
 
         <PreferenceScreen
+                android:key="screen_restore_settings"
                 android:title="@string/ui_restore_settings_label">
 
             <CheckBoxPreference
@@ -271,6 +274,7 @@
                 android:defaultValue="false"/>
 
         <PreferenceScreen
+                android:key="screen_server_settings"
                 android:title="@string/ui_settings_advanced_server_label"
                 android:summary="@string/ui_settings_advanced_server_desc">
 

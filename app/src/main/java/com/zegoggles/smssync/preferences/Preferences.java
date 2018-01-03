@@ -100,7 +100,7 @@ public class Preferences {
         FIRST_USE("first_use"),
         IMAP_SETTINGS("imap_settings"),
         DONATE("donate"),
-        BACKUP_SETTINGS_SCREEN("auto_backup_settings_screen"),
+        BACKUP_SETTINGS_SCREEN("screen_auto_backup_settings"),
         SMS_DEFAULT_PACKAGE("sms_default_package"),
         SMS_DEFAULT_PACKAGE_CHANGE_SEEN("sms_default_package_change_seen"),
         USE_OLD_SCHEDULER("use_old_scheduler"),
