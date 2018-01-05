@@ -172,11 +172,6 @@
    SMS Backup+ è compatibile al 100%% con SMS Backup. Tuttavia assicurati che \"Backup automatico\" sia abilitato solo su una delle due applicazioni, altrimenti si potrebbero ottenere dei duplicati. Inoltre è necessario selezionare \"Ignora\" messaggi per la tua prima sincronizzazione se i messaggi sul telefono sono già stati salvati precedentemente.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
-  <string name="ui_dialog_brokendroidx_msg">Questo è un bug del Droid X che
-  impedisce all\' applicazione di effettuare il backup dei messaggi arrivati. Guarda le FAQ
-  sul nostro sito web per maggiori informazioni.</string>
-
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Ignora</string>
   <string name="err_sync_requires_login_info">Impossibile effettuare il backup senza le informazioni per il login.</string>

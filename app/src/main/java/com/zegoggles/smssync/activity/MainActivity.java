@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements
         if (preferences.shouldShowUpgradeMessage()) {
             show(Dialogs.UPGRADE_FROM_SMSBACKUP);
         }
-        checkAndDisplayDroidWarning();
         preferences.migrateMarkAsRead();
 
         if (preferences.shouldShowAboutDialog()) {
@@ -486,17 +485,13 @@ public class MainActivity extends AppCompatActivity implements
                 title = getString(R.string.ui_dialog_upgrade_title);
                 msg = getString(R.string.ui_dialog_upgrade_msg);
                 break;
-            case BROKEN_DROIDX:
-                title = getString(R.string.ui_dialog_brokendroidx_title);
-                msg = getString(R.string.ui_dialog_brokendroidx_msg);
-                break;
             case CONFIRM_ACTION:
                 return new AlertDialog.Builder(this)
                         .setTitle(R.string.ui_dialog_confirm_action_title)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                if (MainActivity.this.mActions != null) {
-                                    performAction(MainActivity.this.mActions, false);
+                                if (mActions != null) {
+                                    performAction(mActions, false);
                                 }
                             }
                         })
@@ -603,17 +598,6 @@ public class MainActivity extends AppCompatActivity implements
                     .detectNetwork()
                     .penaltyFlashScreen()
                     .build());
-        }
-    }
-
-    private void checkAndDisplayDroidWarning() {
-        if ("DROIDX".equals(Build.MODEL) ||
-            "DROID2".equals(Build.MODEL) &&
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.FROYO &&
-            !getPreferences(MODE_PRIVATE).getBoolean("droidx_warning_displayed", false)) {
-
-            getPreferences(MODE_PRIVATE).edit().putBoolean("droidx_warning_displayed", true).commit();
-            show(Dialogs.BROKEN_DROIDX);
         }
     }
 

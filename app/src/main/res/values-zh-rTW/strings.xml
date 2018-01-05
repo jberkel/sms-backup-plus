@@ -180,11 +180,6 @@
    SMS Backup+ 與 SMS Backup 程式完全向下兼容。但是請確定您只在其中一款程式中開啟“自動備份”，否則將會出現重複備份。如果您已經對設備中的簡訊進行過備份，首次備份時應該選取“跳過”訊息。
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X 簡訊缺陷</string>
-  <string name="ui_dialog_brokendroidx_msg">在 Droid X 中存在一個
-  缺陷，其會阻止本程式備份新接收到的簡訊。請從網站上查看 FAQ
-  瞭解更多訊息。</string>
-
   <string name="ui_sync">備份</string>
   <string name="ui_skip">跳過</string>
   <string name="err_sync_requires_login_info">沒有登入訊息的情況下無法進行備份。</string>

@@ -175,11 +175,6 @@
    SMS Backup+ ist vollständig abwärtskompatibel mit SMS Backup. Die \"Automatische Sicherung\" sollte allerdings nur in einer App aktiviert sein, andernfalls könnten Duplikate enstehen. Außerdem sollten Sie \"Überspringen\" für Ihre erste Sicherung wählen falls Ihre Daten vormals schon gesichert wurden.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
-  <string name="ui_dialog_brokendroidx_msg">Ein Programmfehler auf dem Droid X verhindert
-  dass diese App eingehende Nachrichten sichern kann. Für nähere Informationen werfen Sie bitte
-  einen Blick in die FAQ auf der Website.</string>
-
   <string name="ui_sync">Sicherung</string>
   <string name="ui_skip">Überspringen</string>
   <string name="err_sync_requires_login_info">Eine Sicherung ohne Anmeldeinformationen ist nicht möglich.</string>

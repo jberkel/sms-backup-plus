@@ -172,9 +172,6 @@
    SMS Backup+ is volledig compatibel SMS Backup. Zorg er wel voor dat \"Automatische back-up\" maar in één app aan staat, anders krijgt u dubbele berichten. Ook moet u berichten \"overslaan\" als u voor het eerst synchroniseert en uw berichten op uw telefoon al geback-upt zijn.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X-sms-bug</string>
-  <string name="ui_dialog_brokendroidx_msg">Er is een bug in Droid X waardoor deze app inkomende berichten niet kan back-uppen. Bekijk de veel gestelde vragen (FAQ) op de website voor meer informatie.</string>
-
   <string name="ui_sync">Back-uppen</string>
   <string name="ui_skip">Overslaan</string>
   <string name="err_sync_requires_login_info">Kan niet back-uppen zonder aanmeldingsinformatie.</string>

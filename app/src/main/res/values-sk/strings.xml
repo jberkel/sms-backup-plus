@@ -118,8 +118,6 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="ui_dialog_disconnect_msg">Ste si istý? Po odpojení bude nutné opäť autorizovať Váš účet a stav synchronizácie bude vymazaný</string>
     <string name="ui_dialog_upgrade_title">Informácie o aktualizácii</string>
     <string name="ui_dialog_upgrade_msg">SMS Backup+ je plne spätne kompatibilný s SMS backup. Predsa sa však presvedčte, že Automatická záloha je povolená len v jednej aplikacii, inak je možný vznik duplikácii. Mali by ste tiež zvoliť Preskočiť správy pre prvú migráciu, pokiaľ správy v telefóne už boli predtým zálohované</string>
-    <string name="ui_dialog_brokendroidx_title">DROID X SMS chyba</string>
-    <string name="ui_dialog_brokendroidx_msg">V Droid X je chyba ktorá zabraňuje tejto aplikácii v zálohe prichádzajúcich správ. Viac informácií nájdete v sekcii FAQ na webovej stránke</string>
     <string name="ui_sync">Zálohovať</string>
     <string name="ui_skip">Preskočiť</string>
     <string name="err_sync_requires_login_info">Nie je možné zálohovať bez prihlásenia</string>

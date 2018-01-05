@@ -174,11 +174,6 @@
    SMS Backup+ er fult kompatibel med SMS Backup. Men sørg for at \"Auto sikkerhetskopiering\" kun er aktiv i en applikasjon, ellers vil det kunne oppstå duplikater. Du bør også velge \"Hopp over\" meldinger ved din første synkronisering om meldinger har blitt sikkerhetskopiert tidligere.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS feil</string>
-  <string name="ui_dialog_brokendroidx_msg">Det er en feil i Droid X som
-  forhindrer denne applikasjonen fra å sikkerhetskopiere innkommende
-  meldinger. Se FAQ på nettsiden for mer informasjon.</string>
-
   <string name="ui_sync">Sikkerhetskopier</string>
   <string name="ui_skip">Hopp over</string>
   <string name="err_sync_requires_login_info">Kan ikke sikkerhetskopiere uten innloggings-informasjon.</string>

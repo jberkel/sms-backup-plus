@@ -177,9 +177,6 @@
   <string name="ui_dialog_upgrade_title">Frissítési információk</string>
   <string name="ui_dialog_upgrade_msg">Az SMS Backup+ visszafelé kompatibilis az SMS Backuppal. Mindazonáltal bizonyosodjon meg róla, hogy az \"Automatikus mentés\" csak az egyik alkalmazásban aktív, különben előfordulhatnak ismétlődések a mentett üzenetek között. Ezen kívül válassza a \"Kihagyás\" opciót az első mentéskor, ha már korábban készült biztonsági mentés az üzenetekről.</string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS hiba</string>
-  <string name="ui_dialog_brokendroidx_msg">Van egy hiba a Droid X készülékekben, amely megakadályozza, hogy az alkalmazás hozzáférjen a bejövő üzenetekhez. További információkért keresse fel a gyakran ismételt kérdéseket a weboldalon.</string>
-
   <string name="ui_sync">Mentés</string>
   <string name="ui_skip">Kihagyás</string>
   <string name="err_sync_requires_login_info">Nem lehet menteni bejelentkezési információk nélkül.</string>

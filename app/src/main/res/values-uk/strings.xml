@@ -130,8 +130,6 @@
 <string name="ui_dialog_upgrade_title">Інформація про сумісність</string>
 <string name="ui_dialog_upgrade_msg">
    SMS Backup+ є повністю сумісною SMS Backup. Однак переконайтеся, що \"Автоматичне резервне копіювання\" включено лише в одному застосунку, в іншому випадку ви можете отримати дублікати. Також ви маєте обрати \"Проминути\" в повідомлені для першої синхронізації, якщо повідомлення на телефоні вже були збережені раніше.</string>
-<string name="ui_dialog_brokendroidx_title">Помилки на DROID X</string>
-<string name="ui_dialog_brokendroidx_msg">Існує помилка збереження вхідних повідомлень в Droid X. Будь ласка, перегляньте довідку на веб-сайті для детальної інформації.</string>
 <string name="ui_sync">Резервне копіювання</string>
 <string name="ui_skip">Проминути</string>
 <string name="err_sync_requires_login_info">Не можливо виконати резервне копіювання без входу до системи.</string>

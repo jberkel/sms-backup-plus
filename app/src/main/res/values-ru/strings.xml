@@ -168,9 +168,6 @@
    SMS Backup+ полностью совместим с SMS Backup. Однако, если включить «Автосохранение» в обоих версиях, могут появиться дубликаты SMS. Если вы раньше использовали SMS Backup, нажмите «Пропустить» при первом резервировании.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">Проблема на Droid X</string>
-  <string name="ui_dialog_brokendroidx_msg">Существует проблема с сохранением входящих сообщений на Droid X. Пожалуйста, обратитесь к справочному разделу на сайте</string>
-
   <string name="ui_sync">Сохранить</string>
   <string name="ui_skip">Пропустить</string>
   <string name="err_sync_requires_login_info">Не могу выполнить сохранение без ввода логина/пароля.</string>

@@ -151,11 +151,6 @@
    SMS Backup+, SMS Backup ile tamamen uyumludur. Sadece \"Otomatik yedekleme\" seçeneğinin akif olduğundan emin olun, aksi takdirde mükerrer mesajlar oluşabilir. Ayrıca eğer telefondaki mesajlarınızı daha önce zaten yedeklemişseniz ilk senkronizasyon işlemi esnasında \"Atla\" seçeneğini seçin.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS Hatası</string>
-  <string name="ui_dialog_brokendroidx_msg">Droid X\'te yedekleme işlemi sırasında mesaj almayı
-  engelleyen bir hata var. Daha fazla bilgi için
-  websitemizdeki SSS bölümüne göz atın.</string>
-
   <string name="ui_sync">Yedekle</string>
   <string name="ui_skip">Atla</string>
   <string name="err_sync_requires_login_info">Giriş bilgileri olmadan yedek alınamaz.</string>

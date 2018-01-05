@@ -178,11 +178,6 @@
    SMS Backup+ est entièrement rétro-compatible avec SMS Backup. Veuillez cependant vérifier que l\'option \"Sauvegarde automatique\" n\'est activée que dans une des deux applications, sinon vous aurez des sauvegardes en double. Il est également conseillé de séléctionner \"Ignorer\" les messages pour votre première sauvgarde, si vous les avez déjà sauvegardés.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">Bug SMS DROID X</string>
-  <string name="ui_dialog_brokendroidx_msg">Il y a un bug avec le Droid X qui
-  empêche cette application de sauvegarder les message entrants. Plus d\'informations dans la FAQ
-  disponible sur le site.</string>
-
   <string name="ui_sync">Sauvegarder</string>
   <string name="ui_skip">Ignorer</string>
   <string name="err_sync_requires_login_info">La sauvegarde ne peut être effectuée sans les informations de connexion.</string>

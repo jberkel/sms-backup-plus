@@ -129,10 +129,6 @@
   <string name="ui_dialog_upgrade_title">Informacion përditësimi</string>
   <string name="ui_dialog_upgrade_msg">
    SMS Backup+ është i prapapërpuethshëm plotësisht me SMS Backup. Megjithatë sigurohuni që \"krijimi i kopjes rezervë automatike\" është i aktivizuar vetëm në njërin program, përndryshe do të hasni kopje identike. Gjithashtu ju duhet të përzgjidhni \"Tejkalo\" mesazhet për sinkronizimin tuaj të parë nëse mesazhet në telefon janë tashmë të ruajtura rezervë që më parë.\</string>
-  <string name="ui_dialog_brokendroidx_title">Mangësi e SMS të DROID X</string>
-  <string name="ui_dialog_brokendroidx_msg">Ka një mangësi tek Droid X e cila
-  nuk e lejon këtë program të krijoi kopje rezervë të mesazheve hyrëse. Shikoni FAQ
-  në faqen e internetit për më shumë informacion.</string>
   <string name="ui_sync">Kopje rezervë</string>
   <string name="ui_skip">Anashkalo</string>
   <string name="err_sync_requires_login_info">Nuk mund të krijoj kopje rezervë pa informacionin e hyrjes.</string>

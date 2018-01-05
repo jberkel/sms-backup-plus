@@ -183,11 +183,6 @@
    SMS Backup+ is fully backwards compatible with SMS Backup. However make sure that \"Auto backup\" is only enabled in one app, otherwise you might get duplicates. Also you should select \"Skip\" messages for your first sync if the messages on the phone have already been backed up previously.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
-  <string name="ui_dialog_brokendroidx_msg">There is a bug in Droid X which
-  prevents this application from backing up incoming messages. See the FAQ
-  on the website for more information.</string>
-
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
   <string name="err_sync_requires_login_info">Cannot backup without login information.</string>

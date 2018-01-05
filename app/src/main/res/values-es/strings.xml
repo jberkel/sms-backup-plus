@@ -160,12 +160,6 @@
   <string name="ui_dialog_upgrade_msg">SMS Backup+ es completamente compatible con SMS Backup. Sin embargo asegúrese de que \"Copia de seguridad automática\" está sólo habilitada en una aplicación, de lo contrario podría obtener duplicados. También debe seleccionar \"Saltar\" mensajes para su primera sincronización, si ya ha hecho previamente copia de seguridad de los mensajes en el teléfono.</string>
 
 
-
-  <string name="ui_dialog_brokendroidx_title">Bug SMS de DROID X</string>
-  <string name="ui_dialog_brokendroidx_msg">Hay un bug en el DROID X que impede esta applicacion de copiar los mensajes entrantes. Mas informacion en la FAQ de sitio web.</string>
-
-
-
   <string name="ui_sync">Copia de seguridad</string>
   <string name="ui_skip">Saltar</string>
   <string name="err_sync_requires_login_info">No se puede realizar copia de seguridad sin la información de inicio de sesión.</string>

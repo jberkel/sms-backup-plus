@@ -180,11 +180,6 @@
    SMS Backup+ 完全向下兼容于 SMS Backup。不过请确保“自动备份”仅在一个程序里启用，否则将会出现重复备份。如果您已经对设备中的信息进行过备份，首次备份时应该选择“跳过”。
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X 短信缺陷</string>
-  <string name="ui_dialog_brokendroidx_msg">Droid X 有一个导致
-  新信息备份无法正常工作的缺陷。想要了解更多细节，
-  请访问网站上的常见问题(FAQ)。</string>
-
   <string name="ui_sync">备份</string>
   <string name="ui_skip">跳过</string>
   <string name="err_sync_requires_login_info">没有登录信息，无法备份。</string>

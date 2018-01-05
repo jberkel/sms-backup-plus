@@ -115,8 +115,6 @@
     <string name="ui_dialog_disconnect_msg">Na pewno? Trzeba będzie powtórzyć uwierzytelnianie po odłączenie tego konta</string>
     <string name="ui_dialog_upgrade_title">Informacje o aktualizacji</string>
     <string name="ui_dialog_upgrade_msg">SMS Backup+ jest całkowicie zgodny wstecz z SMS Backup. Należy jednak upewnić się, że \"Automatyczne wykonywanie kopii zapasowej\" jest włączone tylko w jednym programie, w przeciwnym razie powstaną duplikaty wiadomości. Należy również wybrać \"Pomiń\" przy pierwszej synchronizacji, jeśli wcześniej została już utworzona kopia zapasowa.</string>
-    <string name="ui_dialog_brokendroidx_title">Błąd SMS w DROID X</string>
-    <string name="ui_dialog_brokendroidx_msg">W Droid X jest błąd który uniemożliwia aplikacji SMS Backup + tworzenie kopii zapasowej dla wiadomości przychodzących. Więcej informacji znajdziesz w FAQ na naszej stronie internetowej.</string>
     <string name="ui_sync">Kopia zapasowa</string>
     <string name="ui_skip">Pomiń</string>
     <string name="err_sync_requires_login_info">Nie można utworzyć kopii zapasowej bez danych logowania.</string>

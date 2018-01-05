@@ -156,10 +156,6 @@
    SMS Backup+ je plně zpětně kompatibilní s SMS backup. Přesto se ujistěte, že \"Auto backup\" je povolen jen v jedné aplikaci, jinak je možný vznik duplikací. Měli byste také zvolit \"Skip\" zprávy pro první migraci, pokud zprávy v telefonu již byly dříve zálohovány.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS chyba</string>
-  <string name="ui_dialog_brokendroidx_msg">V Droid X je chyba která
-  zabraňuje této aplikaci v záloze příchozích zpráv. Více informací naleznete v sekci FAQ na webové stránce.</string>
-
   <string name="ui_sync">Zálohovat</string>
   <string name="ui_skip">Přeskočit</string>
   <string name="err_sync_requires_login_info">Není možné zálohovat bez přihlášení.</string>

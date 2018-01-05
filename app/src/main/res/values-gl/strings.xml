@@ -174,11 +174,6 @@
     SMS Backup+ é completamente compatible con SMS Backup. Sen embargo, asegúres de que o \"Gardado automático\" está só habilitado nunha das aplicacións, do contrario é posible que se creen duplicados. Tamén debería seleccionar \"Omitir\" mensaxes no súa primeira sincronización se as mensaxes do teléfono foron gardadas previamente.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">Fallo en SMS do DROID X</string>
-  <string name="ui_dialog_brokendroidx_msg">Existe un fallo no Droid X que lle impide
-  a esta aplicación gardar as mensaxes entrantes. Consulte as FAQ
-  na páxina web para máis información.</string>
-
   <string name="ui_sync">Gardar</string>
   <string name="ui_skip">Omitir</string>
   <string name="err_sync_requires_login_info">Non se pode gardar sen información de acceso.</string>

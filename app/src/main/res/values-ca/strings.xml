@@ -176,11 +176,6 @@
    L\'SMS Backup+ és totalment compatible cap enrere amb l\'SMS Backup. Assegureu-vos però que la \"Còpia automàtica\" només està habilitada en una aplicació, en cas contrari us podríeu trobar duplicats. També hauríeu de seleccionar \"Omet\" els missatges per a la primera sincronització si ja s\'ha fet una còpia dels missatges del telèfon.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">Error d\'SMS DROID X</string>
-  <string name="ui_dialog_brokendroidx_msg">Hi ha un error al Droid X que
-  no permet que l\'aplicació copiï els missatges d\'entrada. Vegeu les PMFS
-  al lloc web per a més informació.</string>
-
   <string name="ui_sync">Copia</string>
   <string name="ui_skip">Omet</string>
   <string name="err_sync_requires_login_info">No es pot copiar sense la informació d\'inici de sessió.</string>

@@ -174,11 +174,6 @@
    redan har säkerhetskopierats tidigare.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
-  <string name="ui_dialog_brokendroidx_msg">There is a bug in Droid X which
-  prevents this application from backing up incoming messages. See the FAQ
-  on the website for more information.</string>
-
   <string name="ui_sync">Säkerhetskopiera</string>
   <string name="ui_skip">Hoppa över</string>
   <string name="err_sync_requires_login_info">Kan inte säkerhetskopiera utan inloggningsuppgifter.</string>

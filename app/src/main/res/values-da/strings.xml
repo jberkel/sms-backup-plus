@@ -172,9 +172,6 @@
       SMS Backup+ er fuldt kompatibelt med SMS Backup. Men du skal sikre dig at \"Auto backup\" kun er slået til i en af apps\'ne, ellers risikerer du dubletter. Vælg også \"Spring over\" ved første synkronisering af beskedder på telefonen, hvor der allerede er backed beskeder op.
   </string>
 
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS fejl</string>
-  <string name="ui_dialog_brokendroidx_msg">Der er en fejl der forhindrer beskeder i at blive backed op på Droid X. Se FAQ\'en på hjemmesiden for mere info.</string>
-
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Spring over</string>
   <string name="err_sync_requires_login_info">Kan ikke tage backup uden login information.</string>
