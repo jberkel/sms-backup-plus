@@ -2,7 +2,6 @@ package com.zegoggles.smssync.activity;
 
 import android.content.Context;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -16,9 +15,9 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.service.CancelEvent;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
-import com.zegoggles.smssync.service.CancelEvent;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;

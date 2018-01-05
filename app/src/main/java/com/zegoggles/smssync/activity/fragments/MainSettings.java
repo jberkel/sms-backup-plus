@@ -56,6 +56,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         checkUserDonationStatus();
         updateAutoBackupEnabledSummary();
         updateAutoBackupScheduleSummary();
@@ -66,8 +67,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
                 return false;
             }
         });
-
-
         addPreferenceListener(
             ENABLE_AUTO_BACKUP.key
         );
@@ -77,7 +76,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         updateAutoBackupEnabledSummary();
         updateAutoBackupScheduleSummary();
     }
-
 
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
         if (event.valid()) {
@@ -94,7 +92,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
         connected.setEnabled(authPreferences.useXOAuth());
         connected.setChecked(authPreferences.hasOauthTokens() || authPreferences.hasOAuth2Tokens());
-
 
         String summary = getConnectedSummary(connected);
         connected.setSummary(summary);
@@ -146,6 +143,10 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
         final ListPreference incomingSchedule = (ListPreference)
                 findPreference(INCOMING_TIMEOUT_SECONDS.key);
+
+        // values are out-of sync
+        regSchedule.setValue(String.valueOf(preferences.getRegularTimeoutSecs()));
+        incomingSchedule.setValue(String.valueOf(preferences.getIncomingTimeoutSecs()));
 
         summary.append(regSchedule.getTitle())
                 .append(": ")

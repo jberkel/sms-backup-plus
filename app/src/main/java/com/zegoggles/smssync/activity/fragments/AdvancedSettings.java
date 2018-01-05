@@ -102,7 +102,6 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             return getString(R.string.status_idle_details,
                     lastSync < 0 ? getString(R.string.status_idle_details_never) :
                             DateFormat.getDateTimeInstance().format(new Date(lastSync)));
-
         }
 
         private void updateBackupContactGroupLabelFromPref() {
