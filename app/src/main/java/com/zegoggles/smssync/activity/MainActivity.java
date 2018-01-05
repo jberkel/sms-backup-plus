@@ -30,6 +30,8 @@ import android.os.StrictMode;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
@@ -68,6 +70,7 @@ import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.AppLog;
 
+import static android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
 import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -79,10 +82,12 @@ import static com.zegoggles.smssync.App.TAG;
  */
 public class MainActivity extends AppCompatActivity implements
         OnPreferenceStartFragmentCallback,
-        OnPreferenceStartScreenCallback {
+        OnPreferenceStartScreenCallback,
+        FragmentManager.OnBackStackChangedListener {
     private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
     private static final int REQUEST_WEB_AUTH = 3;
+    private static final String SCREEN_TITLE = "title";
 
     enum Actions {
         Backup,
@@ -100,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
 
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
@@ -111,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         );
-        createFragment(new MainSettings(), null);
+        showFragment(new MainSettings(), null);
         if (preferences.shouldShowUpgradeMessage()) {
             show(Dialogs.UPGRADE_FROM_SMSBACKUP);
         }
@@ -133,6 +139,12 @@ public class MainActivity extends AppCompatActivity implements
             App.unregister(this);
         } catch (Exception ignored) {
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override
@@ -207,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
         dismiss(Dialogs.ACCESS_TOKEN);
         if (event.valid()) {
@@ -218,7 +229,21 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onBackStackChanged() {
+        getSupportActionBar().setSubtitle(getCurrentTitle());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(getSupportFragmentManager().getBackStackEntryCount() > 0);
+    }
 
+    private CharSequence getCurrentTitle() {
+        final int entryCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (entryCount == 0) {
+            return null;
+        } else {
+            final BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(entryCount - 1);
+            return entry.getBreadCrumbTitle();
+        }
+    }
 
     private void onAuthenticated() {
         // Invite use to perform a backup, but only once
@@ -226,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements
             show(Dialogs.FIRST_SYNC);
         }
     }
-
 
     private void initiateRestore() {
         if (checkLoginInformation()) {
@@ -498,7 +522,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference preference) {
-        createFragment(Fragment.instantiate(this, preference.getFragment()), preference.getKey());
+        final Fragment fragment = Fragment.instantiate(this, preference.getFragment());
+        Bundle args = new Bundle();
+        args.putString(SCREEN_TITLE, String.valueOf(preference.getTitle()));
+        fragment.setArguments(args);
+        showFragment(fragment, preference.getKey());
         return true;
     }
 
@@ -512,15 +540,17 @@ public class MainActivity extends AppCompatActivity implements
         return false;
     }
 
-    private void createFragment(Fragment fragment, String rootKey) {
-        Bundle args = new Bundle();
+    private void showFragment(Fragment fragment, String rootKey) {
+        Bundle args = fragment.getArguments() == null ? new Bundle() : fragment.getArguments();
         args.putString(ARG_PREFERENCE_ROOT, rootKey);
         fragment.setArguments(args);
         FragmentTransaction tx = getSupportFragmentManager()
             .beginTransaction()
             .replace(R.id.preferences_container, fragment, rootKey);
         if (rootKey != null) {
-            tx.addToBackStack(rootKey);
+            tx.addToBackStack(null);
+            tx.setTransition(TRANSIT_FRAGMENT_OPEN);
+            tx.setBreadCrumbTitle(args.getString(SCREEN_TITLE));
         }
         tx.commit();
     }
