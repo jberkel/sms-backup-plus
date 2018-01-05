@@ -35,6 +35,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback;
+import android.support.v7.preference.PreferenceFragmentCompat.OnPreferenceStartScreenCallback;
+import android.support.v7.preference.PreferenceScreen;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -52,7 +54,6 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
-import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.activity.events.ConnectEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
@@ -76,7 +77,9 @@ import static com.zegoggles.smssync.App.TAG;
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
-public class MainActivity extends AppCompatActivity implements OnPreferenceStartFragmentCallback {
+public class MainActivity extends AppCompatActivity implements
+        OnPreferenceStartFragmentCallback,
+        OnPreferenceStartScreenCallback {
     private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
     private static final int REQUEST_WEB_AUTH = 3;
@@ -494,9 +497,19 @@ public class MainActivity extends AppCompatActivity implements OnPreferenceStart
     }
 
     @Override
-    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
-        createFragment(Fragment.instantiate(this, pref.getFragment()), pref.getKey());
+    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference preference) {
+        createFragment(Fragment.instantiate(this, preference.getFragment()), preference.getKey());
         return true;
+    }
+
+    @Override
+    public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen preference) {
+        // API level 9 compatibility
+        if (preference.getFragment() == null) {
+            preference.setFragment(preference.getKey());
+            return onPreferenceStartFragment(caller, preference);
+        }
+        return false;
     }
 
     private void createFragment(Fragment fragment, String rootKey) {
