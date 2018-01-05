@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import com.zegoggles.smssync.App;
-import com.zegoggles.smssync.activity.AutoBackupSettingsChangedEvent;
+import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.preferences.Preferences;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;

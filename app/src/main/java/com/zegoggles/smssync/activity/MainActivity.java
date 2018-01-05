@@ -19,33 +19,26 @@ package com.zegoggles.smssync.activity;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceScreen;
+import android.support.v7.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -59,13 +52,11 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
-import com.zegoggles.smssync.activity.donation.DonationActivity;
+import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
+import com.zegoggles.smssync.activity.events.ConnectEvent;
+import com.zegoggles.smssync.activity.events.SettingsResetEvent;
+import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
-import com.zegoggles.smssync.calendar.CalendarAccessor;
-import com.zegoggles.smssync.contacts.ContactAccessor;
-import com.zegoggles.smssync.mail.BackupImapStore;
-import com.zegoggles.smssync.mail.DataType;
-import com.zegoggles.smssync.preferences.AuthMode;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.BackupManagerWrapper;
 import com.zegoggles.smssync.preferences.Preferences;
@@ -75,41 +66,17 @@ import com.zegoggles.smssync.service.SmsRestoreService;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.AppLog;
-import com.zegoggles.smssync.utils.ListPreferenceHelper;
-
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.mail.DataType.CALLLOG;
-import static com.zegoggles.smssync.mail.DataType.SMS;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_SETTINGS_SCREEN;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.CONNECTED;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.DONATE;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.ENABLE_AUTO_BACKUP;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.IMAP_SETTINGS;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.REGULAR_TIMEOUT_SECONDS;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.USE_OLD_SCHEDULER;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
-public class MainActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
+public class MainActivity extends AppCompatActivity implements OnPreferenceStartFragmentCallback {
     private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
     private static final int REQUEST_WEB_AUTH = 3;
@@ -120,11 +87,9 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     }
     private Actions mActions;
 
-    Preferences preferences;
+    private Preferences preferences;
     private AuthPreferences authPreferences;
     private OAuth2Client oauth2Client;
-    private Handler handler;
-    private PreferenceFragmentCompat preferenceFragment;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -133,62 +98,29 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        handler = new Handler();
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         preferences = new Preferences(this);
-        preferenceFragment = (PreferenceFragmentCompat) getSupportFragmentManager().findFragmentById(R.id.preferences);
-
-        setPreferenceListeners();
-        if (preferences.shouldShowUpgradeMessage()) show(Dialogs.UPGRADE_FROM_SMSBACKUP);
-
+        preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+                public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                    BackupManagerWrapper.dataChanged(MainActivity.this);
+                }
+            }
+        );
+        createFragment(new MainSettings(), null);
+        if (preferences.shouldShowUpgradeMessage()) {
+            show(Dialogs.UPGRADE_FROM_SMSBACKUP);
+        }
         checkAndDisplayDroidWarning();
-
         preferences.migrateMarkAsRead();
 
         if (preferences.shouldShowAboutDialog()) {
             show(Dialogs.ABOUT);
         }
-
         checkDefaultSmsApp();
-        checkGCM();
-
         setupStrictMode();
         App.register(this);
-
-        addPreferenceListener(new AutoBackupSettingsChangedEvent(),
-            ENABLE_AUTO_BACKUP.key,
-            INCOMING_TIMEOUT_SECONDS.key,
-            REGULAR_TIMEOUT_SECONDS.key,
-            WIFI_ONLY.key,
-            USE_OLD_SCHEDULER.key,
-            CALLLOG_BACKUP_AFTER_CALL.key);
-        for (DataType dataType : DataType.values()) {
-            addPreferenceListener(new AutoBackupSettingsChangedEvent(),  dataType.backupEnabledPreference);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "MainActivity: onResume()");
-
-        super.onResume();
-        initCalendars();
-        initGroups();
-
-        updateAutoBackupEnabledSummary();
-        updateAutoBackupScheduleSummary();
-        updateLastBackupTimes();
-        updateBackupContactGroupLabelFromPref();
-        updateCallLogCalendarLabelFromPref();
-        updateImapFolderLabelFromPref();
-        updateImapCallogFolderLabelFromPref();
-        updateUsernameLabel(null);
-        updateMaxItemsPerSync(null);
-        updateMaxItemsPerRestore(null);
-
-        updateImapSettings(!authPreferences.useXOAuth());
-        checkUserDonationStatus();
     }
 
     @Override
@@ -272,10 +204,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         }
     }
 
-    @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
-        updateAutoBackupEnabledSummary();
-        updateAutoBackupScheduleSummary();
-    }
 
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
         dismiss(Dialogs.ACCESS_TOKEN);
@@ -287,158 +215,15 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         }
     }
 
-    private void updateAutoBackupEnabledSummary() {
-        findPreference(ENABLE_AUTO_BACKUP.key).setSummary(summarizeAutoBackupSettings());
-    }
 
-    private void updateAutoBackupScheduleSummary() {
-        findPreference(BACKUP_SETTINGS_SCREEN.key).setSummary(summarizeBackupScheduleSettings());
-    }
 
     private void onAuthenticated() {
-        updateConnected();
         // Invite use to perform a backup, but only once
         if (preferences.isFirstUse()) {
             show(Dialogs.FIRST_SYNC);
         }
     }
 
-    private String getLastSyncText(final long lastSync) {
-        return getString(R.string.status_idle_details,
-                lastSync < 0 ? getString(R.string.status_idle_details_never) :
-                DateFormat.getDateTimeInstance().format(new Date(lastSync)));
-
-    }
-
-    private void updateLastBackupTimes() {
-        for (DataType type : DataType.values()) {
-            findPreference(type.backupEnabledPreference).setSummary(
-                getLastSyncText(preferences.getDataTypePreferences().getMaxSyncedDate(type))
-            );
-        }
-    }
-
-    private ConnectivityManager getConnectivityManager() {
-        return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-    }
-
-    String summarizeAutoBackupSettings() {
-        final List<String> enabled = new ArrayList<String>();
-        for (DataType dataType : preferences.getDataTypePreferences().enabled()) {
-            enabled.add(getString(dataType.resId));
-        }
-        StringBuilder summary = new StringBuilder();
-        if (!enabled.isEmpty()) {
-            summary.append(getString(R.string.ui_enable_auto_sync_summary, TextUtils.join(", ", enabled)));
-            if (!getConnectivityManager().getBackgroundDataSetting()) {
-                summary.append(' ').append(getString(R.string.ui_enable_auto_sync_bg_data));
-            }
-            if (preferences.isInstalledOnSDCard()) {
-                summary.append(' ').append(getString(R.string.sd_card_disclaimer));
-            }
-        } else {
-            summary.append(getString(R.string.ui_enable_auto_sync_no_enabled_summary));
-        }
-        return summary.toString();
-    }
-
-    private String summarizeBackupScheduleSettings() {
-        final StringBuilder summary = new StringBuilder();
-
-        final ListPreference regSchedule = (ListPreference)
-                findPreference(REGULAR_TIMEOUT_SECONDS.key);
-
-        final ListPreference incomingSchedule = (ListPreference)
-                findPreference(INCOMING_TIMEOUT_SECONDS.key);
-
-        summary.append(regSchedule.getTitle())
-                .append(": ")
-                .append(regSchedule.getEntry())
-                .append(", ")
-                .append(incomingSchedule.getTitle())
-                .append(": ")
-                .append(incomingSchedule.getEntry());
-
-        if (preferences.isWifiOnly()) {
-            summary.append(" (")
-                    .append(findPreference(WIFI_ONLY.key).getTitle())
-                    .append(")");
-        }
-        return summary.toString();
-    }
-
-    private void addPreferenceListener(final Object event, String... prefKeys) {
-        for (String prefKey : prefKeys) {
-            findPreference(prefKey).setOnPreferenceChangeListener(
-                    new OnPreferenceChangeListener() {
-                        public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    App.post(event);
-                                    onContentChanged();
-                                }
-                            });
-                            return true;
-                        }
-                    });
-        }
-    }
-
-    private void updateUsernameLabel(String username) {
-        if (username == null) {
-            username = authPreferences.getImapUsername();
-            if (username == null) {
-                username = getString(R.string.ui_login_label);
-            }
-        }
-        findPreference(AuthPreferences.LOGIN_USER).setTitle(username);
-    }
-
-    private void updateBackupContactGroupLabelFromPref() {
-        final ListPreference groupPref = (ListPreference)
-                findPreference(BACKUP_CONTACT_GROUP.key);
-
-        groupPref.setTitle(groupPref.getEntry() != null ? groupPref.getEntry() :
-                getString(R.string.ui_backup_contact_group_label));
-    }
-
-    private void updateCallLogCalendarLabelFromPref() {
-        final ListPreference calendarPref = (ListPreference)
-                findPreference(CALLLOG_SYNC_CALENDAR.key);
-
-        calendarPref.setTitle(calendarPref.getEntry() != null ? calendarPref.getEntry() :
-                getString(R.string.ui_backup_calllog_sync_calendar_label));
-    }
-
-    private void updateImapFolderLabelFromPref() {
-        String imapFolder = preferences.getDataTypePreferences().getFolder(SMS);
-        findPreference(SMS.folderPreference).setTitle(imapFolder);
-    }
-
-    private void updateImapCallogFolderLabelFromPref() {
-        String imapFolder = preferences.getDataTypePreferences().getFolder(CALLLOG);
-        findPreference(CALLLOG.folderPreference).setTitle(imapFolder);
-    }
-
-    private void initGroups() {
-        ContactAccessor contacts = ContactAccessor.Get.instance();
-        ListPreferenceHelper.initListPreference((ListPreference) findPreference(BACKUP_CONTACT_GROUP.key),
-                contacts.getGroups(getContentResolver(), getResources()), false);
-    }
-
-    private void initCalendars() {
-        final ListPreference calendarPref = (ListPreference)
-                findPreference(CALLLOG_SYNC_CALENDAR.key);
-        CalendarAccessor calendars = CalendarAccessor.Get.instance(getContentResolver());
-        boolean enabled = ListPreferenceHelper.initListPreference(calendarPref, calendars.getCalendars(), false);
-
-        findPreference(CALLLOG_SYNC_CALENDAR_ENABLED.key).setEnabled(enabled);
-    }
-
-    private Preference findPreference(String key) {
-        return preferenceFragment.findPreference(key);
-    }
 
     private void initiateRestore() {
         if (checkLoginInformation()) {
@@ -462,14 +247,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
             return false;
         } else {
             return true;
-        }
-    }
-
-    private void checkGCM() {
-        if (!App.gcmAvailable) {
-            final Preference preference = findPreference(USE_OLD_SCHEDULER.key);
-            preference.setEnabled(false);
-            preference.setSummary(getString(R.string.pref_use_old_scheduler_no_gcm_summary));
         }
     }
 
@@ -675,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
                                 authPreferences.clearOAuth1Data();
                                 authPreferences.clearOauth2Data();
                                 preferences.getDataTypePreferences().clearLastSyncData();
-                                updateConnected();
+                                App.post(new SettingsResetEvent());
                             }
                         }).create();
             case UPGRADE_FROM_SMSBACKUP:
@@ -717,16 +494,22 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
     }
 
     @Override
-    public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen preferenceScreen) {
-        SMSBackupPreferenceFragment fragment = new SMSBackupPreferenceFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Bundle args = new Bundle();
-        args.putString(ARG_PREFERENCE_ROOT, preferenceScreen.getKey());
-        fragment.setArguments(args);
-        ft.replace(R.id.preferences, fragment, preferenceScreen.getKey());
-        ft.addToBackStack(preferenceScreen.getKey());
-        ft.commit();
+    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
+        createFragment(Fragment.instantiate(this, pref.getFragment()), pref.getKey());
         return true;
+    }
+
+    private void createFragment(Fragment fragment, String rootKey) {
+        Bundle args = new Bundle();
+        args.putString(ARG_PREFERENCE_ROOT, rootKey);
+        fragment.setArguments(args);
+        FragmentTransaction tx = getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.preferences_container, fragment, rootKey);
+        if (rootKey != null) {
+            tx.addToBackStack(rootKey);
+        }
+        tx.commit();
     }
 
     private void reset() {
@@ -747,38 +530,6 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
                 .create();
     }
 
-    private void updateMaxItemsPerSync(String newValue) {
-        updateMaxItems(MAX_ITEMS_PER_SYNC.key, preferences.getMaxItemsPerSync(), newValue);
-    }
-
-    private void updateMaxItemsPerRestore(String newValue) {
-        updateMaxItems(MAX_ITEMS_PER_RESTORE.key, preferences.getMaxItemsPerRestore(), newValue);
-    }
-
-    private void updateMaxItems(String prefKey, int currentValue, String newValue) {
-        Preference pref = findPreference(prefKey);
-        if (newValue == null) {
-            newValue = String.valueOf(currentValue);
-        }
-        // XXX
-        pref.setTitle("-1".equals(newValue) ? getString(R.string.all_messages) : newValue);
-    }
-
-    private CheckBoxPreference updateConnected() {
-        CheckBoxPreference connected = (CheckBoxPreference) findPreference(CONNECTED.key);
-
-        connected.setEnabled(authPreferences.useXOAuth());
-        connected.setChecked(authPreferences.hasOauthTokens() || authPreferences.hasOAuth2Tokens());
-
-        final String username = authPreferences.getUsername();
-        String summary = connected.isChecked() && !TextUtils.isEmpty(username) ?
-                getString(R.string.gmail_already_connected, username) :
-                getString(R.string.gmail_needs_connecting);
-        connected.setSummary(summary);
-
-        return connected;
-    }
-
     private void show(Dialogs d) {
         showDialog(d.ordinal());
     }
@@ -791,125 +542,15 @@ public class MainActivity extends AppCompatActivity implements PreferenceFragmen
         }
     }
 
-    private void updateImapSettings(boolean enabled) {
-        findPreference(IMAP_SETTINGS.key).setEnabled(enabled);
-    }
-
-    private void setPreferenceListeners() {
-        preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                        BackupManagerWrapper.dataChanged(MainActivity.this);
-                    }
-                }
-        );
-
-        findPreference(AuthPreferences.SERVER_AUTHENTICATION)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        final boolean plain = (AuthMode.PLAIN) ==
-                                AuthMode.valueOf(newValue.toString().toUpperCase(Locale.ENGLISH));
-
-                        updateConnected().setEnabled(!plain);
-                        updateImapSettings(plain);
-                        return true;
-                    }
-                });
-
-        findPreference(MAX_ITEMS_PER_SYNC.key)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        updateMaxItemsPerSync(newValue.toString());
-                        return true;
-                    }
-                });
-
-        findPreference(MAX_ITEMS_PER_RESTORE.key)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        updateMaxItemsPerRestore(newValue.toString());
-                        return true;
-                    }
-                });
-
-        findPreference(AuthPreferences.LOGIN_USER)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        updateUsernameLabel(newValue.toString());
-                        return true;
-                    }
-                });
-
-        findPreference(AuthPreferences.LOGIN_PASSWORD)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        authPreferences.setImapPassword(newValue.toString());
-                        return true;
-                    }
-                });
-
-        updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object change) {
-                boolean newValue = (Boolean) change;
-                if (newValue) {
-                    startActivityForResult(new Intent(MainActivity.this, AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
-                } else {
-                    show(Dialogs.DISCONNECT);
-                }
-                return false;
-            }
-        });
-
-        findPreference(SMS.folderPreference)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                        return checkValidImapFolder(preference, newValue.toString());
-                    }
-                });
-
-        findPreference(CALLLOG.folderPreference)
-                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                    public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                        return checkValidImapFolder(preference, newValue.toString());
-                    }
-                });
-    }
-
-    private boolean checkValidImapFolder(Preference preference, String imapFolder) {
-        if (BackupImapStore.isValidImapFolder(imapFolder)) {
-            preference.setTitle(imapFolder);
-            return true;
+    @Subscribe public void onConnect(ConnectEvent event) {
+        if (event.connect) {
+            startActivityForResult(new Intent(MainActivity.this,
+                    AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
         } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    show(Dialogs.INVALID_IMAP_FOLDER);
-                }
-            });
-            return false;
+            show(Dialogs.DISCONNECT);
         }
     }
 
-    private void checkUserDonationStatus() {
-        try {
-            DonationActivity.checkUserHasDonated(this, new DonationActivity.DonationStatusListener() {
-                @Override
-                public void userDonationState(State state) {
-                    switch (state) {
-                        case NOT_AVAILABLE:
-                        case DONATED:
-                            PreferenceScreen screen = preferenceFragment.getPreferenceScreen();
-                            Preference donate = screen.findPreference(DONATE.key);
-                            if (donate != null) {
-                                screen.removePreference(donate);
-                            }
-                    }
-                }
-            });
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
-    }
     @TargetApi(11) @SuppressWarnings({"ConstantConditions", "PointlessBooleanExpression"})
     private void setupStrictMode() {
         if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {

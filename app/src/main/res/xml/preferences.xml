@@ -19,8 +19,8 @@
             android:defaultValue="false"/>
 
     <PreferenceScreen
+            android:fragment="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
             android:key="screen_auto_backup_settings"
-            android:dependency="enable_auto_sync"
             android:title="@string/ui_auto_backup_settings_label">
 
         <ListPreference
@@ -64,11 +64,13 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+            android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings"
             android:key="screen_advanced_settings"
             android:title="@string/ui_settings_advanced_label"
             android:summary="@string/ui_settings_advanced_desc">
 
         <PreferenceScreen
+                android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup"
                 android:key="screen_backup_settings"
                 android:title="@string/ui_backup_settings_label">
 
@@ -94,6 +96,7 @@
                     android:defaultValue="true"/>
 
             <PreferenceScreen
+                    android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup$CallLog"
                     android:key="screen_calllog_settings"
                     android:title="@string/ui_backup_calllog_settings_label"
                     android:dependency="backup_calllog">
@@ -193,6 +196,7 @@
         </PreferenceScreen>
 
         <PreferenceScreen
+                android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Restore"
                 android:key="screen_restore_settings"
                 android:title="@string/ui_restore_settings_label">
 
@@ -274,6 +278,7 @@
                 android:defaultValue="false"/>
 
         <PreferenceScreen
+                android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Server"
                 android:key="screen_server_settings"
                 android:title="@string/ui_settings_advanced_server_label"
                 android:summary="@string/ui_settings_advanced_server_desc">

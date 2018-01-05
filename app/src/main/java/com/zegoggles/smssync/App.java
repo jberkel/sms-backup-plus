@@ -25,7 +25,7 @@ import android.util.Log;
 import com.fsck.k9.mail.K9MailLib;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.zegoggles.smssync.activity.AutoBackupSettingsChangedEvent;
+import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.BootReceiver;

@@ -14,9 +14,8 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <fragment
-            android:name="com.zegoggles.smssync.activity.SMSBackupPreferenceFragment"
-            android:id="@+id/preferences"
-            android:layout_width="match_parent"
+    <FrameLayout
+            android:id="@+id/preferences_container"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 </LinearLayout>
