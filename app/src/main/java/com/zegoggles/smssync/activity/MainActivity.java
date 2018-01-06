@@ -17,13 +17,8 @@
 package com.zegoggles.smssync.activity;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -44,10 +39,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
@@ -57,7 +48,6 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
 import com.zegoggles.smssync.activity.events.ConnectEvent;
-import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.preferences.AuthPreferences;
@@ -68,7 +58,6 @@ import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
-import com.zegoggles.smssync.utils.AppLog;
 
 import static android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
 import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
@@ -91,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements
 
     enum Actions {
         Backup,
+        BackupSkip,
         Restore
     }
     private Actions mActions;
@@ -119,12 +109,12 @@ public class MainActivity extends AppCompatActivity implements
         );
         showFragment(new MainSettings(), null);
         if (preferences.shouldShowUpgradeMessage()) {
-            show(Dialogs.UPGRADE_FROM_SMSBACKUP);
+            show(Dialogs.Type.UPGRADE_FROM_SMSBACKUP);
         }
         preferences.migrateMarkAsRead();
 
         if (preferences.shouldShowAboutDialog()) {
-            show(Dialogs.ABOUT);
+            show(Dialogs.Type.ABOUT);
         }
         checkDefaultSmsApp();
         setupStrictMode();
@@ -156,13 +146,13 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_about:
-                show(Dialogs.ABOUT);
+                show(Dialogs.Type.ABOUT);
                 return true;
             case R.id.menu_reset:
-                show(Dialogs.RESET);
+                show(Dialogs.Type.RESET);
                 return true;
             case R.id.menu_view_log:
-                show(Dialogs.VIEW_LOG);
+                show(Dialogs.Type.VIEW_LOG);
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -190,10 +180,10 @@ public class MainActivity extends AppCompatActivity implements
 
                 final String code = data == null ? null : data.getStringExtra(OAuth2WebAuthActivity.EXTRA_CODE);
                 if (!TextUtils.isEmpty(code)) {
-                    show(Dialogs.ACCESS_TOKEN);
+                    show(Dialogs.Type.ACCESS_TOKEN);
                     new OAuth2CallbackTask(oauth2Client).execute(code);
                 } else {
-                    show(Dialogs.ACCESS_TOKEN_ERROR);
+                    show(Dialogs.Type.ACCESS_TOKEN_ERROR);
                 }
                 break;
             }
@@ -219,12 +209,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
-        dismiss(Dialogs.ACCESS_TOKEN);
         if (event.valid()) {
             authPreferences.setOauth2Token(event.token.userName, event.token.accessToken, event.token.refreshToken);
             onAuthenticated();
         } else {
-            show(Dialogs.ACCESS_TOKEN_ERROR);
+            show(Dialogs.Type.ACCESS_TOKEN_ERROR);
         }
     }
 
@@ -247,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements
     private void onAuthenticated() {
         // Invite use to perform a backup, but only once
         if (preferences.isFirstUse()) {
-            show(Dialogs.FIRST_SYNC);
+            show(Dialogs.Type.FIRST_SYNC);
         }
     }
 
@@ -260,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements
     private void initiateBackup() {
         if (checkLoginInformation()) {
             if (preferences.isFirstBackup()) {
-                show(Dialogs.FIRST_SYNC);
+                show(Dialogs.Type.FIRST_SYNC);
             } else {
                 startBackup(false);
             }
@@ -269,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private boolean checkLoginInformation() {
         if (!authPreferences.isLoginInformationSet()) {
-            show(Dialogs.MISSING_CREDENTIALS);
+            show(Dialogs.Type.MISSING_CREDENTIALS);
             return false;
         } else {
             return true;
@@ -284,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements
     private void performAction(Actions act, boolean needConfirm) {
         if (needConfirm) {
             this.mActions = act;
-            show(Dialogs.CONFIRM_ACTION);
+            show(Dialogs.Type.CONFIRM_ACTION);
         } else {
             if (Actions.Backup.equals(act)) {
                 initiateBackup();
@@ -318,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements
                 if (preferences.hasSeenSmsDefaultPackageChangeDialog()) {
                     requestDefaultSmsPackageChange();
                 } else {
-                    show(Dialogs.SMS_DEFAULT_PACKAGE_CHANGE);
+                    show(Dialogs.Type.SMS_DEFAULT_PACKAGE_CHANGE);
                 }
             }
         } else {
@@ -332,188 +321,7 @@ public class MainActivity extends AppCompatActivity implements
                 getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
     }
 
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog) {
-        super.onPrepareDialog(id, dialog);
-        switch (Dialogs.values()[id]) {
-            case VIEW_LOG:
-                View view = dialog.findViewById(AppLog.ID);
-                if (view instanceof TextView) {
-                    AppLog.readLog(App.LOG, (TextView) view);
-                }
-        }
-    }
 
-    @Override
-    protected Dialog onCreateDialog(final int id) {
-        String title, msg;
-        switch (Dialogs.values()[id]) {
-            case MISSING_CREDENTIALS:
-                title = getString(R.string.ui_dialog_missing_credentials_title);
-                msg = authPreferences.useXOAuth() ?
-                        getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
-                        getString(R.string.ui_dialog_missing_credentials_msg_plain);
-                break;
-            case INVALID_IMAP_FOLDER:
-                title = getString(R.string.ui_dialog_invalid_imap_folder_title);
-                msg = getString(R.string.ui_dialog_invalid_imap_folder_msg);
-                break;
-            case FIRST_SYNC:
-                DialogInterface.OnClickListener firstSyncListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startBackup(which == DialogInterface.BUTTON2);
-                            }
-                        };
-                final int maxItems = preferences.getMaxItemsPerSync();
-                final String syncMsg = maxItems < 0 ?
-                        getString(R.string.ui_dialog_first_sync_msg) :
-                        getString(R.string.ui_dialog_first_sync_msg_batched, maxItems);
-
-                return new AlertDialog.Builder(this)
-                        .setTitle(R.string.ui_dialog_first_sync_title)
-                        .setMessage(syncMsg)
-                        .setPositiveButton(R.string.ui_sync, firstSyncListener)
-                        .setNegativeButton(R.string.ui_skip, firstSyncListener)
-                        .create();
-            case ABOUT:
-                View contentView = getLayoutInflater().inflate(R.layout.about_dialog, null, false);
-                WebView webView = (WebView) contentView.findViewById(R.id.about_content);
-                webView.setWebViewClient(new WebViewClient() {
-
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)));
-                        return true;
-
-                    }
-                });
-                webView.loadUrl("file:///android_asset/about.html");
-
-                return new AlertDialog.Builder(this)
-                        .setCustomTitle(null)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setView(contentView)
-                        .create();
-
-            case VIEW_LOG:
-                return AppLog.displayAsDialog(App.LOG, this);
-
-            case RESET:
-                return new AlertDialog.Builder(this)
-                        .setTitle(R.string.ui_dialog_reset_title)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                reset();
-                                dismissDialog(id);
-                            }
-                        })
-                        .setMessage(R.string.ui_dialog_reset_message)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .create();
-
-            case REQUEST_TOKEN:
-                ProgressDialog req = new ProgressDialog(this);
-                req.setTitle(null);
-                req.setMessage(getString(R.string.ui_dialog_request_token_msg));
-                req.setIndeterminate(true);
-                req.setCancelable(false);
-                return req;
-            case ACCESS_TOKEN:
-                ProgressDialog acc = new ProgressDialog(this);
-                acc.setTitle(null);
-                acc.setMessage(getString(R.string.ui_dialog_access_token_msg));
-                acc.setIndeterminate(true);
-                acc.setCancelable(false);
-                return acc;
-            case ACCESS_TOKEN_ERROR:
-                title = getString(R.string.ui_dialog_access_token_error_title);
-                msg = getString(R.string.ui_dialog_access_token_error_msg);
-                break;
-            case CONNECT:
-                return new AlertDialog.Builder(this)
-                        .setCustomTitle(null)
-                        .setMessage(getString(R.string.ui_dialog_connect_msg, getString(R.string.app_name)))
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            startActivityForResult(new Intent(MainActivity.this, OAuth2WebAuthActivity.class)
-                                .setData(oauth2Client.requestUrl()), REQUEST_WEB_AUTH);
-
-                                dismissDialog(id);
-                            }
-                        }).create();
-            case CONNECT_TOKEN_ERROR:
-                return new AlertDialog.Builder(this)
-                        .setCustomTitle(null)
-                        .setMessage(R.string.ui_dialog_connect_token_error)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }).create();
-
-            case ACCOUNTMANAGER_TOKEN_ERROR:
-                return new AlertDialog.Builder(this)
-                        .setCustomTitle(null)
-                        .setMessage(R.string.ui_dialog_account_manager_token_error)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                handleFallbackAuth();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .create();
-            case DISCONNECT:
-                return new AlertDialog.Builder(this)
-                        .setCustomTitle(null)
-                        .setMessage(R.string.ui_dialog_disconnect_msg)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                authPreferences.clearOAuth1Data();
-                                authPreferences.clearOauth2Data();
-                                preferences.getDataTypePreferences().clearLastSyncData();
-                                App.post(new SettingsResetEvent());
-                            }
-                        }).create();
-            case UPGRADE_FROM_SMSBACKUP:
-                title = getString(R.string.ui_dialog_upgrade_title);
-                msg = getString(R.string.ui_dialog_upgrade_msg);
-                break;
-            case CONFIRM_ACTION:
-                return new AlertDialog.Builder(this)
-                        .setTitle(R.string.ui_dialog_confirm_action_title)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (mActions != null) {
-                                    performAction(mActions, false);
-                                }
-                            }
-                        })
-                        .setMessage(R.string.ui_dialog_confirm_action_msg)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .create();
-            case SMS_DEFAULT_PACKAGE_CHANGE:
-                return new AlertDialog.Builder(this)
-                        .setTitle(R.string.ui_dialog_sms_default_package_change_title)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                requestDefaultSmsPackageChange();
-                            }
-                        })
-                        .setMessage(R.string.ui_dialog_sms_default_package_change_msg)
-                        .create();
-
-            default:
-                return null;
-        }
-        return createMessageDialog(title, msg);
-    }
 
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference preference) {
@@ -550,34 +358,8 @@ public class MainActivity extends AppCompatActivity implements
         tx.commit();
     }
 
-    private void reset() {
-        preferences.getDataTypePreferences().clearLastSyncData();
-        preferences.reset();
-    }
-
-    private Dialog createMessageDialog(String title, String msg) {
-        return new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(msg)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .create();
-    }
-
-    private void show(Dialogs d) {
-        showDialog(d.ordinal());
-    }
-
-    private void dismiss(Dialogs d) {
-        try {
-            dismissDialog(d.ordinal());
-        } catch (IllegalArgumentException e) {
-            // ignore
-        }
+    private void show(Dialogs.Type d) {
+        d.instantiate(this).show(getSupportFragmentManager(), null);
     }
 
     @Subscribe public void onConnect(ConnectEvent event) {
@@ -585,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements
             startActivityForResult(new Intent(MainActivity.this,
                     AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
         } else {
-            show(Dialogs.DISCONNECT);
+            show(Dialogs.Type.DISCONNECT);
         }
     }
 
@@ -629,13 +411,13 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
             if (!TextUtils.isEmpty(error)) {
-                show(Dialogs.ACCOUNTMANAGER_TOKEN_ERROR);
+                show(Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR);
             }
         }
     }
 
     private void handleFallbackAuth() {
-        show(Dialogs.CONNECT);
+        show(Dialogs.Type.CONNECT);
     }
 
     private void checkDefaultSmsApp() {
