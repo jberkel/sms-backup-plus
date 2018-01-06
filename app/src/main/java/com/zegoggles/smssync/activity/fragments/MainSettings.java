@@ -12,7 +12,7 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
-import com.zegoggles.smssync.activity.events.AccountConnectedEvent;
+import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.mail.DataType;
@@ -62,8 +62,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         updateAutoBackupScheduleSummary();
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
-                boolean newValue = (Boolean) change;
-                App.post(new AccountConnectedEvent(newValue));
+                App.post(new AccountConnectionChangedEvent((Boolean) change));
                 return false;
             }
         });

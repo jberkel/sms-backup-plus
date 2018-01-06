@@ -48,7 +48,7 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
-import com.zegoggles.smssync.activity.events.AccountConnectedEvent;
+import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.DisconnectAccountEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements
         OnPreferenceStartScreenCallback,
         FragmentManager.OnBackStackChangedListener {
     private static final int REQUEST_PICK_ACCOUNT = 2;
-
     private static final String SCREEN_TITLE = "title";
 
     enum Actions {
@@ -397,13 +396,19 @@ public class MainActivity extends AppCompatActivity implements
         dialog.instantiate(this, args).show(getSupportFragmentManager(), dialog.name());
     }
 
-    @Subscribe public void onConnect(AccountConnectedEvent event) {
-        if (event.connect) {
+    @Subscribe public void onConnect(AccountConnectionChangedEvent event) {
+        if (event.connected) {
             startActivityForResult(new Intent(MainActivity.this,
                     AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
         } else {
             showDialog(DISCONNECT);
         }
+    }
+
+    @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
+        final Intent intent = new Intent(this, OAuth2WebAuthActivity.class)
+                .setData(oauth2Client.requestUrl());
+        showDialog(CONNECT, new BundleBuilder().putParcelable(INTENT, intent).build());
     }
 
     @TargetApi(11) @SuppressWarnings({"ConstantConditions", "PointlessBooleanExpression"})
@@ -449,13 +454,6 @@ public class MainActivity extends AppCompatActivity implements
                 showDialog(ACCOUNT_MANAGER_TOKEN_ERROR);
             }
         }
-    }
-
-
-    @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
-        final Intent intent = new Intent(this, OAuth2WebAuthActivity.class)
-                .setData(oauth2Client.requestUrl());
-        showDialog(CONNECT, new BundleBuilder().putParcelable(INTENT, intent).build());
     }
 
     private void checkDefaultSmsApp() {
