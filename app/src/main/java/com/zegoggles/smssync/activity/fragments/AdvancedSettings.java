@@ -61,6 +61,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             updateImapCallogFolderLabelFromPref();
             updateBackupContactGroupLabelFromPref();
             updateLastBackupTimes();
+            initGroups();
             registerValidImapFolderCheck();
             findPreference(MAX_ITEMS_PER_SYNC.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -121,12 +122,17 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                     });
         }
 
+        private void initGroups() {
+            ContactAccessor contacts = ContactAccessor.Get.instance();
+            ListPreferenceHelper.initListPreference((ListPreference) findPreference(BACKUP_CONTACT_GROUP.key),
+                    contacts.getGroups(getContext().getContentResolver(), getResources()), false);
+        }
+
         public static class CallLog extends AdvancedSettings {
             @Override
             public void onResume() {
                 super.onResume();
                 updateCallLogCalendarLabelFromPref();
-                initGroups();
                 initCalendars();
                 registerValidCallLogFolderCheck();
 
@@ -139,12 +145,6 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
 
                 calendarPref.setTitle(calendarPref.getEntry() != null ? calendarPref.getEntry() :
                         getString(R.string.ui_backup_calllog_sync_calendar_label));
-            }
-
-            private void initGroups() {
-                ContactAccessor contacts = ContactAccessor.Get.instance();
-                ListPreferenceHelper.initListPreference((ListPreference) findPreference(BACKUP_CONTACT_GROUP.key),
-                        contacts.getGroups(getContext().getContentResolver(), getResources()), false);
             }
 
             private void initCalendars() {
@@ -169,8 +169,8 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
 
     public static class Restore extends AdvancedSettings {
         @Override
-        public void onStart() {
-            super.onStart();
+        public void onResume() {
+            super.onResume();
             updateMaxItemsPerRestore(null);
             findPreference(MAX_ITEMS_PER_RESTORE.key)
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -196,8 +196,8 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         }
 
         @Override
-        public void onStart() {
-            super.onStart();
+        public void onResume() {
+            super.onResume();
             updateUsernameLabel(null);
             updateImapSettings(!authPreferences.useXOAuth());
 
