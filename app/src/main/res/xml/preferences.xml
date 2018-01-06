@@ -1,4 +1,4 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
     <com.zegoggles.smssync.activity.StatusPreference
             android:selectable="false"
             android:layout="@layout/status"/>
@@ -21,7 +21,8 @@
     <PreferenceScreen
             android:fragment="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
             android:key="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
-            android:title="@string/ui_auto_backup_settings_label">
+            android:title="@string/ui_auto_backup_settings_label"
+            tools:targetApi="honeycomb">
 
         <ListPreference
                 android:key="auto_backup_schedule"
@@ -67,12 +68,14 @@
             android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings"
             android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings"
             android:title="@string/ui_settings_advanced_label"
-            android:summary="@string/ui_settings_advanced_desc">
+            android:summary="@string/ui_settings_advanced_desc"
+            tools:targetApi="honeycomb">
 
         <PreferenceScreen
                 android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup"
                 android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup"
-                android:title="@string/ui_backup_settings_label">
+                android:title="@string/ui_backup_settings_label"
+                tools:targetApi="honeycomb">
 
             <CheckBoxPreference
                     android:key="backup_sms"
@@ -195,7 +198,8 @@
         <PreferenceScreen
                 android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Restore"
                 android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Restore"
-                android:title="@string/ui_restore_settings_label">
+                android:title="@string/ui_restore_settings_label"
+                tools:targetApi="honeycomb">
 
             <CheckBoxPreference
                     android:key="restore_sms"
@@ -278,7 +282,8 @@
                 android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Server"
                 android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Server"
                 android:title="@string/ui_settings_advanced_server_label"
-                android:summary="@string/ui_settings_advanced_server_desc">
+                android:summary="@string/ui_settings_advanced_server_desc"
+                tools:targetApi="honeycomb">
 
             <ListPreference
                     android:key="server_authentication"
