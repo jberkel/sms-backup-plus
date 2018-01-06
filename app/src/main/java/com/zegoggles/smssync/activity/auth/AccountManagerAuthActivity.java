@@ -5,30 +5,30 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.OperationCanceledException;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.Dialogs;
 import com.zegoggles.smssync.activity.MainActivity;
 
 import static com.zegoggles.smssync.App.TAG;
 
-@TargetApi(5)
-public class AccountManagerAuthActivity extends Activity {
-    private static final int DIALOG_ACCOUNTS = 0;
-
+public class AccountManagerAuthActivity extends AppCompatActivity {
     public static final String EXTRA_TOKEN = "token";
     public static final String EXTRA_ERROR = "error";
-    public static final String EXTRA_DENIED = "denied";
+    private static final String EXTRA_DENIED = "denied";
     public static final String EXTRA_ACCOUNT = "account";
 
     public static final String ACTION_ADD_ACCOUNT = "addAccount";
-    public static final String ACTION_FALLBACKAUTH = "fallBackAuth";
+    public static final String ACTION_FALLBACK_AUTH = "fallBackAuth";
 
     public static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
     public static final String GOOGLE_TYPE = "com.google";
@@ -42,7 +42,7 @@ public class AccountManagerAuthActivity extends Activity {
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
         if (accounts == null || accounts.length == 0) {
             Log.d(TAG, "no google accounts found on this device, using standard auth");
-            setResult(RESULT_OK, new Intent(ACTION_FALLBACKAUTH));
+            setResult(RESULT_OK, new Intent(ACTION_FALLBACK_AUTH));
             finish();
         }
     }
@@ -51,38 +51,11 @@ public class AccountManagerAuthActivity extends Activity {
     protected void onResume() {
         super.onResume();
         if (!isFinishing()) {
-            showDialog(DIALOG_ACCOUNTS);
+            Bundle args = new Bundle();
+            args.putParcelableArray(AccountDialogs.ACCOUNTS, accountManager.getAccountsByType(GOOGLE_TYPE));
+            ((AppCompatDialogFragment)Fragment.instantiate(this, AccountDialogs.class.getName(), args))
+                .show(getSupportFragmentManager(), null);
         }
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DIALOG_ACCOUNTS:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.select_google_account);
-                final Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
-                final int size = accounts.length;
-                String[] names = new String[size];
-                for (int i = 0; i < size; i++) {
-                    names[i] = accounts[i].name;
-                }
-                builder.setItems(names, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        onAccountSelected(accounts[which]);
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        finish();
-                    }
-                });
-                return builder.create();
-        }
-        return null;
     }
 
     private void onAccountSelected(final Account account) {
@@ -123,5 +96,32 @@ public class AccountManagerAuthActivity extends Activity {
                 .putExtra(EXTRA_TOKEN, token);
         setResult(RESULT_OK, result);
         finish();
+    }
+
+    public static class AccountDialogs extends Dialogs.BaseFragment {
+        static final String ACCOUNTS = "accounts";
+
+        @Override @NonNull
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle(R.string.select_google_account);
+            final Account[] accounts = (Account[]) getArguments().getParcelableArray(ACCOUNTS);
+            String[] names = new String[accounts.length];
+            for (int i = 0; i < accounts.length; i++) {
+                names[i] = accounts[i].name;
+            }
+            return builder.setItems(names, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ((AccountManagerAuthActivity)getActivity()).onAccountSelected(accounts[which]);
+                    dialog.dismiss();
+                }
+            }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    getActivity().finish();
+                }
+            })
+              .create();
+        }
     }
 }

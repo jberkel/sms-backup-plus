@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements
                 if (resultCode == RESULT_OK && data != null) {
                     if (AccountManagerAuthActivity.ACTION_ADD_ACCOUNT.equals(data.getAction())) {
                         handleAccountManagerAuth(data);
-                    } else if (AccountManagerAuthActivity.ACTION_FALLBACKAUTH.equals(data.getAction())) {
+                    } else if (AccountManagerAuthActivity.ACTION_FALLBACK_AUTH.equals(data.getAction())) {
                         handleFallbackAuth();
                     }
                 } else if (LOCAL_LOGV) {

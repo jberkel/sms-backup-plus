@@ -1,10 +1,10 @@
 package com.zegoggles.smssync.activity.donation;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -131,7 +131,8 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
         }
         String[] items = new String[options.size()];
         options.toArray(items);
-        builder.setItems(items, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.ui_dialog_donate_message)
+               .setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String selectedSku;
@@ -150,20 +151,18 @@ public class DonationActivity extends Activity implements SkuDetailsResponseList
                         .build()
                 );
             }
-        });
-        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
             }
-        });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        }).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 finish();
             }
-        });
-        builder.setTitle(R.string.ui_dialog_donate_message).show();
+        })
+          .show();
     }
 
     @Override
