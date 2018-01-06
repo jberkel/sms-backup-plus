@@ -1,10 +1,12 @@
 package com.zegoggles.smssync.activity.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.Dialogs;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
@@ -17,6 +19,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.zegoggles.smssync.activity.Dialogs.Type.INVALID_IMAP_FOLDER;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
@@ -42,12 +45,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             preference.setTitle(imapFolder);
             return true;
         } else {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            show(Dialogs.INVALID_IMAP_FOLDER);
-//                        }
-//                    });
+            INVALID_IMAP_FOLDER.instantiate(getActivity(), null).show(getFragmentManager(), null);
             return false;
         }
     }

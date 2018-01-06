@@ -1,18 +1,31 @@
+/* Copyright (c) 2009 Christoph Studer <chstuder@gmail.com>
+ * Copyright (c) 2010 Jan Berkel <jan.berkel@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.zegoggles.smssync.activity;
-
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Telephony;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -22,16 +35,23 @@ import android.webkit.WebViewClient;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.MainActivity.Actions;
+import com.zegoggles.smssync.activity.events.DisconnectAccountEvent;
+import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.AppLog;
 
+import static android.R.drawable.ic_dialog_alert;
+import static android.R.drawable.ic_dialog_info;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
+import static android.provider.Telephony.Sms.Intents.EXTRA_PACKAGE_NAME;
 import static com.zegoggles.smssync.activity.MainActivity.Actions.Backup;
 import static com.zegoggles.smssync.activity.MainActivity.Actions.BackupSkip;
 
 public class Dialogs {
-    enum Type {
+    public enum Type {
         MISSING_CREDENTIALS(MissingCredentials.class),
         FIRST_SYNC(FirstSync.class),
         INVALID_IMAP_FOLDER(InvalidImapFolder.class),
@@ -55,40 +75,41 @@ public class Dialogs {
             this.fragment = fragment;
         }
 
-        BaseFragment instantiate(Context context) {
-            return (BaseFragment) Fragment.instantiate(context, fragment.getName());
+        public BaseFragment instantiate(Context context, @Nullable Bundle args) {
+            return (BaseFragment) Fragment.instantiate(context, fragment.getName(), args);
         }
     }
 
     @SuppressWarnings("WeakerAccess")
     public static class BaseFragment extends AppCompatDialogFragment {
-        Dialog createMessageDialog(String title, String msg) {
+        Dialog createMessageDialog(String title, String msg, int icon) {
             return new AlertDialog.Builder(getContext())
                 .setTitle(title)
                 .setMessage(msg)
-                .setPositiveButton(android.R.string.ok, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
+                .setIcon(icon)
+                .setPositiveButton(android.R.string.ok, null)
                 .create();
         }
     }
 
     public static class MissingCredentials extends BaseFragment {
+        static final String USE_XOAUTH = "use_xoauth";
+
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final boolean useXOAuth = getArguments().getBoolean(USE_XOAUTH);
             final String title = getString(R.string.ui_dialog_missing_credentials_title);
-            final String msg = /* authPreferences.useXOAuth() */ true ?
+            final String msg = useXOAuth ?
                     getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
                     getString(R.string.ui_dialog_missing_credentials_msg_plain);
 
-            return createMessageDialog(title, msg);
+            return createMessageDialog(title, msg, ic_dialog_alert);
         }
     }
 
     public static class FirstSync extends BaseFragment {
+        static final String MAX_ITEMS_PER_SYNC = "max_items_per_sync";
+
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             DialogInterface.OnClickListener firstSyncListener =
@@ -98,7 +119,7 @@ public class Dialogs {
                             App.post(which == BUTTON_NEGATIVE ? BackupSkip : Backup);
                         }
                     };
-            final int maxItems = /* preferences.getMaxItemsPerSync() */ 0;
+            final int maxItems = getArguments().getInt(MAX_ITEMS_PER_SYNC);
             final String syncMsg = maxItems < 0 ?
                     getString(R.string.ui_dialog_first_sync_msg) :
                     getString(R.string.ui_dialog_first_sync_msg_batched, maxItems);
@@ -117,7 +138,7 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final String title = getString(R.string.ui_dialog_invalid_imap_folder_title);
             final String msg = getString(R.string.ui_dialog_invalid_imap_folder_msg);
-            return createMessageDialog(title, msg);
+            return createMessageDialog(title, msg, ic_dialog_alert);
         }
     }
 
@@ -152,41 +173,25 @@ public class Dialogs {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             App.post(new SettingsResetEvent());
-                            dismiss();
                         }
                     })
                     .setMessage(R.string.ui_dialog_reset_message)
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
         }
-        /*
-        private void reset() {
-            preferences.getDataTypePreferences().clearLastSyncData();
-            preferences.reset();
-        }
-        */
     }
 
     public static class Disconnect extends BaseFragment {
-
-        public Disconnect() {
-            super();
-        }
-
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setCustomTitle(null)
+                    .setIcon(ic_dialog_alert)
+                    .setTitle(R.string.ui_dialog_confirm_action_title)
                     .setMessage(R.string.ui_dialog_disconnect_msg)
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            /*
-                            authPreferences.clearOAuth1Data();
-                            authPreferences.clearOauth2Data();
-                            preferences.getDataTypePreferences().clearLastSyncData();
-                            */
-                            App.post(new SettingsResetEvent());
+                            App.post(new DisconnectAccountEvent());
                         }
                     }).create();
         }
@@ -219,16 +224,15 @@ public class Dialogs {
 
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            ProgressDialog acc = new ProgressDialog(getContext());
-            acc.setTitle(null);
-            acc.setMessage(getString(R.string.ui_dialog_access_token_msg));
-            acc.setIndeterminate(true);
-            acc.setCancelable(false);
-            return acc;
+            ProgressDialog progress = new ProgressDialog(getContext());
+            progress.setTitle(null);
+            progress.setMessage(getString(R.string.ui_dialog_access_token_msg));
+            progress.setIndeterminate(true);
+            progress.setCancelable(false);
+            return progress;
         }
 
-        @Subscribe
-        public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
+        @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
             dismiss();
         }
     }
@@ -238,11 +242,14 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final String title = getString(R.string.ui_dialog_access_token_error_title);
             final String msg = getString(R.string.ui_dialog_access_token_error_msg);
-            return createMessageDialog(title, msg);
+            return createMessageDialog(title, msg, ic_dialog_alert);
         }
     }
 
     public static class Connect extends BaseFragment {
+        static final int REQUEST_WEB_AUTH = 3;
+        static final String INTENT = "intent";
+
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
@@ -251,9 +258,8 @@ public class Dialogs {
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-//                            startActivityForResult(new Intent(MainActivity.this, OAuth2WebAuthActivity.class)
-//                                    .setData(oauth2Client.requestUrl()), REQUEST_WEB_AUTH);
-                            dismiss();
+                            final Intent intent = getArguments().getParcelable(INTENT);
+                            startActivityForResult(intent, REQUEST_WEB_AUTH);
                         }
                     }).create();
         }
@@ -263,12 +269,10 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setCustomTitle(null)
-                    .setMessage(R.string.ui_dialog_connect_token_error)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    }).create();
+                .setCustomTitle(null)
+                .setMessage(R.string.ui_dialog_connect_token_error)
+                .setPositiveButton(android.R.string.ok, null)
+                .create();
         }
     }
 
@@ -276,19 +280,15 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setCustomTitle(null)
-                    .setMessage(R.string.ui_dialog_account_manager_token_error)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-//                            handleFallbackAuth();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .create();
+                .setCustomTitle(null)
+                .setMessage(R.string.ui_dialog_account_manager_token_error)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        App.post(new FallbackAuthEvent());
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .create();
         }
     }
 
@@ -297,7 +297,7 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final String title = getString(R.string.ui_dialog_upgrade_title);
             final String msg = getString(R.string.ui_dialog_upgrade_msg);
-            return createMessageDialog(title, msg);
+            return createMessageDialog(title, msg, ic_dialog_info);
         }
     }
 
@@ -306,41 +306,29 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return AppLog.displayAsDialog(App.LOG, getContext());
         }
-
-        /*
-        protected void onPrepareDialog(int id, Dialog dialog) {
-            super.onPrepareDialog(id, dialog);
-            switch (Dialogs.Type.values()[id]) {
-                case VIEW_LOG:
-                    View view = dialog.findViewById(AppLog.ID);
-                    if (view instanceof TextView) {
-                        AppLog.readLog(App.LOG, (TextView) view);
-                    }
-            }
-        }
-        */
     }
 
     public static class ConfirmAction extends BaseFragment {
+        static final String ACTION = "action";
+
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
                     .setTitle(R.string.ui_dialog_confirm_action_title)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-//                            if (mActions != null) {
-//                                performAction(mActions, false);
-//                            }
+                            App.post(Actions.valueOf(getArguments().getString(ACTION)));
                         }
                     })
                     .setMessage(R.string.ui_dialog_confirm_action_msg)
+                    .setIcon(ic_dialog_alert)
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
         }
     }
 
     public static class SmsDefaultPackage extends BaseFragment {
-        private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
+        static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
 
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -357,8 +345,8 @@ public class Dialogs {
 
         @TargetApi(Build.VERSION_CODES.KITKAT)
         private void requestDefaultSmsPackageChange() {
-            final Intent changeIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
-                    .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getContext().getPackageName());
+            final Intent changeIntent = new Intent(ACTION_CHANGE_DEFAULT)
+                    .putExtra(EXTRA_PACKAGE_NAME, getContext().getPackageName());
 
             startActivityForResult(changeIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
         }

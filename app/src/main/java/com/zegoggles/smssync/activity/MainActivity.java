@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -47,7 +48,10 @@ import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
-import com.zegoggles.smssync.activity.events.ConnectEvent;
+import com.zegoggles.smssync.activity.events.AccountConnectedEvent;
+import com.zegoggles.smssync.activity.events.DisconnectAccountEvent;
+import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
+import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.preferences.AuthPreferences;
@@ -58,12 +62,34 @@ import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
+import com.zegoggles.smssync.utils.BundleBuilder;
 
 import static android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
 import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.activity.Dialogs.ConfirmAction.ACTION;
+import static com.zegoggles.smssync.activity.Dialogs.Connect.INTENT;
+import static com.zegoggles.smssync.activity.Dialogs.Connect.REQUEST_WEB_AUTH;
+import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
+import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
+import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
+import static com.zegoggles.smssync.activity.Dialogs.Type.ABOUT;
+import static com.zegoggles.smssync.activity.Dialogs.Type.ACCESS_TOKEN;
+import static com.zegoggles.smssync.activity.Dialogs.Type.ACCESS_TOKEN_ERROR;
+import static com.zegoggles.smssync.activity.Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR;
+import static com.zegoggles.smssync.activity.Dialogs.Type.CONFIRM_ACTION;
+import static com.zegoggles.smssync.activity.Dialogs.Type.CONNECT;
+import static com.zegoggles.smssync.activity.Dialogs.Type.DISCONNECT;
+import static com.zegoggles.smssync.activity.Dialogs.Type.FIRST_SYNC;
+import static com.zegoggles.smssync.activity.Dialogs.Type.MISSING_CREDENTIALS;
+import static com.zegoggles.smssync.activity.Dialogs.Type.RESET;
+import static com.zegoggles.smssync.activity.Dialogs.Type.SMS_DEFAULT_PACKAGE_CHANGE;
+import static com.zegoggles.smssync.activity.Dialogs.Type.UPGRADE_FROM_SMSBACKUP;
+import static com.zegoggles.smssync.activity.Dialogs.Type.VIEW_LOG;
+import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_ADD_ACCOUNT;
+import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_FALLBACK_AUTH;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -73,9 +99,8 @@ public class MainActivity extends AppCompatActivity implements
         OnPreferenceStartFragmentCallback,
         OnPreferenceStartScreenCallback,
         FragmentManager.OnBackStackChangedListener {
-    private static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
-    private static final int REQUEST_WEB_AUTH = 3;
+
     private static final String SCREEN_TITLE = "title";
 
     enum Actions {
@@ -83,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements
         BackupSkip,
         Restore
     }
-    private Actions mActions;
 
     private Preferences preferences;
     private AuthPreferences authPreferences;
@@ -109,12 +133,12 @@ public class MainActivity extends AppCompatActivity implements
         );
         showFragment(new MainSettings(), null);
         if (preferences.shouldShowUpgradeMessage()) {
-            show(Dialogs.Type.UPGRADE_FROM_SMSBACKUP);
+            showDialog(UPGRADE_FROM_SMSBACKUP);
         }
         preferences.migrateMarkAsRead();
 
         if (preferences.shouldShowAboutDialog()) {
-            show(Dialogs.Type.ABOUT);
+            showDialog(ABOUT);
         }
         checkDefaultSmsApp();
         setupStrictMode();
@@ -146,13 +170,13 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_about:
-                show(Dialogs.Type.ABOUT);
+                showDialog(ABOUT);
                 return true;
             case R.id.menu_reset:
-                show(Dialogs.Type.RESET);
+                showDialog(RESET);
                 return true;
             case R.id.menu_view_log:
-                show(Dialogs.Type.VIEW_LOG);
+                showDialog(VIEW_LOG);
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -166,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case REQUEST_CHANGE_DEFAULT_SMS_PACKAGE: {
                 preferences.setSeenSmsDefaultPackageChangeDialog();
-
                 if (preferences.getSmsDefaultPackage() != null) {
                     startRestore();
                 }
@@ -180,19 +203,19 @@ public class MainActivity extends AppCompatActivity implements
 
                 final String code = data == null ? null : data.getStringExtra(OAuth2WebAuthActivity.EXTRA_CODE);
                 if (!TextUtils.isEmpty(code)) {
-                    show(Dialogs.Type.ACCESS_TOKEN);
+                    showDialog(ACCESS_TOKEN);
                     new OAuth2CallbackTask(oauth2Client).execute(code);
                 } else {
-                    show(Dialogs.Type.ACCESS_TOKEN_ERROR);
+                    showDialog(ACCESS_TOKEN_ERROR);
                 }
                 break;
             }
             case REQUEST_PICK_ACCOUNT: {
                 if (resultCode == RESULT_OK && data != null) {
-                    if (AccountManagerAuthActivity.ACTION_ADD_ACCOUNT.equals(data.getAction())) {
+                    if (ACTION_ADD_ACCOUNT.equals(data.getAction())) {
                         handleAccountManagerAuth(data);
-                    } else if (AccountManagerAuthActivity.ACTION_FALLBACK_AUTH.equals(data.getAction())) {
-                        handleFallbackAuth();
+                    } else if (ACTION_FALLBACK_AUTH.equals(data.getAction())) {
+                        handleFallbackAuth(new FallbackAuthEvent());
                     }
                 } else if (LOCAL_LOGV) {
                     Log.v(TAG, "request canceled, result="+resultCode);
@@ -213,17 +236,27 @@ public class MainActivity extends AppCompatActivity implements
             authPreferences.setOauth2Token(event.token.userName, event.token.accessToken, event.token.refreshToken);
             onAuthenticated();
         } else {
-            show(Dialogs.Type.ACCESS_TOKEN_ERROR);
+            showDialog(ACCESS_TOKEN_ERROR);
         }
     }
 
-    @Override
-    public void onBackStackChanged() {
+    @Subscribe public void onDisconnectAccount(DisconnectAccountEvent event) {
+        authPreferences.clearOAuth1Data();
+        authPreferences.clearOauth2Data();
+        preferences.getDataTypePreferences().clearLastSyncData();
+    }
+
+    @Subscribe public void onReset(SettingsResetEvent event) {
+        preferences.getDataTypePreferences().clearLastSyncData();
+        preferences.reset();
+    }
+
+    @Override public void onBackStackChanged() {
         getSupportActionBar().setSubtitle(getCurrentTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(getSupportFragmentManager().getBackStackEntryCount() > 0);
     }
 
-    private CharSequence getCurrentTitle() {
+    private @Nullable CharSequence getCurrentTitle() {
         final int entryCount = getSupportFragmentManager().getBackStackEntryCount();
         if (entryCount == 0) {
             return null;
@@ -234,9 +267,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void onAuthenticated() {
-        // Invite use to perform a backup, but only once
+        // Invite user to perform a backup, but only once
         if (preferences.isFirstUse()) {
-            show(Dialogs.Type.FIRST_SYNC);
+            showDialog(FIRST_SYNC, new BundleBuilder().putInt(MAX_ITEMS_PER_SYNC, preferences.getMaxItemsPerSync()).build());
         }
     }
 
@@ -249,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements
     private void initiateBackup() {
         if (checkLoginInformation()) {
             if (preferences.isFirstBackup()) {
-                show(Dialogs.Type.FIRST_SYNC);
+                showDialog(FIRST_SYNC);
             } else {
                 startBackup(false);
             }
@@ -258,7 +291,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private boolean checkLoginInformation() {
         if (!authPreferences.isLoginInformationSet()) {
-            show(Dialogs.Type.MISSING_CREDENTIALS);
+            showDialog(MISSING_CREDENTIALS,
+                    new BundleBuilder().putBoolean(USE_XOAUTH, authPreferences.useXOAuth()).build());
             return false;
         } else {
             return true;
@@ -272,8 +306,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void performAction(Actions act, boolean needConfirm) {
         if (needConfirm) {
-            this.mActions = act;
-            show(Dialogs.Type.CONFIRM_ACTION);
+            showDialog(CONFIRM_ACTION, new BundleBuilder().putString(ACTION, act.name()).build());
         } else {
             if (Actions.Backup.equals(act)) {
                 initiateBackup();
@@ -307,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements
                 if (preferences.hasSeenSmsDefaultPackageChangeDialog()) {
                     requestDefaultSmsPackageChange();
                 } else {
-                    show(Dialogs.Type.SMS_DEFAULT_PACKAGE_CHANGE);
+                    showDialog(SMS_DEFAULT_PACKAGE_CHANGE);
                 }
             }
         } else {
@@ -320,8 +353,6 @@ public class MainActivity extends AppCompatActivity implements
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
                 getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
     }
-
-
 
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference preference) {
@@ -343,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements
         return false;
     }
 
-    private void showFragment(Fragment fragment, String rootKey) {
+    private void showFragment(@NonNull Fragment fragment, @Nullable String rootKey) {
         Bundle args = fragment.getArguments() == null ? new Bundle() : fragment.getArguments();
         args.putString(ARG_PREFERENCE_ROOT, rootKey);
         fragment.setArguments(args);
@@ -358,16 +389,20 @@ public class MainActivity extends AppCompatActivity implements
         tx.commit();
     }
 
-    private void show(Dialogs.Type d) {
-        d.instantiate(this).show(getSupportFragmentManager(), null);
+    private void showDialog(Dialogs.Type dialog) {
+        showDialog(dialog, null);
     }
 
-    @Subscribe public void onConnect(ConnectEvent event) {
+    private void showDialog(@NonNull Dialogs.Type dialog, @Nullable Bundle args) {
+        dialog.instantiate(this, args).show(getSupportFragmentManager(), dialog.name());
+    }
+
+    @Subscribe public void onConnect(AccountConnectedEvent event) {
         if (event.connect) {
             startActivityForResult(new Intent(MainActivity.this,
                     AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
         } else {
-            show(Dialogs.Type.DISCONNECT);
+            showDialog(DISCONNECT);
         }
     }
 
@@ -402,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void handleAccountManagerAuth(Intent data) {
+    private void handleAccountManagerAuth(@NonNull Intent data) {
         String token = data.getStringExtra(AccountManagerAuthActivity.EXTRA_TOKEN);
         String account = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ACCOUNT);
         if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
@@ -411,13 +446,16 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
             if (!TextUtils.isEmpty(error)) {
-                show(Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR);
+                showDialog(ACCOUNT_MANAGER_TOKEN_ERROR);
             }
         }
     }
 
-    private void handleFallbackAuth() {
-        show(Dialogs.Type.CONNECT);
+
+    @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
+        final Intent intent = new Intent(this, OAuth2WebAuthActivity.class)
+                .setData(oauth2Client.requestUrl());
+        showDialog(CONNECT, new BundleBuilder().putParcelable(INTENT, intent).build());
     }
 
     private void checkDefaultSmsApp() {

@@ -10,16 +10,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
 import com.zegoggles.smssync.activity.MainActivity;
+import com.zegoggles.smssync.utils.BundleBuilder;
 
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.AccountDialogs.ACCOUNTS;
 
 public class AccountManagerAuthActivity extends AppCompatActivity {
     public static final String EXTRA_TOKEN = "token";
@@ -50,10 +52,11 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (!isFinishing()) {
-            Bundle args = new Bundle();
-            args.putParcelableArray(AccountDialogs.ACCOUNTS, accountManager.getAccountsByType(GOOGLE_TYPE));
-            ((AppCompatDialogFragment)Fragment.instantiate(this, AccountDialogs.class.getName(), args))
+            final Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
+            Bundle args = new BundleBuilder().putParcelableArray(ACCOUNTS, accounts).build();
+            ((DialogFragment)Fragment.instantiate(this, AccountDialogs.class.getName(), args))
                 .show(getSupportFragmentManager(), null);
         }
     }
@@ -101,27 +104,32 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
     public static class AccountDialogs extends Dialogs.BaseFragment {
         static final String ACCOUNTS = "accounts";
 
-        @Override @NonNull
+        @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.select_google_account);
             final Account[] accounts = (Account[]) getArguments().getParcelableArray(ACCOUNTS);
+            return new AlertDialog.Builder(getContext())
+                .setTitle(R.string.select_google_account)
+                .setItems(getNames(accounts), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((AccountManagerAuthActivity) getActivity()).onAccountSelected(accounts[which]);
+                        dialog.dismiss();
+                    }
+                }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        getActivity().finish();
+                    }
+                })
+                .create();
+        }
+
+        private String[] getNames(Account[] accounts) {
             String[] names = new String[accounts.length];
             for (int i = 0; i < accounts.length; i++) {
                 names[i] = accounts[i].name;
             }
-            return builder.setItems(names, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ((AccountManagerAuthActivity)getActivity()).onAccountSelected(accounts[which]);
-                    dialog.dismiss();
-                }
-            }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    getActivity().finish();
-                }
-            })
-              .create();
+            return names;
         }
     }
 }

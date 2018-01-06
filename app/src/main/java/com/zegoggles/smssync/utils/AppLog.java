@@ -25,8 +25,8 @@ import static com.zegoggles.smssync.App.TAG;
 
 public class AppLog {
     // keep max 32k worth of logs
-    static final int MAX_SIZE = 32 * 1024;
-    public static final int ID = 1;
+    private static final int MAX_SIZE = 32 * 1024;
+    private static final int ID = 1;
 
     private PrintWriter writer;
     private String dateFormat;
@@ -140,7 +140,6 @@ public class AppLog {
                 scrollTo(0, view.getHeight());
             }
         };
-
         return new AlertDialog.Builder(context)
                 .setCustomTitle(null)
                 .setPositiveButton(android.R.string.ok, null)
@@ -148,11 +147,11 @@ public class AppLog {
                 .create();
     }
 
-    public static boolean readLog(String name, TextView view) {
+    private static boolean readLog(String name, TextView view) {
         return readLog(getFile(name), view);
     }
 
-    public static boolean readLog(File f, TextView view) {
+    private static boolean readLog(File f, TextView view) {
         StringBuilder text = new StringBuilder();
         if (view != null && f.exists()) {
             BufferedReader br = null;
@@ -180,7 +179,7 @@ public class AppLog {
         return text.length() > 0;
     }
 
-    static File getFile(String name) {
+    private static File getFile(String name) {
         return new File(Environment.getExternalStorageDirectory(), name);
     }
 }
