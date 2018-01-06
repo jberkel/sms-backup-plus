@@ -52,23 +52,14 @@ public interface ContactAccessor {
      */
     Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources);
 
-    public static class Get {
+    class Get {
         private static ContactAccessor sContactAccessor;
 
         private Get() {}
 
         public static ContactAccessor instance() {
-            final int sdkVersion = Build.VERSION.SDK_INT;
             if (sContactAccessor == null) {
-                try {
-                    if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
-                        sContactAccessor = new ContactAccessorPre20();
-                    } else {
-                        sContactAccessor = new ContactAccessorPost20();
-                    }
-                } catch (Exception e) {
-                    throw new IllegalStateException(e);
-                }
+                sContactAccessor = new ContactAccessorPost20();
             }
             return sContactAccessor;
         }

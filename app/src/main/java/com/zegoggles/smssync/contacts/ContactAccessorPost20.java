@@ -17,7 +17,6 @@ package com.zegoggles.smssync.contacts;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
@@ -30,7 +29,6 @@ import com.zegoggles.smssync.R;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@TargetApi(5)
 public class ContactAccessorPost20 implements ContactAccessor {
     public String getOwnerEmail(Context context) {
         AccountManager mgr = AccountManager.get(context);
