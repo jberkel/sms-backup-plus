@@ -15,6 +15,7 @@
  */
 package com.zegoggles.smssync.activity;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -143,23 +144,22 @@ public class Dialogs {
     }
 
     public static class About extends BaseFragment {
-        @Override @NonNull
+        @Override @NonNull @SuppressLint("InflateParams")
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            View contentView = getActivity().getLayoutInflater().inflate(R.layout.about_dialog, null, false);
-            WebView webView = (WebView) contentView.findViewById(R.id.about_content);
+            final View contentView = getActivity().getLayoutInflater().inflate(R.layout.about_dialog, null, false);
+            final WebView webView = (WebView) contentView.findViewById(R.id.about_content);
             webView.setWebViewClient(new WebViewClient() {
-                @Override
-                @SuppressWarnings("deprecation")
+                @Override @SuppressWarnings("deprecation")
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)));
                     return true;
-
                 }
             });
             webView.loadUrl("file:///android_asset/about.html");
             return new AlertDialog.Builder(getContext())
-                    .setCustomTitle(null)
                     .setPositiveButton(android.R.string.ok, null)
+                    .setIcon(R.drawable.ic_launcher)
+                    .setTitle(R.string.menu_info)
                     .setView(contentView)
                     .create();
         }
