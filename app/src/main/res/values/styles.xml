@@ -5,7 +5,7 @@
     <color name="bubble">#378604</color>
     <color name="bubble_dark">#296304</color>
     <color name="bubble_text">#F2F2F2</color>
-
+    <color name="syncing">#cc9900</color>
 
     <style name="SMSBackupPlusTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/bubble</item>
@@ -15,8 +15,10 @@
         <item name="android:textColorPrimary">@color/bubble_text</item>
     </style>
 
-    <color name="status_idle">@color/bubble_text</color>
-    <color name="status_done">@color/bubble</color>
-    <color name="status_sync">#cc9900</color>
-    <color name="status_error">@color/envelope_dark</color>
+    <declare-styleable name="StatusPreference">
+        <attr name="statusIdle" format="color"/>
+        <attr name="statusError" format="color"/>
+        <attr name="statusSyncing" format="color"/>
+        <attr name="statusDone" format="color"/>
+    </declare-styleable>
 </resources>

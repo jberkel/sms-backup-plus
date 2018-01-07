@@ -1,7 +1,15 @@
-<PreferenceScreen xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools">
+
     <com.zegoggles.smssync.activity.StatusPreference
+            xmlns:custom="http://schemas.android.com/apk/res/com.zegoggles.smssync"
             android:selectable="false"
-            android:layout="@layout/status"/>
+            android:layout="@layout/status"
+            custom:statusIdle="?attr/colorPrimary"
+            custom:statusSyncing="@color/syncing"
+            custom:statusDone="?attr/colorPrimaryDark"
+            custom:statusError="@color/envelope_dark"
+    />
 
     <CheckBoxPreference
             android:key="connected"

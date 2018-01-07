@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.activity;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
@@ -41,6 +42,8 @@ public class StatusPreference extends Preference implements View.OnClickListener
     private ProgressBar mProgressBar;
     private final Preferences preferences;
 
+    private final int idle, done, error, syncing;
+
     @SuppressWarnings("unused")
     public StatusPreference(Context context) {
         this(context, null);
@@ -55,6 +58,17 @@ public class StatusPreference extends Preference implements View.OnClickListener
     public StatusPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         this.preferences = new Preferences(context);
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.StatusPreference,
+                defStyleAttr,
+                defStyleRes);
+
+        idle = a.getColor(R.styleable.StatusPreference_statusIdle, 0);
+        done = a.getColor(R.styleable.StatusPreference_statusDone, 0);
+        error = a.getColor(R.styleable.StatusPreference_statusError, 0);
+        syncing = a.getColor(R.styleable.StatusPreference_statusSyncing, 0);
+        a.recycle();
     }
 
     @Override
@@ -204,11 +218,11 @@ public class StatusPreference extends Preference implements View.OnClickListener
         }
         mSyncDetailsLabel.setText(text);
         mStatusLabel.setText(R.string.status_done);
-        mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_done));
+        mStatusLabel.setTextColor(done);
     }
 
     private void finishedRestore(RestoreState newState) {
-        mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_done));
+        mStatusLabel.setTextColor(done);
         mStatusLabel.setText(R.string.status_done);
         mSyncDetailsLabel.setText(getContext().getResources().getQuantityString(
                 R.plurals.status_restore_done_details,
@@ -220,7 +234,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
     private void idle() {
         mSyncDetailsLabel.setText(getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
         mStatusLabel.setText(R.string.status_idle);
-        mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_idle));
+        mStatusLabel.setTextColor(idle);
     }
 
     private String getLastSyncText(final long lastSync) {
@@ -256,27 +270,26 @@ public class StatusPreference extends Preference implements View.OnClickListener
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void setViewAttributes(final SmsSyncState state) {
         switch (state) {
             case LOGIN:
             case CALC:
             case BACKUP:
             case RESTORE:
-                mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_sync));
+                mStatusLabel.setTextColor(syncing);
                 mStatusIcon.setImageResource(R.drawable.ic_syncing);
                 break;
             case ERROR:
                 mProgressBar.setProgress(0);
                 mProgressBar.setIndeterminate(false);
-                mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_error));
+                mStatusLabel.setTextColor(error);
                 mStatusIcon.setImageResource(R.drawable.ic_error);
                 setButtonsToDefault();
                 break;
             default:
                 mProgressBar.setProgress(0);
                 mProgressBar.setIndeterminate(false);
-                mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_idle));
+                mStatusLabel.setTextColor(idle);
                 mStatusIcon.setImageResource(R.drawable.ic_idle);
                 setButtonsToDefault();
                 break;
