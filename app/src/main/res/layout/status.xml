@@ -28,7 +28,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="6dip"
                 android:layout_toRightOf="@id/status_icon"
-                android:textColor="@color/status_done"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 

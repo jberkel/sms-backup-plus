@@ -220,6 +220,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
     private void idle() {
         mSyncDetailsLabel.setText(getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
         mStatusLabel.setText(R.string.status_idle);
+        mStatusLabel.setTextColor(getContext().getResources().getColor(R.color.status_idle));
     }
 
     private String getLastSyncText(final long lastSync) {
@@ -255,6 +256,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void setViewAttributes(final SmsSyncState state) {
         switch (state) {
             case LOGIN:

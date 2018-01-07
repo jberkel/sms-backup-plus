@@ -66,9 +66,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
                 return false;
             }
         });
-        addPreferenceListener(
-            ENABLE_AUTO_BACKUP.key
-        );
+        addPreferenceListener(ENABLE_AUTO_BACKUP.key);
     }
 
     @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {

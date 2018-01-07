@@ -14,4 +14,9 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:textColorPrimary">@color/bubble_text</item>
     </style>
+
+    <color name="status_idle">@color/bubble_text</color>
+    <color name="status_done">@color/bubble</color>
+    <color name="status_sync">#cc9900</color>
+    <color name="status_error">@color/envelope_dark</color>
 </resources>
