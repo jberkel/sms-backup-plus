@@ -355,10 +355,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference preference) {
-        final Fragment fragment = Fragment.instantiate(this, preference.getFragment());
-        Bundle args = new Bundle();
-        args.putString(SCREEN_TITLE, String.valueOf(preference.getTitle()));
-        fragment.setArguments(args);
+        final Fragment fragment = Fragment.instantiate(this, preference.getFragment(),
+                new BundleBuilder().putString(SCREEN_TITLE, String.valueOf(preference.getTitle())).build());
         showFragment(fragment, preference.getKey());
         return true;
     }
