@@ -380,7 +380,6 @@ public class MainActivity extends AppCompatActivity implements
             .replace(R.id.preferences_container, fragment, rootKey);
         if (rootKey != null) {
             tx.addToBackStack(null);
-            tx.setTransition(TRANSIT_FRAGMENT_OPEN);
             tx.setBreadCrumbTitle(args.getString(SCREEN_TITLE));
         }
         tx.commit();
