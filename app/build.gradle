@@ -35,6 +35,11 @@ android {
         }
     }
 
+    lintOptions {
+        // http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.LintOptions.html#com.android.build.gradle.internal.dsl.LintOptions
+        warningsAsErrors true
+    }
+
     useLibrary 'org.apache.http.legacy'
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'

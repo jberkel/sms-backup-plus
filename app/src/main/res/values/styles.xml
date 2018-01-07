@@ -13,6 +13,7 @@
         <item name="colorAccent">@color/envelope_light</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:textColorPrimary">@color/bubble_text</item>
+        <item name="android:textColorSecondary">@color/envelope_grey</item>
     </style>
 
     <declare-styleable name="StatusPreference">
