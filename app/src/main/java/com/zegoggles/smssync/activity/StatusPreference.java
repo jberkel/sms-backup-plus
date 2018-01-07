@@ -2,6 +2,9 @@ package com.zegoggles.smssync.activity;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
@@ -31,18 +34,23 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class StatusPreference extends Preference implements View.OnClickListener {
-    private Button mBackupButton;
-    private Button mRestoreButton;
+    private Button backupButton;
+    private Button restoreButton;
 
-    private ImageView mStatusIcon;
+    private ImageView statusIcon;
 
-    private TextView mStatusLabel;
-    private TextView mSyncDetailsLabel;
+    private TextView statusLabel;
+    private TextView syncDetailsLabel;
 
-    private ProgressBar mProgressBar;
+    private ProgressBar progressBar;
     private final Preferences preferences;
 
-    private final int idle, done, error, syncing;
+    private final int idleColor, doneColor, errorColor, syncingColor;
+
+    private static final int doneDrawable = R.drawable.ic_done;
+    private static final int idleDrawable = doneDrawable;
+    private static final int errorDrawable = R.drawable.ic_syncing_problem;
+    private static final int syncingDrawable = R.drawable.ic_syncing;
 
     @SuppressWarnings("unused")
     public StatusPreference(Context context) {
@@ -57,40 +65,39 @@ public class StatusPreference extends Preference implements View.OnClickListener
     @SuppressWarnings("WeakerAccess")
     public StatusPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        this.preferences = new Preferences(context);
+        preferences = new Preferences(context);
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.StatusPreference,
                 defStyleAttr,
                 defStyleRes);
-
-        idle = a.getColor(R.styleable.StatusPreference_statusIdle, 0);
-        done = a.getColor(R.styleable.StatusPreference_statusDone, 0);
-        error = a.getColor(R.styleable.StatusPreference_statusError, 0);
-        syncing = a.getColor(R.styleable.StatusPreference_statusSyncing, 0);
+        idleColor = a.getColor(R.styleable.StatusPreference_statusIdle, 0);
+        doneColor = a.getColor(R.styleable.StatusPreference_statusDone, 0);
+        errorColor = a.getColor(R.styleable.StatusPreference_statusError, 0);
+        syncingColor = a.getColor(R.styleable.StatusPreference_statusSyncing, 0);
         a.recycle();
     }
 
     @Override
     public void onClick(View v) {
-        if (v == mBackupButton) {
+        if (v == backupButton) {
             if (!SmsBackupService.isServiceWorking()) {
                 if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
                 App.post(MainActivity.Actions.Backup);
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
                 // Sync button will be restored on next status update.
-                mBackupButton.setText(R.string.ui_sync_button_label_canceling);
-                mBackupButton.setEnabled(false);
+                backupButton.setText(R.string.ui_sync_button_label_canceling);
+                backupButton.setEnabled(false);
                 App.post(new CancelEvent());
             }
-        } else if (v == mRestoreButton) {
+        } else if (v == restoreButton) {
             if (LOCAL_LOGV) Log.v(TAG, "restore");
             if (!SmsRestoreService.isServiceWorking()) {
                 App.post(MainActivity.Actions.Restore);
             } else {
-                mRestoreButton.setText(R.string.ui_sync_button_label_canceling);
-                mRestoreButton.setEnabled(false);
+                restoreButton.setText(R.string.ui_sync_button_label_canceling);
+                restoreButton.setEnabled(false);
                 App.post(new CancelEvent());
             }
         }
@@ -112,49 +119,49 @@ public class StatusPreference extends Preference implements View.OnClickListener
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
-        mBackupButton = (Button) holder.findViewById(R.id.sync_button);
-        mBackupButton.setOnClickListener(this);
+        backupButton = (Button) holder.findViewById(R.id.sync_button);
+        backupButton.setOnClickListener(this);
 
-        mRestoreButton = (Button) holder.findViewById(R.id.restore_button);
-        mRestoreButton.setOnClickListener(this);
+        restoreButton = (Button) holder.findViewById(R.id.restore_button);
+        restoreButton.setOnClickListener(this);
 
-        mStatusIcon = (ImageView) holder.findViewById(R.id.status_icon);
-        mStatusLabel  = (TextView) holder.findViewById(R.id.status_label);
+        statusIcon = (ImageView) holder.findViewById(R.id.status_icon);
+        statusLabel = (TextView) holder.findViewById(R.id.status_label);
         View mSyncDetails = holder.findViewById(R.id.details_sync);
-        mSyncDetailsLabel = (TextView) mSyncDetails.findViewById(R.id.details_sync_label);
-        mProgressBar = (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress);
+        syncDetailsLabel = (TextView) mSyncDetails.findViewById(R.id.details_sync_label);
+        progressBar = (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress);
 
         idle();
     }
 
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "restoreStateChanged:" + newState);
-        if (mBackupButton == null) return;
+        if (backupButton == null) return;
 
         stateChanged(newState);
         switch (newState.state) {
             case RESTORE:
-                mBackupButton.setEnabled(false);
-                mRestoreButton.setText(R.string.ui_restore_button_label_restoring);
-                mStatusLabel.setText(R.string.status_restore);
-                mSyncDetailsLabel.setText(newState.getNotificationLabel(getContext().getResources()));
-                mProgressBar.setIndeterminate(false);
-                mProgressBar.setProgress(newState.currentRestoredCount);
-                mProgressBar.setMax(newState.itemsToRestore);
+                backupButton.setEnabled(false);
+                restoreButton.setText(R.string.ui_restore_button_label_restoring);
+                statusLabel.setText(R.string.status_restore);
+                syncDetailsLabel.setText(newState.getNotificationLabel(getContext().getResources()));
+                progressBar.setIndeterminate(false);
+                progressBar.setProgress(newState.currentRestoredCount);
+                progressBar.setMax(newState.itemsToRestore);
                 break;
             case FINISHED_RESTORE:
                 finishedRestore(newState);
                 break;
 
             case CANCELED_RESTORE:
-                mStatusLabel.setText(R.string.status_canceled);
-                mSyncDetailsLabel.setText(getContext().getString(R.string.status_restore_canceled_details,
+                statusLabel.setText(R.string.status_canceled);
+                syncDetailsLabel.setText(getContext().getString(R.string.status_restore_canceled_details,
                         newState.currentRestoredCount,
                         newState.itemsToRestore));
                 break;
             case UPDATING_THREADS:
-                mProgressBar.setIndeterminate(true);
-                mSyncDetailsLabel.setText(getContext().getString(R.string.status_updating_threads));
+                progressBar.setIndeterminate(true);
+                syncDetailsLabel.setText(getContext().getString(R.string.status_updating_threads));
                 break;
 
         }
@@ -162,7 +169,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
 
     @Subscribe public void backupStateChanged(final BackupState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "backupStateChanged:"+newState);
-        if (mBackupButton == null || newState.backupType.isBackground()) return;
+        if (backupButton == null || newState.backupType.isBackground()) return;
 
         stateChanged(newState);
 
@@ -171,18 +178,18 @@ public class StatusPreference extends Preference implements View.OnClickListener
                 finishedBackup(newState);
                 break;
             case BACKUP:
-                mRestoreButton.setEnabled(false);
-                mBackupButton.setText(R.string.ui_sync_button_label_syncing);
-                mStatusLabel.setText(R.string.status_backup);
-                mSyncDetailsLabel.setText(newState.getNotificationLabel(getContext().getResources()));
-                mProgressBar.setIndeterminate(false);
-                mProgressBar.setProgress(newState.currentSyncedItems);
-                mProgressBar.setMax(newState.itemsToSync);
+                restoreButton.setEnabled(false);
+                backupButton.setText(R.string.ui_sync_button_label_syncing);
+                statusLabel.setText(R.string.status_backup);
+                syncDetailsLabel.setText(newState.getNotificationLabel(getContext().getResources()));
+                progressBar.setIndeterminate(false);
+                progressBar.setProgress(newState.currentSyncedItems);
+                progressBar.setMax(newState.itemsToSync);
                 break;
             case CANCELED_BACKUP:
-                mStatusLabel.setText(R.string.status_canceled);
+                statusLabel.setText(R.string.status_canceled);
 
-                mSyncDetailsLabel.setText(getContext().getString(R.string.status_canceled_details,
+                syncDetailsLabel.setText(getContext().getString(R.string.status_canceled_details,
                         newState.currentSyncedItems,
                         newState.itemsToSync));
                 break;
@@ -190,19 +197,19 @@ public class StatusPreference extends Preference implements View.OnClickListener
     }
 
     private void authFailed() {
-        mStatusLabel.setText(R.string.status_auth_failure);
+        statusLabel.setText(R.string.status_auth_failure);
 
         if (new AuthPreferences(getContext()).useXOAuth()) {
-            mSyncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
+            syncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
         } else {
-            mSyncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
+            syncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
         }
     }
 
     private void calc() {
-        mStatusLabel.setText(R.string.status_working);
-        mSyncDetailsLabel.setText(R.string.status_calc_details);
-        mProgressBar.setIndeterminate(true);
+        statusLabel.setText(R.string.status_working);
+        syncDetailsLabel.setText(R.string.status_calc_details);
+        progressBar.setIndeterminate(true);
     }
 
     private void finishedBackup(BackupState state) {
@@ -216,15 +223,15 @@ public class StatusPreference extends Preference implements View.OnClickListener
         } else if (backedUpCount == 0) {
             text = getContext().getString(R.string.status_backup_done_details_noitems);
         }
-        mSyncDetailsLabel.setText(text);
-        mStatusLabel.setText(R.string.status_done);
-        mStatusLabel.setTextColor(done);
+        syncDetailsLabel.setText(text);
+        statusLabel.setText(R.string.status_done);
+        statusLabel.setTextColor(doneColor);
     }
 
     private void finishedRestore(RestoreState newState) {
-        mStatusLabel.setTextColor(done);
-        mStatusLabel.setText(R.string.status_done);
-        mSyncDetailsLabel.setText(getContext().getResources().getQuantityString(
+        statusLabel.setTextColor(doneColor);
+        statusLabel.setText(R.string.status_done);
+        syncDetailsLabel.setText(getContext().getResources().getQuantityString(
                 R.plurals.status_restore_done_details,
                 newState.actualRestoredCount,
                 newState.actualRestoredCount,
@@ -232,9 +239,10 @@ public class StatusPreference extends Preference implements View.OnClickListener
     }
 
     private void idle() {
-        mSyncDetailsLabel.setText(getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
-        mStatusLabel.setText(R.string.status_idle);
-        mStatusLabel.setTextColor(idle);
+        syncDetailsLabel.setText(getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
+        statusLabel.setText(R.string.status_idle);
+        statusLabel.setTextColor(idleColor);
+        statusIcon.setImageDrawable(getTintedDrawable(idleDrawable, idleColor));
     }
 
     private String getLastSyncText(final long lastSync) {
@@ -250,9 +258,9 @@ public class StatusPreference extends Preference implements View.OnClickListener
                 idle();
                 break;
             case LOGIN:
-                mStatusLabel.setText(R.string.status_working);
-                mSyncDetailsLabel.setText(R.string.status_login_details);
-                mProgressBar.setIndeterminate(true);
+                statusLabel.setText(R.string.status_working);
+                syncDetailsLabel.setText(R.string.status_login_details);
+                progressBar.setIndeterminate(true);
                 break;
             case CALC:
                 calc();
@@ -262,8 +270,8 @@ public class StatusPreference extends Preference implements View.OnClickListener
                     authFailed();
                 } else {
                     final String errorMessage = state.getErrorMessage(getContext().getResources());
-                    mStatusLabel.setText(R.string.status_unknown_error);
-                    mSyncDetailsLabel.setText(getContext().getString(R.string.status_unknown_error_details,
+                    statusLabel.setText(R.string.status_unknown_error);
+                    syncDetailsLabel.setText(getContext().getString(R.string.status_unknown_error_details,
                             errorMessage == null ? "N/A" : errorMessage));
                 }
                 break;
@@ -276,30 +284,38 @@ public class StatusPreference extends Preference implements View.OnClickListener
             case CALC:
             case BACKUP:
             case RESTORE:
-                mStatusLabel.setTextColor(syncing);
-                mStatusIcon.setImageResource(R.drawable.ic_syncing);
+                statusLabel.setTextColor(syncingColor);
+                statusIcon.setImageDrawable(getTintedDrawable(syncingDrawable, syncingColor));
                 break;
             case ERROR:
-                mProgressBar.setProgress(0);
-                mProgressBar.setIndeterminate(false);
-                mStatusLabel.setTextColor(error);
-                mStatusIcon.setImageResource(R.drawable.ic_error);
+                progressBar.setProgress(0);
+                progressBar.setIndeterminate(false);
+                statusLabel.setTextColor(errorColor);
+                statusIcon.setImageDrawable(getTintedDrawable(errorDrawable, errorColor));
                 setButtonsToDefault();
                 break;
             default:
-                mProgressBar.setProgress(0);
-                mProgressBar.setIndeterminate(false);
-                mStatusLabel.setTextColor(idle);
-                mStatusIcon.setImageResource(R.drawable.ic_idle);
+                progressBar.setProgress(0);
+                progressBar.setIndeterminate(false);
+                statusLabel.setTextColor(idleColor);
+                statusIcon.setImageDrawable(getTintedDrawable(idleDrawable, idleColor));
                 setButtonsToDefault();
                 break;
         }
     }
 
     private void setButtonsToDefault() {
-        mRestoreButton.setEnabled(true);
-        mRestoreButton.setText(R.string.ui_restore_button_label_idle);
-        mBackupButton.setEnabled(true);
-        mBackupButton.setText(R.string.ui_sync_button_label_idle);
+        restoreButton.setEnabled(true);
+        restoreButton.setText(R.string.ui_restore_button_label_idle);
+        backupButton.setEnabled(true);
+        backupButton.setText(R.string.ui_sync_button_label_idle);
+    }
+
+    @SuppressWarnings("deprecation")
+    private @NonNull Drawable getTintedDrawable(int resource, int color) {
+        Drawable drawable = getContext().getResources().getDrawable(resource);
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable.mutate(), color);
+        return drawable;
     }
 }
