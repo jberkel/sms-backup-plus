@@ -3,6 +3,8 @@ package com.zegoggles.smssync.utils;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * A Bundle that doesn't suck. Allows you to chain method calls as you'd expect.
  * https://gist.github.com/felipecsl/45bc010713c0f543354e
@@ -72,6 +74,11 @@ public class BundleBuilder {
 
     public BundleBuilder putParcelableArray(String key, Parcelable[] value) {
         bundle.putParcelableArray(key, value);
+        return this;
+    }
+
+    public BundleBuilder putParcelableArrayList(String key, ArrayList<? extends Parcelable> value) {
+        bundle.putParcelableArrayList(key, value);
         return this;
     }
 
