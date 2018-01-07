@@ -1,6 +1,17 @@
 <resources>
-    <style name="Theme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorAccent">#43A007</item>
+    <color name="envelope_light">#E93E30</color>
+    <color name="envelope_dark">#A8261B</color>
+    <color name="envelope_grey">#ACACA3</color>
+    <color name="bubble">#378604</color>
+    <color name="bubble_dark">#296304</color>
+    <color name="bubble_text">#F2F2F2</color>
+
+
+    <style name="SMSBackupPlusTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/bubble</item>
+        <item name="colorPrimaryDark">@color/bubble_dark</item>
+        <item name="colorAccent">@color/envelope_light</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="android:textColorPrimary">@color/bubble_text</item>
     </style>
 </resources>
