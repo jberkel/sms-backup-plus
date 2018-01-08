@@ -20,7 +20,9 @@ import android.app.Application;
 import android.content.ComponentName;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import com.fsck.k9.mail.K9MailLib;
 import com.squareup.otto.Bus;
@@ -37,7 +39,7 @@ import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 import static android.content.pm.PackageManager.DONT_KILL_APP;
 
 public class App extends Application {
-    public static final boolean DEBUG = BuildConfig.DEBUG;
+    private static final boolean DEBUG = BuildConfig.DEBUG;
     public static final boolean LOCAL_LOGV = DEBUG;
     public static final String TAG = "SMSBackup+";
     public static final String LOG = "sms_backup_plus.log";
@@ -52,6 +54,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        setupStrictMode();
         gcmAvailable = GooglePlayServices.isAvailable(this);
         preferences = new Preferences(this);
         backupJobs = new BackupJobs(this);
@@ -132,6 +135,17 @@ public class App extends Application {
             if (preferences.getIncomingTimeoutSecs() > 0 && !preferences.isUseOldScheduler()) {
                 backupJobs.scheduleContentTriggerJob();
             }
+        }
+    }
+
+    private void setupStrictMode() {
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                    .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyFlashScreen()
+                .build());
         }
     }
 

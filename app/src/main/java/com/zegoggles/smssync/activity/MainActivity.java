@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -43,7 +42,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
-import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
@@ -64,7 +62,6 @@ import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
-import static android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
 import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -140,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements
             showDialog(ABOUT);
         }
         checkDefaultSmsApp();
-        setupStrictMode();
         App.register(this);
     }
 
@@ -406,18 +402,6 @@ public class MainActivity extends AppCompatActivity implements
         final Intent intent = new Intent(this, OAuth2WebAuthActivity.class)
                 .setData(oauth2Client.requestUrl());
         showDialog(CONNECT, new BundleBuilder().putParcelable(INTENT, intent).build());
-    }
-
-    @TargetApi(11) @SuppressWarnings({"ConstantConditions", "PointlessBooleanExpression"})
-    private void setupStrictMode() {
-        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-//                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()
-                    .penaltyFlashScreen()
-                    .build());
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
