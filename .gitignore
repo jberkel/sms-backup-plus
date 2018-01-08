@@ -10,6 +10,7 @@ keystore.properties
 *.swp
 .rvmrc
 .idea
+captures
 *.DS_Store
 target
 out
