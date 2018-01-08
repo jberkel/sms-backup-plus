@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.activity;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -46,6 +47,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
     private final Preferences preferences;
 
     private final int idleColor, doneColor, errorColor, syncingColor;
+    private final Drawable idle, done, error, syncing;
 
     private static final int doneDrawable = R.drawable.ic_done;
     private static final int idleDrawable = doneDrawable;
@@ -76,6 +78,11 @@ public class StatusPreference extends Preference implements View.OnClickListener
         errorColor = a.getColor(R.styleable.StatusPreference_statusError, 0);
         syncingColor = a.getColor(R.styleable.StatusPreference_statusSyncing, 0);
         a.recycle();
+
+        idle = getTintedDrawable(context.getResources(), idleDrawable, idleColor);
+        done = getTintedDrawable(context.getResources(), doneDrawable, doneColor);
+        error = getTintedDrawable(context.getResources(), errorDrawable, errorColor);
+        syncing = getTintedDrawable(context.getResources(),syncingDrawable, syncingColor);
     }
 
     @Override
@@ -226,11 +233,13 @@ public class StatusPreference extends Preference implements View.OnClickListener
         syncDetailsLabel.setText(text);
         statusLabel.setText(R.string.status_done);
         statusLabel.setTextColor(doneColor);
+        statusIcon.setImageDrawable(done);
     }
 
     private void finishedRestore(RestoreState newState) {
         statusLabel.setTextColor(doneColor);
         statusLabel.setText(R.string.status_done);
+        statusIcon.setImageDrawable(done);
         syncDetailsLabel.setText(getContext().getResources().getQuantityString(
                 R.plurals.status_restore_done_details,
                 newState.actualRestoredCount,
@@ -242,7 +251,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
         syncDetailsLabel.setText(getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
         statusLabel.setText(R.string.status_idle);
         statusLabel.setTextColor(idleColor);
-        statusIcon.setImageDrawable(getTintedDrawable(idleDrawable, idleColor));
+        statusIcon.setImageDrawable(idle);
     }
 
     private String getLastSyncText(final long lastSync) {
@@ -285,20 +294,20 @@ public class StatusPreference extends Preference implements View.OnClickListener
             case BACKUP:
             case RESTORE:
                 statusLabel.setTextColor(syncingColor);
-                statusIcon.setImageDrawable(getTintedDrawable(syncingDrawable, syncingColor));
+                statusIcon.setImageDrawable(syncing);
                 break;
             case ERROR:
                 progressBar.setProgress(0);
                 progressBar.setIndeterminate(false);
                 statusLabel.setTextColor(errorColor);
-                statusIcon.setImageDrawable(getTintedDrawable(errorDrawable, errorColor));
+                statusIcon.setImageDrawable(error);
                 setButtonsToDefault();
                 break;
             default:
                 progressBar.setProgress(0);
                 progressBar.setIndeterminate(false);
                 statusLabel.setTextColor(idleColor);
-                statusIcon.setImageDrawable(getTintedDrawable(idleDrawable, idleColor));
+                statusIcon.setImageDrawable(idle);
                 setButtonsToDefault();
                 break;
         }
@@ -312,8 +321,8 @@ public class StatusPreference extends Preference implements View.OnClickListener
     }
 
     @SuppressWarnings("deprecation")
-    private @NonNull Drawable getTintedDrawable(int resource, int color) {
-        Drawable drawable = getContext().getResources().getDrawable(resource);
+    private static @NonNull Drawable getTintedDrawable(Resources resources, int resource, int color) {
+        Drawable drawable = resources.getDrawable(resource);
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable.mutate(), color);
         return drawable;
