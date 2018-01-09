@@ -259,7 +259,7 @@ public class Dialogs {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             final Intent intent = getArguments().getParcelable(INTENT);
-                            startActivityForResult(intent, REQUEST_WEB_AUTH);
+                            getActivity().startActivityForResult(intent, REQUEST_WEB_AUTH);
                         }
                     }).create();
         }

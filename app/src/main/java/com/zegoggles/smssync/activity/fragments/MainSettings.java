@@ -13,6 +13,7 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
+import com.zegoggles.smssync.activity.events.DisconnectAccountEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.mail.DataType;
@@ -63,7 +64,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 App.post(new AccountConnectionChangedEvent((Boolean) change));
-                return false;
+                return false; // will be set later
             }
         });
         addPreferenceListener(ENABLE_AUTO_BACKUP.key);
@@ -78,6 +79,13 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         if (event.valid()) {
             updateConnected();
         }
+    }
+
+    @Subscribe public void onDisconnectAccount(DisconnectAccountEvent event) {
+        authPreferences.clearOAuth1Data();
+        authPreferences.clearOauth2Data();
+        preferences.getDataTypePreferences().clearLastSyncData();
+        updateConnected();
     }
 
     @Subscribe public void settingsReset(SettingsResetEvent event) {

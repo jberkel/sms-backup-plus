@@ -47,7 +47,6 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
 import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
-import com.zegoggles.smssync.activity.events.DisconnectAccountEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
@@ -62,6 +61,7 @@ import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
+import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
 import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -220,6 +220,24 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference preference) {
+        final Fragment fragment = Fragment.instantiate(this, preference.getFragment(),
+                new BundleBuilder().putString(SCREEN_TITLE, String.valueOf(preference.getTitle())).build());
+        showFragment(fragment, preference.getKey());
+        return true;
+    }
+
+    @Override
+    public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen preference) {
+        // API level 9 compatibility
+        if (preference.getFragment() == null) {
+            preference.setFragment(preference.getKey());
+            return onPreferenceStartFragment(caller, preference);
+        }
+        return false;
+    }
+
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
         if (isSmsBackupDefaultSmsApp() && newState.isFinished()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
@@ -235,15 +253,27 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    @Subscribe public void onDisconnectAccount(DisconnectAccountEvent event) {
-        authPreferences.clearOAuth1Data();
-        authPreferences.clearOauth2Data();
-        preferences.getDataTypePreferences().clearLastSyncData();
-    }
-
     @Subscribe public void onReset(SettingsResetEvent event) {
         preferences.getDataTypePreferences().clearLastSyncData();
         preferences.reset();
+    }
+
+    @Subscribe
+    public void performAction(Actions act) {
+        performAction(act, preferences.confirmAction());
+    }
+
+    @Subscribe public void onConnect(AccountConnectionChangedEvent event) {
+        if (event.connected) {
+            startActivityForResult(new Intent(MainActivity.this,
+                    AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
+        } else {
+            showDialog(DISCONNECT);
+        }
+    }
+
+    @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
+        showDialog(CONNECT);
     }
 
     @Override public void onBackStackChanged() {
@@ -264,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements
     private void onAuthenticated() {
         // Invite user to perform a backup, but only once
         if (preferences.isFirstUse()) {
-            showDialog(FIRST_SYNC, new BundleBuilder().putInt(MAX_ITEMS_PER_SYNC, preferences.getMaxItemsPerSync()).build());
+            showDialog(FIRST_SYNC);
         }
     }
 
@@ -286,17 +316,11 @@ public class MainActivity extends AppCompatActivity implements
 
     private boolean checkLoginInformation() {
         if (!authPreferences.isLoginInformationSet()) {
-            showDialog(MISSING_CREDENTIALS,
-                    new BundleBuilder().putBoolean(USE_XOAUTH, authPreferences.useXOAuth()).build());
+            showDialog(MISSING_CREDENTIALS);
             return false;
         } else {
             return true;
         }
-    }
-
-    @Subscribe
-    public void performAction(Actions act) {
-        performAction(act, preferences.confirmAction());
     }
 
     private void performAction(Actions act, boolean needConfirm) {
@@ -349,24 +373,6 @@ public class MainActivity extends AppCompatActivity implements
                 getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
     }
 
-    @Override
-    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference preference) {
-        final Fragment fragment = Fragment.instantiate(this, preference.getFragment(),
-                new BundleBuilder().putString(SCREEN_TITLE, String.valueOf(preference.getTitle())).build());
-        showFragment(fragment, preference.getKey());
-        return true;
-    }
-
-    @Override
-    public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen preference) {
-        // API level 9 compatibility
-        if (preference.getFragment() == null) {
-            preference.setFragment(preference.getKey());
-            return onPreferenceStartFragment(caller, preference);
-        }
-        return false;
-    }
-
     private void showFragment(@NonNull Fragment fragment, @Nullable String rootKey) {
         Bundle args = fragment.getArguments() == null ? new Bundle() : fragment.getArguments();
         args.putString(ARG_PREFERENCE_ROOT, rootKey);
@@ -382,31 +388,28 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void showDialog(Dialogs.Type dialog) {
-        showDialog(dialog, null);
+        final Bundle arguments = new Bundle();
+        switch (dialog) {
+            case FIRST_SYNC:
+                arguments.putInt(MAX_ITEMS_PER_SYNC, preferences.getMaxItemsPerSync()); break;
+            case MISSING_CREDENTIALS:
+                arguments.putBoolean(USE_XOAUTH, authPreferences.useXOAuth()); break;
+            case CONNECT:
+                arguments.putParcelable(INTENT,
+                        new Intent(this, OAuth2WebAuthActivity.class)
+                        .setData(oauth2Client.requestUrl()));
+                break;
+        }
+        showDialog(dialog, arguments);
     }
 
     private void showDialog(@NonNull Dialogs.Type dialog, @Nullable Bundle args) {
         dialog.instantiate(this, args).show(getSupportFragmentManager(), dialog.name());
     }
 
-    @Subscribe public void onConnect(AccountConnectionChangedEvent event) {
-        if (event.connected) {
-            startActivityForResult(new Intent(MainActivity.this,
-                    AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
-        } else {
-            showDialog(DISCONNECT);
-        }
-    }
-
-    @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
-        final Intent intent = new Intent(this, OAuth2WebAuthActivity.class)
-                .setData(oauth2Client.requestUrl());
-        showDialog(CONNECT, new BundleBuilder().putParcelable(INTENT, intent).build());
-    }
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void requestDefaultSmsPackageChange() {
-        final Intent changeIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+        final Intent changeIntent = new Intent(ACTION_CHANGE_DEFAULT)
                 .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
 
         startActivityForResult(changeIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
@@ -416,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements
     private void restoreDefaultSmsProvider(String smsPackage) {
         Log.d(TAG, "restoring SMS provider "+smsPackage);
         if (!TextUtils.isEmpty(smsPackage)) {
-            final Intent changeDefaultIntent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+            final Intent changeDefaultIntent = new Intent(ACTION_CHANGE_DEFAULT)
                     .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, smsPackage);
 
             startActivity(changeDefaultIntent);
