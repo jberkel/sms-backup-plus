@@ -82,7 +82,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     }
 
     @Subscribe public void onDisconnectAccount(DisconnectAccountEvent event) {
-        authPreferences.clearOAuth1Data();
         authPreferences.clearOauth2Data();
         preferences.getDataTypePreferences().clearLastSyncData();
         updateConnected();
@@ -96,7 +95,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         CheckBoxPreference connected = (CheckBoxPreference) findPreference(CONNECTED.key);
 
         connected.setEnabled(authPreferences.useXOAuth());
-        connected.setChecked(authPreferences.hasOauthTokens() || authPreferences.hasOAuth2Tokens());
+        connected.setChecked(authPreferences.hasOAuth2Tokens());
 
         String summary = getConnectedSummary(connected);
         connected.setSummary(summary);
@@ -105,7 +104,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     }
 
     private String getConnectedSummary(CheckBoxPreference connected) {
-        final String username = authPreferences.getUsername();
+        final String username = authPreferences.getOauth2Username();
         return connected.isChecked() && !TextUtils.isEmpty(username) ?
                 getString(R.string.gmail_already_connected, username) :
                 getString(R.string.gmail_needs_connecting);

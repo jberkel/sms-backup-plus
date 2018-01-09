@@ -11,7 +11,6 @@ import com.fsck.k9.mail.AuthType;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefresher;
-import com.zegoggles.smssync.auth.XOAuthConsumer;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -37,9 +36,7 @@ public class AuthPreferences {
      */
     public static final String LOGIN_PASSWORD = "login_password";
     public static final String SERVER_AUTHENTICATION = "server_authentication";
-    @Deprecated private static final String OAUTH_TOKEN = "oauth_token";
-    @Deprecated private static final String OAUTH_TOKEN_SECRET = "oauth_token_secret";
-    @Deprecated private static final String OAUTH_USER = "oauth_user";
+
     private static final String OAUTH2_USER = "oauth2_user";
     private static final String OAUTH2_TOKEN = "oauth2_token";
     private static final String OAUTH2_REFRESH_TOKEN = "oauth2_refresh_token";
@@ -68,14 +65,6 @@ public class AuthPreferences {
         this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
     }
 
-    @Deprecated
-    public XOAuthConsumer getOAuthConsumer() {
-        return new XOAuthConsumer(
-                getOauthUsername(),
-                getOauthToken(),
-                getOauthTokenSecret());
-    }
-
     public String getOauth2Token() {
         return getCredentials().getString(OAUTH2_TOKEN, null);
     }
@@ -84,24 +73,9 @@ public class AuthPreferences {
         return getCredentials().getString(OAUTH2_REFRESH_TOKEN, null);
     }
 
-    @Deprecated
-    public boolean hasOauthTokens() {
-        return getOauthUsername() != null &&
-                getOauthToken() != null &&
-                getOauthTokenSecret() != null;
-    }
-
     public boolean hasOAuth2Tokens() {
         return getOauth2Username() != null &&
                 getOauth2Token() != null;
-    }
-
-    public String getUsername() {
-        return preferences.getString(OAUTH_USER, getOauth2Username());
-    }
-
-    public boolean needsMigration() {
-        return hasOauthTokens() && !hasOAuth2Tokens();
     }
 
     public void setOauth2Token(String username, String accessToken, String refreshToken) {
@@ -114,15 +88,6 @@ public class AuthPreferences {
                 .commit();
         getCredentials().edit()
                 .putString(OAUTH2_REFRESH_TOKEN, refreshToken)
-                .commit();
-    }
-
-    @Deprecated
-    public void clearOAuth1Data() {
-        preferences.edit().remove(OAUTH_USER).commit();
-        getCredentials().edit()
-                .remove(OAUTH_TOKEN)
-                .remove(OAUTH_TOKEN_SECRET)
                 .commit();
     }
 
@@ -162,7 +127,7 @@ public class AuthPreferences {
     public String getUserEmail() {
         switch (getAuthMode()) {
             case XOAUTH:
-                return getUsername();
+                return getOauth2Username();
             default:
                 return getImapUsername();
         }
@@ -174,7 +139,7 @@ public class AuthPreferences {
                 return !TextUtils.isEmpty(getImapPassword()) &&
                         !TextUtils.isEmpty(getImapUsername());
             case XOAUTH:
-                return hasOauthTokens() || hasOAuth2Tokens();
+                return hasOAuth2Tokens();
             default:
                 return false;
         }
@@ -207,22 +172,7 @@ public class AuthPreferences {
                 serverPreferences.getServerAddress());
     }
 
-    @Deprecated
-    private String getOauthTokenSecret() {
-        return getCredentials().getString(OAUTH_TOKEN_SECRET, null);
-    }
-
-    @Deprecated
-    private String getOauthToken() {
-        return getCredentials().getString(OAUTH_TOKEN, null);
-    }
-
-    @Deprecated
-    private String getOauthUsername() {
-        return preferences.getString(OAUTH_USER, null);
-    }
-
-    private String getOauth2Username() {
+    public String getOauth2Username() {
         return preferences.getString(OAUTH2_USER, null);
     }
 

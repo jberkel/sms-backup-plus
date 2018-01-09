@@ -32,7 +32,6 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.service.exception.BackupDisabledException;
@@ -43,7 +42,6 @@ import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
-import com.zegoggles.smssync.tasks.MigrateOAuth1TokenTask;
 
 import java.util.Date;
 import java.util.EnumSet;
@@ -93,11 +91,7 @@ public class SmsBackupService extends ServiceBase {
         appLog(R.string.app_log_backup_requested, getString(backupType.resId));
         // Only start a backup if there's no other operation going on at this time.
         if (!isWorking() && !SmsRestoreService.isServiceWorking()) {
-            if (getAuthPreferences().needsMigration()) {
-                runMigration();
-            } else {
-                backup(backupType, intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false));
-            }
+            backup(backupType, intent.getBooleanExtra(Consts.KEY_SKIP_MESSAGES, false));
         } else {
             appLog(R.string.app_log_skip_backup_already_running);
         }
@@ -301,16 +295,5 @@ public class SmsBackupService extends ServiceBase {
 
     public BackupState transition(SmsSyncState newState, Exception e) {
         return mState.transition(newState, e);
-    }
-
-    @Deprecated
-    private void runMigration() {
-        appLogDebug("running OAuth1 migration");
-        final MigrateOAuth1TokenTask migrationTask = new MigrateOAuth1TokenTask(
-                getAuthPreferences().getOAuthConsumer(),
-                new OAuth2Client(getAuthPreferences().getOAuth2ClientId()),
-                getAuthPreferences());
-
-        migrationTask.execute();
     }
 }

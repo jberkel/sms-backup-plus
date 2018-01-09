@@ -29,7 +29,7 @@ import static com.zegoggles.smssync.App.TAG;
  */
 public class OAuth2Client {
     private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
-    public static final String TOKEN_URL = "https://www.googleapis.com/oauth2/v3/token";
+    private static final String TOKEN_URL = "https://www.googleapis.com/oauth2/v3/token";
 
     /**
      * When choosing a URI scheme to associate with the app, apps MUST use a

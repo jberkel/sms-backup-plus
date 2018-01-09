@@ -6,7 +6,6 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -39,7 +38,7 @@ public class TokenRefresher {
     public void refreshOAuth2Token() throws TokenRefreshException{
         final String token = authPreferences.getOauth2Token();
         final String refreshToken = authPreferences.getOauth2RefreshToken();
-        final String name = authPreferences.getUsername();
+        final String name = authPreferences.getOauth2Username();
 
         if (isEmpty(token)) {
             throw new TokenRefreshException("no current token set");

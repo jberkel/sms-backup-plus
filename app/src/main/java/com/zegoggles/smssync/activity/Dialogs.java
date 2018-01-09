@@ -126,11 +126,11 @@ public class Dialogs {
                     getString(R.string.ui_dialog_first_sync_msg_batched, maxItems);
 
             return new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.ui_dialog_first_sync_title)
-                    .setMessage(syncMsg)
-                    .setPositiveButton(R.string.ui_sync, firstSyncListener)
-                    .setNegativeButton(R.string.ui_skip, firstSyncListener)
-                    .create();
+                .setTitle(R.string.ui_dialog_first_sync_title)
+                .setMessage(syncMsg)
+                .setPositiveButton(R.string.ui_sync, firstSyncListener)
+                .setNegativeButton(R.string.ui_skip, firstSyncListener)
+                .create();
         }
     }
 
@@ -157,11 +157,11 @@ public class Dialogs {
             });
             webView.loadUrl("file:///android_asset/about.html");
             return new AlertDialog.Builder(getContext())
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setIcon(R.drawable.ic_launcher)
-                    .setTitle(R.string.menu_info)
-                    .setView(contentView)
-                    .create();
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(R.drawable.ic_launcher)
+                .setTitle(R.string.menu_info)
+                .setView(contentView)
+                .create();
         }
     }
 
@@ -169,15 +169,15 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.ui_dialog_reset_title)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            App.post(new SettingsResetEvent());
-                        }
-                    })
-                    .setMessage(R.string.ui_dialog_reset_message)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
+                .setTitle(R.string.ui_dialog_reset_title)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        App.post(new SettingsResetEvent());
+                    }
+                })
+                .setMessage(R.string.ui_dialog_reset_message)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
         }
     }
 
@@ -185,15 +185,15 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setIcon(ic_dialog_alert)
-                    .setTitle(R.string.ui_dialog_confirm_action_title)
-                    .setMessage(R.string.ui_dialog_disconnect_msg)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            App.post(new DisconnectAccountEvent());
-                        }
-                    }).create();
+                .setIcon(ic_dialog_alert)
+                .setTitle(R.string.ui_dialog_confirm_action_title)
+                .setMessage(R.string.ui_dialog_disconnect_msg)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        App.post(new DisconnectAccountEvent());
+                    }
+                }).create();
         }
     }
 
@@ -243,14 +243,14 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setMessage(getString(R.string.ui_dialog_connect_msg, getString(R.string.app_name)))
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            final Intent intent = getArguments().getParcelable(INTENT);
-                            getActivity().startActivityForResult(intent, REQUEST_WEB_AUTH);
-                        }
-                    }).create();
+                .setMessage(getString(R.string.ui_dialog_connect_msg, getString(R.string.app_name)))
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Intent intent = getArguments().getParcelable(INTENT);
+                        getActivity().startActivityForResult(intent, REQUEST_WEB_AUTH);
+                    }
+                }).create();
         }
     }
 
@@ -305,16 +305,16 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.ui_dialog_confirm_action_title)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            App.post(Actions.valueOf(getArguments().getString(ACTION)));
-                        }
-                    })
-                    .setMessage(R.string.ui_dialog_confirm_action_msg)
-                    .setIcon(ic_dialog_alert)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .create();
+                .setTitle(R.string.ui_dialog_confirm_action_title)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        App.post(Actions.valueOf(getArguments().getString(ACTION)));
+                    }
+                })
+                .setMessage(R.string.ui_dialog_confirm_action_msg)
+                .setIcon(ic_dialog_alert)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
         }
     }
 
@@ -324,15 +324,15 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.ui_dialog_sms_default_package_change_title)
-                    .setIcon(ic_dialog_info)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            requestDefaultSmsPackageChange();
-                        }
-                    })
-                    .setMessage(R.string.ui_dialog_sms_default_package_change_msg)
-                    .create();
+                .setTitle(R.string.ui_dialog_sms_default_package_change_title)
+                .setIcon(ic_dialog_info)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        requestDefaultSmsPackageChange();
+                    }
+                })
+                .setMessage(R.string.ui_dialog_sms_default_package_change_msg)
+                .create();
         }
 
         @TargetApi(Build.VERSION_CODES.KITKAT)
