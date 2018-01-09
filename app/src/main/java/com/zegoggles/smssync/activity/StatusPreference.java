@@ -1,11 +1,8 @@
 package com.zegoggles.smssync.activity;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
@@ -27,6 +24,7 @@ import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import com.zegoggles.smssync.service.state.State;
+import com.zegoggles.smssync.utils.Drawables;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -79,10 +77,10 @@ public class StatusPreference extends Preference implements View.OnClickListener
         syncingColor = a.getColor(R.styleable.StatusPreference_statusSyncing, 0);
         a.recycle();
 
-        idle = getTintedDrawable(context.getResources(), idleDrawable, idleColor);
-        done = getTintedDrawable(context.getResources(), doneDrawable, doneColor);
-        error = getTintedDrawable(context.getResources(), errorDrawable, errorColor);
-        syncing = getTintedDrawable(context.getResources(),syncingDrawable, syncingColor);
+        idle = Drawables.getTinted(context.getResources(), idleDrawable, idleColor);
+        done = Drawables.getTinted(context.getResources(), doneDrawable, doneColor);
+        error = Drawables.getTinted(context.getResources(), errorDrawable, errorColor);
+        syncing = Drawables.getTinted(context.getResources(),syncingDrawable, syncingColor);
     }
 
     @Override
@@ -318,13 +316,5 @@ public class StatusPreference extends Preference implements View.OnClickListener
         restoreButton.setText(R.string.ui_restore_button_label_idle);
         backupButton.setEnabled(true);
         backupButton.setText(R.string.ui_sync_button_label_idle);
-    }
-
-    @SuppressWarnings("deprecation")
-    private static @NonNull Drawable getTintedDrawable(Resources resources, int resource, int color) {
-        Drawable drawable = resources.getDrawable(resource);
-        drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable.mutate(), color);
-        return drawable;
     }
 }

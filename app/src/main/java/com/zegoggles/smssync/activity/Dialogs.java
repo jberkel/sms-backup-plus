@@ -253,7 +253,6 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                    .setCustomTitle(null)
                     .setMessage(getString(R.string.ui_dialog_connect_msg, getString(R.string.app_name)))
                     .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -269,7 +268,8 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                .setCustomTitle(null)
+                .setTitle(R.string.status_unknown_error)
+                .setIcon(ic_dialog_alert)
                 .setMessage(R.string.ui_dialog_connect_token_error)
                 .setPositiveButton(android.R.string.ok, null)
                 .create();
@@ -280,9 +280,10 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
-                .setCustomTitle(null)
+                .setTitle(R.string.status_unknown_error)
+                .setIcon(ic_dialog_alert)
                 .setMessage(R.string.ui_dialog_account_manager_token_error)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         App.post(new FallbackAuthEvent());
                     }

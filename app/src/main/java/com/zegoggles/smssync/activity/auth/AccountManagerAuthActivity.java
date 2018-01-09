@@ -8,6 +8,7 @@ import android.accounts.OperationCanceledException;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -15,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
 import com.zegoggles.smssync.activity.MainActivity;
@@ -23,6 +25,7 @@ import com.zegoggles.smssync.utils.BundleBuilder;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.AccountDialogs.ACCOUNTS;
+import static com.zegoggles.smssync.utils.Drawables.getTinted;
 
 public class AccountManagerAuthActivity extends AppCompatActivity {
     public static final String EXTRA_TOKEN = "token";
@@ -41,24 +44,15 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accountManager = AccountManager.get(this);
-
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
         if (accounts == null || accounts.length == 0) {
             Log.d(TAG, "no google accounts found on this device, using standard auth");
             setResult(RESULT_OK, new Intent(ACTION_FALLBACK_AUTH));
             finish();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (!isFinishing()) {
-            final Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
+        } else {
             Bundle args = new BundleBuilder().putParcelableArray(ACCOUNTS, accounts).build();
             ((DialogFragment)Fragment.instantiate(this, AccountDialogs.class.getName(), args))
-                .show(getSupportFragmentManager(), null);
+                    .show(getSupportFragmentManager(), null);
         }
     }
 
@@ -110,13 +104,17 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
     public static class AccountDialogs extends Dialogs.BaseFragment {
         static final String ACCOUNTS = "accounts";
 
-        @Override
-        @NonNull
+        @Override @NonNull @SuppressWarnings("deprecation")
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Account[] accounts = (Account[]) getArguments().getParcelableArray(ACCOUNTS);
             final int[] checkedItem = {0};
+
+            final TypedValue secondaryColor = new TypedValue();
+            getContext().getTheme().resolveAttribute(android.R.attr.textColorSecondary, secondaryColor, true);
+
             return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.select_google_account)
+                .setIcon(getTinted(getResources(), R.drawable.ic_account_circle, secondaryColor.data))
                 .setSingleChoiceItems(getNames(accounts), checkedItem[0], new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         checkedItem[0] = which;
@@ -134,8 +132,13 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
                         ((AccountManagerAuthActivity)getActivity()).onCanceled();
                     }
                 })
-                .setCancelable(false)
                 .create();
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
+            ((AccountManagerAuthActivity)getActivity()).onCanceled();
         }
 
         private String[] getNames(Account[] accounts) {

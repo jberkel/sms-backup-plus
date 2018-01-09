@@ -141,10 +141,9 @@ public class AppLog {
             }
         };
         return new AlertDialog.Builder(context)
-                .setCustomTitle(null)
-                .setPositiveButton(android.R.string.ok, null)
-                .setView(sView)
-                .create();
+            .setPositiveButton(android.R.string.ok, null)
+            .setView(sView)
+            .create();
     }
 
     private static boolean readLog(String name, TextView view) {
