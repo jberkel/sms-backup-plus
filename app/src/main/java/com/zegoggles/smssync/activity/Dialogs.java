@@ -45,6 +45,7 @@ import com.zegoggles.smssync.utils.AppLog;
 
 import static android.R.drawable.ic_dialog_alert;
 import static android.R.drawable.ic_dialog_info;
+import static android.app.ProgressDialog.STYLE_SPINNER;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
 import static android.provider.Telephony.Sms.Intents.EXTRA_PACKAGE_NAME;
@@ -59,7 +60,7 @@ public class Dialogs {
         ABOUT(About.class),
         RESET(Reset.class),
         DISCONNECT(Disconnect.class),
-        ACCESS_TOKEN(AccessToken.class),
+        ACCESS_TOKEN(OAuth2AccessTokenProgress.class),
         ACCESS_TOKEN_ERROR(AccessTokenError.class),
         CONNECT(Connect.class),
         CONNECT_TOKEN_ERROR(ConnectTokenError.class),
@@ -196,7 +197,20 @@ public class Dialogs {
         }
     }
 
-    public static class AccessToken extends BaseFragment {
+    public static class AccessTokenProgress extends BaseFragment {
+        @Override @NonNull
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            ProgressDialog progress = new ProgressDialog(getContext());
+            progress.setTitle(null);
+            progress.setProgressStyle(STYLE_SPINNER);
+            progress.setMessage(getString(R.string.ui_dialog_access_token_msg));
+            progress.setIndeterminate(true);
+            progress.setCancelable(false);
+            return progress;
+        }
+    }
+
+    public static class OAuth2AccessTokenProgress extends AccessTokenProgress {
         @Override
         public void onAttach(Context context) {
             super.onAttach(context);
@@ -208,17 +222,6 @@ public class Dialogs {
             super.onDetach();
             App.unregister(this);
         }
-
-        @Override @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            ProgressDialog progress = new ProgressDialog(getContext());
-            progress.setTitle(null);
-            progress.setMessage(getString(R.string.ui_dialog_access_token_msg));
-            progress.setIndeterminate(true);
-            progress.setCancelable(false);
-            return progress;
-        }
-
         @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
             dismiss();
         }

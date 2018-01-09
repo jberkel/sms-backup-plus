@@ -8,7 +8,6 @@ import android.accounts.OperationCanceledException;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -19,6 +18,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
+import com.zegoggles.smssync.activity.Dialogs.AccessTokenProgress;
 import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
@@ -38,6 +38,7 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
 
     public static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
     public static final String GOOGLE_TYPE = "com.google";
+    private static final String PROGRESS_TAG = "progress";
 
     private AccountManager accountManager;
 
@@ -57,7 +58,9 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
     }
 
     private void onAccountSelected(final Account account) {
-        accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, null, this, new AccountManagerCallback<Bundle>() {
+        new AccessTokenProgress().show(getSupportFragmentManager(), PROGRESS_TAG);
+        accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, null, this,
+                new AccountManagerCallback<Bundle>() {
             public void run(AccountManagerFuture<Bundle> future) {
                 try {
                     useToken(account, future.getResult().getString(KEY_AUTHTOKEN));
@@ -65,6 +68,11 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
                     onAccessDenied();
                 } catch (Exception e) {
                     handleException(e);
+                } finally {
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(PROGRESS_TAG);
+                    if (fragment instanceof DialogFragment) {
+                        ((DialogFragment)fragment).dismiss();
+                    }
                 }
             }
         }, null);
