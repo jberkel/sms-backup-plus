@@ -59,7 +59,6 @@ public class Dialogs {
         ABOUT(About.class),
         RESET(Reset.class),
         DISCONNECT(Disconnect.class),
-        REQUEST_TOKEN(RequestToken.class),
         ACCESS_TOKEN(AccessToken.class),
         ACCESS_TOKEN_ERROR(AccessTokenError.class),
         CONNECT(Connect.class),
@@ -197,18 +196,6 @@ public class Dialogs {
         }
     }
 
-    public static class RequestToken extends BaseFragment {
-        @Override @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            ProgressDialog req = new ProgressDialog(getContext());
-            req.setTitle(null);
-            req.setMessage(getString(R.string.ui_dialog_request_token_msg));
-            req.setIndeterminate(true);
-            req.setCancelable(false);
-            return req;
-        }
-    }
-
     public static class AccessToken extends BaseFragment {
         @Override
         public void onAttach(Context context) {
@@ -285,7 +272,7 @@ public class Dialogs {
                 .setMessage(R.string.ui_dialog_account_manager_token_error)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        App.post(new FallbackAuthEvent());
+                        App.post(new FallbackAuthEvent(false));
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)

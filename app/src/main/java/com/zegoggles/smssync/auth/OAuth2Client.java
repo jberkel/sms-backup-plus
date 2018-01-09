@@ -129,11 +129,11 @@ public class OAuth2Client {
 
     public Uri requestUrl() {
         return Uri.parse(AUTH_URL)
-                .buildUpon()
-                .appendQueryParameter(SCOPE, DEFAULT_SCOPE)
-                .appendQueryParameter(CLIENT_ID, clientId)
-                .appendQueryParameter(RESPONSE_TYPE, "code")
-                .appendQueryParameter(REDIRECT_URI, REDIRECT_URL.toString()).build();
+            .buildUpon()
+            .appendQueryParameter(SCOPE, DEFAULT_SCOPE)
+            .appendQueryParameter(CLIENT_ID, clientId)
+            .appendQueryParameter(RESPONSE_TYPE, "code")
+            .appendQueryParameter(REDIRECT_URI, REDIRECT_URL.toString()).build();
     }
 
     public OAuth2Token getToken(String code) throws IOException {

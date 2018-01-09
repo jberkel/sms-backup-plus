@@ -77,8 +77,8 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
 
     private void onAccessDenied() {
         Intent result = new Intent(this, MainActivity.class)
-                .setAction(ACTION_ADD_ACCOUNT)
-                .putExtra(EXTRA_DENIED, true);
+            .setAction(ACTION_ADD_ACCOUNT)
+            .putExtra(EXTRA_DENIED, true);
         setResult(RESULT_OK, result);
         finish();
     }

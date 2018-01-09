@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
     private Preferences preferences;
     private AuthPreferences authPreferences;
     private OAuth2Client oauth2Client;
+    private Intent fallbackAuthIntent;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -119,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements
 
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
+        fallbackAuthIntent = new Intent(this, OAuth2WebAuthActivity.class).setData(oauth2Client.requestUrl());
+
         preferences = new Preferences(this);
         preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(
             new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -210,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements
                     if (ACTION_ADD_ACCOUNT.equals(data.getAction())) {
                         handleAccountManagerAuth(data);
                     } else if (ACTION_FALLBACK_AUTH.equals(data.getAction())) {
-                        handleFallbackAuth(new FallbackAuthEvent());
+                        handleFallbackAuth(new FallbackAuthEvent(true));
                     }
                 } else if (LOCAL_LOGV) {
                     Log.v(TAG, "request canceled, result="+resultCode);
@@ -273,7 +276,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
-        showDialog(CONNECT);
+        if (event.showDialog) {
+            showDialog(CONNECT);
+        } else {
+            startActivityForResult(fallbackAuthIntent, REQUEST_WEB_AUTH);
+        }
     }
 
     @Override public void onBackStackChanged() {
@@ -395,9 +402,7 @@ public class MainActivity extends AppCompatActivity implements
             case MISSING_CREDENTIALS:
                 arguments.putBoolean(USE_XOAUTH, authPreferences.useXOAuth()); break;
             case CONNECT:
-                arguments.putParcelable(INTENT,
-                        new Intent(this, OAuth2WebAuthActivity.class)
-                        .setData(oauth2Client.requestUrl()));
+                arguments.putParcelable(INTENT, fallbackAuthIntent);
                 break;
         }
         showDialog(dialog, arguments);

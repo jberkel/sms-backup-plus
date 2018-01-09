@@ -156,7 +156,6 @@
   <string name="ui_dialog_first_sync_title">Eerste back-up</string>
   <string name="ui_dialog_first_sync_msg">Back-uppen of alle berichten opgeslagen op dit apparaat overslaan?</string>
   <string name="ui_dialog_first_sync_msg_batched">Back-uppen of alle berichten opgeslagen op dit apparaat overslaan?\n\nOpmerking: de back-up zal worden opgesplitst in delen van %1$d berichten.</string>
-  <string name="ui_dialog_request_token_msg">Google contacteren…</string>
   <string name="ui_dialog_access_token_msg">Toegang aanvragen…</string>
 
   <string name="ui_dialog_access_token_error_title">Autorisatie mislukt</string>

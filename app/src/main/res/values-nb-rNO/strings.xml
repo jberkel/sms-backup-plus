@@ -157,7 +157,6 @@
   <string name="ui_dialog_first_sync_title">Første sikkerhetskopiering</string>
   <string name="ui_dialog_first_sync_msg">Sikkerhetskopier eller hopp over alle meldinger på denne enheten?</string>
   <string name="ui_dialog_first_sync_msg_batched">Sikkerhetskopier eller hopp over alle meldinger på denne enheten?\n\nVarsel: Sikkerhetskopiering vil deles i samlinger med %1$d meldinger.</string>
-  <string name="ui_dialog_request_token_msg">Kontaker Google...</string>
   <string name="ui_dialog_access_token_msg">Spør om tilgang...</string>
 
   <string name="ui_dialog_access_token_error_title">Autorisasjons feil</string>

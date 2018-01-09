@@ -162,7 +162,6 @@
   <string name="ui_dialog_first_sync_title">최초 백업</string>
   <string name="ui_dialog_first_sync_msg">장치에 저장된 모든 메시지를 백업할까요, 건너뛸까요?</string>
   <string name="ui_dialog_first_sync_msg_batched">장치에 저장된 모든 메시지를 백업할까요, 건너뛸까요?\n\n주의: 백업은 %1$d 개씩의 메시지로 분할되어 일괄처리됩니다.</string>
-  <string name="ui_dialog_request_token_msg">Google에 연결 중...</string>
   <string name="ui_dialog_access_token_msg">액세스 요청 중...</string>
 
   <string name="ui_dialog_access_token_error_title">인증 실패</string>

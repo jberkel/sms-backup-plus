@@ -155,7 +155,6 @@
       Kopiera eller hoppa över alla meddelanden som finns på den här telefonen?\n\n
       Obs: Säkerhetskopieringen kommer att delas upp i omgångar om %1$d meddelanden.
   </string>
-  <string name="ui_dialog_request_token_msg">Kontaktar Google...</string>
   <string name="ui_dialog_access_token_msg">Begär åtkomst...</string>
 
   <string name="ui_dialog_access_token_error_title">Autentiseringen misslyckads</string>

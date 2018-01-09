@@ -156,7 +156,6 @@
   <string name="ui_dialog_first_sync_title">Første backup</string>
   <string name="ui_dialog_first_sync_msg">Foretag backup af de SMS\'er der er på telefonen nu, eller spring over?</string>
   <string name="ui_dialog_first_sync_msg_batched">Foretag backup af de SMS\'er der er på telefonen nu, eller spring over?\n\nBemærk: Backuppen vil blive splittet op i bunker af %1$d beskeder.</string>
-  <string name="ui_dialog_request_token_msg">Kontakter Google…</string>
   <string name="ui_dialog_access_token_msg">Forespørger om adgang…</string>
 
   <string name="ui_dialog_access_token_error_title">Kunne ikke få adgang</string>

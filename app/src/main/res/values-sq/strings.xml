@@ -117,7 +117,6 @@
   <string name="ui_dialog_first_sync_title">Kopja rezervë e parë</string>
   <string name="ui_dialog_first_sync_msg">Krijoni kopje rezervë ose anashkaloni gjithë mesazhet e ruajtura në këtë pajisje?</string>
   <string name="ui_dialog_first_sync_msg_batched">Krijoni kopje rezervë ose i anashkaloni të gjitha mesazhet të ruajtura aktualisht në pajisje?\n\nVini re: Kopja rezervë do të ndahet në grumbuj %1$d mesazhesh.</string>
-  <string name="ui_dialog_request_token_msg">Duke kontaktuar Google…</string>
   <string name="ui_dialog_access_token_msg">Duke kërkuar akses…</string>
   <string name="ui_dialog_access_token_error_title">Gabim verifikimi</string>
   <string name="ui_dialog_access_token_error_msg">Nuk mund të marri shenjën e aksesit. Sigurohuni të zgjidhni

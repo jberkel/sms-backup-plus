@@ -152,7 +152,6 @@
   <string name="ui_dialog_first_sync_title">Первое сохранение</string>
   <string name="ui_dialog_first_sync_msg">Сохранить существующие в телефоне сообщения?</string>
   <string name="ui_dialog_first_sync_msg_batched">Сохранить существующие в телефоне сообщения?\n\nЗамечание: Сообщения будут разбиты на %1$d группы.</string>
-  <string name="ui_dialog_request_token_msg">Соединение с Google...</string>
   <string name="ui_dialog_access_token_msg">Запрашиваю доступ...</string>
 
    <string name="ui_dialog_access_token_error_title">Ошибка авторизации</string>

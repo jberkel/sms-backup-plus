@@ -160,7 +160,6 @@
   <string name="ui_dialog_first_sync_title">Erste Sicherung</string>
   <string name="ui_dialog_first_sync_msg">Sollen alle Nachrichten auf diesem Gerät gesichert oder übersprungen werden?</string>
   <string name="ui_dialog_first_sync_msg_batched">Sollen alle Nachrichten auf diesem Gerät gesichert oder übersprungen werden?\n\nHinweis: Die Sicherung wird in Stapel zu je %1$d Nachrichten aufgesplittet.</string>
-  <string name="ui_dialog_request_token_msg">Verbinde mit Google...</string>
   <string name="ui_dialog_access_token_msg">Zugangsanforderung...</string>
 
   <string name="ui_dialog_access_token_error_title">Authorisierungsfehler</string>

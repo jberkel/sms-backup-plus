@@ -157,7 +157,6 @@
   <string name="ui_dialog_first_sync_title">Primeiro gardado</string>
   <string name="ui_dialog_first_sync_msg">Gardar ou omitir todas as mensaxes almacenadas actualmente no dispositivo?</string>
   <string name="ui_dialog_first_sync_msg_batched">Gardar ou omitir todas as mensaxes almacenadas actualmente no dispositivo?\n\nNota: O gardado será dividido en lotes de %1$d mensaxes.</string>
-  <string name="ui_dialog_request_token_msg">Contactando con Google…</string>
   <string name="ui_dialog_access_token_msg">Solicitando acceso…</string>
 
   <string name="ui_dialog_access_token_error_title">Fallo de utorización</string>

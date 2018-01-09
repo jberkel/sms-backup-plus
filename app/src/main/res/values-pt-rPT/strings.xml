@@ -111,7 +111,6 @@
   <string name="ui_dialog_first_sync_title">Cópia inicial</string>
   <string name="ui_dialog_first_sync_msg">Cópiar ou ignorar todas as mensagens guardadas neste aparelho?</string>
   <string name="ui_dialog_first_sync_msg_batched">Cópiar ou ignorar todas as mensagens guardadas neste aparelho?\n\nNota: A cópia será dividida em blocos de %1$d mensagens.</string>
-  <string name="ui_dialog_request_token_msg">A ligar ao Google...</string>
   <string name="ui_dialog_access_token_msg">A solicitar acesso...</string>
   <string name="ui_dialog_access_token_error_title">Erro na autenticação</string>
   <string name="ui_dialog_access_token_error_msg">Não foi possível obter autorização de acesso(token error). Confirme que definiu \"Autorizar acesso\".

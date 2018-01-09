@@ -163,7 +163,6 @@
   <string name="ui_dialog_first_sync_title">首次备份</string>
   <string name="ui_dialog_first_sync_msg">备份或跳过当前存储在设备上的所有信息？</string>
   <string name="ui_dialog_first_sync_msg_batched">备份或跳过当前存储在设备上的信息？\n\提示：这次备份将会以每次 %1$d 个项目的状态进行。</string>
-  <string name="ui_dialog_request_token_msg">联络 Google 中...</string>
   <string name="ui_dialog_access_token_msg">请求访问中...</string>
 
   <string name="ui_dialog_access_token_error_title">认证失败</string>

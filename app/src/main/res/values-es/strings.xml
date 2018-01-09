@@ -144,7 +144,6 @@
   <string name="ui_dialog_first_sync_title">Primera copia de seguridad</string>
   <string name="ui_dialog_first_sync_msg">Copia de seguridad o saltarse todos los mensajes almacenados actualmente en este dispositivo?</string>
   <string name="ui_dialog_first_sync_msg_batched">¿Copia de seguridad o saltarse todos los mensajes almacenados actualmente en este dispositivo?\n\nNota: La copia de seguridad se dividirá en lotes de %1$d mensajes.</string>
-  <string name="ui_dialog_request_token_msg">Obteniendo token de solicitud...</string>
   <string name="ui_dialog_access_token_msg">Solicitando acceso...</string>
 
   <string name="ui_dialog_access_token_error_title">Fallo de autorización</string>

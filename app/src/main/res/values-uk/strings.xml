@@ -120,7 +120,6 @@
 <string name="ui_dialog_first_sync_msg_batched">Збереження або пропуск всіх попередніх повідомлень, які зберігаються на цьому пристрої?
 
 Примітка: резервні копії буде розподілено на частина по %1$d повідомлень.</string>
-<string name="ui_dialog_request_token_msg">З’єднання з Google\u2026</string>
 <string name="ui_dialog_access_token_msg">Запит доступу\u2026</string>
 <string name="ui_dialog_access_token_error_title">Помилка авторизації</string>
 <string name="ui_dialog_access_token_error_msg">Не можливо отримати доступ. Переконайтеся, що ви надали доступ застосунку.</string>

@@ -155,7 +155,6 @@
   <string name="ui_dialog_first_sync_title">Πρώτη αποθήκευση</string>
   <string name="ui_dialog_first_sync_msg">Αποθήκευση ή παράληψη όλων των πρόσφατων μηνυμάτων της συσκεύης;</string>
   <string name="ui_dialog_first_sync_msg_batched"> Αποθήκευση ή παράληψη όλων των πρόσφατων μηνυμάτων της συσκεύης;\n\nNote: Η αποθήκευση θα χωριστεί σε πακέτα των %1$d μηνυμάτων.</string>
-  <string name="ui_dialog_request_token_msg">Συνδέεται με Google…</string>
   <string name="ui_dialog_access_token_msg">Αίτηση πρόσβασης…</string>
 
   <string name="ui_dialog_access_token_error_title">Σφάλμα πιστοποίησης </string>
