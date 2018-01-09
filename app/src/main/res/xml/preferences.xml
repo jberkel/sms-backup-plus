@@ -330,7 +330,6 @@
                         android:title="@string/ui_login_label"
                         android:summary="@string/ui_login_desc"
                         android:singleLine="true"
-                        android:dialogMessage="@string/ui_login_dialog_msg"
                         android:persistent="true"/>
 
                 <EditTextPreference

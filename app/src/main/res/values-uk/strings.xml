@@ -50,7 +50,6 @@
 <string name="imap_settings">Налаштування IMAP</string>
 <string name="ui_login_label">Ім’я користувача</string>
 <string name="ui_login_desc">IMAP логін або адреса електронної пошти.</string>
-<string name="ui_login_dialog_msg">УВАГА: Зміна зміна логіну викликати проблеми при використанні XOAuth.</string>
 <string name="ui_password_label">Пароль</string>
 <string name="ui_password_desc">Пароль до вашого облікового запису IMAP. Використовується лише якщо XOAuth відключено.</string>
 <string name="ui_password_dialog_msg">Пароль зберігається на цьому пристрої і використовується лише для входу.</string>

@@ -67,7 +67,6 @@
   <string name="imap_settings">IMAP innstillinger</string>
   <string name="ui_login_label">Brukernavn</string>
   <string name="ui_login_desc">Din IMAP konto/epost adresse.</string>
-  <string name="ui_login_dialog_msg">Advarsel: Forandring av brukernavn ved bruk av XOAuth, kann føre til feil.</string>
   <string name="ui_password_label">Passord</string>
   <string name="ui_password_desc">Ditt IMAP passord. Brukes kun om XOAuth er avslått.</string>
   <string name="ui_password_dialog_msg">Passordet er lagret på denne enheten og brukes kun for å logge inn.</string>

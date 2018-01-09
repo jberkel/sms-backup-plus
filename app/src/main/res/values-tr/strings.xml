@@ -66,7 +66,6 @@
   <string name="imap_settings">IMAP ayarları</string>
   <string name="ui_login_label">Kullanıcı adı</string>
   <string name="ui_login_desc">IMAP hesabınız/e-posta adresiniz.</string>
-  <string name="ui_login_dialog_msg">UYARI: Kullanıcı adını değiştirmek XOAuth kullanımında bazı sıkıntılara sebep olabilir.</string>
   <string name="ui_password_label">Şifre</string>
   <string name="ui_password_desc">IMAP hesap şifreniz. Sadece XOAuth devre dışı bırakıldığında kullanılır.</string>
   <string name="ui_password_dialog_msg">Bu şifre telefonunuzda saklanır ve sadece giriş yapılacağı zaman kullanılır.</string>

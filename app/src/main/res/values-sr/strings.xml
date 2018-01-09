@@ -67,7 +67,6 @@
   <string name="imap_settings">Поставке ИМАП-а</string>
   <string name="ui_login_label">Корисничко име</string>
   <string name="ui_login_desc">Ваш ИМАП налог/е-адреса.</string>
-  <string name="ui_login_dialog_msg">УПОЗОРЕЊЕ: Промена корисничког имена може да поквари неке ствари када користите XOAuth.</string>
   <string name="ui_password_label">Лозинка</string>
   <string name="ui_password_desc">Лозинка вашег ИМАП налога. Користи се само када је XOAuth онемогућен.</string>
   <string name="ui_password_dialog_msg">Лозинка је сачувана на овом уређају и користи се само за пријаву.</string>

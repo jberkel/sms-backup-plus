@@ -66,7 +66,6 @@
   <string name="imap_settings">Configuración IMAP</string>
   <string name="ui_login_label">Nombre de usuario</string>
   <string name="ui_login_desc">Su cuenta de Google/dirección de e-mail.</string>
-  <string name="ui_login_dialog_msg">ADVERTENCIA: Cambiar el nombre de usuario restablecerá toda la información de copia de seguridad y su contraseña.</string>
   <string name="ui_password_label">Contraseña</string>
   <string name="ui_password_desc">Su contraseña de cuenta IMAP. Sólo se usa cuando XOAuth está deshabilitado.</string>
   <string name="ui_password_dialog_msg">La contraseña es almacenada en este dispositivo y sólo se utiliza para iniciar sesión en Gmail.</string>

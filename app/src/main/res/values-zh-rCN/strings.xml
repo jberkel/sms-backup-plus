@@ -67,7 +67,6 @@
   <string name="imap_settings">IMAP 设置</string>
   <string name="ui_login_label">用户名</string>
   <string name="ui_login_desc">您的 IMAP 账户名/邮箱地址。</string>
-  <string name="ui_login_dialog_msg">警告：使用 XOAuth 时更改用户名可能会造成错误。</string>
   <string name="ui_password_label">密码</string>
   <string name="ui_password_desc">你的 IMAP 账号的密码。仅在 XOAuth 禁用时有效。</string>
   <string name="ui_password_dialog_msg">密码只会储存在这台设备上，并且仅供登录使用。</string>

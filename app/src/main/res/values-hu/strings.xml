@@ -68,7 +68,6 @@
   <string name="imap_settings">IMAP beállítások</string>
   <string name="ui_login_label">Felhasználónév</string>
   <string name="ui_login_desc">Az Ön IMAP-fiókja/e-mail cím.</string>
-  <string name="ui_login_dialog_msg">FIGYELEM: A felhasználónév megváltoztatása problémákat okozhat XOAuth használata esetén.</string>
   <string name="ui_password_label">Jelszó</string>
   <string name="ui_password_desc">Az IMAP-fiókjának jelszava. XOAuth használata esetén hagyja üresen.</string>
   <string name="ui_password_dialog_msg">Az alkalmazás a jelszót a készüléken tárolja és csak a bejelentkezéskor használja azt.</string>

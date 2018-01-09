@@ -96,15 +96,14 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
         connected.setEnabled(authPreferences.useXOAuth());
         connected.setChecked(authPreferences.hasOAuth2Tokens());
-
-        String summary = getConnectedSummary(connected);
-        connected.setSummary(summary);
+        connected.setSummary(getConnectedSummary(connected));
 
         return connected;
     }
 
     private String getConnectedSummary(CheckBoxPreference connected) {
         final String username = authPreferences.getOauth2Username();
+
         return connected.isChecked() && !TextUtils.isEmpty(username) ?
                 getString(R.string.gmail_already_connected, username) :
                 getString(R.string.gmail_needs_connecting);

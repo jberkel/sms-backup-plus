@@ -67,7 +67,6 @@
   <string name="imap_settings">IMAP 설정</string>
   <string name="ui_login_label">사용자 이름</string>
   <string name="ui_login_desc">당신의 IMAP 계정/이메일 주소.</string>
-  <string name="ui_login_dialog_msg">경고: 사용자 이름을 바꾸면 XOAuth가 오작동하게 될 수 있습니다.</string>
   <string name="ui_password_label">비밀번호</string>
   <string name="ui_password_desc">당신의 IMAP 계정 비밀번호. XOAuth가 비활성화되었을 때에만 사용함.</string>
   <string name="ui_password_dialog_msg">비밀번호가 이 장치에 저장되었으며 로그인 시에만 사용됩니다.</string>

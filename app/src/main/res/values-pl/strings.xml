@@ -40,7 +40,6 @@
     <string name="imap_settings">Ustawienia IMAP</string>
     <string name="ui_login_label">Nazwa użytkownika</string>
     <string name="ui_login_desc">Nazwa konta Google/adres e-mail.</string>
-    <string name="ui_login_dialog_msg">UWAGA: Zmiana nazwy użytkownika wyczyści także hasło oraz wszystkie informacje o kopii zapasowej.</string>
     <string name="ui_password_label">Hasło</string>
     <string name="ui_password_desc">Hasło do konta IMAP. Używane tylko gdy XOAuth jest wyłączone.</string>
     <string name="ui_password_dialog_msg">Hasło jest przechowywane na tym urządzeniu i jest używane tylko do logowania w Gmailu.</string>

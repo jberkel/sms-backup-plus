@@ -1,12 +1,10 @@
 package com.zegoggles.smssync.activity.fragments;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.Dialogs;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
@@ -211,7 +209,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                     });
 
 
-            findPreference(AuthPreferences.LOGIN_USER)
+            findPreference(AuthPreferences.IMAP_USER)
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
                             updateUsernameLabel(newValue.toString());
@@ -219,7 +217,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                         }
                     });
 
-            findPreference(AuthPreferences.LOGIN_PASSWORD)
+            findPreference(AuthPreferences.IMAP_PASSWORD)
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
                             authPreferences.setImapPassword(newValue.toString());
@@ -239,7 +237,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                     username = getString(R.string.ui_login_label);
                 }
             }
-            findPreference(AuthPreferences.LOGIN_USER).setTitle(username);
+            findPreference(AuthPreferences.IMAP_USER).setTitle(username);
         }
     }
 }

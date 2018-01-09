@@ -66,7 +66,6 @@
   <string name="imap_settings">Impostazioni IMAP</string>
   <string name="ui_login_label">Username</string>
   <string name="ui_login_desc">Indirizzo email/account IMAP.</string>
-  <string name="ui_login_dialog_msg">ATTENZIONE: Cambiare lo username potrebbe impedire il corretto funzionamento quando si usa XOAuth.</string>
   <string name="ui_password_label">Password</string>
   <string name="ui_password_desc">Password account IMAP. Utilizzata quando XOAuth è disattivato.</string>
   <string name="ui_password_dialog_msg">La password è memorizzata sul dispositivo e verrà usata solo per il login.</string>

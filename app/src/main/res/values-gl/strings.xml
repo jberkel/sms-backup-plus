@@ -67,7 +67,6 @@
   <string name="imap_settings">Configuración IMAP</string>
   <string name="ui_login_label">Nome de usuario</string>
   <string name="ui_login_desc">A súa conta IMAP/enderezo electrónico.</string>
-  <string name="ui_login_dialog_msg">AVISO: Cambiar o nome de usuario pode desconfigurar cousas cando se usa XOAuth.</string>
   <string name="ui_password_label">Contrasinal</string>
   <string name="ui_password_desc">O contrasinal da súa conta IMAP. Só cando está desactivado XOAuth.</string>
   <string name="ui_password_dialog_msg">O contrasinal almacenarase neste dispositivo e só se usará para iniciar sesión.</string>

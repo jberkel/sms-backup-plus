@@ -48,7 +48,6 @@
   <string name="imap_settings">Aranzhimet e IMAP</string>
   <string name="ui_login_label">Emri i Përdoruesit</string>
   <string name="ui_login_desc">Llogaria juaj e IMAP/adresa juaj e e-mail.</string>
-  <string name="ui_login_dialog_msg">Kujdes: Ndryshimi i emrit të përdoruesit mund të prishi punë gjatë përdorimit të XOAuth.</string>
   <string name="ui_password_label">Fjalëkalimi</string>
   <string name="ui_password_desc">Fjalëkalimi i llogarisë suaj IMAP. Përdoret vetën kur XOAuth është jo aktiv.</string>
   <string name="ui_password_dialog_msg">Fjalëkalimi është ruajtur në këtë pajisje dhe përdoret vetëm për hyrje.</string>

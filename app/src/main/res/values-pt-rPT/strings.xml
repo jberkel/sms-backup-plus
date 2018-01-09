@@ -47,7 +47,6 @@
   <string name="imap_settings">Definições de IMAP</string>
   <string name="ui_login_label">Utilizador</string>
   <string name="ui_login_desc">Nome de utilizador/e-mail da sua conta IMAP.</string>
-  <string name="ui_login_dialog_msg">AVISO: Se alterar o nome de utilizador poderá impedir o uso de XOAuth.</string>
   <string name="ui_password_label">Palavra-passe</string>
   <string name="ui_password_desc">A Palavra-passe da sua conta IMAP. Só é usada quando XOAuth está desativado.</string>
   <string name="ui_password_dialog_msg">A palavra-passe é mantida neste aparelho, não é partilhada e só é usada para autenticação.</string>

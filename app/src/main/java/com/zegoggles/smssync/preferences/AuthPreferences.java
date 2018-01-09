@@ -27,19 +27,14 @@ public class AuthPreferences {
     private final ServerPreferences serverPreferences;
     private SharedPreferences credentials;
 
-    /**
-     * Preference key containing the Google account username.
-     */
-    public static final String LOGIN_USER = "login_user";
-    /**
-     * Preference key containing the Google account password.
-     */
-    public static final String LOGIN_PASSWORD = "login_password";
     public static final String SERVER_AUTHENTICATION = "server_authentication";
 
     private static final String OAUTH2_USER = "oauth2_user";
     private static final String OAUTH2_TOKEN = "oauth2_token";
     private static final String OAUTH2_REFRESH_TOKEN = "oauth2_refresh_token";
+
+    public static final String IMAP_USER = "login_user";
+    public static final String IMAP_PASSWORD = "login_password";
 
     /**
      * IMAP URI.
@@ -113,11 +108,11 @@ public class AuthPreferences {
     }
 
     public void setImapPassword(String s) {
-        getCredentials().edit().putString(LOGIN_PASSWORD, s).commit();
+        getCredentials().edit().putString(IMAP_PASSWORD, s).commit();
     }
 
     public void setImapUser(String s) {
-        preferences.edit().putString(LOGIN_USER, s).commit();
+        preferences.edit().putString(IMAP_USER, s).commit();
     }
 
     public boolean useXOAuth() {
@@ -194,11 +189,11 @@ public class AuthPreferences {
     }
 
     public String getImapUsername() {
-        return preferences.getString(LOGIN_USER, null);
+        return preferences.getString(IMAP_USER, null);
     }
 
     private String getImapPassword() {
-        return getCredentials().getString(LOGIN_PASSWORD, null);
+        return getCredentials().getString(IMAP_PASSWORD, null);
     }
 
     /**

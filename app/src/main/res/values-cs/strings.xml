@@ -65,7 +65,6 @@
   <string name="imap_settings">IMAP nastavení</string>
   <string name="ui_login_label">Uživatel</string>
   <string name="ui_login_desc">Váš IMAP uživatel/emailová adresa.</string>
-  <string name="ui_login_dialog_msg">UPOZORNĚNÍ: Změna uživ.jména může při užití XOAuth způsobit problémy.</string>
   <string name="ui_password_label">Heslo</string>
   <string name="ui_password_desc">Heslo pro IMAP účet. Aktivní pouze při zakázaném XOAuth.</string>
   <string name="ui_password_dialog_msg">Heslo je uloženo v telefonu a je použito jen pro přihlášení.</string>
