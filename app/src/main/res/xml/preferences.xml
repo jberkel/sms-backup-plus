@@ -329,6 +329,7 @@
                         android:key="login_user"
                         android:title="@string/ui_login_label"
                         android:summary="@string/ui_login_desc"
+                        android:inputType="text|textEmailAddress"
                         android:singleLine="true"
                         android:persistent="true"/>
 
@@ -338,6 +339,7 @@
                         android:summary="@string/ui_password_desc"
                         android:singleLine="true"
                         android:password="true"
+                        android:inputType="textPassword"
                         android:dialogMessage="@string/ui_password_dialog_msg"
                         android:persistent="false"/>
             </PreferenceCategory>
