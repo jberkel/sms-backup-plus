@@ -202,7 +202,6 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
                             final boolean plain = (AuthMode.PLAIN) ==
                                     AuthMode.valueOf(newValue.toString().toUpperCase(Locale.ENGLISH));
-//                            updateConnected().setEnabled(!plain);
                             updateImapSettings(plain);
                             return true;
                         }
