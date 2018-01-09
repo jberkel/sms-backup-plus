@@ -166,7 +166,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
                 break;
             case UPDATING_THREADS:
                 progressBar.setIndeterminate(true);
-                syncDetailsLabel.setText(getContext().getString(R.string.status_updating_threads));
+                syncDetailsLabel.setText(R.string.status_updating_threads);
                 break;
 
         }

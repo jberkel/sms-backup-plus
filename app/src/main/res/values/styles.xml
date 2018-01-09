@@ -1,4 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- simple palette based on app logo -->
     <color name="envelope_light">#E93E30</color>
     <color name="envelope_dark">#A8261B</color>
     <color name="envelope_grey">#ACACA3</color>
@@ -7,13 +8,23 @@
     <color name="bubble_text">#F2F2F2</color>
     <color name="syncing">#cc9900</color>
 
+    <color name="primary">@color/bubble</color>
+    <color name="primary_dark">@color/bubble_dark</color>
+    <color name="accent">@color/envelope_light</color>
+    <color name="accent_dark">@color/envelope_dark</color>
+
+    <color name="primary_text">@color/bubble_text</color>
+    <color name="secondary_text">@color/envelope_grey</color>
+    <color name="tertiary_text">@color/secondary_text</color>
+
     <style name="SMSBackupPlusTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/bubble</item>
-        <item name="colorPrimaryDark">@color/bubble_dark</item>
-        <item name="colorAccent">@color/envelope_light</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorTertiary">@color/text_tertiary</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-        <item name="android:textColorPrimary">@color/bubble_text</item>
-        <item name="android:textColorSecondary">@color/envelope_grey</item>
     </style>
 
     <declare-styleable name="StatusPreference">
@@ -22,4 +33,47 @@
         <attr name="statusSyncing" format="color"/>
         <attr name="statusDone" format="color"/>
     </declare-styleable>
+
+    <!-- https://gist.github.com/dlew/a2e2f247c78495eca4e6 -->
+    <style name="SMSBackupPlusTheme.Debug" tools:ignore="NewApi">
+        <item name="android:textColorPrimary">#FFFF00</item>
+        <item name="android:textColorSecondary">#FF00FF</item>
+        <item name="android:textColorTertiary">#00FFFF</item>
+
+        <item name="android:textColorPrimaryInverse">#CCCC00</item>
+        <item name="android:textColorSecondaryInverse">#CC00CC</item>
+        <item name="android:textColorTertiaryInverse">#00CCCC</item>
+
+        <item name="android:textColorPrimaryDisableOnly">#FFCC00</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">#FF00CC</item>
+
+        <item name="android:textColorPrimaryNoDisable">#CCFF00</item>
+        <item name="android:textColorSecondaryNoDisable">#00FFCC</item>
+
+        <item name="android:textColorPrimaryInverseNoDisable">#CC00FF</item>
+        <item name="android:textColorSecondaryInverseNoDisable">#00CCFF</item>
+
+        <item name="android:textColorHint">#FF8800</item>
+        <item name="android:textColorHintInverse">#FF0088</item>
+
+        <item name="android:textColorHighlight">#88FF00</item>
+        <item name="android:textColorHighlightInverse">#00FF88</item>
+
+        <item name="android:textColorLink">#8800FF</item>
+        <item name="android:textColorLinkInverse">#0088FF</item>
+
+        <item name="android:textColorAlertDialogListItem">#444444</item>
+
+        <!-- Color palette (via app-compat) -->
+        <item name="colorPrimary">#FF0000</item>
+        <item name="colorPrimaryDark">#00FF00</item>
+        <item name="colorAccent">#0000FF</item>
+
+        <item name="colorControlNormal">#CC0000</item>
+        <item name="colorControlActivated">#00CC00</item>
+        <item name="colorControlHighlight">#0000CC</item>
+
+        <item name="colorButtonNormal">#880000</item>
+        <item name="colorSwitchThumbNormal">#008800</item>
+    </style>
 </resources>

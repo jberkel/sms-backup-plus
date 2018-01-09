@@ -8,7 +8,7 @@
             custom:statusIdle="?attr/colorPrimary"
             custom:statusSyncing="@color/syncing"
             custom:statusDone="?attr/colorPrimaryDark"
-            custom:statusError="@color/envelope_dark"
+            custom:statusError="@color/accent_dark"
     />
 
     <CheckBoxPreference

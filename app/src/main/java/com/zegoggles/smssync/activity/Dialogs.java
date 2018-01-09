@@ -325,6 +325,7 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
                     .setTitle(R.string.ui_dialog_sms_default_package_change_title)
+                    .setIcon(ic_dialog_info)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             requestDefaultSmsPackageChange();
