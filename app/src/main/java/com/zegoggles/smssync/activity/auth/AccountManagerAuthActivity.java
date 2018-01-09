@@ -20,6 +20,7 @@ import com.zegoggles.smssync.activity.Dialogs;
 import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.AccountDialogs.ACCOUNTS;
 
@@ -65,8 +66,7 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
         accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, null, this, new AccountManagerCallback<Bundle>() {
             public void run(AccountManagerFuture<Bundle> future) {
                 try {
-                    String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
-                    useToken(account, token);
+                    useToken(account, future.getResult().getString(KEY_AUTHTOKEN));
                 } catch (OperationCanceledException e) {
                     onAccessDenied();
                 } catch (Exception e) {
@@ -74,6 +74,11 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
                 }
             }
         }, null);
+    }
+
+    private void onCanceled() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     private void onAccessDenied() {
@@ -87,16 +92,17 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
     private void handleException(Exception e) {
         Log.w(TAG, e);
         Intent result = new Intent(this, MainActivity.class)
-                .setAction(ACTION_ADD_ACCOUNT)
-                .putExtra(EXTRA_ERROR, e.getMessage());
+            .setAction(ACTION_ADD_ACCOUNT)
+            .putExtra(EXTRA_ERROR, e.getMessage());
         setResult(RESULT_OK, result);
         finish();
     }
 
     private void useToken(Account account, String token) {
+        Log.d(TAG, "obtained token for " + account + " from AccountManager");
         Intent result = new Intent(ACTION_ADD_ACCOUNT)
-                .putExtra(EXTRA_ACCOUNT, account.name)
-                .putExtra(EXTRA_TOKEN, token);
+            .putExtra(EXTRA_ACCOUNT, account.name)
+            .putExtra(EXTRA_TOKEN, token);
         setResult(RESULT_OK, result);
         finish();
     }
@@ -108,19 +114,27 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
         @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Account[] accounts = (Account[]) getArguments().getParcelableArray(ACCOUNTS);
+            final int[] checkedItem = {0};
             return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.select_google_account)
-                .setItems(getNames(accounts), new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(getNames(accounts), checkedItem[0], new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        ((AccountManagerAuthActivity) getActivity()).onAccountSelected(accounts[which]);
-                        dialog.dismiss();
-                    }
-                }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        getActivity().finish();
+                        checkedItem[0] = which;
                     }
                 })
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        ((AccountManagerAuthActivity)getActivity()).onAccountSelected(accounts[checkedItem[0]]);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ((AccountManagerAuthActivity)getActivity()).onCanceled();
+                    }
+                })
+                .setCancelable(false)
                 .create();
         }
 
