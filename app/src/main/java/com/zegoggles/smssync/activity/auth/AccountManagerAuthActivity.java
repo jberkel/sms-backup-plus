@@ -8,14 +8,15 @@ import android.accounts.OperationCanceledException;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.TypedValue;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
 import com.zegoggles.smssync.activity.Dialogs.AccessTokenProgress;
@@ -112,17 +113,15 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
     public static class AccountDialogs extends Dialogs.BaseFragment {
         static final String ACCOUNTS = "accounts";
 
-        @Override @NonNull @SuppressWarnings("deprecation")
+        @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Account[] accounts = (Account[]) getArguments().getParcelableArray(ACCOUNTS);
             final int[] checkedItem = {0};
 
-            final TypedValue secondaryColor = new TypedValue();
-            getContext().getTheme().resolveAttribute(android.R.attr.textColorSecondary, secondaryColor, true);
-
+            final ColorStateList colorStateList = ContextCompat.getColorStateList(getContext(), R.color.secondary_text);
             return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.select_google_account)
-                .setIcon(getTinted(getResources(), R.drawable.ic_account_circle, secondaryColor.data))
+                .setIcon(getTinted(getResources(), R.drawable.ic_account_circle, colorStateList.getDefaultColor()))
                 .setSingleChoiceItems(getNames(accounts), checkedItem[0], new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         checkedItem[0] = which;
@@ -156,5 +155,6 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
             }
             return names;
         }
+
     }
 }

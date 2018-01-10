@@ -4,15 +4,12 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.ContactsContract;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.*;
@@ -66,7 +63,7 @@ public class PersonLookupTest {
         )).thenReturn(name("Testor Test"));
 
         when(resolver.query(
-                MessageConverter.ECLAIR_CONTENT_URI,
+                MessageConverter.CONTENT_URI,
                 new String[] { ContactsContract.CommonDataKinds.Email.DATA },
                 ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
                 new String[] { String.valueOf(1) },
@@ -88,7 +85,7 @@ public class PersonLookupTest {
         )).thenReturn(name("Testor Test"));
 
         when(resolver.query(
-                MessageConverter.ECLAIR_CONTENT_URI,
+                MessageConverter.CONTENT_URI,
                 new String[] { ContactsContract.CommonDataKinds.Email.DATA },
                 ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
                 new String[] { String.valueOf(1) },

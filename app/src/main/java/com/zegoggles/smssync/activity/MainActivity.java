@@ -53,7 +53,6 @@ import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
 import com.zegoggles.smssync.activity.events.PerformAction;
 import com.zegoggles.smssync.activity.events.PerformAction.Actions;
-import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.preferences.AuthPreferences;
@@ -73,13 +72,13 @@ import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.Dialogs.ConfirmAction.ACTION;
+import static com.zegoggles.smssync.activity.Dialogs.Type.OAUTH2_ACCESS_TOKEN_ERROR;
 import static com.zegoggles.smssync.activity.Dialogs.WebConnect.REQUEST_WEB_AUTH;
 import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
 import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ABOUT;
-import static com.zegoggles.smssync.activity.Dialogs.Type.ACCESS_TOKEN;
-import static com.zegoggles.smssync.activity.Dialogs.Type.ACCESS_TOKEN_ERROR;
+import static com.zegoggles.smssync.activity.Dialogs.Type.OAUTH2_ACCESS_TOKEN_PROGRESS;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR;
 import static com.zegoggles.smssync.activity.Dialogs.Type.CONFIRM_ACTION;
 import static com.zegoggles.smssync.activity.Dialogs.Type.WEB_CONNECT;
@@ -205,10 +204,10 @@ public class MainActivity extends AppCompatActivity implements
 
                 final String code = data == null ? null : data.getStringExtra(OAuth2WebAuthActivity.EXTRA_CODE);
                 if (!TextUtils.isEmpty(code)) {
-                    showDialog(ACCESS_TOKEN);
+                    showDialog(OAUTH2_ACCESS_TOKEN_PROGRESS);
                     new OAuth2CallbackTask(oauth2Client).execute(code);
                 } else {
-                    showDialog(ACCESS_TOKEN_ERROR);
+                    showDialog(OAUTH2_ACCESS_TOKEN_ERROR);
                 }
                 break;
             }
@@ -256,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements
             authPreferences.setOauth2Token(event.token.userName, event.token.accessToken, event.token.refreshToken);
             onAuthenticated();
         } else {
-            showDialog(ACCESS_TOKEN_ERROR);
+            showDialog(OAUTH2_ACCESS_TOKEN_ERROR);
         }
     }
 

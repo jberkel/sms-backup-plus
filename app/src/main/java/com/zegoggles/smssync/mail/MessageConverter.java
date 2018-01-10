@@ -50,7 +50,7 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class MessageConverter {
-    public static final Uri ECLAIR_CONTENT_URI =
+    public static final Uri CONTENT_URI =
             Uri.parse("content://com.android.contacts/data/emails");
 
     private final Context mContext;

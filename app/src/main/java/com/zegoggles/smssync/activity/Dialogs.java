@@ -57,24 +57,24 @@ import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup
 
 public class Dialogs {
     public enum Type {
-        MISSING_CREDENTIALS(MissingCredentials.class),
         FIRST_SYNC(FirstSync.class),
+        UPGRADE_FROM_SMSBACKUP(Upgrade.class),
+        MISSING_CREDENTIALS(MissingCredentials.class),
         INVALID_IMAP_FOLDER(InvalidImapFolder.class),
+        CONFIRM_ACTION(ConfirmAction.class),
+        SMS_DEFAULT_PACKAGE_CHANGE(SmsDefaultPackage.class),
+        // menu
         ABOUT(About.class),
         RESET(Reset.class),
-        DISCONNECT(Disconnect.class),
-        ACCESS_TOKEN(OAuth2AccessTokenProgress.class),
-        ACCESS_TOKEN_ERROR(AccessTokenError.class),
-        WEB_CONNECT(WebConnect.class),
-        WEB_CONNECT_TOKEN_ERROR(WebConnectTokenError.class),
-        ACCOUNT_MANAGER_TOKEN_ERROR(AccountManagerTokenError.class),
-        UPGRADE_FROM_SMSBACKUP(Upgrade.class),
         VIEW_LOG(ViewLog.class),
-        CONFIRM_ACTION(ConfirmAction.class),
-        SMS_DEFAULT_PACKAGE_CHANGE(SmsDefaultPackage.class);
+        // connect flow
+        WEB_CONNECT(WebConnect.class),
+        OAUTH2_ACCESS_TOKEN_PROGRESS(OAuth2AccessTokenProgress.class),
+        OAUTH2_ACCESS_TOKEN_ERROR(OAuth2AccessTokenError.class),
+        ACCOUNT_MANAGER_TOKEN_ERROR(AccountManagerTokenError.class),
+        DISCONNECT(Disconnect.class);
 
         final Class<? extends BaseFragment> fragment;
-
         Type(Class<? extends BaseFragment> fragment) {
             this.fragment = fragment;
         }
@@ -214,6 +214,15 @@ public class Dialogs {
         }
     }
 
+    public static class OAuth2AccessTokenError extends BaseFragment {
+        @Override @NonNull
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final String title = getString(R.string.ui_dialog_access_token_error_title);
+            final String msg = getString(R.string.ui_dialog_access_token_error_msg);
+            return createMessageDialog(title, msg, ic_dialog_alert);
+        }
+    }
+
     public static class OAuth2AccessTokenProgress extends AccessTokenProgress {
         @Override
         public void onAttach(Context context) {
@@ -231,12 +240,20 @@ public class Dialogs {
         }
     }
 
-    public static class AccessTokenError extends BaseFragment {
+    public static class AccountManagerTokenError extends BaseFragment {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final String title = getString(R.string.ui_dialog_access_token_error_title);
-            final String msg = getString(R.string.ui_dialog_access_token_error_msg);
-            return createMessageDialog(title, msg, ic_dialog_alert);
+            return new AlertDialog.Builder(getContext())
+                    .setTitle(R.string.status_unknown_error)
+                    .setIcon(ic_dialog_alert)
+                    .setMessage(R.string.ui_dialog_account_manager_token_error)
+                    .setPositiveButton(yes, new OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            App.post(new FallbackAuthEvent(false));
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .create();
         }
     }
 
@@ -256,35 +273,6 @@ public class Dialogs {
                         getActivity().startActivityForResult(intent, REQUEST_WEB_AUTH);
                     }
                 }).create();
-        }
-    }
-
-    public static class WebConnectTokenError extends BaseFragment {
-        @Override @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new AlertDialog.Builder(getContext())
-                .setTitle(R.string.status_unknown_error)
-                .setIcon(ic_dialog_alert)
-                .setMessage(R.string.ui_dialog_connect_token_error)
-                .setPositiveButton(ok, null)
-                .create();
-        }
-    }
-
-    public static class AccountManagerTokenError extends BaseFragment {
-        @Override @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new AlertDialog.Builder(getContext())
-                .setTitle(R.string.status_unknown_error)
-                .setIcon(ic_dialog_alert)
-                .setMessage(R.string.ui_dialog_account_manager_token_error)
-                .setPositiveButton(yes, new OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        App.post(new FallbackAuthEvent(false));
-                    }
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .create();
         }
     }
 
