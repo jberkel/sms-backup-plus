@@ -228,6 +228,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference preference) {
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "onPreferenceStartFragment(" + preference + ")");
+        }
         final Fragment fragment = Fragment.instantiate(this, preference.getFragment(),
                 new BundleBuilder().putString(SCREEN_TITLE, String.valueOf(preference.getTitle())).build());
         showFragment(fragment, preference.getKey());
@@ -236,12 +239,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen preference) {
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "onPreferenceStartScreen(" + preference + ")");
+        }
         // API level 9 compatibility
         if (preference.getFragment() == null) {
             preference.setFragment(preference.getKey());
             return onPreferenceStartFragment(caller, preference);
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
