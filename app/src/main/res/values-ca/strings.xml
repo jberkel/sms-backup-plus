@@ -129,8 +129,6 @@
 
   <string name="sd_card_disclaimer">És possible que la còpia automàtica no funcioni de forma fiable si l\'aplicació està instal·lada a la targeta SD.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">També caldrà que habiliteu les dades en segon pla.</string>
-
   <string name="ui_auto_backup_schedule_label">Planificació regular</string>
   <string name="ui_auto_backup_schedule_desc">Quan s\'han de copiar els SMS</string>
 

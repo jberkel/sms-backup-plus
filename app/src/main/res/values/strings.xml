@@ -136,8 +136,6 @@
 
   <string name="sd_card_disclaimer">Auto backup might not work reliably when app is installed on SD card.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">You will also need to enable background data.</string>
-
   <string name="ui_auto_backup_schedule_label">Regular schedule</string>
   <string name="ui_auto_backup_schedule_desc">When to backup SMS</string>
 

@@ -133,8 +133,6 @@
 
   <string name="sd_card_disclaimer">當此程式安裝在 SD 卡中時，自動備份可能會無法有效運作。</string>
 
-  <string name="ui_enable_auto_sync_bg_data">您將同時需要開啟背景資料。</string>
-
   <string name="ui_auto_backup_schedule_label">定時調度計劃</string>
   <string name="ui_auto_backup_schedule_desc">何時備份簡訊</string>
 

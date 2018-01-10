@@ -126,8 +126,6 @@
 
   <string name="sd_card_disclaimer">Il salvataggio automatico potrebbe rivelarsi non affidabile se l\'applicazione viene installata su una memoria SD.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Sarà necessario inoltre abilitare i dati in background.</string>
-
   <string name="ui_auto_backup_schedule_label">Intervalli regolari</string>
   <string name="ui_auto_backup_schedule_desc">Quando salvare gli SMS</string>
 

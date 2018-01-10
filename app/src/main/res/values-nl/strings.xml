@@ -127,8 +127,6 @@
 
   <string name="sd_card_disclaimer">Automatische back-up werkt mogelijks niet goed als de app opgeslagen is op de SD-kaart.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">U zal ook achtergronddata moeten inschakelen.</string>
-
   <string name="ui_auto_backup_schedule_label">Normaal rooster</string>
   <string name="ui_auto_backup_schedule_desc">Wanneer sms\'en moeten geback-upt worden</string>
 

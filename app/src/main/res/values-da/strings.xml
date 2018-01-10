@@ -127,8 +127,6 @@
 
   <string name="sd_card_disclaimer">Automatisk backup vil sikkert ikke virke når app\'en er installeret på SD kortet.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Du skal også aktivere baggrundsdata.</string>
-
   <string name="ui_auto_backup_schedule_label">Almindeligt interval</string>
   <string name="ui_auto_backup_schedule_desc">Hvor ofte bliver der backed op</string>
 

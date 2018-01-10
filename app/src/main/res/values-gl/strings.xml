@@ -128,8 +128,6 @@
 
   <string name="sd_card_disclaimer">O gardado automático pode non funcionar de xeito fiable cando se instale a aplicación na tarxeta SD.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Tamén debe habilitar datos en segundo plano.</string>
-
   <string name="ui_auto_backup_schedule_label">Axenda regular</string>
   <string name="ui_auto_backup_schedule_desc">Cando se gardarán as SMS</string>
 

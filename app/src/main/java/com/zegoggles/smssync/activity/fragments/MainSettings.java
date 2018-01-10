@@ -1,6 +1,5 @@
 package com.zegoggles.smssync.activity.fragments;
 
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
@@ -11,20 +10,19 @@ import android.util.Log;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.donation.DonationActivity;
+import com.zegoggles.smssync.activity.donation.DonationActivity.DonationStatusListener;
 import com.zegoggles.smssync.activity.events.AccountAddedEvent;
-import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.AccountRemovedEvent;
+import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
-import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthPreferences;
-import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.Context.CONNECTIVITY_SERVICE;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_SETTINGS_SCREEN;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CONNECTED;
@@ -70,10 +68,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         addPreferenceListener(ENABLE_AUTO_BACKUP.key);
     }
 
-    @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
-        updateAutoBackupPreference();
-    }
-
     @Subscribe public void onAccountAdded(AccountAddedEvent event) {
         updateConnected();
         updateAutoBackupPreference();
@@ -86,7 +80,11 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         updateAutoBackupPreference();
     }
 
-    @Subscribe public void settingsReset(SettingsResetEvent event) {
+    @Subscribe public void onAutoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
+        updateAutoBackupPreference();
+    }
+
+    @Subscribe public void onSettingsReset(SettingsResetEvent event) {
         updateConnected();
     }
 
@@ -134,9 +132,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         StringBuilder summary = new StringBuilder();
         if (!enabled.isEmpty()) {
             summary.append(getString(R.string.ui_enable_auto_sync_summary, TextUtils.join(", ", enabled)));
-            if (!getConnectivityManager().getBackgroundDataSetting()) {
-                summary.append(' ').append(getString(R.string.ui_enable_auto_sync_bg_data));
-            }
             if (preferences.isInstalledOnSDCard()) {
                 summary.append(' ').append(getString(R.string.sd_card_disclaimer));
             }
@@ -175,13 +170,9 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         return summary.toString();
     }
 
-    private ConnectivityManager getConnectivityManager() {
-        return (ConnectivityManager) getContext().getSystemService(CONNECTIVITY_SERVICE);
-    }
-
     private void checkUserDonationStatus() {
         try {
-            DonationActivity.checkUserHasDonated(getContext(), new DonationActivity.DonationStatusListener() {
+            DonationActivity.checkUserDonationStatus(getContext(), new DonationStatusListener() {
                 @Override
                 public void userDonationState(State state) {
                     switch (state) {

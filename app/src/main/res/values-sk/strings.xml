@@ -87,7 +87,6 @@
     <string name="ui_enable_auto_sync_desc">Či chcete automaticky zálohovať nové správy</string>
     <string name="ui_enable_auto_sync_summary">Automatické zálohovanie %1$s</string>
     <string name="sd_card_disclaimer">Automatické zálohovanie nemusí fungovať spoľahlivo, ak je aplikácia nainštalovaná na SD kartu</string>
-    <string name="ui_enable_auto_sync_bg_data">Budete musieť povoliť prenos údajov na pozadí</string>
     <string name="ui_auto_backup_schedule_label">Podľa plánu</string>
     <string name="ui_auto_backup_schedule_desc">Kedy zálohovať SMS</string>
     <string name="ui_auto_backup_incoming_schedule_label">Príchodzie správy</string>

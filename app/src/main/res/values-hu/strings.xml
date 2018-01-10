@@ -134,8 +134,6 @@
 
   <string name="sd_card_disclaimer">Az automatikus mentés nem működik megbízhatóan, ha az alkalmazás az SD-kártyára van telepítve.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Engedélyeznie kell az adatkapcsolatot a háttérben.</string>
-
   <string name="ui_auto_backup_schedule_label">Rendszeres ütemezés</string>
   <string name="ui_auto_backup_schedule_desc">Mentés rendszeres ütemezése</string>
 

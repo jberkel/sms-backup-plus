@@ -97,7 +97,6 @@
 <string name="ui_enable_auto_sync_summary">Автоматично збережено %1$s.</string>
 <string name="ui_enable_auto_sync_no_enabled_summary">Не обрано тип елементу для резервного копіювання.</string>
 <string name="sd_card_disclaimer">Автоматичне резервне копіювання може ненадійно працювати, коли програма встановлена ​​на SD-картку.</string>
-<string name="ui_enable_auto_sync_bg_data">Ви маєте включити фонову передачу даних.</string>
 <string name="ui_auto_backup_schedule_label">Постійний розклад</string>
 <string name="ui_auto_backup_schedule_desc">Коли зберігати SMS повідомлення</string>
 <string name="ui_auto_backup_incoming_schedule_label">Вхідний розклад</string>

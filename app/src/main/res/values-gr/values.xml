@@ -127,8 +127,6 @@
 
   <string name="sd_card_disclaimer">Η αυτόματη αποθήκευση ίσως δεν λειτουργεί αξιόπιστα όταν η εφαρμογή είναι εγκατεστημένη σε κάρτα SD.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Θα χρειαστεί να ενεργοποιήσεις background δεδομένα.</string>
-
   <string name="ui_auto_backup_schedule_label">Κανονικό πρόγραμμα</string>
   <string name="ui_auto_backup_schedule_desc">Πότε να γίνει αποθήκευση SMS</string>
 

@@ -133,8 +133,6 @@
 
   <string name="sd_card_disclaimer">La sauvegarde automatique pourrait ne pas fonctionner correctement si l\'application est installée sur la carte SD.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Vous avez également besoin d\'activer les données d\'arrière plan.</string>
-
   <string name="ui_auto_backup_schedule_label">Intervalle</string>
   <string name="ui_auto_backup_schedule_desc">Définir à quelle fréquence les SMS seront sauvegardés.</string>
 

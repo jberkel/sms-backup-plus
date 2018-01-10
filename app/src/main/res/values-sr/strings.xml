@@ -133,8 +133,6 @@
 
   <string name="sd_card_disclaimer">Аутоматско прављење резервне копије можда неће радити поуздано ако је апликација инсталирана на СД картици.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Такође је потребно да омогућите размену података у позадини.</string>
-
   <string name="ui_auto_backup_schedule_label">Редован распоред</string>
   <string name="ui_auto_backup_schedule_desc">Када копирати СМС поруке</string>
 

@@ -133,8 +133,6 @@
 
   <string name="sd_card_disclaimer">当本程序安装在 SD 卡中时，自动备份可能无法正常工作。</string>
 
-  <string name="ui_enable_auto_sync_bg_data">您同时需要开启后台数据。</string>
-
   <string name="ui_auto_backup_schedule_label">定时备份计划</string>
   <string name="ui_auto_backup_schedule_desc">何时备份短信</string>
 

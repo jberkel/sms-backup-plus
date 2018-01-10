@@ -164,7 +164,7 @@ public class DonationActivity extends AppCompatActivity implements
         billingClient.querySkuDetailsAsync(SkuDetailsParams.newBuilder()
                 .setType(INAPP)
                 .setSkusList(Arrays.asList(ALL_SKUS))
-                .build(), DonationActivity.this);
+                .build(), this);
     }
 
     private void showSelectDialog(List<SkuDetails> skuDetails) {
@@ -184,8 +184,8 @@ public class DonationActivity extends AppCompatActivity implements
         }
     }
 
-    public static void checkUserHasDonated(Context context,
-                                           final DonationStatusListener listener) {
+    public static void checkUserDonationStatus(Context context,
+                                               final DonationStatusListener listener) {
         final BillingClient helper = BillingClient.newBuilder(context).setListener(new PurchasesUpdatedListener() {
             @Override
             public void onPurchasesUpdated(@BillingResponse int responseCode, @Nullable List<Purchase> purchases) {

@@ -95,7 +95,6 @@
   <string name="ui_enable_auto_sync_summary">Krijimi i kopjes rezervë automatike %1$s.</string>
   <string name="ui_enable_auto_sync_no_enabled_summary">Nuk është përzgjedhur tip shënimi për tu ruajtur rezervë.</string>
   <string name="sd_card_disclaimer">Krijimi automatik i kopjes rezervë mund të mos punoj sic duhet kur programi është i instaluar në kartën SD.</string>
-  <string name="ui_enable_auto_sync_bg_data">Gjithashtu do t\'ju duhet të aktivizoni të dhënat në sfond.</string>
   <string name="ui_auto_backup_schedule_label">Planifikim i rregullt</string>
   <string name="ui_auto_backup_schedule_desc">Kur të krijoni kopje rezervë të SMS-ve</string>
   <string name="ui_auto_backup_incoming_schedule_label">Planifikimi i gjurmëve hyrëse</string>

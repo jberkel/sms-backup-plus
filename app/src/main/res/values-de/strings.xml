@@ -131,8 +131,6 @@
 
   <string name="sd_card_disclaimer">Die automatische Sicherung könnte nicht funktionieren wenn die App auf die SD-Karte installiert wurde.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Sie müssen die Hintergrunddaten aktivieren.</string>
-
   <string name="ui_auto_backup_schedule_label">Zeitplan (regulär)</string>
   <string name="ui_auto_backup_schedule_desc">Wann SMS gesichert werden sollen.</string>
 

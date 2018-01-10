@@ -86,7 +86,6 @@
     <string name="ui_enable_auto_sync_desc">Czy automatycznie tworzyć kopię zapasową nowych SMSów.</string>
     <string name="ui_enable_auto_sync_summary">Automatyczna kopia %1$s.</string>
     <string name="sd_card_disclaimer">Może nie działać prawidłowo gdy aplikacja jest zainstalowana na karcie SD.</string>
-    <string name="ui_enable_auto_sync_bg_data">Wymagane jest włączenie przesyłu danych w tle.</string>
     <string name="ui_auto_backup_schedule_label">Harmonogram podstawowy</string>
     <string name="ui_auto_backup_schedule_desc">Kiedy wykonać kopię SMSów</string>
     <string name="ui_auto_backup_incoming_schedule_label">Harmonogram przychodzący</string>
