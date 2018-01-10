@@ -3,6 +3,7 @@ package com.zegoggles.smssync.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -28,7 +29,7 @@ public class AppLog {
     private static final int MAX_SIZE = 32 * 1024;
     private static final int ID = 1;
 
-    private PrintWriter writer;
+    private @Nullable PrintWriter writer;
     private String dateFormat;
 
     public AppLog(char[] format) {
@@ -83,6 +84,75 @@ public class AppLog {
         return DateFormat.format(dateFormat, d);
     }
 
+    public static Dialog displayAsDialog(String name, Context context) {
+        File file = getFile(name);
+        if (file.exists() && file.length() > 0) {
+            return getLogDialog(file, context);
+        } else {
+            return logNotFound(context);
+        }
+    }
+
+    private static Dialog logNotFound(Context context) {
+        return new AlertDialog.Builder(context)
+            .setTitle(R.string.menu_view_log)
+            .setMessage(R.string.app_log_empty)
+            .setIcon(android.R.drawable.ic_dialog_info)
+            .setPositiveButton(android.R.string.ok, null)
+            .create();
+    }
+
+    private static Dialog getLogDialog(File file, Context context) {
+        final int PAD = 5;
+        final TextView view = new TextView(context);
+        view.setId(ID);
+        view.setText(readLog(file));
+
+        final ScrollView sView = new ScrollView(context) {
+            {
+                addView(view);
+                setPadding(PAD, PAD, PAD, PAD);
+            }
+
+            @Override
+            protected void onLayout(boolean changed, int l, int t, int r, int b) {
+                super.onLayout(changed, l, t, r, b);
+                scrollTo(0, view.getHeight());
+            }
+        };
+        return new AlertDialog.Builder(context)
+            .setPositiveButton(android.R.string.ok, null)
+            .setView(sView)
+            .create();
+    }
+
+    private static String readLog(File f) {
+        StringBuilder text = new StringBuilder();
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(f));
+            String line;
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "error reading", e);
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+        return text.toString();
+    }
+
+    private static File getFile(String name) {
+        return new File(Environment.getExternalStorageDirectory(), name);
+    }
+
     private void rotate(final File logFile) {
         if (logFile.length() > MAX_SIZE) {
             if (LOCAL_LOGV) Log.v(TAG, "rotating logfile " + logFile);
@@ -119,66 +189,5 @@ public class AppLog {
                 }
             }.start();
         }
-    }
-
-    public static Dialog displayAsDialog(String name, Context context) {
-        final int PAD = 5;
-        final TextView view = new TextView(context);
-        view.setId(ID);
-
-        readLog(name, view);
-
-        final ScrollView sView = new ScrollView(context) {
-            {
-                addView(view);
-                setPadding(PAD, PAD, PAD, PAD);
-            }
-
-            @Override
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
-                super.onLayout(changed, l, t, r, b);
-                scrollTo(0, view.getHeight());
-            }
-        };
-        return new AlertDialog.Builder(context)
-            .setPositiveButton(android.R.string.ok, null)
-            .setView(sView)
-            .create();
-    }
-
-    private static boolean readLog(String name, TextView view) {
-        return readLog(getFile(name), view);
-    }
-
-    private static boolean readLog(File f, TextView view) {
-        StringBuilder text = new StringBuilder();
-        if (view != null && f.exists()) {
-            BufferedReader br = null;
-            try {
-                br = new BufferedReader(new FileReader(f));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    text.append(line);
-                    text.append('\n');
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "error reading", e);
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException ignored) {
-                    }
-                }
-            }
-            view.setText(text.length() > 0 ? text :
-                    view.getContext().getString(R.string.app_log_empty));
-        }
-
-        return text.length() > 0;
-    }
-
-    private static File getFile(String name) {
-        return new File(Environment.getExternalStorageDirectory(), name);
     }
 }
