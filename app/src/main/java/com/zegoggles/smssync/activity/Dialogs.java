@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -116,8 +117,8 @@ public class Dialogs {
 
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            DialogInterface.OnClickListener firstSyncListener =
-                    new DialogInterface.OnClickListener() {
+            OnClickListener firstSyncListener =
+                    new OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             App.post(which == SKIP_BUTTON ? BackupSkip : Backup);
@@ -172,8 +173,9 @@ public class Dialogs {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
+                .setIcon(ic_dialog_alert)
                 .setTitle(R.string.ui_dialog_reset_title)
-                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(ok, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         App.post(new SettingsResetEvent());
                     }
@@ -192,7 +194,7 @@ public class Dialogs {
                 .setTitle(R.string.ui_dialog_confirm_action_title)
                 .setMessage(R.string.ui_dialog_disconnect_msg)
                 .setNegativeButton(cancel, null)
-                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(ok, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         App.post(new AccountRemovedEvent());
                     }
@@ -249,7 +251,7 @@ public class Dialogs {
                 .setTitle(null)
                 .setMessage(getString(R.string.ui_dialog_connect_msg, getString(R.string.app_name)))
                 .setNegativeButton(cancel, null)
-                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(ok, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final Intent intent = getArguments().getParcelable(INTENT);
                         getActivity().startActivityForResult(intent, REQUEST_WEB_AUTH);
@@ -277,7 +279,7 @@ public class Dialogs {
                 .setTitle(R.string.status_unknown_error)
                 .setIcon(ic_dialog_alert)
                 .setMessage(R.string.ui_dialog_account_manager_token_error)
-                .setPositiveButton(yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(yes, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         App.post(new FallbackAuthEvent(false));
                     }
@@ -310,7 +312,7 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.ui_dialog_confirm_action_title)
-                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(ok, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         App.post(new PerformAction(Actions.valueOf(getArguments().getString(ACTION)), false));
                     }
@@ -331,7 +333,7 @@ public class Dialogs {
             return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.ui_dialog_sms_default_package_change_title)
                 .setIcon(ic_dialog_info)
-                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(ok, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         requestDefaultSmsPackageChange();
                     }
