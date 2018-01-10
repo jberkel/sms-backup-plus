@@ -20,8 +20,7 @@ import static com.zegoggles.smssync.mail.MessageConverter.ECLAIR_CONTENT_URI;
 
 public class PersonLookup {
     private static final String[] PHONE_PROJECTION = getPhoneProjection();
-    // PhoneLookup.CONTENT_FILTER_URI
-    private static final Uri ECLAIR_CONTENT_FILTER_URI =
+    private static final Uri CONTENT_FILTER_URI =
             Uri.parse("content://com.android.contacts/phone_lookup");
 
 
@@ -48,7 +47,7 @@ public class PersonLookup {
         if (TextUtils.isEmpty(address)) {
             return new PersonRecord(0, null, null, "-1");
         } else if (!mPeopleCache.containsKey(address)) {
-            Uri personUri = Uri.withAppendedPath(ECLAIR_CONTENT_FILTER_URI, Uri.encode(address));
+            Uri personUri = Uri.withAppendedPath(CONTENT_FILTER_URI, Uri.encode(address));
 
             Cursor c = mResolver.query(personUri, PHONE_PROJECTION, null, null, null);
             final PersonRecord record;

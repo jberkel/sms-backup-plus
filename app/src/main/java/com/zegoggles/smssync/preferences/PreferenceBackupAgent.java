@@ -16,10 +16,9 @@ import static com.zegoggles.smssync.App.TAG;
 /**
  * @noinspection UnusedDeclaration
  */
-@TargetApi(8)
 public class PreferenceBackupAgent extends BackupAgentHelper {
     // A key to uniquely identify the set of backup data
-    static final String PREFS_BACKUP_KEY = "prefs";
+    private static final String PREFS_BACKUP_KEY = "prefs";
 
     @Override
     public void onCreate() {

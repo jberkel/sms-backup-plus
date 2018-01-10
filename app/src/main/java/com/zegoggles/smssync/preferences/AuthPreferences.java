@@ -145,7 +145,7 @@ public class AuthPreferences {
             if (hasOAuth2Tokens()) {
                 return formatUri(AuthType.XOAUTH2, SERVER_PROTOCOL, getOauth2Username(), generateXOAuth2Token());
             } else {
-                Log.w(TAG, "No valid xoauth1/2 tokens");
+                Log.w(TAG, "No valid xoauth2 tokens");
                 return null;
             }
         } else {
