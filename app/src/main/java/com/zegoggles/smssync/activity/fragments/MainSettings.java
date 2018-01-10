@@ -59,8 +59,8 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         super.onResume();
 
         checkUserDonationStatus();
-        updateAutoBackupEnabledSummary();
-        updateAutoBackupScheduleSummary();
+        updateAutoBackupPreference();
+        updateAutoBackupSettingsScreen();
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 App.post(new AccountConnectionChangedEvent((Boolean) change));
@@ -71,8 +71,9 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     }
 
     @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
-        updateAutoBackupEnabledSummary();
-        updateAutoBackupScheduleSummary();
+        updateAutoBackupPreference();
+        updateAutoBackupSettingsScreen();
+
     }
 
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
@@ -101,6 +102,18 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         return connected;
     }
 
+    private void updateAutoBackupPreference() {
+        final Preference preference = findPreference(ENABLE_AUTO_BACKUP.key);
+        preference.setSummary(summarizeAutoBackupSettings());
+        preference.setEnabled(!authPreferences.useXOAuth() || authPreferences.hasOAuth2Tokens());
+    }
+
+    private void updateAutoBackupSettingsScreen() {
+        final Preference preference = findPreference(BACKUP_SETTINGS_SCREEN.key);
+        preference.setSummary(summarizeBackupScheduleSettings());
+        preference.setEnabled(preferences.isEnableAutoSync());
+    }
+
     private String getConnectedSummary(CheckBoxPreference connected) {
         final String username = authPreferences.getOauth2Username();
         final String imapUsername = authPreferences.getImapUsername();
@@ -111,14 +124,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         } else {
             return getString(R.string.custom_imap, TextUtils.isEmpty(imapUsername)? "" : imapUsername);
         }
-    }
-
-    private void updateAutoBackupEnabledSummary() {
-        findPreference(ENABLE_AUTO_BACKUP.key).setSummary(summarizeAutoBackupSettings());
-    }
-
-    private void updateAutoBackupScheduleSummary() {
-        findPreference(BACKUP_SETTINGS_SCREEN.key).setSummary(summarizeBackupScheduleSettings());
     }
 
     private String summarizeAutoBackupSettings() {

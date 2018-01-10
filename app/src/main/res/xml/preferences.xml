@@ -20,7 +20,6 @@
 
     <CheckBoxPreference
             android:key="enable_auto_sync"
-            android:dependency="connected"
             android:title="@string/ui_enable_auto_sync_label"
             android:summary="@string/ui_enable_auto_sync_desc"
             android:persistent="true"
