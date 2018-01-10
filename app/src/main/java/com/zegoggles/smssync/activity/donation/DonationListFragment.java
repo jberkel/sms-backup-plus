@@ -3,6 +3,8 @@ package com.zegoggles.smssync.activity.donation;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static android.R.string.cancel;
 import static com.zegoggles.smssync.activity.donation.DonationActivity.DEBUG_IAB;
 
 public class DonationListFragment extends Dialogs.BaseFragment {
@@ -37,34 +40,35 @@ public class DonationListFragment extends Dialogs.BaseFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final ArrayList<Sku> skus = getArguments().getParcelableArrayList(SKUS);
         return new AlertDialog.Builder(getContext())
-                .setTitle(R.string.ui_dialog_donate_message)
-                .setItems(getOptions(skus), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String selectedSku;
-                        if (DEBUG_IAB) {
-                            if (which < Sku.Test.SKUS.length) {
-                                selectedSku = Sku.Test.SKUS[which].getSku();
-                            } else {
-                                selectedSku = skus.get(which - Sku.Test.SKUS.length).getSku();
-                            }
+            .setTitle(R.string.ui_dialog_donate_message)
+            .setItems(getOptions(skus), new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String selectedSku;
+                    if (DEBUG_IAB) {
+                        if (which < Sku.Test.SKUS.length) {
+                            selectedSku = Sku.Test.SKUS[which].getSku();
                         } else {
-                            selectedSku = skus.get(which).getSku();
+                            selectedSku = skus.get(which - Sku.Test.SKUS.length).getSku();
                         }
-                        listener.selectedSku(selectedSku);
+                    } else {
+                        selectedSku = skus.get(which).getSku();
                     }
-                }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getActivity().finish();
-                    }
-                }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        getActivity().finish();
-                    }
-                })
-                .create();
+                    listener.selectedSku(selectedSku);
+                }
+            })
+            .setNegativeButton(cancel, new OnClickListener() {
+                @Override public void onClick(DialogInterface dialogInterface, int which) {
+                    onCancel(dialogInterface);
+                }
+            })
+            .create();
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        getActivity().finish();
     }
 
     private CharSequence[] getOptions(List<Sku> skus) {

@@ -11,12 +11,14 @@ import com.android.billingclient.api.BillingClient.BillingResponse;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.Purchase.PurchasesResult;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.donation.DonationListFragment.SkuSelectionListener;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
 import java.util.ArrayList;
@@ -43,7 +45,17 @@ import static com.zegoggles.smssync.activity.donation.DonationListFragment.SKUS;
 public class DonationActivity extends AppCompatActivity implements
         SkuDetailsResponseListener,
         PurchasesUpdatedListener,
-        DonationListFragment.SkuSelectionListener {
+        SkuSelectionListener {
+
+    public interface DonationStatusListener {
+        enum State {
+            DONATED,
+            NOT_DONATED,
+            UNKNOWN,
+            NOT_AVAILABLE
+        }
+        void userDonationState(State state);
+    }
 
     static boolean DEBUG_IAB = BuildConfig.DEBUG;
     private @Nullable BillingClient billingClient;
@@ -52,16 +64,16 @@ public class DonationActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         billingClient = BillingClient.newBuilder(this).setListener(this).build();
         billingClient.startConnection(new BillingClientStateListener() {
-            @Override
-            public void onBillingSetupFinished(@BillingResponse int resultCode) {
-                Log.d(TAG, "onBillingSetupFinished(" + resultCode + ")" + Thread.currentThread().getName());
+            @Override public void onBillingSetupFinished(@BillingResponse int resultCode) {
+                if (LOCAL_LOGV) {
+                    Log.v(TAG, "onBillingSetupFinished(" + resultCode + ")" + Thread.currentThread().getName());
+                }
                 switch (resultCode) {
                     case OK:
                         queryAvailableSkus();
                         break;
                     default:
-                        String message = getString(R.string.donation_error_iab_unavailable);
-                        Toast.makeText(DonationActivity.this, message, LENGTH_LONG).show();
+                        Toast.makeText(DonationActivity.this, R.string.donation_error_iab_unavailable, LENGTH_LONG).show();
                         Log.w(TAG, "Problem setting up in-app billing: " + resultCode);
                         finish();
                         break;
@@ -77,7 +89,10 @@ public class DonationActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        billingClient = null;
+        if (billingClient != null) {
+            billingClient.endConnection();
+            billingClient = null;
+        }
     }
 
     @Override
@@ -127,9 +142,9 @@ public class DonationActivity extends AppCompatActivity implements
                     message = getString(R.string.donation_unspecified_error, responseCode);
             }
             Toast.makeText(this,
-                    getString(R.string.ui_donation_failure_message, message),
-                    LENGTH_LONG)
-                    .show();
+                getString(R.string.ui_donation_failure_message, message),
+                LENGTH_LONG)
+                .show();
         }
         finish();
     }
@@ -163,50 +178,41 @@ public class DonationActivity extends AppCompatActivity implements
         donationList.show(getSupportFragmentManager(), null);
     }
 
-    private void log(String s) {
+    private static void log(String s) {
         if (DEBUG_IAB) {
             Log.d(TAG, s);
         }
     }
 
-    public interface DonationStatusListener {
-        enum State {
-            DONATED,
-            NOT_DONATED,
-            UNKNOWN,
-            NOT_AVAILABLE
-        }
-        void userDonationState(State state);
-    }
-
-    public static void checkUserHasDonated(Context context, final DonationStatusListener listener) {
+    public static void checkUserHasDonated(Context context,
+                                           final DonationStatusListener listener) {
         final BillingClient helper = BillingClient.newBuilder(context).setListener(new PurchasesUpdatedListener() {
             @Override
-            public void onPurchasesUpdated(int responseCode, List<Purchase> purchases) {
-                if (LOCAL_LOGV) {
-                    Log.v(TAG, "onPurchasesUpdated(" + responseCode + ")");
-                }
+            public void onPurchasesUpdated(@BillingResponse int responseCode, @Nullable List<Purchase> purchases) {
+                log("onPurchasesUpdated("+responseCode+", "+purchases+")");
             }
         }).build();
         helper.startConnection(new BillingClientStateListener() {
             @Override
             public void onBillingSetupFinished(@BillingResponse int resultCode) {
-                if (LOCAL_LOGV) {
-                    Log.v(TAG, "checkUserHasDonated: onBillingSetupFinished("+resultCode+")");
-                }
-                if (resultCode == OK) {
-                    Purchase.PurchasesResult result = helper.queryPurchases(INAPP);
-                    if (result.getResponseCode() == OK) {
-                        listener.userDonationState(userHasDonated(result.getPurchasesList()) ? DONATED : NOT_DONATED);
-                    } else {
-                        listener.userDonationState(UNKNOWN);
-                    }
-                } else {
-                    listener.userDonationState(resultCode == BILLING_UNAVAILABLE ? NOT_AVAILABLE : UNKNOWN);
-                }
+                    log("checkUserHasDonated: onBillingSetupFinished("+resultCode+")");
                 try {
-                    helper.endConnection();
-                } catch (Exception ignored) {
+                    if (resultCode == OK) {
+                        PurchasesResult result = helper.queryPurchases(INAPP);
+                        if (result.getResponseCode() == OK) {
+                            listener.userDonationState(userHasDonated(result.getPurchasesList()) ? DONATED : NOT_DONATED);
+                        } else {
+                            listener.userDonationState(UNKNOWN);
+                        }
+                    } else {
+                        listener.userDonationState(resultCode == BILLING_UNAVAILABLE ? NOT_AVAILABLE : UNKNOWN);
+                    }
+                } finally {
+                    try {
+                        helper.endConnection();
+                    } catch (Exception ignored) {
+                        Log.w(TAG, "ignoring error during endConnection()", ignored);
+                    }
                 }
             }
             public void onBillingServiceDisconnected() {
