@@ -3,9 +3,9 @@ package com.zegoggles.smssync.activity.donation;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import com.zegoggles.smssync.R;
@@ -36,7 +36,7 @@ public class DonationListFragment extends Dialogs.BaseFragment {
         }
     }
 
-    @Override
+    @Override @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final ArrayList<Sku> skus = getArguments().getParcelableArrayList(SKUS);
         return new AlertDialog.Builder(getContext())

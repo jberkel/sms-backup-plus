@@ -58,7 +58,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         super.onResume();
 
         checkUserDonationStatus();
-        updateAutoBackupPreference();
+        updateAutoBackupPreferences();
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 App.post(new AccountConnectionChangedEvent((Boolean) change));
@@ -70,18 +70,18 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
     @Subscribe public void onAccountAdded(AccountAddedEvent event) {
         updateConnected();
-        updateAutoBackupPreference();
+        updateAutoBackupPreferences();
     }
 
     @Subscribe public void onAccountRemoved(AccountRemovedEvent event) {
         authPreferences.clearOauth2Data();
         preferences.getDataTypePreferences().clearLastSyncData();
         updateConnected();
-        updateAutoBackupPreference();
+        updateAutoBackupPreferences();
     }
 
     @Subscribe public void onAutoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
-        updateAutoBackupPreference();
+        updateAutoBackupPreferences();
     }
 
     @Subscribe public void onSettingsReset(SettingsResetEvent event) {
@@ -98,18 +98,14 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         return connected;
     }
 
-    private void updateAutoBackupPreference() {
-        final Preference preference = findPreference(ENABLE_AUTO_BACKUP.key);
-        preference.setSummary(summarizeAutoBackupSettings());
-        preference.setEnabled(!authPreferences.useXOAuth() || authPreferences.hasOAuth2Tokens());
+    private void updateAutoBackupPreferences() {
+        final CheckBoxPreference autoBackup = (CheckBoxPreference) findPreference(ENABLE_AUTO_BACKUP.key);
+        autoBackup.setSummary(summarizeAutoBackupSettings());
+        autoBackup.setEnabled(!authPreferences.useXOAuth() || authPreferences.hasOAuth2Tokens());
 
-        updateAutoBackupSettingsScreen();
-    }
-
-    private void updateAutoBackupSettingsScreen() {
-        final Preference preference = findPreference(BACKUP_SETTINGS_SCREEN.key);
-        preference.setSummary(summarizeBackupScheduleSettings());
-        preference.setEnabled(preferences.isEnableAutoSync());
+        final Preference autoBackupSettings = findPreference(BACKUP_SETTINGS_SCREEN.key);
+        autoBackupSettings.setSummary(summarizeBackupScheduleSettings(autoBackup.isChecked()));
+        autoBackupSettings.setEnabled(autoBackup.isEnabled() && autoBackup.isChecked());
     }
 
     private String getConnectedSummary(CheckBoxPreference connected) {
@@ -141,14 +137,14 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         return summary.toString();
     }
 
-    private String summarizeBackupScheduleSettings() {
+    private String summarizeBackupScheduleSettings(boolean isEnabled) {
+        if (!isEnabled) {
+            return null;
+        }
+
         final StringBuilder summary = new StringBuilder();
-
-        final ListPreference regSchedule = (ListPreference)
-                findPreference(REGULAR_TIMEOUT_SECONDS.key);
-
-        final ListPreference incomingSchedule = (ListPreference)
-                findPreference(INCOMING_TIMEOUT_SECONDS.key);
+        final ListPreference regSchedule = (ListPreference) findPreference(REGULAR_TIMEOUT_SECONDS.key);
+        final ListPreference incomingSchedule = (ListPreference) findPreference(INCOMING_TIMEOUT_SECONDS.key);
 
         // values are out-of sync
         regSchedule.setValue(String.valueOf(preferences.getRegularTimeoutSecs()));

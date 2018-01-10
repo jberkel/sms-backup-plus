@@ -84,7 +84,6 @@ public class Dialogs {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
     public static class BaseFragment extends AppCompatDialogFragment {
         Dialog createMessageDialog(String title, String msg, int icon) {
             return new AlertDialog.Builder(getContext())
