@@ -27,7 +27,7 @@ public class AutoBackupSettings extends SMSBackupPreferenceFragment {
         if (!App.gcmAvailable) {
             final Preference preference = findPreference(USE_OLD_SCHEDULER.key);
             preference.setEnabled(false);
-            preference.setSummary(getString(R.string.pref_use_old_scheduler_no_gcm_summary));
+            preference.setSummary(R.string.pref_use_old_scheduler_no_gcm_summary);
         }
     }
 }
