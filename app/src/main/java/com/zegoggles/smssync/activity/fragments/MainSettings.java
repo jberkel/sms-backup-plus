@@ -76,6 +76,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     @Subscribe public void onAccountRemoved(AccountRemovedEvent event) {
         authPreferences.clearOauth2Data();
         preferences.getDataTypePreferences().clearLastSyncData();
+        findAutoBackupPreference().setChecked(false);
 
         updateConnected();
         updateAutoBackupPreferences();
@@ -103,7 +104,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     }
 
     private void updateAutoBackupPreferences() {
-        final CheckBoxPreference autoBackup = (CheckBoxPreference) findPreference(ENABLE_AUTO_BACKUP.key);
+        final CheckBoxPreference autoBackup = findAutoBackupPreference();
         autoBackup.setSummary(summarizeAutoBackupSettings());
         autoBackup.setEnabled(!authPreferences.useXOAuth() || authPreferences.hasOAuth2Tokens());
 
@@ -168,6 +169,10 @@ public class MainSettings extends SMSBackupPreferenceFragment {
                     .append(")");
         }
         return summary.toString();
+    }
+
+    private CheckBoxPreference findAutoBackupPreference() {
+        return (CheckBoxPreference) findPreference(ENABLE_AUTO_BACKUP.key);
     }
 
     private void checkUserDonationStatus() {
