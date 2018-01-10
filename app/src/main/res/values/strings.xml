@@ -61,7 +61,7 @@
 
   <string name="ui_settings_advanced_label">Advanced settings</string>
   <string name="ui_settings_advanced_desc">Set advanced preferences.</string>
-  <string name="ui_settings_advanced_server_label">IMAP server settings</string>
+  <string name="ui_settings_advanced_server_label">Custom IMAP server</string>
   <string name="ui_settings_advanced_server_desc">Do not change unless you know what you are doing!</string>
 
   <string name="imap_settings">IMAP settings</string>

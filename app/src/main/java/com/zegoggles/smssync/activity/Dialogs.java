@@ -36,21 +36,23 @@ import android.webkit.WebViewClient;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.MainActivity.Actions;
 import com.zegoggles.smssync.activity.events.DisconnectAccountEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
+import com.zegoggles.smssync.activity.events.PerformAction;
+import com.zegoggles.smssync.activity.events.PerformAction.Actions;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.AppLog;
 
 import static android.R.drawable.ic_dialog_alert;
 import static android.R.drawable.ic_dialog_info;
+import static android.R.string.cancel;
+import static android.R.string.ok;
+import static android.R.string.yes;
 import static android.app.ProgressDialog.STYLE_SPINNER;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
-import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
-import static android.provider.Telephony.Sms.Intents.EXTRA_PACKAGE_NAME;
-import static com.zegoggles.smssync.activity.MainActivity.Actions.Backup;
-import static com.zegoggles.smssync.activity.MainActivity.Actions.BackupSkip;
+import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup;
+import static com.zegoggles.smssync.activity.events.PerformAction.Actions.BackupSkip;
 
 public class Dialogs {
     public enum Type {
@@ -88,7 +90,7 @@ public class Dialogs {
                 .setTitle(title)
                 .setMessage(msg)
                 .setIcon(icon)
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(ok, null)
                 .create();
         }
     }
@@ -110,6 +112,7 @@ public class Dialogs {
 
     public static class FirstSync extends BaseFragment {
         static final String MAX_ITEMS_PER_SYNC = "max_items_per_sync";
+        static final int SKIP_BUTTON = BUTTON_NEGATIVE;
 
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -117,7 +120,7 @@ public class Dialogs {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            App.post(which == BUTTON_NEGATIVE ? BackupSkip : Backup);
+                            App.post(which == SKIP_BUTTON ? BackupSkip : Backup);
                         }
                     };
             final int maxItems = getArguments().getInt(MAX_ITEMS_PER_SYNC);
@@ -157,7 +160,7 @@ public class Dialogs {
             });
             webView.loadUrl("file:///android_asset/about.html");
             return new AlertDialog.Builder(getContext())
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(ok, null)
                 .setIcon(R.drawable.ic_launcher)
                 .setTitle(R.string.menu_info)
                 .setView(contentView)
@@ -170,13 +173,13 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.ui_dialog_reset_title)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         App.post(new SettingsResetEvent());
                     }
                 })
                 .setMessage(R.string.ui_dialog_reset_message)
-                .setNegativeButton(android.R.string.cancel, null)
+                .setNegativeButton(cancel, null)
                 .create();
         }
     }
@@ -188,8 +191,8 @@ public class Dialogs {
                 .setIcon(ic_dialog_alert)
                 .setTitle(R.string.ui_dialog_confirm_action_title)
                 .setMessage(R.string.ui_dialog_disconnect_msg)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setNegativeButton(cancel, null)
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         App.post(new DisconnectAccountEvent());
                     }
@@ -244,8 +247,8 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
                 .setMessage(getString(R.string.ui_dialog_connect_msg, getString(R.string.app_name)))
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setNegativeButton(cancel, null)
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         final Intent intent = getArguments().getParcelable(INTENT);
                         getActivity().startActivityForResult(intent, REQUEST_WEB_AUTH);
@@ -261,7 +264,7 @@ public class Dialogs {
                 .setTitle(R.string.status_unknown_error)
                 .setIcon(ic_dialog_alert)
                 .setMessage(R.string.ui_dialog_connect_token_error)
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(ok, null)
                 .create();
         }
     }
@@ -273,7 +276,7 @@ public class Dialogs {
                 .setTitle(R.string.status_unknown_error)
                 .setIcon(ic_dialog_alert)
                 .setMessage(R.string.ui_dialog_account_manager_token_error)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         App.post(new FallbackAuthEvent(false));
                     }
@@ -306,14 +309,14 @@ public class Dialogs {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.ui_dialog_confirm_action_title)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        App.post(Actions.valueOf(getArguments().getString(ACTION)));
+                        App.post(new PerformAction(Actions.valueOf(getArguments().getString(ACTION)), false));
                     }
                 })
                 .setMessage(R.string.ui_dialog_confirm_action_msg)
                 .setIcon(ic_dialog_alert)
-                .setNegativeButton(android.R.string.cancel, null)
+                .setNegativeButton(cancel, null)
                 .create();
         }
     }
@@ -327,7 +330,7 @@ public class Dialogs {
             return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.ui_dialog_sms_default_package_change_title)
                 .setIcon(ic_dialog_info)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         requestDefaultSmsPackageChange();
                     }

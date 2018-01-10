@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.events.PerformAction;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.CancelEvent;
@@ -31,6 +32,8 @@ import java.util.Date;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup;
+import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Restore;
 
 public class StatusPreference extends Preference implements View.OnClickListener {
     private Button backupButton;
@@ -84,27 +87,11 @@ public class StatusPreference extends Preference implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == backupButton) {
-            if (!SmsBackupService.isServiceWorking()) {
-                if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
-                App.post(MainActivity.Actions.Backup);
-            } else {
-                if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
-                // Sync button will be restored on next status update.
-                backupButton.setText(R.string.ui_sync_button_label_canceling);
-                backupButton.setEnabled(false);
-                App.post(new CancelEvent());
-            }
-        } else if (v == restoreButton) {
-            if (LOCAL_LOGV) Log.v(TAG, "restore");
-            if (!SmsRestoreService.isServiceWorking()) {
-                App.post(MainActivity.Actions.Restore);
-            } else {
-                restoreButton.setText(R.string.ui_sync_button_label_canceling);
-                restoreButton.setEnabled(false);
-                App.post(new CancelEvent());
-            }
+    public void onClick(View which) {
+        if (which == backupButton) {
+            onBackup();
+        } else if (which == restoreButton) {
+            onRestore();
         }
     }
 
@@ -193,11 +180,34 @@ public class StatusPreference extends Preference implements View.OnClickListener
                 break;
             case CANCELED_BACKUP:
                 statusLabel.setText(R.string.status_canceled);
-
                 syncDetailsLabel.setText(getContext().getString(R.string.status_canceled_details,
                         newState.currentSyncedItems,
                         newState.itemsToSync));
                 break;
+        }
+    }
+
+    private void onBackup() {
+        if (!SmsBackupService.isServiceWorking()) {
+            if (LOCAL_LOGV) Log.v(TAG, "user requested sync");
+            App.post(new PerformAction(Backup, preferences.confirmAction()));
+        } else {
+            if (LOCAL_LOGV) Log.v(TAG, "user requested cancel");
+            // Sync button will be restored on next status update.
+            backupButton.setText(R.string.ui_sync_button_label_canceling);
+            backupButton.setEnabled(false);
+            App.post(new CancelEvent());
+        }
+    }
+
+    private void onRestore() {
+        if (LOCAL_LOGV) Log.v(TAG, "restore");
+        if (!SmsRestoreService.isServiceWorking()) {
+            App.post(new PerformAction(Restore, preferences.confirmAction()));
+        } else {
+            restoreButton.setText(R.string.ui_sync_button_label_canceling);
+            restoreButton.setEnabled(false);
+            App.post(new CancelEvent());
         }
     }
 

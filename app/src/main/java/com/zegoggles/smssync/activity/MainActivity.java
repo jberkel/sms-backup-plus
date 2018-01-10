@@ -50,6 +50,8 @@ import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
 import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
+import com.zegoggles.smssync.activity.events.PerformAction;
+import com.zegoggles.smssync.activity.events.PerformAction.Actions;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
@@ -70,11 +72,9 @@ import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.Dialogs.ConfirmAction.ACTION;
-import static com.zegoggles.smssync.activity.Dialogs.Connect.INTENT;
 import static com.zegoggles.smssync.activity.Dialogs.Connect.REQUEST_WEB_AUTH;
 import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
-import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.*;
 import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ABOUT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCESS_TOKEN;
@@ -91,6 +91,8 @@ import static com.zegoggles.smssync.activity.Dialogs.Type.UPGRADE_FROM_SMSBACKUP
 import static com.zegoggles.smssync.activity.Dialogs.Type.VIEW_LOG;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_ADD_ACCOUNT;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_FALLBACK_AUTH;
+import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup;
+import static com.zegoggles.smssync.activity.events.PerformAction.Actions.BackupSkip;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -102,12 +104,6 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager.OnBackStackChangedListener {
     private static final int REQUEST_PICK_ACCOUNT = 2;
     private static final String SCREEN_TITLE = "title";
-
-    enum Actions {
-        Backup,
-        BackupSkip,
-        Restore
-    }
 
     private Preferences preferences;
     private AuthPreferences authPreferences;
@@ -268,11 +264,6 @@ public class MainActivity extends AppCompatActivity implements
         preferences.reset();
     }
 
-    @Subscribe
-    public void performAction(Actions act) {
-        performAction(act, preferences.confirmAction());
-    }
-
     @Subscribe public void onConnect(AccountConnectionChangedEvent event) {
         if (event.connected) {
             startActivityForResult(new Intent(MainActivity.this,
@@ -312,40 +303,29 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void initiateRestore() {
-        if (checkLoginInformation()) {
-            startRestore();
-        }
-    }
-
-    private void initiateBackup() {
-        if (checkLoginInformation()) {
-            if (preferences.isFirstBackup()) {
+    @Subscribe public void performAction(PerformAction action) {
+        if (authPreferences.isLoginInformationSet()) {
+            if (action.confirm) {
+                showDialog(CONFIRM_ACTION, new BundleBuilder().putString(ACTION, action.action.name()).build());
+            } else if (preferences.isFirstBackup() && action.action == Backup) {
                 showDialog(FIRST_SYNC);
             } else {
-                startBackup(false);
+                doPerform(action.action);
             }
-        }
-    }
-
-    private boolean checkLoginInformation() {
-        if (!authPreferences.isLoginInformationSet()) {
+        } else {
             showDialog(MISSING_CREDENTIALS);
-            return false;
-        } else {
-            return true;
         }
     }
 
-    private void performAction(Actions act, boolean needConfirm) {
-        if (needConfirm) {
-            showDialog(CONFIRM_ACTION, new BundleBuilder().putString(ACTION, act.name()).build());
-        } else {
-            if (Actions.Backup.equals(act)) {
-                initiateBackup();
-            } else if (Actions.Restore.equals(act)) {
-                initiateRestore();
-            }
+    @Subscribe public void doPerform(Actions action) {
+        switch (action) {
+            case Backup:
+            case BackupSkip:
+                startBackup(action == BackupSkip);
+                break;
+            case Restore:
+                startRestore();
+                break;
         }
     }
 
