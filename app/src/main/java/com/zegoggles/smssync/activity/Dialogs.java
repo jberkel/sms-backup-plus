@@ -320,6 +320,7 @@ public class Dialogs {
 
     public static class SmsDefaultPackage extends BaseFragment {
         static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
+        static final String INTENT = "intent";
 
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -337,10 +338,8 @@ public class Dialogs {
 
         @TargetApi(Build.VERSION_CODES.KITKAT)
         private void requestDefaultSmsPackageChange() {
-            final Intent changeIntent = new Intent(ACTION_CHANGE_DEFAULT)
-                    .putExtra(EXTRA_PACKAGE_NAME, getContext().getPackageName());
-
-            startActivityForResult(changeIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+            final Intent intent = getArguments().getParcelable(INTENT);
+            getActivity().startActivityForResult(intent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
         }
     }
 }

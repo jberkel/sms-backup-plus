@@ -44,6 +44,8 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.Dialogs.Connect;
+import com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
 import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
@@ -62,6 +64,7 @@ import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
 import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
+import static android.provider.Telephony.Sms.Intents.EXTRA_PACKAGE_NAME;
 import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -71,6 +74,7 @@ import static com.zegoggles.smssync.activity.Dialogs.Connect.INTENT;
 import static com.zegoggles.smssync.activity.Dialogs.Connect.REQUEST_WEB_AUTH;
 import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
+import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.*;
 import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ABOUT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCESS_TOKEN;
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements
     private AuthPreferences authPreferences;
     private OAuth2Client oauth2Client;
     private Intent fallbackAuthIntent;
+    private Intent changeDefaultPackageIntent;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -121,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         fallbackAuthIntent = new Intent(this, OAuth2WebAuthActivity.class).setData(oauth2Client.requestUrl());
+        changeDefaultPackageIntent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, getPackageName());
 
         preferences = new Preferences(this);
         preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(
@@ -187,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements
 
         switch (requestCode) {
             case REQUEST_CHANGE_DEFAULT_SMS_PACKAGE: {
+                if (resultCode == RESULT_CANCELED) break;
                 preferences.setSeenSmsDefaultPackageChangeDialog();
                 if (preferences.getSmsDefaultPackage() != null) {
                     startRestore();
@@ -402,8 +409,9 @@ public class MainActivity extends AppCompatActivity implements
             case MISSING_CREDENTIALS:
                 arguments.putBoolean(USE_XOAUTH, authPreferences.useXOAuth()); break;
             case CONNECT:
-                arguments.putParcelable(INTENT, fallbackAuthIntent);
-                break;
+                arguments.putParcelable(Connect.INTENT, fallbackAuthIntent); break;
+            case SMS_DEFAULT_PACKAGE_CHANGE:
+                arguments.putParcelable(SmsDefaultPackage.INTENT, changeDefaultPackageIntent); break;
         }
         showDialog(dialog, arguments);
     }
@@ -414,10 +422,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void requestDefaultSmsPackageChange() {
-        final Intent changeIntent = new Intent(ACTION_CHANGE_DEFAULT)
-                .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, getPackageName());
-
-        startActivityForResult(changeIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+        startActivityForResult(changeDefaultPackageIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -425,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "restoring SMS provider "+smsPackage);
         if (!TextUtils.isEmpty(smsPackage)) {
             final Intent changeDefaultIntent = new Intent(ACTION_CHANGE_DEFAULT)
-                    .putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, smsPackage);
+                    .putExtra(EXTRA_PACKAGE_NAME, smsPackage);
 
             startActivity(changeDefaultIntent);
         }
