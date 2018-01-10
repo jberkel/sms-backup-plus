@@ -122,7 +122,6 @@
 <string name="ui_dialog_access_token_error_title">Помилка авторизації</string>
 <string name="ui_dialog_access_token_error_msg">Не можливо отримати доступ. Переконайтеся, що ви надали доступ застосунку.</string>
 <string name="ui_dialog_connect_msg">В вікні переглядачу тенет надайте доступ застосунку %1$s до вашої пошти.</string>
-<string name="ui_dialog_connect_token_error">Не вдалося з’єднатися з Google. Переконайтеся, що мережеве з’єднання встановлено і час та часовий пояс налаштовані правильно.</string>
 <string name="ui_dialog_disconnect_msg">Ви впевнені? Після відключення потрібно буде повторно надати доступ до вашої пошти. Стан синхронізації буде скинуто.</string>
 <string name="ui_dialog_upgrade_title">Інформація про сумісність</string>
 <string name="ui_dialog_upgrade_msg">

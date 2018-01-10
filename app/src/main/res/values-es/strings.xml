@@ -151,7 +151,6 @@
 
 
   <string name="ui_dialog_connect_msg">Se abrirá una ventana de navegador, donde usted necesitará iniciar sesión en gmail y autorizar esta aplicación %1$s</string>
-  <string name="ui_dialog_connect_token_error">No se pudo obtener el token de solicitud de Google. Asegúrese de que el teléfono está conectado a internet.</string>
   <string name="ui_dialog_disconnect_msg">¿Está seguro? Necesitará autorizar de nuevo después de desconectar esta cuenta</string>
 
   <string name="ui_dialog_upgrade_title">Información de actualización</string>

@@ -168,7 +168,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">將會開啟一個瀏覽器視窗，提示您登入到 Gmail 並為 %1$s 授予訪問您的電郵的權限。</string>
-  <string name="ui_dialog_connect_token_error">無法從 Google 取得權限。請確認此設備已經連接到網絡。</string>
   <string name="ui_dialog_disconnect_msg">您確定嗎？斷開後您將需要重新認證帳戶，並且本地同步處理狀態將被重設。</string>
 
   <string name="ui_dialog_upgrade_title">升級訊息</string>

@@ -141,7 +141,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">%1$s programının Gmail hesabınıza erişebilmesi için açılan tarayıcı ekranında hesabınıza giriş yapmalısınız.</string>
-  <string name="ui_dialog_connect_token_error">Googledan veri erişim isteği alınamadı. Ağ bağlantınızın etkin olduğundan ve zaman / zaman dilimi ayarınızın düzgün bir şekilde ayarlandığından emin olun.</string>
   <string name="ui_dialog_disconnect_msg">Emin misiniz? Bağlantınızı kesip tekrar kimlik doğrulaması yapmanız durumunda yerel senkronizason durumu sıfırlanacak.</string>
 
   <string name="ui_dialog_upgrade_title">Güncelleme bilgisi</string>

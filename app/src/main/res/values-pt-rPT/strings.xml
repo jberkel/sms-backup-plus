@@ -115,7 +115,6 @@
   <string name="ui_dialog_access_token_error_msg">Não foi possível obter autorização de acesso(token error). Confirme que definiu \"Autorizar acesso\".
   </string>
   <string name="ui_dialog_connect_msg">Uma janela do browser será aberta, deverá entrar na sua conta Gmail e confirmar %1$s o acesso aos seus emails.</string>
-  <string name="ui_dialog_connect_token_error">Não foi possível obter autorização de acesso(token request error). Confirme que tem uma ligação de rede activa e que as horas e o fuso horário estão corretos.</string>
   <string name="ui_dialog_disconnect_msg">Tem a certeza? Terá de voltar a autorizar o acesso à sua conta e a configuração da sincronização local será reposta(reset).</string>
   <string name="ui_dialog_upgrade_title">Atualizações</string>
   <string name="ui_dialog_upgrade_msg">SMS Backup+ é completamente compatível com SMS Backup. No entanto, verifique que apenas tem \"Cópia Automática\" ativada numa das aplicação, ou poderá ficar com SMS duplicadas. Também deverá selecionar \"Ignorar\" mensagens guardadas na sincronização inicial se as SMS no aparelho já tenham uma cópia de segurança efetuada anteriormente. </string>

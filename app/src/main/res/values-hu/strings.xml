@@ -167,7 +167,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">Egy böngésző ablak fog megnyílni, amiben be kell jelentkeznie a Gmail fiókjával és engedélyeznie kell az %1$s számára a hozzáférést az emailjeihez.</string>
-  <string name="ui_dialog_connect_token_error">Nem sikerült a Google hozzáférési token megszerzése. Győződjön meg róla, hogy a van élő internet kapcsolata, és a készüléken az idő, illetve az időzóna megfelelően van beállítva.</string>
   <string name="ui_dialog_disconnect_msg">Biztos benne? A kapcsolat bontása után újra jóvá kell hagynia hozzáférést a fiókjával és a helyi biztonsági mentés állapota is alaphelyzetbe kerül.</string>
 
   <string name="ui_dialog_upgrade_title">Frissítési információk</string>

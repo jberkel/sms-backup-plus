@@ -166,7 +166,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">Votre navigateur va s\'ouvrir, vous demandant de vous identifier à Gmail, afin d\'autoriser %1$s l\'accès à vos e-mails.</string>
-  <string name="ui_dialog_connect_token_error">Impossible d\'obtenir la requête d\'identification de Google. Veuillez vérifier que le réseau est actif et que le fuseau horaire est configuré correctement.</string>
   <string name="ui_dialog_disconnect_msg">Êtes-vous certain ? Vous devrez ensuite ré-autoriser l\'accès à votre compte une fois déconnecté, et la syncronisation locale sera réinitialisée.</string>
 
   <string name="ui_dialog_upgrade_title">Informations de mises à jour</string>

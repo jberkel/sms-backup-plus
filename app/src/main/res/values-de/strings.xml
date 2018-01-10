@@ -163,7 +163,6 @@
   <string name="ui_dialog_access_token_error_msg">Konnte Zugangstoken nicht erhalten. Stellen Sie sicher dass Sie \"Zugriff gewähren\" gewählt haben.</string>
 
   <string name="ui_dialog_connect_msg">Melden Sie sich im nachfolgenden Browser Fenster bitte bei Gmail an und gewähren Sie %1$s Zugriff zu Ihren E-Mails.</string>
-  <string name="ui_dialog_connect_token_error">Konnte Anforderungstoken von Google nicht erhalten. Stellen Sie sicher dass die Netzwerkverbindung aktiv ist und Ihre Uhrzeit/Zeitzone richtig eingestellt ist.</string>
   <string name="ui_dialog_disconnect_msg">Sind Sie sicher? Nach der Trennung werden Sie sich erneut anmelden müssen. Außerdem wird Ihr Synchronisierungsstatus zurückgesetzt.</string>
 
   <string name="ui_dialog_upgrade_title">Upgrade Information</string>

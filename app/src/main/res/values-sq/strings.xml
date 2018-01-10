@@ -121,7 +121,6 @@
     \"Siguro akses\".
   </string>
   <string name="ui_dialog_connect_msg">Një dritare shfletuesi do të hapet, duke ju kërkuar të futeni në Gmail për të siguruar %1$s akses në e-mailet tuaja.</string>
-  <string name="ui_dialog_connect_token_error">Nuk mund të marri shenjën e kërkesës nga Google. Sigurohuni që lidhja me rrjetin është aktive dhe koha / zona e kohës është konfiguruar saktë.</string>
   <string name="ui_dialog_disconnect_msg">Jeni të sigurtë? Ju do të keni nevojë të riautorizoni llogarinë tuaj mbas i keni shkëputur si dhe gjendja e sinkronizimit lokal do të rivendoset.</string>
   <string name="ui_dialog_upgrade_title">Informacion përditësimi</string>
   <string name="ui_dialog_upgrade_msg">

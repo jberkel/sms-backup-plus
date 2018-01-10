@@ -160,7 +160,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">Si aprirà una finestra del browser per richiedere il consenso di accesso all\'account Gmail da parte di %1$s per accedere alle email.</string>
-  <string name="ui_dialog_connect_token_error">Impossibile ottenere il token di richiesta da Google. Assicurarsi che la connessione di rete sia attiva.</string>
   <string name="ui_dialog_disconnect_msg">Sei sicuro? Sarà necessario autorizzare nuovamente il tuo account dopo averlo disconnesso e lo stato di sincronizzazione locale sarà resettato.</string>
 
   <string name="ui_dialog_upgrade_title">Aggiorna informazioni</string>

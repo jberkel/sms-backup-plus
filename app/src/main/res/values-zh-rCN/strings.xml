@@ -168,7 +168,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">将会开启一个浏览器, 提示您登录 Gmail 并授权 %1$s 访问您的邮件。</string>
-  <string name="ui_dialog_connect_token_error">无法从 Google 获取授权。请确认您已连接到网络并设置了正确的时间/时区。</string>
   <string name="ui_dialog_disconnect_msg">您确认要断开连接吗？您将需要重新认证账户，并且本地的同步状态将被重置。</string>
 
   <string name="ui_dialog_upgrade_title">升级信息</string>

@@ -160,7 +160,6 @@
   <string name="ui_dialog_access_token_error_msg">Kunne ikke få adgang. Husk at vælg \"Tillad adgang\".</string>
 
   <string name="ui_dialog_connect_msg">Et browser vindue vil blive åbnet. Du vil blive bedt om at logge ind på din Gmail konto, for at give %1$s adgang til dine emails</string>
-  <string name="ui_dialog_connect_token_error">Kunne ikke få svar fra Google. Kontroller at der er netværksforbindelse og at tiden og tidszonen er indstillet korrekt.</string>
   <string name="ui_dialog_disconnect_msg">Er du sikker? Du skal bagefter gen-autorisere kontoen og dine synkroniseringen vil blive nulstillet.</string>
 
   <string name="ui_dialog_upgrade_title">Opgraderings information</string>

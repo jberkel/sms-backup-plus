@@ -167,7 +167,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">브라우저 창이 열려서 이메일에 %1$s 접근을 승인하기 위해 Gmail에 로그인하라고 할 것입니다.</string>
-  <string name="ui_dialog_connect_token_error">Google로부터 토큰을 받아오지 못했습니다. 네트워크 연결이 활성화되었는지 확인하고 시간과 시간대 설정이 올바르게 되었는지 확인하십시오.</string>
   <string name="ui_dialog_disconnect_msg">확실한가요? 연결을 해제하고 난 후에는 계정을 재인증해야 하고 로컬 동기화 상태가 초기화될 것입니다.</string>
 
   <string name="ui_dialog_upgrade_title">업그레이드 정보</string>

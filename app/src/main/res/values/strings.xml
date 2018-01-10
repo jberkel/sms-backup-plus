@@ -171,7 +171,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">A browser window will open, prompting you to log into Gmail to grant %1$s access to your emails.</string>
-  <string name="ui_dialog_connect_token_error">Could not obtain request token from Google. Make sure the network connection is active and your time / time zone is configured properly.</string>
   <string name="ui_dialog_disconnect_msg">Are you sure? You will need to reauthorize your account after disconnecting and the local sync state will be reset.</string>
 
   <string name="ui_dialog_upgrade_title">Upgrade information</string>

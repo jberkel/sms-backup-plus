@@ -164,7 +164,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">S\'obrirà una finestra del navegador que us demanarà que inicieu la sessió a Gmail per concedir %1$s accés al correu electrònic.</string>
-  <string name="ui_dialog_connect_token_error">No s\'ha pogut aconseguir el testimoni d\'accés de Google. Assegureu-vos que la connexió de xarxa està activa i que l\'hora i la zona horària estan ben configurats.</string>
   <string name="ui_dialog_disconnect_msg">Segur? Caldrà que torneu a autoritzar el compte després de la desconnexió i l\'estat de sincronització local es restablirà.</string>
 
   <string name="ui_dialog_upgrade_title">Informació d\'actualització</string>

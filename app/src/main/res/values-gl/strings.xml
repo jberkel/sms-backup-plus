@@ -162,7 +162,6 @@
   </string>
 
   <string name="ui_dialog_connect_msg">Abrirase un navegador que lle solicitará que inicie sesión en GMail para conceder acceso a %1$s ás súas mensaxes de correo.</string>
-  <string name="ui_dialog_connect_token_error">Non se puido obter un identificador de solicitude de Google. Asegúrese de que a conexión de rede esta activa e a hora / zona horaria está configurada correctamente.</string>
   <string name="ui_dialog_disconnect_msg">Está seguro? Terá que reautorizar a súa conta despois de desconectar e reiniciarase o estado da sincronización local.</string>
 
   <string name="ui_dialog_upgrade_title">Información de actualización</string>

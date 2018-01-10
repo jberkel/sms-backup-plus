@@ -108,7 +108,6 @@
     <string name="ui_dialog_access_token_error_title">Uwierzytelnianie nie powiodło się</string>
     <string name="ui_dialog_access_token_error_msg">Nie można uzyskać żetonu dostępu. Upewnij się, że wybrano opcję \"Pozwól na dostęp\".</string>
     <string name="ui_dialog_connect_msg">Zostanie otwarte okno przeglądarki, w którym należy zalogować się do gmail i autoryzować ten program %1$s</string>
-    <string name="ui_dialog_connect_token_error">Nie można uzyskać żetonu żądania od Google. Upewnij się, że telefon jest podłączony do Internetu.</string>
     <string name="ui_dialog_disconnect_msg">Na pewno? Trzeba będzie powtórzyć uwierzytelnianie po odłączenie tego konta</string>
     <string name="ui_dialog_upgrade_title">Informacje o aktualizacji</string>
     <string name="ui_dialog_upgrade_msg">SMS Backup+ jest całkowicie zgodny wstecz z SMS Backup. Należy jednak upewnić się, że \"Automatyczne wykonywanie kopii zapasowej\" jest włączone tylko w jednym programie, w przeciwnym razie powstaną duplikaty wiadomości. Należy również wybrać \"Pomiń\" przy pierwszej synchronizacji, jeśli wcześniej została już utworzona kopia zapasowa.</string>
