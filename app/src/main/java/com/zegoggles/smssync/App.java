@@ -89,7 +89,7 @@ public class App extends Application {
         if (LOCAL_LOGV) {
             Log.v(TAG, "autoBackupSettingsChanged("+event+")");
         }
-        setBroadcastReceiversEnabled(preferences.isUseOldScheduler() && preferences.isEnableAutoSync());
+        setBroadcastReceiversEnabled(preferences.isUseOldScheduler() && preferences.isAutoBackupEnabled());
         rescheduleJobs();
     }
 
@@ -129,7 +129,7 @@ public class App extends Application {
     private void rescheduleJobs() {
         backupJobs.cancelAll();
 
-        if (preferences.isEnableAutoSync()) {
+        if (preferences.isAutoBackupEnabled()) {
             backupJobs.scheduleRegular();
 
             if (preferences.getIncomingTimeoutSecs() > 0 && !preferences.isUseOldScheduler()) {

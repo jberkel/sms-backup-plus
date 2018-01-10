@@ -42,7 +42,6 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.FIRST_USE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.LAST_VERSION_CODE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAIL_SUBJECT_PREFIX;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ_ON_RESTORE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ_TYPES;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
@@ -87,8 +86,6 @@ public class Preferences {
         REFERENCE_UID("reference_uid"),
         MAIL_SUBJECT_PREFIX("mail_subject_prefix"),
         RESTORE_STARRED_ONLY("restore_starred_only"),
-        @Deprecated
-        MARK_AS_READ("mark_as_read"),
         MARK_AS_READ_TYPES("mark_as_read_types"),
         MARK_AS_READ_ON_RESTORE("mark_as_read_on_restore"),
         THIRD_PARTY_INTEGRATION("third_party_integration"),
@@ -116,7 +113,7 @@ public class Preferences {
     public SharedPreferences getSharedPreferences() {
         return preferences;
     }
-    public DataTypePreferences getDataTypePreferences() { return new DataTypePreferences(preferences); };
+    public DataTypePreferences getDataTypePreferences() { return new DataTypePreferences(preferences); }
 
     public boolean isAppLogEnabled() {
         return preferences.getBoolean(APP_LOG.key, false);
@@ -197,8 +194,8 @@ public class Preferences {
         }
     }
 
-    public boolean isEnableAutoSync() {
-        return preferences.getBoolean(ENABLE_AUTO_BACKUP.key, Defaults.ENABLE_AUTO_SYNC);
+    public boolean isAutoBackupEnabled() {
+        return preferences.getBoolean(ENABLE_AUTO_BACKUP.key, Defaults.ENABLE_AUTO_BACKUP);
     }
 
     public int getIncomingTimeoutSecs() {
@@ -207,16 +204,6 @@ public class Preferences {
 
     public int getRegularTimeoutSecs() {
         return getStringAsInt(REGULAR_TIMEOUT_SECONDS, Defaults.REGULAR_TIMEOUT_SECONDS);
-    }
-
-    public void migrateMarkAsRead() {
-        if (preferences.contains(MARK_AS_READ.key)) {
-            SharedPreferences.Editor editor = preferences.edit();
-            boolean markAsRead = preferences.getBoolean(MARK_AS_READ.key, true);
-            editor.putString(MARK_AS_READ_TYPES.key, markAsRead ? MarkAsReadTypes.READ.name() : MarkAsReadTypes.UNREAD.name());
-            editor.remove(MARK_AS_READ.key);
-            editor.commit();
-        }
     }
 
     public MarkAsReadTypes getMarkAsReadType() {
@@ -263,9 +250,9 @@ public class Preferences {
 
     public void reset() {
         preferences.edit()
-                .remove(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key)
-                .remove(SMS_DEFAULT_PACKAGE.key)
-                .commit();
+            .remove(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key)
+            .remove(SMS_DEFAULT_PACKAGE.key)
+            .commit();
     }
 
     public boolean isNotificationEnabled() {

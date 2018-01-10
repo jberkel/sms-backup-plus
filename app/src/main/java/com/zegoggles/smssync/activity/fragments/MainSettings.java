@@ -76,6 +76,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     @Subscribe public void onAccountRemoved(AccountRemovedEvent event) {
         authPreferences.clearOauth2Data();
         preferences.getDataTypePreferences().clearLastSyncData();
+
         updateConnected();
         updateAutoBackupPreferences();
     }
@@ -85,6 +86,9 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     }
 
     @Subscribe public void onSettingsReset(SettingsResetEvent event) {
+        preferences.getDataTypePreferences().clearLastSyncData();
+        preferences.reset();
+
         updateConnected();
     }
 

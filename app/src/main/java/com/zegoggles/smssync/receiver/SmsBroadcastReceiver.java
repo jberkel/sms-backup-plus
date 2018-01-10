@@ -53,15 +53,15 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     private boolean shouldSchedule(Context context) {
         final Preferences preferences = getPreferences(context);
 
-        final boolean autoSync = preferences.isEnableAutoSync();
+        final boolean autoBackupEnabled = preferences.isAutoBackupEnabled();
         final boolean loginInformationSet = getAuthPreferences(context).isLoginInformationSet();
         final boolean firstBackup = preferences.isFirstBackup();
 
-        final boolean schedule = (autoSync && loginInformationSet && !firstBackup);
+        final boolean schedule = (autoBackupEnabled && loginInformationSet && !firstBackup);
 
         if (!schedule) {
             final String message = "Not set up to back up. " +
-                    "autoSync=" + autoSync +
+                    "autoBackup=" + autoBackupEnabled +
                     ", loginInfoSet=" + loginInformationSet +
                     ", firstBackup=" + firstBackup;
 

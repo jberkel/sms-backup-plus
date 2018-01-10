@@ -125,7 +125,7 @@ public class SmsJobService extends JobService {
     private boolean shouldRun(JobParameters jobParameters) {
         if (BackupType.fromName(jobParameters.getTag()) == REGULAR) {
             final Preferences prefs = new Preferences(this);
-            final boolean autoBackupEnabled = prefs.isEnableAutoSync();
+            final boolean autoBackupEnabled = prefs.isAutoBackupEnabled();
             if (!autoBackupEnabled) {
                 // was disabled in meantime, cancel
                 getBackupJobs().cancelRegular();

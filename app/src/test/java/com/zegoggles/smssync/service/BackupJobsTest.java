@@ -58,7 +58,7 @@ public class BackupJobsTest {
     }
 
     @Test public void shouldScheduleRegular() throws Exception {
-        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.isAutoBackupEnabled()).thenReturn(true);
         when(preferences.getRegularTimeoutSecs()).thenReturn(2000);
         Job job = subject.scheduleRegular();
         verifyJobScheduled(job, 2000, "REGULAR");
@@ -87,39 +87,39 @@ public class BackupJobsTest {
     }
 
     @Test public void shouldScheduleRegularJobAfterBootForOldScheduler() throws Exception {
-        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.isAutoBackupEnabled()).thenReturn(true);
         when(preferences.isUseOldScheduler()).thenReturn(true);
         Job job = subject.scheduleBootup();
         verifyJobScheduled(job, 60, "REGULAR");
     }
 
     @Test public void shouldScheduleNothingAfterBootForNewScheduler() throws Exception {
-        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.isAutoBackupEnabled()).thenReturn(true);
         when(preferences.isUseOldScheduler()).thenReturn(false);
         Job job = subject.scheduleBootup();
         assertThat(job).isNull();
     }
 
     @Test public void shouldCancelAllJobsAfterBootIfAutoBackupDisabled() throws Exception {
-        when(preferences.isEnableAutoSync()).thenReturn(false);
+        when(preferences.isAutoBackupEnabled()).thenReturn(false);
         Job job = subject.scheduleBootup();
         assertThat(job).isNull();
     }
 
     @Test public void shouldScheduleIncoming() throws Exception {
-        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.isAutoBackupEnabled()).thenReturn(true);
         when(preferences.getIncomingTimeoutSecs()).thenReturn(2000);
         Job job = subject.scheduleIncoming();
         verifyJobScheduled(job, 2000, "INCOMING");
     }
 
     @Test public void shouldNotScheduleRegularBackupIfAutoBackupIsDisabled() throws Exception {
-        when(preferences.isEnableAutoSync()).thenReturn(false);
+        when(preferences.isAutoBackupEnabled()).thenReturn(false);
         assertThat(subject.scheduleRegular()).isEqualTo(null);
     }
 
     @Test public void shouldNotScheduleIncomingBackupIfAutoBackupIsDisabled() throws Exception {
-        when(preferences.isEnableAutoSync()).thenReturn(false);
+        when(preferences.isAutoBackupEnabled()).thenReturn(false);
         assertThat(subject.scheduleIncoming()).isEqualTo(null);
     }
 

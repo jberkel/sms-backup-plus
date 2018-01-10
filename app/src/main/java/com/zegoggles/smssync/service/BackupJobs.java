@@ -83,7 +83,7 @@ public class BackupJobs {
     }
 
     public @Nullable Job scheduleBootup() {
-        if (!preferences.isEnableAutoSync()) {
+        if (!preferences.isAutoBackupEnabled()) {
             Log.d(TAG, "auto backup no longer enabled, canceling all jobs");
             cancelAll();
             return null;
@@ -128,7 +128,7 @@ public class BackupJobs {
             Log.v(TAG, "scheduleBackup(" + inSeconds + ", " + backupType + ", " + force + ")");
         }
 
-        if (force || (preferences.isEnableAutoSync() && inSeconds > 0)) {
+        if (force || (preferences.isAutoBackupEnabled() && inSeconds > 0)) {
             final Job job = createJob(inSeconds, backupType);
             if (schedule(job) != null) {
                 if (LOCAL_LOGV) {
@@ -138,7 +138,7 @@ public class BackupJobs {
             }
             return job;
         } else {
-            if (LOCAL_LOGV) Log.v(TAG, "Not scheduling backup because auto sync is disabled.");
+            if (LOCAL_LOGV) Log.v(TAG, "Not scheduling backup because auto backup is disabled.");
             return null;
         }
     }

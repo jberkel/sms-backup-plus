@@ -47,9 +47,9 @@ public class SmsBroadcastReceiverTest {
         verify(backupJobs, times(1)).scheduleIncoming();
     }
 
-    @Test public void shouldNotScheduleIfAutoSyncIsDisabled() throws Exception {
+    @Test public void shouldNotScheduleIfAutoBackupIsDisabled() throws Exception {
         mockScheduled();
-        when(preferences.isEnableAutoSync()).thenReturn(false);
+        when(preferences.isAutoBackupEnabled()).thenReturn(false);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
         verifyZeroInteractions(backupJobs);
     }
@@ -70,7 +70,7 @@ public class SmsBroadcastReceiverTest {
 
     private void mockScheduled() {
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
-        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.isAutoBackupEnabled()).thenReturn(true);
         when(preferences.isFirstBackup()).thenReturn(false);
         when(preferences.isUseOldScheduler()).thenReturn(true);
     }

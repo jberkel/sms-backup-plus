@@ -139,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements
         if (preferences.shouldShowUpgradeMessage()) {
             showDialog(UPGRADE_FROM_SMSBACKUP);
         }
-        preferences.migrateMarkAsRead();
-
         if (preferences.shouldShowAboutDialog()) {
             showDialog(ABOUT);
         }
@@ -260,11 +258,6 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             showDialog(ACCESS_TOKEN_ERROR);
         }
-    }
-
-    @Subscribe public void onReset(SettingsResetEvent event) {
-        preferences.getDataTypePreferences().clearLastSyncData();
-        preferences.reset();
     }
 
     @Subscribe public void onConnect(AccountConnectionChangedEvent event) {
