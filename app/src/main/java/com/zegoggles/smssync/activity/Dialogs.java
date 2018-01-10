@@ -36,7 +36,7 @@ import android.webkit.WebViewClient;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.events.DisconnectAccountEvent;
+import com.zegoggles.smssync.activity.events.AccountRemovedEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
 import com.zegoggles.smssync.activity.events.PerformAction;
 import com.zegoggles.smssync.activity.events.PerformAction.Actions;
@@ -64,8 +64,8 @@ public class Dialogs {
         DISCONNECT(Disconnect.class),
         ACCESS_TOKEN(OAuth2AccessTokenProgress.class),
         ACCESS_TOKEN_ERROR(AccessTokenError.class),
-        CONNECT(Connect.class),
-        CONNECT_TOKEN_ERROR(ConnectTokenError.class),
+        WEB_CONNECT(WebConnect.class),
+        WEB_CONNECT_TOKEN_ERROR(WebConnectTokenError.class),
         ACCOUNT_MANAGER_TOKEN_ERROR(AccountManagerTokenError.class),
         UPGRADE_FROM_SMSBACKUP(Upgrade.class),
         VIEW_LOG(ViewLog.class),
@@ -194,7 +194,7 @@ public class Dialogs {
                 .setNegativeButton(cancel, null)
                 .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        App.post(new DisconnectAccountEvent());
+                        App.post(new AccountRemovedEvent());
                     }
                 }).create();
         }
@@ -239,13 +239,14 @@ public class Dialogs {
         }
     }
 
-    public static class Connect extends BaseFragment {
+    public static class WebConnect extends BaseFragment {
         static final int REQUEST_WEB_AUTH = 3;
         static final String INTENT = "intent";
 
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())
+                .setTitle(null)
                 .setMessage(getString(R.string.ui_dialog_connect_msg, getString(R.string.app_name)))
                 .setNegativeButton(cancel, null)
                 .setPositiveButton(ok, new DialogInterface.OnClickListener() {
@@ -257,7 +258,7 @@ public class Dialogs {
         }
     }
 
-    public static class ConnectTokenError extends BaseFragment {
+    public static class WebConnectTokenError extends BaseFragment {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getContext())

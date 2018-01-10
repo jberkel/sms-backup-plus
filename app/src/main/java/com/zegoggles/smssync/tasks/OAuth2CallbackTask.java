@@ -42,7 +42,7 @@ public class OAuth2CallbackTask extends AsyncTask<String, Void, OAuth2Token> {
     public static class OAuth2CallbackEvent {
         public final OAuth2Token token;
 
-        public OAuth2CallbackEvent(OAuth2Token token) {
+        OAuth2CallbackEvent(OAuth2Token token) {
             this.token = token;
         }
 

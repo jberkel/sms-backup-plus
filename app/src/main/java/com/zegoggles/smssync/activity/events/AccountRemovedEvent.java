@@ -1,4 +1,4 @@
 package com.zegoggles.smssync.activity.events;
 
-public class DisconnectAccountEvent {
+public class AccountRemovedEvent {
 }

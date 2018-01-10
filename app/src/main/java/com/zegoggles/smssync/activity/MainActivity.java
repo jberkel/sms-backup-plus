@@ -44,10 +44,11 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.Dialogs.Connect;
+import com.zegoggles.smssync.activity.Dialogs.WebConnect;
 import com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
+import com.zegoggles.smssync.activity.events.AccountAddedEvent;
 import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
 import com.zegoggles.smssync.activity.events.PerformAction;
@@ -72,7 +73,7 @@ import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.Dialogs.ConfirmAction.ACTION;
-import static com.zegoggles.smssync.activity.Dialogs.Connect.REQUEST_WEB_AUTH;
+import static com.zegoggles.smssync.activity.Dialogs.WebConnect.REQUEST_WEB_AUTH;
 import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
 import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
@@ -81,7 +82,7 @@ import static com.zegoggles.smssync.activity.Dialogs.Type.ACCESS_TOKEN;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCESS_TOKEN_ERROR;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR;
 import static com.zegoggles.smssync.activity.Dialogs.Type.CONFIRM_ACTION;
-import static com.zegoggles.smssync.activity.Dialogs.Type.CONNECT;
+import static com.zegoggles.smssync.activity.Dialogs.Type.WEB_CONNECT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.DISCONNECT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.FIRST_SYNC;
 import static com.zegoggles.smssync.activity.Dialogs.Type.MISSING_CREDENTIALS;
@@ -91,6 +92,8 @@ import static com.zegoggles.smssync.activity.Dialogs.Type.UPGRADE_FROM_SMSBACKUP
 import static com.zegoggles.smssync.activity.Dialogs.Type.VIEW_LOG;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_ADD_ACCOUNT;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_FALLBACK_AUTH;
+import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_ACCOUNT;
+import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_TOKEN;
 import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup;
 import static com.zegoggles.smssync.activity.events.PerformAction.Actions.BackupSkip;
 
@@ -266,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Subscribe public void onConnect(AccountConnectionChangedEvent event) {
         if (event.connected) {
-            startActivityForResult(new Intent(MainActivity.this,
+            startActivityForResult(new Intent(this,
                     AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
         } else {
             showDialog(DISCONNECT);
@@ -275,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
         if (event.showDialog) {
-            showDialog(CONNECT);
+            showDialog(WEB_CONNECT);
         } else {
             startActivityForResult(fallbackAuthIntent, REQUEST_WEB_AUTH);
         }
@@ -297,6 +300,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void onAuthenticated() {
+        App.post(new AccountAddedEvent());
         // Invite user to perform a backup, but only once
         if (preferences.isFirstUse()) {
             showDialog(FIRST_SYNC);
@@ -388,8 +392,8 @@ public class MainActivity extends AppCompatActivity implements
                 arguments.putInt(MAX_ITEMS_PER_SYNC, preferences.getMaxItemsPerSync()); break;
             case MISSING_CREDENTIALS:
                 arguments.putBoolean(USE_XOAUTH, authPreferences.useXOAuth()); break;
-            case CONNECT:
-                arguments.putParcelable(Connect.INTENT, fallbackAuthIntent); break;
+            case WEB_CONNECT:
+                arguments.putParcelable(WebConnect.INTENT, fallbackAuthIntent); break;
             case SMS_DEFAULT_PACKAGE_CHANGE:
                 arguments.putParcelable(SmsDefaultPackage.INTENT, changeDefaultPackageIntent); break;
         }
@@ -417,8 +421,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void handleAccountManagerAuth(@NonNull Intent data) {
-        String token = data.getStringExtra(AccountManagerAuthActivity.EXTRA_TOKEN);
-        String account = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ACCOUNT);
+        final String token = data.getStringExtra(EXTRA_TOKEN);
+        final String account = data.getStringExtra(EXTRA_ACCOUNT);
         if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
             authPreferences.setOauth2Token(account, token, null);
             onAuthenticated();

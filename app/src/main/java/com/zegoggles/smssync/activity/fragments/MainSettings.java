@@ -11,9 +11,10 @@ import android.util.Log;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.events.AccountAddedEvent;
 import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
-import com.zegoggles.smssync.activity.events.DisconnectAccountEvent;
+import com.zegoggles.smssync.activity.events.AccountRemovedEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.mail.DataType;
@@ -60,7 +61,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
         checkUserDonationStatus();
         updateAutoBackupPreference();
-        updateAutoBackupSettingsScreen();
         updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 App.post(new AccountConnectionChangedEvent((Boolean) change));
@@ -72,20 +72,18 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
     @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
         updateAutoBackupPreference();
-        updateAutoBackupSettingsScreen();
-
     }
 
-    @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
-        if (event.valid()) {
-            updateConnected();
-        }
+    @Subscribe public void onAccountAdded(AccountAddedEvent event) {
+        updateConnected();
+        updateAutoBackupPreference();
     }
 
-    @Subscribe public void onDisconnectAccount(DisconnectAccountEvent event) {
+    @Subscribe public void onAccountRemoved(AccountRemovedEvent event) {
         authPreferences.clearOauth2Data();
         preferences.getDataTypePreferences().clearLastSyncData();
         updateConnected();
+        updateAutoBackupPreference();
     }
 
     @Subscribe public void settingsReset(SettingsResetEvent event) {
@@ -106,6 +104,8 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         final Preference preference = findPreference(ENABLE_AUTO_BACKUP.key);
         preference.setSummary(summarizeAutoBackupSettings());
         preference.setEnabled(!authPreferences.useXOAuth() || authPreferences.hasOAuth2Tokens());
+
+        updateAutoBackupSettingsScreen();
     }
 
     private void updateAutoBackupSettingsScreen() {
