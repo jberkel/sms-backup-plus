@@ -44,9 +44,6 @@ public class OAuth2WebAuthActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            App.unregister(this);
-        } catch (Exception ignored) {
-        }
+        App.unregister(this);
     }
 }

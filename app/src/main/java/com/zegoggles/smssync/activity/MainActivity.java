@@ -142,16 +142,18 @@ public class MainActivity extends AppCompatActivity implements
             showDialog(ABOUT);
         }
         checkDefaultSmsApp();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         App.register(this);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            App.unregister(this);
-        } catch (Exception ignored) {
-        }
+    protected void onStop() {
+        App.unregister(this);
+        super.onStop();
     }
 
     @Override

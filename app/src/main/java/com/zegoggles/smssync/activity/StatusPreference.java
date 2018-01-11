@@ -87,15 +87,6 @@ public class StatusPreference extends Preference implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View which) {
-        if (which == backupButton) {
-            onBackup();
-        } else if (which == restoreButton) {
-            onRestore();
-        }
-    }
-
-    @Override
     public void onAttached() {
         super.onAttached();
         App.register(this);
@@ -105,6 +96,15 @@ public class StatusPreference extends Preference implements View.OnClickListener
     public void onDetached() {
         super.onDetached();
         App.unregister(this);
+    }
+
+    @Override
+    public void onClick(View which) {
+        if (which == backupButton) {
+            onBackup();
+        } else if (which == restoreButton) {
+            onRestore();
+        }
     }
 
     @Override

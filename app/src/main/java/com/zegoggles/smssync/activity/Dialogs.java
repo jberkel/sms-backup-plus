@@ -235,8 +235,9 @@ public class Dialogs {
             super.onDetach();
             App.unregister(this);
         }
+
         @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
-            dismiss();
+            dismissAllowingStateLoss();
         }
     }
 

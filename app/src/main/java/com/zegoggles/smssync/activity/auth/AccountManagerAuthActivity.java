@@ -72,7 +72,7 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
                 } finally {
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(PROGRESS_TAG);
                     if (fragment instanceof DialogFragment) {
-                        ((DialogFragment)fragment).dismiss();
+                        ((DialogFragment)fragment).dismissAllowingStateLoss();
                     }
                 }
             }
