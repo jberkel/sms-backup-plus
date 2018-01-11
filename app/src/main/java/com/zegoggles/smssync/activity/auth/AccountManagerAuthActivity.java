@@ -39,7 +39,6 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
 
     public static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
     public static final String GOOGLE_TYPE = "com.google";
-    private static final String PROGRESS_TAG = "progress";
 
     private AccountManager accountManager;
 
@@ -59,7 +58,7 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
     }
 
     private void onAccountSelected(final Account account) {
-        new AccessTokenProgress().show(getSupportFragmentManager(), PROGRESS_TAG);
+        new AccessTokenProgress().show(getSupportFragmentManager(), null);
         accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, null, this,
                 new AccountManagerCallback<Bundle>() {
             public void run(AccountManagerFuture<Bundle> future) {
@@ -69,11 +68,6 @@ public class AccountManagerAuthActivity extends AppCompatActivity {
                     onAccessDenied();
                 } catch (Exception e) {
                     handleException(e);
-                } finally {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(PROGRESS_TAG);
-                    if (fragment instanceof DialogFragment) {
-                        ((DialogFragment)fragment).dismissAllowingStateLoss();
-                    }
                 }
             }
         }, null);
