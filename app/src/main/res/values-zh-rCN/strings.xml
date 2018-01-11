@@ -273,7 +273,6 @@
 
   <string name="pref_acra_disabled">已禁用</string>
 
-  <string name="app_log_skip_backup_background_data">已跳过，因为后台数据被停用</string>
   <string name="app_log_skip_backup_already_running">已跳过，因为备份已在进行中</string>
   <string name="app_log_skip_backup_skip_messages">跳过所有信息</string>
   <string name="app_log_skip_backup_no_items">已跳过 (没有找到项目)</string>

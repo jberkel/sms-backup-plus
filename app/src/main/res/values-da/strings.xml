@@ -266,7 +266,6 @@
 
   <string name="pref_acra_disabled">Deaktiveret</string>
 
-  <string name="app_log_skip_backup_background_data">Sprunget over fordi baggrunds data er deaktiveret</string>
   <string name="app_log_skip_backup_already_running">Sprunget over fordi backup allerede er igang</string>
   <string name="app_log_skip_backup_skip_messages">Spring alle beskeder over</string>
   <string name="app_log_skip_backup_no_items">Sprunget over (ingen emner fundet)</string>

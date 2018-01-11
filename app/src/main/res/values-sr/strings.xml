@@ -273,7 +273,6 @@
 
   <string name="pref_acra_disabled">Онемогућено</string>
 
-  <string name="app_log_skip_backup_background_data">Прескочено, јер је онемогућена размена података у позадини</string>
   <string name="app_log_skip_backup_already_running">Прескочено, јер је већ покренуто прављење резервне копије</string>
   <string name="app_log_skip_backup_skip_messages">Прескочи све поруке</string>
   <string name="app_log_skip_backup_no_items">Прескочено (нема ставки)</string>

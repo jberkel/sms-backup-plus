@@ -180,7 +180,6 @@
     <string name="ui_donation_success_message">Darowizna dokonana. Dziekuję bardzo!</string>
     <string name="ui_donation_failure_message">Darowizna nieudana: %1$s</string>
     <string name="pref_acra_disabled">Wyłączone</string>
-    <string name="app_log_skip_backup_background_data">Pomijam, dane w tle sa wyłączone</string>
     <string name="app_log_skip_backup_already_running">Pomijam, kopia zapasowa własnie sie wykonuje</string>
     <string name="app_log_skip_backup_skip_messages">Pomiń wszystkie wiadomości</string>
     <string name="app_log_skip_backup_no_items">Pomijam (nie znaleziono pozycji)</string>

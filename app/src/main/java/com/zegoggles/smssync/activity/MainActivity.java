@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Telephony;
+import android.provider.Telephony.Sms;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements
             if (isSmsBackupDefaultSmsApp()) {
                 startService(intent);
             } else {
-                String defaultSmsPackage = Telephony.Sms.getDefaultSmsPackage(this);
+                final String defaultSmsPackage = Sms.getDefaultSmsPackage(this);
                 Log.d(TAG, "default SMS package: " + defaultSmsPackage);
                 preferences.setSmsDefaultPackage(defaultSmsPackage);
 
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private boolean isSmsBackupDefaultSmsApp() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-                getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
+                getPackageName().equals(Sms.getDefaultSmsPackage(this));
     }
 
     private void showFragment(@NonNull Fragment fragment, @Nullable String rootKey) {
@@ -405,12 +405,10 @@ public class MainActivity extends AppCompatActivity implements
         dialog.instantiate(this, args).show(getSupportFragmentManager(), dialog.name());
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void requestDefaultSmsPackageChange() {
         startActivityForResult(changeDefaultPackageIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void restoreDefaultSmsProvider(String smsPackage) {
         Log.d(TAG, "restoring SMS provider "+smsPackage);
         if (!TextUtils.isEmpty(smsPackage)) {

@@ -2,23 +2,27 @@ package com.zegoggles.smssync.auth;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountsException;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 
 import java.io.IOException;
 
+import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static android.text.TextUtils.isEmpty;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.AUTH_TOKEN_TYPE;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.GOOGLE_TYPE;
 
-@TargetApi(5)
 public class TokenRefresher {
     private @Nullable final AccountManager accountManager;
     private final OAuth2Client oauth2Client;
@@ -56,13 +60,7 @@ public class TokenRefresher {
         if (accountManager == null) throw new TokenRefreshException("account manager is null");
         invalidateToken(token);
         try {
-            Bundle bundle = accountManager.getAuthToken(
-                    new Account(name, GOOGLE_TYPE),
-                    AUTH_TOKEN_TYPE,
-                    true,   /* notify on failure */
-                    null,   /* callback */
-                    null    /* handler */
-            ).getResult();
+            Bundle bundle = getAuthToken(new Account(name, GOOGLE_TYPE));
 
             if (bundle != null) {
                 String newToken = bundle.getString(AccountManager.KEY_AUTHTOKEN);
@@ -75,16 +73,43 @@ public class TokenRefresher {
             } else {
                 throw new TokenRefreshException("no bundle received from accountmanager");
             }
-        } catch (OperationCanceledException e) {
+        } catch (AccountsException e) {
             Log.w(TAG, e);
             throw new TokenRefreshException(e);
         } catch (IOException e) {
             Log.w(TAG, e);
             throw new TokenRefreshException(e);
-        } catch (AuthenticatorException e) {
-            Log.w(TAG, e);
-            throw new TokenRefreshException(e);
         }
+    }
+
+    private Bundle getAuthToken(Account account) throws AccountsException, IOException {
+        if (Build.VERSION.SDK_INT >= 14) {
+            return getAuthTokenApi14(account);
+        } else {
+            return getAuthTokenPreApi14(account);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private Bundle getAuthTokenPreApi14(Account account) throws AccountsException, IOException {
+        return accountManager.getAuthToken(
+                account,
+                AUTH_TOKEN_TYPE,
+                true,
+                null,
+                null
+        ).getResult();
+    }
+
+    @TargetApi(ICE_CREAM_SANDWICH)
+    private Bundle getAuthTokenApi14(Account account) throws AccountsException, IOException {
+        return accountManager.getAuthToken(account,
+                AUTH_TOKEN_TYPE,
+                null,
+                true,
+                null,
+                null
+        ).getResult();
     }
 
     public boolean invalidateToken(String token) {

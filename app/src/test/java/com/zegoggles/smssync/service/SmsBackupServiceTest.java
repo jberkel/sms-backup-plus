@@ -14,7 +14,6 @@ import com.zegoggles.smssync.preferences.DataTypePreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.exception.BackupDisabledException;
 import com.zegoggles.smssync.service.exception.NoConnectionException;
-import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
 import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.SmsSyncState;
@@ -96,19 +95,6 @@ public class SmsBackupServiceTest {
     @Test public void shouldTriggerBackupWithManualIntent() throws Exception {
         Intent intent = new Intent();
         intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
-        service.handleIntent(intent);
-        verify(backupTask).execute(any(BackupConfig.class));
-    }
-
-    @Test public void shouldRespectBackgroundDataSetting() throws Exception {
-        Intent intent = new Intent();
-        service.handleIntent(intent);
-
-        verifyZeroInteractions(backupTask);
-        assertThat(service.getState().exception).isExactlyInstanceOf(RequiresBackgroundDataException.class);
-
-        shadowConnectivityManager.setBackgroundDataSetting(true);
-
         service.handleIntent(intent);
         verify(backupTask).execute(any(BackupConfig.class));
     }

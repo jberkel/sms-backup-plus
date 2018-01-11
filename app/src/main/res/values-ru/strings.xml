@@ -253,7 +253,6 @@
 
   <string name="pref_acra_disabled">Отключено</string>
 
-  <string name="app_log_skip_backup_background_data">Пропущено, фоновые данные отключены</string>
   <string name="app_log_skip_backup_already_running">Пропущено, резервирование уже выполняется</string>
   <string name="app_log_skip_backup_skip_messages">Пропуск сообщений</string>
   <string name="app_log_skip_backup_no_items">Пропущено, нечего сохранять</string>

@@ -330,7 +330,6 @@ public class Dialogs {
                 .create();
         }
 
-        @TargetApi(Build.VERSION_CODES.KITKAT)
         private void requestDefaultSmsPackageChange() {
             final Intent intent = getArguments().getParcelable(INTENT);
             getActivity().startActivityForResult(intent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);

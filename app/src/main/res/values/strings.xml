@@ -277,7 +277,6 @@
 
   <string name="pref_acra_disabled">Disabled</string>
 
-  <string name="app_log_skip_backup_background_data">Skipped because background data is disabled</string>
   <string name="app_log_skip_backup_already_running">Skipped because backup already running</string>
   <string name="app_log_skip_backup_skip_messages">Skip all messages</string>
   <string name="app_log_skip_backup_no_items">Skipped (no items found)</string>

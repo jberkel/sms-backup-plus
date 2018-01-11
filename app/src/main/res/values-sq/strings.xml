@@ -198,7 +198,6 @@
   <string name="mms">MMS</string>
   <string name="calllog">Ditari i thirrjeve</string>
   <string name="pref_acra_disabled">I Çaktivizuar</string>
-  <string name="app_log_skip_backup_background_data">U anashkalua sepse të dhënat e sfondit janë të çaktivizuara</string>
   <string name="app_log_skip_backup_already_running">U anashkalua sepse krijimi i kopjes rezervë është tashmë duke punuar</string>
   <string name="app_log_skip_backup_skip_messages">Anashkalo të gjithë mesazhet</string>
   <string name="app_log_skip_backup_no_items">E anashkaluar (nuk u gjetën shënime)</string>

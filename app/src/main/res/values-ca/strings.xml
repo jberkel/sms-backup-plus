@@ -269,7 +269,6 @@
   <string name="calllog">Registre de trucades</string>
   <string name="pref_acra_disabled">Inhabilitats</string>
 
-  <string name="app_log_skip_backup_background_data">S\'ha omès perquè les dades en segon pla estan inhabilitades</string>
   <string name="app_log_skip_backup_already_running">S\'ha omès perquè ja s\'està fent una còpia de seguretat</string>
   <string name="app_log_skip_backup_skip_messages">Omet tots els missatges</string>
   <string name="app_log_skip_backup_no_items">S\'ha omès (no s\'ha trobat cap element)</string>

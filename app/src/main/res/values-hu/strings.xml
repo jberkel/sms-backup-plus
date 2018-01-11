@@ -270,7 +270,6 @@
 
   <string name="pref_acra_disabled">Letiltva</string>
 
-  <string name="app_log_skip_backup_background_data">Kihagyva, mert az adatkapcsolat a háttérben le van tiltva</string>
   <string name="app_log_skip_backup_already_running">Kihagyva, mert már folyamatban van egy mentés</string>
   <string name="app_log_skip_backup_skip_messages">Az összes üzenet kihagyása</string>
   <string name="app_log_skip_backup_no_items">Kihagyva (nincs mit menteni)</string>

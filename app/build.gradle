@@ -97,3 +97,9 @@ task(tag(type: Exec) {
         git push --tags origin master
     """
 }).dependsOn(checkVersion)
+
+tasks.withType(JavaCompile) {
+    if (!it.name.toLowerCase().contains('test')) {
+        options.compilerArgs = ['-Werror',  '-Xlint:unchecked', '-Xlint:deprecation']
+    }
+}

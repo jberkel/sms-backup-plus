@@ -37,7 +37,6 @@ import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.service.exception.BackupDisabledException;
 import com.zegoggles.smssync.service.exception.ConnectivityException;
 import com.zegoggles.smssync.service.exception.NoConnectionException;
-import com.zegoggles.smssync.service.exception.RequiresBackgroundDataException;
 import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.BackupState;
@@ -106,7 +105,6 @@ public class SmsBackupService extends ServiceBase {
             EnumSet<DataType> enabledTypes = getEnabledBackupTypes();
             if (!skip) {
                 checkCredentials();
-                checkBackgroundDataSettings(backupType);
                 checkConnectivity(backupType);
             }
 
@@ -114,8 +112,6 @@ public class SmsBackupService extends ServiceBase {
             getBackupTask().execute(getBackupConfig(backupType, enabledTypes, getBackupImapStore(), skip));
         } catch (MessagingException e) {
             Log.w(TAG, e);
-            moveToState(mState.transition(ERROR, e));
-        } catch (RequiresBackgroundDataException e) {
             moveToState(mState.transition(ERROR, e));
         } catch (ConnectivityException e) {
             moveToState(mState.transition(ERROR, e));
@@ -154,12 +150,6 @@ public class SmsBackupService extends ServiceBase {
     private void checkCredentials() throws RequiresLoginException {
         if (!getAuthPreferences().isLoginInformationSet()) {
             throw new RequiresLoginException();
-        }
-    }
-
-    private void checkBackgroundDataSettings(BackupType backupType) throws RequiresBackgroundDataException {
-        if (backupType.isBackground() && !getConnectivityManager().getBackgroundDataSetting()) {
-            throw new RequiresBackgroundDataException();
         }
     }
 
@@ -253,7 +243,7 @@ public class SmsBackupService extends ServiceBase {
         notification = builder.setContentTitle(getString(R.string.status_backup))
                 .setContentText(state.getNotificationLabel(getResources()))
                 .setContentIntent(getPendingIntent())
-                .getNotification();
+                .build();
         startForeground(BACKUP_ID, notification);
     }
 
@@ -281,7 +271,7 @@ public class SmsBackupService extends ServiceBase {
                 .setTicker(getString(R.string.app_name))
                 .setContentTitle(title)
                 .setContentIntent(getPendingIntent())
-                .getNotification();
+                .build();
         getNotifier().notify(notificationId, n);
     }
 

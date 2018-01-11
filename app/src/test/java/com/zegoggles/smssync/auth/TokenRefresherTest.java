@@ -50,6 +50,7 @@ public class TokenRefresherTest {
 
         when(accountManager.getAuthToken(notNull(Account.class),
                 anyString(),
+                isNull(Bundle.class),
                 anyBoolean(),
                 any(AccountManagerCallback.class),
                 any(Handler.class))).thenReturn(mock(AccountManagerFuture.class));
@@ -71,6 +72,7 @@ public class TokenRefresherTest {
         AccountManagerFuture<Bundle> future = mock(AccountManagerFuture.class);
         when(accountManager.getAuthToken(notNull(Account.class),
                 anyString(),
+                isNull(Bundle.class),
                 anyBoolean(),
                 any(AccountManagerCallback.class),
                 any(Handler.class))).thenReturn(future);
@@ -97,7 +99,7 @@ public class TokenRefresherTest {
 
         when(accountManager.getAuthToken(
                 new Account("username", GOOGLE_TYPE),
-                AUTH_TOKEN_TYPE, true, null, null)
+                AUTH_TOKEN_TYPE, null,true, null, null)
         ).thenReturn(future);
 
         Bundle bundle = new Bundle();

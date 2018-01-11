@@ -276,7 +276,6 @@ public class Preferences {
         }
     }
 
-    @TargetApi(8)
     public boolean isInstalledOnSDCard() {
         PackageInfo pInfo;
         try {

@@ -272,7 +272,6 @@
 
   <string name="pref_acra_disabled">비활성화</string>
 
-  <string name="app_log_skip_backup_background_data">백그라운드 데이터가 비활성이기 때문에 건너뜀</string>
   <string name="app_log_skip_backup_already_running">백업이 이미 실행 중이므로 건너뜀</string>
   <string name="app_log_skip_backup_skip_messages">모든 메시지 건너뛰기</string>
   <string name="app_log_skip_backup_no_items">생략 (항목을 찾을 수 없음)</string>

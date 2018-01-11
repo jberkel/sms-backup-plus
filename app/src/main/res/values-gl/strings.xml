@@ -268,7 +268,6 @@
 
   <string name="pref_acra_disabled">Desactivado</string>
 
-  <string name="app_log_skip_backup_background_data">Omitido debido a que os datos en segundo plano están desactivados</string>
   <string name="app_log_skip_backup_already_running">Omitido porque o gardado xa está en proceso</string>
   <string name="app_log_skip_backup_skip_messages">Omitir todas as mensaxes</string>
   <string name="app_log_skip_backup_no_items">Omitido (non se atoparon elementos)</string>

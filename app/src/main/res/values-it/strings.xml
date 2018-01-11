@@ -269,7 +269,6 @@
 
   <string name="pref_acra_disabled">Disattivato</string>
 
-  <string name="app_log_skip_backup_background_data">Ignorato perchè la connessione dati è disattivata</string>
   <string name="app_log_skip_backup_already_running">Ignorato perchè il backup è in corso</string>
   <string name="app_log_skip_backup_skip_messages">Ignora tutti i messaggi</string>
   <string name="app_log_skip_backup_no_items">Fallito (nessun oggetto trovato)</string>

@@ -144,7 +144,7 @@ public class SmsRestoreService extends ServiceBase {
                     .setContentTitle(getString(R.string.status_restore))
                     .setContentText(state.getNotificationLabel(getResources()))
                     .setContentIntent(getPendingIntent())
-                    .getNotification();
+                    .build();
 
             startForeground(RESTORE_ID, notification);
         } else {
@@ -158,6 +158,7 @@ public class SmsRestoreService extends ServiceBase {
         return mState;
     }
 
+    @SuppressWarnings("deprecation")
     @Override protected int wakeLockType() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // hold a full wake lock when restoring on newer version of Android, since

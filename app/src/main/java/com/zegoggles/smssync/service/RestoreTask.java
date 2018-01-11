@@ -211,6 +211,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         App.post(changed);
     }
 
+    @SuppressWarnings("unchecked")
     private DataType importMessage(Message message) {
         uids.add(message.getUid());
 
@@ -219,7 +220,6 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         DataType dataType = null;
         try {
             if (LOCAL_LOGV) Log.v(TAG, "fetching message uid " + message.getUid());
-            //noinspection unchecked
             message.getFolder().fetch(Collections.singletonList(message), fp, null);
             dataType = converter.getDataType(message);
             //only restore sms+call log for now

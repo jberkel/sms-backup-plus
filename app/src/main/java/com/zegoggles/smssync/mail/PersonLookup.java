@@ -39,7 +39,6 @@ public class PersonLookup {
     }
 
     /* Look up a person */
-    @SuppressWarnings("deprecation")
     public @NonNull PersonRecord lookupPerson(final String address) {
         if (TextUtils.isEmpty(address)) {
             return new PersonRecord(0, null, null, "-1");

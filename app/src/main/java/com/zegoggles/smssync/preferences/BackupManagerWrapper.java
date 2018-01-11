@@ -1,13 +1,11 @@
 package com.zegoggles.smssync.preferences;
 
-import android.annotation.TargetApi;
 import android.app.backup.BackupManager;
 import android.util.Log;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
-@TargetApi(8)
 public class BackupManagerWrapper {
     static Boolean available = null;
 

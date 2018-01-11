@@ -264,7 +264,6 @@
 
   <string name="pref_acra_disabled">Απενεργοποιημένο</string>
 
-  <string name="app_log_skip_backup_background_data"> Παραλείφθηκαν  επειδή τα δεδομένα στο παρασκήνιο είναι απενεργοποιημένα </string>
   <string name="app_log_skip_backup_already_running"> Παραλείφθηκαν λόγω παράλληλης εκτέλεσης αντιγράφων ασφαλείας  </string>
   <string name="app_log_skip_backup_skip_messages"> Μεταφορά όλων των μηνυμάτων </string>
   <string name="app_log_skip_backup_no_items"> Παραλείφθηκαν διότι τα συγκεκριμένα είδη δεν βρέθηκαν</string>

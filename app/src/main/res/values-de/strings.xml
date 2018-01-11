@@ -277,7 +277,6 @@
 
   <string name="pref_acra_disabled">Deaktiviert</string>
 
-  <string name="app_log_skip_backup_background_data">Übersprungen weil Hintergrunddaten deaktiviert sind.</string>
   <string name="app_log_skip_backup_already_running">Übersprungen weil die Sicherung bereits läuft.</string>
   <string name="app_log_skip_backup_skip_messages">Überspringe alle Nachrichten</string>
   <string name="app_log_skip_backup_no_items">Übersprungen (Keine Einträge gefunden)</string>

@@ -16,6 +16,7 @@ public class GooglePlayServices {
     private static final String COM_ANDROID_VENDING = "com.android.vending";
     private static final int MIN_GMS_VERSION = 9256030; // 9256030  9.2.56 (030-124593566)
 
+    @SuppressWarnings("deprecation")
     @SuppressLint("PackageManagerGetSignatures")
     public static boolean isAvailable(Context context) {
         final PackageManager packageManager = context.getPackageManager();

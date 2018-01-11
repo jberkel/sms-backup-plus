@@ -8,12 +8,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
-import android.text.format.Time;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -23,7 +24,7 @@ public class CalendarAccessorPost40 implements CalendarAccessor {
 
     private ContentResolver resolver;
 
-    public CalendarAccessorPost40(ContentResolver resolver) {
+    CalendarAccessorPost40(ContentResolver resolver) {
         this.resolver = resolver;
     }
 
@@ -36,8 +37,8 @@ public class CalendarAccessorPost40 implements CalendarAccessor {
     }
 
     @Override
-    public boolean addEntry(long calendarId, Date when, int duration, String title,
-                            String description) {
+    public boolean addEntry(long calendarId, @NonNull Date when, int duration, @NonNull String title,
+                            @NonNull String description) {
         if (LOCAL_LOGV) {
             Log.v(TAG, String.format("addEntry(%d, %s, %d, %s, %s)",
                     calendarId, when.toString(), duration, title, description));
@@ -51,8 +52,7 @@ public class CalendarAccessorPost40 implements CalendarAccessor {
         contentValues.put(CalendarContract.Events.ACCESS_LEVEL, CalendarContract.Events.ACCESS_DEFAULT);
         contentValues.put(CalendarContract.Events.STATUS, CalendarContract.Events.STATUS_CONFIRMED);
         contentValues.put(CalendarContract.Events.CALENDAR_ID, calendarId);
-        contentValues.put(CalendarContract.Events.EVENT_TIMEZONE, Time.getCurrentTimezone());
-
+        contentValues.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
 
         try {
             resolver.insert(CalendarContract.Events.CONTENT_URI, contentValues);
@@ -63,7 +63,7 @@ public class CalendarAccessorPost40 implements CalendarAccessor {
         }
     }
 
-    @Override
+    @Override @NonNull
     public Map<String, String> getCalendars() {
         final Map<String, String> map = new LinkedHashMap<String, String>();
 

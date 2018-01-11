@@ -86,13 +86,6 @@ public abstract class ServiceBase extends Service {
         notification = null;
     }
 
-    // Android api level < 5
-    @Override
-    public void onStart(final Intent intent, int startId) {
-        handleIntent(intent);
-    }
-
-    // Android api level >= 5
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
         handleIntent(intent);
@@ -216,6 +209,7 @@ public abstract class ServiceBase extends Service {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private boolean isConnectedViaWifi_pre_SDK21() {
         WifiManager wifiManager = getWifiManager();
         return (wifiManager != null &&
