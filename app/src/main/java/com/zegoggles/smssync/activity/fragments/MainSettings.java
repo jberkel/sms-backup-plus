@@ -42,14 +42,14 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onStart() {
+        super.onStart();
         App.register(this);
-    }
 
+    }
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         App.unregister(this);
     }
 
