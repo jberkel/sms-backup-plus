@@ -40,6 +40,12 @@ android {
         warningsAsErrors true
     }
 
+    //  avoid "Duplicate files copied in APK META-INF/"
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
