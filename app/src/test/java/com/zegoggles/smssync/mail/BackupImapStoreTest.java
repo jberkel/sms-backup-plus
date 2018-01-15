@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.mail.BackupImapStore.isValidImapFolder;
 import static com.zegoggles.smssync.mail.BackupImapStore.isValidUri;
-import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 @SuppressLint("AuthLeak")

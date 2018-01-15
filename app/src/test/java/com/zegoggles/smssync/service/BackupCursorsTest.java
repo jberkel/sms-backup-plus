@@ -10,9 +10,11 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.NoSuchElementException;
 
-import static com.zegoggles.smssync.mail.DataType.*;
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.fest.assertions.api.Assertions.fail;
+import static com.google.common.truth.Truth.assertThat;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
+import static com.zegoggles.smssync.mail.DataType.MMS;
+import static com.zegoggles.smssync.mail.DataType.SMS;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)

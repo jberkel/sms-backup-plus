@@ -1,6 +1,5 @@
 package com.zegoggles.smssync.preferences;
 
-import com.zegoggles.smssync.mail.DataType;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -8,10 +7,10 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
-import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class PreferencesTest {

@@ -71,7 +71,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.6.1'
     testCompile 'org.robolectric:shadows-httpclient:3.0'
-    testCompile 'com.squareup:fest-android:1.0.5'
+    testCompile "com.google.truth:truth:0.39"
     testCompile 'org.mockito:mockito-all:1.10.17'
 }
 

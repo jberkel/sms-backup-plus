@@ -29,7 +29,7 @@ import java.util.List;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_SUCCESS;
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_UNSUPPORTED_TRIGGER;
-import static org.fest.assertions.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
@@ -86,7 +86,7 @@ public class AlarmManagerDriverTest {
         ShadowAlarmManager.ScheduledAlarm nextScheduledAlarm = shadow.getNextScheduledAlarm();
 
         assertThat(nextScheduledAlarm.type).isEqualTo(AlarmManager.RTC_WAKEUP);
-        assertThat(nextScheduledAlarm.triggerAtTime).isGreaterThan(0);
+        assertThat(nextScheduledAlarm.triggerAtTime).isGreaterThan(0L);
 
         PendingIntent pendingIntent = nextScheduledAlarm.operation;
         ShadowPendingIntent shadowPendingIntent = shadowOf(pendingIntent);

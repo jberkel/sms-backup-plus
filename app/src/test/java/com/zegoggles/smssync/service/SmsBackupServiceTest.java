@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -107,7 +107,7 @@ public class SmsBackupServiceTest {
         service.handleIntent(intent);
 
         verifyZeroInteractions(backupTask);
-        assertThat(service.getState().exception).isExactlyInstanceOf(NoConnectionException.class);
+        assertThat(service.getState().exception).isInstanceOf(NoConnectionException.class);
     }
 
     @Test public void shouldNotCheckForConnectivityBeforeBackingUpWithNewScheduler() throws Exception {
@@ -129,7 +129,7 @@ public class SmsBackupServiceTest {
         service.handleIntent(intent);
 
         verifyZeroInteractions(backupTask);
-        assertThat(service.getState().exception).isExactlyInstanceOf(RequiresWifiException.class);
+        assertThat(service.getState().exception).isInstanceOf(RequiresWifiException.class);
     }
 
     @Test public void shouldCheckForWifiConnectivityAndNetworkType() throws Exception {
@@ -141,7 +141,7 @@ public class SmsBackupServiceTest {
         service.handleIntent(intent);
 
         verifyZeroInteractions(backupTask);
-        assertThat(service.getState().exception).isExactlyInstanceOf(RequiresWifiException.class);
+        assertThat(service.getState().exception).isInstanceOf(RequiresWifiException.class);
     }
 
     @Test public void shouldCheckForLoginCredentials() throws Exception {
@@ -150,7 +150,7 @@ public class SmsBackupServiceTest {
         shadowConnectivityManager.setBackgroundDataSetting(true);
         service.handleIntent(intent);
         verifyZeroInteractions(backupTask);
-        assertThat(service.getState().exception).isExactlyInstanceOf(RequiresLoginException.class);
+        assertThat(service.getState().exception).isInstanceOf(RequiresLoginException.class);
     }
 
     @Test public void shouldCheckForEnabledDataTypes() throws Exception {
@@ -161,7 +161,7 @@ public class SmsBackupServiceTest {
         shadowConnectivityManager.setBackgroundDataSetting(true);
         service.handleIntent(intent);
         verifyZeroInteractions(backupTask);
-        assertThat(service.getState().exception).isExactlyInstanceOf(BackupDisabledException.class);
+        assertThat(service.getState().exception).isInstanceOf(BackupDisabledException.class);
         assertThat(service.getState().state).isEqualTo(SmsSyncState.FINISHED_BACKUP);
     }
 
@@ -202,7 +202,7 @@ public class SmsBackupServiceTest {
 
         service.handleIntent(intent);
         verifyZeroInteractions(backupTask);
-        assertThat(service.getState().exception).isExactlyInstanceOf(MessagingException.class);
+        assertThat(service.getState().exception).isInstanceOf(MessagingException.class);
     }
 
     @Test public void shouldNotifyUserAboutErrorInManualMode() throws Exception {

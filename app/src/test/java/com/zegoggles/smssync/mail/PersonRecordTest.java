@@ -4,10 +4,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.preferences.AddressStyle.NAME;
 import static com.zegoggles.smssync.preferences.AddressStyle.NAME_AND_NUMBER;
 import static com.zegoggles.smssync.preferences.AddressStyle.NUMBER;
-import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class PersonRecordTest {

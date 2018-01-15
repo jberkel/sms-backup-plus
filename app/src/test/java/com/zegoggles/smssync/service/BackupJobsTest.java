@@ -19,10 +19,10 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowPackageManager;
 
 import static com.firebase.jobdispatcher.ObservedUri.Flags.FLAG_NOTIFY_FOR_DESCENDANTS;
+import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.Consts.CALLLOG_PROVIDER;
 import static com.zegoggles.smssync.Consts.SMS_PROVIDER;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
-import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.robolectric.Shadows.shadowOf;
@@ -80,7 +80,7 @@ public class BackupJobsTest {
         assertThat(job.getTrigger()).isInstanceOf(JobTrigger.ContentUriTrigger.class);
 
         JobTrigger.ContentUriTrigger contentUriTrigger = (JobTrigger.ContentUriTrigger) job.getTrigger();
-        assertThat(contentUriTrigger.getUris()).contains(
+        assertThat(contentUriTrigger.getUris()).containsExactly(
             new ObservedUri(SMS_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS),
             new ObservedUri(CALLLOG_PROVIDER, FLAG_NOTIFY_FOR_DESCENDANTS)
         );
@@ -139,7 +139,7 @@ public class BackupJobsTest {
         if ("BROADCAST_INTENT".equals(expectedType)) {
             assertThat(job.getConstraints()).isEmpty();
         } else {
-            assertThat(job.getConstraints()).contains(Constraint.ON_ANY_NETWORK);
+            assertThat(job.getConstraints()).asList().contains(Constraint.ON_ANY_NETWORK);
         }
     }
 }

@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Robolectric.setupService;
@@ -22,7 +22,7 @@ public class SmsJobServiceTest {
     }
 
     @Test public void testOnStartJob() {
-        final JobParameters jobParameters = mock(JobParameters.class);;
+        final JobParameters jobParameters = mock(JobParameters.class);
         when(jobParameters.getTag()).thenReturn(BackupJobs.CONTENT_TRIGGER_TAG);
 
         boolean moreWork = smsJobService.onStartJob(jobParameters);
