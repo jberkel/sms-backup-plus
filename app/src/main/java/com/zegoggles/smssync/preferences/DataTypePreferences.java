@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import static com.zegoggles.smssync.mail.DataType.Defaults.MAX_SYNCED_DATE;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 
 public class DataTypePreferences {
@@ -50,7 +51,7 @@ public class DataTypePreferences {
      * @return returns the last synced date in milliseconds (epoch)
      */
     public long getMaxSyncedDate(DataType dataType) {
-        long maxSynced = sharedPreferences.getLong(dataType.maxSyncedPreference, DataType.Defaults.MAX_SYNCED_DATE);
+        final long maxSynced = sharedPreferences.getLong(dataType.maxSyncedPreference, MAX_SYNCED_DATE);
         if (dataType == MMS && maxSynced > 0) {
             return maxSynced * 1000L;
         } else {

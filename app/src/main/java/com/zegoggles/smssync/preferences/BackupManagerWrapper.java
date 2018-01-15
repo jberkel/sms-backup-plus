@@ -1,17 +1,13 @@
 package com.zegoggles.smssync.preferences;
 
 import android.app.backup.BackupManager;
-import android.util.Log;
-
-import static com.zegoggles.smssync.App.LOCAL_LOGV;
-import static com.zegoggles.smssync.App.TAG;
 
 public class BackupManagerWrapper {
-    static Boolean available = null;
+    private static Boolean available = null;
 
     private BackupManagerWrapper() {}
 
-    static boolean available() {
+    private static boolean available() {
         if (available == null) {
             try {
                 Class.forName("android.app.backup.BackupManager");
@@ -25,7 +21,6 @@ public class BackupManagerWrapper {
 
     public static void dataChanged(android.content.Context context) {
         if (available()) {
-            if (LOCAL_LOGV) Log.v(TAG, "dataChanged()");
             new BackupManager(context).dataChanged();
         }
     }
