@@ -1,7 +1,6 @@
 package com.zegoggles.smssync.preferences;
 
 import android.content.SharedPreferences;
-import android.os.Build;
 import com.zegoggles.smssync.mail.DataType;
 
 import java.util.ArrayList;
@@ -18,12 +17,7 @@ public class DataTypePreferences {
     }
 
     public boolean isBackupEnabled(DataType dataType) {
-        //noinspection SimplifiableIfStatement
-        if (dataType.minSdkVersion > 0 && Build.VERSION.SDK_INT < dataType.minSdkVersion) {
-            return false;
-        } else {
-            return sharedPreferences.getBoolean(dataType.backupEnabledPreference, dataType.backupEnabledByDefault);
-        }
+        return sharedPreferences.getBoolean(dataType.backupEnabledPreference, dataType.backupEnabledByDefault);
     }
 
     public void setBackupEnabled(boolean enabled, DataType dataType) {

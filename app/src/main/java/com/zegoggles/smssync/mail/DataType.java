@@ -1,12 +1,11 @@
 package com.zegoggles.smssync.mail;
 
-import android.os.Build;
 import com.zegoggles.smssync.R;
 
 public enum DataType {
-    SMS     (R.string.sms,      R.string.sms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      Defaults.SMS_BACKUP_ENABLED,     PreferenceKeys.RESTORE_SMS,     Defaults.SMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_SMS,      -1),
-    MMS     (R.string.mms,      R.string.mms_with_field,     PreferenceKeys.IMAP_FOLDER,          Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_MMS,      Defaults.MMS_BACKUP_ENABLED,     null,                           Defaults.MMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_MMS,      Build.VERSION_CODES.ECLAIR),
-    CALLLOG (R.string.calllog,  R.string.call_with_field,    PreferenceKeys.IMAP_FOLDER_CALLLOG,  Defaults.CALLLOG_FOLDER, PreferenceKeys.BACKUP_CALLLOG,  Defaults.CALLLOG_BACKUP_ENABLED, PreferenceKeys.RESTORE_CALLLOG, Defaults.CALLLOG_RESTORE_ENABLED, PreferenceKeys.MAX_SYNCED_DATE_CALLLOG,  -1);
+    SMS     (R.string.sms,     R.string.sms_with_field,  PreferenceKeys.IMAP_FOLDER,         Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      Defaults.SMS_BACKUP_ENABLED,     PreferenceKeys.RESTORE_SMS,     Defaults.SMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_SMS),
+    MMS     (R.string.mms,     R.string.mms_with_field,  PreferenceKeys.IMAP_FOLDER,         Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_MMS,      Defaults.MMS_BACKUP_ENABLED,     null,                           Defaults.MMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_MMS),
+    CALLLOG (R.string.calllog, R.string.call_with_field, PreferenceKeys.IMAP_FOLDER_CALLLOG, Defaults.CALLLOG_FOLDER, PreferenceKeys.BACKUP_CALLLOG,  Defaults.CALLLOG_BACKUP_ENABLED, PreferenceKeys.RESTORE_CALLLOG, Defaults.CALLLOG_RESTORE_ENABLED, PreferenceKeys.MAX_SYNCED_DATE_CALLLOG);
 
     public final int resId;
     public final int withField;
@@ -14,7 +13,6 @@ public enum DataType {
     public final String restoreEnabledPreference;
     public final String folderPreference;
     public final String defaultFolder;
-    public final int minSdkVersion;
     public final boolean backupEnabledByDefault;
     public final boolean restoreEnabledByDefault;
     public final String maxSyncedPreference;
@@ -27,8 +25,7 @@ public enum DataType {
              boolean backupEnabledByDefault,
              String restoreEnabledPreference,
              boolean restoreEnabledByDefault,
-             String maxSyncedPreference,
-             int minSdkVersion) {
+             String maxSyncedPreference) {
         this.resId = resId;
         this.withField = withField;
         this.folderPreference = folderPreference;
@@ -38,7 +35,6 @@ public enum DataType {
         this.restoreEnabledPreference = restoreEnabledPreference;
         this.restoreEnabledByDefault = restoreEnabledByDefault;
         this.maxSyncedPreference = maxSyncedPreference;
-        this.minSdkVersion = minSdkVersion;
     }
 
     public static class PreferenceKeys {
