@@ -313,7 +313,7 @@ public class Preferences {
             code = -1;
         }
 
-        int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, -1);
+        final int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, -1);
         if (lastSeenCode < code) {
             return preferences.edit().putInt(LAST_VERSION_CODE.key, code).commit();
         } else {
