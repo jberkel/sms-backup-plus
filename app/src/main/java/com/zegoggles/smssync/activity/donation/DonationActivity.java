@@ -23,6 +23,7 @@ import com.zegoggles.smssync.utils.BundleBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -32,7 +33,6 @@ import static com.android.billingclient.api.BillingClient.BillingResponse.ITEM_U
 import static com.android.billingclient.api.BillingClient.BillingResponse.OK;
 import static com.android.billingclient.api.BillingClient.BillingResponse.USER_CANCELED;
 import static com.android.billingclient.api.BillingClient.SkuType.INAPP;
-import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.Consts.Billing.ALL_SKUS;
 import static com.zegoggles.smssync.Consts.Billing.DONATION_PREFIX;
@@ -57,7 +57,7 @@ public class DonationActivity extends AppCompatActivity implements
         void userDonationState(State state);
     }
 
-    static boolean DEBUG_IAB = BuildConfig.DEBUG;
+    private static boolean DEBUG_IAB = BuildConfig.DEBUG;
     private @Nullable BillingClient billingClient;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -65,9 +65,7 @@ public class DonationActivity extends AppCompatActivity implements
         billingClient = BillingClient.newBuilder(this).setListener(this).build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override public void onBillingSetupFinished(@BillingResponse int resultCode) {
-                if (LOCAL_LOGV) {
-                    Log.v(TAG, "onBillingSetupFinished(" + resultCode + ")" + Thread.currentThread().getName());
-                }
+                log("onBillingSetupFinished(" + resultCode + ")" + Thread.currentThread().getName());
                 switch (resultCode) {
                     case OK:
                         queryAvailableSkus();
@@ -118,9 +116,13 @@ public class DonationActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * @param responseCode response code of the update
+     * @param purchases list of updated purchases if present
+     */
     @Override
     public void onPurchasesUpdated(@BillingResponse int responseCode, @Nullable List<Purchase> purchases) {
-        log("onIabPurchaseFinished(" + responseCode + ", " + purchases);
+        log("onPurchasesUpdated(" + responseCode + ", " + purchases + ")");
         if (responseCode == OK) {
             Toast.makeText(this,
                     R.string.ui_donation_success_message,
@@ -152,19 +154,22 @@ public class DonationActivity extends AppCompatActivity implements
     @Override
     public void selectedSku(String sku) {
         if (billingClient == null) return;
+        if (DEBUG_IAB) {
+            Log.v(TAG, "selectedSku("+sku+")");
+        }
         billingClient.launchBillingFlow(this, BillingFlowParams.newBuilder()
-                .setType(INAPP)
-                .setSku(sku)
-                .build()
+            .setType(INAPP)
+            .setSku(sku)
+            .build()
         );
     }
 
     private void queryAvailableSkus() {
         if (billingClient == null) return;
         billingClient.querySkuDetailsAsync(SkuDetailsParams.newBuilder()
-                .setType(INAPP)
-                .setSkusList(Arrays.asList(ALL_SKUS))
-                .build(), this);
+            .setType(INAPP)
+            .setSkusList(Arrays.asList(ALL_SKUS))
+            .build(), this);
     }
 
     private void showSelectDialog(List<SkuDetails> skuDetails) {
@@ -173,6 +178,10 @@ public class DonationActivity extends AppCompatActivity implements
         for (SkuDetails detail : skuDetails) {
             skus.add(new Sku(detail));
         }
+        if (DEBUG_IAB) {
+            Collections.addAll(skus, Sku.Test.SKUS);
+        }
+        Collections.sort(skus);
         final DonationListFragment donationList = new DonationListFragment();
         donationList.setArguments(new BundleBuilder().putParcelableArrayList(SKUS, skus).build());
         donationList.show(getSupportFragmentManager(), null);

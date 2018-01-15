@@ -12,11 +12,9 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static android.R.string.cancel;
-import static com.zegoggles.smssync.activity.donation.DonationActivity.DEBUG_IAB;
 
 public class DonationListFragment extends Dialogs.BaseFragment {
     static final String SKUS = "skus";
@@ -44,17 +42,7 @@ public class DonationListFragment extends Dialogs.BaseFragment {
             .setItems(getOptions(skus), new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    String selectedSku;
-                    if (DEBUG_IAB) {
-                        if (which < Sku.Test.SKUS.length) {
-                            selectedSku = Sku.Test.SKUS[which].getSku();
-                        } else {
-                            selectedSku = skus.get(which - Sku.Test.SKUS.length).getSku();
-                        }
-                    } else {
-                        selectedSku = skus.get(which).getSku();
-                    }
-                    listener.selectedSku(selectedSku);
+                    listener.selectedSku(skus.get(which).getSku());
                 }
             })
             .setNegativeButton(cancel, new OnClickListener() {
@@ -72,15 +60,8 @@ public class DonationListFragment extends Dialogs.BaseFragment {
     }
 
     private CharSequence[] getOptions(List<Sku> skus) {
-        final List<Sku> sortedSkus = new ArrayList<Sku>(skus);
-        Collections.sort(sortedSkus);
         List<String> options = new ArrayList<String>();
-        if (DEBUG_IAB) {
-            for (Sku testSku : Sku.Test.SKUS) {
-                options.add(testSku.getDescription());
-            }
-        }
-        for (final Sku sku : sortedSkus) {
+        for (final Sku sku : skus) {
             String item = sku.getTitle();
             if (!TextUtils.isEmpty(sku.getPrice())) {
                 item += "  " + sku.getPrice();
