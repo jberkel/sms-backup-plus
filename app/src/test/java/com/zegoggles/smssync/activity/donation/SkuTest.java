@@ -1,9 +1,12 @@
 package com.zegoggles.smssync.activity.donation;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import static com.google.common.truth.Truth.assertThat;
 
+@RunWith(RobolectricTestRunner.class)
 public class SkuTest {
     private Sku sku1 = new Sku("test", "test.sku.1", "$10.00", "Test 1", "Test 1", 10000);
     private Sku sku2 = new Sku("test", "test.sku.2", "$7.00", "Test 2", "Test 2", 7000);
