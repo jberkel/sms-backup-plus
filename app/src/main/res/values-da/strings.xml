@@ -243,7 +243,7 @@
   <string name="auto_backup_settings">Auto backup indstillinger</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
-  <string name="ui_restore_settings_label">Nulstil indstillinger</string>
+  <string name="ui_restore_settings_label">Genetabler indstillinger</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">Backup SMS</string>
