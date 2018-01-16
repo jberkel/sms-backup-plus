@@ -1,32 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Creator: CorelDRAW 2017 -->
-<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="101.6mm" height="101.6mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
-viewBox="0 0 10160 10160"
- xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <style type="text/css">
-   <![CDATA[
-    .fil3 {fill:#439F06}
-    .fil1 {fill:#A8251B}
-    .fil2 {fill:#ACACA2}
-    .fil0 {fill:#E93D2F}
-    .fil4 {fill:#F1F1F1}
-   ]]>
-  </style>
- </defs>
- <g id="Layer_x0020_1">
-  <metadata id="CorelCorpID_0Corel-Layer"/>
-  <g id="_1605452068096">
-   <g>
-    <polygon class="fil0" points="643.2,6871.47 3010.97,8217.45 643.2,9547.16 "/>
-    <polygon class="fil1" points="5298.8,6871.47 5298.8,9547.16 643.2,9547.16 "/>
-    <polygon class="fil2" points="2991.62,5019.12 5298.8,6871.47 2956.23,8216.39 643.2,6871.47 "/>
-   </g>
-   <path class="fil3" d="M3598.13 983.95c0,-350.02 145.83,-492.88 503.08,-492.88l5098.51 0c357.25,0 503.09,142.86 503.09,492.88l0 4012.1c0,350.02 -145.84,492.88 -503.09,492.88l-4235.1 0 -1126.27 900.19c-35.61,53.46 -242.03,216.62 -239.48,-58.68l-0.74 -5346.49z"/>
-   <polygon class="fil4" points="8700.15,1708.33 8700.15,2175.16 4599.72,2175.16 4599.72,1708.33 "/>
-   <polygon class="fil4" points="8700.15,2781.78 8700.15,3248.72 4599.72,3248.72 4599.72,2781.78 "/>
-   <polygon class="fil4" points="7286.46,3823.33 7286.46,4290.27 4589.09,4290.27 4589.09,3823.33 "/>
-  </g>
- </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="384" viewBox="0 0 10160 10160" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd">
+    <g id="Layer_x0020_1">
+        <g id="_1605452068096">
+            <path fill="#e93d2f" d="M643.2 6871.47l2367.77 1345.98L643.2 9547.16z"/>
+            <path fill="#a8251b" d="M5298.8 6871.47v2675.69H643.2z"/>
+            <path fill="#acaca2" d="M2991.62 5019.12L5298.8 6871.47 2956.23 8216.39 643.2 6871.47z"/>
+            <path fill="#439f06" d="M3598.13 983.95c0-350.02 145.83-492.88 503.08-492.88h5098.51c357.25 0 503.09 142.86 503.09 492.88v4012.1c0 350.02-145.84 492.88-503.09 492.88h-4235.1l-1126.27 900.19c-35.61 53.46-242.03 216.62-239.48-58.68l-.74-5346.49z"/>
+            <path fill="#f1f1f1" d="M8700.15 1708.33v466.83H4599.72v-466.83zM8700.15 2781.78v466.94H4599.72v-466.94zM7286.46 3823.33v466.94H4589.09v-466.94z"/>
+        </g>
+    </g>
 </svg>
