@@ -16,6 +16,7 @@
     <issue id="ApplySharedPref" severity="ignore"/>
 
     <!-- for older android devices we need to store in /drawable -->
+    <issue id="IconLauncherFormat" severity="ignore"/>
     <issue id="IconLocation" severity="ignore"/>
     <issue id="IconDuplicatesConfig" severity="ignore"/>
     <issue id="IconDensities" severity="ignore"/>

@@ -161,7 +161,7 @@ public class Dialogs {
             webView.loadUrl("file:///android_asset/about.html");
             return new AlertDialog.Builder(getContext())
                 .setPositiveButton(ok, null)
-                .setIcon(R.drawable.ic_launcher)
+                .setIcon(R.drawable.ic_sms_backup)
                 .setTitle(R.string.menu_info)
                 .setView(contentView)
                 .create();

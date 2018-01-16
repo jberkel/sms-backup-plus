@@ -1,11 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- simple palette based on app logo -->
-    <color name="envelope_light">#E93E30</color>
-    <color name="envelope_dark">#A8261B</color>
-    <color name="envelope_grey">#ACACA3</color>
-    <color name="bubble">#378604</color>
+    <!-- simple palette based on app logo (ic_sms_backup) -->
+    <color name="envelope_light">#e93d2f</color>
+    <color name="envelope_dark">#a8251b</color>
+    <color name="envelope_grey">#acaca2</color>
+    <color name="bubble">#439f06</color>
     <color name="bubble_dark">#296304</color>
-    <color name="bubble_text">#F2F2F2</color>
+    <color name="bubble_text">#f1f1f1</color>
     <color name="syncing">#cc9900</color>
 
     <color name="primary">@color/bubble</color>
