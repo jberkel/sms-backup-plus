@@ -44,8 +44,6 @@ import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 
-import java.util.Locale;
-
 import static android.net.ConnectivityManager.TYPE_WIFI;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
