@@ -17,14 +17,22 @@
     <color name="secondary_text">@color/envelope_grey</color>
     <color name="tertiary_text">@color/secondary_text</color>
 
-    <style name="SMSBackupPlusTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="SMSBackupPlusTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
+    <style name="SMSBackupPlusTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
         <item name="android:textColorTertiary">@color/text_tertiary</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <declare-styleable name="StatusPreference">
@@ -35,7 +43,7 @@
     </declare-styleable>
 
     <!-- https://gist.github.com/dlew/a2e2f247c78495eca4e6 -->
-    <style name="SMSBackupPlusTheme.Debug" tools:ignore="NewApi">
+    <style name="Debug" tools:ignore="NewApi">
         <item name="android:textColorPrimary">#FFFF00</item>
         <item name="android:textColorSecondary">#FF00FF</item>
         <item name="android:textColorTertiary">#00FFFF</item>
