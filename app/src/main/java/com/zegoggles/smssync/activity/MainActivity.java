@@ -18,7 +18,6 @@ package com.zegoggles.smssync.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony.Sms;
@@ -56,7 +55,6 @@ import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.preferences.AuthPreferences;
-import com.zegoggles.smssync.preferences.BackupManagerWrapper;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
@@ -128,13 +126,6 @@ public class MainActivity extends ThemeActivity implements
         changeDefaultPackageIntent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, getPackageName());
 
         preferences = new Preferences(this);
-        preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(
-            new SharedPreferences.OnSharedPreferenceChangeListener() {
-                public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                    BackupManagerWrapper.dataChanged(MainActivity.this);
-                }
-            }
-        );
         if (bundle == null) {
             showFragment(new MainSettings(), null);
         }

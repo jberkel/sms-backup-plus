@@ -117,7 +117,7 @@ public class App extends Application {
 
     private void enableOrDisableComponent(boolean enabled, Class<?> component) {
         if (LOCAL_LOGV) {
-            Log.v(TAG, "enableComponent("+enabled+", "+component.getSimpleName()+")");
+            Log.v(TAG, "enableOrDisableComponent("+enabled+", "+component.getSimpleName()+")");
         }
         // NB: changes made via setComponentEnabledSetting are persisted across reboots
         getPackageManager().setComponentEnabledSetting(

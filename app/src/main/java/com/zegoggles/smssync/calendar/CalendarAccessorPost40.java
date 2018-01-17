@@ -60,6 +60,9 @@ public class CalendarAccessorPost40 implements CalendarAccessor {
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "could not add calendar entry", e);
             return false;
+        } catch (SecurityException e) {
+            Log.w(TAG, "could not add calendar entry (permission)", e);
+            return false;
         }
     }
 
@@ -89,6 +92,8 @@ public class CalendarAccessorPost40 implements CalendarAccessor {
             }
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "calendars not available", e);
+        } catch (SecurityException e) {
+            Log.e(TAG, "calendar permission missing", e);
         } finally {
             if (cursor != null) {
                 cursor.close();

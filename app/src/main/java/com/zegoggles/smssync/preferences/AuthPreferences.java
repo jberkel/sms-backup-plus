@@ -57,7 +57,7 @@ public class AuthPreferences {
     /* package */ AuthPreferences(Context context, ServerPreferences serverPreferences) {
         this.context = context.getApplicationContext();
         this.serverPreferences = serverPreferences;
-        this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public String getOauth2Token() {

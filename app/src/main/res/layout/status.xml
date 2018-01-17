@@ -18,6 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:src="@drawable/ic_done"/>
 
         <TextView
@@ -27,7 +28,9 @@
                 android:layout_alignBaseline="@id/status_icon"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="6dip"
+                android:layout_marginStart="6dip"
                 android:layout_toRightOf="@id/status_icon"
+                android:layout_toEndOf="@id/status_icon"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
@@ -36,6 +39,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/status_label"
+                android:layout_alignStart="@id/status_label"
                 android:layout_below="@id/status_icon"
                 android:orientation="vertical">
 
@@ -45,7 +49,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:indeterminate="false"
-                android:paddingRight="10dip" />
+                android:paddingLeft="0dip"
+                android:paddingStart="0dip"
+                android:paddingRight="10dip"
+                android:paddingEnd="10dip"/>
 
             <TextView
                     android:id="@+id/details_sync_label"
