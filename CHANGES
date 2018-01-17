@@ -1,5 +1,6 @@
 == 1.5.11 (1555) tbd
 
+  * Added dark/light theme switcher
   * Modernized UI (Material/AppCompat)
   * Simplify IMAP search logic to prevent timeouts
   * Retry connection timeouts more aggressively
