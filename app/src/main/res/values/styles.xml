@@ -37,7 +37,7 @@
 
     <style name="Toolbar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/text_primary</item>
-        <item name="colorControlNormal">@color/primary_text</item>
+        <item name="android:textColorSecondary">#DEDEDE</item>
     </style>
 
     <declare-styleable name="StatusPreference">
