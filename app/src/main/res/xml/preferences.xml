@@ -67,8 +67,8 @@
     </PreferenceScreen>
 
     <PreferenceScreen
-            android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings"
-            android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings"
+            android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Main"
+            android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Main"
             android:persistent="false"
             android:title="@string/ui_settings_advanced_label"
             android:summary="@string/ui_settings_advanced_desc"
@@ -315,6 +315,13 @@
                         android:persistent="false"/>
             </PreferenceCategory>
         </PreferenceScreen>
+
+        <ListPreference
+                android:key="app_theme"
+                android:title="@string/ui_theme_label"
+                android:entries="@array/app_theme_entries"
+                android:entryValues="@array/app_theme_values"
+                />
     </PreferenceScreen>
 
     <Preference

@@ -345,4 +345,8 @@
     to set SMS Backup+ as your SMS app during the restore operation. You will
     get asked to change it back to the original setting after restoring.
   </string>
+
+  <string name="ui_theme_label">App theme</string>
+  <string name="dark_theme">Dark</string>
+  <string name="light_theme">Light</string>
 </resources>

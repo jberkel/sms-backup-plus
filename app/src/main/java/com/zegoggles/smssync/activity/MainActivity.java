@@ -28,7 +28,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback;
@@ -44,8 +43,8 @@ import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.Dialogs.WebConnect;
 import com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage;
+import com.zegoggles.smssync.activity.Dialogs.WebConnect;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
 import com.zegoggles.smssync.activity.events.AccountAddedEvent;
@@ -53,6 +52,7 @@ import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
 import com.zegoggles.smssync.activity.events.PerformAction;
 import com.zegoggles.smssync.activity.events.PerformAction.Actions;
+import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.preferences.AuthPreferences;
@@ -65,6 +65,7 @@ import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
 import static android.provider.Telephony.Sms.Intents.EXTRA_PACKAGE_NAME;
 import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
@@ -72,23 +73,23 @@ import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.Dialogs.ConfirmAction.ACTION;
-import static com.zegoggles.smssync.activity.Dialogs.Type.OAUTH2_ACCESS_TOKEN_ERROR;
-import static com.zegoggles.smssync.activity.Dialogs.WebConnect.REQUEST_WEB_AUTH;
 import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
 import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ABOUT;
-import static com.zegoggles.smssync.activity.Dialogs.Type.OAUTH2_ACCESS_TOKEN_PROGRESS;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR;
 import static com.zegoggles.smssync.activity.Dialogs.Type.CONFIRM_ACTION;
-import static com.zegoggles.smssync.activity.Dialogs.Type.WEB_CONNECT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.DISCONNECT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.FIRST_SYNC;
 import static com.zegoggles.smssync.activity.Dialogs.Type.MISSING_CREDENTIALS;
+import static com.zegoggles.smssync.activity.Dialogs.Type.OAUTH2_ACCESS_TOKEN_ERROR;
+import static com.zegoggles.smssync.activity.Dialogs.Type.OAUTH2_ACCESS_TOKEN_PROGRESS;
 import static com.zegoggles.smssync.activity.Dialogs.Type.RESET;
 import static com.zegoggles.smssync.activity.Dialogs.Type.SMS_DEFAULT_PACKAGE_CHANGE;
 import static com.zegoggles.smssync.activity.Dialogs.Type.UPGRADE_FROM_SMSBACKUP;
 import static com.zegoggles.smssync.activity.Dialogs.Type.VIEW_LOG;
+import static com.zegoggles.smssync.activity.Dialogs.Type.WEB_CONNECT;
+import static com.zegoggles.smssync.activity.Dialogs.WebConnect.REQUEST_WEB_AUTH;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_ADD_ACCOUNT;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_FALLBACK_AUTH;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_ACCOUNT;
@@ -100,7 +101,7 @@ import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup
  * This is the main activity showing the status of the SMS Sync service and
  * providing controls to configure it.
  */
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends ThemeActivity implements
         OnPreferenceStartFragmentCallback,
         OnPreferenceStartScreenCallback,
         FragmentManager.OnBackStackChangedListener {
@@ -134,7 +135,9 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         );
-        showFragment(new MainSettings(), null);
+        if (bundle == null) {
+            showFragment(new MainSettings(), null);
+        }
         if (preferences.shouldShowUpgradeMessage()) {
             showDialog(UPGRADE_FROM_SMSBACKUP);
         }
@@ -285,9 +288,20 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Subscribe public void themeChangedEvent(ThemeChangedEvent event) {
+        if (Build.VERSION.SDK_INT >= HONEYCOMB) {
+            recreate();
+        }
+    }
+
     @Override public void onBackStackChanged() {
         getSupportActionBar().setSubtitle(getCurrentTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(getSupportFragmentManager().getBackStackEntryCount() > 0);
+    }
+
+    @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        onBackStackChanged();
     }
 
     private @Nullable CharSequence getCurrentTitle() {

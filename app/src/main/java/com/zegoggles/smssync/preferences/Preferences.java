@@ -16,7 +16,6 @@
 
 package com.zegoggles.smssync.preferences;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -24,6 +23,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
 
@@ -32,6 +32,7 @@ import java.util.Locale;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG_DEBUG;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_THEME;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
@@ -101,6 +102,7 @@ public class Preferences {
         SMS_DEFAULT_PACKAGE("sms_default_package"),
         SMS_DEFAULT_PACKAGE_CHANGE_SEEN("sms_default_package_change_seen"),
         USE_OLD_SCHEDULER("use_old_scheduler"),
+        APP_THEME("app_theme")
         ;
 
         public final String key;
@@ -327,6 +329,17 @@ public class Preferences {
 
     public boolean setUseOldScheduler(boolean enabled) {
         return preferences.edit().putBoolean(USE_OLD_SCHEDULER.key, enabled).commit();
+    }
+
+    public int getAppTheme() {
+        final String theme = preferences.getString(APP_THEME.key, null);
+        if ("light".equals(theme)) {
+            return R.style.SMSBackupPlusTheme_Light;
+        } else if ("debug".equals(theme)) {
+            return R.style.Debug;
+        } else {
+            return R.style.SMSBackupPlusTheme_Dark;
+        }
     }
 
     private boolean isOldSmsBackupInstalled() {

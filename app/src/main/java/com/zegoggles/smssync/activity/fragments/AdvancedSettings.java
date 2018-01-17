@@ -5,6 +5,7 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.BackupImapStore;
@@ -20,6 +21,7 @@ import java.util.Locale;
 import static com.zegoggles.smssync.activity.Dialogs.Type.INVALID_IMAP_FOLDER;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.SMS;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_THEME;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
@@ -29,22 +31,11 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_R
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
 
 public class AdvancedSettings extends SMSBackupPreferenceFragment {
-    void updateMaxItems(String prefKey, int currentValue, String newValue) {
-        Preference pref = findPreference(prefKey);
-        if (newValue == null) {
-            newValue = String.valueOf(currentValue);
-        }
-        // XXX
-        pref.setTitle("-1".equals(newValue) ? getString(R.string.all_messages) : newValue);
-    }
-
-    boolean checkValidImapFolder(Preference preference, String imapFolder) {
-        if (BackupImapStore.isValidImapFolder(imapFolder)) {
-            preference.setTitle(imapFolder);
-            return true;
-        } else {
-            INVALID_IMAP_FOLDER.instantiate(getActivity(), null).show(getFragmentManager(), null);
-            return false;
+    public static class Main extends AdvancedSettings {
+        @Override
+        public void onResume() {
+            super.onResume();
+            addPreferenceListener(new ThemeChangedEvent(), APP_THEME.key);
         }
     }
 
@@ -237,6 +228,25 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                 }
             }
             findPreference(AuthPreferences.IMAP_USER).setTitle(username);
+        }
+    }
+
+    void updateMaxItems(String prefKey, int currentValue, String newValue) {
+        Preference pref = findPreference(prefKey);
+        if (newValue == null) {
+            newValue = String.valueOf(currentValue);
+        }
+        // XXX
+        pref.setTitle("-1".equals(newValue) ? getString(R.string.all_messages) : newValue);
+    }
+
+    boolean checkValidImapFolder(Preference preference, String imapFolder) {
+        if (BackupImapStore.isValidImapFolder(imapFolder)) {
+            preference.setTitle(imapFolder);
+            return true;
+        } else {
+            INVALID_IMAP_FOLDER.instantiate(getActivity(), null).show(getFragmentManager(), null);
+            return false;
         }
     }
 }

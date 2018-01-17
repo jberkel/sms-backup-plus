@@ -135,4 +135,14 @@
     <item>@string/plain_value</item>
   </string-array>
 
+  <string-array name="app_theme_entries">
+      <item>@string/dark_theme</item>
+      <item>@string/light_theme</item>
+  </string-array>
+
+  <string-array name="app_theme_values">
+    <item>dark</item>
+    <item>light</item>
+  </string-array>
+
 </resources>

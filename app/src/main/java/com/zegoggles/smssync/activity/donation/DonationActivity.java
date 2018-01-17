@@ -18,6 +18,7 @@ import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.zegoggles.smssync.BuildConfig;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.ThemeActivity;
 import com.zegoggles.smssync.activity.donation.DonationListFragment.SkuSelectionListener;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
@@ -42,7 +43,7 @@ import static com.zegoggles.smssync.activity.donation.DonationActivity.DonationS
 import static com.zegoggles.smssync.activity.donation.DonationActivity.DonationStatusListener.State.UNKNOWN;
 import static com.zegoggles.smssync.activity.donation.DonationListFragment.SKUS;
 
-public class DonationActivity extends AppCompatActivity implements
+public class DonationActivity extends ThemeActivity implements
         SkuDetailsResponseListener,
         PurchasesUpdatedListener,
         SkuSelectionListener {

@@ -21,6 +21,7 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
 import com.zegoggles.smssync.activity.Dialogs.AccessTokenProgress;
 import com.zegoggles.smssync.activity.MainActivity;
+import com.zegoggles.smssync.activity.ThemeActivity;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
@@ -28,7 +29,7 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.AccountDialogs.ACCOUNTS;
 import static com.zegoggles.smssync.utils.Drawables.getTinted;
 
-public class AccountManagerAuthActivity extends AppCompatActivity {
+public class AccountManagerAuthActivity extends ThemeActivity {
     public static final String EXTRA_TOKEN = "token";
     public static final String EXTRA_ERROR = "error";
     private static final String EXTRA_DENIED = "denied";

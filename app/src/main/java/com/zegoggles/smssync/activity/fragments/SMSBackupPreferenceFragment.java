@@ -22,6 +22,10 @@ public class SMSBackupPreferenceFragment extends PreferenceFragmentCompat {
     }
 
     void addPreferenceListener(String... prefKeys) {
+        addPreferenceListener(new AutoBackupSettingsChangedEvent(), prefKeys);
+    }
+
+    void addPreferenceListener(final Object event, String... prefKeys) {
         for (String prefKey : prefKeys) {
             findPreference(prefKey).setOnPreferenceChangeListener(
                     new OnPreferenceChangeListener() {
@@ -29,7 +33,7 @@ public class SMSBackupPreferenceFragment extends PreferenceFragmentCompat {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    App.post(new AutoBackupSettingsChangedEvent());
+                                    App.post(event);
                                 }
                             });
                             return true;

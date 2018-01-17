@@ -35,6 +35,11 @@
         <item name="android:textColorTertiary">@color/text_tertiary</item>
     </style>
 
+    <style name="Toolbar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="colorControlNormal">@color/primary_text</item>
+    </style>
+
     <declare-styleable name="StatusPreference">
         <attr name="statusIdle" format="color"/>
         <attr name="statusError" format="color"/>

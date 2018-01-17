@@ -3,6 +3,7 @@ package com.zegoggles.smssync.activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
@@ -125,6 +126,19 @@ public class StatusPreference extends Preference implements View.OnClickListener
 
         idle();
     }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        // TODO implement
+        return super.onSaveInstanceState();
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        // TODO implement
+        super.onRestoreInstanceState(state);
+    }
+
 
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "restoreStateChanged:" + newState);
