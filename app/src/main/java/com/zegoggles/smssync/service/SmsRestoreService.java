@@ -143,7 +143,7 @@ public class SmsRestoreService extends ServiceBase {
             notification = createNotification(R.string.status_restore)
                     .setContentTitle(getString(R.string.status_restore))
                     .setContentText(state.getNotificationLabel(getResources()))
-                    .setContentIntent(getPendingIntent())
+                    .setContentIntent(getPendingIntent(null))
                     .build();
 
             startForeground(RESTORE_ID, notification);

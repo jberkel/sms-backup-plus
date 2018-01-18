@@ -32,6 +32,12 @@ public class BackupItemsFetcher {
         return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
     }
 
+    /**
+     * Gets the most recent timestamp for given datatype.
+     * @param dataType the data type
+     * @return timestamp
+     * @throws SecurityException if app does not hold necessary permissions
+     */
     public long getMostRecentTimestamp(DataType dataType) {
         return getMostRecentTimestampForQuery(queryBuilder.buildMostRecentQueryForDataType(dataType));
     }

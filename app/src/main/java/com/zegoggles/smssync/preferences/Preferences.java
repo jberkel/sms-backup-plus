@@ -58,6 +58,8 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.USE_OLD_SCHEDUL
 import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 
 public class Preferences {
+    private static final int DEFAULT_APP_THEME = R.style.SMSBackupPlusTheme_Light;
+
     private static final String ERROR = "error";
     private final Context context;
     private final SharedPreferences preferences;
@@ -112,9 +114,6 @@ public class Preferences {
     }
     private static final String CALLLOG_TYPES = "backup_calllog_types";
 
-    public SharedPreferences getSharedPreferences() {
-        return preferences;
-    }
     public DataTypePreferences getDataTypePreferences() { return new DataTypePreferences(preferences); }
 
     public boolean isAppLogEnabled() {
@@ -234,8 +233,8 @@ public class Preferences {
         }
     }
 
-    public boolean setSmsDefaultPackage(String smsPackage) {
-        return preferences.edit().putString(SMS_DEFAULT_PACKAGE.key, smsPackage).commit();
+    public void setSmsDefaultPackage(String smsPackage) {
+        preferences.edit().putString(SMS_DEFAULT_PACKAGE.key, smsPackage).commit();
     }
 
     public String getSmsDefaultPackage() {
@@ -246,8 +245,8 @@ public class Preferences {
         return preferences.contains(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key);
     }
 
-    public boolean setSeenSmsDefaultPackageChangeDialog() {
-        return preferences.edit().putBoolean(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key, true).commit();
+    public void setSeenSmsDefaultPackageChangeDialog() {
+        preferences.edit().putBoolean(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key, true).commit();
     }
 
     public void reset() {
@@ -317,7 +316,8 @@ public class Preferences {
 
         final int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, -1);
         if (lastSeenCode < code) {
-            return preferences.edit().putInt(LAST_VERSION_CODE.key, code).commit();
+            preferences.edit().putInt(LAST_VERSION_CODE.key, code).commit();
+            return true;
         } else {
             return false;
         }
@@ -327,18 +327,20 @@ public class Preferences {
         return preferences.getBoolean(USE_OLD_SCHEDULER.key, false);
     }
 
-    public boolean setUseOldScheduler(boolean enabled) {
-        return preferences.edit().putBoolean(USE_OLD_SCHEDULER.key, enabled).commit();
+    public void setUseOldScheduler(boolean enabled) {
+        preferences.edit().putBoolean(USE_OLD_SCHEDULER.key, enabled).commit();
     }
 
     public int getAppTheme() {
         final String theme = preferences.getString(APP_THEME.key, null);
         if ("light".equals(theme)) {
             return R.style.SMSBackupPlusTheme_Light;
+        } else if ("dark".equals(theme)) {
+            return R.style.SMSBackupPlusTheme_Dark;
         } else if ("debug".equals(theme)) {
             return R.style.Debug;
         } else {
-            return R.style.SMSBackupPlusTheme_Dark;
+            return DEFAULT_APP_THEME;
         }
     }
 

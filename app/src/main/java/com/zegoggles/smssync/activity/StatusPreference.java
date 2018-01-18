@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.events.MissingPermissionsEvent;
 import com.zegoggles.smssync.activity.events.PerformAction;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
@@ -30,6 +31,7 @@ import com.zegoggles.smssync.utils.Drawables;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -139,7 +141,6 @@ public class StatusPreference extends Preference implements View.OnClickListener
         super.onRestoreInstanceState(state);
     }
 
-
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "restoreStateChanged:" + newState);
         if (backupButton == null) return;
@@ -161,7 +162,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
 
             case CANCELED_RESTORE:
                 statusLabel.setText(R.string.status_canceled);
-                syncDetailsLabel.setText(getContext().getString(R.string.status_restore_canceled_details,
+                syncDetailsLabel.setText(getString(R.string.status_restore_canceled_details,
                         newState.currentRestoredCount,
                         newState.itemsToRestore));
                 break;
@@ -194,11 +195,15 @@ public class StatusPreference extends Preference implements View.OnClickListener
                 break;
             case CANCELED_BACKUP:
                 statusLabel.setText(R.string.status_canceled);
-                syncDetailsLabel.setText(getContext().getString(R.string.status_canceled_details,
+                syncDetailsLabel.setText(getString(R.string.status_canceled_details,
                         newState.currentSyncedItems,
                         newState.itemsToSync));
                 break;
         }
+    }
+
+    @Subscribe public void onMissingPermissions(MissingPermissionsEvent event) {
+        displayMissingPermissions(event.permissions);
     }
 
     private void onBackup() {
@@ -225,7 +230,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
         }
     }
 
-    private void authFailed() {
+    private void onAuthFailed() {
         statusLabel.setText(R.string.status_auth_failure);
 
         if (new AuthPreferences(getContext()).useXOAuth()) {
@@ -233,6 +238,11 @@ public class StatusPreference extends Preference implements View.OnClickListener
         } else {
             syncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
         }
+    }
+
+    private void displayMissingPermissions(List<AppPermission> appPermissions) {
+        statusLabel.setText(R.string.status_permission_problem);
+        syncDetailsLabel.setText(AppPermission.formatMissingPermissionDetails(getContext().getResources(), appPermissions));
     }
 
     private void calc() {
@@ -245,12 +255,11 @@ public class StatusPreference extends Preference implements View.OnClickListener
         int backedUpCount = state.currentSyncedItems;
         String text = null;
         if (backedUpCount == preferences.getMaxItemsPerSync()) {
-            text = getContext().getString(R.string.status_backup_done_details_max_per_sync, backedUpCount);
+            text = getString(R.string.status_backup_done_details_max_per_sync, backedUpCount);
         } else if (backedUpCount > 0) {
-            text = getContext().getResources().getQuantityString(R.plurals.status_backup_done_details, backedUpCount,
-                    backedUpCount);
+            text = getQuantityString(R.plurals.status_backup_done_details, backedUpCount, backedUpCount);
         } else if (backedUpCount == 0) {
-            text = getContext().getString(R.string.status_backup_done_details_noitems);
+            text = getString(R.string.status_backup_done_details_noitems);
         }
         syncDetailsLabel.setText(text);
         statusLabel.setText(R.string.status_done);
@@ -262,7 +271,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
         statusLabel.setTextColor(doneColor);
         statusLabel.setText(R.string.status_done);
         statusIcon.setImageDrawable(done);
-        syncDetailsLabel.setText(getContext().getResources().getQuantityString(
+        syncDetailsLabel.setText(getQuantityString(
                 R.plurals.status_restore_done_details,
                 newState.actualRestoredCount,
                 newState.actualRestoredCount,
@@ -277,8 +286,8 @@ public class StatusPreference extends Preference implements View.OnClickListener
     }
 
     private String getLastSyncText(final long lastSync) {
-        return getContext().getString(R.string.status_idle_details,
-                lastSync < 0 ? getContext().getString(R.string.status_idle_details_never) :
+        return getString(R.string.status_idle_details,
+                lastSync < 0 ? getString(R.string.status_idle_details_never) :
                         DateFormat.getDateTimeInstance().format(new Date(lastSync)));
     }
 
@@ -298,11 +307,13 @@ public class StatusPreference extends Preference implements View.OnClickListener
                 break;
             case ERROR:
                 if (state.isAuthException()) {
-                    authFailed();
+                    onAuthFailed();
+                } else if (state.isPermissionException()) {
+                    displayMissingPermissions(AppPermission.from(state.getMissingPermissions()));
                 } else {
                     final String errorMessage = state.getErrorMessage(getContext().getResources());
                     statusLabel.setText(R.string.status_unknown_error);
-                    syncDetailsLabel.setText(getContext().getString(R.string.status_unknown_error_details,
+                    syncDetailsLabel.setText(getString(R.string.status_unknown_error_details,
                             errorMessage == null ? "N/A" : errorMessage));
                 }
                 break;
@@ -340,5 +351,13 @@ public class StatusPreference extends Preference implements View.OnClickListener
         restoreButton.setText(R.string.ui_restore_button_label_idle);
         backupButton.setEnabled(true);
         backupButton.setText(R.string.ui_sync_button_label_idle);
+    }
+
+    private String getString(int resourceId, Object... formatArgs) {
+        return getContext().getResources().getString(resourceId, formatArgs);
+    }
+
+    private String getQuantityString(int resourceId, int quantity, Object... formatArgs) {
+        return getContext().getResources().getQuantityString(resourceId, quantity, formatArgs);
     }
 }

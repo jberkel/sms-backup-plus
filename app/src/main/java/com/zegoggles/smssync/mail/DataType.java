@@ -1,11 +1,19 @@
 package com.zegoggles.smssync.mail;
 
+import android.os.Build;
 import com.zegoggles.smssync.R;
 
+import static android.Manifest.permission.READ_CALL_LOG;
+import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_SMS;
+
 public enum DataType {
-    SMS     (R.string.sms,     R.string.sms_with_field,  PreferenceKeys.IMAP_FOLDER,         Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      Defaults.SMS_BACKUP_ENABLED,     PreferenceKeys.RESTORE_SMS,     Defaults.SMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_SMS),
-    MMS     (R.string.mms,     R.string.mms_with_field,  PreferenceKeys.IMAP_FOLDER,         Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_MMS,      Defaults.MMS_BACKUP_ENABLED,     null,                           Defaults.MMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_MMS),
-    CALLLOG (R.string.calllog, R.string.call_with_field, PreferenceKeys.IMAP_FOLDER_CALLLOG, Defaults.CALLLOG_FOLDER, PreferenceKeys.BACKUP_CALLLOG,  Defaults.CALLLOG_BACKUP_ENABLED, PreferenceKeys.RESTORE_CALLLOG, Defaults.CALLLOG_RESTORE_ENABLED, PreferenceKeys.MAX_SYNCED_DATE_CALLLOG);
+    SMS     (R.string.sms,     R.string.sms_with_field,  PreferenceKeys.IMAP_FOLDER,         Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      Defaults.SMS_BACKUP_ENABLED,     PreferenceKeys.RESTORE_SMS,     Defaults.SMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_SMS, new String[]{READ_SMS, READ_CONTACTS}),
+    MMS     (R.string.mms,     R.string.mms_with_field,  PreferenceKeys.IMAP_FOLDER,         Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_MMS,      Defaults.MMS_BACKUP_ENABLED,     null,                           Defaults.MMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_MMS, new String[]{READ_SMS, READ_CONTACTS}),
+    CALLLOG (R.string.calllog, R.string.call_with_field, PreferenceKeys.IMAP_FOLDER_CALLLOG, Defaults.CALLLOG_FOLDER, PreferenceKeys.BACKUP_CALLLOG,  Defaults.CALLLOG_BACKUP_ENABLED, PreferenceKeys.RESTORE_CALLLOG, Defaults.CALLLOG_RESTORE_ENABLED, PreferenceKeys.MAX_SYNCED_DATE_CALLLOG,
+        // READ_CALL_LOG was introduced in API level 16 (Jelly Bean), previously part of READ_CONTACTS
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? new String[]{ READ_CONTACTS, READ_CALL_LOG } : new String[]{ READ_CONTACTS }
+    );
 
     public final int resId;
     public final int withField;
@@ -16,6 +24,7 @@ public enum DataType {
     public final boolean backupEnabledByDefault;
     public final boolean restoreEnabledByDefault;
     public final String maxSyncedPreference;
+    public final String[] requiredPermissions;
 
     DataType(int resId,
              int withField,
@@ -25,7 +34,8 @@ public enum DataType {
              boolean backupEnabledByDefault,
              String restoreEnabledPreference,
              boolean restoreEnabledByDefault,
-             String maxSyncedPreference) {
+             String maxSyncedPreference,
+             String[] requiredPermissions) {
         this.resId = resId;
         this.withField = withField;
         this.folderPreference = folderPreference;
@@ -35,6 +45,7 @@ public enum DataType {
         this.restoreEnabledPreference = restoreEnabledPreference;
         this.restoreEnabledByDefault = restoreEnabledByDefault;
         this.maxSyncedPreference = maxSyncedPreference;
+        this.requiredPermissions = requiredPermissions;
     }
 
     public static class PreferenceKeys {

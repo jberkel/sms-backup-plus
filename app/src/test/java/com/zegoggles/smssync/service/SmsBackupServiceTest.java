@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.contacts.ContactGroup;
@@ -33,7 +34,10 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.google.common.truth.Truth.assertThat;
+import static com.zegoggles.smssync.service.BackupType.MANUAL;
+import static com.zegoggles.smssync.service.BackupType.REGULAR;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -43,17 +47,10 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class SmsBackupServiceTest {
-    private static class UserNotification {
-        final String title, text;
-        private UserNotification(String title, String text) {
-            this.title = title;
-            this.text = text;
-        }
-    }
     SmsBackupService service;
     ShadowConnectivityManager shadowConnectivityManager;
     ShadowWifiManager shadowWifiManager;
-    List<UserNotification> sentNotifications;
+    List<NotificationCompat.Builder> sentNotifications;
 
     @Mock AuthPreferences authPreferences;
     @Mock Preferences preferences;
@@ -63,16 +60,17 @@ public class SmsBackupServiceTest {
 
     @Before public void before() {
         initMocks(this);
-        sentNotifications = new ArrayList<UserNotification>();
+        sentNotifications = new ArrayList<NotificationCompat.Builder>();
         service = new SmsBackupService() {
             @Override public Context getApplicationContext() { return RuntimeEnvironment.application; }
             @Override public Resources getResources() { return getApplicationContext().getResources(); }
             @Override protected BackupTask getBackupTask() { return backupTask; }
             @Override protected BackupJobs getBackupJobs() { return backupJobs; }
             @Override protected Preferences getPreferences() { return preferences; }
+            @Override public int checkPermission(String permission, int pid, int uid) { return PERMISSION_GRANTED; }
             @Override protected AuthPreferences getAuthPreferences() { return authPreferences; }
-            @Override protected void notifyUser(int icon, int notificationId, String title, String text) {
-                sentNotifications.add(new UserNotification(title, text));
+            @Override protected void notifyUser(int icon, NotificationCompat.Builder builder) {
+                sentNotifications.add(builder);
             }
         };
         shadowConnectivityManager = shadowOf(service.getConnectivityManager());
@@ -93,15 +91,13 @@ public class SmsBackupServiceTest {
     }
 
     @Test public void shouldTriggerBackupWithManualIntent() throws Exception {
-        Intent intent = new Intent();
-        intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
+        Intent intent = new Intent(MANUAL.name());
         service.handleIntent(intent);
         verify(backupTask).execute(any(BackupConfig.class));
     }
 
     @Test public void shouldCheckForConnectivityBeforeBackingUp() throws Exception {
-        Intent intent = new Intent();
-        intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
+        Intent intent = new Intent(MANUAL.name());
 
         shadowConnectivityManager.setActiveNetworkInfo(null);
         service.handleIntent(intent);
@@ -113,8 +109,7 @@ public class SmsBackupServiceTest {
     @Test public void shouldNotCheckForConnectivityBeforeBackingUpWithNewScheduler() throws Exception {
         when(preferences.isUseOldScheduler()).thenReturn(false);
 
-        Intent intent = new Intent();
-        intent.putExtra(BackupType.EXTRA, BackupType.REGULAR.name());
+        Intent intent = new Intent(REGULAR.name());
         shadowConnectivityManager.setActiveNetworkInfo(null);
         shadowConnectivityManager.setBackgroundDataSetting(true);
         service.handleIntent(intent);
@@ -166,23 +161,20 @@ public class SmsBackupServiceTest {
     }
 
     @Test public void shouldPassInCorrectBackupConfig() throws Exception {
-        Intent intent = new Intent();
-        intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
+        Intent intent = new Intent(MANUAL.name());
         ArgumentCaptor<BackupConfig> config = ArgumentCaptor.forClass(BackupConfig.class);
 
         service.handleIntent(intent);
         verify(backupTask).execute(config.capture());
 
         BackupConfig backupConfig = config.getValue();
-        assertThat(backupConfig.backupType).isEqualTo(BackupType.MANUAL);
+        assertThat(backupConfig.backupType).isEqualTo(MANUAL);
         assertThat(backupConfig.currentTry).isEqualTo(0);
-        assertThat(backupConfig.skip).isFalse();
     }
 
     @Test public void shouldScheduleNextRegularBackupAfterFinished() throws Exception {
         shadowConnectivityManager.setBackgroundDataSetting(true);
-        Intent intent = new Intent();
-        intent.putExtra(BackupType.EXTRA, BackupType.REGULAR.name());
+        Intent intent = new Intent(REGULAR.name());
         service.handleIntent(intent);
 
         verify(backupTask).execute(any(BackupConfig.class));
@@ -191,14 +183,13 @@ public class SmsBackupServiceTest {
 
         verify(backupJobs).scheduleRegular();
 
-        assertThat(shadowOf(service).isStoppedBySelf());
-        assertThat(shadowOf(service).isForegroundStopped());
+        assertThat(shadowOf(service).isStoppedBySelf()).isTrue();
+        assertThat(shadowOf(service).isForegroundStopped()).isTrue();
     }
 
     @Test public void shouldCheckForValidStore() throws Exception {
         when(authPreferences.getStoreUri()).thenReturn("invalid");
-        Intent intent = new Intent();
-        intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
+        Intent intent = new Intent(MANUAL.name());
 
         service.handleIntent(intent);
         verifyZeroInteractions(backupTask);
@@ -207,24 +198,22 @@ public class SmsBackupServiceTest {
 
     @Test public void shouldNotifyUserAboutErrorInManualMode() throws Exception {
         when(authPreferences.getStoreUri()).thenReturn("invalid");
-        Intent intent = new Intent();
-        intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
+        Intent intent = new Intent(MANUAL.name());
 
         service.handleIntent(intent);
         verifyZeroInteractions(backupTask);
 
         assertNotificationShown("SMSBackup+ error", "No valid IMAP URI: invalid");
 
-        assertThat(shadowOf(service).isStoppedBySelf());
-        assertThat(shadowOf(service).isForegroundStopped());
+        assertThat(shadowOf(service).isStoppedBySelf()).isTrue();
+        assertThat(shadowOf(service).isForegroundStopped()).isTrue();
     }
 
-
-    private void assertNotificationShown(String title, String message) {
+    private void assertNotificationShown(CharSequence title, CharSequence message) {
         assertThat(sentNotifications).hasSize(1);
-        UserNotification u = sentNotifications.get(0);
-        assertThat(u.title).isEqualTo(title);
-        assertThat(u.text).isEqualTo(message);
+        NotificationCompat.Builder u = sentNotifications.get(0);
+        assertThat(u.mContentTitle).isEqualTo(title);
+        assertThat(u.mContentText).isEqualTo(message);
     }
 
     private NetworkInfo connectedViaEdge() {

@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.provider.Telephony.Sms;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
@@ -40,7 +41,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
-import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage;
 import com.zegoggles.smssync.activity.Dialogs.WebConnect;
@@ -49,6 +49,7 @@ import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
 import com.zegoggles.smssync.activity.events.AccountAddedEvent;
 import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.FallbackAuthEvent;
+import com.zegoggles.smssync.activity.events.MissingPermissionsEvent;
 import com.zegoggles.smssync.activity.events.PerformAction;
 import com.zegoggles.smssync.activity.events.PerformAction.Actions;
 import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
@@ -59,9 +60,13 @@ import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
+import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.tasks.OAuth2CallbackTask;
 import com.zegoggles.smssync.utils.BundleBuilder;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
@@ -70,10 +75,11 @@ import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERE
 import static android.widget.Toast.LENGTH_LONG;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.App.post;
+import static com.zegoggles.smssync.activity.AppPermission.allGranted;
 import static com.zegoggles.smssync.activity.Dialogs.ConfirmAction.ACTION;
 import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
-import static com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ABOUT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR;
 import static com.zegoggles.smssync.activity.Dialogs.Type.CONFIRM_ACTION;
@@ -87,13 +93,13 @@ import static com.zegoggles.smssync.activity.Dialogs.Type.SMS_DEFAULT_PACKAGE_CH
 import static com.zegoggles.smssync.activity.Dialogs.Type.UPGRADE_FROM_SMSBACKUP;
 import static com.zegoggles.smssync.activity.Dialogs.Type.VIEW_LOG;
 import static com.zegoggles.smssync.activity.Dialogs.Type.WEB_CONNECT;
-import static com.zegoggles.smssync.activity.Dialogs.WebConnect.REQUEST_WEB_AUTH;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_ADD_ACCOUNT;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_FALLBACK_AUTH;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_ACCOUNT;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_TOKEN;
 import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup;
-import static com.zegoggles.smssync.activity.events.PerformAction.Actions.BackupSkip;
+import static com.zegoggles.smssync.service.BackupType.MANUAL;
+import static com.zegoggles.smssync.service.BackupType.SKIP;
 
 /**
  * This is the main activity showing the status of the SMS Sync service and
@@ -103,7 +109,14 @@ public class MainActivity extends ThemeActivity implements
         OnPreferenceStartFragmentCallback,
         OnPreferenceStartScreenCallback,
         FragmentManager.OnBackStackChangedListener {
+    static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
+    static final int REQUEST_WEB_AUTH = 3;
+    private static final int REQUEST_PERMISSIONS_BACKUP_MANUAL = 4;
+    private static final int REQUEST_PERMISSIONS_BACKUP_MANUAL_SKIP = 5;
+    private static final int REQUEST_PERMISSIONS_BACKUP_SERVICE = 6;
+
+    public static final String EXTRA_PERMISSIONS = "permissions";
     private static final String SCREEN_TITLE = "title";
 
     private Preferences preferences;
@@ -136,6 +149,7 @@ public class MainActivity extends ThemeActivity implements
             showDialog(ABOUT);
         }
         checkDefaultSmsApp();
+        requestPermissionsIfNeeded();
     }
 
     @Override
@@ -215,7 +229,7 @@ public class MainActivity extends ThemeActivity implements
                         handleFallbackAuth(new FallbackAuthEvent(true));
                     }
                 } else if (LOCAL_LOGV) {
-                    Log.v(TAG, "request canceled, result="+resultCode);
+                    Log.v(TAG, "request canceled, result=" + resultCode);
                 }
                 break;
             }
@@ -250,6 +264,15 @@ public class MainActivity extends ThemeActivity implements
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
         if (isSmsBackupDefaultSmsApp() && newState.isFinished()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
+        }
+    }
+
+    @Subscribe public void backupStateChanged(final BackupState newState) {
+        if ((newState.backupType == MANUAL || newState.backupType == SKIP) && newState.isPermissionException()) {
+            ActivityCompat.requestPermissions(this,
+                newState.getMissingPermissions(),
+                newState.backupType == SKIP ? REQUEST_PERMISSIONS_BACKUP_MANUAL_SKIP : REQUEST_PERMISSIONS_BACKUP_MANUAL
+            );
         }
     }
 
@@ -331,7 +354,7 @@ public class MainActivity extends ThemeActivity implements
         switch (action) {
             case Backup:
             case BackupSkip:
-                startBackup(action == BackupSkip);
+                startBackup(action == Backup ? MANUAL : SKIP);
                 break;
             case Restore:
                 startRestore();
@@ -339,13 +362,8 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    private void startBackup(boolean skip) {
-        final Intent intent = new Intent(this, SmsBackupService.class);
-        if (preferences.isFirstBackup()) {
-            intent.putExtra(Consts.KEY_SKIP_MESSAGES, skip);
-        }
-        intent.putExtra(BackupType.EXTRA, BackupType.MANUAL.name());
-        startService(intent);
+    private void startBackup(BackupType backupType) {
+        startService(new Intent(this, SmsBackupService.class).setAction(backupType.name()));
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -442,5 +460,39 @@ public class MainActivity extends ThemeActivity implements
         if (isSmsBackupDefaultSmsApp() && !SmsRestoreService.isServiceWorking()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
+    }
+
+    private void requestPermissionsIfNeeded() {
+        final Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(EXTRA_PERMISSIONS)) {
+            final String[] permissions = intent.getStringArrayExtra(EXTRA_PERMISSIONS);
+            Log.v(TAG, "requesting permissions "+ Arrays.toString(permissions));
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_BACKUP_SERVICE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.v(TAG, "onRequestPermissionsResult("+requestCode+ ","+ Arrays.toString(permissions) +","+ Arrays.toString(grantResults));
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_BACKUP_MANUAL:
+            case REQUEST_PERMISSIONS_BACKUP_MANUAL_SKIP:
+                if (allGranted(grantResults)) {
+                    startBackup(requestCode == REQUEST_PERMISSIONS_BACKUP_MANUAL ? MANUAL : SKIP);
+                } else {
+                    final List<AppPermission> missing = AppPermission.from(permissions, grantResults);
+                    Log.w(TAG, "not all permissions granted: "+missing);
+                    post(new MissingPermissionsEvent(missing));
+                }
+                break;
+            case REQUEST_PERMISSIONS_BACKUP_SERVICE:
+                if (allGranted(grantResults)) {
+                    startBackup(MANUAL);
+                } else {
+                    post(new MissingPermissionsEvent(AppPermission.from(permissions, grantResults)));
+                }
+                break;
+         }
     }
 }

@@ -97,7 +97,7 @@ public class AlarmManagerDriverTest {
         assertThat(shadowPendingIntent.getFlags()).isEqualTo(FLAG_UPDATE_CURRENT);
         assertThat(shadowPendingIntent.getSavedIntent().getAction()).isNotEmpty();
 
-        assertThat(shadowPendingIntent.getSavedIntent().getStringExtra(BackupType.EXTRA))
+        assertThat(shadowPendingIntent.getSavedIntent().getAction())
                 .isEqualTo(ofExpectedType);
 
         return shadowPendingIntent.getSavedIntent();

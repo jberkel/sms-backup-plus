@@ -8,9 +8,8 @@ public enum BackupType {
     INCOMING(R.string.source_incoming),
     REGULAR(R.string.source_regular),
     UNKNOWN(R.string.source_unknown),
-    MANUAL(R.string.source_manual);
-
-    public static final String EXTRA = "com.zegoggles.smssync.BackupTypeAsString";
+    MANUAL(R.string.source_manual),
+    SKIP(R.string.source_manual);
 
     public final int resId;
 
@@ -19,9 +18,8 @@ public enum BackupType {
     }
 
     public static BackupType fromIntent(Intent intent) {
-        if (intent.hasExtra(EXTRA)) {
-            final String name = intent.getStringExtra(EXTRA);
-            return fromName(name);
+        if (intent.getAction() != null) {
+            return fromName(intent.getAction());
         } else {
             return UNKNOWN;
         }
@@ -37,7 +35,8 @@ public enum BackupType {
     }
 
     public boolean isBackground() {
-        return this != MANUAL;
+        return this != MANUAL && this != SKIP;
     }
+
     public boolean isRecurring() { return this == REGULAR; }
 }

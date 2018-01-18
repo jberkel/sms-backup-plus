@@ -27,6 +27,7 @@ import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
@@ -44,6 +45,7 @@ import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.net.ConnectivityManager.TYPE_WIFI;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -187,16 +189,21 @@ public abstract class ServiceBase extends Service {
 
     @NonNull NotificationCompat.Builder createNotification(int resId) {
         return new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setTicker(getString(resId))
-                .setWhen(System.currentTimeMillis())
-                .setOngoing(true);
+            .setSmallIcon(R.drawable.ic_notification)
+            .setTicker(getString(resId))
+            .setWhen(System.currentTimeMillis())
+            .setOngoing(true);
     }
 
-    PendingIntent getPendingIntent() {
-        return PendingIntent.getActivity(this, 0,
-            new Intent(this, MainActivity.class),
-            PendingIntent.FLAG_UPDATE_CURRENT);
+    PendingIntent getPendingIntent(@Nullable Bundle extras) {
+        final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        if (extras != null) {
+            intent.putExtras(extras);
+        }
+         return PendingIntent.getActivity(getApplicationContext(),
+                 0,
+                 intent,
+                 FLAG_UPDATE_CURRENT);
     }
 
     boolean isConnectedViaWifi() {

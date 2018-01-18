@@ -9,7 +9,6 @@ import java.util.EnumSet;
 
 public class BackupConfig {
     public final BackupImapStore imapStore;
-    public final boolean skip;
     public final int currentTry;
     public final int maxItemsPerSync;
     public final ContactGroup groupToBackup;
@@ -19,7 +18,6 @@ public class BackupConfig {
 
     BackupConfig(@NonNull BackupImapStore imapStore,
                  int currentTry,
-                 boolean skip,
                  int maxItemsPerSync,
                  @NonNull ContactGroup groupToBackup,
                  @NonNull BackupType backupType,
@@ -30,7 +28,6 @@ public class BackupConfig {
         if (currentTry < 0) throw new IllegalArgumentException("currentTry < 0");
 
         this.imapStore = imapStore;
-        this.skip = skip;
         this.currentTry = currentTry;
         this.maxItemsPerSync = maxItemsPerSync;
         this.groupToBackup = groupToBackup;
@@ -41,7 +38,6 @@ public class BackupConfig {
 
     public BackupConfig retryWithStore(BackupImapStore store) {
         return new BackupConfig(store, currentTry + 1,
-                skip,
                 maxItemsPerSync,
                 groupToBackup,
                 backupType,
@@ -52,7 +48,6 @@ public class BackupConfig {
     @Override public String toString() {
         return "BackupConfig{" +
                 "imap=" + imapStore +
-                ", skip=" + skip +
                 ", currentTry=" + currentTry +
                 ", maxItemsPerSync=" + maxItemsPerSync +
                 ", groupToBackup=" + groupToBackup +

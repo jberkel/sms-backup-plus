@@ -1,9 +1,16 @@
 package com.zegoggles.smssync.activity.fragments;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.Preference.OnPreferenceChangeListener;
+import android.util.Log;
+import android.view.View;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
@@ -15,9 +22,13 @@ import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.utils.ListPreferenceHelper;
 
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.Manifest.permission.WRITE_CALENDAR;
+import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.activity.AppPermission.allGranted;
 import static com.zegoggles.smssync.activity.Dialogs.Type.INVALID_IMAP_FOLDER;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.SMS;
@@ -116,40 +127,82 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         }
 
         public static class CallLog extends AdvancedSettings {
+            private static final int REQUEST_CALENDAR_ACCESS = 0;
+            private CheckBoxPreference enabledPreference;
+            private ListPreference calendarPreference;
+            private Preference folderPreference;
+
+            @Override
+            public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+                super.onViewCreated(view, savedInstanceState);
+                enabledPreference = (CheckBoxPreference) findPreference(CALLLOG_SYNC_CALENDAR_ENABLED.key);
+                calendarPreference = (ListPreference) findPreference(CALLLOG_SYNC_CALENDAR.key);
+                folderPreference = findPreference(CALLLOG.folderPreference);
+            }
+
             @Override
             public void onResume() {
                 super.onResume();
-                updateCallLogCalendarLabelFromPref();
                 initCalendars();
+
+                updateCallLogCalendarLabelFromPref();
                 registerValidCallLogFolderCheck();
+                registerCalendarSyncEnabledCallback();
 
                 addPreferenceListener(CALLLOG_BACKUP_AFTER_CALL.key);
+
+                if (needCalendarPermission() && enabledPreference.isChecked()) {
+                    // user revoked calendar permission manually
+                    enabledPreference.setChecked(false);
+                }
+            }
+
+            private void registerCalendarSyncEnabledCallback() {
+                enabledPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        if (newValue == Boolean.TRUE && needCalendarPermission()) {
+                            requestPermissions(new String[] {WRITE_CALENDAR}, REQUEST_CALENDAR_ACCESS);
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                Log.v(TAG, "onRequestPermissionsResult("+requestCode+ ","+ Arrays.toString(permissions) +","+ Arrays.toString(grantResults));
+
+                if (requestCode == REQUEST_CALENDAR_ACCESS) {
+                    enabledPreference.setChecked(allGranted(grantResults));
+                }
+            }
+
+            private boolean needCalendarPermission() {
+                return ContextCompat.checkSelfPermission(getContext(), WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED;
             }
 
             private void updateCallLogCalendarLabelFromPref() {
-                final ListPreference calendarPref = (ListPreference)
-                        findPreference(CALLLOG_SYNC_CALENDAR.key);
-
-                calendarPref.setTitle(calendarPref.getEntry() != null ? calendarPref.getEntry() :
+                calendarPreference.setTitle(calendarPreference.getEntry() != null ? calendarPreference.getEntry() :
                         getString(R.string.ui_backup_calllog_sync_calendar_label));
             }
 
             private void initCalendars() {
-                final ListPreference calendarPref = (ListPreference)
-                        findPreference(CALLLOG_SYNC_CALENDAR.key);
-                CalendarAccessor calendars = CalendarAccessor.Get.instance(getContext().getContentResolver());
-                boolean enabled = ListPreferenceHelper.initListPreference(calendarPref, calendars.getCalendars(), false);
+                if (needCalendarPermission()) return;
 
-                findPreference(CALLLOG_SYNC_CALENDAR_ENABLED.key).setEnabled(enabled);
+                CalendarAccessor calendars = CalendarAccessor.Get.instance(getContext().getContentResolver());
+                ListPreferenceHelper.initListPreference(calendarPreference, calendars.getCalendars(), false);
             }
 
             private void registerValidCallLogFolderCheck() {
-                findPreference(CALLLOG.folderPreference)
-                        .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                            public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                                return checkValidImapFolder(preference, newValue.toString());
-                            }
-                        });
+                folderPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                    public boolean onPreferenceChange(Preference preference, final Object newValue) {
+                        return checkValidImapFolder(preference, newValue.toString());
+                    }
+                });
             }
         }
     }

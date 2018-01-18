@@ -37,6 +37,8 @@ import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.Defaults.MAX_SYNCED_DATE;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
+import static com.zegoggles.smssync.service.BackupType.MANUAL;
+import static com.zegoggles.smssync.service.BackupType.SKIP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.CALC;
 import static com.zegoggles.smssync.service.state.SmsSyncState.CANCELED_BACKUP;
@@ -114,9 +116,11 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     @Override protected BackupState doInBackground(BackupConfig... params) {
-        if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
+        if (params == null || params.length == 0) {
+            throw new IllegalArgumentException("No config passed");
+        }
         final BackupConfig config = params[0];
-        if (config.skip) {
+        if (config.backupType == SKIP) {
             return skip(config.typesToBackup);
         } else {
             return acquireLocksAndBackup(config);
@@ -165,6 +169,8 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             return transition(ERROR, e);
         } catch (MessagingException e) {
             return transition(ERROR, e);
+        } catch (SecurityException e) {
+            return transition(ERROR, e);
         } finally {
             if (cursors != null) {
                 cursors.close();
@@ -199,10 +205,14 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private BackupState skip(Iterable<DataType> types) {
         appLog(R.string.app_log_skip_backup_skip_messages);
         for (DataType type : types) {
-            preferences.getDataTypePreferences().setMaxSyncedDate(type, fetcher.getMostRecentTimestamp(type));
+            try {
+                preferences.getDataTypePreferences().setMaxSyncedDate(type, fetcher.getMostRecentTimestamp(type));
+            } catch (SecurityException e ) {
+                return new BackupState(ERROR, 0, 0, MANUAL, type, e);
+            }
         }
         Log.i(TAG, "All messages skipped.");
-        return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
+        return new BackupState(FINISHED_BACKUP, 0, 0, MANUAL, null, null);
     }
 
     private void appLog(int id, Object... args) {

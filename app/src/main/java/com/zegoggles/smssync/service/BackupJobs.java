@@ -183,12 +183,9 @@ public class BackupJobs {
     }
 
     private @NonNull Job.Builder createBuilder(BackupType backupType) {
-        final Bundle extras = new Bundle();
-        extras.putString(BackupType.EXTRA, backupType.name());
         return firebaseJobDispatcher.newJobBuilder()
             .setReplaceCurrent(true)
             .setService(SmsJobService.class)
-            .setExtras(extras)
             .setTag(backupType.name())
             .setRetryStrategy(defaultRetryStrategy())
             .setConstraints(jobConstraints(backupType));

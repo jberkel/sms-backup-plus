@@ -16,7 +16,6 @@
 package com.zegoggles.smssync.activity;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -52,6 +50,8 @@ import static android.R.string.ok;
 import static android.R.string.yes;
 import static android.app.ProgressDialog.STYLE_SPINNER;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static com.zegoggles.smssync.activity.MainActivity.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
+import static com.zegoggles.smssync.activity.MainActivity.REQUEST_WEB_AUTH;
 import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup;
 import static com.zegoggles.smssync.activity.events.PerformAction.Actions.BackupSkip;
 
@@ -204,6 +204,8 @@ public class Dialogs {
     public static class AccessTokenProgress extends BaseFragment {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // NB: progress dialog is not AppCompat-ready, and will not appear themed
+            //     correctly on older devices
             ProgressDialog progress = new ProgressDialog(getContext());
             progress.setTitle(null);
             progress.setProgressStyle(STYLE_SPINNER);
@@ -259,7 +261,6 @@ public class Dialogs {
     }
 
     public static class WebConnect extends BaseFragment {
-        static final int REQUEST_WEB_AUTH = 3;
         static final String INTENT = "intent";
 
         @Override @NonNull
@@ -313,7 +314,6 @@ public class Dialogs {
     }
 
     public static class SmsDefaultPackage extends BaseFragment {
-        static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
         static final String INTENT = "intent";
 
         @Override @NonNull

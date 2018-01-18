@@ -34,6 +34,7 @@ import static com.zegoggles.smssync.service.CancelEvent.Origin.SYSTEM;
 
 
 public class SmsJobService extends JobService {
+    /** job parameters keyed by job tag / {@link BackupType} */
     private Map<String, JobParameters> jobs = new HashMap<String, JobParameters>();
 
     @Override
@@ -75,9 +76,10 @@ public class SmsJobService extends JobService {
             getBackupJobs().scheduleIncoming();
             return false;
         } else if (shouldRun(jobParameters)) {
-            startService(new Intent(this, SmsBackupService.class).putExtras(extras));
-            final String backupType = extras == null ? jobParameters.getTag() : extras.getString(BackupType.EXTRA);
-            jobs.put(backupType, jobParameters);
+            startService(new Intent(this, SmsBackupService.class)
+                .setAction(jobParameters.getTag())
+                .putExtras(extras));
+            jobs.put(jobParameters.getTag(), jobParameters);
             return true;
         } else {
             Log.d(TAG, "skipping run");
@@ -109,10 +111,11 @@ public class SmsJobService extends JobService {
 
         final JobParameters jobParameters = jobs.remove(state.backupType.name());
         if (jobParameters != null) {
+            final boolean needsReschedule = state.isError() && !state.isPermissionException();
             if (LOCAL_LOGV) {
-                Log.v(TAG, "jobFinished(" + jobParameters + ", isError=" + state.isError() + ")");
+                Log.v(TAG, "jobFinished(" + jobParameters + ", isError=" + state.isError() + ", needsReschedule="+needsReschedule+")");
             }
-            jobFinished(jobParameters, state.isError());
+            jobFinished(jobParameters, needsReschedule);
         } else {
             Log.w(TAG, "unknown job for state "+state);
         }

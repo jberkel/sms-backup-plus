@@ -37,7 +37,6 @@ import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_S
 import static com.firebase.jobdispatcher.FirebaseJobDispatcher.SCHEDULE_RESULT_UNSUPPORTED_TRIGGER;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.service.BackupType.UNKNOWN;
 
 /**
  * Simple driver to emulate old AlarmManager backup scheduling behaviour.
@@ -123,8 +122,7 @@ class AlarmManagerDriver implements Driver, JobValidator {
 
     private static PendingIntent createPendingIntent(Context ctx, BackupType backupType) {
         final Intent intent = (new Intent(ctx, SmsBackupService.class))
-            .setAction(backupType.name())
-            .putExtra(BackupType.EXTRA, backupType.name());
+            .setAction(backupType.name());
 
         return PendingIntent.getService(ctx, 0, intent, FLAG_UPDATE_CURRENT);
     }

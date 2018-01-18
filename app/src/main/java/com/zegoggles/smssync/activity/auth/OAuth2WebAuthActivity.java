@@ -1,19 +1,16 @@
 package com.zegoggles.smssync.activity.auth;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.activity.ThemeActivity;
 
-import static com.zegoggles.smssync.App.TAG;
-
-public class OAuth2WebAuthActivity extends Activity {
+public class OAuth2WebAuthActivity extends ThemeActivity {
     public static final String EXTRA_CODE = "code";
-    public static final String EXTRA_ERROR = "error";
+    private static final String EXTRA_ERROR = "error";
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);

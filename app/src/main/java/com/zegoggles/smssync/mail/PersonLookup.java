@@ -38,7 +38,10 @@ public class PersonLookup {
         mResolver = resolver;
     }
 
-    /* Look up a person */
+    /**
+     * Look up a person
+     * @throws SecurityException if the caller does not hold READ_CONTACTS
+     */
     public @NonNull PersonRecord lookupPerson(final String address) {
         if (TextUtils.isEmpty(address)) {
             return new PersonRecord(0, null, null, "-1");

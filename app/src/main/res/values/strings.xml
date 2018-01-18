@@ -51,6 +51,20 @@
   <string name="status_auth_failure">Login error</string>
   <string name="notification_auth_failure">SMSBackup+ login error</string>
 
+  <string name="status_permission_problem">Permission problem</string>
+
+  <plurals name="status_permission_problem_details">
+    <item quantity="one">The following permission is required: %1$s.</item>
+    <item quantity="other">The following permissions are required: %1$s.</item>
+  </plurals>
+
+  <string name="permission_read_sms">Send and view SMS Messages</string>
+  <string name="permission_read_call_log">Read Call Log</string>
+  <string name="permission_read_contacts">Access your contacts</string>
+  <string name="permission_unknown">Unknown</string>
+
+  <string name="notification_missing_permission">SMSBackup+ permission problem</string>
+
   <string name="status_auth_failure_details_xoauth">XOAuth authorization error. Please make sure you enabled IMAP in your Gmail account settings.</string>
   <string name="status_auth_failure_details_plain">IMAP authorization error.
   Make sure login and password are set correctly.</string>

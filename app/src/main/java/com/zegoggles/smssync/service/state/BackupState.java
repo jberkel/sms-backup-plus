@@ -10,8 +10,8 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
 
 public class BackupState extends State {
-    public final int currentSyncedItems, itemsToSync;
     public final BackupType backupType;
+    public final int currentSyncedItems, itemsToSync;
 
     public BackupState() {
         this(INITIAL, 0, 0, UNKNOWN, null, null);

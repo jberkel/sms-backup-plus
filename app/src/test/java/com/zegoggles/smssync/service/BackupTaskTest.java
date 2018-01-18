@@ -83,7 +83,7 @@ public class BackupTaskTest {
     }
 
     private BackupConfig getBackupConfig(EnumSet<DataType> types) {
-        return new BackupConfig(store, 0, false, 100, new ContactGroup(-1), BackupType.MANUAL, types,
+        return new BackupConfig(store, 0, 100, new ContactGroup(-1), BackupType.MANUAL, types,
                 false
         );
     }
@@ -173,7 +173,7 @@ public class BackupTaskTest {
         when(fetcher.getMostRecentTimestamp(any(DataType.class))).thenReturn(-23L);
 
         BackupState finalState = task.doInBackground(new BackupConfig(
-            store, 0, true, 100, new ContactGroup(-1), BackupType.MANUAL, EnumSet.of(SMS), false
+            store, 0, 100, new ContactGroup(-1), BackupType.SKIP, EnumSet.of(SMS), false
             )
         );
         verify(dataTypePreferences).setMaxSyncedDate(DataType.SMS, -23);

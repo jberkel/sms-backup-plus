@@ -11,11 +11,11 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
@@ -24,8 +24,13 @@ import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.activity.ThemeActivity;
 import com.zegoggles.smssync.utils.BundleBuilder;
 
+import java.util.Arrays;
+
+import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.activity.AppPermission.allGranted;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.AccountDialogs.ACCOUNTS;
 import static com.zegoggles.smssync.utils.Drawables.getTinted;
 
@@ -40,12 +45,45 @@ public class AccountManagerAuthActivity extends ThemeActivity {
 
     public static final String AUTH_TOKEN_TYPE = "oauth2:https://mail.google.com/";
     public static final String GOOGLE_TYPE = "com.google";
+    private static final int REQUEST_GET_ACCOUNTS = 0;
 
     private AccountManager accountManager;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accountManager = AccountManager.get(this);
+
+        if (needsGetAccountPermission()) {
+            requestGetAccountsPermission();
+        } else {
+            checkAccounts();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.v(TAG, "onRequestPermissionsResult("+requestCode+ ","+ Arrays.toString(permissions) +","+ Arrays.toString(grantResults));
+        if (requestCode == REQUEST_GET_ACCOUNTS) {
+            if (allGranted(grantResults)) {
+                checkAccounts();
+            } else {
+                Log.w(TAG, "no permission to get accounts");
+                setResult(RESULT_OK, new Intent(ACTION_FALLBACK_AUTH));
+                finish();
+            }
+        }
+    }
+
+    private void requestGetAccountsPermission() {
+        ActivityCompat.requestPermissions(this, new String[] {GET_ACCOUNTS}, REQUEST_GET_ACCOUNTS);
+    }
+
+    private boolean needsGetAccountPermission() {
+        return ContextCompat.checkSelfPermission(this, GET_ACCOUNTS) == PERMISSION_DENIED;
+    }
+
+    private void checkAccounts() {
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_TYPE);
         if (accounts == null || accounts.length == 0) {
             Log.d(TAG, "no google accounts found on this device, using standard auth");

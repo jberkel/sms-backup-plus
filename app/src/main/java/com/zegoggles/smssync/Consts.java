@@ -25,13 +25,6 @@ import android.provider.CallLog;
 public final class Consts {
     private Consts() {}
 
-    /**
-     * Key in the intent extras for indication whether all unsynced messages should
-     * be skipped or not.
-     */
-    public static final String KEY_SKIP_MESSAGES = "com.zegoggles.smssync.SkipMessages";
-
-
     /** {@link android.provider.Telephony.Mms#CONTENT_URI} */
     public static final Uri MMS_PROVIDER     = Uri.parse("content://mms");
     public static final String MMS_PART      = "part";

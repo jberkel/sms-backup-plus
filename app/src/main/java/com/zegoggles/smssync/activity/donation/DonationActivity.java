@@ -221,7 +221,6 @@ public class DonationActivity extends ThemeActivity implements
                     try {
                         helper.endConnection();
                     } catch (Exception ignored) {
-                        Log.w(TAG, "ignoring error during endConnection()", ignored);
                     }
                 }
             }
