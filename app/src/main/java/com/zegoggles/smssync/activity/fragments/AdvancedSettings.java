@@ -15,6 +15,7 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
+import com.zegoggles.smssync.contacts.Group;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthMode;
@@ -25,6 +26,7 @@ import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import static android.Manifest.permission.WRITE_CALENDAR;
 import static com.zegoggles.smssync.App.TAG;
@@ -121,9 +123,11 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         }
 
         private void initGroups() {
-            ContactAccessor contacts = ContactAccessor.Get.instance();
+            ContactAccessor contacts = new ContactAccessor();
+            final Map<Integer, Group> groups = contacts.getGroups(getContext().getContentResolver(), getResources());
+
             ListPreferenceHelper.initListPreference((ListPreference) findPreference(BACKUP_CONTACT_GROUP.key),
-                    contacts.getGroups(getContext().getContentResolver(), getResources()), false);
+                    groups, false);
         }
 
         public static class CallLog extends AdvancedSettings {

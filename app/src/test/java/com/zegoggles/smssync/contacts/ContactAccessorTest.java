@@ -21,14 +21,13 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(RobolectricTestRunner.class)
-public class ContactAccessorPost20Test {
-
-    ContactAccessorPost20 accessor;
+public class ContactAccessorTest {
+    ContactAccessor accessor;
     @Mock ContentResolver resolver;
 
     @Before public void before() {
         initMocks(this);
-        accessor = new ContactAccessorPost20();
+        accessor = new ContactAccessor();
     }
 
     @Test public void shouldAccessContactsWithEverybody() throws Exception {

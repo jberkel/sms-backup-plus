@@ -85,7 +85,7 @@ public class SmsRestoreService extends ServiceBase {
                     getPreferences(),
                     getAuthPreferences().getUserEmail(),
                     new PersonLookup(getContentResolver()),
-                    ContactAccessor.Get.instance()
+                    new ContactAccessor()
             );
 
             RestoreConfig config = new RestoreConfig(

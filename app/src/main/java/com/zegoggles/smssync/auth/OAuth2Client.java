@@ -244,10 +244,6 @@ public class OAuth2Client {
         return feedHandler.getEmail();
     }
 
-    public String getClientId() {
-        return clientId;
-    }
-
     private static class FeedHandler extends DefaultHandler {
         private static final String EMAIL = "email";
         private static final String AUTHOR = "author";
