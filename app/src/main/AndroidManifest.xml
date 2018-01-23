@@ -44,7 +44,8 @@
          on external storage
     -->
     <!-- android.permission-group.STORAGE -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="18"/>
 
     <!-- Allows the app to create network sockets and use custom network protocols. The browser and
         other applications provide means to send data to the internet, so this permission is not

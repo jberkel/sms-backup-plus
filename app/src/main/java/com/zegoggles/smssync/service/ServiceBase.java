@@ -33,7 +33,6 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.text.format.DateFormat;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.App;
@@ -67,13 +66,7 @@ public abstract class ServiceBase extends Service {
     public void onCreate() {
         super.onCreate();
         if (new Preferences(this).isAppLogEnabled()) {
-            char[] format;
-            try {
-                format = DateFormat.getDateFormatOrder(this);
-            } catch (IllegalArgumentException e) {
-                format = new char[] { 'd' };
-            }
-            this.appLog = new AppLog(format);
+            this.appLog = new AppLog(this);
         }
         App.register(this);
     }

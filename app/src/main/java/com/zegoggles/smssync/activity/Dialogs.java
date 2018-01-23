@@ -290,7 +290,7 @@ public class Dialogs {
     public static class ViewLog extends BaseFragment {
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return AppLog.displayAsDialog(App.LOG, getContext());
+            return AppLog.displayAsDialog(getContext());
         }
     }
 

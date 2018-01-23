@@ -180,7 +180,7 @@ issue and attach the following details:
 
 If it is related to backing up / restoring you should also enable the sync log in debug mode
 (Advanced settings) and attach a relevant portion of it. The sync log is located on your SD card as
-"sms_backup_plus.log".
+`sms_backup_plus.log` (in the directory `Android/data/com.zegoggles.smssync/files`).
 
 To attach the sync log create a "gist" (https://gist.github.com) and link to the gist you created instead
 of posting the full content in the issue.
