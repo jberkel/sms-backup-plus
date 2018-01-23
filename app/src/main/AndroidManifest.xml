@@ -29,7 +29,7 @@
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
 
     <!-- Allows the app to get the list of accounts known by the phone. This may include any accounts
-        created by applications you have installed. -->
+         created by applications you have installed. -->
     <!-- android.permission-group.ACCOUNTS -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
@@ -48,8 +48,8 @@
                      android:maxSdkVersion="18"/>
 
     <!-- Allows the app to create network sockets and use custom network protocols. The browser and
-        other applications provide means to send data to the internet, so this permission is not
-        required to send data to the internet. -->
+         other applications provide means to send data to the internet, so this permission is not
+         required to send data to the internet. -->
     <!-- android.permission-group.NETWORK -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -59,7 +59,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <!-- Allows the app to view information about Wi-Fi networking, such as whether Wi-Fi is enabled
-        and name of connected Wi-Fi devices. -->
+         and name of connected Wi-Fi devices. -->
     <!-- android.permission-group.NETWORK -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
