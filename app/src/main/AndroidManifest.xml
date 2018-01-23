@@ -35,9 +35,14 @@
 
     <!-- Allows the app to request authentication tokens. Removed in Android 6 -->
     <!-- android.permission-group.ACCOUNTS -->
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"
+                     android:maxSdkVersion="22"/>
 
-    <!-- Allows the app to write to the SD card. -->
+    <!-- Allows the app to write to the SD card.
+         Beginning with Android 4.4 (API level 19), it's no longer necessary for your app to request the
+         WRITE_EXTERNAL_STORAGE permission when your app wants to write to its own application-specific directories
+         on external storage
+    -->
     <!-- android.permission-group.STORAGE -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
@@ -66,12 +71,6 @@
          by always running. -->
     <!-- android.permission-group.APP_INFO -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-    <!-- Allows the app to access the phone features of the device.
-        This permission allows the app to determine the phone number and device
-        IDs, whether a call is active, and the remote number connected by a call. -->
-    <!-- android.permission-group.PHONE_CALLS -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
