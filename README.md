@@ -205,10 +205,9 @@ course be addressed.
 
   * Read contacts - Needed to map phone numbers to names and email addresses
   * Your messages (read / write SMS) - Needed for backup+restore
-  * Prevent phone from sleeping - needed to keep network active during a backup
   * Modify calendar events - needed for the call log backup to GCal
   * Send email to guests - this refers to calendar invitations (which are not created by the app)
-  * Storage (modify/delete SD card contents) - this is needed for caching
+  * Prevent phone from sleeping - needed to keep network active during a backup
   * Find accounts on the device - used for authentication
   * Use accounts on the device - used for authentication
   * Google Play billing service - used for in-app donations
