@@ -32,8 +32,35 @@ public class ContactAccessor {
 
     /**
      * @param resolver the resolver
+     * @param resources the resources
+     * @return the ids and groups a user has
+     * @throws SecurityException if READ_CONTACTS permission is missing
+     */
+    public Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources) {
+        final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
+
+        map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, resources.getString(R.string.everybody), 0));
+
+        final Cursor c = resolver.query(
+                Groups.CONTENT_SUMMARY_URI,
+                new String[]{Groups._ID, Groups.TITLE, Groups.SUMMARY_COUNT},
+                null,
+                null,
+                Groups.TITLE + " ASC");
+
+        while (c != null && c.moveToNext()) {
+            map.put(c.getInt(0), new Group(c.getInt(0), c.getString(1), c.getInt(2)));
+        }
+
+        if (c != null) c.close();
+        return map;
+    }
+
+    /**
+     * @param resolver the resolver
      * @param group  the group
      * @return all contacts from a group
+     * @throws SecurityException if READ_CONTACTS permission is missing
      */
     public ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
         if (group.isEveryBody()) return null;
@@ -54,30 +81,5 @@ public class ContactAccessor {
         }
         if (c != null) c.close();
         return contactIds;
-    }
-
-    /**
-     * @param resolver the resolver
-     * @param resources the resources
-     * @return the ids and groups a user has
-     */
-    public Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources) {
-        final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
-
-        map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, resources.getString(R.string.everybody), 0));
-
-        final Cursor c = resolver.query(
-                Groups.CONTENT_SUMMARY_URI,
-                new String[]{Groups._ID, Groups.TITLE, Groups.SUMMARY_COUNT},
-                null,
-                null,
-                Groups.TITLE + " ASC");
-
-        while (c != null && c.moveToNext()) {
-            map.put(c.getInt(0), new Group(c.getInt(0), c.getString(1), c.getInt(2)));
-        }
-
-        if (c != null) c.close();
-        return map;
     }
 }
