@@ -64,6 +64,8 @@ public class AccountManagerAuthActivity extends ThemeActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.v(TAG, "onRequestPermissionsResult("+requestCode+ ","+ Arrays.toString(permissions) +","+ Arrays.toString(grantResults));
+        if (isFinishing()) return;
+
         if (requestCode == REQUEST_GET_ACCOUNTS) {
             if (allGranted(grantResults)) {
                 checkAccounts();
