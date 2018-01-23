@@ -17,7 +17,7 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.MessageConverter.CONTENT_URI;
 
 public class PersonLookup {
-    private static final String[] PHONE_PROJECTION = getPhoneProjection();
+    private static final String[] PHONE_PROJECTION = new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME};
     private static final Uri CONTENT_FILTER_URI =
             Uri.parse("content://com.android.contacts/phone_lookup");
 
@@ -107,9 +107,5 @@ public class PersonLookup {
         return email != null &&
                 (email.toLowerCase(Locale.ENGLISH).endsWith("gmail.com") ||
                  email.toLowerCase(Locale.ENGLISH).endsWith("googlemail.com"));
-    }
-
-    private static String[] getPhoneProjection() {
-        return new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME};
     }
 }

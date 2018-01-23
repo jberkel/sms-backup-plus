@@ -31,10 +31,9 @@ public class ContactAccessor {
     static final int EVERYBODY_ID = -1;
 
     /**
-     *
      * @param resolver the resolver
-     * @param group   the group
-     * @return All contacts from a group
+     * @param group  the group
+     * @return all contacts from a group
      */
     public ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
         if (group.isEveryBody()) return null;
@@ -58,11 +57,9 @@ public class ContactAccessor {
     }
 
     /**
-     * All groups a user has
-     *
      * @param resolver the resolver
      * @param resources the resources
-     * @return the ids and groups
+     * @return the ids and groups a user has
      */
     public Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources) {
         final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
