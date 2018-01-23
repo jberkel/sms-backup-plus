@@ -221,7 +221,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
 
     private void onRestore() {
         if (LOCAL_LOGV) Log.v(TAG, "restore");
-        if (!SmsRestoreService.isServiceWorking()) {
+        if (SmsRestoreService.isServiceIdle()) {
             App.post(new PerformAction(Restore, preferences.confirmAction()));
         } else {
             restoreButton.setText(R.string.ui_sync_button_label_canceling);

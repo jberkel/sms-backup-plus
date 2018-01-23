@@ -169,7 +169,7 @@ public class SmsRestoreService extends ServiceBase {
         }
     }
 
-    public static boolean isServiceWorking() {
-        return service != null && service.isWorking();
+    public static boolean isServiceIdle() {
+        return service == null || !service.isWorking();
     }
 }

@@ -32,7 +32,6 @@ import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.AppPermission;
 import com.zegoggles.smssync.activity.MainActivity;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
@@ -101,7 +100,7 @@ public class SmsBackupService extends ServiceBase {
 
         appLog(R.string.app_log_backup_requested, getString(backupType.resId));
         // Only start a backup if there's no other operation going on at this time.
-        if (!isWorking() && !SmsRestoreService.isServiceWorking()) {
+        if (!isWorking() && SmsRestoreService.isServiceIdle()) {
             backup(backupType);
         } else {
             appLog(R.string.app_log_skip_backup_already_running);

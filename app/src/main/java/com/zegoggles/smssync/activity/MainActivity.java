@@ -457,7 +457,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     private void checkDefaultSmsApp() {
-        if (isSmsBackupDefaultSmsApp() && !SmsRestoreService.isServiceWorking()) {
+        if (isSmsBackupDefaultSmsApp() && SmsRestoreService.isServiceIdle()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }
