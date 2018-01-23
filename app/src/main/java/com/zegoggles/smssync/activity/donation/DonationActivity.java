@@ -3,7 +3,6 @@ package com.zegoggles.smssync.activity.donation;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 import com.android.billingclient.api.BillingClient;
@@ -124,13 +123,10 @@ public class DonationActivity extends ThemeActivity implements
     @Override
     public void onPurchasesUpdated(@BillingResponse int responseCode, @Nullable List<Purchase> purchases) {
         log("onPurchasesUpdated(" + responseCode + ", " + purchases + ")");
+        String message;
         if (responseCode == OK) {
-            Toast.makeText(this,
-                    R.string.ui_donation_success_message,
-                    LENGTH_LONG)
-                    .show();
+            message = getString(R.string.ui_donation_success_message);
         } else {
-            String message;
             switch (responseCode) {
                 case ITEM_UNAVAILABLE:
                     message = getString(R.string.donation_error_unavailable);
@@ -144,11 +140,9 @@ public class DonationActivity extends ThemeActivity implements
                 default:
                     message = getString(R.string.donation_unspecified_error, responseCode);
             }
-            Toast.makeText(this,
-                getString(R.string.ui_donation_failure_message, message),
-                LENGTH_LONG)
-                .show();
+            message = getString(R.string.ui_donation_failure_message, message);
         }
+        Toast.makeText(this, message, LENGTH_LONG).show();
         finish();
     }
 
