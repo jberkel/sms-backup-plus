@@ -117,6 +117,11 @@ Please don't file bug reports against this, WhatsApp backup support is no longer
 included in the latest version. If you really need it you can manually install an older version which still includes the feature,
 [1.5.9-BETA5](https://github.com/jberkel/sms-backup-plus/releases/tag/1.5.9-BETA5). Also see issue [564][].
 
+### <a name="RCS-support">Rich Communication Services</a>
+
+[Rich Communication Services](https://en.wikipedia.org/wiki/Rich_Communication_Services) is currently not supported, nor are there any plans to support it.
+Rich Communication Services is also known as RCS, Advanced Messaging, Advanded Communictaions, joyn or Message+.
+
 ### <a name="3rdparty">3rd party app integration</a>
 
 If you want to trigger backups from another app, enable `3rd party integration`
