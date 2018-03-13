@@ -62,8 +62,10 @@ public class AccountManagerAuthActivity extends ThemeActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onStateNotSaved(); // workaround for https://issuetracker.google.com/issues/37122909
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.v(TAG, "onRequestPermissionsResult("+requestCode+ ","+ Arrays.toString(permissions) +","+ Arrays.toString(grantResults));
+
         if (isFinishing()) return;
 
         if (requestCode == REQUEST_GET_ACCOUNTS) {
