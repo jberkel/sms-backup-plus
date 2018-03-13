@@ -23,7 +23,7 @@ public class HeaderGeneratorTest {
 
     @Before
     public void before() {
-        generator = new HeaderGenerator("ref", "1.0");
+        generator = new HeaderGenerator("ref", 1);
     }
 
     @Test public void testShouldGenerateStandardHeaders() throws Exception {

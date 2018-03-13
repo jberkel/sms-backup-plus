@@ -226,9 +226,5 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="ssl_required">SSL (Krävs)</string>
-  <string name="ssl_optional">SSL (Frivillig)</string>
-  <string name="tls_required">TLS (Krävs)</string>
-  <string name="tls_optional">TLS (Frivillig)</string>
-  <string name="none">Ingen</string>
+  <string name="security_none">Ingen</string>
 </resources>

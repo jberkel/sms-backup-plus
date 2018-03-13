@@ -228,11 +228,7 @@
   <string name="_3mins">3 perc</string>
   <string name="_30mins">30 perc</string>
 
-  <string name="ssl_required">SSL (kötelező)</string>
-  <string name="ssl_optional">SSL (opcionális)</string>
-  <string name="tls_required">TLS (kötelező)</string>
-  <string name="tls_optional">TLS (opcionális)</string>
-  <string name="none">Nincs</string>
+  <string name="security_none">Nincs</string>
 
   <string name="ui_third_party_integration_label">Külső integráció</string>
   <string name="ui_third_party_integration_desc">Engedélyezi más alkalmazások számára, hogy mentést kezdeményezzenek broadcast intentek által</string>

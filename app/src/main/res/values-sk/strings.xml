@@ -156,11 +156,7 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="_1min">1 min</string>
     <string name="_3mins">3 min</string>
     <string name="_30mins">30 min</string>
-    <string name="ssl_required">SSL (Požadované)</string>
-    <string name="ssl_optional">SSL (Voliteľné)</string>
-    <string name="tls_required">TLS (Požadované)</string>
-    <string name="tls_optional">TLS (Voliteľné)</string>
-    <string name="none">Žiadny</string>
+    <string name="security_none">Žiadny</string>
     <string name="ui_third_party_integration_label">Integrácia z 3-tej strany</string>
     <string name="ui_third_party_integration_desc">Umožňuje ďalším aplikáciám spustiť zálohovanie pomocou vysielania príkazov</string>
     <string name="ui_backup_settings_label">Nastavenia zálohy</string>

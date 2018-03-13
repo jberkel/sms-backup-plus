@@ -188,9 +188,5 @@
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
 
-  <string name="ssl_required">SSL (Vyžadováno)</string>
-  <string name="ssl_optional">SSL (Volitelně)</string>
-  <string name="tls_required">TLS (Vyžadováno)</string>
-  <string name="tls_optional">TLS (Volitelně)</string>
-  <string name="none">None</string>
+  <string name="security_none">None</string>
 </resources>

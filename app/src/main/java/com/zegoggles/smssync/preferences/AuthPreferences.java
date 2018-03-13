@@ -18,13 +18,12 @@ import java.util.Locale;
 
 import static android.util.Base64.NO_WRAP;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.preferences.ServerPreferences.Defaults.SERVER_PROTOCOL;
+import static com.zegoggles.smssync.preferences.Preferences.getDefaultType;
 
 public class AuthPreferences {
     private static final String UTF_8 = "UTF-8";
     private final Context context;
     private final SharedPreferences preferences;
-    private final ServerPreferences serverPreferences;
     private SharedPreferences credentials;
 
     public static final String SERVER_AUTHENTICATION = "server_authentication";
@@ -35,6 +34,17 @@ public class AuthPreferences {
 
     public static final String IMAP_USER = "login_user";
     public static final String IMAP_PASSWORD = "login_password";
+
+    /**
+     * Preference key containing the server address
+     */
+    private static final String SERVER_ADDRESS = "server_address";
+    /**
+     * Preference key containing the server protocol
+     */
+    private static final String SERVER_PROTOCOL = "server_protocol";
+
+    private static final String SERVER_TRUST_ALL_CERTIFICATES = "server_trust_all_certificates";
 
     /**
      * IMAP URI.
@@ -50,13 +60,11 @@ public class AuthPreferences {
      */
     private static final String IMAP_URI = "imap%s://%s:%s:%s@%s";
 
-    public AuthPreferences(Context context) {
-        this(context,  new ServerPreferences(context));
-    }
+    private static final String DEFAULT_SERVER_ADDRESS = "imap.gmail.com:993";
+    private static final String DEFAULT_SERVER_PROTOCOL = "+ssl+";
 
-    /* package */ AuthPreferences(Context context, ServerPreferences serverPreferences) {
+    public AuthPreferences(Context context) {
         this.context = context.getApplicationContext();
-        this.serverPreferences = serverPreferences;
         this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -116,7 +124,7 @@ public class AuthPreferences {
     }
 
     public boolean useXOAuth() {
-        return getAuthMode() == AuthMode.XOAUTH && serverPreferences.isGmail();
+        return getAuthMode() == AuthMode.XOAUTH && isGmail();
     }
 
     public String getUserEmail() {
@@ -143,28 +151,44 @@ public class AuthPreferences {
     public String getStoreUri() {
         if (useXOAuth()) {
             if (hasOAuth2Tokens()) {
-                return formatUri(AuthType.XOAUTH2, SERVER_PROTOCOL, getOauth2Username(), generateXOAuth2Token());
+                return formatUri(AuthType.XOAUTH2, DEFAULT_SERVER_PROTOCOL, getOauth2Username(), generateXOAuth2Token());
             } else {
                 Log.w(TAG, "No valid xoauth2 tokens");
                 return null;
             }
         } else {
             return formatUri(AuthType.PLAIN,
-                    serverPreferences.getServerProtocol(),
-                    getImapUsername(),
-                    getImapPassword());
+                getServerProtocol(),
+                getImapUsername(),
+                getImapPassword());
         }
+    }
+
+    private String getServerAddress() {
+        return preferences.getString(SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
+    }
+
+    private String getServerProtocol() {
+        return preferences.getString(SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
+    }
+
+    private boolean isGmail() {
+        return DEFAULT_SERVER_ADDRESS.equalsIgnoreCase(getServerAddress());
+    }
+
+    public boolean isTrustAllCertificates() {
+        return preferences.getBoolean(SERVER_TRUST_ALL_CERTIFICATES, false);
     }
 
     private String formatUri(AuthType authType, String serverProtocol, String username, String password) {
         return String.format(IMAP_URI,
-                serverProtocol,
-                authType.name().toUpperCase(Locale.US),
-                // NB: there's a bug in K9mail-library which requires double-encoding of uris
-                // https://github.com/k9mail/k-9/commit/b0d401c3b73c6b57402dc81d3cfd6488a71a1b98
-                encode(encode(username)),
-                encode(encode(password)),
-                serverPreferences.getServerAddress());
+            serverProtocol,
+            authType.name().toUpperCase(Locale.US),
+            // NB: there's a bug in K9mail-library which requires double-encoding of uris
+            // https://github.com/k9mail/k-9/commit/b0d401c3b73c6b57402dc81d3cfd6488a71a1b98
+            encode(encode(username)),
+            encode(encode(password)),
+            getServerAddress());
     }
 
     public String getOauth2Username() {
@@ -172,7 +196,7 @@ public class AuthPreferences {
     }
 
     private AuthMode getAuthMode() {
-        return new Preferences(context, preferences).getDefaultType(SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
+        return getDefaultType(preferences, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
     }
 
     /* package */ void setServerAuthMode(AuthType authType) {
@@ -229,6 +253,20 @@ public class AuthPreferences {
             return s == null ? "" : URLEncoder.encode(s, UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void migrate() {
+        if (useXOAuth()) {
+            return;
+        }
+        // convert deprecated authentication methods
+        if ("+ssl".equals(getServerProtocol()) ||
+            "+tls".equals(getServerProtocol())) {
+            preferences.edit()
+                .putBoolean(SERVER_TRUST_ALL_CERTIFICATES, true)
+                .putString(SERVER_PROTOCOL, getServerProtocol()+"+")
+                .commit();
         }
     }
 }

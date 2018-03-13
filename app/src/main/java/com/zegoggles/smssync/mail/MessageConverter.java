@@ -83,8 +83,8 @@ public class MessageConverter {
 
         mMessageGenerator = new MessageGenerator(mContext,
                 new Address(userEmail),
-                AddressStyle.getEmailAddressStyle(preferences),
-                new HeaderGenerator(referenceUid, preferences.getVersion(true)),
+                preferences.getEmailAddressStyle(),
+                new HeaderGenerator(referenceUid, preferences.getVersionCode()),
                 mPersonLookup,
                 preferences.getMailSubjectPrefix(),
                 allowedIds,

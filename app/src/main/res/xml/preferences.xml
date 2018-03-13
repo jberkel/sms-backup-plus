@@ -289,14 +289,6 @@
                         android:dialogMessage="@string/ui_server_dialog_msg"
                         android:defaultValue="@string/default_server_address"/>
 
-                <ListPreference
-                        android:key="server_protocol"
-                        android:title="@string/ui_protocol_label"
-                        android:summary="@string/ui_protocol_desc"
-                        android:entries="@array/server_protocol_entries"
-                        android:entryValues="@array/server_protocol_entryValues"
-                        android:defaultValue="@string/plus_ssl_plus"/>
-
                 <EditTextPreference
                         android:key="login_user"
                         android:title="@string/ui_login_label"
@@ -313,6 +305,20 @@
                         android:inputType="textPassword"
                         android:dialogMessage="@string/ui_password_dialog_msg"
                         android:persistent="false"/>
+
+                <ListPreference
+                        android:key="server_protocol"
+                        android:title="@string/ui_protocol_label"
+                        android:summary="@string/ui_protocol_desc"
+                        android:entries="@array/server_protocol_entries"
+                        android:entryValues="@array/server_protocol_entryValues"
+                        android:defaultValue="@string/plus_ssl_plus"/>
+
+                <CheckBoxPreference
+                        android:key="server_trust_all_certificates"
+                        android:title="@string/ui_protocol_trust_all_certificates_label"
+                        android:summary="@string/ui_protocol_trust_all_certificates_desc"
+                        android:defaultValue="false"/>
             </PreferenceCategory>
         </PreferenceScreen>
 

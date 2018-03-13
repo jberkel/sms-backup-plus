@@ -36,8 +36,6 @@ import com.fsck.k9.mail.store.imap.ImapStore;
 import com.zegoggles.smssync.preferences.DataTypePreferences;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,10 +55,11 @@ import static java.util.Locale.ENGLISH;
 public class BackupImapStore extends ImapStore {
     private final Map<DataType, BackupFolder> openFolders = new HashMap<DataType, BackupFolder>();
 
-    public BackupImapStore(final Context context, final String uri) throws MessagingException {
+    public BackupImapStore(final Context context, final String uri,
+                           boolean trustAllCertificates) throws MessagingException {
         super(new BackupStoreConfig(uri),
-                getTrustedSocketFactory(context, uri),
-                (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE));
+            trustAllCertificates ? AllTrustedSocketFactory.INSTANCE : new DefaultTrustedSocketFactory(context),
+            (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE));
     }
 
     public BackupFolder getFolder(DataType type, DataTypePreferences preferences) throws MessagingException {
@@ -217,30 +216,13 @@ public class BackupImapStore extends ImapStore {
         if (TextUtils.isEmpty(uri)) return false;
         Uri parsed = Uri.parse(uri);
         return parsed != null &&
-                !TextUtils.isEmpty(parsed.getAuthority()) &&
-                !TextUtils.isEmpty(parsed.getHost()) &&
-                !TextUtils.isEmpty(parsed.getScheme()) &&
-                ("imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
-                "imap+ssl".equalsIgnoreCase(parsed.getScheme()) ||
-                "imap".equalsIgnoreCase(parsed.getScheme()) ||
-                "imap+tls+".equalsIgnoreCase(parsed.getScheme()) ||
-                "imap+tls".equalsIgnoreCase(parsed.getScheme()));
-    }
-
-    // reimplement trust-all logic which was removed in
-    // https://github.com/k9mail/k-9/commit/daea7f1ecdb4515298a6c57dd5a829689426c2c9
-    private static TrustedSocketFactory getTrustedSocketFactory(Context context, String storeUri) {
-        try {
-            if (isInsecureStoreUri(new URI(storeUri))) {
-                Log.d(TAG, "insecure store uri specified, trusting ALL certificates");
-                return AllTrustedSocketFactory.INSTANCE;
-            }
-        } catch (URISyntaxException ignored) {
-        }
-        return new DefaultTrustedSocketFactory(context);
-    }
-
-    private static boolean isInsecureStoreUri(URI uri) {
-        return "imap+tls".equals(uri.getScheme()) || "imap+ssl".equals(uri.getScheme());
+            !TextUtils.isEmpty(parsed.getAuthority()) &&
+            !TextUtils.isEmpty(parsed.getHost()) &&
+            !TextUtils.isEmpty(parsed.getScheme()) &&
+            (
+            "imap".equalsIgnoreCase(parsed.getScheme()) ||
+            "imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
+            "imap+tls+".equalsIgnoreCase(parsed.getScheme())
+            );
     }
 }

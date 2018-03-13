@@ -222,11 +222,7 @@
   <string name="_3mins">3 λεπτό </string>
   <string name="_30mins">30 λεπτό </string>
 
-  <string name="ssl_required">SSL (Υποχρεωτικό)</string>
-  <string name="ssl_optional">SSL (Προαιρετικό)</string>
-  <string name="tls_required">TLS (Υποχρεωτικό)</string>
-  <string name="tls_optional">TLS (Προαιρετικό)</string>
-  <string name="none">None</string>
+  <string name="security_none">None</string>
 
   <string name="ui_third_party_integration_label"> Ολοκλήρωση 3ου προσώπου </string>
   <string name="ui_third_party_integration_desc"> Επιτρέψτε άλλες εφαρμογές να δημιουργήσουν αντίγραφα ασφαλείας   </string>

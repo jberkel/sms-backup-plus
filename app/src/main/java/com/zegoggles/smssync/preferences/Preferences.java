@@ -22,6 +22,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.contacts.ContactGroup;
@@ -104,8 +105,8 @@ public class Preferences {
         SMS_DEFAULT_PACKAGE("sms_default_package"),
         SMS_DEFAULT_PACKAGE_CHANGE_SEEN("sms_default_package_change_seen"),
         USE_OLD_SCHEDULER("use_old_scheduler"),
-        APP_THEME("app_theme")
-        ;
+        APP_THEME("app_theme"),
+        EMAIL_ADDRESS_STYLE("email_address_style");
 
         public final String key;
         Keys(String key) {
@@ -143,7 +144,7 @@ public class Preferences {
     }
 
     public  CallLogTypes getCallLogType() {
-        return getDefaultType(CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
+        return getDefaultType(preferences, CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
     }
 
     public boolean isRestoreStarredOnly() {
@@ -208,11 +209,15 @@ public class Preferences {
     }
 
     public MarkAsReadTypes getMarkAsReadType() {
-        return getDefaultType(MARK_AS_READ_TYPES.key, MarkAsReadTypes.class, MarkAsReadTypes.READ);
+        return getDefaultType(preferences, MARK_AS_READ_TYPES.key, MarkAsReadTypes.class, MarkAsReadTypes.READ);
     }
 
     public boolean getMarkAsReadOnRestore() {
         return preferences.getBoolean(MARK_AS_READ_ON_RESTORE.key, Defaults.MARK_AS_READ_ON_RESTORE);
+    }
+
+    public AddressStyle getEmailAddressStyle() {
+        return getDefaultType(preferences, Keys.EMAIL_ADDRESS_STYLE.key, AddressStyle.class, AddressStyle.NAME);
     }
 
     public boolean isFirstBackup() {
@@ -264,16 +269,25 @@ public class Preferences {
         return preferences.getBoolean(CONFIRM_ACTION.key, false);
     }
 
-    public String getVersion(boolean code) {
+    @Nullable public String getVersionName() {
         PackageInfo pInfo;
         try {
-            pInfo = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(),
-                    PackageManager.GET_META_DATA);
-            return "" + (code ? pInfo.versionCode : pInfo.versionName);
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, ERROR, e);
             return null;
+        }
+    }
+
+    public int getVersionCode() {
+        PackageInfo pInfo;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, ERROR, e);
+            return -1;
         }
     }
 
@@ -344,6 +358,10 @@ public class Preferences {
         }
     }
 
+    public void migrate() {
+        new AuthPreferences(context).migrate();
+    }
+
     private boolean isOldSmsBackupInstalled() {
         try {
             context.getPackageManager().getPackageInfo(
@@ -355,7 +373,7 @@ public class Preferences {
         }
     }
 
-    <T extends Enum<T>> T getDefaultType(String pref, Class<T> tClazz, T defaultType) {
+    static <T extends Enum<T>> T getDefaultType(SharedPreferences preferences, String pref, Class<T> tClazz, T defaultType) {
         try {
             final String s = preferences.getString(pref, null);
             return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase(Locale.ENGLISH));

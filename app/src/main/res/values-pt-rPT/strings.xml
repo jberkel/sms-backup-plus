@@ -160,11 +160,7 @@
   <string name="_1min">1 min</string>
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
-  <string name="ssl_required">SSL (Requerido)</string>
-  <string name="ssl_optional">SSL (Opcional)</string>
-  <string name="tls_required">TLS (Requerido)</string>
-  <string name="tls_optional">TLS (Opcional)</string>
-  <string name="none">Nenhum</string>
+  <string name="security_none">Nenhum</string>
   <string name="ui_third_party_integration_label">Integração com outras aplicações</string>
   <string name="ui_third_party_integration_desc">Permitir que outras aplicações possam solicitar cópias de segurança usando esta aplicação e respectivas definições</string>
 </resources>

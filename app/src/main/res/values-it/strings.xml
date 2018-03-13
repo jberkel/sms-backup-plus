@@ -223,11 +223,7 @@
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
 
-  <string name="ssl_required">SSL (Necessario)</string>
-  <string name="ssl_optional">SSL (Facoltativo)</string>
-  <string name="tls_required">TLS (Necessario)</string>
-  <string name="tls_optional">TLS (Facoltativo)</string>
-  <string name="none">Nessuno</string>
+  <string name="security_none">Nessuno</string>
 
   <string name="ui_third_party_integration_label">Accesso da terze parti</string>
   <string name="ui_third_party_integration_desc">Permetti alle applicazioni esterne di eseguire backup</string>

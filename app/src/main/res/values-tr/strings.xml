@@ -178,9 +178,5 @@
   <string name="_3mins">3 dakika</string>
   <string name="_30mins">30 dakika</string>
 
-  <string name="ssl_required">SSL (Önerilir)</string>
-  <string name="ssl_optional">SSL (İsteğe bağlı)</string>
-  <string name="tls_required">TLS (Önerilir)</string>
-  <string name="tls_optional">TLS (İsteğe bağlı)</string>
-  <string name="none">Yok</string>
+  <string name="security_none">Yok</string>
 </resources>

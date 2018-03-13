@@ -228,11 +228,7 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="ssl_required">SSL (Necessari)</string>
-  <string name="ssl_optional">SSL (Opcional)</string>
-  <string name="tls_required">TLS (Necessari)</string>
-  <string name="tls_optional">TLS (Opcional)</string>
-  <string name="none">Cap</string>
+  <string name="security_none">Cap</string>
 
   <string name="ui_third_party_integration_label">Integració amb tercers</string>
   <string name="ui_third_party_integration_desc">Permet que altres aplicacions iniciïn còpies de seguretat mitjançant intents de difusió</string>

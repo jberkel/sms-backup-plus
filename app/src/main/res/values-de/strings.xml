@@ -227,11 +227,7 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="ssl_required">SSL (Benötigt)</string>
-  <string name="ssl_optional">SSL (Optional)</string>
-  <string name="tls_required">TLS (Benötigt)</string>
-  <string name="tls_optional">TLS (Optional)</string>
-  <string name="none">Keine</string>
+  <string name="security_none">Keine</string>
 
   <string name="ui_third_party_integration_label">3rd party Integration</string>
   <string name="ui_third_party_integration_desc">Anderen Apps erlauben, eine Sicherung via \"Broadcast intents\" zu starten.</string>

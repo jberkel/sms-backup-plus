@@ -169,11 +169,7 @@
   <string name="_1min">1 min</string>
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
-  <string name="ssl_required">SSL</string>
-  <string name="ssl_optional">SSL (besoni të gjitha)</string>
-  <string name="tls_required">TLS</string>
-  <string name="tls_optional">TLS (besoni të gjitha)</string>
-  <string name="none">Asnjë</string>
+  <string name="security_none">Asnjë</string>
   <string name="ui_third_party_integration_label">integrim i dorës së tretë</string>
   <string name="ui_third_party_integration_desc">Lejoni programet e tjera të tërheqin kopje rezervë nëpërmjet qëllimeve transmetuese</string>
   <!-- new ui -->

@@ -57,6 +57,8 @@ public class App extends Application {
         setupStrictMode();
         gcmAvailable = GooglePlayServices.isAvailable(this);
         preferences = new Preferences(this);
+        preferences.migrate();
+
         backupJobs = new BackupJobs(this);
 
         if (gcmAvailable) {

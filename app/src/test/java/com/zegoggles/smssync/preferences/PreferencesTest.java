@@ -43,12 +43,12 @@ public class PreferencesTest {
         assertThat(preferences.isFirstBackup()).isFalse();
     }
 
-    @Ignore @Test public void shouldGetVersion() throws Exception {
-        assertThat(preferences.getVersion(false)).matches("\\d+\\.\\d+\\.\\d+(-\\w+)?");
+    @Ignore @Test public void shouldGetVersionName() throws Exception {
+        assertThat(preferences.getVersionName()).matches("\\d+\\.\\d+\\.\\d+(-\\w+)?");
     }
 
-    @Test public void shouldGetVersionWithCode() throws Exception {
-        assertThat(preferences.getVersion(true)).matches("\\d+");
+    @Test public void shouldGetVersionCode() throws Exception {
+        assertThat(preferences.getVersionCode()).isEqualTo(0);
     }
 
     @Test public void shouldTestOnSDCARD() throws Exception {

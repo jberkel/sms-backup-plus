@@ -226,11 +226,7 @@
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
 
-  <string name="ssl_required">SSL (påkrevd)</string>
-  <string name="ssl_optional">SSL (valgfritt)</string>
-  <string name="tls_required">TLS (påkrevd)</string>
-  <string name="tls_optional">TLS (valgfritt)</string>
-  <string name="none">Ingen</string>
+  <string name="security_none">Ingen</string>
 
   <string name="ui_third_party_integration_label">Tredjeparts integrasjon</string>
   <string name="ui_third_party_integration_desc">Tillat andre applikasjon å starte sikkerhetskopiering ved valgt kringkasting.</string>

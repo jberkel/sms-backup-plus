@@ -183,9 +183,5 @@
   <string name="_24h">24 h</string>
   <string name="never">Nunca</string>
 
-  <string name="ssl_required">SSL (Obligatorio)</string>
-  <string name="ssl_optional">SSL (Opcional)</string>
-  <string name="tls_required">TLS (Obligatorio)</string>
-  <string name="tls_optional">TLS (Opcional)</string>
-  <string name="none">Ninguno</string>
+  <string name="security_none">Ninguno</string>
 </resources>

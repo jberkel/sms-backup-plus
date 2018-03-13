@@ -231,11 +231,7 @@
   <string name="_3mins">3 分钟</string>
   <string name="_30mins">30 分钟</string>
 
-  <string name="ssl_required">SSL (必需)</string>
-  <string name="ssl_optional">SSL (可选)</string>
-  <string name="tls_required">TLS (必需)</string>
-  <string name="tls_optional">TLS (可选)</string>
-  <string name="none">无</string>
+  <string name="security_none">无</string>
 
   <string name="ui_third_party_integration_label">第三方集成</string>
   <string name="ui_third_party_integration_desc">允许其他应用使用广播 Intent 触发备份</string>

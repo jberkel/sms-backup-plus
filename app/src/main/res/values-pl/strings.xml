@@ -153,11 +153,7 @@
     <string name="_1min">1 min.</string>
     <string name="_3mins">3 min.</string>
     <string name="_30mins">30 min.</string>
-    <string name="ssl_required">SSL (wymagane)</string>
-    <string name="ssl_optional">SSL (opcjonalne)</string>
-    <string name="tls_required">TLS (wymagane)</string>
-    <string name="tls_optional">TLS (opcjonalne)</string>
-    <string name="none">brak</string>
+    <string name="security_none">brak</string>
     <string name="ui_third_party_integration_label">3rd party integration</string>
     <string name="ui_third_party_integration_desc">Allow other apps to trigger backups via intent broadcasts</string>
     <string name="ui_backup_settings_label">Ustawienia kopii zapasowej</string>

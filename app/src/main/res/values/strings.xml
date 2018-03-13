@@ -87,8 +87,13 @@
   <string name="ui_server_label">Server address</string>
   <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
   <string name="ui_server_dialog_msg">Default for gmail is \"imap.gmail.com:993\"</string>
+
   <string name="ui_protocol_label">Security</string>
-  <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL\"."</string>
+  <string name="ui_protocol_desc">The security protocol of the server.</string>
+
+  <string name="ui_protocol_trust_all_certificates_label">Trust all certificates</string>
+  <string name="ui_protocol_trust_all_certificates_desc">Not recommended. Typically set for self-hosted servers.</string>
+
   <string name="ui_authentication_label">Authentication</string>
   <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOAuth\".</string>
   <string name="plain">Plain text</string>
@@ -253,11 +258,9 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="ssl_required">SSL</string>
-  <string name="ssl_optional">SSL (trust all)</string>
-  <string name="tls_required">TLS</string>
-  <string name="tls_optional">TLS (trust all)</string>
-  <string name="none">None</string>
+  <string name="security_tls">TLS</string>
+  <string name="security_starttls">STARTTLS</string>
+  <string name="security_none">None</string>
 
   <string name="ui_third_party_integration_label">3rd party integration</string>
   <string name="ui_third_party_integration_desc">Allow other apps to trigger backups via broadcast intents</string>

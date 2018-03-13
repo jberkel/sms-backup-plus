@@ -223,11 +223,7 @@
   <string name="_3mins">3 min.</string>
   <string name="_30mins">30 min.</string>
 
-  <string name="ssl_required">SSL (vereist)</string>
-  <string name="ssl_optional">SSL (optioneel)</string>
-  <string name="tls_required">TLS (vereist)</string>
-  <string name="tls_optional">TLS (optioneel)</string>
-  <string name="none">Geen</string>
+  <string name="security_none">Geen</string>
 
   <string name="ui_third_party_integration_label">3rd party-integratie</string>
   <string name="ui_third_party_integration_desc">Toestaan dat andere apps een back-up starten met broadcast intents</string>

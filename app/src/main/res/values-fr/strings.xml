@@ -229,11 +229,7 @@
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
 
-  <string name="ssl_required">SSL (Requis)</string>
-  <string name="ssl_optional">SSL (Facultatif)</string>
-  <string name="tls_required">TLS (Requis)</string>
-  <string name="tls_optional">TLS (Facultatif)</string>
-  <string name="none">Aucun</string>
+  <string name="security_none">Aucun</string>
 
   <string name="ui_third_party_integration_label">Intégration des applications tierces</string>
   <string name="ui_third_party_integration_desc">Autoriser des applications tierces à lancer le processus de sauvergarde</string>

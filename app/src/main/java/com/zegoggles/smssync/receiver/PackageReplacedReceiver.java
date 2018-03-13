@@ -17,7 +17,7 @@ public class PackageReplacedReceiver extends BroadcastReceiver {
         if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + context + "," + intent + ")");
 
         if (Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())) {
-            Log.d(TAG, "now installed version: " + new Preferences(context).getVersion(true));
+            Log.d(TAG, "now installed version: " + new Preferences(context).getVersionCode());
             //  just post event and let application handle the rest
             App.post(new AutoBackupSettingsChangedEvent());
         } else {

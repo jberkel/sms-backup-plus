@@ -15,6 +15,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+// NB: Trust-all logic was removed in
+// https://github.com/k9mail/k-9/commit/daea7f1ecdb4515298a6c57dd5a829689426c2c9
 @SuppressLint("TrustAllX509TrustManager")
 class AllTrustedSocketFactory implements TrustedSocketFactory {
     public static TrustedSocketFactory INSTANCE = new AllTrustedSocketFactory();

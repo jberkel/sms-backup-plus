@@ -231,11 +231,7 @@
   <string name="_3mins">3 мин.</string>
   <string name="_30mins">30 мин.</string>
 
-  <string name="ssl_required">ССЛ</string>
-  <string name="ssl_optional">ССЛ (опционо)</string>
-  <string name="tls_required">ТЛС</string>
-  <string name="tls_optional">ТЛС (опционо)</string>
-  <string name="none">Ништа</string>
+  <string name="security_none">Ништа</string>
 
   <string name="ui_third_party_integration_label">Интеграција других апл.</string>
   <string name="ui_third_party_integration_desc">Дозволи другим апликацијама да започну копирање путем емитовања намере</string>

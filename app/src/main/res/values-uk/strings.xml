@@ -170,11 +170,7 @@
 <string name="_1min">1 хвилина</string>
 <string name="_3mins">3 хвилини</string>
 <string name="_30mins">30 хвилин</string>
-<string name="ssl_required">SSL (обов’язково)</string>
-<string name="ssl_optional">SSL (необов’язково)</string>
-<string name="tls_required">TLS (обов’язково)</string>
-<string name="tls_optional">TLS (необов’язково)</string>
-<string name="none">Немає</string>
+<string name="security_none">Немає</string>
 
 <string name="ui_third_party_integration_label">Інтеграції</string>
 <string name="ui_third_party_integration_desc">Дозволити іншим застосункам запуск резервного копіювання за допомогою трансляції намірів</string>

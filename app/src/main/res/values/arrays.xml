@@ -106,19 +106,18 @@
   </string-array>
 
   <string-array name="server_protocol_entries">
-    <item>@string/ssl_required</item>
-    <item>@string/ssl_optional</item>
-    <item>@string/tls_required</item>
-    <item>@string/tls_optional</item>
-    <item>@string/none</item>
+    <!-- only connect via TLS, no plain sockets -->
+    <item>@string/security_tls</item>
+    <!-- connect via plan, then upgrade to TLS -->
+    <item>@string/security_starttls</item>
+    <!-- connect via plain socket -->
+    <item>@string/security_none</item>
   </string-array>
 
   <string name="plus_ssl_plus">+ssl+</string>
   <string-array name="server_protocol_entryValues">
-    <item>@string/plus_ssl_plus</item>
-    <item>+ssl</item>
+    <item>@string/plus_ssl_plus</item> <!-- default -->
     <item>+tls+</item>
-    <item>+tls</item>
     <item/>
   </string-array>
 

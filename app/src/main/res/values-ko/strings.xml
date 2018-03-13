@@ -230,11 +230,7 @@
   <string name="_3mins">3 분</string>
   <string name="_30mins">30 분</string>
 
-  <string name="ssl_required">SSL</string>
-  <string name="ssl_optional">SSL (모두 신뢰)</string>
-  <string name="tls_required">TLS</string>
-  <string name="tls_optional">TLS (모두 신뢰)</string>
-  <string name="none">없음</string>
+  <string name="security_none">없음</string>
 
   <string name="ui_third_party_integration_label">제3자 앱 통합</string>
   <string name="ui_third_party_integration_desc">다른 앱이 브로드캐스트 인텐트를 통해 백업을 실행할 수 있도록 허용</string>

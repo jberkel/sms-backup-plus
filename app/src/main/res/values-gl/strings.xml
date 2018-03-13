@@ -226,11 +226,7 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="ssl_required">SSL (Requirido)</string>
-  <string name="ssl_optional">SSL (Opcional)</string>
-  <string name="tls_required">TLS (Requirido)</string>
-  <string name="tls_optional">TLS (Opcional)</string>
-  <string name="none">None</string>
+  <string name="security_none">None</string>
 
   <string name="ui_third_party_integration_label">Integración con terceiras partes</string>
   <string name="ui_third_party_integration_desc">Permitir que outras aplicacións inicien gardados usnado intencións de difusión</string>

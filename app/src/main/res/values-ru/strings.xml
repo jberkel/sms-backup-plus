@@ -211,11 +211,7 @@
   <string name="_3mins">3 минуты</string>
   <string name="_30mins">30 минут</string>
 
-  <string name="ssl_required">SSL (обязательно)</string>
-  <string name="ssl_optional">SSL (опционально)</string>
-  <string name="tls_required">TLS (обязательно)</string>
-  <string name="tls_optional">TLS (опционально)</string>
-  <string name="none">Нет</string>
+  <string name="security_none">Нет</string>
 
   <string name="ui_third_party_integration_label">Интеграция с внешними приложениями</string>
   <string name="ui_third_party_integration_desc">Разрешает другим приложениям запускать резервирование через broadcast</string>

@@ -224,11 +224,7 @@
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
 
-  <string name="ssl_required">SSL (Påkrævet)</string>
-  <string name="ssl_optional">SSL (Valgfri)</string>
-  <string name="tls_required">TLS (Påkrævet)</string>
-  <string name="tls_optional">TLS (Valgfri)</string>
-  <string name="none">Ingen</string>
+  <string name="security_none">Ingen</string>
 
   <string name="ui_third_party_integration_label">3. parts integration</string>
   <string name="ui_third_party_integration_desc">Tillad andre apps at trigge backup via Broadcast intents.</string>

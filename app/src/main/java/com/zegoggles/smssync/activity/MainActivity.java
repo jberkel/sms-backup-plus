@@ -309,6 +309,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     @Override public void onBackStackChanged() {
+        if (getSupportActionBar() == null) return;
         getSupportActionBar().setSubtitle(getCurrentTitle());
         getSupportActionBar().setDisplayHomeAsUpEnabled(getSupportFragmentManager().getBackStackEntryCount() > 0);
     }
