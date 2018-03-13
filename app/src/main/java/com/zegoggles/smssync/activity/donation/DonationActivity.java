@@ -96,8 +96,7 @@ public class DonationActivity extends ThemeActivity implements
     @Override
     public void onSkuDetailsResponse(@BillingResponse int responseCode, List<SkuDetails> details) {
         log("onSkuDetailsResponse(" + responseCode + ", " + details + ")");
-
-        if (responseCode != OK) {
+        if (isFinishing() || responseCode != OK) {
             Log.w(TAG, "failed to query inventory: " + responseCode);
             return;
         }
@@ -108,12 +107,7 @@ public class DonationActivity extends ThemeActivity implements
                 skuDetailsList.add(d);
             }
         }
-
-        if (!isFinishing()) {
-            showSelectDialog(skuDetailsList);
-        } else {
-            finish();
-        }
+        showSelectDialog(skuDetailsList);
     }
 
     /**
