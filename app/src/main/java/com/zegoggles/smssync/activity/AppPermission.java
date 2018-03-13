@@ -59,7 +59,17 @@ public enum AppPermission {
         return appPermissions;
     }
 
+    /**
+     * “It is possible that the permissions request interaction
+     * with the user is interrupted. In this case you will receive empty permissions
+     * and results arrays which should be treated as a cancellation.“
+     *
+     * {@link android.support.v4.app.FragmentActivity#onRequestPermissionsResult(int, String[], int[])}
+     */
     public static boolean allGranted(@NonNull int[] grantResults) {
+        if (grantResults.length == 0) {
+            return false;
+        }
         for (int result : grantResults) {
             if (result == PackageManager.PERMISSION_DENIED) {
                 return false;
