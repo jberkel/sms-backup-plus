@@ -55,7 +55,6 @@
 <string name="ui_password_dialog_msg">Пароль зберігається на цьому пристрої і використовується лише для входу.</string>
 <string name="ui_server_label">Адреса серверу</string>
 <string name="ui_server_desc">Адреса і порт серверу для синхронізації.</string>
-<string name="ui_server_dialog_msg">Типово для Gmail є \"imap.gmail.com:993\"</string>
 <string name="ui_protocol_label">Безпека</string>
 <string name="ui_protocol_desc">Протокол безпеки на сервері. Типово для Gmail є \"SSL (обов’язково)\".</string>
 <string name="ui_authentication_label">Автентифікація</string>

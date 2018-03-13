@@ -72,7 +72,6 @@
   <string name="ui_password_dialog_msg">Le mot de passe est stocké sur votre mobile et n\'est utilisé que pour la connexion à votre compte.</string>
   <string name="ui_server_label">Adresse du serveur</string>
   <string name="ui_server_desc">L\'adresse du serveur auquel vous voulez synchroniser votre appareil, ainsi que le port désiré.</string>
-  <string name="ui_server_dialog_msg">La configuration par défaut pour Gmail est \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Sécurité</string>
   <string name="ui_protocol_desc">Le protocole de sécurité utilisé par le serveur. Le protocole par défaut pour Gmail est \"SSL (Requis)\"."</string>
   <string name="ui_authentication_label">Authentification</string>

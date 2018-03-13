@@ -71,7 +71,6 @@
   <string name="ui_password_dialog_msg">Το password εισήχθει σε αυτή τη συσκευή και χρησιμοποιείται μόνο για login.</string>
   <string name="ui_server_label"> Διεύθυνση Server </string>
   <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
-  <string name="ui_server_dialog_msg">Default for gmail is \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Ασφάλεια</string>
   <string name="ui_protocol_desc">Το πρωτόκολλο ασφαλείας του server. Default for gmail is \"SSL (Required)\"."</string>
   <string name="ui_authentication_label">Πιστοποίηση</string>

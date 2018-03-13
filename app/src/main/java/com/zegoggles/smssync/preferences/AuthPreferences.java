@@ -124,7 +124,7 @@ public class AuthPreferences {
     }
 
     public boolean useXOAuth() {
-        return getAuthMode() == AuthMode.XOAUTH && isGmail();
+        return getAuthMode() == AuthMode.XOAUTH;
     }
 
     public String getUserEmail() {
@@ -151,7 +151,12 @@ public class AuthPreferences {
     public String getStoreUri() {
         if (useXOAuth()) {
             if (hasOAuth2Tokens()) {
-                return formatUri(AuthType.XOAUTH2, DEFAULT_SERVER_PROTOCOL, getOauth2Username(), generateXOAuth2Token());
+                return formatUri(
+                    AuthType.XOAUTH2,
+                        DEFAULT_SERVER_PROTOCOL,
+                        getOauth2Username(),
+                        generateXOAuth2Token(),
+                        DEFAULT_SERVER_ADDRESS);
             } else {
                 Log.w(TAG, "No valid xoauth2 tokens");
                 return null;
@@ -160,7 +165,8 @@ public class AuthPreferences {
             return formatUri(AuthType.PLAIN,
                 getServerProtocol(),
                 getImapUsername(),
-                getImapPassword());
+                getImapPassword(),
+                getServerAddress());
         }
     }
 
@@ -172,15 +178,11 @@ public class AuthPreferences {
         return preferences.getString(SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
     }
 
-    private boolean isGmail() {
-        return DEFAULT_SERVER_ADDRESS.equalsIgnoreCase(getServerAddress());
-    }
-
     public boolean isTrustAllCertificates() {
         return preferences.getBoolean(SERVER_TRUST_ALL_CERTIFICATES, false);
     }
 
-    private String formatUri(AuthType authType, String serverProtocol, String username, String password) {
+    private String formatUri(AuthType authType, String serverProtocol, String username, String password, String serverAddress) {
         return String.format(IMAP_URI,
             serverProtocol,
             authType.name().toUpperCase(Locale.US),
@@ -188,7 +190,7 @@ public class AuthPreferences {
             // https://github.com/k9mail/k-9/commit/b0d401c3b73c6b57402dc81d3cfd6488a71a1b98
             encode(encode(username)),
             encode(encode(password)),
-            getServerAddress());
+            serverAddress);
     }
 
     public String getOauth2Username() {
@@ -197,10 +199,6 @@ public class AuthPreferences {
 
     private AuthMode getAuthMode() {
         return getDefaultType(preferences, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
-    }
-
-    /* package */ void setServerAuthMode(AuthType authType) {
-        preferences.edit().putString(AuthPreferences.SERVER_AUTHENTICATION, authType.name()).commit();
     }
 
     // All sensitive information is stored in a separate prefs file so we can

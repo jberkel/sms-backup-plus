@@ -72,7 +72,6 @@
   <string name="ui_password_dialog_msg">비밀번호가 이 장치에 저장되었으며 로그인 시에만 사용됩니다.</string>
   <string name="ui_server_label">서버 주소</string>
   <string name="ui_server_desc">동기화 할 서버의 주소(포트 번호 포함).</string>
-  <string name="ui_server_dialog_msg">Gmail의 기본값은 \"imap.gmail.com:993\" 입니다</string>
   <string name="ui_protocol_label">보안</string>
   <string name="ui_protocol_desc">서버의 보안 프로토콜. Gmail의 기본값은 \"SSL\"입니다.</string>
   <string name="ui_authentication_label">인증</string>

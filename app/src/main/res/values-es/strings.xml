@@ -71,7 +71,6 @@
   <string name="ui_password_dialog_msg">La contraseña es almacenada en este dispositivo y sólo se utiliza para iniciar sesión en Gmail.</string>
   <string name="ui_server_label">Dirección del servidor</string>
   <string name="ui_server_desc">La dirección del servidor al que desea sincronizar incl. su puerto.</string>
-  <string name="ui_server_dialog_msg">ADVERTENCIA: Cambiar la dirección del servidor restablecerá toda la información de copia de seguridad y su contraseña. Predeterminado para gmail es \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Seguridad</string>
   <string name="ui_protocol_desc">El protocolo de seguridad del servidor. Predeterminado para gmail es \"SSL (Obligatorio)\"."</string>
   <string name="ui_authentication_label">Autenticación</string>

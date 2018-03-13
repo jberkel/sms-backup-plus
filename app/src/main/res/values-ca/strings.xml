@@ -72,7 +72,6 @@
   <string name="ui_password_dialog_msg">La contrasenya es desa al dispositiu i només s\'utilitza per iniciar la sessió.</string>
   <string name="ui_server_label">Adreça del servidor</string>
   <string name="ui_server_desc">L\'adreça del servidor de sincronització, incloent el port.</string>
-  <string name="ui_server_dialog_msg">El predeterminat de Gmail és \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Seguretat</string>
   <string name="ui_protocol_desc">El protocol de seguretat del servidor. El predeterminat de Gmail és \"SSL (Requerit)\"."</string>
   <string name="ui_authentication_label">Autentificació</string>

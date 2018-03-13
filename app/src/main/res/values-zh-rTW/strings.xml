@@ -72,7 +72,6 @@
   <string name="ui_password_dialog_msg">密碼只會儲存在這台設備上，並且僅會做登入之用。</string>
   <string name="ui_server_label">伺服器地址</string>
   <string name="ui_server_desc">你想要進行同步的伺服器地址及其連接埠。</string>
-  <string name="ui_server_dialog_msg">Gmail 的預設伺服器為 \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">安全性</string>
   <string name="ui_protocol_desc">伺服器的安全協議。Gmail 的預設為 \"SSL (必需)\"。</string>
   <string name="ui_authentication_label">身份驗證</string>

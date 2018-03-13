@@ -53,7 +53,6 @@
   <string name="ui_password_dialog_msg">Fjalëkalimi është ruajtur në këtë pajisje dhe përdoret vetëm për hyrje.</string>
   <string name="ui_server_label">Adresa e serverit</string>
   <string name="ui_server_desc">Adresa e serverit që ju dëshironi të sinkronizoni të përfshijë. portën e tij.</string>
-  <string name="ui_server_dialog_msg">Konfigurimi fillestar për Gmail është \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Siguria</string>
   <string name="ui_protocol_desc">Protokolli i sigurisë së serverit. Konfigurimi fillestar për gmail është \"SSL\"."</string>
   <string name="ui_authentication_label">Verifikim</string>

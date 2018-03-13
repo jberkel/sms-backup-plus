@@ -72,7 +72,6 @@
   <string name="ui_password_dialog_msg">O contrasinal almacenarase neste dispositivo e só se usará para iniciar sesión.</string>
   <string name="ui_server_label">Enderezo do servidor</string>
   <string name="ui_server_desc">O enderezo do servidor co que desexa sincronizar incluíndo o porto.</string>
-  <string name="ui_server_dialog_msg">O predeterminado para GMail é \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Seguridade</string>
   <string name="ui_protocol_desc">O protocolo de seguridade do servidor. O predeterminado para GMail é \"SSL (Requirido)\"."</string>
   <string name="ui_authentication_label">Autenticación</string>

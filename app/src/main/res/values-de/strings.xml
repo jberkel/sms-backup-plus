@@ -71,7 +71,6 @@
   <string name="ui_password_dialog_msg">Das Password wird auf diesem Gerät gespeichert und nur zur Anmeldung benutzt.</string>
   <string name="ui_server_label">Server-Adresse</string>
   <string name="ui_server_desc">Adresse inkl. Port des Mailservers mit dem Sie synchronisieren möchten</string>
-  <string name="ui_server_dialog_msg">Standard für Gmail ist \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Sicherheit</string>
   <string name="ui_protocol_desc">Sicherheitsprotokoll des Server. Standard für Gmail ist \"SSL (Required)\".</string>
   <string name="ui_authentication_label">Authentifizierung</string>

@@ -71,7 +71,6 @@
   <string name="ui_password_dialog_msg">La password è memorizzata sul dispositivo e verrà usata solo per il login.</string>
   <string name="ui_server_label">Indirizzo server</string>
   <string name="ui_server_desc">Indirizzo del server che vuoi sincronizzare inclusa la porta.</string>
-  <string name="ui_server_dialog_msg">Il predefinito per gmail è \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Sicurezza</string>
   <string name="ui_protocol_desc">Il protocollo di sicurezza del server. Il predefinito per gmail è \"SSL (Richiesto)\"."</string>
   <string name="ui_authentication_label">Autenticazione</string>

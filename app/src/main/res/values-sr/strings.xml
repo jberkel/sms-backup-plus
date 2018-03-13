@@ -72,7 +72,6 @@
   <string name="ui_password_dialog_msg">Лозинка је сачувана на овом уређају и користи се само за пријаву.</string>
   <string name="ui_server_label">Адреса сервера</string>
   <string name="ui_server_desc">Адреса сервера са којим желите да се синхронизујете, укључујући и порт.</string>
-  <string name="ui_server_dialog_msg">Подразумевано за Gmail је „imap.gmail.com:993“</string>
   <string name="ui_protocol_label">Безбедност</string>
   <string name="ui_protocol_desc">Безбедносни протокол сервера. Подразумевани за Gmail је „ССЛ“.</string>
   <string name="ui_authentication_label">Аутентификација</string>

@@ -46,7 +46,6 @@
     <string name="ui_password_dialog_msg">Heslo je uložené v telefóne a je použité len pre prihlásenie</string>
     <string name="ui_server_label">Adresa servera</string>
     <string name="ui_server_desc">Adresa servera s ktorým sa chcete synchronizovať</string>
-    <string name="ui_server_dialog_msg">Východzia pre GMail je "imap.gmail.com:993"</string>
     <string name="ui_protocol_label">Bezpečnosť</string>
     <string name="ui_protocol_desc">Zabezpečené spojenie k serveru. Východzie pre GMail je "SSL (Odporúčané)"</string>
     <string name="ui_authentication_label">Prihlásenie</string>

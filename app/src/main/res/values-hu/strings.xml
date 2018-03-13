@@ -73,7 +73,6 @@
   <string name="ui_password_dialog_msg">Az alkalmazás a jelszót a készüléken tárolja és csak a bejelentkezéskor használja azt.</string>
   <string name="ui_server_label">Kiszolgáló címe</string>
   <string name="ui_server_desc">A kiszolgáló címe és portszáma, amellyel szinkronizálni szeretne.</string>
-  <string name="ui_server_dialog_msg">Alapértelmezett cím Gmailhez: \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Biztonság</string>
   <string name="ui_protocol_desc">A kiszolgáló által használt biztonsági protokoll. Alapértelmezett érték Gmailhez: \"SSL (kötelező)\"."</string>
   <string name="ui_authentication_label">Hitelesítés</string>
