@@ -1,9 +1,11 @@
 package com.zegoggles.smssync.activity.donation;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClient.BillingResponse;
@@ -151,6 +153,19 @@ public class DonationActivity extends ThemeActivity implements
             .setSku(sku)
             .build()
         );
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // 🤔 suggested workaround from
+        // https://issuetracker.google.com/issues/37094575
+        super.onSaveInstanceState(outState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            final View rootView = findViewById(android.R.id.content);
+            if (rootView != null) {
+                rootView.cancelPendingInputEvents();
+            }
+        }
     }
 
     private void queryAvailableSkus() {
