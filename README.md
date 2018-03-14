@@ -1,11 +1,9 @@
-# SMS Backup+ ![Icon][] [![Build Status SVG][]][Build Status]
+# SMS Backup+ <img src="https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/graphic-assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/> [![Build Status SVG][]][Build Status]
 
 <a href="https://play.google.com/store/apps/details?id=com.zegoggles.smssync">
     <img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/> </a> &nbsp; <a href="https://f-droid.org/packages/com.zegoggles.smssync/">
     <img alt="Get it on F-Droid" src="https://jberkel.github.io/sms-backup-plus/assets/img/f-droid-badge.svg" height="80pt"/>
 </a>
-
-
 
 This is a fork of the Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms), where development has
@@ -463,7 +461,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [showimap]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/show_imap.png
 [strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/app/src/main/res/values/strings.xml
 [Tasker]: http://tasker.dinglisch.net/
-[Icon]: https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/app/src/main/res/drawable/ic_launcher.png
 [Authorized Access to your Google Account]: https://security.google.com/settings/security/permissions
 [community]: https://plus.google.com/communities/113290889178902750997
 [beta-link]: https://play.google.com/apps/testing/com.zegoggles.smssync
