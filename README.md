@@ -1,4 +1,4 @@
-# SMS Backup+ <img src="https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/graphic-assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/> [![Build Status SVG][]][Build Status]
+# SMS Backup+ <img src="https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/graphic-assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/> [![Build Status SVG][]][Build Status] [![Open Source Helpers](https://www.codetriage.com/jberkel/sms-backup-plus/badges/users.svg)](https://www.codetriage.com/jberkel/sms-backup-plus)
 
 <a href="https://play.google.com/store/apps/details?id=com.zegoggles.smssync">
     <img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/> </a> &nbsp; <a href="https://f-droid.org/packages/com.zegoggles.smssync/">
