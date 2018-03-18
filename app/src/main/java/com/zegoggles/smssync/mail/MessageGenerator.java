@@ -100,6 +100,7 @@ class MessageGenerator {
 
         Date sentDate;
         try {
+            // TODO: should probably be TextBasedSmsColumns.DATE_SENT
             sentDate = new Date(Long.valueOf(msgMap.get(Telephony.TextBasedSmsColumns.DATE)));
         } catch (NumberFormatException n) {
             Log.e(TAG, ERROR_PARSING_DATE, n);
