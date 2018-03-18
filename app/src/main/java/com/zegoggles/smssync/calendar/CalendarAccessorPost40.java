@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
@@ -59,6 +60,9 @@ public class CalendarAccessorPost40 implements CalendarAccessor {
             return true;
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "could not add calendar entry", e);
+            return false;
+        } catch (SQLiteException e) {
+            Log.w(TAG, "could not add calendar entry", e);
             return false;
         } catch (SecurityException e) {
             Log.w(TAG, "could not add calendar entry (permission)", e);
