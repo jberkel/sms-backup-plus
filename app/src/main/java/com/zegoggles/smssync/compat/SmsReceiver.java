@@ -25,8 +25,12 @@ public class SmsReceiver extends BroadcastReceiver {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive("+intent+")");
-        final SmsMessage[] messages = getMessagesFromIntent(intent);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ||
+            !Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
+            return;
+        }
 
+        final SmsMessage[] messages = getMessagesFromIntent(intent);
         if (messages != null && messages.length > 0) {
             storeMessage(context, messages);
         }
