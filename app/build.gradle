@@ -13,8 +13,8 @@ android {
         applicationId "com.zegoggles.smssync"
         minSdkVersion 9
         targetSdkVersion 25
-        versionCode 1566
-        versionName "1.5.11-beta13"
+        versionCode 1567
+        versionName "1.5.11-beta14"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
