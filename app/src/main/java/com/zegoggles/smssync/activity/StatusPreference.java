@@ -90,12 +90,6 @@ public class StatusPreference extends Preference implements View.OnClickListener
     }
 
     @Override
-    public void onAttached() {
-        super.onAttached();
-        App.register(this);
-    }
-
-    @Override
     public void onDetached() {
         super.onDetached();
         App.unregister(this);
@@ -127,6 +121,8 @@ public class StatusPreference extends Preference implements View.OnClickListener
         progressBar = (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress);
 
         idle();
+
+        App.register(this);
     }
 
     @Override
@@ -143,7 +139,6 @@ public class StatusPreference extends Preference implements View.OnClickListener
 
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "restoreStateChanged:" + newState);
-        if (backupButton == null) return;
 
         stateChanged(newState);
         switch (newState.state) {
@@ -176,7 +171,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
 
     @Subscribe public void backupStateChanged(final BackupState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "backupStateChanged:"+newState);
-        if (backupButton == null || newState.backupType.isBackground()) return;
+        if (newState.backupType.isBackground()) return;
 
         stateChanged(newState);
 
