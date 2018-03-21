@@ -355,6 +355,7 @@
   <string name="donation_error_already_owned">you have already donated</string>
   <string name="donation_unspecified_error">unspecified error: %1$d</string>
 
+  <string name="error_no_sms_default_package">No default SMS package set.</string>
   <string name="ui_dialog_sms_default_package_change_title">Upgrade notice</string>
   <string name="ui_dialog_sms_default_package_change_msg">
     In order to restore your messages on Android KitKat and Lollipop you need

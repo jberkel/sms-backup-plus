@@ -262,8 +262,8 @@ public class MainActivity extends ThemeActivity implements
     }
 
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
-        if (isSmsBackupDefaultSmsApp() && newState.isFinished()) {
-            restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
+        if (newState.isFinished() && isSmsBackupDefaultSmsApp()) {
+             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }
 
@@ -377,12 +377,17 @@ public class MainActivity extends ThemeActivity implements
             } else {
                 final String defaultSmsPackage = Sms.getDefaultSmsPackage(this);
                 Log.d(TAG, "default SMS package: " + defaultSmsPackage);
-                preferences.setSmsDefaultPackage(defaultSmsPackage);
+                if (!TextUtils.isEmpty(defaultSmsPackage)) {
+                    preferences.setSmsDefaultPackage(defaultSmsPackage);
 
-                if (preferences.hasSeenSmsDefaultPackageChangeDialog()) {
-                    requestDefaultSmsPackageChange();
+                    if (preferences.hasSeenSmsDefaultPackageChangeDialog()) {
+                        requestDefaultSmsPackageChange();
+                    } else {
+                        showDialog(SMS_DEFAULT_PACKAGE_CHANGE);
+                    }
                 } else {
-                    showDialog(SMS_DEFAULT_PACKAGE_CHANGE);
+                    // no default package – running on tablet?
+                    Toast.makeText(this, R.string.error_no_sms_default_package, LENGTH_LONG).show();
                 }
             }
         } else {
