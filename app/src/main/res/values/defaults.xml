@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_server_address">imap.gmail.com:993</string>
+    <string name="default_server_address">imap.example.com:993</string>
     <string name="imap_folder_calllog_default">Call log</string>
     <string name="imap_folder_default">SMS</string>
     <string name="max_items_per_restore_default">500</string>

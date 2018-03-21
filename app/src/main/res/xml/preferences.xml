@@ -286,7 +286,6 @@
                         android:title="@string/ui_server_label"
                         android:summary="@string/ui_server_desc"
                         android:singleLine="true"
-                        android:dialogMessage="@string/ui_server_dialog_msg"
                         android:defaultValue="@string/default_server_address"/>
 
                 <EditTextPreference

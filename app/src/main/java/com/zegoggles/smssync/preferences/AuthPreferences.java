@@ -38,7 +38,7 @@ public class AuthPreferences {
     /**
      * Preference key containing the server address
      */
-    private static final String SERVER_ADDRESS = "server_address";
+    public static final String SERVER_ADDRESS = "server_address";
     /**
      * Preference key containing the server protocol
      */
@@ -208,6 +208,10 @@ public class AuthPreferences {
             credentials = context.getSharedPreferences("credentials", Context.MODE_PRIVATE);
         }
         return credentials;
+    }
+
+    public String getServername() {
+        return preferences.getString(SERVER_ADDRESS, null);
     }
 
     public String getImapUsername() {

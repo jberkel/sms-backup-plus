@@ -10,6 +10,7 @@ import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.Preference.OnPreferenceChangeListener;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import com.zegoggles.smssync.R;
@@ -249,19 +250,29 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         @Override
         public void onResume() {
             super.onResume();
-            updateUsernameLabel(null);
+            updateUsernameLabel(authPreferences.getImapUsername());
+            updateServerNameLabel(authPreferences.getServername());
             updateImapSettings(!authPreferences.useXOAuth());
 
             findPreference(AuthPreferences.SERVER_AUTHENTICATION)
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            final boolean plain = (AuthMode.PLAIN) ==
-                                    AuthMode.valueOf(newValue.toString().toUpperCase(Locale.ENGLISH));
+                            final boolean plain = AuthMode.valueOf(newValue.toString().toUpperCase(Locale.ENGLISH))
+                                    == AuthMode.PLAIN;
                             updateImapSettings(plain);
                             return true;
                         }
                     });
 
+
+            findPreference(AuthPreferences.SERVER_ADDRESS)
+                    .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            updateServerNameLabel(newValue.toString());
+                            return true;
+                        }
+                    });
 
             findPreference(AuthPreferences.IMAP_USER)
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -285,13 +296,17 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         }
 
         private void updateUsernameLabel(String username) {
-            if (username == null) {
-                username = authPreferences.getImapUsername();
-                if (username == null) {
-                    username = getString(R.string.ui_login_label);
-                }
+            if (TextUtils.isEmpty(username)) {
+                username = getString(R.string.ui_login_label);
             }
             findPreference(AuthPreferences.IMAP_USER).setTitle(username);
+        }
+
+        private void updateServerNameLabel(String servername) {
+            if (TextUtils.isEmpty(servername)) {
+                servername = getString(R.string.ui_server_label);
+            }
+            findPreference(AuthPreferences.SERVER_ADDRESS).setTitle(servername);
         }
     }
 

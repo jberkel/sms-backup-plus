@@ -86,7 +86,6 @@
   <string name="ui_password_dialog_msg">The password is stored on this device and is only used to login.</string>
   <string name="ui_server_label">Server address</string>
   <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
-  <string name="ui_server_dialog_msg">imap.example.com:993</string>
 
   <string name="ui_protocol_label">Security</string>
   <string name="ui_protocol_desc">The security protocol of the server.</string>
