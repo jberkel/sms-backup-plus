@@ -193,10 +193,10 @@ issue and attach the following details:
  * Version of Android / brand of phone used
 
 If it is related to backing up / restoring you should also enable the sync log in debug mode
-(Advanced settings) and attach a relevant portion of it. The sync log is located on your SD card as
+(Advanced settings) and attach a relevant portion of it. The sync log is stored as
 `sms_backup_plus.log` (in the directory `Android/data/com.zegoggles.smssync/files`).
 
-👉 1.5.11: new log file path, previously on external storage
+👉 1.5.11: new log file path, previously on external storage / sdcard.
 
 To attach the sync log create a "gist" (https://gist.github.com) and link to the gist you created instead
 of posting the full content in the issue.
@@ -243,13 +243,11 @@ twice.
 #### <a name="faq-backup-automatic-backup">Automatic backup does not work / stopped working</a>
 
 If the automatic backup does not work first make sure that a manually
-initiated backup works as expected. There seem to be some problems with
-automatic backups; a fix will be to change the current backup logic to use
-Android's built-in SyncManager: see github tickets [507][] and [572][].
+initiated backup works as expected. 
 
-This change will be part of the next major version ([1.6.0][], no release date yet).
-
-👉 Added in 1.5.11
+👉 1.5.11 brings many improvements to auto-backup reliability. However some beta users have 
+still reported problems. If the backups don't run automatically try changing the system 
+"Battery optimization" settings for SMS Backup+ to "Don't optimize".
 
 #### <a name="faq-backup-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
 
@@ -320,15 +318,10 @@ It's a Gmail feature, but you can disable it.
 In Gmail settings, set conversation view to `off`
 ([screenshot][converationviewoff]).
 
-<a name="faq-delete"/>
 #### <a name="faq-backup-does-it-sync">When I delete a text locally, will it delete the saved copy on Gmail?</a>
 
 No. SMS Backup+ does not do a "real" sync, once the text has been transferred
 to Gmail it won't get modified or deleted by the app.
-
-#### <a name="faq-backup-sms-as-calls">My messages get backed up as calls!</a>
-
-This might be due to some changes in Samsung's version of Android, see [#287](https://github.com/jberkel/sms-backup-plus/issues/287).
 
 #### <a name="faq-backup-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
 
@@ -387,8 +380,6 @@ next to "SMS Backup+".
 If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
-
-### <a name="faq-device-specific">Device specific questions</a>
 
 ## <a name="beta">Beta testing
 
