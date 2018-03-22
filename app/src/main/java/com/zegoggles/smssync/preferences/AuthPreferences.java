@@ -140,7 +140,8 @@ public class AuthPreferences {
         switch (getAuthMode()) {
             case PLAIN:
                 return !TextUtils.isEmpty(getImapPassword()) &&
-                        !TextUtils.isEmpty(getImapUsername());
+                       !TextUtils.isEmpty(getImapUsername()) &&
+                       !TextUtils.isEmpty(getServerAddress());
             case XOAUTH:
                 return hasOAuth2Tokens();
             default:

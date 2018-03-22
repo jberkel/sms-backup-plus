@@ -10,11 +10,17 @@ import java.util.List;
 import static com.zegoggles.smssync.mail.DataType.Defaults.MAX_SYNCED_DATE;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 
-public class DataTypePreferences {
+public class DataTypePreferences implements SharedPreferences.OnSharedPreferenceChangeListener {
+    public interface DataTypeListener {
+        void onChanged(DataType dataType, DataTypePreferences preferences);
+    }
+
+    private DataTypeListener listener;
     private final SharedPreferences sharedPreferences;
 
     DataTypePreferences(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     public boolean isBackupEnabled(DataType dataType) {
@@ -76,5 +82,24 @@ public class DataTypePreferences {
             editor.remove(type.maxSyncedPreference);
         }
         editor.commit();
+    }
+
+    public void registerDataTypeListener(DataTypeListener listener) {
+        this.listener = listener;
+        if (listener != null) {
+            for (DataType type : DataType.values()) {
+                listener.onChanged(type, this);
+            }
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (listener == null) return;
+        for (DataType type : DataType.values()) {
+            if (type.backupEnabledPreference.equals(key)) {
+                listener.onChanged(type, this);
+            }
+        }
     }
 }

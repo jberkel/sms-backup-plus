@@ -82,21 +82,21 @@
   <string name="ui_login_label">Username</string>
   <string name="ui_login_desc">Your IMAP account/e-mail address.</string>
   <string name="ui_password_label">Password</string>
-  <string name="ui_password_desc">Your IMAP account password. Only used when XOAuth is disabled.</string>
+  <string name="ui_password_desc">Your IMAP account password.</string>
   <string name="ui_password_dialog_msg">The password is stored on this device and is only used to login.</string>
   <string name="ui_server_label">Server address</string>
-  <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
+  <string name="ui_server_desc">The address of the server incl. its port.</string>
 
   <string name="ui_protocol_label">Security</string>
   <string name="ui_protocol_desc">The security protocol of the server.</string>
 
   <string name="ui_protocol_trust_all_certificates_label">Trust all certificates</string>
-  <string name="ui_protocol_trust_all_certificates_desc">Not recommended. Typically set for self-hosted servers.</string>
+  <string name="ui_protocol_trust_all_certificates_desc">Not recommended. Enable for a server without valid certificate.</string>
 
   <string name="ui_authentication_label">Authentication</string>
-  <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOAuth\".</string>
+  <string name="ui_authentication_desc">The authentication method.</string>
   <string name="plain">Plain text</string>
-  <string name="xoauth">XOAuth2</string>
+  <string name="xoauth">XOAuth2 (Gmail)</string>
 
   <string name="ui_imap_folder_label">Gmail label</string>
   <string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
@@ -208,7 +208,8 @@
 
   <string name="gmail_needs_connecting">Tap to connect your Gmail account (required).</string>
   <string name="gmail_already_connected">Connected as %1$s.</string>
-  <string name="custom_imap">Using custom IMAP as %1$s.</string>
+  <string name="custom_imap">IMAP %1$s.</string>
+  <string name="custom_imap_not_configured">IMAP (not configured)</string>
 
   <string name="ui_connected_label">Connect</string>
   <string name="ui_connected_desc">Your account needs to be connected.</string>

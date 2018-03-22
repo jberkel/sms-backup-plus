@@ -285,8 +285,8 @@
                         android:key="server_address"
                         android:title="@string/ui_server_label"
                         android:summary="@string/ui_server_desc"
-                        android:singleLine="true"
-                        android:defaultValue="@string/default_server_address"/>
+                        android:dialogMessage="imap.example.com:993"
+                        android:singleLine="true"/>
 
                 <EditTextPreference
                         android:key="login_user"
@@ -326,6 +326,7 @@
                 android:title="@string/ui_theme_label"
                 android:entries="@array/app_theme_entries"
                 android:entryValues="@array/app_theme_values"
+                android:defaultValue="light"
                 />
     </PreferenceScreen>
 

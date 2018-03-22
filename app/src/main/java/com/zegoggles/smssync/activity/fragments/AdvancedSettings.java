@@ -3,7 +3,6 @@ package com.zegoggles.smssync.activity.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
@@ -23,6 +22,7 @@ import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthMode;
 import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
 
 import java.text.DateFormat;
 import java.util.Arrays;
@@ -95,6 +95,22 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                     return !(Boolean) newValue || checkCallLogPermissions();
                 }
             });
+
+            preferences.getDataTypePreferences().registerDataTypeListener(new DataTypePreferences.DataTypeListener() {
+                @Override
+                public void onChanged(DataType dataType, DataTypePreferences preferences) {
+                    if (dataType == DataType.CALLLOG) {
+                        findPreference(AdvancedSettings.Backup.CallLog.class.getName())
+                                .setEnabled(preferences.isBackupEnabled(dataType));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+            preferences.getDataTypePreferences().registerDataTypeListener(null);
         }
 
         @Override

@@ -135,13 +135,13 @@
   </string-array>
 
   <string-array name="app_theme_entries">
-      <item>@string/dark_theme</item>
-      <item>@string/light_theme</item>
+    <item>@string/light_theme</item>
+    <item>@string/dark_theme</item>
   </string-array>
 
   <string-array name="app_theme_values">
-    <item>dark</item>
     <item>light</item>
+    <item>dark</item>
   </string-array>
 
 </resources>

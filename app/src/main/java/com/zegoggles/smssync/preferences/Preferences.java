@@ -18,6 +18,7 @@ package com.zegoggles.smssync.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -62,6 +63,7 @@ public class Preferences {
 
     private final Context context;
     private final SharedPreferences preferences;
+    private final DataTypePreferences dataTypePreferences;
 
     public Preferences(Context context) {
         this(context.getApplicationContext(),
@@ -71,6 +73,7 @@ public class Preferences {
     public Preferences(Context context, SharedPreferences preferences) {
         this.context = context;
         this.preferences = preferences;
+        this.dataTypePreferences = new DataTypePreferences(preferences);
     }
 
     public enum Keys {
@@ -113,7 +116,7 @@ public class Preferences {
     }
     private static final String CALLLOG_TYPES = "backup_calllog_types";
 
-    public DataTypePreferences getDataTypePreferences() { return new DataTypePreferences(preferences); }
+    public DataTypePreferences getDataTypePreferences() { return dataTypePreferences; }
 
     public boolean isAppLogEnabled() {
         return preferences.getBoolean(APP_LOG.key, false);

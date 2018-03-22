@@ -115,13 +115,15 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
     private String getConnectedSummary(CheckBoxPreference connected) {
         final String username = authPreferences.getOauth2Username();
-        final String imapUsername = authPreferences.getImapUsername();
         if (connected.isEnabled()) {
             return connected.isChecked() && !TextUtils.isEmpty(username) ?
                     getString(R.string.gmail_already_connected, username) :
                     getString(R.string.gmail_needs_connecting);
+        } else if (authPreferences.isLoginInformationSet()) {
+            return getString(R.string.custom_imap,
+                    authPreferences.getImapUsername() + "@" + authPreferences.getServername());
         } else {
-            return getString(R.string.custom_imap, TextUtils.isEmpty(imapUsername)? "" : imapUsername);
+            return getString(R.string.custom_imap_not_configured);
         }
     }
 
