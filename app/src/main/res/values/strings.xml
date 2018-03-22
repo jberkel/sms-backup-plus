@@ -357,11 +357,13 @@
   <string name="donation_unspecified_error">unspecified error: %1$d</string>
 
   <string name="error_no_sms_default_package">No default SMS package set.</string>
-  <string name="ui_dialog_sms_default_package_change_title">Upgrade notice</string>
+  <string name="ui_dialog_sms_default_package_change_title">Required app change</string>
   <string name="ui_dialog_sms_default_package_change_msg">
-    In order to restore your messages on Android KitKat and Lollipop you need
-    to set SMS Backup+ as your SMS app during the restore operation. You will
-    get asked to change it back to the original setting after restoring.
+    You need to set SMS Backup+ as your default SMS app during the restore operation.
+    After completion you will be prompted to change it back to the original setting.
+
+    Any incoming SMS messages during restore will get delivered as usual
+    but won\'t generate notifications.
   </string>
 
   <string name="ui_theme_label">App theme</string>
