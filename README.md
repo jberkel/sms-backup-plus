@@ -33,16 +33,16 @@ But if you find the app useful and want to support the development of it you can
 from within the app itself, using the secure Play Store payment mechanism.
 
 To get updates more frequently join the [beta programme](#beta) or download the latest beta manually
-from [releases][].
+from [Github releases][].
 
-Also make sure to read the [Privacy Policy][privacy-policy].
+Also make sure to read the [Privacy Policy][].
 
-## <a name="usage">Usage</a>
+## Usage
 
 ### First steps
 
-You need to have an IMAP account or a Gmail account with IMAP enabled. See the
-[Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
+You need to have an IMAP account or a Gmail account with IMAP enabled. See
+[Use IMAP to check Gmail on other email clients][] to learn how to enable IMAP for your Gmail
 account or look at this [screenshot][imapenableshot].
 
 After starting SMS Backup+, tap on "Connect" to start the authorization process.
@@ -91,9 +91,9 @@ on it, SMS Backup+ will skip the restore of already existing messages.
 
 Before the restore can begin you will need to confirm the change of the
 default SMS app. This step is required to get further permissions to write
-messages.
+messages (see also the corresponding [FAQ entry](#faq-restore-default-app)).
 
-### <a name="call-log-support">Call log support</a>
+### Call log support
 
 SMS Backup+ can also backup and restore your call logs. It stores all calls using a
 separate label (defaults to `Call log`, but can be changed in Advanced
@@ -126,7 +126,7 @@ included in the latest version. If you really need it you can manually install a
 ### <a name="RCS-support">Rich Communication Services</a>
 
 [Rich Communication Services](https://en.wikipedia.org/wiki/Rich_Communication_Services) is currently not supported, nor are there any plans to support it.
-Rich Communication Services is also known as RCS, Advanced Messaging, Advanded Communictaions, joyn or Message+.
+Rich Communication Services is also known as _RCS_, _Advanced Messaging_, _Advanced Communications_, _joyn_ or _Message+_.
 
 ### <a name="3rdparty">3rd party app integration</a>
 
@@ -168,7 +168,6 @@ automatically be created the first time you're performing a backup.
     * [The app saves only 100 SMS/MMS per contact!](#faq-backup-gmail-100)
     * [In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.](#faq-backup-threading)
     * [When I delete a text locally, will it delete the saved copy on Gmail?](#faq-backup-does-it-sync)
-    * [My messages get backed up as calls!](#faq-backup-sms-as-calls)
     * [I get the error "Trust anchor for certification path not found"](#faq-backup-untrusted-certificate)
   * [Restore questions](#faq-restore)
     * [Why does SMS Backup+ ask to become the default SMS app?](#faq-restore-default-app)
@@ -179,14 +178,12 @@ automatically be created the first time you're performing a backup.
   * [Authentication questions](#faq-authentication)
     * [How can I revoke the app's access to my Gmail account?](#faq-authentication-revoke-access)
     * [When connecting, I get 'Could not obtain request token...'](#faq-authentication-request-token)
-  * [Device specific questions](#faq-device-specific)
-    * [I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!](#faq-device-specific-droidx-received)
 
 ### <a name="faq-general">General questions</a>
 
 #### <a name="faq-general-file-bug-report">I want to file a bug report, what should I do?</a>
 
-First check [github issues][] to see if the bug has already been reported. If not, create a new
+First check [Github issues][] to see if the bug has already been reported. If not, create a new
 issue and attach the following details:
 
  * Version of SMS Backup+ used
@@ -198,10 +195,10 @@ If it is related to backing up / restoring you should also enable the sync log i
 
 👉 1.5.11: new log file path, previously on external storage / sdcard.
 
-To attach the sync log create a "gist" (https://gist.github.com) and link to the gist you created instead
+To attach the sync log create a "[gist](https://gist.github.com)" and link to the gist you created instead
 of posting the full content in the issue.
 
-It might also be worth to install the current <a href="#beta">beta</a> version of SMS Backup+ to
+It might also be worth to install the current [beta](#beta) version of SMS Backup+ to
 make sure the bug has not already been fixed.
 
 #### <a name="faq-general-can-you-add-feature-x">Can you add feature X?</a>
@@ -383,16 +380,16 @@ displaying correctly. The authentication process won't work otherwise.
 
 ## <a name="beta">Beta testing
 
-If you want to help beta testing, follow the instructions [here][beta-link]. You will be asked to opt in
+If you want to help beta testing, visit the [Play Store beta page]. You will be asked to opt in
 to the beta program (you can leave it at any time).
 
 Once opted in your device will automatically update to the latest beta which might have bug fixes
 and features not found in the currently released version.
 
-Alternatively you can download an APK and install it manually from [Github releases][releases]
+Alternatively you can download an APK and install it manually from [Github releases][]
 (however, you won't get automatic updates this way).
 
-There is a also a [community][] on Google+ where SMS Backup+ is discussed, it is no longer required
+There is a also a [Google+ community][] where SMS Backup+ is discussed, it is no longer required
 to join it in order to get automatic updates.
 
 ## <a name="contributing">Contributing</a>
@@ -412,7 +409,7 @@ translate the following file, then send the translated version via email:
   * [strings.xml][]
 
 However, if you're already familiar with Git I'd prefer if you cloned the
-repository and send me a [pull request][].
+repository and send me a [pull request][About pull requests].
 
 ## <a name="credits">Credits</a>
 
@@ -451,34 +448,32 @@ repository and send me a [pull request][].
 
 ![SMS Backup+ material][smsbackup_screenshot_material]
 
-## <a name="license">License</a>
+## License
 
 This application is released under the terms of the [Apache License, Version 2.0][].
 
-[privacy-policy]: https://jberkel.github.io/sms-backup-plus/privacy-policy/
-[original issue list]: http://code.google.com/p/android-sms/issues/list
-[github issues]: http://github.com/jberkel/sms-backup-plus/issues
-[f-droid]: https://f-droid.org/repository/browse/?fdid=com.zegoggles.smssync
-[PlayLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
-[Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
-[smsbackup_screenshot_holo]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
-[smsbackup_screenshot_material]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_material_cropped.png
+[Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
+[Build Status SVG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.svg?branch=master
+
+[Use IMAP to check Gmail on other email clients]: https://support.google.com/mail/answer/7126229?hl=en
 [converationviewoff]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/soundcloud.com-mail-settings-jan-soundcloud.com.jpg
-[smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
 [imapenableshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/enable_imap.png
 [showimap]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/show_imap.png
 [strings.xml]: https://github.com/jberkel/sms-backup-plus/raw/master/app/src/main/res/values/strings.xml
-[Tasker]: http://tasker.dinglisch.net/
+[Tasker]: https://tasker.joaoapps.com/
 [Authorized Access to your Google Account]: https://security.google.com/settings/security/permissions
-[community]: https://plus.google.com/communities/113290889178902750997
-[beta-link]: https://play.google.com/apps/testing/com.zegoggles.smssync
-[releases]: https://github.com/jberkel/sms-backup-plus/releases
-[pull request]: https://help.github.com/articles/about-pull-requests/
-[Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
-[Build Status SVG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.svg?branch=master
+[Google+ community]: https://plus.google.com/communities/113290889178902750997
+[Play Store beta page]: https://play.google.com/apps/testing/com.zegoggles.smssync
+[Github releases]: https://github.com/jberkel/sms-backup-plus/releases
+[Github issues]: http://github.com/jberkel/sms-backup-plus/issues
+[About pull requests]: https://help.github.com/articles/about-pull-requests/
+
+[smsbackup_screenshot_holo]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
+[smsbackup_screenshot_material]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_material_cropped.png
+
 [Apache License, Version 2.0]: http://www.apache.org/licenses/LICENSE-2.0.html
-[507]: https://github.com/jberkel/sms-backup-plus/issues/507
+[Privacy Policy]: https://jberkel.github.io/sms-backup-plus/privacy-policy/
+
 [516]: https://github.com/jberkel/sms-backup-plus/issues/516
 [564]: https://github.com/jberkel/sms-backup-plus/issues/564
-[572]: https://github.com/jberkel/sms-backup-plus/issues/572
 [1.6.0]: https://github.com/jberkel/sms-backup-plus/milestones/1.6.0
