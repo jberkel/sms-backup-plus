@@ -91,7 +91,7 @@
   <string name="ui_protocol_desc">The security protocol of the server.</string>
 
   <string name="ui_protocol_trust_all_certificates_label">Trust all certificates</string>
-  <string name="ui_protocol_trust_all_certificates_desc">Not recommended. Enable for a server without valid certificate.</string>
+  <string name="ui_protocol_trust_all_certificates_desc">Not recommended. Enable for a server with a self-signed certificate.</string>
 
   <string name="ui_authentication_label">Authentication</string>
   <string name="ui_authentication_desc">The authentication method.</string>
@@ -315,7 +315,7 @@
   <string name="app_log_empty">Log is empty. Enable it in \"Advanced settings\".</string>
 
   <string name="pref_app_log">Sync log</string>
-  <string name="pref_app_log_enabled">Log is stored on SD card as \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_enabled">Log is stored as \"sms_backup_plus.log\".</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
   <string name="pref_app_log_debug">Extra debug information</string>
