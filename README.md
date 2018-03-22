@@ -5,16 +5,14 @@
     <img alt="Get it on F-Droid" src="https://jberkel.github.io/sms-backup-plus/assets/img/f-droid-badge.svg" height="80pt"/>
 </a>
 
-This is a fork of the Android backup tool
-[SMS Backup](http://code.google.com/p/android-sms), where development has
-stopped a while ago. It uses Gmail to perform SMS, MMS and call log backups over
+This is a fork of the now defunct Android backup tool
+[SMS Backup](http://code.google.com/p/android-sms). It uses Gmail/IMAP to perform SMS, MMS and call log backups over
 the network.
 
-Main differences / improvements:
+Main feature/improvements:
 
-  * New restore feature. SMS stored on Gmail can be transferred back to the
-  phone. This even works for users who have already created their backups with
-  older versions of SMS Backup. Note: MMS are currently not restored.
+  * Restore. SMS stored on Gmail can be transferred back to the
+  phone. ⚠️ MMS are not restored.
 
   * XOAuth2: SMS Backup+ will never ask you for your Gmail password. Instead it
   uses [XOAuth2](https://developers.google.com/gmail/imap/xoauth2-protocol) to get access to your
@@ -25,11 +23,9 @@ Main differences / improvements:
   * Call log backup (since `1.2`), with Google Calendar integration (since
   `1.3.`) and restore (since `1.4`).
 
-  * Batch size limits removed.
-
   * Works with any IMAP server (but defaults to Gmail).
 
-Tested with Android 2.3.x - 8.0.x.
+Tested with Android 2.3.x - 8.1.x.
 
 SMS Backup+ is available for free in the Google Play Store, there will never be a pro / paid version.
 
@@ -49,19 +45,18 @@ You need to have an IMAP account or a Gmail account with IMAP enabled. See the
 [Enabling IMAP in Gmail][] help page to learn how to enable IMAP for your Gmail
 account or look at this [screenshot][imapenableshot].
 
-After starting SMS Backup+, tap on the "Connect" check box to start the
-authorization process.
+After starting SMS Backup+, tap on "Connect" to start the authorization process.
 
-On newer Android devices you'll be presented with a list of Gmail accounts to
-be used for the backup. You'll need to give SMSBackup+ the permission to access your
-emails.
+👉 1.5.11 only: You will first have give SMS Backup+ the permission to access your account, displayed
+as "Allow SMS Backup+ to access your contacts?".
 
-On older devices a browser window will open where Gmail prompts you to log in and asks you to give
-SMS Backup+ permission to access your emails.
+If you consent you have to confirm the Gmail account to be used for the backup.
 
-After selecting "Grant Access" SMS Backup+ will become visible again, the
-checkbox should now be checked, indicating that the authorization process was
-successful.
+If you don't have a Google account registered on your device a browser window
+will appear to perform a web-based authentication as fallback.
+
+After completing the authorization process the "Connect"
+checkbox should be checked, indicating success.
 
 ### Initial backup
 
@@ -80,12 +75,23 @@ again to Gmail. Please note that any messages arrived after you last
 uninstalled SMS Backup and this initial backup won't ever be backed up to
 Gmail.
 
+👉 1.5.11 only: Before the backup starts you will have to grant "send and
+view" permissions for SMS.
+
 ### Restoring
 
 If you wish to restore messages back to your phone tap "Restore". By default
 all messages stored on Gmail will be restored (this can be changed in "Advanced
-Settings"). You can safely restore to a phone which has already message stored
+Settings").
+
+👉 1.5.11: Default changed to 500 messages.
+
+You can safely restore to a phone which has already message stored
 on it, SMS Backup+ will skip the restore of already existing messages.
+
+Before the restore can begin you will need to confirm the change of the
+default SMS app. This step is required to get further permissions to write
+messages.
 
 ### <a name="call-log-support">Call log support</a>
 
@@ -108,6 +114,8 @@ sync` in Advanced settings, and make sure you have selected a calendar to sync
 with.
 
 If you only want to backup specific call types you can do so as well.
+
+👉 1.5.11: Call log backup is disabled by default.
 
 ### <a name="whatsapp-support">WhatsApp support</a>
 
@@ -134,6 +142,9 @@ Authentication to Plain text in "Advanced Settings - IMAP server settings",
 then change the server address / username and password accordingly. Make sure
 to set security to "SSL (optional / trust all)" if the IMAP server you're connecting to has
 a self-signed certificate ("Unknown certificate" error during backup).
+
+👉 1.5.11: security settings have been simplified. Select TLS and check
+"Trust all certificates" if using a self-signed certificate.
 
 Also note that Gmail labels correspond to IMAP folders, which will
 automatically be created the first time you're performing a backup.
@@ -185,6 +196,8 @@ If it is related to backing up / restoring you should also enable the sync log i
 (Advanced settings) and attach a relevant portion of it. The sync log is located on your SD card as
 `sms_backup_plus.log` (in the directory `Android/data/com.zegoggles.smssync/files`).
 
+👉 1.5.11: new log file path, previously on external storage
+
 To attach the sync log create a "gist" (https://gist.github.com) and link to the gist you created instead
 of posting the full content in the issue.
 
@@ -216,6 +229,9 @@ course be addressed.
   * Google Play billing service - used for in-app donations
   * Run at startup - used to enable automatic backups after reboot
 
+👉 1.5.11 introduces runtime permissions (Android 6.0+) which means that you only grant the permissions
+for the features you actually use, after installing the application.
+
 #### <a name="faq-general-package-not-signed">When updating the app I get 'Package file was not signed correctly'</a>
 
 Try uninstalling the app, then installing the new version. Make sure to select
@@ -232,6 +248,8 @@ automatic backups; a fix will be to change the current backup logic to use
 Android's built-in SyncManager: see github tickets [507][] and [572][].
 
 This change will be part of the next major version ([1.6.0][], no release date yet).
+
+👉 Added in 1.5.11
 
 #### <a name="faq-backup-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
 
@@ -321,6 +339,7 @@ reasons why this might happen:
   * You use an IMAP server with an expired / self-signed certificate
 
 You can try to set the IMAP Server Setting `Security` to `SSL (optional / trust all)`.
+👉 1.5.11: renamed to "Trust all certificates"
 
 ### <a name="faq-restore">Restore questions</a>
 
@@ -356,15 +375,11 @@ only keep a few hundred or so messages in the SMS label.
 Next time you restore it will only restore those messages and it will be a lot
 faster.
 
-#### <a name="faq-restore-reversed">The timestamps of the restored messages is wrong / the messages are not restored in the right order</a>
-
-This is a known bug: [#94](https://github.com/jberkel/sms-backup-plus/issues/94)
-
 ### <a name="faq-authentication">Authentication questions</a>
 
 #### <a name="faq-authentication-revoke-access">How can I revoke the app's access to my Gmail account?</a>
 
-Go to [Authorized Access to your Google Account][] and select "Revoke Access"
+Go to [Authorized Access to your Google Account][] and select "Remove Access"
 next to "SMS Backup+".
 
 #### <a name="faq-authentication-request-token">When connecting, I get 'Could not obtain request token...'</a>
@@ -374,12 +389,6 @@ double-check that your time zone settings are correct, and that the local time i
 displaying correctly. The authentication process won't work otherwise.
 
 ### <a name="faq-device-specific">Device specific questions</a>
-
-#### <a name="faq-device-specific-droidx-received">I'm using a Motorola DROID X/2, and it does not back up incoming messages, only sent!</a>
-
-It's a known SMS bug in the latest OTA 2.2 update ([details][droidbug]). As a workaround
-you can try installing [SMS Time fix][] ([apk][smstimefixzip]) and set "Adjustment Method" to "Use Phone's Time".
-
 
 ## <a name="beta">Beta testing
 
@@ -401,10 +410,8 @@ to join it in order to get automatic updates.
 
     $ git clone https://github.com/jberkel/sms-backup-plus.git
     $ cd sms-backup-plus
-    $ ./gradlew assembleRelease
-    $ adb install app/build/outputs/apk/app-release-unsigned.apk
-
-I've imported some relevant issues from the [original issue list][] to [github issues][].
+    $ ./gradlew assembleDebug
+    $ adb install app/build/outputs/apk/app-debug.apk
 
 ### <a name="translating">Translating the UI</a>
 
@@ -445,7 +452,7 @@ repository and send me a [pull request][].
 
 ## <a name="screenhots">Screenshots</a>
 
-![SMS Backup+ screenshot][smsbackupshot]
+![SMS Backup+ holo][smsbackup_screenshot_holo] ![SMS Backup+ material][smsbackup_screenshot_material]
 
 ## <a name="license">License</a>
 
@@ -457,9 +464,8 @@ This application is released under the terms of the [Apache License, Version 2.0
 [f-droid]: https://f-droid.org/repository/browse/?fdid=com.zegoggles.smssync
 [PlayLink]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [Enabling IMAP in Gmail]: http://mail.google.com/support/bin/answer.py?hl=en&answer=77695
-[smsbackupshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
-[droidbug]: http://www.mydigitallife.info/2010/09/27/motorola-droid-x-froyo-text-messaging-bug-rectified-via-sms-time-fix/
-[SMS Time fix]: http://www.appbrain.com/app/sms-time-fix/com.mattprecious.smsfix
+[smsbackup_screenshot_holo]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_holo_cropped.png
+[smsbackup_screenshot_material]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/smsbackup_material_cropped.png
 [converationviewoff]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/soundcloud.com-mail-settings-jan-soundcloud.com.jpg
 [smstimefixzip]: https://supportforums.motorola.com/servlet/JiveServlet/download/269690-40815/sms-time-fix.zip
 [imapenableshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/enable_imap.png
