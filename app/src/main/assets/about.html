@@ -1,31 +1,30 @@
 <html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="about.css"/>
+  </head>
+
   <body>
-    <h2 style="margin-bottom: -14px">
-      SMS Backup+ 1.5.11
-    </h2>
     <p>
-      <small>Author: Jan Berkel (and many others, see below)</small>
+      <small>Author: <a href="https://github.com/jberkel/">Jan Berkel</a> (and many others, see credits below)</small>
     </p>
+
     <p>
       Automatically backs up your SMS/MMS and call logs to Gmail or any other
       IMAP server. Can also restore SMS / call logs after they have been backed up.
     </p>
 
     <h3>New in this release:</h3>
-    <ul>
+    <ul class="news">
       <li>Runtime permissions on Android 6.0+. It is recommended to run a manual backup after upgrade.</li>
-      <li>Improved backup schedule reliability (thanks <a href="https://github.com/MadsAndreasen">Mads Andreasen<a> for initial JobManager implementation)</li>
-      <li>Replaced WebView auth with browser</li>
+      <li>Improved auto backup reliability (thanks <a href="https://github.com/MadsAndreasen">Mads Andreasen</a> for initial JobManager implementation)</li>
+      <li>Fixed browser authentication</li>
       <li>Improved restore experience (thanks <a href="https://github.com/angryziber">Anton Keks/angryziber</a>)</li>
       <li>Modernized UI</li>
       <li>Updated notification images</li>
       <li>Updated Korean translation</li>
     </ul>
-
-     <h3>Recent release history</h3>
-      <ul>
-        <li>1.5.10: New app icon (#580)</li>
-      </ul>
+    <p>See <a href="https://github.com/jberkel/sms-backup-plus/raw/master/CHANGES">changes on github</a>
+      for the full list.</p>
 
     <h3>Information</h3>
     <p>
@@ -36,20 +35,14 @@
       reporting a bug.
     </p>
 
-
-    <p>See <a
-      href="https://github.com/jberkel/sms-backup-plus/raw/master/CHANGES">changes
-      on github</a> for the full list.</p>
-
-    <h3>Thanks</h3>
+    <h3>Credits</h3>
     <p>Many thanks to:</p>
-    <ul>
-      <li> <a href="https://github.com/bjdodson">Ben Dodson</a> (Contacts 2.0 + MMS support) </li>
-      <li> <a href="https://github.com/dicer">Felix Knecht</a> Call log backup code </li>
-      <li> <a href="http://studer.tv/">Christoph Studer</a>, the original author of SMS Backup </li>
-      <li> The <a href="https://github.com/k9mail/k-9/">k9mail</a> project for IMAP code </li>
-      <li> The <a href="https://github.com/mttkay/signpost">signpost</a> project for OAuth support </li>
-      <li> Shimon Simon (new icon design) </li>
+    <ul class="thanks">
+      <li><a href="https://github.com/bjdodson">Ben Dodson</a> (Contacts 2.0 + MMS support)</li>
+      <li><a href="https://github.com/dicer">Felix Knecht</a> Call log backup code </li>
+      <li><a href="http://studer.tv/">Christoph Studer</a>, the original author of SMS Backup</li>
+      <li>The <a href="https://github.com/k9mail/k-9/">k9mail</a> project for IMAP code</li>
+      <li>Shimon Simon (new icon design) </li>
 
       <li>
         All translators: Chinese (<a href="http://bbs.goapk.com">bbs.goapk.com</a>,
@@ -82,14 +75,22 @@
 
     <h3>License</h3>
     <p>This application is released under the terms of the
-     <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License, Version 2.0</a>.
-     <ul>
+      <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License, Version 2.0</a>. As stated in the license,
+      please include a link to the original project and license if you use any of code.
+    </p>
+    <ul class="license">
         <li>
           <a href="https://github.com/jberkel/sms-backup-plus/raw/master/NOTICE">NOTICE</a>
         </li>
         <li>
           <a href="https://github.com/jberkel/sms-backup-plus/raw/master/COPYING">COPYING</a>
        </li>
-     </ul>
+    </ul>
+
+    <h3>Privacy Policy</h3>
+    <p>
+      To function properly SMS Backup+ needs to have full access to various types of private data stored on your phone as
+      well as your email account. Take a moment to read the <a href="https://jberkel.github.io/sms-backup-plus/privacy-policy/">Privacy Policy</a>.
+    </p>
   </body>
 </html>

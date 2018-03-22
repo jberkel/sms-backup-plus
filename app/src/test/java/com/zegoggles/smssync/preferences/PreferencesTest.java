@@ -1,7 +1,6 @@
 package com.zegoggles.smssync.preferences;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -41,14 +40,6 @@ public class PreferencesTest {
     @Test public void shouldTestForFirstBackupCallLog() throws Exception {
         preferences.getDataTypePreferences().setMaxSyncedDate(CALLLOG, 1234);
         assertThat(preferences.isFirstBackup()).isFalse();
-    }
-
-    @Ignore @Test public void shouldGetVersionName() throws Exception {
-        assertThat(preferences.getVersionName()).matches("\\d+\\.\\d+\\.\\d+(-\\w+)?");
-    }
-
-    @Test public void shouldGetVersionCode() throws Exception {
-        assertThat(preferences.getVersionCode()).isEqualTo(0);
     }
 
     @Test public void shouldTestOnSDCARD() throws Exception {

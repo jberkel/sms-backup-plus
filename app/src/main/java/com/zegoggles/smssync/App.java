@@ -18,11 +18,15 @@ package com.zegoggles.smssync;
 
 import android.app.Application;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.fsck.k9.mail.K9MailLib;
 import com.squareup.otto.Bus;
@@ -102,6 +106,29 @@ public class App extends Application {
 
     public static void post(Object event) {
         bus.post(event);
+    }
+
+    @Nullable
+    public static String getVersionName(Context context) {
+        PackageInfo pInfo;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, null, e);
+            return null;
+        }
+    }
+
+    public static int getVersionCode(Context context) {
+        PackageInfo pInfo;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, null, e);
+            return -1;
+        }
     }
 
     public static void unregister(Object listener) {

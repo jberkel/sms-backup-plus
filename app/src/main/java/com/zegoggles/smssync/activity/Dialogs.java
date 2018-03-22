@@ -162,7 +162,7 @@ public class Dialogs {
             return new AlertDialog.Builder(getContext())
                 .setPositiveButton(ok, null)
                 .setIcon(R.drawable.ic_sms_backup)
-                .setTitle(R.string.menu_info)
+                .setTitle(getString(R.string.app_name) + " " + App.getVersionName(getContext()))
                 .setView(contentView)
                 .create();
         }

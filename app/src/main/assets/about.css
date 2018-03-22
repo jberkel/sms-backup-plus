@@ -1,0 +1,8 @@
+ul.news li {
+    margin-bottom: 0.6em;
+}
+
+a {
+    color: #e93d2f; /* envelope_light */
+    text-decoration: none;
+}

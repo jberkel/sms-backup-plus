@@ -30,10 +30,10 @@ import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.MimeUtility;
+import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
-import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.MarkAsReadTypes;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.utils.ThreadHelper;
@@ -84,7 +84,7 @@ public class MessageConverter {
         mMessageGenerator = new MessageGenerator(mContext,
                 new Address(userEmail),
                 preferences.getEmailAddressStyle(),
-                new HeaderGenerator(referenceUid, preferences.getVersionCode()),
+                new HeaderGenerator(referenceUid, App.getVersionCode(mContext)),
                 mPersonLookup,
                 preferences.getMailSubjectPrefix(),
                 allowedIds,

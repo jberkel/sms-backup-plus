@@ -22,7 +22,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.contacts.ContactGroup;
@@ -61,7 +60,6 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 public class Preferences {
     private static final int DEFAULT_APP_THEME = R.style.SMSBackupPlusTheme_Light;
 
-    private static final String ERROR = "error";
     private final Context context;
     private final SharedPreferences preferences;
 
@@ -269,28 +267,6 @@ public class Preferences {
         return preferences.getBoolean(CONFIRM_ACTION.key, false);
     }
 
-    @Nullable public String getVersionName() {
-        PackageInfo pInfo;
-        try {
-            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            return pInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, ERROR, e);
-            return null;
-        }
-    }
-
-    public int getVersionCode() {
-        PackageInfo pInfo;
-        try {
-            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            return pInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, ERROR, e);
-            return -1;
-        }
-    }
-
     public boolean isInstalledOnSDCard() {
         PackageInfo pInfo;
         try {
@@ -300,7 +276,7 @@ public class Preferences {
 
             return (pInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, ERROR, e);
+            Log.e(TAG, "error", e);
             return false;
         }
     }
@@ -324,7 +300,7 @@ public class Preferences {
                     PackageManager.GET_META_DATA);
             code = pInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, ERROR, e);
+            Log.e(TAG, "error", e);
             code = -1;
         }
 
