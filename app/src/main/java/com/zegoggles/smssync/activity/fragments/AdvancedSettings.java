@@ -1,10 +1,9 @@
 package com.zegoggles.smssync.activity.fragments;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
@@ -13,7 +12,9 @@ import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
@@ -22,13 +23,13 @@ import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthMode;
 import com.zegoggles.smssync.preferences.AuthPreferences;
-import com.zegoggles.smssync.utils.ListPreferenceHelper;
 
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.WRITE_CALENDAR;
@@ -49,6 +50,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_S
 import static com.zegoggles.smssync.utils.ListPreferenceHelper.initListPreference;
 
 public class AdvancedSettings extends SMSBackupPreferenceFragment {
+
     public static class Main extends AdvancedSettings {
         @Override
         public void onResume() {
@@ -58,6 +60,15 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
     }
 
     public static class Backup extends AdvancedSettings {
+        private static final int REQUEST_CALL_LOG_PERMISSIONS = 0;
+        private CheckBoxPreference callLogPreference;
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            callLogPreference = (CheckBoxPreference) findPreference(CALLLOG.backupEnabledPreference);
+        }
+
         @Override
         public void onResume() {
             super.onResume();
@@ -76,10 +87,35 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                     }
                 });
 
-            addPreferenceListener(
-                DataType.SMS.backupEnabledPreference,
-                DataType.MMS.backupEnabledPreference,
-                DataType.CALLLOG.backupEnabledPreference);
+            addPreferenceListener(DataType.SMS.backupEnabledPreference, DataType.MMS.backupEnabledPreference);
+
+            callLogPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    return !(Boolean) newValue || checkCallLogPermissions();
+                }
+            });
+        }
+
+        @Override
+        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            if (requestCode == REQUEST_CALL_LOG_PERMISSIONS && allGranted(grantResults)) {
+                callLogPreference.setChecked(true);
+                App.post(new AutoBackupSettingsChangedEvent());
+            }
+        }
+
+        private boolean checkCallLogPermissions() {
+            final Set<String> requiredPermissions = CALLLOG.checkPermissions(getContext());
+
+            if (requiredPermissions.isEmpty()) {
+                return true;
+            } else {
+                requestPermissions(requiredPermissions.toArray(new String[requiredPermissions.size()]),
+                    REQUEST_CALL_LOG_PERMISSIONS);
+                return false;
+            }
         }
 
         private void updateImapFolderLabelFromPref() {

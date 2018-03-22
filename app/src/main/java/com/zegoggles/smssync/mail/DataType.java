@@ -1,11 +1,17 @@
 package com.zegoggles.smssync.mail;
 
+import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import com.zegoggles.smssync.R;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static android.Manifest.permission.READ_CALL_LOG;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_SMS;
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
 
 public enum DataType {
     SMS     (R.string.sms,     R.string.sms_with_field,  PreferenceKeys.IMAP_FOLDER,         Defaults.SMS_FOLDER,     PreferenceKeys.BACKUP_SMS,      Defaults.SMS_BACKUP_ENABLED,     PreferenceKeys.RESTORE_SMS,     Defaults.SMS_RESTORE_ENABLED,     PreferenceKeys.MAX_SYNCED_DATE_SMS, new String[]{READ_SMS, READ_CONTACTS}),
@@ -46,6 +52,16 @@ public enum DataType {
         this.restoreEnabledByDefault = restoreEnabledByDefault;
         this.maxSyncedPreference = maxSyncedPreference;
         this.requiredPermissions = requiredPermissions;
+    }
+
+    public Set<String> checkPermissions(Context context) {
+        Set<String> missing = new HashSet<String>();
+        for (String permission : requiredPermissions) {
+            if (ContextCompat.checkSelfPermission(context, permission) == PERMISSION_DENIED) {
+                missing.add(permission);
+            }
+        }
+        return missing;
     }
 
     public static class PreferenceKeys {

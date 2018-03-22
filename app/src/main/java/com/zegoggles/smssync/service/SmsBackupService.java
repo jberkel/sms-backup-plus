@@ -141,11 +141,7 @@ public class SmsBackupService extends ServiceBase {
     private void checkPermissions(EnumSet<DataType> enabledTypes) throws MissingPermissionException {
         Set<String> missing = new HashSet<String>();
         for (DataType dataType : enabledTypes) {
-            for (String permission : dataType.requiredPermissions) {
-                if (ContextCompat.checkSelfPermission(this, permission) == PERMISSION_DENIED) {
-                    missing.add(permission);
-                }
-            }
+            missing.addAll(dataType.checkPermissions(this));
         }
         if (!missing.isEmpty()) {
             throw new MissingPermissionException(missing);

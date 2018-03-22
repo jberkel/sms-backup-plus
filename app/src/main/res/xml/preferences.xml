@@ -96,7 +96,7 @@
                     android:key="backup_calllog"
                     android:title="@string/ui_backup_calllog_label"
                     android:summary="@string/ui_backup_calllog_desc"
-                    android:defaultValue="true"/>
+                    android:defaultValue="false"/>
 
             <PreferenceScreen
                     android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup$CallLog"
