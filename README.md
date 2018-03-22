@@ -243,10 +243,10 @@ twice.
 #### <a name="faq-backup-automatic-backup">Automatic backup does not work / stopped working</a>
 
 If the automatic backup does not work first make sure that a manually
-initiated backup works as expected. 
+initiated backup works as expected.
 
-👉 1.5.11 brings many improvements to auto-backup reliability. However some beta users have 
-still reported problems. If the backups don't run automatically try changing the system 
+👉 1.5.11 brings many improvements to auto-backup reliability. However some beta users have
+still reported problems. If the backups don't run automatically try changing the system
 "Battery optimization" settings for SMS Backup+ to "Don't optimize".
 
 #### <a name="faq-backup-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
@@ -443,7 +443,13 @@ repository and send me a [pull request][].
 
 ## <a name="screenhots">Screenshots</a>
 
-![SMS Backup+ holo][smsbackup_screenshot_holo] ![SMS Backup+ material][smsbackup_screenshot_material]
+### 1.5.10
+
+![SMS Backup+ holo][smsbackup_screenshot_holo]
+
+### 1.5.11-BETA
+
+![SMS Backup+ material][smsbackup_screenshot_material]
 
 ## <a name="license">License</a>
 
