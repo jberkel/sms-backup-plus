@@ -4,7 +4,7 @@
   * Clean up security settings for IMAP servers (#839)
   * Implemented runtime permissions for Android 6.0+
   * Added dark/light theme switcher
-  * Modernized UI (Material/AppCompat)
+  * Modernized UI (Material/AppCompat), added adaptive icon
   * Simplify IMAP search logic to prevent timeouts
   * Retry connection timeouts more aggressively
   * Call logs: support rejected / voicemail
