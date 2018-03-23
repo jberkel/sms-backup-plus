@@ -389,7 +389,7 @@ displaying correctly. The authentication process won't work otherwise.
 ## <a name="beta">Beta testing
 
 If you want to help beta testing, visit the [Play Store beta page]. You will be asked to opt in
-to the beta program (you can leave it at any time).
+to the beta program (you can leave it anytime).
 
 Once opted in your device will automatically update to the latest beta which might have bug fixes
 and features not found in the currently released version.
@@ -419,7 +419,7 @@ repository and submit a [pull request][About pull requests].
 
 ## <a name="credits">Credits</a>
 
-  * [Christoph Studer](http://studer.tv/) Original author of SMS Backup
+  * [Christoph Studer](http://studer.tv/) Original author of SMS Backup (2009-2010)
   * [Ben Dodson](https://github.com/bjdodson) - Contacts 2.0 / MMS support
   * [Felix Knecht](https://github.com/dicer) - Call log backup code
   * [Michael Scharfstein](https://github.com/smike) - Call log calendar ICS support
@@ -438,7 +438,7 @@ repository and submit a [pull request][About pull requests].
   * Nemanja Bračko - Serbian translation
   * Markus Osanger - German translation
   * Dimitris / Mazin Hussein - Greek translation
-  * Yunsu Choi - Korean translation
+  * Yunsu Choi, [Taegil Bae](https://github.com/demokritos) - Korean translation
   * Javier Pico - Galician translation
   * Ferran Rius - Catalan translation
   * [Mads Andreasen](https://github.com/MadsAndreasen) - Danish translation, initial JobDispatcher code
