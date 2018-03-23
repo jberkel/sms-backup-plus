@@ -9,7 +9,7 @@ This is a fork of the now defunct Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms). It uses Gmail/IMAP to perform SMS, MMS and call log backups over
 the network.
 
-Main feature/improvements:
+Main features/improvements:
 
   * Restore. SMS/Call logs stored on Gmail can be transferred back to the
   phone. ⚠️ MMS are not restored.
@@ -18,14 +18,14 @@ Main feature/improvements:
   uses [XOAuth2](https://developers.google.com/gmail/imap/xoauth2-protocol) to get access to your
   data. You can revoke the access rights at any time.
 
-  * MMS backup support (since `1.1`), only available on Android 2.x
+  * MMS backup support (added in version 1.1)
 
-  * Call log backup (since `1.2`), with Google Calendar integration (since
-  `1.3.`) and restore (since `1.4`).
+  * Call log backup (version 1.2), with Google Calendar integration
+  (1.3) and restore (1.4).
 
   * Works with any IMAP server (but defaults to Gmail).
 
-Tested with Android 2.3.x - 8.1.x.
+Tested with Android 2.3.x (Gingerbread) - 8.1.x. (Oreo)
 
 SMS Backup+ is available for free in the [Google Play Store][] and on [F-Droid][],
 there will never be a pro / paid version.
@@ -356,7 +356,8 @@ However SMS Backup+ is open source; patches are more than welcome.
 
 #### <a name="faq-restore-many-messages">I'm not able to restore all of my (insert huge number) messages!</a>
 
-SMS Backup has not been designed to restore many thousands of messages. See the question "[How do I restore the last N weeks / N messages?](#faq-restore-partial)" for a way around that.
+SMS Backup has not been designed to restore many thousands of messages. See the
+question "[How do I restore the last N weeks / N messages?](#faq-restore-partial)" for a way around that.
 
 #### <a name="faq-restore-partial">How do I restore the last N weeks / N messages?</a>
 
