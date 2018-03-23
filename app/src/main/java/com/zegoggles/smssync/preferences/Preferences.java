@@ -24,6 +24,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
@@ -296,20 +297,10 @@ public class Preferences {
     }
 
     public boolean shouldShowAboutDialog() {
-        int code;
-        try {
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(),
-                    PackageManager.GET_META_DATA);
-            code = pInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "error", e);
-            code = -1;
-        }
-
-        final int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, -1);
-        if (lastSeenCode < code) {
-            preferences.edit().putInt(LAST_VERSION_CODE.key, code).commit();
+        final int currentVersionCode = App.getVersionCode(context);
+        final int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, 0);
+        if (lastSeenCode < currentVersionCode) {
+            preferences.edit().putInt(LAST_VERSION_CODE.key, currentVersionCode).commit();
             return true;
         } else {
             return false;
