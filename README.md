@@ -150,6 +150,9 @@ automatically get created on the first backup.
 
 ## <a name="faq">FAQ</a>
 
+If you don't find an answer here you can also visit the [Google+ community][] which might be able
+to help.
+
   * [General questions](#faq-general)
     * [I want to file a bug report, what should I do?](#faq-general-file-bug-report)
     * [Can you add feature X?](#faq-general-can-you-add-feature-x)
@@ -171,8 +174,7 @@ automatically get created on the first backup.
   * [Restore questions](#faq-restore)
     * [Why does SMS Backup+ ask to become the default SMS app?](#faq-restore-default-app)
     * [Are there any plans to support restoring of MMS?](#faq-restore-MMS)
-    * [I'm not able to restore all of my (insert huge number) messages!]
-    (#faq-restore-many-messages)
+    * [I'm not able to restore all of my (insert huge number) messages!](#faq-restore-many-messages)
     * [How do I restore the last N weeks / N messages?](#faq-restore-partial)
     * [The timestamps of the restored messages is wrong / the messages are not restored in the right order](#faq-restore-reversed)
   * [Authentication questions](#faq-authentication)
@@ -392,11 +394,9 @@ to the beta program (you can leave it at any time).
 Once opted in your device will automatically update to the latest beta which might have bug fixes
 and features not found in the currently released version.
 
-Alternatively you can download an APK and install it manually from [Github releases][]
-(however, you won't get automatic updates this way).
-
-There is a also a [Google+ community][] where SMS Backup+ is discussed, it is no longer required
-to join it in order to get automatic updates.
+Alternatively you can download an APK from [Github releases][] and install it manually
+(⚠️ you won't get automatic updates this way). You can also install via [F-Droid][]
+which often has more recent versions than what is available on the Play Store.
 
 ## <a name="contributing">Contributing</a>
 
