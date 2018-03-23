@@ -19,6 +19,7 @@ package com.zegoggles.smssync;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
@@ -139,6 +140,17 @@ public class App extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, null, e);
             return -1;
+        }
+    }
+
+    public static boolean isInstalledOnSDCard(Context context) {
+        PackageInfo pInfo;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return (pInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "error", e);
+            return false;
         }
     }
 

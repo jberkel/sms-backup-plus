@@ -18,9 +18,6 @@ package com.zegoggles.smssync.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import com.zegoggles.smssync.App;
@@ -268,20 +265,6 @@ public class Preferences {
 
     public boolean confirmAction() {
         return preferences.getBoolean(CONFIRM_ACTION.key, false);
-    }
-
-    public boolean isInstalledOnSDCard() {
-        PackageInfo pInfo;
-        try {
-            pInfo = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(),
-                    PackageManager.GET_META_DATA);
-
-            return (pInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "error", e);
-            return false;
-        }
     }
 
     public boolean shouldShowAboutDialog() {

@@ -135,7 +135,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         StringBuilder summary = new StringBuilder();
         if (!enabled.isEmpty()) {
             summary.append(getString(R.string.ui_enable_auto_sync_summary, TextUtils.join(", ", enabled)));
-            if (preferences.isInstalledOnSDCard()) {
+            if (App.isInstalledOnSDCard(getContext())) {
                 summary.append(' ').append(getString(R.string.sd_card_disclaimer));
             }
         } else {
