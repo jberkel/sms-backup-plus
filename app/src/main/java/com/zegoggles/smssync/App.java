@@ -99,9 +99,20 @@ public class App extends Application {
         rescheduleJobs();
     }
 
-
     public static void register(Object listener) {
-        bus.register(listener);
+        try {
+            bus.register(listener);
+        } catch (IllegalArgumentException ignored) {
+            Log.w(TAG, ignored);
+        }
+     }
+
+    public static void unregister(Object listener) {
+        try {
+            bus.unregister(listener);
+        } catch (IllegalArgumentException ignored) {
+            Log.w(TAG, ignored);
+        }
     }
 
     public static void post(Object event) {
@@ -128,14 +139,6 @@ public class App extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, null, e);
             return -1;
-        }
-    }
-
-    public static void unregister(Object listener) {
-        try {
-            bus.unregister(listener);
-        } catch (IllegalArgumentException ignored) {
-            Log.w(TAG, ignored);
         }
     }
 
