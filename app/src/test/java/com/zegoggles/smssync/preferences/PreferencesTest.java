@@ -41,8 +41,4 @@ public class PreferencesTest {
         preferences.getDataTypePreferences().setMaxSyncedDate(CALLLOG, 1234);
         assertThat(preferences.isFirstBackup()).isFalse();
     }
-
-    @Test public void shouldTestOnSDCARD() throws Exception {
-        assertThat(preferences.isInstalledOnSDCard()).isFalse();
-    }
 }
