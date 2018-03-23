@@ -142,10 +142,7 @@
   <string name="ui_dialog_connect_msg">%1$s programının Gmail hesabınıza erişebilmesi için açılan tarayıcı ekranında hesabınıza giriş yapmalısınız.</string>
   <string name="ui_dialog_disconnect_msg">Emin misiniz? Bağlantınızı kesip tekrar kimlik doğrulaması yapmanız durumunda yerel senkronizason durumu sıfırlanacak.</string>
 
-  <string name="ui_dialog_upgrade_title">Güncelleme bilgisi</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+, SMS Backup ile tamamen uyumludur. Sadece \"Otomatik yedekleme\" seçeneğinin akif olduğundan emin olun, aksi takdirde mükerrer mesajlar oluşabilir. Ayrıca eğer telefondaki mesajlarınızı daha önce zaten yedeklemişseniz ilk senkronizasyon işlemi esnasında \"Atla\" seçeneğini seçin.
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">Güncelleme bilgisi</string>-->
 
   <string name="ui_sync">Yedekle</string>
   <string name="ui_skip">Atla</string>

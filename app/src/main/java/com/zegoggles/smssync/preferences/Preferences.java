@@ -18,7 +18,6 @@ package com.zegoggles.smssync.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -285,17 +284,6 @@ public class Preferences {
         }
     }
 
-    public boolean shouldShowUpgradeMessage() {
-        final String key = "upgrade_message_seen";
-        boolean seen = preferences.getBoolean(key, false);
-        if (!seen && isOldSmsBackupInstalled()) {
-            preferences.edit().putBoolean(key, true).commit();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public boolean shouldShowAboutDialog() {
         final int currentVersionCode = App.getVersionCode(context);
         final int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, 0);
@@ -330,17 +318,6 @@ public class Preferences {
 
     public void migrate() {
         new AuthPreferences(context).migrate();
-    }
-
-    private boolean isOldSmsBackupInstalled() {
-        try {
-            context.getPackageManager().getPackageInfo(
-                    "tv.studer.smssync",
-                    PackageManager.GET_META_DATA);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 
     static <T extends Enum<T>> T getDefaultType(SharedPreferences preferences, String pref, Class<T> tClazz, T defaultType) {

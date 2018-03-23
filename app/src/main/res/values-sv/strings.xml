@@ -161,14 +161,7 @@
   <string name="ui_dialog_connect_msg">Webbläsaren kommer att öppnas och begära att du loggar in på Gmail för att ge %1$s tillgång till din e-post.</string>
   <string name="ui_dialog_disconnect_msg">Är du säker? Du måste autentisera igen efter frånkoppling och synkronisering nollställs.</string>
 
-  <string name="ui_dialog_upgrade_title">Uppgraderingsinformation</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ är fullständigt bakåtkompatibelt med SMS Backup. Dock får bara
-   \"Automatisk säkerhetskopiering\" vara aktiverat i ett program, annars
-   riskerar du att få dubletter. Du ska också välja \"Hoppa över\" meddelanden
-   vid första säkerhetskopieringen om de meddelanden som finns på telefonen
-   redan har säkerhetskopierats tidigare.
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">Uppgraderingsinformation</string>-->
 
   <string name="ui_sync">Säkerhetskopiera</string>
   <string name="ui_skip">Hoppa över</string>

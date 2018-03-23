@@ -159,10 +159,7 @@
   <string name="ui_dialog_connect_msg">В открывшемся окне браузера подтвердите разрешение %1$s получить доступ к вашей почте.</string>
   <string name="ui_dialog_disconnect_msg">Уверены? Вам будет необходимо заново подтвердить разрешение на доступ к вашему ящику. Текущее состояние сохранения будет сброшено.</string>
 
- <string name="ui_dialog_upgrade_title">Информация о совместимости</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ полностью совместим с SMS Backup. Однако, если включить «Автосохранение» в обоих версиях, могут появиться дубликаты SMS. Если вы раньше использовали SMS Backup, нажмите «Пропустить» при первом резервировании.
-  </string>
+ <!--<string name="ui_dialog_upgrade_title">Информация о совместимости</string>-->
 
   <string name="ui_sync">Сохранить</string>
   <string name="ui_skip">Пропустить</string>

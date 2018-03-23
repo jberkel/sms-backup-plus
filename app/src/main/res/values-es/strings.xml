@@ -152,9 +152,7 @@
   <string name="ui_dialog_connect_msg">Se abrirá una ventana de navegador, donde usted necesitará iniciar sesión en gmail y autorizar esta aplicación %1$s</string>
   <string name="ui_dialog_disconnect_msg">¿Está seguro? Necesitará autorizar de nuevo después de desconectar esta cuenta</string>
 
-  <string name="ui_dialog_upgrade_title">Información de actualización</string>
-  <string name="ui_dialog_upgrade_msg">SMS Backup+ es completamente compatible con SMS Backup. Sin embargo asegúrese de que \"Copia de seguridad automática\" está sólo habilitada en una aplicación, de lo contrario podría obtener duplicados. También debe seleccionar \"Saltar\" mensajes para su primera sincronización, si ya ha hecho previamente copia de seguridad de los mensajes en el teléfono.</string>
-
+  <!--<string name="ui_dialog_upgrade_title">Información de actualización</string>-->
 
   <string name="ui_sync">Copia de seguridad</string>
   <string name="ui_skip">Saltar</string>

@@ -163,10 +163,7 @@
   <string name="ui_dialog_connect_msg">Abrirase un navegador que lle solicitará que inicie sesión en GMail para conceder acceso a %1$s ás súas mensaxes de correo.</string>
   <string name="ui_dialog_disconnect_msg">Está seguro? Terá que reautorizar a súa conta despois de desconectar e reiniciarase o estado da sincronización local.</string>
 
-  <string name="ui_dialog_upgrade_title">Información de actualización</string>
-  <string name="ui_dialog_upgrade_msg">
-    SMS Backup+ é completamente compatible con SMS Backup. Sen embargo, asegúres de que o \"Gardado automático\" está só habilitado nunha das aplicacións, do contrario é posible que se creen duplicados. Tamén debería seleccionar \"Omitir\" mensaxes no súa primeira sincronización se as mensaxes do teléfono foron gardadas previamente.
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">Información de actualización</string>-->
 
   <string name="ui_sync">Gardar</string>
   <string name="ui_skip">Omitir</string>

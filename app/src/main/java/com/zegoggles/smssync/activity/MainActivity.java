@@ -90,7 +90,6 @@ import static com.zegoggles.smssync.activity.Dialogs.Type.OAUTH2_ACCESS_TOKEN_ER
 import static com.zegoggles.smssync.activity.Dialogs.Type.OAUTH2_ACCESS_TOKEN_PROGRESS;
 import static com.zegoggles.smssync.activity.Dialogs.Type.RESET;
 import static com.zegoggles.smssync.activity.Dialogs.Type.SMS_DEFAULT_PACKAGE_CHANGE;
-import static com.zegoggles.smssync.activity.Dialogs.Type.UPGRADE_FROM_SMSBACKUP;
 import static com.zegoggles.smssync.activity.Dialogs.Type.VIEW_LOG;
 import static com.zegoggles.smssync.activity.Dialogs.Type.WEB_CONNECT;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACTION_ADD_ACCOUNT;
@@ -141,9 +140,6 @@ public class MainActivity extends ThemeActivity implements
         preferences = new Preferences(this);
         if (bundle == null) {
             showFragment(new MainSettings(), null);
-        }
-        if (preferences.shouldShowUpgradeMessage()) {
-            showDialog(UPGRADE_FROM_SMSBACKUP);
         }
         if (preferences.shouldShowAboutDialog()) {
             showDialog(ABOUT);

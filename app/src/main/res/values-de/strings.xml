@@ -164,10 +164,7 @@
   <string name="ui_dialog_connect_msg">Melden Sie sich im nachfolgenden Browser Fenster bitte bei Gmail an und gewähren Sie %1$s Zugriff zu Ihren E-Mails.</string>
   <string name="ui_dialog_disconnect_msg">Sind Sie sicher? Nach der Trennung werden Sie sich erneut anmelden müssen. Außerdem wird Ihr Synchronisierungsstatus zurückgesetzt.</string>
 
-  <string name="ui_dialog_upgrade_title">Upgrade Information</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ ist vollständig abwärtskompatibel mit SMS Backup. Die \"Automatische Sicherung\" sollte allerdings nur in einer App aktiviert sein, andernfalls könnten Duplikate enstehen. Außerdem sollten Sie \"Überspringen\" für Ihre erste Sicherung wählen falls Ihre Daten vormals schon gesichert wurden.
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">Upgrade Information</string>-->
 
   <string name="ui_sync">Sicherung</string>
   <string name="ui_skip">Überspringen</string>

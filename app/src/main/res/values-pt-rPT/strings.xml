@@ -115,8 +115,7 @@
   </string>
   <string name="ui_dialog_connect_msg">Uma janela do browser será aberta, deverá entrar na sua conta Gmail e confirmar %1$s o acesso aos seus emails.</string>
   <string name="ui_dialog_disconnect_msg">Tem a certeza? Terá de voltar a autorizar o acesso à sua conta e a configuração da sincronização local será reposta(reset).</string>
-  <string name="ui_dialog_upgrade_title">Atualizações</string>
-  <string name="ui_dialog_upgrade_msg">SMS Backup+ é completamente compatível com SMS Backup. No entanto, verifique que apenas tem \"Cópia Automática\" ativada numa das aplicação, ou poderá ficar com SMS duplicadas. Também deverá selecionar \"Ignorar\" mensagens guardadas na sincronização inicial se as SMS no aparelho já tenham uma cópia de segurança efetuada anteriormente. </string>
+  <!--<string name="ui_dialog_upgrade_title">Atualizações</string>-->
   <string name="ui_sync">Copiar</string>
   <string name="ui_skip">Ignorar</string>
   <string name="err_sync_requires_login_info">Não é possível efectuar cópia sem dados de início de sessão.</string>

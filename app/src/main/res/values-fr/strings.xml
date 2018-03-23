@@ -167,11 +167,7 @@
   <string name="ui_dialog_connect_msg">Votre navigateur va s\'ouvrir, vous demandant de vous identifier à Gmail, afin d\'autoriser %1$s l\'accès à vos e-mails.</string>
   <string name="ui_dialog_disconnect_msg">Êtes-vous certain ? Vous devrez ensuite ré-autoriser l\'accès à votre compte une fois déconnecté, et la syncronisation locale sera réinitialisée.</string>
 
-  <string name="ui_dialog_upgrade_title">Informations de mises à jour</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ est entièrement rétro-compatible avec SMS Backup. Veuillez cependant vérifier que l\'option \"Sauvegarde automatique\" n\'est activée que dans une des deux applications, sinon vous aurez des sauvegardes en double. Il est également conseillé de séléctionner \"Ignorer\" les messages pour votre première sauvgarde, si vous les avez déjà sauvegardés.
-  </string>
-
+  <!--<string name="ui_dialog_upgrade_title">Informations de mises à jour</string>-->
   <string name="ui_sync">Sauvegarder</string>
   <string name="ui_skip">Ignorer</string>
   <string name="err_sync_requires_login_info">La sauvegarde ne peut être effectuée sans les informations de connexion.</string>

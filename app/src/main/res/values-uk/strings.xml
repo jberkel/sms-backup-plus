@@ -122,9 +122,7 @@
 <string name="ui_dialog_access_token_error_msg">Не можливо отримати доступ. Переконайтеся, що ви надали доступ застосунку.</string>
 <string name="ui_dialog_connect_msg">В вікні переглядачу тенет надайте доступ застосунку %1$s до вашої пошти.</string>
 <string name="ui_dialog_disconnect_msg">Ви впевнені? Після відключення потрібно буде повторно надати доступ до вашої пошти. Стан синхронізації буде скинуто.</string>
-<string name="ui_dialog_upgrade_title">Інформація про сумісність</string>
-<string name="ui_dialog_upgrade_msg">
-   SMS Backup+ є повністю сумісною SMS Backup. Однак переконайтеся, що \"Автоматичне резервне копіювання\" включено лише в одному застосунку, в іншому випадку ви можете отримати дублікати. Також ви маєте обрати \"Проминути\" в повідомлені для першої синхронізації, якщо повідомлення на телефоні вже були збережені раніше.</string>
+<!--<string name="ui_dialog_upgrade_title">Інформація про сумісність</string>-->
 <string name="ui_sync">Резервне копіювання</string>
 <string name="ui_skip">Проминути</string>
 <string name="err_sync_requires_login_info">Не можливо виконати резервне копіювання без входу до системи.</string>

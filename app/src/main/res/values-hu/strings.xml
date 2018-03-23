@@ -168,8 +168,7 @@
   <string name="ui_dialog_connect_msg">Egy böngésző ablak fog megnyílni, amiben be kell jelentkeznie a Gmail fiókjával és engedélyeznie kell az %1$s számára a hozzáférést az emailjeihez.</string>
   <string name="ui_dialog_disconnect_msg">Biztos benne? A kapcsolat bontása után újra jóvá kell hagynia hozzáférést a fiókjával és a helyi biztonsági mentés állapota is alaphelyzetbe kerül.</string>
 
-  <string name="ui_dialog_upgrade_title">Frissítési információk</string>
-  <string name="ui_dialog_upgrade_msg">Az SMS Backup+ visszafelé kompatibilis az SMS Backuppal. Mindazonáltal bizonyosodjon meg róla, hogy az \"Automatikus mentés\" csak az egyik alkalmazásban aktív, különben előfordulhatnak ismétlődések a mentett üzenetek között. Ezen kívül válassza a \"Kihagyás\" opciót az első mentéskor, ha már korábban készült biztonsági mentés az üzenetekről.</string>
+  <!--<string name="ui_dialog_upgrade_title">Frissítési információk</string>-->
 
   <string name="ui_sync">Mentés</string>
   <string name="ui_skip">Kihagyás</string>

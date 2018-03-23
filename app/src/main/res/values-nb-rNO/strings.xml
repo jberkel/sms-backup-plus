@@ -163,10 +163,7 @@
   <string name="ui_dialog_connect_msg">Et nettleser vindu vil åpnes og be deg om å logge inn på Gmail for å tillate %1$s tilgang til din epost.</string>
   <string name="ui_dialog_disconnect_msg">Er du sikker? Du må da reautorisere mot din konto og synkroniserings-status vil bli tilbakestilt.</string>
 
-  <string name="ui_dialog_upgrade_title">Oppgraderings informasjon</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ er fult kompatibel med SMS Backup. Men sørg for at \"Auto sikkerhetskopiering\" kun er aktiv i en applikasjon, ellers vil det kunne oppstå duplikater. Du bør også velge \"Hopp over\" meldinger ved din første synkronisering om meldinger har blitt sikkerhetskopiert tidligere.
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">Oppgraderings informasjon</string>-->
 
   <string name="ui_sync">Sikkerhetskopier</string>
   <string name="ui_skip">Hopp over</string>

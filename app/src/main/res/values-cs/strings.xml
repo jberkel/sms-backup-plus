@@ -147,10 +147,7 @@
   <string name="ui_dialog_connect_msg">Bude otevřen prohlížeč pro přihlášení do GMail účtu a povolení %1$s přístupu do GMailu.</string>
   <string name="ui_dialog_disconnect_msg">Jste si jistí? Po odpojení bude nutné opětovně autorizovat Váš účet a stav synchonizace bude resetován.</string>
 
-  <string name="ui_dialog_upgrade_title">Informace o upgradu</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ je plně zpětně kompatibilní s SMS backup. Přesto se ujistěte, že \"Auto backup\" je povolen jen v jedné aplikaci, jinak je možný vznik duplikací. Měli byste také zvolit \"Skip\" zprávy pro první migraci, pokud zprávy v telefonu již byly dříve zálohovány.
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">Informace o upgradu</string>-->
 
   <string name="ui_sync">Zálohovat</string>
   <string name="ui_skip">Přeskočit</string>

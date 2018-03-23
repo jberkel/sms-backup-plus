@@ -121,9 +121,7 @@
   </string>
   <string name="ui_dialog_connect_msg">Një dritare shfletuesi do të hapet, duke ju kërkuar të futeni në Gmail për të siguruar %1$s akses në e-mailet tuaja.</string>
   <string name="ui_dialog_disconnect_msg">Jeni të sigurtë? Ju do të keni nevojë të riautorizoni llogarinë tuaj mbas i keni shkëputur si dhe gjendja e sinkronizimit lokal do të rivendoset.</string>
-  <string name="ui_dialog_upgrade_title">Informacion përditësimi</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ është i prapapërpuethshëm plotësisht me SMS Backup. Megjithatë sigurohuni që \"krijimi i kopjes rezervë automatike\" është i aktivizuar vetëm në njërin program, përndryshe do të hasni kopje identike. Gjithashtu ju duhet të përzgjidhni \"Tejkalo\" mesazhet për sinkronizimin tuaj të parë nëse mesazhet në telefon janë tashmë të ruajtura rezervë që më parë.\</string>
+  <!--<string name="ui_dialog_upgrade_title">Informacion përditësimi</string>-->
   <string name="ui_sync">Kopje rezervë</string>
   <string name="ui_skip">Anashkalo</string>
   <string name="err_sync_requires_login_info">Nuk mund të krijoj kopje rezervë pa informacionin e hyrjes.</string>

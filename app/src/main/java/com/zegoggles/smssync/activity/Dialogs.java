@@ -58,7 +58,6 @@ import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup
 public class Dialogs {
     public enum Type {
         FIRST_SYNC(FirstSync.class),
-        UPGRADE_FROM_SMSBACKUP(Upgrade.class),
         MISSING_CREDENTIALS(MissingCredentials.class),
         INVALID_IMAP_FOLDER(InvalidImapFolder.class),
         CONFIRM_ACTION(ConfirmAction.class),
@@ -275,15 +274,6 @@ public class Dialogs {
                         getActivity().startActivityForResult(intent, REQUEST_WEB_AUTH);
                     }
                 }).create();
-        }
-    }
-
-    public static class Upgrade extends BaseFragment {
-        @Override @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final String title = getString(R.string.ui_dialog_upgrade_title);
-            final String msg = getString(R.string.ui_dialog_upgrade_msg);
-            return createMessageDialog(title, msg, ic_dialog_info);
         }
     }
 

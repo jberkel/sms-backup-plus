@@ -169,10 +169,7 @@
   <string name="ui_dialog_connect_msg">将会开启一个浏览器, 提示您登录 Gmail 并授权 %1$s 访问您的邮件。</string>
   <string name="ui_dialog_disconnect_msg">您确认要断开连接吗？您将需要重新认证账户，并且本地的同步状态将被重置。</string>
 
-  <string name="ui_dialog_upgrade_title">升级信息</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ 完全向下兼容于 SMS Backup。不过请确保“自动备份”仅在一个程序里启用，否则将会出现重复备份。如果您已经对设备中的信息进行过备份，首次备份时应该选择“跳过”。
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">升级信息</string>-->
 
   <string name="ui_sync">备份</string>
   <string name="ui_skip">跳过</string>

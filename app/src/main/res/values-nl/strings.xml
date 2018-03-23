@@ -161,11 +161,7 @@
   <string name="ui_dialog_connect_msg">Een browservenster zal geopend worden en u vragen om u aan te melden bij Gmail om %1$s toegang te geven tot uw e-mails.</string>
   <string name="ui_dialog_disconnect_msg">Weet u het zeker? U zal uw account opnieuw moeten autoriseren nadat u de verbinding hebt verbroken en de lokale synchronisatiestatus zal opnieuw worden ingesteld.</string>
 
-  <string name="ui_dialog_upgrade_title">Upgrade-informatie</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ is volledig compatibel SMS Backup. Zorg er wel voor dat \"Automatische back-up\" maar in één app aan staat, anders krijgt u dubbele berichten. Ook moet u berichten \"overslaan\" als u voor het eerst synchroniseert en uw berichten op uw telefoon al geback-upt zijn.
-  </string>
-
+  <!--<string name="ui_dialog_upgrade_title">Upgrade-informatie</string>-->
   <string name="ui_sync">Back-uppen</string>
   <string name="ui_skip">Overslaan</string>
   <string name="err_sync_requires_login_info">Kan niet back-uppen zonder aanmeldingsinformatie.</string>

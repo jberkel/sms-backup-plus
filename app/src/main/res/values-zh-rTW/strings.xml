@@ -169,10 +169,7 @@
   <string name="ui_dialog_connect_msg">將會開啟一個瀏覽器視窗，提示您登入到 Gmail 並為 %1$s 授予訪問您的電郵的權限。</string>
   <string name="ui_dialog_disconnect_msg">您確定嗎？斷開後您將需要重新認證帳戶，並且本地同步處理狀態將被重設。</string>
 
-  <string name="ui_dialog_upgrade_title">升級訊息</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ 與 SMS Backup 程式完全向下兼容。但是請確定您只在其中一款程式中開啟“自動備份”，否則將會出現重複備份。如果您已經對設備中的簡訊進行過備份，首次備份時應該選取“跳過”訊息。
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">升級訊息</string>-->
 
   <string name="ui_sync">備份</string>
   <string name="ui_skip">跳過</string>

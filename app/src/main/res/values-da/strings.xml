@@ -161,10 +161,7 @@
   <string name="ui_dialog_connect_msg">Et browser vindue vil blive åbnet. Du vil blive bedt om at logge ind på din Gmail konto, for at give %1$s adgang til dine emails</string>
   <string name="ui_dialog_disconnect_msg">Er du sikker? Du skal bagefter gen-autorisere kontoen og dine synkroniseringen vil blive nulstillet.</string>
 
-  <string name="ui_dialog_upgrade_title">Opgraderings information</string>
-  <string name="ui_dialog_upgrade_msg">
-      SMS Backup+ er fuldt kompatibelt med SMS Backup. Men du skal sikre dig at \"Auto backup\" kun er slået til i en af apps\'ne, ellers risikerer du dubletter. Vælg også \"Spring over\" ved første synkronisering af beskedder på telefonen, hvor der allerede er backed beskeder op.
-  </string>
+  <!--<string name="ui_dialog_upgrade_title">Opgraderings information</string>-->
 
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Spring over</string>
