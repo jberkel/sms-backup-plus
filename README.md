@@ -14,7 +14,7 @@ Main feature/improvements:
   * Restore. SMS/Call logs stored on Gmail can be transferred back to the
   phone. ⚠️ MMS are not restored.
 
-  * Security: SMS Backup+ will never ask you for your Gmail password. Instead it
+  * Security. SMS Backup+ will never ask you for your Gmail password. Instead it
   uses [XOAuth2](https://developers.google.com/gmail/imap/xoauth2-protocol) to get access to your
   data. You can revoke the access rights at any time.
 
@@ -27,7 +27,7 @@ Main feature/improvements:
 
 Tested with Android 2.3.x - 8.1.x.
 
-SMS Backup+ is available for free in the [Google Play Store][] and on [F-Droid][], 
+SMS Backup+ is available for free in the [Google Play Store][] and on [F-Droid][],
 there will never be a pro / paid version.
 
 But if you find the app useful and want to support its development you can make a donation
@@ -88,19 +88,19 @@ Settings").
 
 👉 1.5.11: Default changed to 500 messages.
 
-You can safely restore to a phone which has already message stored
-on it, SMS Backup+ will skip already existing messages.
+You can safely restore to a phone which has already messages stored
+on it, SMS Backup+ will skip the existing messages.
 
-Before the restore can begin you will need to confirm the change of the
+Before the restore can start you will need to confirm the change of the
 default SMS app. This step is required to get further permissions to write
 messages (see also the corresponding [FAQ entry](#faq-restore-default-app)).
 
 ### Call log support
 
 SMS Backup+ can also backup and restore your call logs. It stores all calls using a
-separate label (defaults to `Call log`, but can be changed in Advanced
-Settings). If you wish you can set this to the same value as `SMS`, to make all backed
-up data use the same label.
+separate label (defaults to `Call log`, but can be changed in "Advanced
+settings"). If you wish you can set this to the same value as `SMS`, to make all
+backups use the same label.
 
 The body of the call log message contains the duration of the
 call in seconds followed by the phone number and call type (`incoming` /
@@ -115,9 +115,10 @@ You can also add call log entries to a Google calendar. Just select `Calendar
 sync` in Advanced settings, and make sure you have selected a calendar to sync
 with.
 
-If you only want to backup specific call types you can do so as well.
+If you only want to backup specific call types (incoming, outgoint etc.) you can
+do so as well.
 
-👉 1.5.11: Call log backup is disabled by default. Permissions need to be confirmed 
+👉 1.5.11: Call log backup is disabled by default. Permissions need to be confirmed
 separately for phone and calendar access.
 
 ### <a name="RCS-support">Rich Communication Services</a>
@@ -135,16 +136,17 @@ disabled.
 ### Usage without Gmail (IMAP)
 
 You don't have to use Gmail to backup your text messages - change
-Authentication to "Plain text" in "Advanced Settings - IMAP server settings",
-then change the server address / username and password accordingly. Make sure
-to set security to "SSL (optional / trust all)" if the IMAP server you're connecting to has
-a self-signed certificate ("Unknown certificate" error during backup).
+Authentication to "Plain text" in "Advanced settings - Custom IMAP server",
+then change the server address / user name and password accordingly. Make sure
+to set security to "SSL (optional / trust all)" if your IMAP server
+has a self-signed certificate ("Unknown certificate" error during
+backup).
 
 👉 1.5.11: security settings have been simplified. Select TLS and check
 "Trust all certificates" if using a self-signed certificate.
 
-Also note that Gmail labels simply correspond to IMAP folders, which will
-automatically be created on the first backup.
+Also note that Gmail labels simply correspond to IMAP folders that will
+automatically get created on the first backup.
 
 ## <a name="faq">FAQ</a>
 
@@ -169,7 +171,8 @@ automatically be created on the first backup.
   * [Restore questions](#faq-restore)
     * [Why does SMS Backup+ ask to become the default SMS app?](#faq-restore-default-app)
     * [Are there any plans to support restoring of MMS?](#faq-restore-MMS)
-    * [I'm not able to restore all of my 20000 messages!](#faq-restore-many-messages)
+    * [I'm not able to restore all of my (insert huge number) messages!]
+    (#faq-restore-many-messages)
     * [How do I restore the last N weeks / N messages?](#faq-restore-partial)
     * [The timestamps of the restored messages is wrong / the messages are not restored in the right order](#faq-restore-reversed)
   * [Authentication questions](#faq-authentication)
@@ -186,9 +189,9 @@ issue and attach the following details:
  * Version of SMS Backup+ used
  * Version of Android / brand of phone used
 
-If it is related to backing up / restoring you should also enable the sync log in debug mode
-(Advanced settings) and attach a relevant portion of it. The sync log is stored as
-`sms_backup_plus.log` (in the directory `Android/data/com.zegoggles.smssync/files`).
+If it is related to backing up / restoring you should also enable the sync log with
+"Extra debug information" enabled (in "Advanced settings") and attach a relevant portion of it.
+The sync log is stored as `sms_backup_plus.log` (in the directory `Android/data/com.zegoggles.smssync/files`).
 
 👉 1.5.11: new log file path, was previously on external storage / sdcard.
 
@@ -240,8 +243,11 @@ If the automatic backup does not work first make sure that a manually
 initiated backup works as expected.
 
 👉 1.5.11 brings many improvements to auto-backup reliability. However some beta users have
-still reported problems. If the backups don't run automatically try changing the system
+still reported problems. If the backups don't run automatically try changing the Android
 "Battery optimization" settings for SMS Backup+ to "Don't optimize".
+
+When reporting a bug related to auto backup it is essential to attach a sync log file. See
+the [relevant FAQ](#faq-general-file-bug-report) for more information on how to do this.
 
 #### <a name="faq-backup-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
 
@@ -322,8 +328,8 @@ to Gmail it won't get modified or deleted by the app.
 This means that it is impossible to establish a trusted connection with the IMAP server. A few
 reasons why this might happen:
 
-  * You run an old version of Android
-  * You use an IMAP server with an expired / self-signed certificate
+  * You run on an ancient version of Android
+  * You use an IMAP server with an expired or self-signed certificate
 
 You can try to set the IMAP Server Setting `Security` to `SSL (optional / trust all)`.
 
@@ -333,12 +339,13 @@ You can try to set the IMAP Server Setting `Security` to `SSL (optional / trust 
 
 #### <a name="faq-restore-default-app">Why does SMS Backup+ ask to become the default SMS app?</a>
 
-Google has changed the way SMS permissions work starting with Android KitKat. In order
-to get write access to your messages an app has to be set as the default system SMS app. Before starting
-the restore operation SMS Backup+ will request your permission to be set as default app. After the
-restore has finished you will be asked to set the previous choice (usually 'Messaging')
-back as default. This last step is important, if you don't set the old default back you might lose
-new messages.
+Google has changed the way SMS permissions work starting with Android 4.4
+(KitKat). In order to get write access to your messages an app has to be set as
+the default system SMS app. Before starting the restore operation SMS Backup+
+will request your permission to be set as default app. After restoring you will
+be asked to set the previous choice (usually "Messaging") back as default.
+⚠️ This last step is important, if you don't set the old default back you might
+lose new messages.
 
 #### <a name="faq-restore-MMS">Are there any plans to support restoring of MMS?</a>
 
@@ -406,8 +413,8 @@ translate the following file, then send the translated version via email:
 
   * [strings.xml][]
 
-However, if you're already familiar with Git I'd prefer if you cloned the
-repository and send me a [pull request][About pull requests].
+However, if you're already familiar with Git you can just clone the
+repository and submit a [pull request][About pull requests].
 
 ## <a name="credits">Credits</a>
 
@@ -438,13 +445,13 @@ repository and send me a [pull request][About pull requests].
 
 ## <a name="screenhots">Screenshots</a>
 
-### 1.5.10
-
-![SMS Backup+ holo][smsbackup_screenshot_holo]
-
 ### 1.5.11-BETA
 
 ![SMS Backup+ material][smsbackup_screenshot_material]
+
+### 1.5.10
+
+![SMS Backup+ holo][smsbackup_screenshot_holo]
 
 ## License
 
@@ -477,4 +484,3 @@ This application is released under the terms of the [Apache License, Version 2.0
 
 [516]: https://github.com/jberkel/sms-backup-plus/issues/516
 [564]: https://github.com/jberkel/sms-backup-plus/issues/564
-[1.6.0]: https://github.com/jberkel/sms-backup-plus/milestones/1.6.0
