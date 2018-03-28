@@ -267,8 +267,9 @@ sync state. All messages on the phone will be backed up on the next run.
 
 #### <a name="faq-backup-only-received">Only received messages are backed up, not the ones I sent</a>
 
-Do you use Google Voice to send messages? There is an open issue: [516][]. It could also be
-a device specific problem.
+Do you use a non-standard app like Google Voice/Hangouts or Signal to send
+messages? It could also be a device specific problem.
+Related issues: [516][], [841][].
 
 #### <a name="faq-backup-inbox">Why do backed up SMS show up in my inbox?</a>
 
@@ -485,3 +486,4 @@ This application is released under the terms of the [Apache License, Version 2.0
 
 [516]: https://github.com/jberkel/sms-backup-plus/issues/516
 [564]: https://github.com/jberkel/sms-backup-plus/issues/564
+[841]: https://github.com/jberkel/sms-backup-plus/issues/841
