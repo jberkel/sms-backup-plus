@@ -386,7 +386,7 @@ If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
 
-## <a name="beta">Beta testing
+## <a name="beta">Beta testing</a>
 
 If you want to help beta testing, visit the [Play Store beta page]. You will be asked to opt in
 to the beta program (you can leave it anytime).
