@@ -96,7 +96,7 @@
   <string name="ui_authentication_label">Authentication</string>
   <string name="ui_authentication_desc">The authentication method.</string>
   <string name="plain">Plain text</string>
-  <string name="xoauth">XOAuth2 (Gmail)</string>
+  <string name="xoauth" translatable="false">XOAuth2 (Gmail)</string>
 
   <string name="ui_imap_folder_label">Gmail label</string>
   <string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>

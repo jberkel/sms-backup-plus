@@ -77,7 +77,6 @@
   <string name="ui_authentication_label">Аутентификација</string>
   <string name="ui_authentication_desc">Начин аутентификације. Подразумевано за Gmail је „XOauth“.</string>
   <string name="plain">Обичан текст</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Етикета за СМС</string>
   <string name="ui_imap_folder_desc">Етикета која се додељује СМС порукама.</string>

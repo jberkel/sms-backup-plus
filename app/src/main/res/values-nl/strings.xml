@@ -75,7 +75,6 @@
   <string name="ui_authentication_label">Authenticatie</string>
   <string name="ui_authentication_desc">De authenticatiemethode \"XOAuth\" is de standaard voor Gmail.</string>
   <string name="plain">Gewone tekst</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail-label</string>
   <string name="ui_imap_folder_desc">Gmail-label voor sms.</string>

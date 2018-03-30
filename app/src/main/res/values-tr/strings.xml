@@ -76,7 +76,6 @@
   <string name="ui_authentication_label">Kimlik Denetleme</string>
   <string name="ui_authentication_desc">Kimlik denetleme metodu. Gmail için varsayılan metod: \"XOauth\".</string>
   <string name="plain">Düz yazı</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail etiketi</string>
   <string name="ui_imap_folder_desc">SMS\'ler için atanacak Gmail etiketi.</string>

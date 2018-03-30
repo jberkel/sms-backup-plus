@@ -77,7 +77,6 @@
   <string name="ui_authentication_label">身份驗證</string>
   <string name="ui_authentication_desc">身份驗證方法。Gmail 的預設為 \"XOAuth\"。</string>
   <string name="plain">純文本</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail 標籤</string>
   <string name="ui_imap_folder_desc">套用到簡訊的 Gmail 標籤。</string>

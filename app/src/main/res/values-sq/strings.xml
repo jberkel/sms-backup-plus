@@ -58,7 +58,6 @@
   <string name="ui_authentication_label">Verifikim</string>
   <string name="ui_authentication_desc">Metoda e verifikimit. Konfigurimi fillestar për gmail është \"XOAuth\".</string>
   <string name="plain">Tekst i thjeshtë</string>
-  <string name="xoauth">XOAuth2</string>
   <string name="ui_imap_folder_label">etiketë Gmail</string>
   <string name="ui_imap_folder_desc">etiketë e Gmail caktuar SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Mesazhet SMS e ruajtura rezervë do të shënohen me këtë etiketë në Gmail.</string>
