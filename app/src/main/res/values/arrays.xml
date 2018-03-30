@@ -20,7 +20,7 @@
     <item>@string/mark_as_read_message_status</item>
   </string-array>
 
-  <string name="read">read</string>
+  <string name="read" translatable="false">read</string>
   <string-array name="mark_as_read_values">
     <item>@string/read</item>
     <item>unread</item>
@@ -47,7 +47,7 @@
     <item>@string/email_address_style_number</item>
   </string-array>
 
-  <string name="name">name</string>
+  <string name="name" translatable="false">name</string>
   <string-array name="email_address_style_values">
     <item>@string/name</item>
     <item>name_and_number</item>
@@ -62,7 +62,7 @@
     <item>@string/call_type_missed</item>
   </string-array>
 
-  <string name="call_type_everything_value">everything</string>
+  <string name="call_type_everything_value" translatable="false">everything</string>
   <string-array name="backup_calllog_types_values">
     <item>@string/call_type_everything_value</item>
     <item>incoming</item>
@@ -114,7 +114,7 @@
     <item>@string/security_none</item>
   </string-array>
 
-  <string name="plus_ssl_plus">+ssl+</string>
+  <string name="plus_ssl_plus" translatable="false">+ssl+</string>
   <string-array name="server_protocol_entryValues">
     <item>@string/plus_ssl_plus</item> <!-- default -->
     <item>+tls+</item>
@@ -126,8 +126,8 @@
     <item>@string/plain</item>
   </string-array>
 
-  <string name="xoauth_value">xoauth</string>
-  <string name="plain_value">plain</string>
+  <string name="xoauth_value" translatable="false">xoauth</string>
+  <string name="plain_value" translatable="false">plain</string>
 
   <string-array name="server_authentication_values">
     <item>@string/xoauth_value</item>
