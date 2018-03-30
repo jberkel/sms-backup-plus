@@ -281,7 +281,7 @@
   <string name="app_log_empty">Protokoll ist leer. Sie können es in den \"Erweiterten Einstellungen\" aktivieren.</string>
 
   <string name="pref_app_log">Sync-Protokoll</string>
-  <string name="pref_app_log_enabled">Protokoll wird als \"sms_backup_plus.log\" auf der SD-Karte gespeichert.</string>
+  <string name="pref_app_log_enabled">Protokoll wird als \"sms_backup_plus.log\" gespeichert.</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
   <string name="source_incoming">eingehend</string>

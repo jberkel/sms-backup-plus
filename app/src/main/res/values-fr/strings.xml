@@ -51,7 +51,7 @@
   <string name="status_auth_failure">Erreur d\'identification</string>
   <string name="notification_auth_failure">Erreur d\'identification SMS Backup+</string>
 
-  <string name="status_auth_failure_details_xoauth">Erreur d\'authentification XOAuth. Veuillez vérifier que vous avez bien activé le protocol IMAP dans les réglages de votre compte Gmail.</string>
+  <string name="status_auth_failure_details_xoauth">Erreur d\'authentification XOAuth2. Veuillez vérifier que vous avez bien activé le protocol IMAP dans les réglages de votre compte Gmail.</string>
   <string name="status_auth_failure_details_plain">Erreur d\'authentification IMAP.
   Veuillez vérifier que vos identifiants soient bien saisis.</string>
   <string name="status_calc_details">Calcul en cours\u2026</string>
@@ -68,14 +68,14 @@
   <string name="ui_login_label">Nom d\'utilisateur</string>
   <string name="ui_login_desc">Adresse e-mail/nom de votre compte IMAP.</string>
   <string name="ui_password_label">Mot de passe</string>
-  <string name="ui_password_desc">Mot de passe de votre compte IMAP. Utile seulement si l\'identification XOAuth est désactivé.</string>
+  <string name="ui_password_desc">Mot de passe de votre compte IMAP. Utile seulement si l\'identification XOAuth2 est désactivé.</string>
   <string name="ui_password_dialog_msg">Le mot de passe est stocké sur votre mobile et n\'est utilisé que pour la connexion à votre compte.</string>
   <string name="ui_server_label">Adresse du serveur</string>
   <string name="ui_server_desc">L\'adresse du serveur auquel vous voulez synchroniser votre appareil, ainsi que le port désiré.</string>
   <string name="ui_protocol_label">Sécurité</string>
-  <string name="ui_protocol_desc">Le protocole de sécurité utilisé par le serveur. Le protocole par défaut pour Gmail est \"SSL (Requis)\"."</string>
+  <string name="ui_protocol_desc">Le protocole de sécurité utilisé par le serveur.</string>
   <string name="ui_authentication_label">Authentification</string>
-  <string name="ui_authentication_desc">Méthode d\'authentification. La méthode par défaut pour gmail est \"XOauth\".</string>
+  <string name="ui_authentication_desc">Méthode d\'authentification.</string>
   <string name="plain">Texte simple</string>
 
   <string name="ui_imap_folder_label">Libellé Gmail</string>
@@ -102,7 +102,7 @@
   <string name="ui_backup_calllog_sync_calendar_enabled_desc">Ajouter les entrées du journal d\'appel au calendrier</string>
 
   <string name="ui_backup_calllog_types_label">Types d\'appels</string>
-  <string name="ui_backup_calllog_types_desc">Types d\'appels à sauvegarder</string>
+  <string name="ui_backup_calllog_types_desc">Types d\'appels à sauvegarder.</string>
 
   <string name="ui_backup_calllog_sync_calendar_label">Aucun</string>
   <string name="ui_backup_calllog_sync_calendar_desc">Calendrier utilisé pour le journal d\'appels.</string>
@@ -138,7 +138,7 @@
   <string name="ui_auto_backup_incoming_schedule_desc">Définir quand les SMS seront sauvegardés après leur réception.</string>
 
   <string name="ui_wifi_only_label">WiFi requis</string>
-  <string name="ui_wifi_only_desc">Ne sauvegarder/restaurer que lorsque l\'appareil est connecté au WiFi</string>
+  <string name="ui_wifi_only_desc">Ne sauvegarder que lorsque l\'appareil est connecté au WiFi</string>
 
   <string name="ui_notifications_label">Notifications</string>
   <string name="ui_notifications_desc">Notifications d\'arrière plan</string>
@@ -166,7 +166,6 @@
   <string name="ui_dialog_connect_msg">Votre navigateur va s\'ouvrir, vous demandant de vous identifier à Gmail, afin d\'autoriser %1$s l\'accès à vos e-mails.</string>
   <string name="ui_dialog_disconnect_msg">Êtes-vous certain ? Vous devrez ensuite ré-autoriser l\'accès à votre compte une fois déconnecté, et la syncronisation locale sera réinitialisée.</string>
 
-  <!--<string name="ui_dialog_upgrade_title">Informations de mises à jour</string>-->
   <string name="ui_sync">Sauvegarder</string>
   <string name="ui_skip">Ignorer</string>
   <string name="err_sync_requires_login_info">La sauvegarde ne peut être effectuée sans les informations de connexion.</string>
@@ -226,20 +225,16 @@
   <string name="security_none">Aucun</string>
 
   <string name="ui_third_party_integration_label">Intégration des applications tierces</string>
-  <string name="ui_third_party_integration_desc">Autoriser des applications tierces à lancer le processus de sauvergarde</string>
+  <string name="ui_third_party_integration_desc">Autoriser des applications tierces à lancer le processus de sauvergarde.</string>
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Paramètres de sauvegarde</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
-
   <string name="ui_backup_calllog_settings_label">Paramètres de sauvegarde du journal d\'appel</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">Paramètres de sauvegarde automatique</string>
   <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Paramètres de restauration</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">Sauvegarde des SMS</string>
   <string name="ui_backup_sms_desc">Activer la sauvegarde des SMS</string>
@@ -275,7 +270,7 @@
   <string name="app_log_empty">Le journal est vide. Activez-le dans \"Paramètres avancés\".</string>
 
   <string name="pref_app_log">Synchroniser journal</string>
-  <string name="pref_app_log_enabled">Journal stocké sur la carte SD en tant que \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_enabled">Journal stocké en tant que \"sms_backup_plus.log\".</string>
   <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
 
   <string name="pref_app_log_debug">Informations supplémentaires de débuggage</string>
@@ -318,4 +313,27 @@
     Il vous sera ensuite demandé de redéfinir l\'application originelle après la restauration.
   </string>
     <string name="ui_dark_theme_label">Thème foncé</string>
+    <string name="status_permission_problem">Problème de permission</string>
+  <string name="permission_read_sms">Accès aux SMS</string>
+  <string name="permission_read_call_log">Accès au journal d\'appel</string>
+  <string name="permission_read_contacts">Accès aux contacts</string>
+  <string name="permission_unknown">Inconnu</string>
+    <string name="ui_protocol_trust_all_certificates_desc">Déconseillé. Utiliser pour des certificats auto-signés.
+    </string>
+  <string name="ui_backup_calllog_after_call_label">Sauvegarde lors appel</string>
+  <string name="ui_backup_calllog_after_call_desc">Automatiquement effectuer une sauvgarde après un appel
+    entrant/sortant.
+  </string>
+  <string name="custom_imap_not_configured">IMAP (non configuré)</string>
+  <string name="call_rejected">appel entrant, refusé</string>
+  <string name="call_voicemail">appel entrant, messagerie vocale</string>
+  <string name="call_rejected_text">Appel refusé de %1$s</string>
+  <string name="call_voicemail_text">Appel de %1$s (messagerie vocale)</string>
+  <string name="donation_unspecified_error">erreur générale: %1$d</string>
+  <string name="error_no_sms_default_package">Aucune application SMS par défaut</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Le service \"Google Play\" n\'est pas disponible</string>
+  <string name="theme_app_relaunch">Relancement requis</string>
+  <string name="ui_protocol_trust_all_certificates_label">Faire confiance à tous les certificats</string>
+  <string name="pref_use_old_scheduler">Vieux planification de sauvegarde</string>
+  <string name="pref_use_old_scheduler_summary">Forcer l\'usage du vieux planificateur.</string>
 </resources>

@@ -108,7 +108,7 @@
   <string-array name="server_protocol_entries">
     <!-- only connect via TLS, no plain sockets -->
     <item>@string/security_tls</item>
-    <!-- connect via plan, then upgrade to TLS -->
+    <!-- connect via plain, then upgrade to TLS -->
     <item>@string/security_starttls</item>
     <!-- connect via plain socket -->
     <item>@string/security_none</item>

@@ -58,9 +58,9 @@
     <item quantity="other">The following permissions are required: %1$s.</item>
   </plurals>
 
-  <string name="permission_read_sms">Send and view SMS Messages</string>
-  <string name="permission_read_call_log">Read Call Log</string>
-  <string name="permission_read_contacts">Access your contacts</string>
+  <string name="permission_read_sms">Access SMS Messages</string>
+  <string name="permission_read_call_log">Access Call Log</string>
+  <string name="permission_read_contacts">Access contacts</string>
   <string name="permission_unknown">Unknown</string>
 
   <string name="notification_missing_permission" translatable="false">@string/status_permission_problem</string>
