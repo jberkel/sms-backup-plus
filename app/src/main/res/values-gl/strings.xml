@@ -312,4 +312,5 @@
   <string name="donation_error_unavailable">non dispoñible</string>
   <string name="donation_error_canceled">cancelado</string>
   <string name="donation_error_already_owned">vostede xa realizou unha doazón</string>
+    <string name="ui_dark_theme_label">Tema escuro</string>
 </resources>

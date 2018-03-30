@@ -314,4 +314,5 @@
   <string name="donation_error_unavailable">ikke tilgængelig</string>
   <string name="donation_error_canceled">anulleret</string>
   <string name="donation_error_already_owned">du har allerede doneret</string>
+    <string name="ui_dark_theme_label">Mørkt tema</string>
 </resources>

@@ -43,7 +43,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_MODE;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_THEME;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.IMAP_SETTINGS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
@@ -55,7 +55,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         @Override
         public void onResume() {
             super.onResume();
-            addPreferenceListener(new ThemeChangedEvent(), DARK_MODE.key);
+            addPreferenceListener(new ThemeChangedEvent(), DARK_THEME.key);
         }
     }
 

@@ -327,4 +327,5 @@
     SMS 앱으로 설정해야 합니다. 복원이 완료된 후에 원래의 설정으로 돌려 놓을 건지
     물어 볼 것입니다.
   </string>
+    <string name="ui_dark_theme_label">어두운 테마</string>
 </resources>

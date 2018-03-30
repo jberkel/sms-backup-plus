@@ -325,4 +325,5 @@
     choisir SMS Backup+ comme application par défaut pour les SMS pendant l\'opération de restauration.
     Il vous sera ensuite demandé de redéfinir l\'application originelle après la restauration.
   </string>
+    <string name="ui_dark_theme_label">Thème foncé</string>
 </resources>

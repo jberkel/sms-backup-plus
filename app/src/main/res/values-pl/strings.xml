@@ -198,4 +198,5 @@
     <string name="source_3rd_party">3rd party</string>
     <string name="source_manual">manual</string>
     <string name="source_unknown">unknown</string>
+    <string name="ui_dark_theme_label">Ciemny motyw</string>
 </resources>

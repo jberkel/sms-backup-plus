@@ -226,5 +226,6 @@
 
   <string name="ui_third_party_integration_label">Tredjeparts integrasjon</string>
   <string name="ui_third_party_integration_desc">Tillat andre applikasjon å starte sikkerhetskopiering ved valgt kringkasting.</string>
+    <string name="ui_dark_theme_label">Mørkt tema</string>
 </resources>
 <!-- new ui -->

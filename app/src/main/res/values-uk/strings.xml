@@ -243,4 +243,5 @@
 <string name="donation_error_unavailable">недоступний</string>
 <string name="donation_error_canceled">скасовано</string>
 <string name="donation_error_already_owned">ви вже здаровували</string>
+    <string name="ui_dark_theme_label">Темна тема</string>
 </resources>

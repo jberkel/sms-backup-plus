@@ -219,4 +219,5 @@
   <string name="_30mins">30 mins</string>
 
   <string name="security_none">Ingen</string>
+    <string name="ui_dark_theme_label">Mörkt tema</string>
 </resources>

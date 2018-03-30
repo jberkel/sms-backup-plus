@@ -181,4 +181,8 @@
   <string name="never">Nunca</string>
 
   <string name="security_none">Ninguno</string>
+    <string name="_1min">1 min</string>
+    <string name="_3mins">3 mins</string>
+    <string name="_30mins">30 mins</string>
+    <string name="ui_dark_theme_label">Tema oscuro</string>
 </resources>

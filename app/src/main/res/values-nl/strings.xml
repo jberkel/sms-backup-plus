@@ -312,4 +312,5 @@
   <string name="donation_error_unavailable">niet beschikbaar</string>
   <string name="donation_error_canceled">geannuleerd</string>
   <string name="donation_error_already_owned">u heeft al gedoneerd</string>
+    <string name="ui_dark_theme_label">Donker thema</string>
 </resources>

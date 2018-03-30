@@ -185,4 +185,5 @@
   <string name="_30mins">30 min</string>
 
   <string name="security_none">None</string>
+    <string name="ui_dark_theme_label">Tmavý motiv</string>
 </resources>

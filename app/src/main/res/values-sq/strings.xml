@@ -243,4 +243,5 @@
     të vendosni SMS Backup+ si programin tuaj fillestar të SMS përgjatë proçesit të rikthimit. Ju do të
     pyeteni të ndryshoni përsëri aranzhimet si në fillim mbas rikthimit.
   </string>
+    <string name="ui_dark_theme_label">Tema e errët</string>
 </resources>

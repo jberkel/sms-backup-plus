@@ -325,4 +325,5 @@
     magát alapértelmezett SMS alkalmazássá visszaállítás közben. A művelet
     befejezése után vissza kell állítani az eredeti beállítást.
   </string>
+    <string name="ui_dark_theme_label">Sötét téma</string>
 </resources>

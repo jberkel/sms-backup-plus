@@ -36,7 +36,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CONFIRM_ACTION;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_MODE;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_THEME;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.ENABLE_AUTO_BACKUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.FIRST_USE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
@@ -102,7 +102,7 @@ public class Preferences {
         SMS_DEFAULT_PACKAGE("sms_default_package"),
         SMS_DEFAULT_PACKAGE_CHANGE_SEEN("sms_default_package_change_seen"),
         USE_OLD_SCHEDULER("use_old_scheduler"),
-        DARK_MODE("dark_mode"),
+        DARK_THEME("dark_theme"),
         EMAIL_ADDRESS_STYLE("email_address_style");
 
         public final String key;
@@ -286,7 +286,7 @@ public class Preferences {
     }
 
     public @StyleRes int getAppTheme() {
-        final boolean darkMode = preferences.getBoolean(DARK_MODE.key, false);
+        final boolean darkMode = preferences.getBoolean(DARK_THEME.key, false);
         return darkMode ? R.style.SMSBackupPlusTheme_Dark : R.style.SMSBackupPlusTheme_Light;
     }
 

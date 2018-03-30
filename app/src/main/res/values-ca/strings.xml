@@ -317,4 +317,5 @@
   <string name="donation_error_unavailable">no disponible</string>
   <string name="donation_error_canceled">cancel·lat</string>
   <string name="donation_error_already_owned">ja heu donat anteriorment</string>
+    <string name="ui_dark_theme_label">Tema fosc</string>
 </resources>

@@ -322,8 +322,8 @@
         </PreferenceScreen>
 
         <android.support.v7.preference.SwitchPreferenceCompat
-                android:key="dark_mode"
-                android:title="@string/ui_dark_mode_label"
+                android:key="dark_theme"
+                android:title="@string/ui_dark_theme_label"
                 android:defaultValue="off"
             />
     </PreferenceScreen>

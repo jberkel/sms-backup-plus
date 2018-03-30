@@ -289,5 +289,6 @@
   <string name="source_3rd_party">di terze parti</string>
   <string name="source_manual">manuale</string>
   <string name="source_unknown">sconosciuto</string>
+    <string name="ui_dark_theme_label">Tema scuro</string>
 
 </resources>

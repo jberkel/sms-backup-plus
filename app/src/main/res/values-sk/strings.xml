@@ -202,4 +202,5 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="source_3rd_party">tretia strana</string>
     <string name="source_manual">príručka</string>
     <string name="source_unknown">neznáme</string>
+    <string name="ui_dark_theme_label">Tmavý motív</string>
 </resources>

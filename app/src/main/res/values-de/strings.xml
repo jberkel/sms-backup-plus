@@ -305,6 +305,7 @@
   <string name="ui_confirm_action_desc">Frage vor Backup / Restore</string>
   <string name="ui_dialog_confirm_action_title">Bestätigung</string>
   <string name="ui_dialog_confirm_action_msg">Wollen Sie diese Aktion ausführen?</string>
+  <string name="ui_dark_theme_label">Dunkles Design</string>
 
 
 </resources>

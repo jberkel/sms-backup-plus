@@ -161,4 +161,5 @@
   <string name="security_none">Nenhum</string>
   <string name="ui_third_party_integration_label">Integração com outras aplicações</string>
   <string name="ui_third_party_integration_desc">Permitir que outras aplicações possam solicitar cópias de segurança usando esta aplicação e respectivas definições</string>
+    <string name="ui_dark_theme_label">Tema escuro</string>
 </resources>

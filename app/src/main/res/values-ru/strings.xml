@@ -297,4 +297,5 @@
   <string name="donation_error_unavailable">недоступно</string>
   <string name="donation_error_canceled">отменено</string>
   <string name="donation_error_already_owned">пожертвование уже выполнено</string>
+    <string name="ui_dark_theme_label">Ночной режим</string>
 </resources>

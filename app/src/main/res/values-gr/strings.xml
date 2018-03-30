@@ -309,4 +309,5 @@
   <string name="donation_error_unavailable">μη διαθέσιμη</string>
   <string name="donation_error_canceled">ακυρώθηκε</string>
   <string name="donation_error_already_owned">έχετε ήδη πραγματοποιήσει δωρεά </string>
+  <string name="ui_dark_theme_label">Σκούρο θέμα</string>
 </resources>
