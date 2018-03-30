@@ -316,7 +316,6 @@
   <string name="donation_unspecified_error">allgemeiner Fehler: %1$d</string>
   <string name="error_no_sms_default_package">Keine voreingestellte SMS-Anwendung verfügbar.</string>
   <string name="error_sms_provider_not_writable">SMS provider ist nicht schreibbar</string>
-  <string name="notification_missing_permission">Erlaubnisproblem</string>
   <string name="permission_read_call_log">Anrufsliste lesen</string>
   <string name="permission_read_contacts">Zugriff auf Kontakte</string>
   <string name="permission_read_sms">Senden und Lesen von SMS Nachrichten</string>

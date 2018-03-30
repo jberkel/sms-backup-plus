@@ -63,7 +63,7 @@
   <string name="permission_read_contacts">Access your contacts</string>
   <string name="permission_unknown">Unknown</string>
 
-  <string name="notification_missing_permission">SMSBackup+ permission problem</string>
+  <string name="notification_missing_permission" translatable="false">@string/status_permission_problem</string>
 
   <string name="status_auth_failure_details_xoauth">XOAuth authorization error. Please make sure you enabled IMAP in your Gmail account settings.</string>
   <string name="status_auth_failure_details_plain">IMAP authorization error.
