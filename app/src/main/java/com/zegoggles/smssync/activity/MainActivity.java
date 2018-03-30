@@ -301,6 +301,9 @@ public class MainActivity extends ThemeActivity implements
     @Subscribe public void themeChangedEvent(ThemeChangedEvent event) {
         if (Build.VERSION.SDK_INT >= HONEYCOMB) {
             recreate();
+        } else {
+            Toast.makeText(this, R.string.theme_app_relaunch, Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

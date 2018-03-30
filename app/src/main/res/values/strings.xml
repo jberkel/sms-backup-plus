@@ -364,6 +364,7 @@
   </string>
 
   <string name="ui_theme_label">App theme</string>
+  <string name="theme_app_relaunch">App relaunch required</string>
   <string name="dark_theme">Dark</string>
   <string name="light_theme">Light</string>
 </resources>

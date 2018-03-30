@@ -23,12 +23,13 @@ public abstract class ThemeActivity extends AppCompatActivity {
     }
 
     @TargetApi(26)
-    private void setNavBarColor(@StyleRes int themeId) {
-        final int color = getResources().getColor(
-                themeId == R.style.SMSBackupPlusTheme_Light ?
-                R.color.navigation_bar_light : R.color.navigation_bar_dark, null);
+    private void setNavBarColor(@StyleRes final int themeId) {
+        final int navBarColor = getResources().getColor(
+            themeId == R.style.SMSBackupPlusTheme_Light ?
+            R.color.navigation_bar_light : R.color.navigation_bar_dark, null);
 
-        getWindow().setNavigationBarColor(color);
+        getWindow().setNavigationBarColor(navBarColor);
+
         int visibility = getWindow().getDecorView().getSystemUiVisibility();
         if (themeId == R.style.SMSBackupPlusTheme_Light) {
             visibility |= SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
