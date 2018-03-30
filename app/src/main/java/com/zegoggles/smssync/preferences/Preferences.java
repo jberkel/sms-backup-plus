@@ -31,12 +31,12 @@ import java.util.Locale;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG_DEBUG;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_THEME;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CONFIRM_ACTION;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_MODE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.ENABLE_AUTO_BACKUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.FIRST_USE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
@@ -57,8 +57,6 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.USE_OLD_SCHEDUL
 import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 
 public class Preferences {
-    private static final int DEFAULT_APP_THEME = R.style.SMSBackupPlusTheme_Light;
-
     private final Context context;
     private final SharedPreferences preferences;
     private final DataTypePreferences dataTypePreferences;
@@ -104,7 +102,7 @@ public class Preferences {
         SMS_DEFAULT_PACKAGE("sms_default_package"),
         SMS_DEFAULT_PACKAGE_CHANGE_SEEN("sms_default_package_change_seen"),
         USE_OLD_SCHEDULER("use_old_scheduler"),
-        APP_THEME("app_theme"),
+        DARK_MODE("dark_mode"),
         EMAIL_ADDRESS_STYLE("email_address_style");
 
         public final String key;
@@ -288,16 +286,8 @@ public class Preferences {
     }
 
     public @StyleRes int getAppTheme() {
-        final String theme = preferences.getString(APP_THEME.key, null);
-        if ("light".equals(theme)) {
-            return R.style.SMSBackupPlusTheme_Light;
-        } else if ("dark".equals(theme)) {
-            return R.style.SMSBackupPlusTheme_Dark;
-        } else if ("debug".equals(theme)) {
-            return R.style.Debug;
-        } else {
-            return DEFAULT_APP_THEME;
-        }
+        final boolean darkMode = preferences.getBoolean(DARK_MODE.key, false);
+        return darkMode ? R.style.SMSBackupPlusTheme_Dark : R.style.SMSBackupPlusTheme_Light;
     }
 
     public void migrate() {

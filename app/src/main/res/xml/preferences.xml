@@ -321,13 +321,11 @@
             </PreferenceCategory>
         </PreferenceScreen>
 
-        <ListPreference
-                android:key="app_theme"
-                android:title="@string/ui_theme_label"
-                android:entries="@array/app_theme_entries"
-                android:entryValues="@array/app_theme_values"
-                android:defaultValue="light"
-                />
+        <android.support.v7.preference.SwitchPreferenceCompat
+                android:key="dark_mode"
+                android:title="@string/ui_dark_mode_label"
+                android:defaultValue="off"
+            />
     </PreferenceScreen>
 
     <Preference

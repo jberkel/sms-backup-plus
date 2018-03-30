@@ -52,7 +52,7 @@
     </declare-styleable>
 
     <!-- https://gist.github.com/dlew/a2e2f247c78495eca4e6 -->
-    <style name="Debug" tools:ignore="NewApi">
+    <style name="Debug" tools:ignore="NewApi, UnusedResources">
         <item name="android:textColorPrimary">#FFFF00</item>
         <item name="android:textColorSecondary">#FF00FF</item>
         <item name="android:textColorTertiary">#00FFFF</item>

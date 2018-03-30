@@ -363,8 +363,6 @@
     but won\'t generate notifications.
   </string>
 
-  <string name="ui_theme_label">App theme</string>
+  <string name="ui_dark_mode_label">Dark mode</string>
   <string name="theme_app_relaunch">App relaunch required</string>
-  <string name="dark_theme">Dark</string>
-  <string name="light_theme">Light</string>
 </resources>

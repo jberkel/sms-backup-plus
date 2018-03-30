@@ -133,15 +133,4 @@
     <item>@string/xoauth_value</item>
     <item>@string/plain_value</item>
   </string-array>
-
-  <string-array name="app_theme_entries">
-    <item>@string/light_theme</item>
-    <item>@string/dark_theme</item>
-  </string-array>
-
-  <string-array name="app_theme_values">
-    <item>light</item>
-    <item>dark</item>
-  </string-array>
-
 </resources>
