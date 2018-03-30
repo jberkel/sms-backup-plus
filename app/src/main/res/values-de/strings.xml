@@ -160,7 +160,7 @@
   <string name="ui_dialog_access_token_error_title">Authorisierungsfehler</string>
   <string name="ui_dialog_access_token_error_msg">Konnte Zugangstoken nicht erhalten. Stellen Sie sicher dass Sie \"Zugriff gewähren\" gewählt haben.</string>
 
-  <string name="ui_dialog_connect_msg">Melden Sie sich im nachfolgenden Browser Fenster bitte bei Gmail an und gewähren Sie %1$s Zugriff zu Ihren E-Mails.</string>
+  <string name="ui_dialog_connect_msg">Melden Sie sich im nachfolgenden Browserfenster bitte bei Gmail an und gewähren Sie %1$s Zugriff zu Ihren E-Mails.</string>
   <string name="ui_dialog_disconnect_msg">Sind Sie sicher? Nach der Trennung werden Sie sich erneut anmelden müssen. Außerdem wird Ihr Synchronisierungsstatus zurückgesetzt.</string>
 
   <!--<string name="ui_dialog_upgrade_title">Upgrade Information</string>-->
@@ -217,9 +217,9 @@
   <string name="_24h">24 h</string>
   <string name="never">Niemals</string>
 
-  <string name="_1min">1 min</string>
-  <string name="_3mins">3 mins</string>
-  <string name="_30mins">30 mins</string>
+  <string name="_1min">1 Minute</string>
+  <string name="_3mins">3 Minuten</string>
+  <string name="_30mins">30 Minuten</string>
 
   <string name="security_none">Keine</string>
 
@@ -323,7 +323,7 @@
   <string name="pref_use_old_scheduler_summary">Erzwinge die Benutzung des alten Zeitplaners</string>
   <string name="select_google_account">Wählen Sie ein Google-Konto</string>
   <string name="status_permission_problem">Erlaubnisproblem</string>
-  <string name="theme_app_relaunch">Neustart der App erforderlich</string>
+  <string name="theme_app_relaunch">Manueller Neustart der App erforderlich</string>
   <string name="ui_backup_calllog_after_call_desc">Automatisches Sichern nach ein/ausgehendem Anruf</string>
   <string name="ui_backup_calllog_after_call_label">Sichern nach Anruf</string>
   <string name="ui_dialog_sms_default_package_change_title">Benötige Änderung</string>

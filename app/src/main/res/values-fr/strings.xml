@@ -331,7 +331,7 @@
   <string name="donation_unspecified_error">erreur générale: %1$d</string>
   <string name="error_no_sms_default_package">Aucune application SMS par défaut</string>
   <string name="pref_use_old_scheduler_no_gcm_summary">Le service \"Google Play\" n\'est pas disponible</string>
-  <string name="theme_app_relaunch">Relancement requis</string>
+  <string name="theme_app_relaunch">Relancement manuel requis</string>
   <string name="ui_protocol_trust_all_certificates_label">Faire confiance à tous les certificats</string>
   <string name="pref_use_old_scheduler">Vieux planification de sauvegarde</string>
   <string name="pref_use_old_scheduler_summary">Forcer l\'usage du vieux planificateur.</string>
