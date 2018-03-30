@@ -18,6 +18,8 @@
     <color name="tertiary_text">@color/secondary_text</color>
 
     <color name="adaptive_icon_background">#ffffff</color>
+    <color name="navigation_bar_light">@color/primary_text</color>
+    <color name="navigation_bar_dark">@android:color/black</color>
 
     <style name="SMSBackupPlusTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>

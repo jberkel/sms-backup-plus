@@ -19,6 +19,7 @@ package com.zegoggles.smssync.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.StyleRes;
 import android.util.Log;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
@@ -286,7 +287,7 @@ public class Preferences {
         preferences.edit().putBoolean(USE_OLD_SCHEDULER.key, enabled).commit();
     }
 
-    public int getAppTheme() {
+    public @StyleRes int getAppTheme() {
         final String theme = preferences.getString(APP_THEME.key, null);
         if ("light".equals(theme)) {
             return R.style.SMSBackupPlusTheme_Light;

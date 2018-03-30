@@ -1,14 +1,40 @@
 package com.zegoggles.smssync.activity;
 
+import android.annotation.TargetApi;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatActivity;
+import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.preferences.Preferences;
 
 public abstract class ThemeActivity extends AppCompatActivity {
+    private static final int SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR = 16;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(new Preferences(this).getAppTheme());
+        final int themeResId = new Preferences(this).getAppTheme();
+        setTheme(themeResId);
+        if (VERSION.SDK_INT >= 26) {
+            setNavBarColor(themeResId);
+        }
         super.onCreate(savedInstanceState);
+    }
+
+    @TargetApi(26)
+    private void setNavBarColor(@StyleRes int themeId) {
+        final int color = getResources().getColor(
+                themeId == R.style.SMSBackupPlusTheme_Light ?
+                R.color.navigation_bar_light : R.color.navigation_bar_dark, null);
+
+        getWindow().setNavigationBarColor(color);
+        int visibility = getWindow().getDecorView().getSystemUiVisibility();
+        if (themeId == R.style.SMSBackupPlusTheme_Light) {
+            visibility |= SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        } else {
+            visibility &= ~(SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
+        getWindow().getDecorView().setSystemUiVisibility(visibility);
     }
 }
