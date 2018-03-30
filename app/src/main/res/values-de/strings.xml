@@ -246,11 +246,6 @@
 
   <string name="ui_restore_sms_label">SMS Wiederherstellung</string>
 
-  <string name="ui_feature_not_available_yet">(Funktion noch nicht verfügbar)</string>
-
-  <string name="ui_restore_mms_label">MMS Wiederherstellung</string>
-  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
-
   <string name="ui_restore_calllog_label">Anrufliste Wiederherstellung</string>
 
   <string name="sms">SMS</string>

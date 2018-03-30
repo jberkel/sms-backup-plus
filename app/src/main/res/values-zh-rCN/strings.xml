@@ -250,11 +250,6 @@
 
   <string name="ui_restore_sms_label">还原短信</string>
 
-  <string name="ui_feature_not_available_yet">(功能暂时不可用)</string>
-
-  <string name="ui_restore_mms_label">还原彩信</string>
-  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
-
   <string name="ui_restore_calllog_label">还原通话记录</string>
 
   <string name="sms">短信</string>

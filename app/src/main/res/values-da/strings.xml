@@ -243,11 +243,6 @@
 
   <string name="ui_restore_sms_label">Genetabler SMS</string>
 
-  <string name="ui_feature_not_available_yet">(Funktionen er ikke tilgængelig endnu)</string>
-
-  <string name="ui_restore_mms_label">Genetabler MMS</string>
-  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
-
   <string name="ui_restore_calllog_label">Genetabler opkalds log</string>
 
   <string name="sms">SMS</string>
