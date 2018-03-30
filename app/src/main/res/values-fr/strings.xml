@@ -246,7 +246,6 @@
   <string name="ui_backup_sms_desc">Activer la sauvegarde des SMS</string>
 
   <string name="ui_restore_sms_label">Restaurer les SMS</string>
-  <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(Fonction encore indisponible)</string>
 
@@ -254,7 +253,6 @@
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Restaurer le journal d\'appel</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>

@@ -249,7 +249,6 @@
   <string name="ui_backup_sms_desc">Омогући копирање СМС порука</string>
 
   <string name="ui_restore_sms_label">Врати СМС</string>
-  <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(функција још није доступна)</string>
 
@@ -257,7 +256,6 @@
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Врати евид. позива</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">СМС</string>
   <string name="mms">ММС</string>

@@ -196,7 +196,6 @@
             <CheckBoxPreference
                     android:key="restore_sms"
                     android:title="@string/ui_restore_sms_label"
-                    android:summary="@string/ui_restore_sms_desc"
                     android:defaultValue="true"/>
 
             <CheckBoxPreference
@@ -209,7 +208,6 @@
             <CheckBoxPreference
                     android:key="restore_calllog"
                     android:title="@string/ui_restore_calllog_label"
-                    android:summary="@string/ui_restore_calllog_desc"
                     android:defaultValue="true"/>
 
             <CheckBoxPreference

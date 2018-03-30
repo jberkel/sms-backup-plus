@@ -205,7 +205,7 @@
 
   <string name="gmail_needs_connecting">Tap to connect your Gmail account (required).</string>
   <string name="gmail_already_connected">Connected as %1$s.</string>
-  <string name="custom_imap">IMAP %1$s.</string>
+  <string name="custom_imap" translatable="false">IMAP %1$s.</string>
   <string name="custom_imap_not_configured">IMAP (not configured)</string>
 
   <string name="ui_connected_label">Connect</string>
@@ -255,8 +255,8 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="security_tls">TLS</string>
-  <string name="security_starttls">STARTTLS</string>
+  <string name="security_tls" translatable="false">TLS</string>
+  <string name="security_starttls" translatable="false">STARTTLS</string>
   <string name="security_none">None</string>
 
   <string name="ui_third_party_integration_label">3rd party integration</string>
@@ -275,7 +275,6 @@
   <string name="ui_backup_sms_desc">Enable SMS backup</string>
 
   <string name="ui_restore_sms_label">Restore SMS</string>
-  <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(Feature not available yet)</string>
 
@@ -283,7 +282,6 @@
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Restore call log</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
@@ -333,9 +331,7 @@
   <string name="ui_dialog_confirm_action_title">Confirm Action</string>
   <string name="ui_dialog_confirm_action_msg">Are you sure want to perform the action?</string>
 
-  <string name="ui_dialog_account_manager_token_error">
-      Could not get token from system. Do you want to try the browser authentication method?
-  </string>
+  <string name="ui_dialog_account_manager_token_error">Could not get token from system. Do you want to try the browser authentication method?</string>
   <string name="select_google_account">Select a Google account</string>
 
   <!-- donation related -->

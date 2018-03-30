@@ -67,14 +67,14 @@
   <string name="ui_login_label">Benutzername</string>
   <string name="ui_login_desc">Ihr IMAP-Konto/E-Mail-Adresse</string>
   <string name="ui_password_label">Passwort</string>
-  <string name="ui_password_desc">Ihr IMAP-Konto-Passwort. Wird nur benötigt, falls XOAuth deaktiviert wurde.</string>
+  <string name="ui_password_desc">Ihr IMAP-Konto-Passwort.</string>
   <string name="ui_password_dialog_msg">Das Password wird auf diesem Gerät gespeichert und nur zur Anmeldung benutzt.</string>
   <string name="ui_server_label">Server-Adresse</string>
   <string name="ui_server_desc">Adresse inkl. Port des Mailservers mit dem Sie synchronisieren möchten</string>
   <string name="ui_protocol_label">Sicherheit</string>
-  <string name="ui_protocol_desc">Sicherheitsprotokoll des Server. Standard für Gmail ist \"SSL (Required)\".</string>
+  <string name="ui_protocol_desc">Sicherheitsprotokoll des Server.</string>
   <string name="ui_authentication_label">Authentifizierung</string>
-  <string name="ui_authentication_desc">Authentifizierungsmethode. Standard für Gmail ist \"XOauth\".</string>
+  <string name="ui_authentication_desc">Authentifizierungsmethode.</string>
   <string name="plain">Klartext</string>
   <string name="xoauth">XOAuth2</string>
 
@@ -245,7 +245,6 @@
   <string name="ui_backup_sms_desc">SMS Sicherung aktivieren</string>
 
   <string name="ui_restore_sms_label">SMS Wiederherstellung</string>
-  <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(Funktion noch nicht verfügbar)</string>
 
@@ -253,7 +252,6 @@
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Anrufliste Wiederherstellung</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
@@ -306,6 +304,42 @@
   <string name="ui_dialog_confirm_action_title">Bestätigung</string>
   <string name="ui_dialog_confirm_action_msg">Wollen Sie diese Aktion ausführen?</string>
   <string name="ui_dark_theme_label">Dunkles Design</string>
+  <string name="ui_dialog_account_manager_token_error">Konnte kein Zugangstoken vom System erhalten. Wollen Sie die browserbasierte Authentifizierungsmethode versuchen?</string>
+  <string name="ui_dialog_sms_default_package_change_msg">Für das Wiederherstellen müssen Sie SMS Backup+ als ihre
+    standardmäßige SMS-App festlegen. Nach dem Vorgang wird die Einstellung zurückgesetzt. Eingehende Nachrichten
+    während der Wiederherstellung werden zugestellt, erzeugen aber keine Notifikationen.
+  </string>
+  <string name="donation_error_already_owned">Sie haben bereits gespendet</string>
+  <string name="call_rejected">Eingehender Anruf, abgelehnt</string>
+  <string name="call_rejected_text">Abgelehnter Anruf von %1$s</string>
+  <string name="call_voicemail">Eingehender Anruf, Anrufbeantworter</string>
+  <string name="call_voicemail_text">Anruf von %1$s (Anrufbeantworter)</string>
+  <string name="custom_imap_not_configured">IMAP (nicht konfiguriert)</string>
+  <string name="donation_error_canceled">abgebrochen</string>
+  <string name="donation_error_iab_unavailable">Bezahlungsmethode nicht verfügbar</string>
+  <string name="donation_error_unavailable">nicht verfügbar</string>
+  <string name="donation_unspecified_error">allgemeiner Fehler: %1$d</string>
+  <string name="error_no_sms_default_package">Keine voreingestellte SMS-Anwendung verfügbar.</string>
+  <string name="error_sms_provider_not_writable">SMS provider ist nicht schreibbar</string>
+  <string name="notification_missing_permission">Erlaubnisproblem</string>
+  <string name="permission_read_call_log">Anrufsliste lesen</string>
+  <string name="permission_read_contacts">Zugriff auf Kontakte</string>
+  <string name="permission_read_sms">Senden und Lesen von SMS Nachrichten</string>
+  <string name="permission_unknown">Unbekannt</string>
+  <string name="pref_use_old_scheduler">Alten Zeitplaner verwenden</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Google Play Services is nicht verfügbar</string>
+  <string name="pref_use_old_scheduler_summary">Erzwinge die Benutzung des alten Zeitplaners</string>
+  <string name="select_google_account">Wählen Sie ein Google-Konto</string>
+  <string name="status_permission_problem">Erlaubnisproblem</string>
+  <string name="theme_app_relaunch">Neustart der App erforderlich</string>
+  <string name="ui_backup_calllog_after_call_desc">Automatisches Sichern nach ein/ausgehendem Anruf</string>
+  <string name="ui_backup_calllog_after_call_label">Sichern nach Anruf</string>
+  <string name="ui_dialog_sms_default_package_change_title">Benötige Änderung</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Keine Sicherungsart ausgewählt.</string>
+  <string name="ui_protocol_trust_all_certificates_desc">Nicht empfohlen. Benötigt für selbsterstellte Zertifkate.
+  </string>
+  <string name="ui_protocol_trust_all_certificates_label">Allen Zertifikaten trauen</string>
+  <string name="app_log_backup_messages_with_config">Benuzte Konfiguration: %1$s</string>
 
 
 </resources>

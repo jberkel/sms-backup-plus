@@ -181,12 +181,10 @@
   <string name="ui_backup_sms_label">Kopjoni rezervë SMS</string>
   <string name="ui_backup_sms_desc">Aktivizoni kopjen rezervë SMS</string>
   <string name="ui_restore_sms_label">Riktheni SMS</string>
-  <string name="ui_restore_sms_desc" />
   <string name="ui_feature_not_available_yet">(Tipar akoma i padisponueshëm)</string>
   <string name="ui_restore_mms_label">Riktheni MMS</string>
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
   <string name="ui_restore_calllog_label">Riktheni ditarin e thirrjeve</string>
-  <string name="ui_restore_calllog_desc" />
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Ditari i thirrjeve</string>

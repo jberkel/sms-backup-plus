@@ -241,15 +241,12 @@
   <string name="ui_backup_sms_desc"> Ενεργοποίηση SMS αντιγράφων ασφαλείας </string>
 
   <string name="ui_restore_sms_label"> Επαναφορά SMS</string>
-  <string name="ui_restore_sms_desc"/>
-
   <string name="ui_feature_not_available_yet">( Χαρακτηριστικό που δεν διατίθεται ακόμη)</string>
 
   <string name="ui_restore_mms_label"> Επαναφορά MMS</string>
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label"> Επαναφορά μητρώου κλήσεων </string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>

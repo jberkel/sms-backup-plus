@@ -165,12 +165,10 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="ui_backup_sms_label">Záloha SMS</string>
     <string name="ui_backup_sms_desc">Zapnutie zálohy SMS</string>
     <string name="ui_restore_sms_label">Obnova SMS</string>
-    <string name="ui_restore_sms_desc" />
     <string name="ui_feature_not_available_yet">(Funkcie, ktoré ešte nie sú k dispozícii)</string>
     <string name="ui_restore_mms_label">Obnova MMS</string>
     <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
     <string name="ui_restore_calllog_label">Obnova denníka hovorov</string>
-    <string name="ui_restore_calllog_desc" />
     <string name="sms">SMS</string>
     <string name="mms">MMS</string>
     <string name="calllog">Denník hovorov</string>

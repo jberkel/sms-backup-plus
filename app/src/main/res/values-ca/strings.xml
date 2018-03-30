@@ -246,7 +246,6 @@
   <string name="ui_backup_sms_desc">Habilita la còpia dels SMS</string>
 
   <string name="ui_restore_sms_label">Restaura els SMS</string>
-  <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(Característica encara no disponible)</string>
 
@@ -254,7 +253,6 @@
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Restaura el registre de trucades</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>

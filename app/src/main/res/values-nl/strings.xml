@@ -240,7 +240,6 @@
   <string name="ui_backup_sms_desc">Sms-back-up inschakelen</string>
 
   <string name="ui_restore_sms_label">Sms herstellen</string>
-  <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(Functie nog niet beschikbaar)</string>
 
@@ -248,7 +247,6 @@
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Gesprekkenlijst herstellen</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">Sms</string>
   <string name="mms">Mms</string>

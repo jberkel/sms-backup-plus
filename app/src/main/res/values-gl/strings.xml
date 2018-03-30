@@ -244,7 +244,6 @@
   <string name="ui_backup_sms_desc">Habilitar gardado de SMS</string>
 
   <string name="ui_restore_sms_label">Reestablecer SMS</string>
-  <string name="ui_restore_sms_desc"/>
 
   <string name="ui_feature_not_available_yet">(Característica non dispoñible polo momento)</string>
 
@@ -252,7 +251,6 @@
   <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Reestablecer historial de chamadas</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
