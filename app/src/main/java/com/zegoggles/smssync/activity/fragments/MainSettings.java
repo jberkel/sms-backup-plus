@@ -5,6 +5,7 @@ import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.Preference.OnPreferenceChangeListener;
+import android.support.v7.preference.TwoStatePreference;
 import android.text.TextUtils;
 import android.util.Log;
 import com.squareup.otto.Subscribe;
@@ -93,13 +94,18 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         updateConnected();
     }
 
-    private CheckBoxPreference updateConnected() {
-        CheckBoxPreference connected = (CheckBoxPreference) findPreference(CONNECTED.key);
+    private TwoStatePreference updateConnected() {
+        TwoStatePreference connected = (TwoStatePreference) findPreference(CONNECTED.key);
 
         connected.setEnabled(authPreferences.useXOAuth());
         connected.setChecked(authPreferences.hasOAuth2Tokens());
-        connected.setSummary(getConnectedSummary(connected));
 
+        final String summary = getConnectedSummary(connected);
+        if (connected.isChecked()) {
+            connected.setSummary(summary);
+        } else {
+            connected.setSummaryOff(summary);
+        }
         return connected;
     }
 
@@ -113,7 +119,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         autoBackupSettings.setEnabled(autoBackup.isEnabled() && autoBackup.isChecked());
     }
 
-    private String getConnectedSummary(CheckBoxPreference connected) {
+    private String getConnectedSummary(TwoStatePreference connected) {
         final String username = authPreferences.getOauth2Username();
         if (connected.isEnabled()) {
             return connected.isChecked() && !TextUtils.isEmpty(username) ?

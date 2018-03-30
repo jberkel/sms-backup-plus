@@ -57,8 +57,10 @@ If you don't have a Google account registered on your device a browser window
 will appear to perform a web-based authentication as fallback.
 
 After completing the authorization process the "Connect"
-checkbox should be checked, indicating success. You are now ready to perform
+switch should be activated, indicating success. You are now ready to perform
 the first backup.
+
+👉 1.5.11: "Connected" changed from checkbox to switch.
 
 ### Initial backup
 
