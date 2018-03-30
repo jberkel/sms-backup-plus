@@ -175,7 +175,6 @@
   <string name="gmail_already_connected">Ansluten som %1$s (tryck för att koppla från).</string>
 
   <string name="ui_connected_label">Anslut</string>
-  <string name="ui_connected_desc">Ditt konto måste vara anslutet.</string>
 
   <string name="call_incoming">Inkommande samtal</string>
   <string name="call_outgoing">Utgående samtal</string>

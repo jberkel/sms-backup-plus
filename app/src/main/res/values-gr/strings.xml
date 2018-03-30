@@ -175,7 +175,6 @@
   <string name="gmail_already_connected"> Συνδεδεμένος ως %1$s.</string>
 
   <string name="ui_connected_label">Σύνδεση</string>
-  <string name="ui_connected_desc"> Ο λογαριασμός σας πρέπει να συνδεθεί.</string>
 
   <string name="call_incoming">Εισερχόμενη κλήση</string>
   <string name="call_outgoing"> Εξερχόμενη κλήση </string>

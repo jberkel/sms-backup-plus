@@ -173,7 +173,6 @@
   <string name="gmail_already_connected">Подключён как %1$s (нажмите для выхода).</string>
 
   <string name="ui_connected_label">Подключение</string>
-  <string name="ui_connected_desc">Требуется подключение.</string>
 
   <string name="call_incoming">входящий вызов</string>
   <string name="call_outgoing">исходящий вызов</string>

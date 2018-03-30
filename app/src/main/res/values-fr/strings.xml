@@ -179,7 +179,6 @@
   <string name="gmail_already_connected">Connecté à %1$s.</string>
 
   <string name="ui_connected_label">Connecter</string>
-  <string name="ui_connected_desc">Votre compte doit être connecté.</string>
 
   <string name="call_incoming">appel entrant</string>
   <string name="call_outgoing">appel sortant</string>

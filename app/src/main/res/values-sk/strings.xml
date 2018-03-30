@@ -122,7 +122,6 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="gmail_needs_connecting">Stlačte pre pripojenie do GMailu (vyžadované)</string>
     <string name="gmail_already_connected">Pripojené ako %1$s (stlačte pre odpojenie)</string>
     <string name="ui_connected_label">Pripojiť</string>
-    <string name="ui_connected_desc">Váš účet potrebuje byť pripojený</string>
     <string name="call_incoming">prichádzajúce hovory</string>
     <string name="call_outgoing">odchádzajúce hovory</string>
     <string name="call_missed">zmeškané hovory</string>

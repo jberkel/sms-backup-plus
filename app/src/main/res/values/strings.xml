@@ -209,7 +209,6 @@
   <string name="custom_imap_not_configured">IMAP (not configured)</string>
 
   <string name="ui_connected_label">Connect</string>
-  <string name="ui_connected_desc">Your account needs to be connected.</string>
 
   <string name="call_incoming">incoming call</string>
   <string name="call_outgoing">outgoing call</string>

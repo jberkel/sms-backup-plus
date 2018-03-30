@@ -119,7 +119,6 @@
     <string name="gmail_needs_connecting">Dotknij by połączyć ze swoim kontem Gmail (wymagane).</string>
     <string name="gmail_already_connected">Konto Gmail połączone %1$s (dotknij by rozłączyć).</string>
     <string name="ui_connected_label">Połącz</string>
-    <string name="ui_connected_desc">Twoje konto musi być uwierzytelnione.</string>
     <string name="call_incoming">Połączenie przychodzące</string>
     <string name="call_outgoing">połączenie wychodzące</string>
     <string name="call_missed">nieodebrane połączenie</string>

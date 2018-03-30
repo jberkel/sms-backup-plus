@@ -182,7 +182,6 @@
   <string name="gmail_already_connected">%1$s néven bejelentkezve.</string>
 
   <string name="ui_connected_label">Bejelentkezés</string>
-  <string name="ui_connected_desc">Be kell jelentkeznie a fiókjával.</string>
 
   <string name="call_incoming">bejövő hívás</string>
   <string name="call_outgoing">kimenő hívás</string>

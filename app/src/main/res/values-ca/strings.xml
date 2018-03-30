@@ -180,7 +180,6 @@
   <string name="gmail_already_connected">Connectat com a %1$s.</string>
 
   <string name="ui_connected_label">Connexió</string>
-  <string name="ui_connected_desc">Cal que el compte estigui connectat.</string>
 
   <string name="call_incoming">trucada entrant</string>
   <string name="call_outgoing">trucada sortint</string>

@@ -178,7 +178,6 @@
   <string name="gmail_already_connected">Koblet til som %1$s.</string>
 
   <string name="ui_connected_label">Koble til</string>
-  <string name="ui_connected_desc">Din konto må kobles til.</string>
 
   <string name="call_incoming">innkommende anrop</string>
   <string name="call_outgoing">utgående anrop</string>

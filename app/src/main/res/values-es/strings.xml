@@ -167,7 +167,6 @@
   <string name="gmail_already_connected">Cuenta de Gmail %1$s conectada (toque para desconectar).</string>
 
   <string name="ui_connected_label">Conectar</string>
-  <string name="ui_connected_desc">Su cuenta necesita ser autorizada.</string>
 
   <string name="email_address_style_name">Nombre</string>
   <string name="email_address_style_name_and_number">Nombre (+00 123456)</string>

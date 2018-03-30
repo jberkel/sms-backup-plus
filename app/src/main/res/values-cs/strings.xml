@@ -161,7 +161,6 @@
   <string name="gmail_already_connected">Připojeno jako %1$s (stiskněte pro odpojení).</string>
 
   <string name="ui_connected_label">Připojit</string>
-  <string name="ui_connected_desc">Váš účet potřebuje být připojen.</string>
 
   <string name="call_type_everything">Vše</string>
   <string name="call_type_incoming">Pouze příchozí hovory</string>

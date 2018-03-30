@@ -176,7 +176,6 @@
   <string name="gmail_already_connected">Connesso come %1$s (premere per disconnettersi).</string>
 
   <string name="ui_connected_label">Connessione</string>
-  <string name="ui_connected_desc">Il proprio account deve essere connesso.</string>
 
   <string name="call_incoming">Chiamata in arrivo</string>
   <string name="call_outgoing">Chiamata in uscita</string>

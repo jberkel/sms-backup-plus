@@ -157,7 +157,6 @@
   <string name="gmail_already_connected">%1$s hesabına bağlanıldı (bağlantıyı kesmek için dokunun).</string>
 
   <string name="ui_connected_label">Bağlan</string>
-  <string name="ui_connected_desc">Hesabınıza bağlanmanız gerekiyor.</string>
 
   <string name="email_address_style_name">İsim</string>
   <string name="email_address_style_name_and_number">İsim (+90 123456)</string>

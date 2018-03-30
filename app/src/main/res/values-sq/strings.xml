@@ -133,7 +133,6 @@
   <string name="gmail_needs_connecting">Trokitni për tu lidhur me llogarinë tuaj të Gmail (e kërkuar).</string>
   <string name="gmail_already_connected">E lidhur si %1$s.</string>
   <string name="ui_connected_label">Lidh</string>
-  <string name="ui_connected_desc">Llogaria juaj ka nevojë të lidhet.</string>
   <string name="call_incoming">thirrje hyrëse</string>
   <string name="call_outgoing">thirrje dalëse</string>
   <string name="call_missed">thirrje e humbur</string>

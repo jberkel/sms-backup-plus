@@ -184,7 +184,6 @@
   <string name="gmail_already_connected">Повезан као %1$s.</string>
 
   <string name="ui_connected_label">Повежи</string>
-  <string name="ui_connected_desc">Ваш налог мора бити повезан.</string>
 
   <string name="call_incoming">долазни позиви</string>
   <string name="call_outgoing">одлазни позиви</string>

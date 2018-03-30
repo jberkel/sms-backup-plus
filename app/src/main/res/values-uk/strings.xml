@@ -133,7 +133,6 @@
 <string name="gmail_needs_connecting">Натисніть, для підключення до Gmail рахунку (обов’язково).</string>
 <string name="gmail_already_connected">Підключений як %1$s.</string>
 <string name="ui_connected_label">Підключення</string>
-<string name="ui_connected_desc">Ваш обліковий запис має бути підключений.</string>
 <string name="call_incoming">вхідний виклик</string>
 <string name="call_outgoing">вихідий виклик</string>
 <string name="call_missed">пропущений виклик</string>

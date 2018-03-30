@@ -126,7 +126,6 @@
   <string name="gmail_needs_connecting">Toque para ligar à sua conta Gmail(requerido).</string>
   <string name="gmail_already_connected">Ligado como %1$s (toque para desligar).</string>
   <string name="ui_connected_label">Ligar</string>
-  <string name="ui_connected_desc">É necessário ligação à sua conta.</string>
   <string name="call_incoming">Chamada recebida</string>
   <string name="call_outgoing">Chamada efectuada</string>
   <string name="call_missed">Chamada não atendida</string>

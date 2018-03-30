@@ -176,7 +176,6 @@
   <string name="gmail_already_connected">Forbundet som %1$s.</string>
 
   <string name="ui_connected_label">Forbind</string>
-  <string name="ui_connected_desc">Din konto skal være forbundet.</string>
 
   <string name="call_incoming">indkomne opkald</string>
   <string name="call_outgoing">udgående opkald</string>

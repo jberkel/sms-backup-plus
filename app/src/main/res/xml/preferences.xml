@@ -15,7 +15,6 @@
     <android.support.v7.preference.SwitchPreferenceCompat
             android:key="connected"
             android:title="@string/ui_connected_label"
-            android:summaryOff="@string/ui_connected_desc"
             android:defaultValue="off"/>
 
     <CheckBoxPreference

@@ -174,7 +174,6 @@
   <string name="gmail_already_connected">Verbonden als %1$s.</string>
 
   <string name="ui_connected_label">Verbinden</string>
-  <string name="ui_connected_desc">Uw account moet verbonden zijn.</string>
 
   <string name="call_incoming">inkomende oproep</string>
   <string name="call_outgoing">uitgaande oproep</string>

@@ -184,7 +184,6 @@
   <string name="gmail_already_connected">已经连接为 %1$s。</string>
 
   <string name="ui_connected_label">连接</string>
-  <string name="ui_connected_desc">需要连接到您的帐户。</string>
 
   <string name="call_incoming">已接来电</string>
   <string name="call_outgoing">已拨电话</string>
