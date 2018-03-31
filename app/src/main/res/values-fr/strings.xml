@@ -81,7 +81,7 @@
   <string name="ui_imap_folder_label">Libellé Gmail</string>
   <string name="ui_imap_folder_desc">Le libellé Gmail associé aux SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Les SMS sauvegardés seront classés avec ce libellé dans Gmail.</string>
-  <string name="ui_mail_subject_prefix_label">Préfixe utilisé dans le sujet de l\'email</string>
+  <string name="ui_mail_subject_prefix_label">Préfixe dans le sujet de l\'email</string>
   <string name="ui_mail_subject_prefix_desc">Utiliser le nom du dossier IMAP comme préfixe dans le sujet de l\'email</string>
 
   <string name="ui_max_items_per_sync_label">Éléments par sauvegarde</string>
@@ -92,14 +92,14 @@
   <string name="ui_restore_starred_only_label">SMS favoris</string>
   <string name="ui_restore_starred_only_desc">Ne restaurer que les SMS classés "favoris".</string>
 
-  <string name="ui_backup_mms_label">Sauvegarde de MMS</string>
-  <string name="ui_backup_mms_desc">Activer la sauvegarde de MMS</string>
+  <string name="ui_backup_mms_label">Sauvegarde des MMS</string>
+  <string name="ui_backup_mms_desc">Activer la sauvegarde des MMS</string>
 
   <string name="ui_backup_calllog_label">Sauvegarde du journal d\'appels</string>
   <string name="ui_backup_calllog_desc">Activer la sauvegarde du journal d\'appels</string>
 
-  <string name="ui_backup_calllog_sync_calendar_enabled_label">Synchroniser au calendrier</string>
-  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Ajouter les entrées du journal d\'appel au calendrier</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Synchroniser avec le calendrier</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Ajouter les entrées du journal d\'appels au calendrier</string>
 
   <string name="ui_backup_calllog_types_label">Types d\'appels</string>
   <string name="ui_backup_calllog_types_desc">Types d\'appels à sauvegarder.</string>
@@ -107,9 +107,9 @@
   <string name="ui_backup_calllog_sync_calendar_label">Aucun</string>
   <string name="ui_backup_calllog_sync_calendar_desc">Calendrier utilisé pour le journal d\'appels.</string>
 
-  <string name="ui_imap_folder_calllog_label">Label du journal d\'appels</string>
-  <string name="ui_imap_folder_calllog_desc">Label Gmail pour les journaux.</string>
-  <string name="ui_imap_folder_calllog_label_dialog_msg">Les appels sauvegardées seront classés avec ce libelé dans Gmail.</string>
+  <string name="ui_imap_folder_calllog_label">Libellé du journal d\'appels</string>
+  <string name="ui_imap_folder_calllog_desc">Libellé Gmail pour les appels.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Les appels sauvegardées seront classés avec ce libellé dans Gmail.</string>
 
   <string name="ui_mark_as_read_label">Marquer comme lus (e-mails)</string>
   <string name="ui_mark_as_read_desc">Définir si les messages (dans Gmail) seront inscrits comme étant lus ou non.</string>
@@ -126,7 +126,7 @@
 
   <string name="ui_enable_auto_sync_label">Sauvegarde automatique</string>
   <string name="ui_enable_auto_sync_desc">Définir si les nouveaux SMS seront sauvegardés de façon automatique ou non.</string>
-  <string name="ui_enable_auto_sync_summary">Sauvergarde automatique de %1$s.</string>
+  <string name="ui_enable_auto_sync_summary">Sauvegarde automatique de %1$s.</string>
   <string name="ui_enable_auto_sync_no_enabled_summary">Aucun type d \'élément à sauvegardé de sélectionné.</string>
 
   <string name="sd_card_disclaimer">La sauvegarde automatique pourrait ne pas fonctionner correctement si l\'application est installée sur la carte SD.</string>
@@ -203,7 +203,7 @@
   <string name="call_type_everything">Tous</string>
   <string name="call_type_incoming">Appels entrants seulement</string>
   <string name="call_type_outgoing">Appels sortants seulement</string>
-  <string name="call_type_incoming_outgoing">Entrants &amp; Sortants</string>
+  <string name="call_type_incoming_outgoing">Entrants &amp; sortants</string>
   <string name="call_type_missed">Appels ratés seulement</string>
 
   <string name="email_address_style_name">Nom</string>
@@ -223,11 +223,11 @@
   <string name="security_none">Aucun</string>
 
   <string name="ui_third_party_integration_label">Intégration des applications tierces</string>
-  <string name="ui_third_party_integration_desc">Autoriser des applications tierces à lancer le processus de sauvergarde.</string>
+  <string name="ui_third_party_integration_desc">Autoriser des applications tierces à lancer le processus de sauvegarde.</string>
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Paramètres de sauvegarde</string>
-  <string name="ui_backup_calllog_settings_label">Paramètres de sauvegarde du journal d\'appel</string>
+  <string name="ui_backup_calllog_settings_label">Paramètres du journal d\'appels</string>
 
   <string name="auto_backup_settings">Paramètres de sauvegarde automatique</string>
   <string name="ui_restore_settings_label">Paramètres de restauration</string>
@@ -237,11 +237,11 @@
 
   <string name="ui_restore_sms_label">Restaurer les SMS</string>
 
-  <string name="ui_restore_calllog_label">Restaurer le journal d\'appel</string>
+  <string name="ui_restore_calllog_label">Restaurer le journal d\'appels</string>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
-  <string name="calllog">Journal d\'appel</string>
+  <string name="calllog">Journal d\'appels</string>
 
   <string name="app_log_skip_backup_already_running">Ignoré car une sauvegarde est déjà en cours</string>
   <string name="app_log_skip_backup_skip_messages">Ignorer tous les messages</string>
@@ -261,14 +261,14 @@
   <string name="app_log_no_next_sync">Pas de nouvelle sauvegarde prévue</string>
 
   <string name="menu_view_log">Voir journal</string>
-  <string name="app_log_empty">Le journal est vide. Activez-le dans \"Paramètres avancés\".</string>
+  <string name="app_log_empty">Le journal est vide. Activez-le dans les \"Paramètres avancés\".</string>
 
   <string name="pref_app_log">Synchroniser journal</string>
-  <string name="pref_app_log_enabled">Journal stocké en tant que \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_enabled">Le journal est stocké en tant que \"sms_backup_plus.log\".</string>
   <string name="pref_app_log_disabled">Désactivé</string>
 
-  <string name="pref_app_log_debug">Informations supplémentaires de débuggage</string>
-  <string name="pref_app_log_debug_summary">Activer la journalisation des informations supplémentaires de debuggage dans le journal de synchronisation</string>
+  <string name="pref_app_log_debug">Aide au débuggage</string>
+  <string name="pref_app_log_debug_summary">Activer l'enregistrement d'informations supplémentaires de débuggage dans le journal</string>
 
    <string name="source_incoming">entrant</string>
   <string name="source_regular">régulier</string>
@@ -288,7 +288,7 @@
 
   <!-- donation related -->
   <string name="donate">Donation</string>
-  <string name="donate_summary">Utilisant la méthode sécurisée de paiement du Google Play Store.</string>
+  <string name="donate_summary">En utilisant la méthode de paiement sécurisé du Google Play Store.</string>
 
   <string name="ui_dialog_donate_message">Veuillez spécifier le montant ainsi que la devise :</string>
   <string name="ui_donation_success_message">Don effectué, merci !</string>
@@ -309,13 +309,13 @@
     <string name="ui_dark_theme_label">Thème foncé</string>
     <string name="status_permission_problem">Problème de permission</string>
   <string name="permission_read_sms">Accès aux SMS</string>
-  <string name="permission_read_call_log">Accès au journal d\'appel</string>
+  <string name="permission_read_call_log">Accès au journal d\'appels</string>
   <string name="permission_read_contacts">Accès aux contacts</string>
   <string name="permission_unknown">Inconnu</string>
-    <string name="ui_protocol_trust_all_certificates_desc">Déconseillé. Utiliser pour des certificats auto-signés.
+    <string name="ui_protocol_trust_all_certificates_desc">Déconseillé. A utiliser pour des certificats auto-signés.
     </string>
-  <string name="ui_backup_calllog_after_call_label">Sauvegarde lors appel</string>
-  <string name="ui_backup_calllog_after_call_desc">Automatiquement effectuer une sauvgarde après un appel
+  <string name="ui_backup_calllog_after_call_label">Sauvegarder après un appel</string>
+  <string name="ui_backup_calllog_after_call_desc">Effectuer automatiquement une sauvegarde après un appel
     entrant/sortant.
   </string>
   <string name="custom_imap_not_configured">IMAP (non configuré)</string>
@@ -328,6 +328,6 @@
   <string name="pref_use_old_scheduler_no_gcm_summary">Le service \"Google Play\" n\'est pas disponible</string>
   <string name="theme_app_relaunch">Relancement manuel requis</string>
   <string name="ui_protocol_trust_all_certificates_label">Faire confiance à tous les certificats</string>
-  <string name="pref_use_old_scheduler">Vieux planification de sauvegarde</string>
-  <string name="pref_use_old_scheduler_summary">Forcer l\'usage du vieux planificateur.</string>
+  <string name="pref_use_old_scheduler">Ancien planificateur de sauvegarde</string>
+  <string name="pref_use_old_scheduler_summary">Forcer l\'utilisation de l'ancien planificateur.</string>
 </resources>
