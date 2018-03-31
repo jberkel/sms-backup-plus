@@ -329,5 +329,5 @@
   <string name="theme_app_relaunch">Relancement manuel requis</string>
   <string name="ui_protocol_trust_all_certificates_label">Faire confiance à tous les certificats</string>
   <string name="pref_use_old_scheduler">Ancien planificateur de sauvegarde</string>
-  <string name="pref_use_old_scheduler_summary">Forcer l\'utilisation de l'ancien planificateur.</string>
+  <string name="pref_use_old_scheduler_summary">Forcer l\'utilisation de l\'ancien planificateur.</string>
 </resources>
