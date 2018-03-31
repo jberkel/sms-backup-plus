@@ -1,0 +1,12 @@
+body {
+    background: #fffdff;
+}
+
+a {
+    color: #e93d2f; /* envelope_light */
+    text-decoration: none;
+}
+
+ul.news li {
+    margin-bottom: 0.6em;
+}

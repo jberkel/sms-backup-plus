@@ -1,5 +1,18 @@
 == 1.5.11 (1555) tbd
 
+  * Handle incoming SMS during Restore (#809, #851)
+  * Clean up security settings for IMAP servers (#839)
+  * Implemented runtime permissions for Android 6.0+
+  * Added dark/light theme switcher
+  * Modernized UI (Material/AppCompat), added adaptive icon
+  * Simplify IMAP search logic to prevent timeouts
+  * Retry connection timeouts more aggressively
+  * Call logs: support rejected / voicemail
+  * Optionally trigger a backup after incoming/outgoing calls
+  * Use JobManager to run backups in the background (#572, #810, #822)
+  * Replaced WebView auth with browser (#767)
+  * Replaced pay-me with Play Billing Library
+  * Gradle build support (#638)
   * Improve restore experience (#586)
   * Fixed unquoted blank in local part of email address (#595)
   * Updated Korean translation (#592)

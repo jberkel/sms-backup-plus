@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="TypographyEllipsis" severity="ignore"/>
+    <issue id="TypographyDashes" severity="ignore"/>
+    <issue id="Typos" severity="ignore"/>
+
+    <issue id="MissingTranslation" severity="ignore"/>
+    <issue id="MissingQuantity" severity="ignore"/>
+    <issue id="UnusedQuantity" severity="ignore"/>
+    <issue id="ContentDescription" severity="ignore"/>
+
+    <issue id="OldTargetApi" severity="ignore"/>
+
+    <issue id="InlinedApi" severity="ignore"/>
+    <issue id="PluralsCandidate" severity="ignore"/>
+    <issue id="ApplySharedPref" severity="ignore"/>
+
+    <!-- for older android devices we need to store in /drawable -->
+    <issue id="IconLauncherFormat" severity="ignore"/>
+    <issue id="IconLocation" severity="ignore"/>
+    <issue id="IconDuplicatesConfig" severity="ignore"/>
+    <issue id="IconDensities" severity="ignore"/>
+    <issue id="IconMissingDensityFolder" severity="ignore"/>
+    <issue id="LintError" severity="ignore"/>
+</lint>

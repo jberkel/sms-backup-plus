@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Sauvegardez vos SMS dans votre compte Gmail. Ceci est une version ameliorée de l\'application "SMS Backup" de
+     Christoph Studer ajoutant la possibilité de restaurer vos SMS sauvegardés sur votre mobile.
+     Cette version est entièrement rétro-compatible avec les sauvegardes faites avec l\'ancienne version.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Sauvegarder</string>
+  <string name="ui_sync_button_label_canceling">Arrêt</string>
+  <string name="ui_sync_button_label_syncing">Annuler</string>
+
+  <string name="ui_restore_button_label_idle">Restaurer</string>
+  <string name="ui_restore_button_label_restoring">Annuler</string>
+
+  <string name="status_idle">Inactif</string>
+  <string name="status_idle_details">Dernière sauvegarde effectuée le : <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">Jamais</string>
+
+  <string name="status_working">En état de marche</string>
+
+  <string name="status_backup">Sauvegarde en cours</string>
+  <string name="status_restore">Restauration en cours</string>
+
+  <string name="status_backup_details">Sauvegarde élément <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>\u2026</string>
+  <string name="status_restore_details">Restauration élément <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g>\u2026</string>
+  <string name="status_login_details">Identification :\u2026</string>
+  <string name="status_updating_threads">Mise à jour\u2026</string>
+  <string name="status_done">Identifié avec succès</string>
+  <string name="status_backup_done_details_max_per_sync">Le maximum de %1$d éléments par sauvegarde a été atteint. Relancez la sauvegarde pour continuer.</string>
+  <string name="status_backup_done_details_noitems">Il n\'y a pas d\'éléments à sauvegarder.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> élément.</item>
+    <item quantity="other">Sauvegardé avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> élément (%2$d éléments identiques).</item>
+    <item quantity="other">Restauré avec succès <xliff:g id="total_items">%1$d</xliff:g> éléments (%2$d éléments identiques).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d éléments restaurés avec succès.</string>
+
+  <string name="status_unknown_error">Erreur</string>
+  <string name="notification_general_error">Erreur SMSBackup+</string>
+
+  <string name="status_unknown_error_details">Erreur pendant la sauvegarde/restauration :\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Erreur d\'identification</string>
+  <string name="notification_auth_failure">Erreur d\'identification SMS Backup+</string>
+
+  <string name="status_auth_failure_details_xoauth">Erreur d\'authentification XOAuth2. Veuillez vérifier que vous avez bien activé le protocol IMAP dans les réglages de votre compte Gmail.</string>
+  <string name="status_auth_failure_details_plain">Erreur d\'authentification IMAP.
+  Veuillez vérifier que vos identifiants soient bien saisis.</string>
+  <string name="status_calc_details">Calcul en cours\u2026</string>
+  <string name="status_canceled">Annulé</string>
+  <string name="status_canceled_details">%1$d/%2$d éléments sauvgardés avec succès.</string>
+  <string name="status_gmail_temp_error">Erreur IMAP de GMail, veuillez réessayer plus tard.</string>
+
+  <string name="ui_settings_advanced_label">Paramètres avancés</string>
+  <string name="ui_settings_advanced_desc">Définir les réglages avancés</string>
+  <string name="ui_settings_advanced_server_label">Paramètres de serveur</string>
+  <string name="ui_settings_advanced_server_desc">Ne pas modifier si vous ne vous y connaissez pas !</string>
+
+  <string name="imap_settings">Paramètres IMAP</string>
+  <string name="ui_login_label">Nom d\'utilisateur</string>
+  <string name="ui_login_desc">Adresse e-mail/nom de votre compte IMAP.</string>
+  <string name="ui_password_label">Mot de passe</string>
+  <string name="ui_password_desc">Mot de passe de votre compte IMAP. Utile seulement si l\'identification XOAuth2 est désactivé.</string>
+  <string name="ui_password_dialog_msg">Le mot de passe est stocké sur votre mobile et n\'est utilisé que pour la connexion à votre compte.</string>
+  <string name="ui_server_label">Adresse du serveur</string>
+  <string name="ui_server_desc">L\'adresse du serveur auquel vous voulez synchroniser votre appareil, ainsi que le port désiré.</string>
+  <string name="ui_protocol_label">Sécurité</string>
+  <string name="ui_protocol_desc">Le protocole de sécurité utilisé par le serveur.</string>
+  <string name="ui_authentication_label">Authentification</string>
+  <string name="ui_authentication_desc">Méthode d\'authentification.</string>
+  <string name="plain">Texte simple</string>
+
+  <string name="ui_imap_folder_label">Libellé Gmail</string>
+  <string name="ui_imap_folder_desc">Le libellé Gmail associé aux SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">Les SMS sauvegardés seront classés avec ce libellé dans Gmail.</string>
+  <string name="ui_mail_subject_prefix_label">Préfixe utilisé dans le sujet de l\'email</string>
+  <string name="ui_mail_subject_prefix_desc">Utiliser le nom du dossier IMAP comme préfixe dans le sujet de l\'email</string>
+
+  <string name="ui_max_items_per_sync_label">Éléments par sauvegarde</string>
+  <string name="ui_max_items_per_sync_desc">Nombre maximum d\'éléments par sauvegarde.</string>
+  <string name="ui_max_items_per_restore_label">Éléments par restauration</string>
+  <string name="ui_max_items_per_restore_desc">Nombre maximum de messages à restaurer.</string>
+
+  <string name="ui_restore_starred_only_label">SMS favoris</string>
+  <string name="ui_restore_starred_only_desc">Ne restaurer que les SMS classés "favoris".</string>
+
+  <string name="ui_backup_mms_label">Sauvegarde de MMS</string>
+  <string name="ui_backup_mms_desc">Activer la sauvegarde de MMS</string>
+
+  <string name="ui_backup_calllog_label">Sauvegarde du journal d\'appels</string>
+  <string name="ui_backup_calllog_desc">Activer la sauvegarde du journal d\'appels</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Synchroniser au calendrier</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Ajouter les entrées du journal d\'appel au calendrier</string>
+
+  <string name="ui_backup_calllog_types_label">Types d\'appels</string>
+  <string name="ui_backup_calllog_types_desc">Types d\'appels à sauvegarder.</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Aucun</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Calendrier utilisé pour le journal d\'appels.</string>
+
+  <string name="ui_imap_folder_calllog_label">Label du journal d\'appels</string>
+  <string name="ui_imap_folder_calllog_desc">Label Gmail pour les journaux.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Les appels sauvegardées seront classés avec ce libelé dans Gmail.</string>
+
+  <string name="ui_mark_as_read_label">Marquer comme lus (e-mails)</string>
+  <string name="ui_mark_as_read_desc">Définir si les messages (dans Gmail) seront inscrits comme étant lus ou non.</string>
+
+  <string name="mark_as_read_always_read">Toujours marquer comme lu</string>
+  <string name="mark_as_read_always_unread">Toujours marquer comme non-lu</string>
+  <string name="mark_as_read_message_status">Utiliser le status du message</string>
+
+  <string name="ui_mark_as_read_restore_label">Marquer comme lus (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Définir si les messages restaurés seront inscrits comme étant lus ou non.</string>
+
+  <string name="ui_email_address_style_label">Style d\'adresse e-mail</string>
+  <string name="ui_email_address_style_desc">Format des adresses e-mail</string>
+
+  <string name="ui_enable_auto_sync_label">Sauvegarde automatique</string>
+  <string name="ui_enable_auto_sync_desc">Définir si les nouveaux SMS seront sauvegardés de façon automatique ou non.</string>
+  <string name="ui_enable_auto_sync_summary">Sauvergarde automatique de %1$s.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Aucun type d \'élément à sauvegardé de sélectionné.</string>
+
+  <string name="sd_card_disclaimer">La sauvegarde automatique pourrait ne pas fonctionner correctement si l\'application est installée sur la carte SD.</string>
+
+  <string name="ui_auto_backup_schedule_label">Intervalle</string>
+  <string name="ui_auto_backup_schedule_desc">Définir à quelle fréquence les SMS seront sauvegardés.</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Planification des messages entrants</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Définir quand les SMS seront sauvegardés après leur réception.</string>
+
+  <string name="ui_wifi_only_label">WiFi requis</string>
+  <string name="ui_wifi_only_desc">Ne sauvegarder que lorsque l\'appareil est connecté au WiFi</string>
+
+  <string name="ui_notifications_label">Notifications</string>
+  <string name="ui_notifications_desc">Notifications d\'arrière plan</string>
+
+  <string name="error_wifi_only_no_connection">Pas de connexion WiFi</string>
+  <string name="error_no_connection">Pas de connexion internet</string>
+  <string name="error_sms_provider_not_writable">Impossible d\'écrire dans le fournisseur de SMS</string>
+
+  <string name="ui_dialog_missing_credentials_title">Informations d\'identification</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Vous devez d\'abord vous connecter à votre compte Gmail.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Vous devez d\'abord définir vos identifiants.</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">Nom du libellé invalide</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Le nom du libellé ne peut contenir que des lettres non accentuées et des chiffres (A-Z, a-z, 0-9), \'/\'.</string>
+  <string name="ui_dialog_first_sync_title">Première sauvegarde</string>
+  <string name="ui_dialog_first_sync_msg">Sauvegarder ou non les messages stockés actuellement sur cet appareil ?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Sauvegarder ou non les messages actuellement stockés sur cet appareil ?\n\nA savoir : la sauvegarde se fera par tranche de %1$d messages.</string>
+  <string name="ui_dialog_access_token_msg">Demande d\'accès…</string>
+
+  <string name="ui_dialog_access_token_error_title">Echec de l\'authentification</string>
+  <string name="ui_dialog_access_token_error_msg">Impossible d\'obtenir la clé d\'identification. Veuillez vérifier que vous avez bien selectionné \"Autoriser l\'accès\".
+  </string>
+
+  <string name="ui_dialog_connect_msg">Votre navigateur va s\'ouvrir, vous demandant de vous identifier à Gmail, afin d\'autoriser %1$s l\'accès à vos e-mails.</string>
+  <string name="ui_dialog_disconnect_msg">Êtes-vous certain ? Vous devrez ensuite ré-autoriser l\'accès à votre compte une fois déconnecté, et la syncronisation locale sera réinitialisée.</string>
+
+  <string name="ui_sync">Sauvegarder</string>
+  <string name="ui_skip">Ignorer</string>
+  <string name="err_sync_requires_login_info">La sauvegarde ne peut être effectuée sans les informations de connexion.</string>
+  <string name="menu_info">À propos de</string>
+  <string name="menu_reset">Réinitialiser</string>
+  <string name="ui_dialog_reset_title">Réinitialiser l\'état actuel de synchronisation</string>
+  <string name="ui_dialog_reset_message">Voulez-vous réinitialiser l\'état de synchronisation actuelle ? Vous pourrez choisir d\'ignorer les messages ou non, plus tard.</string>
+  <string name="all_messages">Tout</string>
+
+  <string name="gmail_needs_connecting">Appuyez ici pour vous connecter à votre compte Gmail (requis).</string>
+  <string name="gmail_already_connected">Connecté à %1$s.</string>
+
+  <string name="ui_connected_label">Connecter</string>
+
+  <string name="call_incoming">appel entrant</string>
+  <string name="call_outgoing">appel sortant</string>
+  <string name="call_missed">appel raté</string>
+
+  <string name="call_missed_text">Appel raté de %1$s</string>
+  <string name="call_incoming_text">Appel de %1$s</string>
+  <string name="call_outgoing_text">Appel à %1$s</string>
+
+  <string name="call_number_field">Numéro : %1$s</string>
+  <string name="call_duration_field">Durée : %1$s</string>
+
+  <string name="sms_with_field">SMS avec %1$s</string>
+  <!-- the subject line needs to be identical otherwise threading will be messed up -->
+  <string name="call_with_field">Appel avec %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Contacts à sauvegarder</string>
+  <string name="ui_backup_contact_group_desc">Sauvegarder les données uniquement pour certains groupes spécifiques</string>
+
+  <string name="everybody">Tout le monde</string>
+
+  <string name="call_type_everything">Tous</string>
+  <string name="call_type_incoming">Appels entrants seulement</string>
+  <string name="call_type_outgoing">Appels sortants seulement</string>
+  <string name="call_type_incoming_outgoing">Entrants &amp; Sortants</string>
+  <string name="call_type_missed">Appels ratés seulement</string>
+
+  <string name="email_address_style_name">Nom</string>
+  <string name="email_address_style_name_and_number">Nom (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 h</string>
+  <string name="_2h">2 h</string>
+  <string name="_6h">6 h</string>
+  <string name="_24h">24 h</string>
+  <string name="never">Jamais</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="security_none">Aucun</string>
+
+  <string name="ui_third_party_integration_label">Intégration des applications tierces</string>
+  <string name="ui_third_party_integration_desc">Autoriser des applications tierces à lancer le processus de sauvergarde.</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">Paramètres de sauvegarde</string>
+  <string name="ui_backup_calllog_settings_label">Paramètres de sauvegarde du journal d\'appel</string>
+
+  <string name="auto_backup_settings">Paramètres de sauvegarde automatique</string>
+  <string name="ui_restore_settings_label">Paramètres de restauration</string>
+
+  <string name="ui_backup_sms_label">Sauvegarde des SMS</string>
+  <string name="ui_backup_sms_desc">Activer la sauvegarde des SMS</string>
+
+  <string name="ui_restore_sms_label">Restaurer les SMS</string>
+
+  <string name="ui_restore_calllog_label">Restaurer le journal d\'appel</string>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">Journal d\'appel</string>
+
+  <string name="app_log_skip_backup_already_running">Ignoré car une sauvegarde est déjà en cours</string>
+  <string name="app_log_skip_backup_skip_messages">Ignorer tous les messages</string>
+  <string name="app_log_skip_backup_no_items">Ignoré (aucun élément trouvé)</string>
+  <string name="app_log_missing_credentials">Ignoré (authentification manquante)</string>
+  <string name="app_log_backup_requested">Sauvegarde demandée (%1$s)</string>
+  <string name="app_log_start_backup">Démarrage de la sauvegarde (%1$s)</string>
+  <string name="app_log_backup_messages">Sauvegarde en cours (%1$d SMS, %2$d MMS, %3$d appels)</string>
+  <string name="app_log_backup_messages_with_config">Utiliser la configuration %1$s</string>
+  <string name="app_log_backup_canceled">Sauvegarde annulée</string>
+  <string name="app_log_backup_finished">Sauvegarde effectuée</string>
+
+  <string name="app_log_backup_failed_authentication">Erreur d\'authentification : %1$s</string>
+  <string name="app_log_backup_failed_general_error">Erreur générale : %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Sauvegarde non effectuée, aucune connection</string>
+  <string name="app_log_scheduled_next_sync">Prochaine sauvegarde prévue pour : %1$s</string>
+  <string name="app_log_no_next_sync">Pas de nouvelle sauvegarde prévue</string>
+
+  <string name="menu_view_log">Voir journal</string>
+  <string name="app_log_empty">Le journal est vide. Activez-le dans \"Paramètres avancés\".</string>
+
+  <string name="pref_app_log">Synchroniser journal</string>
+  <string name="pref_app_log_enabled">Journal stocké en tant que \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_disabled">Désactivé</string>
+
+  <string name="pref_app_log_debug">Informations supplémentaires de débuggage</string>
+  <string name="pref_app_log_debug_summary">Activer la journalisation des informations supplémentaires de debuggage dans le journal de synchronisation</string>
+
+   <string name="source_incoming">entrant</string>
+  <string name="source_regular">régulier</string>
+  <string name="source_3rd_party">application tierce</string>
+  <string name="source_manual">manuel</string>
+  <string name="source_unknown">inconnu</string>
+
+  <string name="ui_confirm_action_label">Confirmation des actions</string>
+  <string name="ui_confirm_action_desc">Demander avant de sauvegarder ou de restaurer</string>
+  <string name="ui_dialog_confirm_action_title">Confirmer l\'action</string>
+  <string name="ui_dialog_confirm_action_msg">Êtes-vous sûr de vouloir effectuer cette action ?</string>
+
+  <string name="ui_dialog_account_manager_token_error">
+      La clé d \'authentification n\'a pas pu être récupérée. Voulez-vous essayer la méthode d\'authentification par navigateur ?
+  </string>
+  <string name="select_google_account">Sélectionner un compte Google</string>
+
+  <!-- donation related -->
+  <string name="donate">Donation</string>
+  <string name="donate_summary">Utilisant la méthode sécurisée de paiement du Google Play Store.</string>
+
+  <string name="ui_dialog_donate_message">Veuillez spécifier le montant ainsi que la devise :</string>
+  <string name="ui_donation_success_message">Don effectué, merci !</string>
+  <string name="ui_donation_failure_message">Erreur lors du don : %1$s</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">La facturation "in-app" n\'est pas disponible</string>
+  <string name="donation_error_unavailable">non disponible</string>
+  <string name="donation_error_canceled">annulé</string>
+  <string name="donation_error_already_owned">vous avez déjà effectué un don</string>
+
+  <string name="ui_dialog_sms_default_package_change_title">Notification de mise-à-jour</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    Afin de restaurer vos messages sur Android KitKat et Lollipop, vous devez
+    choisir SMS Backup+ comme application par défaut pour les SMS pendant l\'opération de restauration.
+    Il vous sera ensuite demandé de redéfinir l\'application originelle après la restauration.
+  </string>
+    <string name="ui_dark_theme_label">Thème foncé</string>
+    <string name="status_permission_problem">Problème de permission</string>
+  <string name="permission_read_sms">Accès aux SMS</string>
+  <string name="permission_read_call_log">Accès au journal d\'appel</string>
+  <string name="permission_read_contacts">Accès aux contacts</string>
+  <string name="permission_unknown">Inconnu</string>
+    <string name="ui_protocol_trust_all_certificates_desc">Déconseillé. Utiliser pour des certificats auto-signés.
+    </string>
+  <string name="ui_backup_calllog_after_call_label">Sauvegarde lors appel</string>
+  <string name="ui_backup_calllog_after_call_desc">Automatiquement effectuer une sauvgarde après un appel
+    entrant/sortant.
+  </string>
+  <string name="custom_imap_not_configured">IMAP (non configuré)</string>
+  <string name="call_rejected">appel entrant, refusé</string>
+  <string name="call_voicemail">appel entrant, messagerie vocale</string>
+  <string name="call_rejected_text">Appel refusé de %1$s</string>
+  <string name="call_voicemail_text">Appel de %1$s (messagerie vocale)</string>
+  <string name="donation_unspecified_error">erreur générale: %1$d</string>
+  <string name="error_no_sms_default_package">Aucune application SMS par défaut</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Le service \"Google Play\" n\'est pas disponible</string>
+  <string name="theme_app_relaunch">Relancement manuel requis</string>
+  <string name="ui_protocol_trust_all_certificates_label">Faire confiance à tous les certificats</string>
+  <string name="pref_use_old_scheduler">Vieux planification de sauvegarde</string>
+  <string name="pref_use_old_scheduler_summary">Forcer l\'usage du vieux planificateur.</string>
+</resources>

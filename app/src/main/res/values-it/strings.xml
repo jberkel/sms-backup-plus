@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_name">SMS Backup+</string>
+
+  <string name="app_description">
+     Usa Gmail per fare il backup dei tuoi SMS. Questa è una versione migliorata dell\'applicazione "SMS Backup" di
+     Christoph Studer che supporta il ripristino degli SMS sul telefono. E\'
+     pienamente compatibile con SMS Backup.
+  </string>
+
+  <string name="ui_sync_button_label_idle">Backup</string>
+  <string name="ui_sync_button_label_canceling">Interruzione in corso</string>
+  <string name="ui_sync_button_label_syncing">Interrompi</string>
+
+  <string name="ui_restore_button_label_idle">Ripristino</string>
+  <string name="ui_restore_button_label_restoring">Interrompi</string>
+
+  <string name="status_idle">Inattivo</string>
+  <string name="status_idle_details">Utimo SMS salvato: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
+  <string name="status_idle_details_never">Mai</string>
+
+  <string name="status_working">Sto lavorando</string>
+  <string name="status_backup">Salvataggio in corso</string>
+  <string name="status_restore">Ripristino in corso</string>
+
+  <string name="status_backup_details">Salvati <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementi\u2026</string>
+  <string name="status_restore_details">Ripristinati <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementi\u2026</string>
+  <string name="status_login_details">Accesso in corso\u2026</string>
+   <string name="status_updating_threads">Aggiornamento conversazioni\u2026</string>
+  <string name="status_done">Fatto</string>
+  <string name="status_backup_done_details_max_per_sync">Raggiunto limite di %1$d elementi per backup. Riavvia il backup per continuare.</string>
+  <string name="status_backup_done_details_noitems">Non ci sono elementi da salvare.</string>
+
+  <plurals name="status_backup_done_details">
+    <item quantity="one">Salvato con successo <xliff:g id="total_items">%1$d</xliff:g> elemento.</item>
+    <item quantity="other">Salvati con successo <xliff:g id="total_items">%1$d</xliff:g> elementi.</item>
+  </plurals>
+
+  <plurals name="status_restore_done_details">
+    <item quantity="one">Ripristinato con successo <xliff:g id="total_items">%1$d</xliff:g> elemento (%2$d dups).</item>
+    <item quantity="other">Ripristinati con successo <xliff:g id="total_items">%1$d</xliff:g> elementi (%2$d dups).</item>
+  </plurals>
+
+  <string name="status_restore_canceled_details">%1$d/%2$d elementi ripristinati con successo.</string>
+
+  <string name="status_unknown_error">Errore</string>
+  <string name="notification_general_error">Errore SMSBackup+</string>
+
+  <string name="status_unknown_error_details">Errore durante il backup/ripristino:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_auth_failure">Errore login</string>
+  <string name="notification_auth_failure">Errore login SMSBackup+</string>
+
+  <string name="status_auth_failure_details_xoauth">Errore autorizzazione XOAuth. Si prega di controllare di aver attivato IMAP nelle impostazioni del proprio account Gmail.</string>
+  <string name="status_auth_failure_details_plain">Errore autorizzazione IMAP.
+  Controllare che il login e la password siano impostate correttamente.</string>
+  <string name="status_calc_details">Calcolo in corso\u2026</string>
+  <string name="status_canceled">Cancellato</string>
+  <string name="status_canceled_details">%1$d/%2$d elementi salvati con successo.</string>
+   <string name="status_gmail_temp_error">Errore IMAP Gmail temporaneo, riprovare più tardi.</string>
+
+  <string name="ui_settings_advanced_label">Impostazioni avanzate</string>
+  <string name="ui_settings_advanced_desc">Imposta preferenze avanzate.</string>
+  <string name="ui_settings_advanced_server_label">Impostazioni server IMAP</string>
+  <string name="ui_settings_advanced_server_desc">Non modificare se non si è sicuri di quello che si sta facendo!</string>
+
+  <string name="imap_settings">Impostazioni IMAP</string>
+  <string name="ui_login_label">Username</string>
+  <string name="ui_login_desc">Indirizzo email/account IMAP.</string>
+  <string name="ui_password_label">Password</string>
+  <string name="ui_password_desc">Password account IMAP. Utilizzata quando XOAuth è disattivato.</string>
+  <string name="ui_password_dialog_msg">La password è memorizzata sul dispositivo e verrà usata solo per il login.</string>
+  <string name="ui_server_label">Indirizzo server</string>
+  <string name="ui_server_desc">Indirizzo del server che vuoi sincronizzare inclusa la porta.</string>
+  <string name="ui_protocol_label">Sicurezza</string>
+  <string name="ui_protocol_desc">Il protocollo di sicurezza del server. Il predefinito per gmail è \"SSL (Richiesto)\"."</string>
+  <string name="ui_authentication_label">Autenticazione</string>
+  <string name="ui_authentication_desc">Il metodo di autenticazione. Il predefinito per gmail è \"XOauth\".</string>
+  <string name="plain">Testo semplice</string>
+
+  <string name="ui_imap_folder_label">Etichetta Gmail</string>
+  <string name="ui_imap_folder_desc">Etichetta Gmail assegnata agli SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">I messaggi SMS salvati saranno contrassegnati in gmail con questa etichetta.</string>
+  <string name="ui_mail_subject_prefix_label">Prefisso oggetto email</string>
+  <string name="ui_mail_subject_prefix_desc">Utilizza l\'etichetta Gmail come prefisso da inserire nell\'oggetto dell\'email</string>
+
+  <string name="ui_max_items_per_sync_label">Elementi per backup</string>
+  <string name="ui_max_items_per_sync_desc">Numero massimo di elementi per backup.</string>
+  <string name="ui_max_items_per_restore_label">Elementi per ogni ripristino</string>
+  <string name="ui_max_items_per_restore_desc">Numero massimo di messaggi ripristinati.</string>
+
+  <string name="ui_restore_starred_only_label">SMS Preferiti</string>
+  <string name="ui_restore_starred_only_desc">Ripristina solo messaggi preferiti.</string>
+
+  <string name="ui_backup_mms_label">Backup MMS</string>
+  <string name="ui_backup_mms_desc">Abilita backup MMS</string>
+
+  <string name="ui_backup_calllog_label">Backup registro chiamate</string>
+  <string name="ui_imap_folder_calllog_desc">Etichetta Gmail assegnata al registro chiamate.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Gli elementi del registro chiamate salvati verranno contrassegnati su Gmail con questa etichetta.</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Sincronizza calendario</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Aggiungi elementi del registro chiamate sul calendario</string>
+
+  <string name="ui_backup_calllog_types_label">Tipi chiamate</string>
+  <string name="ui_backup_calllog_types_desc">Tipi di chiamate da salvare</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Nessuna</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Calendario usato per il registro chiamate</string>
+
+  <string name="ui_imap_folder_calllog_label">Etichetta registro chiamate</string>
+
+  <string name="ui_mark_as_read_label">Segna come letto (email)</string>
+  <string name="ui_mark_as_read_desc">Scegliere se segnare come letti i messaggi in Gmail.</string>
+
+  <string name="ui_mark_as_read_restore_label">Segna come letto (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Scegliere se segnare come letti tutti i messaggi SMS ripristinati.</string>
+
+  <string name="ui_email_address_style_label">Stile indirizzo email</string>
+  <string name="ui_email_address_style_desc">Formato degli indirizzi email</string>
+
+  <string name="ui_enable_auto_sync_label">Backup automatico</string>
+  <string name="ui_enable_auto_sync_desc">Scegliere se salvare automaticamente i nuovi SMS.</string>
+  <string name="ui_enable_auto_sync_summary">Salvare automaticamente %1$s.</string>
+
+  <string name="sd_card_disclaimer">Il salvataggio automatico potrebbe rivelarsi non affidabile se l\'applicazione viene installata su una memoria SD.</string>
+
+  <string name="ui_auto_backup_schedule_label">Intervalli regolari</string>
+  <string name="ui_auto_backup_schedule_desc">Quando salvare gli SMS</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Pianificazioni in arrivo</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Quando salvare gli SMS in arrivo (dopo la ricezione)</string>
+
+  <string name="ui_wifi_only_label">Richiedi Wifi</string>
+  <string name="ui_wifi_only_desc">Effettuare backup/ripristino solo quando si è connessi al Wifi</string>
+
+  <string name="ui_notifications_label">Notifiche</string>
+  <string name="ui_notifications_desc">Notifiche in background</string>
+
+  <string name="error_wifi_only_no_connection">Nessuna connessione Wifi</string>
+  <string name="error_no_connection">Nessuna connessione internet</string>
+
+  <string name="ui_dialog_missing_credentials_title">Informazioni login</string>
+
+  <string name="ui_dialog_missing_credentials_msg_xoauth">E\' necessario prima connettersi all\'account Gmail.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">E\' necessario impostare prima
+  username e password.</string>
+
+  <string name="ui_dialog_invalid_imap_folder_title">Nome etichetta non valido</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">Il nome dell\'etichetta deve contenere solo lettere non accentate e numeri (A-Z, a-z, 0-9), \'/\', \'.\' e spazi (ma non all\'inizio e alla fine).</string>
+  <string name="ui_dialog_first_sync_title">Primo backup</string>
+  <string name="ui_dialog_first_sync_msg">Salva o ignora tutti i messaggi attualmente memorizzati su questo dispositivo?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Salva o ignora tutti i messaggi attualmente memorizzati su questo dispositivo?\n\nNota: Il backup potrebbe essere diviso in gruppi da %1$d messaggi.</string>
+  <string name="ui_dialog_access_token_msg">Richiesta accesso...</string>
+
+  <string name="ui_dialog_access_token_error_title">Autorizzazione non riuscita</string>
+  <string name="ui_dialog_access_token_error_msg">Impossibile ottenere il token di accesso. Assicurati di aver selezionato
+    \"Concedi accesso\".
+  </string>
+
+  <string name="ui_dialog_connect_msg">Si aprirà una finestra del browser per richiedere il consenso di accesso all\'account Gmail da parte di %1$s per accedere alle email.</string>
+  <string name="ui_dialog_disconnect_msg">Sei sicuro? Sarà necessario autorizzare nuovamente il tuo account dopo averlo disconnesso e lo stato di sincronizzazione locale sarà resettato.</string>
+
+  <!--<string name="ui_dialog_upgrade_title">Aggiorna informazioni</string>-->
+
+  <string name="ui_sync">Backup</string>
+  <string name="ui_skip">Ignora</string>
+  <string name="err_sync_requires_login_info">Impossibile effettuare il backup senza le informazioni per il login.</string>
+  <string name="menu_info">Informazioni</string>
+  <string name="menu_reset">Resetta</string>
+  <string name="ui_dialog_reset_title">Resetta stato sincronizzazione attuale</string>
+  <string name="ui_dialog_reset_message">Vuoi resettare lo stato di sincronizzazione
+  attuale? E\'possibile scegliere di ignorare tutti i messaggi in seguito.</string>
+  <string name="all_messages">Tutti</string>
+
+  <string name="gmail_needs_connecting">Premere per connettersi al proprio account (necessario).</string>
+  <string name="gmail_already_connected">Connesso come %1$s (premere per disconnettersi).</string>
+
+  <string name="ui_connected_label">Connessione</string>
+
+  <string name="call_incoming">Chiamata in arrivo</string>
+  <string name="call_outgoing">Chiamata in uscita</string>
+  <string name="call_missed">Chiamata senza risposta</string>
+
+  <string name="call_missed_text">Chiamata senza risposta da %1$s</string>
+  <string name="call_incoming_text">Chiamata da %1$s</string>
+  <string name="call_outgoing_text">Chiamato %1$s</string>
+
+  <string name="call_number_field">Numero: %1$s</string>
+  <string name="call_duration_field">Durata: %1$s</string>
+
+  <string name="sms_with_field">SMS con %1$s</string>
+  <string name="call_with_field">Chiamata con %1$s</string>
+
+  <string name="ui_backup_contact_group_label">Contatti da salvare</string>
+  <string name="ui_backup_contact_group_desc">Salva solo gli elementi di un gruppo specifico</string>
+
+  <string name="everybody">Tutti</string>
+
+  <string name="call_type_everything">Tutte</string>
+  <string name="call_type_incoming">Solo chiamate in arrivo</string>
+  <string name="call_type_outgoing">Solo chiamate in uscita</string>
+  <string name="call_type_incoming_outgoing">In arrivo &amp; In uscita</string>
+  <string name="call_type_missed">Solo chiamate senza risposta</string>
+
+  <string name="email_address_style_name">Nome</string>
+  <string name="email_address_style_name_and_number">Nome (+00 123456)</string>
+  <string name="email_address_style_number">+00 123456</string>
+
+  <string name="_1h">1 ora</string>
+  <string name="_2h">2 ore</string>
+  <string name="_6h">6 ore</string>
+  <string name="_24h">24 ore</string>
+  <string name="never">Mai</string>
+
+  <string name="_1min">1 min</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
+
+  <string name="security_none">Nessuno</string>
+
+  <string name="ui_third_party_integration_label">Accesso da terze parti</string>
+  <string name="ui_third_party_integration_desc">Permetti alle applicazioni esterne di eseguire backup</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">Impostazioni Di Backup</string>
+  <string name="ui_backup_calllog_settings_label">Impostazioni Registro Chiamate</string>
+  <string name="ui_restore_settings_label">Recupera impostazioni</string>
+
+  <string name="ui_backup_sms_label">Backup SMS</string>
+  <string name="ui_backup_sms_desc">Abilita il backup degli SMS</string>
+
+  <string name="ui_restore_sms_label">Recupera SMS</string>
+  <string name="ui_restore_calllog_label">Recupera il Registro chiamate</string>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">Registro chiamate</string>
+
+  <string name="ui_dialog_donate_message">Si prega di specificare la valuta e la somma:</string>
+  <string name="ui_donation_success_message">Donazione avvenuta con successo, grazie!</string>
+  <string name="ui_donation_failure_message">Donazione fallita: %1$s</string>
+
+  <string name="app_log_skip_backup_already_running">Ignorato perchè il backup è in corso</string>
+  <string name="app_log_skip_backup_skip_messages">Ignora tutti i messaggi</string>
+  <string name="app_log_skip_backup_no_items">Fallito (nessun oggetto trovato)</string>
+  <string name="app_log_missing_credentials">Fallito (Credenziali non presenti)</string>
+  <string name="app_log_backup_requested">Backup richiesto (%1$s)</string>
+  <string name="app_log_start_backup">Avvio del backup in corso (%1$s)</string>
+  <string name="app_log_backup_messages">Backup effettuato (%1$d SMS, %2$d MMS, %3$d Registro Chiamate)</string>
+  <string name="app_log_backup_canceled">Backup annullato</string>
+  <string name="app_log_backup_finished">Backup finito</string>
+
+  <string name="app_log_backup_failed_authentication">Errore di autenticazione: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Errore Generale: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Backup fallito, assenza di connessione</string>
+  <string name="app_log_scheduled_next_sync">Il prossimo backup sarà avviato tra: %1$s</string>
+  <string name="app_log_no_next_sync">Nessun nuovo backup pianificato</string>
+
+  <string name="menu_view_log">Guarda log</string>
+  <string name="app_log_empty">I log sono vuoti. Abilitali in \"Impostazioni Avanzate\".</string>
+
+  <string name="pref_app_log">Sincronizza i log</string>
+  <string name="pref_app_log_enabled">I log sono salvati nella memoria SD \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_disabled">Disattivato</string>
+
+  <string name="source_incoming">in corso</string>
+  <string name="source_regular">regolare</string>
+  <string name="source_3rd_party">di terze parti</string>
+  <string name="source_manual">manuale</string>
+  <string name="source_unknown">sconosciuto</string>
+    <string name="ui_dark_theme_label">Tema scuro</string>
+
+</resources>

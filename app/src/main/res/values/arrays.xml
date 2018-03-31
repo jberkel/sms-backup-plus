@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="max_items_per_sync_entries">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>@string/all_messages</item>
+  </string-array>
+
+  <string-array name="max_items_per_sync_values">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="mark_as_read_entries">
+    <item>@string/mark_as_read_always_read</item>
+    <item>@string/mark_as_read_always_unread</item>
+    <item>@string/mark_as_read_message_status</item>
+  </string-array>
+
+  <string name="read" translatable="false">read</string>
+  <string-array name="mark_as_read_values">
+    <item>@string/read</item>
+    <item>unread</item>
+    <item>message_status</item>
+  </string-array>
+
+  <string-array name="max_items_per_restore_entries">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>@string/all_messages</item>
+  </string-array>
+
+  <string-array name="max_items_per_restore_values">
+    <item>100</item>
+    <item>200</item>
+    <item>500</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="email_address_style_entries">
+    <item>@string/email_address_style_name</item>
+    <item>@string/email_address_style_name_and_number</item>
+    <item>@string/email_address_style_number</item>
+  </string-array>
+
+  <string name="name" translatable="false">name</string>
+  <string-array name="email_address_style_values">
+    <item>@string/name</item>
+    <item>name_and_number</item>
+    <item>number</item>
+  </string-array>
+
+  <string-array name="backup_calllog_types_entries">
+    <item>@string/call_type_everything</item>
+    <item>@string/call_type_incoming</item>
+    <item>@string/call_type_outgoing</item>
+    <item>@string/call_type_incoming_outgoing</item>
+    <item>@string/call_type_missed</item>
+  </string-array>
+
+  <string name="call_type_everything_value" translatable="false">everything</string>
+  <string-array name="backup_calllog_types_values">
+    <item>@string/call_type_everything_value</item>
+    <item>incoming</item>
+    <item>outgoing</item>
+    <item>incoming_outgoing</item>
+    <item>missed</item>
+  </string-array>
+
+  <string-array name="auto_backup_schedule_entries">
+    <item>@string/_30mins</item>
+    <item>@string/_1h</item>
+    <item>@string/_2h</item>
+    <item>@string/_6h</item>
+    <item>@string/_24h</item>
+    <item>@string/never</item>
+  </string-array>
+
+  <string-array name="auto_backup_schedule_values">
+    <item>1800</item>
+    <item>3600</item>
+    <item>7200</item>
+    <item>21600</item>
+    <item>86400</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="auto_backup_incoming_schedule_entries">
+    <item>@string/_1min</item>
+    <item>@string/_3mins</item>
+    <item>@string/_30mins</item>
+    <item>@string/_1h</item>
+    <item>@string/never</item>
+  </string-array>
+
+  <string-array name="auto_backup_incoming_schedule_values">
+    <item>60</item>
+    <item>180</item>
+    <item>1800</item>
+    <item>3600</item>
+    <item>-1</item>
+  </string-array>
+
+  <string-array name="server_protocol_entries">
+    <!-- only connect via TLS, no plain sockets -->
+    <item>@string/security_tls</item>
+    <!-- connect via plain, then upgrade to TLS -->
+    <item>@string/security_starttls</item>
+    <!-- connect via plain socket -->
+    <item>@string/security_none</item>
+  </string-array>
+
+  <string name="plus_ssl_plus" translatable="false">+ssl+</string>
+  <string-array name="server_protocol_entryValues">
+    <item>@string/plus_ssl_plus</item> <!-- default -->
+    <item>+tls+</item>
+    <item/>
+  </string-array>
+
+  <string-array name="server_authentication_entries">
+    <item>@string/xoauth</item>
+    <item>@string/plain</item>
+  </string-array>
+
+  <string name="xoauth_value" translatable="false">xoauth</string>
+  <string name="plain_value" translatable="false">plain</string>
+
+  <string-array name="server_authentication_values">
+    <item>@string/xoauth_value</item>
+    <item>@string/plain_value</item>
+  </string-array>
+</resources>

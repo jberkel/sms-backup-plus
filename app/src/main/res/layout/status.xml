@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:paddingBottom="10dip"
+              android:paddingLeft="10dip"
+              android:paddingRight="10dip"
+              android:paddingTop="10dip">
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/status_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_done"/>
+
+        <TextView
+                android:id="@+id/status_label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/status_icon"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="6dip"
+                android:layout_marginStart="6dip"
+                android:layout_toRightOf="@id/status_icon"
+                android:layout_toEndOf="@id/status_icon"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+        <LinearLayout
+                android:id="@+id/details_sync"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/status_label"
+                android:layout_alignStart="@id/status_label"
+                android:layout_below="@id/status_icon"
+                android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/details_sync_progress"
+                style="?android:progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"
+                android:paddingLeft="0dip"
+                android:paddingStart="0dip"
+                android:paddingRight="10dip"
+                android:paddingEnd="10dip"/>
+
+            <TextView
+                    android:id="@+id/details_sync_label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dip"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dip"
+            android:paddingRight="20dip"
+            android:paddingTop="10dip"
+            android:shrinkColumns="*"
+            android:stretchColumns="*"
+            tools:ignore="UselessParent">
+
+        <TableRow>
+
+            <Button
+                    android:id="@+id/sync_button"
+                    android:gravity="center"
+                    android:text="@string/ui_sync_button_label_idle"
+                    />
+
+            <Button
+                    android:id="@+id/restore_button"
+                    android:gravity="center"
+                    android:text="@string/ui_restore_button_label_idle"
+                    />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

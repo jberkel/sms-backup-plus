@@ -2,13 +2,10 @@ language: android
 android:
  components:
     - tools
-    - build-tools-24.0.3
-    - android-24
-    - extra-android-m2repository
+    - build-tools-26.0.2
+    - android-26
 
 jdk: oraclejdk8
 
 script:
-  - mvn android:lint
-  - mvn test
-after_failure: cat target/lint-results/lint-results.xml || true
+  - ./gradlew build
