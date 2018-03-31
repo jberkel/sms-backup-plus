@@ -268,7 +268,7 @@
   <string name="pref_app_log_disabled">Désactivé</string>
 
   <string name="pref_app_log_debug">Aide au débuggage</string>
-  <string name="pref_app_log_debug_summary">Activer l\'enregistrement d'informations supplémentaires de débuggage dans le journal</string>
+  <string name="pref_app_log_debug_summary">Activer l\'enregistrement d\'informations supplémentaires de débuggage dans le journal</string>
 
    <string name="source_incoming">entrant</string>
   <string name="source_regular">régulier</string>
