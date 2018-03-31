@@ -426,7 +426,7 @@ repository and submit a [pull request][About pull requests].
   * [Ben Dodson](https://github.com/bjdodson) - Contacts 2.0 / MMS support
   * [Felix Knecht](https://github.com/dicer) - Call log backup code
   * [Michael Scharfstein](https://github.com/smike) - Call log calendar ICS support
-  * [k9mail](https://github.com/k9mail/k-9/) IMAP library, with some modifications ([k9mail/sms-backup-plus](https://github.com/jberkel/k-9/tree/sms-backup-plus))
+  * [K-9 Mail](https://github.com/k9mail/k-9/) IMAP library, with some modifications ([k-9/sms-backup-plus](https://github.com/jberkel/k-9/tree/sms-backup-plus))
   * [signpost](https://github.com/mttkay/signpost) Matthias Käppler, Signpost OAuth library
   * Shimon Simon (new icon designs)
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
