@@ -429,23 +429,27 @@ repository and submit a [pull request][About pull requests].
   * [K-9 Mail](https://github.com/k9mail/k-9/) IMAP library, with some modifications ([k-9/sms-backup-plus](https://github.com/jberkel/k-9/tree/sms-backup-plus))
   * [signpost](https://github.com/mttkay/signpost) Matthias Käppler, Signpost OAuth library
   * Shimon Simon (new icon designs)
-  * [bbs.goapk.com](http://bbs.goapk.com) / [Chen](http://blog.thisischen.com/) - Chinese translation
+  * [bbs.goapk.com](http://bbs.goapk.com) / [Chen Ma](https://github.com/marcher233) - Chinese translation
   * [skolima](https://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
   * Gabriele Ravanetti / [Patryk Rzucidlo](http://www.ptkdev.it/) / [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
-  * Harun Sahin - Turkish translation
+  * Harun Şahin - Turkish translation
   * [Lukas Pribyl](http://www.lukaspribyl.eu) - Czech translation
   * João Pedro Ferreira - Portuguese translation
-  * Martijn Brouns - Dutch translation
-  * [Tobeon](http://tobeon.net) - Norwegian translation
-  * Nemanja Bračko - Serbian translation
-  * Markus Osanger - German translation
+  * Martijn Brouns, [Niko Strijbol](https://github.com/niknetniko) - Dutch translation
+  * [Torbe](https://github.com/Torbe) - Norwegian translation
+  * Nemanja Bračko, [Mladen Pejaković](https://github.com/pejakm) - Serbian translation
+  * [Markus Osanger](https://github.com/mosanger) - German translation
   * Dimitris / Mazin Hussein - Greek translation
-  * Yunsu Choi, [Taegil Bae](https://github.com/demokritos) - Korean translation
-  * Javier Pico - Galician translation
-  * Ferran Rius - Catalan translation
+  * [Yunsu Choi](https://github.com/YunsuChoi), [Taegil Bae](https://github.com/demokritos) - Korean translation
+  * [Javier Pico](https://github.com/javierpico) - Galician translation
+  * [Ferran Rius](https://github.com/Ferri64) - Catalan translation
   * [Mads Andreasen](https://github.com/MadsAndreasen) - Danish translation, initial JobDispatcher code
   * sHa - Ukrainian translation
+  * [Erik Eloff](https://github.com/Loffe/) - Swedish translation
+  * [Matrix44](https://github.com/Matrix44) - Slovak translation
+  * [László Gárdonyi](https://github.com/gLes) - Hungarian translation
+  * Petr P. Gornostaev, [saratovout](https://github.com/saratovout) - Russian translation
 
 ## <a name="screenhots">Screenshots</a>
 
