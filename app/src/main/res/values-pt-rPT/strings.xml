@@ -135,7 +135,6 @@
   <string name="call_number_field">Número: %1$s</string>
   <string name="call_duration_field">Duração: %1$s</string>
   <string name="sms_with_field">SMS com %1$s</string>
-  <string name="mms_with_field">MMS com %1$s</string>
   <string name="call_with_field">Chamada com %1$s</string>
   <string name="ui_backup_contact_group_label">Contatos a serem copiados</string>
   <string name="ui_backup_contact_group_desc">Só copiar itens de um grupo específico</string>

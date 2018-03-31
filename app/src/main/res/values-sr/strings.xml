@@ -197,7 +197,6 @@
   <string name="call_duration_field">Трајање: %1$s</string>
 
   <string name="sms_with_field">Преписка са %1$s</string>
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Разговор са %1$s</string>
 
   <string name="ui_backup_contact_group_label">Контакти за копирање</string>
@@ -238,7 +237,6 @@
   <!-- <string name="ui_backup_calllog_settings_desc">Поставке евиденције позива</string> -->
 
   <string name="auto_backup_settings">Подеш. аутом. копирања</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Поставке враћања</string>
   <!-- <string name="ui_restore_settings_desc">Поставке враћања</string> -->
@@ -253,8 +251,6 @@
   <string name="sms">СМС</string>
   <string name="mms">ММС</string>
   <string name="calllog">Евиденција позива</string>
-
-  <string name="pref_acra_disabled">Онемогућено</string>
 
   <string name="app_log_skip_backup_already_running">Прескочено, јер је већ покренуто прављење резервне копије</string>
   <string name="app_log_skip_backup_skip_messages">Прескочи све поруке</string>
@@ -278,7 +274,7 @@
 
   <string name="pref_app_log">Дневник синхрон.</string>
   <string name="pref_app_log_enabled">Дневник је смештен на СД картици као „sms_backup_plus.log“.</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Онемогућено</string>
 
   <string name="pref_app_log_debug">Додатни подаци испр. грешака</string>
   <string name="pref_app_log_debug_summary">Омогућује додатне записе у дневнику синхронизације</string>

@@ -188,7 +188,6 @@
 
   <string name="sms_with_field">Sms met %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Oproep met %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contacten om te back-uppen</string>
@@ -223,16 +222,9 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Back-upinstellingen</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
-
   <string name="ui_backup_calllog_settings_label">Gesprekkenlijstinstellingen</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
-
   <string name="auto_backup_settings">Autom.-back-upinstellingen</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
-
   <string name="ui_restore_settings_label">Terugzetteninstellingen</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">Sms back-uppen</string>
   <string name="ui_backup_sms_desc">Sms-back-up inschakelen</string>
@@ -243,8 +235,6 @@
   <string name="sms">Sms</string>
   <string name="mms">Mms</string>
   <string name="calllog">Gesprekkenlijst</string>
-
-  <string name="pref_acra_disabled">Uitgeschakeld</string>
 
   <string name="app_log_skip_backup_already_running">Overgeslagen omdat back-up al bezig is</string>
   <string name="app_log_skip_backup_skip_messages">Alle berichten overgeslagen</string>
@@ -268,7 +258,7 @@
 
   <string name="pref_app_log">Synchronisatielogboek</string>
   <string name="pref_app_log_enabled">Logboek is opgeslagen op SD-kaart als \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Uitgeschakeld</string>
 
   <string name="pref_app_log_debug">Extra debuginformatie</string>
   <string name="pref_app_log_debug_summary">Voegt extra debuginformatie toe in synchronisatielogboeken</string>

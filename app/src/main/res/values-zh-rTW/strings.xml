@@ -197,7 +197,6 @@
   <string name="call_duration_field">耗時: %1$s</string>
 
   <string name="sms_with_field">與 %1$s 的簡訊記錄</string>
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">與 %1$s 的通話記錄</string>
 
   <string name="ui_backup_contact_group_label">需要備份的聯絡人</string>
@@ -238,7 +237,6 @@
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">自動備份設定</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">還原設定</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
@@ -253,8 +251,6 @@
   <string name="sms">簡訊</string>
   <string name="mms">MMS</string>
   <string name="calllog">通話記錄</string>
-
-  <string name="pref_acra_disabled">已停用</string>
 
   <string name="app_log_skip_backup_already_running">已跳過，由於備份已在進行中</string>
   <string name="app_log_skip_backup_skip_messages">跳過所有訊息</string>
@@ -278,7 +274,7 @@
 
   <string name="pref_app_log">同步處理記錄</string>
   <string name="pref_app_log_enabled">記錄會被保存在 SD 卡上，命名為“sms_backup_plus.log”。</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">已停用</string>
 
   <string name="pref_app_log_debug">額外調試資訊</string>
   <string name="pref_app_log_debug_summary">在同步記錄中啓用額外調試記錄</string>

@@ -196,7 +196,6 @@
 
   <string name="sms_with_field">SMS: %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Hívás: %1$s</string>
 
   <string name="ui_backup_contact_group_label">Szűrés névjegyekre</string>
@@ -231,16 +230,9 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Mentési beállítások</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
-
   <string name="ui_backup_calllog_settings_label">Hívásnapló beállítások</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
-
   <string name="auto_backup_settings">Automatikus mentés beállítások</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
-
   <string name="ui_restore_settings_label">Visszaállítási beállítások</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">SMS-ek mentése</string>
   <string name="ui_backup_sms_desc">Engedélyezi az SMS-ek mentését</string>
@@ -252,8 +244,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">hívásnapló</string>
-
-  <string name="pref_acra_disabled">Letiltva</string>
 
   <string name="app_log_skip_backup_already_running">Kihagyva, mert már folyamatban van egy mentés</string>
   <string name="app_log_skip_backup_skip_messages">Az összes üzenet kihagyása</string>
@@ -277,7 +267,7 @@
 
   <string name="pref_app_log">Szinkronizálás naplózása</string>
   <string name="pref_app_log_enabled">A napló az SD-kártyán az \"sms_backup_plus.log\" nevű fájlban van.</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Letiltva</string>
 
   <string name="pref_app_log_debug">Extra hibakeresési információ</string>
   <string name="pref_app_log_debug_summary">Engedélyezi az extra hibakeresési adatok mentését a szinkronizációs naplóba</string>

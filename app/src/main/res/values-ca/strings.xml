@@ -194,7 +194,6 @@
 
   <string name="sms_with_field">SMS amb %1$s</string>
   <!-- la línia del tema ha de ser idèntica, en cas contrari s\'embolicaran els fils -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Truca amb %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contactes a copiar</string>
@@ -235,7 +234,6 @@
   <!-- <string name="ui_backup_calllog_settings_desc">Configuració del registre de trucades</string> -->
 
   <string name="auto_backup_settings">Configuració de còpia automàtica</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Configuració de restauració</string>
   <!-- <string name="ui_restore_settings_desc">Configuració de restauració</string> -->
@@ -250,7 +248,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Registre de trucades</string>
-  <string name="pref_acra_disabled">Inhabilitats</string>
 
   <string name="app_log_skip_backup_already_running">S\'ha omès perquè ja s\'està fent una còpia de seguretat</string>
   <string name="app_log_skip_backup_skip_messages">Omet tots els missatges</string>
@@ -274,7 +271,7 @@
 
   <string name="pref_app_log">Registre de sincronització</string>
   <string name="pref_app_log_enabled">El registre està desat a la targeta SD com a \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Inhabilitats</string>
 
   <string name="pref_app_log_debug">Informació de depuració addicional</string>
   <string name="pref_app_log_debug_summary">Habilita el registre de depuració addicional al registre de sincronització</string>

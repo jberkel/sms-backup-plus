@@ -189,7 +189,6 @@
   <string name="call_duration_field">Durata: %1$s</string>
 
   <string name="sms_with_field">SMS con %1$s</string>
-  <string name="mms_with_field">SMS con %1$s</string>
   <string name="call_with_field">Chiamata con %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contatti da salvare</string>
@@ -224,16 +223,8 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Impostazioni Di Backup</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
-
   <string name="ui_backup_calllog_settings_label">Impostazioni Registro Chiamate</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
-
-  <!-- <string name="auto_backup_settings">Auto-Backup delle impostazioni</string> -->
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
-
   <string name="ui_restore_settings_label">Recupera impostazioni</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">Backup SMS</string>
   <string name="ui_backup_sms_desc">Abilita il backup degli SMS</string>
@@ -248,8 +239,6 @@
   <string name="ui_dialog_donate_message">Si prega di specificare la valuta e la somma:</string>
   <string name="ui_donation_success_message">Donazione avvenuta con successo, grazie!</string>
   <string name="ui_donation_failure_message">Donazione fallita: %1$s</string>
-
-  <string name="pref_acra_disabled">Disattivato</string>
 
   <string name="app_log_skip_backup_already_running">Ignorato perchè il backup è in corso</string>
   <string name="app_log_skip_backup_skip_messages">Ignora tutti i messaggi</string>
@@ -272,7 +261,7 @@
 
   <string name="pref_app_log">Sincronizza i log</string>
   <string name="pref_app_log_enabled">I log sono salvati nella memoria SD \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Disattivato</string>
 
   <string name="source_incoming">in corso</string>
   <string name="source_regular">regolare</string>

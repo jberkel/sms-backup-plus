@@ -128,7 +128,6 @@
     <string name="call_number_field">Numer: %1$s</string>
     <string name="call_duration_field">Czas połączenia: %1$s</string>
     <string name="sms_with_field">SMS od %1$s</string>
-    <item type="string" name="mms_with_field">@string/sms_with_field</item>
     <string name="call_with_field">Połączenie z %1$s</string>
     <string name="ui_backup_contact_group_label">Grupa do backupu</string>
     <string name="ui_backup_contact_group_desc">Twórz kopię tylko dla wybranych grup</string>
@@ -155,7 +154,6 @@
     <string name="ui_backup_settings_label">Ustawienia kopii zapasowej</string>
     <string name="ui_backup_calllog_settings_label">Ustawienia historii połączeń</string>
     <string name="auto_backup_settings">Ustawienia harmonogramu kopii zapasowej</string>
-    <item type="string" name="ui_auto_backup_settings_label">@string/auto_backup_settings</item>
     <string name="ui_restore_settings_label">Ustawienia przywracania</string>
     <string name="ui_backup_sms_label">Kopia zapasowa SMS-ów</string>
     <string name="ui_backup_sms_desc">Włącz kopię SMS-ów</string>
@@ -166,7 +164,6 @@
     <string name="ui_dialog_donate_message">Określ kwotę i walutę:</string>
     <string name="ui_donation_success_message">Darowizna dokonana. Dziekuję bardzo!</string>
     <string name="ui_donation_failure_message">Darowizna nieudana: %1$s</string>
-    <string name="pref_acra_disabled">Wyłączone</string>
     <string name="app_log_skip_backup_already_running">Pomijam, kopia zapasowa własnie sie wykonuje</string>
     <string name="app_log_skip_backup_skip_messages">Pomiń wszystkie wiadomości</string>
     <string name="app_log_skip_backup_no_items">Pomijam (nie znaleziono pozycji)</string>
@@ -185,7 +182,7 @@
     <string name="app_log_empty">Plik logu jest pusty. Włącz go w \"Ustawieniach zaawansowanych\".</string>
     <string name="pref_app_log">Log synchronizacji</string>
     <string name="pref_app_log_enabled">Plik logu został zapisany na karcie SD jako \"sms_backup_plus.log\".</string>
-    <item type="string" name="pref_app_log_disabled">@string/pref_acra_disabled</item>
+    <item type="string" name="pref_app_log_disabled">Wyłączone</item>
     <string name="source_incoming">incoming</string>
     <string name="source_regular">regular</string>
     <string name="source_3rd_party">3rd party</string>

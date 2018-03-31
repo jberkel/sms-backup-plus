@@ -143,7 +143,6 @@
   <string name="call_duration_field">Kohëzgjatja: %1$s</string>
   <string name="sms_with_field">SMS me %1$s</string>
   <!-- linja e subjektit duhet të jetë identike përndryshe rrjedhat do të ngatërrohen-->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Thirrje me %1$s</string>
   <string name="ui_backup_contact_group_label">Kontakte për tu ruajtur rezervë</string>
   <string name="ui_backup_contact_group_desc">Vetëm shënimet e kopjuara rezervë nga një grup specifik</string>
@@ -173,7 +172,6 @@
   <string name="ui_backup_calllog_settings_label">Aranzhimet e ditarit të thirrjeve</string>
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
   <string name="auto_backup_settings">Aranzhimet e kopjes rezervë automatike</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
   <string name="ui_restore_settings_label">Aranzhimet e rikthimit</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
   <string name="ui_backup_sms_label">Kopjoni rezervë SMS</string>
@@ -183,7 +181,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Ditari i thirrjeve</string>
-  <string name="pref_acra_disabled">I Çaktivizuar</string>
   <string name="app_log_skip_backup_already_running">U anashkalua sepse krijimi i kopjes rezervë është tashmë duke punuar</string>
   <string name="app_log_skip_backup_skip_messages">Anashkalo të gjithë mesazhet</string>
   <string name="app_log_skip_backup_no_items">E anashkaluar (nuk u gjetën shënime)</string>
@@ -203,7 +200,7 @@
   <string name="app_log_empty">Ditari është bosh. Aktivizoheni tek \"Aranzhimet e avancuara\".</string>
   <string name="pref_app_log">Sinkronizoni ditarin</string>
   <string name="pref_app_log_enabled">Ditari është i ruajtur në kartën SD si \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">I Çaktivizuar</string>
   <string name="pref_app_log_debug">Informacion rregullimi ekstra</string>
   <string name="pref_app_log_debug_summary">Aktivizon shënimin e rregullimeve ekstra në ditarin e sinkronizimit</string>
   <string name="source_incoming">hyrëse</string>

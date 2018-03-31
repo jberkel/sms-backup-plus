@@ -190,7 +190,6 @@
 
   <string name="sms_with_field">SMS med  %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Opkald med %1$s</string>
 
   <string name="ui_backup_contact_group_label">Backup af følgende kontakter</string>
@@ -231,7 +230,6 @@
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">Auto backup indstillinger</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Genetabler indstillinger</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
@@ -246,8 +244,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Opkalds log</string>
-
-  <string name="pref_acra_disabled">Deaktiveret</string>
 
   <string name="app_log_skip_backup_already_running">Sprunget over fordi backup allerede er igang</string>
   <string name="app_log_skip_backup_skip_messages">Spring alle beskeder over</string>
@@ -271,7 +267,7 @@
 
   <string name="pref_app_log">Synk log</string>
   <string name="pref_app_log_enabled">Loggen er gemt på SD kortet som \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Deaktiveret</string>
 
   <string name="pref_app_log_debug">Ekstra debug information</string>
   <string name="pref_app_log_debug_summary">Aktiverer ekstra debug logning i loggen.</string>

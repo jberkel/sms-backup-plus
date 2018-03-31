@@ -160,8 +160,6 @@
   <string name="ui_dialog_connect_msg"> Θα ανοίξει παράθυρο φυλομετρητή έτσι ώστε να    συνδεθείτε στο Gmail και  %1$s να σας δώσει πρόσβαση στα email σας .</string>
   <string name="ui_dialog_disconnect_msg"> Είσαι σίγουρος; Θα πρέπει να επιτραπούν εκ νέου το λογαριασμό σας μετά την αποσύνδεση και την τοπική κατάσταση συγχρονισμού θα πρέπει να επαναφέρετε.</string>
 
-  <!--<string name="ui_dialog_upgrade_title">Πληροφορίες Αναβάθμισεις</string>-->
-
   <string name="ui_sync"> Δημιουργία αντιγράφων ασφαλείας </string>
   <string name="ui_skip"> Μετάβαση </string>
   <string name="err_sync_requires_login_info"> Δεν είναι δυνατή η δημιουργία αντιγράφων ασφαλείας χωρίς στοιχεία σύνδεσης.</string>
@@ -189,7 +187,6 @@
 
   <string name="sms_with_field">SMS με %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Κάλεσε με %1$s</string>
 
   <string name="ui_backup_contact_group_label">Επαφές για backup</string>
@@ -224,16 +221,10 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label"> Δημιουργία αντιγράφων ασφαλείας των ρυθμίσεων </string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
-
   <string name="ui_backup_calllog_settings_label"> Ρυθμίσεις μητρώου κλήσεων </string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings"> Ρυθμίσεις αυτόματης δημιουργίας αντιγράφων ασφαλείας </string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
-
   <string name="ui_restore_settings_label"> Επαναφορά ρυθμίσεων </string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label"> Δημιουργία αντιγράφων ασφαλείας SMS </string>
   <string name="ui_backup_sms_desc"> Ενεργοποίηση SMS αντιγράφων ασφαλείας </string>
@@ -244,8 +235,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog"> Μητρώο κλήσεων </string>
-
-  <string name="pref_acra_disabled">Απενεργοποιημένο</string>
 
   <string name="app_log_skip_backup_already_running"> Παραλείφθηκαν λόγω παράλληλης εκτέλεσης αντιγράφων ασφαλείας  </string>
   <string name="app_log_skip_backup_skip_messages"> Μεταφορά όλων των μηνυμάτων </string>
@@ -268,7 +257,7 @@
 
   <string name="pref_app_log">Συγχρονισμός μητρώου</string>
   <string name="pref_app_log_enabled">Το μητρώο είναι υποθηκευμένο στην SD κάρτα σας ως : \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Απενεργοποιημένο</string>
 
   <string name="source_incoming">Εισερχόμενη</string>
   <string name="source_regular">Ορθρό </string>

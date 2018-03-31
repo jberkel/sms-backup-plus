@@ -188,7 +188,6 @@
   <string name="call_duration_field">Samtalstid: %1$s</string>
 
   <string name="sms_with_field">SMS med %1$s</string>
-  <string name="mms_with_field">SMS med %1$s</string>
   <string name="call_with_field">Samtal med %1$s</string>
 
   <string name="ui_backup_contact_group_label">Kontakter att säkerhetskopiera</string>

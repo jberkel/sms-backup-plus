@@ -192,7 +192,6 @@
 
   <string name="sms_with_field">SMS con %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Conversa de voz con %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contactos que se gardarán</string>
@@ -233,8 +232,6 @@
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">Configuración do gardado automático</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
-
   <string name="ui_restore_settings_label">Reestablecer configuración</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
@@ -247,8 +244,6 @@
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Historial de chamadas</string>
-
-  <string name="pref_acra_disabled">Desactivado</string>
 
   <string name="app_log_skip_backup_already_running">Omitido porque o gardado xa está en proceso</string>
   <string name="app_log_skip_backup_skip_messages">Omitir todas as mensaxes</string>
@@ -271,7 +266,7 @@
 
   <string name="pref_app_log">Historial de sincronización</string>
   <string name="pref_app_log_enabled">O historial almacénasa na tarxeta SD como \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Desactivado</string>
 
   <string name="source_incoming">entrada</string>
   <string name="source_regular">regular</string>

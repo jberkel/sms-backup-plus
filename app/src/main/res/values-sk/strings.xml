@@ -131,7 +131,6 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="call_number_field">Číslo: %1$s</string>
     <string name="call_duration_field">Trvanie: %1$s</string>
     <string name="sms_with_field">SMS od %1$s</string>
-    <string name="mms_with_field">@string/sms_with_field</string>
     <string name="call_with_field">Volania od %1$s</string>
     <string name="ui_backup_contact_group_label">Kontakty na zálohovanie</string>
     <string name="ui_backup_contact_group_desc">Zálohovanie položiek len určitej skupiny</string>
@@ -158,7 +157,6 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="ui_backup_settings_label">Nastavenia zálohy</string>
     <string name="ui_backup_calllog_settings_label">Nastavenie denníka hovorov</string>
     <string name="auto_backup_settings">Automatická záloha</string>
-    <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
     <string name="ui_restore_settings_label">Nastavenia obnovy</string>
     <string name="ui_backup_sms_label">Záloha SMS</string>
     <string name="ui_backup_sms_desc">Zapnutie zálohy SMS</string>
@@ -170,7 +168,6 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="ui_dialog_donate_message">Uveďte sumu a menu:</string>
     <string name="ui_donation_success_message">Darovanie bolo úspešné. Ďakujeme</string>
     <string name="ui_donation_failure_message">Darovanie bolo neúspešné: %1$s</string>
-    <string name="pref_acra_disabled">Vypnuté</string>
     <string name="app_log_skip_backup_already_running">Vynechané pretože zálohovanie je už spustené</string>
     <string name="app_log_skip_backup_skip_messages">Vynechané všetky správy</string>
     <string name="app_log_skip_backup_no_items">Vynechané (žiadne položky neboli nájdené)</string>
@@ -189,7 +186,7 @@ Poznámka: Záloha bude rozdelená do dávok po %1$d správach"</string>
     <string name="app_log_empty">Denník je prázdny. Zapnite ho v Pokročilé nastavenia</string>
     <string name="pref_app_log">Denník synchronizácie</string>
     <string name="pref_app_log_enabled">Denník uložený na SD kartu "sms_backup_plus.log"</string>
-    <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+    <string name="pref_app_log_disabled">Vypnuté</string>
     <string name="source_incoming">prichádzajúce</string>
     <string name="source_regular">pravidelné</string>
     <string name="source_3rd_party">tretia strana</string>

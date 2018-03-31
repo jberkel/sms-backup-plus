@@ -144,7 +144,6 @@
 <string name="sms_with_field">SMS з %1$s</string>
 
 <!-- the subject line needs to be identical otherwise threading will be messed up -->
-<string name="mms_with_field">@string/sms_with_field</string>
 <string name="call_with_field">Виклик з %1$s</string>
 <string name="ui_backup_contact_group_label">Контакти для резервного копіювання</string>
 <string name="ui_backup_contact_group_desc">Резервнє копіювання елементів з певної групи</string>
@@ -177,7 +176,6 @@
 <!-- <string name="ui_backup_calllog_settings_desc">Налаштування журналу викликів</string> -->
 
 <string name="auto_backup_settings">Налаштування автоматичного резервного копіювання</string>
-<string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
 <string name="ui_restore_settings_label">Відновлення</string>
 <!-- <string name="ui_restore_settings_desc">Параметри відновлення з резервної копії</string> -->
@@ -189,7 +187,6 @@
 <string name="sms">SMS</string>
 <string name="mms">MMS</string>
 <string name="calllog">Журнал викликів</string>
-<string name="pref_acra_disabled">Вимкнено</string>
 <string name="app_log_skip_backup_already_running">Пропущено, оскільки резервне копіювання вже запущено</string>
 <string name="app_log_skip_backup_skip_messages">Пропустити всі повідомлення</string>
 <string name="app_log_skip_backup_no_items">Пропущені (елементів не знайдено)</string>
@@ -209,7 +206,7 @@
 <string name="app_log_empty">Журнал порожній. Увімкніть його в \"Додаткових налаштуваннях\".</string>
 <string name="pref_app_log">Синхронізація журналу</string>
 <string name="pref_app_log_enabled">Журнал зберігається на SD-картку як \"sms_backup_plus.log\".</string>
-<string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+<string name="pref_app_log_disabled">Вимкнено</string>
 <string name="pref_app_log_debug">Додаткова інформація зневадження</string>
 <string name="pref_app_log_debug_summary">Додати додаткову інформацію зневадження до журналу синхронізації</string>
 <string name="source_incoming">вхідні</string>

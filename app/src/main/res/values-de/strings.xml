@@ -193,7 +193,6 @@
 
   <string name="sms_with_field">SMS mit %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Telefonat mit %1$s</string>
 
   <string name="ui_backup_contact_group_label">Zu sichernde Kontakte</string>
@@ -234,7 +233,6 @@
   <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">Einstellungen der Automatischen Sicherung</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Wiederherstellungseinstellungen</string>
   <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
@@ -258,8 +256,6 @@
   <string name="ui_donation_success_message">Spende erfolgreich, Vielen Dank!</string>
   <string name="ui_donation_failure_message">Spende fehlgeschlagen: %1$s</string>
 
-  <string name="pref_acra_disabled">Deaktiviert</string>
-
   <string name="app_log_skip_backup_already_running">Übersprungen weil die Sicherung bereits läuft.</string>
   <string name="app_log_skip_backup_skip_messages">Überspringe alle Nachrichten</string>
   <string name="app_log_skip_backup_no_items">Übersprungen (Keine Einträge gefunden)</string>
@@ -281,7 +277,7 @@
 
   <string name="pref_app_log">Sync-Protokoll</string>
   <string name="pref_app_log_enabled">Protokoll wird als \"sms_backup_plus.log\" gespeichert.</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Deaktiviert</string>
 
   <string name="source_incoming">eingehend</string>
   <string name="source_regular">regulär</string>
