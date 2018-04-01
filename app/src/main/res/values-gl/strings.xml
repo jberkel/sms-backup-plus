@@ -62,8 +62,6 @@
   <string name="permission_read_contacts">Acceso aos contactos</string>
   <string name="permission_unknown">Descoñecido</string>
 
-  <string name="notification_missing_permission" translatable="false">@string/status_permission_problem</string>
-
   <string name="status_auth_failure_details_xoauth">Erro de autorización XOAuth. Por favor, asegúrese de ter habilitado IMAP na configuración da súa conta de GMail.</string>
   <string name="status_auth_failure_details_plain">Erro de autorización IMAP.
   Asegúrese de que o nome de usuario e contrasinal se estableceron correctamente.</string>
@@ -95,7 +93,6 @@
   <string name="ui_authentication_label">Autenticación</string>
   <string name="ui_authentication_desc">O método de autenticación.</string>
   <string name="plain">Texto plano</string>
-  <string name="xoauth" translatable="false">XOAuth2 (Gmail)</string>
 
   <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
   <string name="ui_imap_folder_desc">A etiqueta de Gmail asignada ás SMS.</string>
@@ -200,7 +197,6 @@
 
   <string name="gmail_needs_connecting">Toque para conectar a súa conta de GMail (necesario).</string>
   <string name="gmail_already_connected">Conectado como %1$s.</string>
-  <string name="custom_imap" translatable="false">IMAP %1$s.</string>
   <string name="custom_imap_not_configured">IMAP (sen configurar)</string>
 
   <string name="ui_connected_label">Conectar</string>
@@ -221,7 +217,6 @@
   <string name="call_duration_field">Duración: %1$s</string>
 
   <string name="sms_with_field">SMS con %1$s</string>
-  <string name="mms_with_field" translatable="false">@string/sms_with_field</string>
   <string name="call_with_field">Conversa con %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contactos para copia de seguridade</string>
@@ -249,8 +244,6 @@
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
 
-  <string name="security_tls" translatable="false">TLS</string>
-  <string name="security_starttls" translatable="false">STARTTLS</string>
   <string name="security_none">Ningunha</string>
 
   <string name="ui_third_party_integration_label">Integración con terceiras partes</string>
@@ -261,7 +254,6 @@
   <string name="ui_backup_calllog_settings_label">Configuración de historial de chamadas</string>
 
   <string name="auto_backup_settings">Configuración de copia automatica</string>
-  <string name="ui_auto_backup_settings_label" translatable="false">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Configuración de restauración</string>
 
