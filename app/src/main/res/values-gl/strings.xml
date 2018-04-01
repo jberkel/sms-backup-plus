@@ -28,7 +28,7 @@
   <string name="status_login_details">Iniciando sesión\u2026</string>
   <string name="status_updating_threads">Actualizando conversas\u2026</string>
   <string name="status_done">Feito</string>
-  <string name="status_backup_done_details_max_per_sync">Acadouse o máximo de %1$d elementos por gardado. Reinicie o gardado para continuar.</string>
+  <string name="status_backup_done_details_max_per_sync">Acadouse o máximo de %1$d elementos por copia. Reinicie a copia para continuar.</string>
   <string name="status_backup_done_details_noitems">Non había elementos para gardar.</string>
 
   <plurals name="status_backup_done_details">
@@ -82,7 +82,7 @@
   <string name="ui_login_desc">A súa conta IMAP/enderezo de correo electrónico.</string>
   <string name="ui_password_label">Contrasinal</string>
   <string name="ui_password_desc">O contrasinal da súa conta IMAP.</string>
-  <string name="ui_password_dialog_msg">O contrasinal almacenarase en este dispositivo e só se usará para iniciar sesión.</string>
+  <string name="ui_password_dialog_msg">O contrasinal almacenarase neste dispositivo e só se usará para iniciar sesión.</string>
   <string name="ui_server_label">Enderezo do servidor</string>
   <string name="ui_server_desc">O enderezo do servidor, incluíndo o porto.</string>
 
@@ -101,7 +101,7 @@
   <string name="ui_imap_folder_desc">A etiqueta de Gmail asignada ás SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">As SMS gardadas serán etiquetadas en GMail con este texto.</string>
   <string name="ui_mail_subject_prefix_label">Prefixo do asunto do correo electrónico</string>
-  <string name="ui_mail_subject_prefix_desc">Usar o nome do directorio IMAP como prefixo no asunto do correo electrónico</string>
+  <string name="ui_mail_subject_prefix_desc">Usar como prefixo o nome do directorio IMAP no asunto do correo electrónico</string>
 
   <string name="ui_max_items_per_sync_label">Elementos por copia de seguridade</string>
   <string name="ui_max_items_per_sync_desc">Número máximo de elementos por copia de seguridade.</string>
@@ -147,7 +147,7 @@
   <string name="ui_email_address_style_desc">Formato dos enderezos de correo electrónico</string>
 
   <string name="ui_enable_auto_sync_label">Copia de seguridade automática</string>
-  <string name="ui_enable_auto_sync_desc">Copiar automáticamente as SMS ou non.</string>
+  <string name="ui_enable_auto_sync_desc">Copiar, ou non, as SMS automáticamente.</string>
   <string name="ui_enable_auto_sync_summary">Copiar automáticamente %1$s.</string>
   <string name="ui_enable_auto_sync_no_enabled_summary">Non se seleccionou ningún tipo de elemento para copiar.</string>
 
@@ -160,7 +160,7 @@
   <string name="ui_auto_backup_incoming_schedule_desc">Cando se copiarán as SMS entrantes (logo da recepción)</string>
 
   <string name="ui_wifi_only_label">Precisa Wifi</string>
-  <string name="ui_wifi_only_desc">Copiar só conectado a unha rede  Wifi</string>
+  <string name="ui_wifi_only_desc">Copiar só conectado a unha rede Wifi</string>
 
   <string name="ui_notifications_label">Notificacións</string>
   <string name="ui_notifications_desc">Notificacións en segundo plano</string>
@@ -186,7 +186,7 @@
     \"Permitir\".
   </string>
 
-  <string name="ui_dialog_connect_msg">Abrirase unha fiestra do navegador solicitando que inicie sesión en GMail para conceder %1$s acceso aos seus correos.</string>
+  <string name="ui_dialog_connect_msg">Abrirase unha fiestra do navegador solicitando que inicie sesión en GMail para conceder acceso de %1$s aos seus correos.</string>
   <string name="ui_dialog_disconnect_msg">Seguro? Terá que volver a autorizar a súa conta logo de desconectar e o estado da sincronización local reiniciarase.</string>
 
   <string name="ui_sync">Copiar</string>
@@ -348,5 +348,5 @@
   </string>
 
   <string name="ui_dark_theme_label">Tema escuro</string>
-  <string name="theme_app_relaunch">É necesario relanzar a aplicación de xeito manual da aplicación</string>
+  <string name="theme_app_relaunch">É necesario relanzar a aplicación de xeito manual </string>
 </resources>
