@@ -3,16 +3,15 @@
   <string name="app_name">SMS Backup+</string>
 
   <string name="app_description">
-     Use GMail para gardar os seus SMS. Esta é unha versión mellorada da aplicación "SMS Backup" de
-     Christoph Studer que permite reestablecer os SMS ao teléfono.
+     Use GMail para gardar as súas SMS. Esta é unha versión mellorada da aplicación "SMS Backup" de Christoph Studer que permite reestablecer as SMS ao teléfono.
      É completamente compatible con SMS Backup.
   </string>
 
-  <string name="ui_sync_button_label_idle">Backup</string>
+  <string name="ui_sync_button_label_idle">Gardar</string>
   <string name="ui_sync_button_label_canceling">Detendo</string>
   <string name="ui_sync_button_label_syncing">Deter</string>
 
-  <string name="ui_restore_button_label_idle">Reestablecer</string>
+  <string name="ui_restore_button_label_idle">Restaurar</string>
   <string name="ui_restore_button_label_restoring">Deter</string>
 
   <string name="status_idle">Inactivo</string>
@@ -22,14 +21,14 @@
   <string name="status_working">Traballando</string>
 
   <string name="status_backup">Gardando</string>
-  <string name="status_restore">Reestablecendo</string>
+  <string name="status_restore">Restaurando</string>
 
-  <string name="status_backup_details">Gardado <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementos\u2026</string>
-  <string name="status_restore_details">Restored <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementos\u2026</string>
+  <string name="status_backup_details">Gardados <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementos\u2026</string>
+  <string name="status_restore_details">Restaurados <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementos\u2026</string>
   <string name="status_login_details">Iniciando sesión\u2026</string>
-  <string name="status_updating_threads">Actualizando fíos\u2026</string>
+  <string name="status_updating_threads">Actualizando conversas\u2026</string>
   <string name="status_done">Feito</string>
-  <string name="status_backup_done_details_max_per_sync">Acadouse o máximo de %1$d elementos por gardado. Reinicie o gardado para continuar.</string>
+  <string name="status_backup_done_details_max_per_sync">Acadouse o máximo de %1$d elementos por copia. Reinicie a copia para continuar.</string>
   <string name="status_backup_done_details_noitems">Non había elementos para gardar.</string>
 
   <plurals name="status_backup_done_details">
@@ -38,171 +37,197 @@
   </plurals>
 
   <plurals name="status_restore_done_details">
-    <item quantity="one">Reestablecido con éxito <xliff:g id="total_items">%1$d</xliff:g> elemento (%2$d dups).</item>
-    <item quantity="other">Reestablecidos con éxito <xliff:g id="total_items">%1$d</xliff:g> elementos (%2$d dups).</item>
+    <item quantity="one">Restaurado con éxito <xliff:g id="total_items">%1$d</xliff:g> elemento (%2$d dups).</item>
+    <item quantity="other">Restaurados con éxito <xliff:g id="total_items">%1$d</xliff:g> elementos (%2$d dups).</item>
   </plurals>
 
-  <string name="status_restore_canceled_details">%1$d/%2$d elementos reestablecidos con éxito.</string>
+  <string name="status_restore_canceled_details">%1$d/%2$d elementos restaurados con éxito.</string>
 
   <string name="status_unknown_error">Erro</string>
   <string name="notification_general_error">Erro de SMSBackup+</string>
 
-  <string name="status_unknown_error_details">Erro durante o gardado/reestablecemento:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_unknown_error_details">Erro durante o gardado/restauración:\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">Erro de inicio de sesión</string>
   <string name="notification_auth_failure">SMSBackup+ erro de inicio de sesión</string>
 
-  <string name="status_auth_failure_details_xoauth">Erro de autorización XOAuth. Por favor, asegúrese de que ten habilitado IMAP na configuración da súa conta de GMail.</string>
+  <string name="status_permission_problem">Erro de permisos</string>
+
+  <plurals name="status_permission_problem_details">
+    <item quantity="one">É necesario o seguinte permiso: %1$s.</item>
+    <item quantity="other">Son necesarios os seguintes permisos: %1$s.</item>
+  </plurals>
+
+  <string name="permission_read_sms">Acceso ás mensaxes SMS</string>
+  <string name="permission_read_call_log">Acceso ao historial de chamadas</string>
+  <string name="permission_read_contacts">Acceso aos contactos</string>
+  <string name="permission_unknown">Descoñecido</string>
+
+  <string name="status_auth_failure_details_xoauth">Erro de autorización XOAuth. Por favor, asegúrese de ter habilitado IMAP na configuración da súa conta de GMail.</string>
   <string name="status_auth_failure_details_plain">Erro de autorización IMAP.
-  Asegúrese de que se indicaron o nome de usuario e contrasinal correctos.</string>
-  <string name="status_calc_details">Calculando\u2026</string>
+  Asegúrese de que o nome de usuario e contrasinal se estableceron correctamente.</string>
+  <string name="status_calc_details">Calculanado\u2026</string>
   <string name="status_canceled">Cancelado</string>
   <string name="status_canceled_details">%1$d/%2$d elementos gardados con éxito.</string>
-  <string name="status_gmail_temp_error">Erro temporal de GMail IMAP, inténteo máis tarde.</string>
+  <string name="status_gmail_temp_error">Erro temporal de IMAP en GMail, inténteo de novo máis tarde.</string>
 
-  <string name="ui_settings_advanced_label">Configuracion avanzada</string>
-  <string name="ui_settings_advanced_desc">Establecer configuración avanzada.</string>
-  <string name="ui_settings_advanced_server_label">Configuración de servidor IMAP</string>
-  <string name="ui_settings_advanced_server_desc">Non cambie isto se non está seguro do que fai!</string>
+  <string name="ui_settings_advanced_label">Configuración avanzada</string>
+  <string name="ui_settings_advanced_desc">Establecer preferencias avanzadas.</string>
+  <string name="ui_settings_advanced_server_label">Servidor IMAP personalizado</string>
+  <string name="ui_settings_advanced_server_desc">Non cambiar a menos que saiba o que está a facer!</string>
 
   <string name="imap_settings">Configuración IMAP</string>
   <string name="ui_login_label">Nome de usuario</string>
-  <string name="ui_login_desc">A súa conta IMAP/enderezo electrónico.</string>
+  <string name="ui_login_desc">A súa conta IMAP/enderezo de correo electrónico.</string>
   <string name="ui_password_label">Contrasinal</string>
-  <string name="ui_password_desc">O contrasinal da súa conta IMAP. Só cando está desactivado XOAuth.</string>
+  <string name="ui_password_desc">O contrasinal da súa conta IMAP.</string>
   <string name="ui_password_dialog_msg">O contrasinal almacenarase neste dispositivo e só se usará para iniciar sesión.</string>
   <string name="ui_server_label">Enderezo do servidor</string>
-  <string name="ui_server_desc">O enderezo do servidor co que desexa sincronizar incluíndo o porto.</string>
+  <string name="ui_server_desc">O enderezo do servidor, incluíndo o porto.</string>
+
   <string name="ui_protocol_label">Seguridade</string>
-  <string name="ui_protocol_desc">O protocolo de seguridade do servidor. O predeterminado para GMail é \"SSL (Requirido)\"."</string>
+  <string name="ui_protocol_desc">O protocolo de seguridade do servidor.</string>
+
+  <string name="ui_protocol_trust_all_certificates_label">Confiar en todos os certificados</string>
+  <string name="ui_protocol_trust_all_certificates_desc">Non se recomenda. Activar para un servidor con certificado autoasinado.</string>
+
   <string name="ui_authentication_label">Autenticación</string>
-  <string name="ui_authentication_desc">O método de autenticación. O predeterminado para GMail é \"XOAuth\".</string>
+  <string name="ui_authentication_desc">O método de autenticación.</string>
   <string name="plain">Texto plano</string>
 
-  <string name="ui_imap_folder_label">Etiqueta de GMail</string>
-  <string name="ui_imap_folder_desc">Etiqueta de GMail asignada aos SMS.</string>
-  <string name="ui_imap_folder_label_dialog_msg">Os SMS gardados serán clasificados con esta etiqueta en GMail.</string>
+  <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
+  <string name="ui_imap_folder_desc">A etiqueta de Gmail asignada ás SMS.</string>
+  <string name="ui_imap_folder_label_dialog_msg">As SMS gardadas serán etiquetadas en GMail con este texto.</string>
   <string name="ui_mail_subject_prefix_label">Prefixo do asunto do correo electrónico</string>
-  <string name="ui_mail_subject_prefix_desc">Usar o nome do cartafol IMAP como prefixo no asunto da mensaxe</string>
+  <string name="ui_mail_subject_prefix_desc">Usar como prefixo o nome do directorio IMAP no asunto do correo electrónico</string>
 
-  <string name="ui_max_items_per_sync_label">Elementos por gardado</string>
-  <string name="ui_max_items_per_sync_desc">Número máximo de elementos por gardado.</string>
-  <string name="ui_max_items_per_restore_label">Elementos por reestablecemento</string>
-  <string name="ui_max_items_per_restore_desc">Número máximo de mensaxes reestablecidos.</string>
+  <string name="ui_max_items_per_sync_label">Elementos por copia de seguridade</string>
+  <string name="ui_max_items_per_sync_desc">Número máximo de elementos por copia de seguridade.</string>
+  <string name="ui_max_items_per_restore_label">Elementos por restauración</string>
+  <string name="ui_max_items_per_restore_desc">Número de mensaxes máis recentes para restaurar.</string>
 
   <string name="ui_restore_starred_only_label">Elementos destacados</string>
-  <string name="ui_restore_starred_only_desc">Reestablecer só os elementos destacados.</string>
+  <string name="ui_restore_starred_only_desc">Só restaurar elementos destacados.</string>
 
   <string name="ui_backup_mms_label">Gardar MMS</string>
-  <string name="ui_backup_mms_desc">Habilitar o gardado de MMS</string>
+  <string name="ui_backup_mms_desc">Activar a copia dos MMS</string>
 
   <string name="ui_backup_calllog_label">Gardar historial de chamadas</string>
-  <string name="ui_backup_calllog_desc">Habilitar o gardado do historial de chamadas</string>
+  <string name="ui_backup_calllog_desc">Activar a copia do historial de chamadas</string>
 
-    <string name="ui_backup_calllog_sync_calendar_enabled_label">Calendar sync</string>
-  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Add call log entries to calendar</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Sincronizar calendario</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Engadir as entradas do historial de chamadas ao calendario</string>
 
-  <string name="ui_backup_calllog_types_label">Call types</string>
-  <string name="ui_backup_calllog_types_desc">Which call types to back up</string>
+  <string name="ui_backup_calllog_types_label">Tipos de chamada</string>
+  <string name="ui_backup_calllog_types_desc">Que tipos de chamada se gardarán</string>
 
-  <string name="ui_backup_calllog_sync_calendar_label">None</string>
-  <string name="ui_backup_calllog_sync_calendar_desc">Calendar used for call logs</string>
+  <string name="ui_backup_calllog_sync_calendar_label">Ningún</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Calendario que se usará para o historial de chamadas</string>
 
   <string name="ui_imap_folder_calllog_label">Etiqueta do historial de chamadas</string>
-  <string name="ui_imap_folder_calllog_desc">Etiqueta de GMail que se asignará ao historial de chamadas.</string>
-   <string name="ui_imap_folder_calllog_label_dialog_msg">As entradas do historial de chamadas serán clasificados con esta etiqueta en GMail.</string>
+  <string name="ui_imap_folder_calllog_desc">Etiqueta Gmail asignada ao historial de chamadas.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">As entradas gardadas do historial de chamadas etiquetaranse en GMail con este texto.</string>
 
-  <string name="ui_mark_as_read_label">Marcar como lidas (correo)</string>
-  <string name="ui_mark_as_read_desc">Marcaranse ou non como lidas as mensaxes en GMail.</string>
+  <string name="ui_backup_calllog_after_call_label">Gardar despois das chamadas</string>
+  <string name="ui_backup_calllog_after_call_desc">Gardar automáticamente despois das chamadas entrantes/saíntes (usa o programador de entrada).</string>
 
-  <string name="ui_mark_as_read_restore_label">Marcar como lidas (SMS)</string>
-  <string name="ui_mark_as_read_restore_desc">Marcaranse ou non como lidas todas as SMS reestablecidas.</string>
+  <string name="ui_mark_as_read_label">Marcar como lido (correos electrónicos)</string>
+  <string name="ui_mark_as_read_desc">Marcar as mensaxes en GMail como lidas ou non.</string>
 
-  <string name="ui_email_address_style_label">Email address style</string>
-  <string name="ui_email_address_style_desc">Format of email addresses</string>
+  <string name="mark_as_read_always_read">Marcar sempre como lido</string>
+  <string name="mark_as_read_always_unread">Marcar sempre como non lido</string>
+  <string name="mark_as_read_message_status">Usar o estado da mensaxe</string>
 
-  <string name="ui_enable_auto_sync_label">Gardado automático</string>
-  <string name="ui_enable_auto_sync_desc">Gardaranse automáticamente ou non as novas SMS.</string>
-  <string name="ui_enable_auto_sync_summary">Gardar automáticamente %1$s.</string>
+  <string name="ui_mark_as_read_restore_label">Marcar como lida (SMS)</string>
+  <string name="ui_mark_as_read_restore_desc">Marcar todas as SMS restauradas como lidas ou non.</string>
 
-  <string name="sd_card_disclaimer">O gardado automático pode non funcionar de xeito fiable cando se instale a aplicación na tarxeta SD.</string>
+  <string name="ui_email_address_style_label">Estilo do enderezo de correo electrónico</string>
+  <string name="ui_email_address_style_desc">Formato dos enderezos de correo electrónico</string>
 
-  <string name="ui_auto_backup_schedule_label">Axenda regular</string>
-  <string name="ui_auto_backup_schedule_desc">Cando se gardarán as SMS</string>
+  <string name="ui_enable_auto_sync_label">Copia de seguridade automática</string>
+  <string name="ui_enable_auto_sync_desc">Copiar, ou non, as SMS automáticamente.</string>
+  <string name="ui_enable_auto_sync_summary">Copiar automáticamente %1$s.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Non se seleccionou ningún tipo de elemento para copiar.</string>
 
-  <string name="ui_auto_backup_incoming_schedule_label">Axenda de entrada</string>
-  <string name="ui_auto_backup_incoming_schedule_desc">Cando se gardarán as SMS entrantes (despois de recibilos)</string>
+  <string name="sd_card_disclaimer">A copia automática pode non funcionar de xeito fiable se a aplicación se instalou na tarxeta SD.</string>
 
-  <string name="ui_wifi_only_label">Require Wifi</string>
-  <string name="ui_wifi_only_desc">Gardar só usando conexión Wifi</string>
+  <string name="ui_auto_backup_schedule_label">Programación habitual</string>
+  <string name="ui_auto_backup_schedule_desc">Cando se copiarán as SMS</string>
+
+  <string name="ui_auto_backup_incoming_schedule_label">Programación de entrada</string>
+  <string name="ui_auto_backup_incoming_schedule_desc">Cando se copiarán as SMS entrantes (logo da recepción)</string>
+
+  <string name="ui_wifi_only_label">Precisa Wifi</string>
+  <string name="ui_wifi_only_desc">Copiar só conectado a unha rede Wifi</string>
 
   <string name="ui_notifications_label">Notificacións</string>
   <string name="ui_notifications_desc">Notificacións en segundo plano</string>
 
-  <string name="error_wifi_only_no_connection">Non hai conexión Wifi</string>
-  <string name="error_no_connection">Non hai conexión a internet</string>
+  <string name="error_wifi_only_no_connection">Sen conexión Wifi</string>
+  <string name="error_no_connection">Sen conexión a internet</string>
+  <string name="error_sms_provider_not_writable">Non se pode escribir no provedor de SMS</string>
 
   <string name="ui_dialog_missing_credentials_title">Información de inicio de sesión</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Primeiro debe conectar a súa conta de GMail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Primeiro debe indicar o seu
-  nome de usuario e contrasinal.</string>
+  <string name="ui_dialog_missing_credentials_msg_xoauth">Necesita conectar a súa conta de GMail.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Necesita establecer o nome de usuario e contrasinal.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Nome de etiqueta non válido</string>
-  <string name="ui_dialog_invalid_imap_folder_msg">O nome da etiqueta non pode conter espacios (ao inicio ou fin).</string>
-  <string name="ui_dialog_first_sync_title">Primeiro gardado</string>
-  <string name="ui_dialog_first_sync_msg">Gardar ou omitir todas as mensaxes almacenadas actualmente no dispositivo?</string>
-  <string name="ui_dialog_first_sync_msg_batched">Gardar ou omitir todas as mensaxes almacenadas actualmente no dispositivo?\n\nNota: O gardado será dividido en lotes de %1$d mensaxes.</string>
+  <string name="ui_dialog_invalid_imap_folder_msg">O nome da etiqueta non pode conter espazos (ao principio ou ao final).</string>
+  <string name="ui_dialog_first_sync_title">Primeira copia de seguridade</string>
+  <string name="ui_dialog_first_sync_msg">Gardar ou descartar todas as mensaxes almacendas actualmente neste dispositivo?</string>
+  <string name="ui_dialog_first_sync_msg_batched">Gardar ou descartar todas as mensaxes almacendas actualmente neste dispositivo?\n\nNota: O proceso será dividido en lotes de %1$d mensaxes.</string>
   <string name="ui_dialog_access_token_msg">Solicitando acceso…</string>
 
-  <string name="ui_dialog_access_token_error_title">Fallo de utorización</string>
-  <string name="ui_dialog_access_token_error_msg">Non se puido obter o identificador de acceso. Asegúrese de que seleccionou
-    \"Permitir acceso\".
+  <string name="ui_dialog_access_token_error_title">Fallo de autorización</string>
+  <string name="ui_dialog_access_token_error_msg">Non se puido obter o token de acceso. Asegúrese de ter seleccionado
+    \"Permitir\".
   </string>
 
-  <string name="ui_dialog_connect_msg">Abrirase un navegador que lle solicitará que inicie sesión en GMail para conceder acceso a %1$s ás súas mensaxes de correo.</string>
-  <string name="ui_dialog_disconnect_msg">Está seguro? Terá que reautorizar a súa conta despois de desconectar e reiniciarase o estado da sincronización local.</string>
+  <string name="ui_dialog_connect_msg">Abrirase unha fiestra do navegador solicitando que inicie sesión en GMail para conceder acceso de %1$s aos seus correos.</string>
+  <string name="ui_dialog_disconnect_msg">Seguro? Terá que volver a autorizar a súa conta logo de desconectar e o estado da sincronización local reiniciarase.</string>
 
-  <!--<string name="ui_dialog_upgrade_title">Información de actualización</string>-->
-
-  <string name="ui_sync">Gardar</string>
-  <string name="ui_skip">Omitir</string>
-  <string name="err_sync_requires_login_info">Non se pode gardar sen información de acceso.</string>
+  <string name="ui_sync">Copiar</string>
+  <string name="ui_skip">Saltar</string>
+  <string name="err_sync_requires_login_info">Non se pode facer a copia de seguridade sen a información de inicio de sesión.</string>
   <string name="menu_info">Acerca de</string>
-  <string name="menu_reset">Reiniciaar</string>
-  <string name="ui_dialog_reset_title">Reiniciar o estado de sincronización actual</string>
-  <string name="ui_dialog_reset_message">Desexa reiniciar o estado de sincronización actual?
-  Aínda pode decidir omitir todas as mensaxes máis tarde.</string>
+  <string name="menu_reset">Reiniciar</string>
+  <string name="ui_dialog_reset_title">Reiniciar o estado actual da sincronización</string>
+  <string name="ui_dialog_reset_message">Desexa reiniciar o estado actual da sincronización? Poderá descartar máis tarde todas as mensaxes igualmente.</string>
   <string name="all_messages">Todas</string>
 
-  <string name="gmail_needs_connecting">Tocar para conectar a súa conta de GMail (requirido).</string>
+  <string name="gmail_needs_connecting">Toque para conectar a súa conta de GMail (necesario).</string>
   <string name="gmail_already_connected">Conectado como %1$s.</string>
+  <string name="custom_imap_not_configured">IMAP (sen configurar)</string>
 
-  <string name="ui_connected_label">Conectado</string>
+  <string name="ui_connected_label">Conectar</string>
 
   <string name="call_incoming">chamada entrante</string>
   <string name="call_outgoing">chamada saínte</string>
   <string name="call_missed">chamada perdida</string>
+  <string name="call_rejected">chamada entrante, rexeitada</string>
+  <string name="call_voicemail">chamada entrante, correo de voz</string>
 
   <string name="call_missed_text">Chamada perdida de %1$s</string>
   <string name="call_incoming_text">Chamada de %1$s</string>
   <string name="call_outgoing_text">Chamada a %1$s</string>
+  <string name="call_rejected_text">Chamada rexeitada de %1$s</string>
+  <string name="call_voicemail_text">Chamada de %1$s (correo de voz)</string>
 
   <string name="call_number_field">Número: %1$s</string>
   <string name="call_duration_field">Duración: %1$s</string>
 
   <string name="sms_with_field">SMS con %1$s</string>
-  <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="call_with_field">Conversa de voz con %1$s</string>
+  <string name="call_with_field">Conversa con %1$s</string>
 
-  <string name="ui_backup_contact_group_label">Contactos que se gardarán</string>
-  <string name="ui_backup_contact_group_desc">Só gardar elementos dun grupo determinado</string>
+  <string name="ui_backup_contact_group_label">Contactos para copia de seguridade</string>
+  <string name="ui_backup_contact_group_desc">Facer copia de seguridade de elementos dun grupo determinado</string>
 
-  <string name="everybody">Todo o mundo</string>
+  <string name="everybody">Todos</string>
 
   <string name="call_type_everything">Todo</string>
   <string name="call_type_incoming">Só chamadas entrantes</string>
   <string name="call_type_outgoing">Só chamadas saíntes</string>
-  <string name="call_type_incoming_outgoing">Entrantes &amp; Saíntes</string>
+  <string name="call_type_incoming_outgoing">Entrantes &amp; saíntes</string>
   <string name="call_type_missed">Só chamadas perdidas</string>
 
   <string name="email_address_style_name">Nome</string>
@@ -216,86 +241,104 @@
   <string name="never">Nunca</string>
 
   <string name="_1min">1 min</string>
-  <string name="_3mins">3 mins</string>
-  <string name="_30mins">30 mins</string>
+  <string name="_3mins">3 min</string>
+  <string name="_30mins">30 min</string>
 
-  <string name="security_none">None</string>
+  <string name="security_none">Ningunha</string>
 
   <string name="ui_third_party_integration_label">Integración con terceiras partes</string>
-  <string name="ui_third_party_integration_desc">Permitir que outras aplicacións inicien gardados usnado intencións de difusión</string>
+  <string name="ui_third_party_integration_desc">Permitir que outras aplicacións inicien copias de seguridade usando intentos de difusión</string>
 
   <!-- new ui -->
-  <string name="ui_backup_settings_label">Configuración de gardado</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
+  <string name="ui_backup_settings_label">Configuración de copia de seguridade</string>
+  <string name="ui_backup_calllog_settings_label">Configuración de historial de chamadas</string>
 
-  <string name="ui_backup_calllog_settings_label">Configuración do historial de chamadas</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
+  <string name="auto_backup_settings">Configuración de copia automatica</string>
 
-  <string name="auto_backup_settings">Configuración do gardado automático</string>
-  <string name="ui_restore_settings_label">Reestablecer configuración</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
+  <string name="ui_restore_settings_label">Configuración de restauración</string>
 
-  <string name="ui_backup_sms_label">Cardar SMS</string>
-  <string name="ui_backup_sms_desc">Habilitar gardado de SMS</string>
+  <string name="ui_backup_sms_label">Copiar SMS</string>
+  <string name="ui_backup_sms_desc">Habilitar a copia de SMS</string>
 
-  <string name="ui_restore_sms_label">Reestablecer SMS</string>
-  <string name="ui_restore_calllog_label">Reestablecer historial de chamadas</string>
+  <string name="ui_restore_sms_label">Restauración de SMS</string>
+
+  <string name="ui_restore_calllog_label">Restauración de historial de chamadas</string>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Historial de chamadas</string>
 
-  <string name="app_log_skip_backup_already_running">Omitido porque o gardado xa está en proceso</string>
-  <string name="app_log_skip_backup_skip_messages">Omitir todas as mensaxes</string>
-  <string name="app_log_skip_backup_no_items">Omitido (non se atoparon elementos)</string>
-  <string name="app_log_missing_credentials">Skipped (missing credentials)</string>
-  <string name="app_log_backup_requested">Solicitude de gardado (%1$s)</string>
-  <string name="app_log_start_backup">Iniciando gardado (%1$s)</string>
-  <string name="app_log_backup_messages">Gardando (%1$d SMS, %2$d MMS, %3$d chamadas do historial)</string>
-  <string name="app_log_backup_canceled">Gardado cancelado</string>
-  <string name="app_log_backup_finished">Gardado rematado</string>
+
+
+  <string name="app_log_skip_backup_already_running">Descartado porque xa hai unha copia de seguridade en proceso</string>
+  <string name="app_log_skip_backup_skip_messages">Descartar todas as mensaxes</string>
+  <string name="app_log_skip_backup_no_items">Descartado (non se atoparon elementos)</string>
+  <string name="app_log_missing_credentials">Descartado (faltan credenciais)</string>
+  <string name="app_log_backup_requested">Copia solicitada (%1$s)</string>
+  <string name="app_log_start_backup">Comezando copia de seguridade (%1$s)</string>
+  <string name="app_log_backup_messages">Copiando (%1$d SMS, %2$d MMS, %3$d historial de chamadas)</string>
+  <string name="app_log_backup_messages_with_config">Usando configuración: %1$s</string>
+  <string name="app_log_backup_canceled">Copia cancelada</string>
+  <string name="app_log_backup_finished">Copia rematada</string>
 
   <string name="app_log_backup_failed_authentication">Erro de autenticación: %1$s</string>
   <string name="app_log_backup_failed_general_error">Erro xeral: %1$s</string>
-  <string name="app_log_backup_failed_connectivity">Gardado omitido, sen conectividade</string>
-  <string name="app_log_scheduled_next_sync">Próximo gardado programado para: %1$s</string>
-  <string name="app_log_no_next_sync">Non hai máis gardados programados</string>
+  <string name="app_log_backup_failed_connectivity">Copia descartada, non hai conectividade</string>
+  <string name="app_log_scheduled_next_sync">Próxima copia programada para: %1$s</string>
+  <string name="app_log_no_next_sync">Non hai máis copias programadas</string>
 
-  <string name="menu_view_log">Ver historial</string>
-  <string name="app_log_empty">O historial está baleiro. Actíveo en \"Configuración avanzada\".</string>
+  <string name="menu_view_log">Ver rexistro</string>
+  <string name="app_log_empty">Rexistro baleiro. Activeo en \"Configuración avanzada\".</string>
 
-  <string name="pref_app_log">Historial de sincronización</string>
-  <string name="pref_app_log_enabled">O historial almacénasa na tarxeta SD como \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log">Rexistro de sincronización</string>
+  <string name="pref_app_log_enabled">O rexistro gárdase como \"sms_backup_plus.log\".</string>
   <string name="pref_app_log_disabled">Desactivado</string>
 
-  <string name="source_incoming">entrada</string>
-  <string name="source_regular">regular</string>
-  <string name="source_3rd_party">terceiras partes</string>
+  <string name="pref_app_log_debug">Información extra de depuración</string>
+  <string name="pref_app_log_debug_summary">Activa o rexistro extra de depuración no historial de sincronización</string>
+
+  <string name="pref_use_old_scheduler">Programador antigo de copias</string>
+  <string name="pref_use_old_scheduler_summary">Forzar o uso do progrador antigo de copias de seguridade</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Google Play Services non dispoñible</string>
+
+  <string name="source_incoming">entrante</string>
+  <string name="source_regular">normal</string>
+  <string name="source_3rd_party">3as partes</string>
   <string name="source_manual">manual</string>
-  <string name="source_unknown">descoñecido</string>
+  <string name="source_unknown">descoñecida</string>
 
   <string name="ui_confirm_action_label">Confirmar accións</string>
-  <string name="ui_confirm_action_desc">Consultar antes de realizar un gardado ou restauración</string>
-  <string name="ui_dialog_confirm_action_title">Confirmar Acción</string>
-  <string name="ui_dialog_confirm_action_msg">Está seguro que desexa realizar esta acción?</string>
+  <string name="ui_confirm_action_desc">Consultar antes de realizar unha copia ou restauración</string>
+  <string name="ui_dialog_confirm_action_title">Confirmar acción</string>
+  <string name="ui_dialog_confirm_action_msg">Seguro que desexa realizar a acción?</string>
 
-  <string name="ui_dialog_account_manager_token_error">
-      Non se puido obter o identificador do sistema. Desexa intentar a autenticación dende o navegador?
-  </string>
-  <string name="select_google_account">Seleccione unha conta de Google</string>
+  <string name="ui_dialog_account_manager_token_error">Non se puido obter un token do sistema. Desexa intentar o método de autenticación de navegador?</string>
+  <string name="select_google_account">Seleccionar unha conta de Google</string>
 
   <!-- donation related -->
   <string name="donate">Doar</string>
-  <string name="donate_summary">Usar o método de pagamento seguro dende a aplicación da Google Play.</string>
+  <string name="donate_summary">Usar pago seguro na aplicación de Google Play Store.</string>
 
   <string name="ui_dialog_donate_message">Por favor, indique a cantidade:</string>
-  <string name="ui_donation_success_message">Doazón correcta, moitas grazas!</string>
-  <string name="ui_donation_failure_message">Fallo na doazón: %1$s</string>
+  <string name="ui_donation_success_message">Doazón realizada con éxito, grazas!</string>
+  <string name="ui_donation_failure_message">Fallou a doazón: %1$s</string>
 
   <!-- purchase errors -->
-  <string name="donation_error_iab_unavailable">A facturación dende a aplicación non está dispoñible</string>
+  <string name="donation_error_iab_unavailable">A facturación en aplicación non está dispoñible</string>
   <string name="donation_error_unavailable">non dispoñible</string>
-  <string name="donation_error_canceled">cancelado</string>
-  <string name="donation_error_already_owned">vostede xa realizou unha doazón</string>
-    <string name="ui_dark_theme_label">Tema escuro</string>
+  <string name="donation_error_canceled">cancelada</string>
+  <string name="donation_error_already_owned">xa realizou unha doazón</string>
+  <string name="donation_unspecified_error">erro non especificado: %1$d</string>
+
+  <string name="error_no_sms_default_package">Non se estableceu un paquete de SMS predeterminado.</string>
+  <string name="ui_dialog_sms_default_package_change_title">Cambio de aplicación necesario</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    Necesita establecer SMS Backup+ como a aplicación de SMS predeterminada durante a operación de restauración.
+    Cando remate solicitaráselle que volva cambiala coa configuración orixinal.
+
+    Calquera SMS que entre durante a restauración será entregada normalmente, pero non xerará notificacións.
+  </string>
+
+  <string name="ui_dark_theme_label">Tema escuro</string>
+  <string name="theme_app_relaunch">É necesario relanzar a aplicación de xeito manual </string>
 </resources>
