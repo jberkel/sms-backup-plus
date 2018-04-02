@@ -302,4 +302,33 @@
   <string name="donation_error_canceled">anulleret</string>
   <string name="donation_error_already_owned">du har allerede doneret</string>
     <string name="ui_dark_theme_label">Mørkt tema</string>
+    <string name="status_permission_problem">Problem med tilladelser</string>
+  <string name="permission_read_sms">Adgang til SMS beskeder</string>
+  <string name="permission_read_call_log">Adgang til opkalds lister</string>
+  <string name="permission_read_contacts">Adgang til kontakter</string>
+  <string name="permission_unknown">Ukendt</string>
+  <string name="ui_protocol_trust_all_certificates_label">Stol på alle certifikater</string>
+  <string name="ui_protocol_trust_all_certificates_desc">Ikke anbefalet. Aktiver hvis der bruges en server med selv signeret certifikat.</string>
+  <string name="ui_backup_calllog_after_call_label">Backup efter et opkald</string>
+  <string name="ui_backup_calllog_after_call_desc">Backup automatisk efter et indgående/udgående opkald med same interval som indgående SMS</string>
+  <string name="mark_as_read_always_read">Marker altid som læst</string>
+  <string name="mark_as_read_always_unread">Marker altid som ulæst</string>
+  <string name="mark_as_read_message_status">Brug besked status</string>
+  <string name="custom_imap_not_configured">IMAP (ikke konfigureret)</string>
+  <string name="call_rejected">indgående opkald, afvist</string>
+  <string name="call_voicemail">indgående opkald, telefonsvarer</string>
+  <string name="call_rejected_text">Afvist opkald fra %1$s</string>
+  <string name="call_voicemail_text">Opkald fra %1$s (telefonsvarer)</string>
+  <string name="pref_use_old_scheduler">Gammel skedulerings metode</string>
+  <string name="pref_use_old_scheduler_summary">Gennemtving brug af gammel skedulerings metode</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Google Play Services er ikke tilgængelig</string>
+  <string name="donation_unspecified_error">uspecifieret fejl: %1$d</string>
+  <string name="error_no_sms_default_package">Der er sat en standard SMS pakke.</string>
+  <string name="ui_dialog_sms_default_package_change_title">Påkrævet app ændring</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    "SMS Backup+ er nødt til at være din standard SMS app under genskabelses processen.
+    Efter den er færdig bliver du bedt om at ændre indstillingen tilbage igen.
+
+    Indkomne SMS'er undervejs bliver stadig modtaget og gemt, men der kommer ingen notifikatione."
+  </string>
 </resources>
