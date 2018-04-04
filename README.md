@@ -430,7 +430,7 @@ repository and submit a [pull request][About pull requests].
   * [signpost](https://github.com/mttkay/signpost) Matthias Käppler, Signpost OAuth library
   * Shimon Simon (new icon designs)
   * [bbs.goapk.com](http://bbs.goapk.com) / [Chen Ma](https://github.com/marcher233) - Chinese translation
-  * [skolima](https://github.com/skolima) - Polish translation
+  * [Leszek Ciesielski](https://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
   * Gabriele Ravanetti / [Patryk Rzucidlo](http://www.ptkdev.it/) / [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
   * Harun Şahin - Turkish translation
