@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
-import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
@@ -50,9 +49,6 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class MessageConverter {
-    public static final Uri CONTENT_URI =
-            Uri.parse("content://com.android.contacts/data/emails");
-
     private final Context mContext;
     private final ThreadHelper threadHelper = new ThreadHelper();
 

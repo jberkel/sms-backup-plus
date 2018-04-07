@@ -63,7 +63,7 @@ public class PersonLookupTest {
         )).thenReturn(name("Testor Test"));
 
         when(resolver.query(
-                MessageConverter.CONTENT_URI,
+                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
                 new String[] { ContactsContract.CommonDataKinds.Email.DATA },
                 ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
                 new String[] { String.valueOf(1) },
@@ -85,7 +85,7 @@ public class PersonLookupTest {
         )).thenReturn(name("Testor Test"));
 
         when(resolver.query(
-                MessageConverter.CONTENT_URI,
+                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
                 new String[] { ContactsContract.CommonDataKinds.Email.DATA },
                 ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
                 new String[] { String.valueOf(1) },

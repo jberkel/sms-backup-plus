@@ -2,36 +2,35 @@ package com.zegoggles.smssync.mail;
 
 import android.support.annotation.Nullable;
 import com.fsck.k9.mail.Message;
-import com.fsck.k9.mail.MessagingException;
 
 public final class Headers {
     // private headers
-    public static final String ID             = "X-smssync-id";
-    public static final String ADDRESS        = "X-smssync-address";
+    static final String ID             = "X-smssync-id";
+    static final String ADDRESS        = "X-smssync-address";
     /** {@link DataType} SMS, MMS, CALLLOG */
-    public static final String DATATYPE       = "X-smssync-datatype";
+    static final String DATATYPE       = "X-smssync-datatype";
     /** Subtype, value is datatype specific  */
     public static final String TYPE           = "X-smssync-type";
     public static final String DATE           = "X-smssync-date";
-    public static final String THREAD_ID      = "X-smssync-thread";
-    public static final String READ           = "X-smssync-read";
-    public static final String STATUS         = "X-smssync-status";
-    public static final String PROTOCOL       = "X-smssync-protocol";
-    public static final String SERVICE_CENTER = "X-smssync-service_center";
-    public static final String BACKUP_TIME    = "X-smssync-backup-time";
+    static final String THREAD_ID      = "X-smssync-thread";
+    static final String READ           = "X-smssync-read";
+    static final String STATUS         = "X-smssync-status";
+    static final String PROTOCOL       = "X-smssync-protocol";
+    static final String SERVICE_CENTER = "X-smssync-service_center";
+    static final String BACKUP_TIME    = "X-smssync-backup-time";
     public static final String VERSION        = "X-smssync-version";
     public static final String DURATION       = "X-smssync-duration";
 
     // standard headers
-    public static final String REFERENCES = "References";
-    public static final String MESSAGE_ID = "Message-ID";
+    static final String REFERENCES = "References";
+    static final String MESSAGE_ID = "Message-ID";
 
     private Headers() {}
 
     public static @Nullable String get(Message msg, String header) {
-        String[] hdrs = msg.getHeader(header);
-        if (hdrs.length > 0) {
-            return hdrs[0];
+        final String[] headers = msg.getHeader(header);
+        if (headers.length > 0) {
+            return headers[0];
         } else {
             return null;
         }

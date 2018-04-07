@@ -12,15 +12,15 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.provider.ContactsContract.PhoneLookup.CONTENT_FILTER_URI;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.mail.MessageConverter.CONTENT_URI;
 
 public class PersonLookup {
-    private static final String[] PHONE_PROJECTION = new String[]{ContactsContract.Contacts._ID, ContactsContract.Contacts.DISPLAY_NAME};
-    private static final Uri CONTENT_FILTER_URI =
-            Uri.parse("content://com.android.contacts/phone_lookup");
-
+    private static final String[] PHONE_PROJECTION = new String[] {
+        ContactsContract.Contacts._ID,
+        ContactsContract.Contacts.DISPLAY_NAME
+    };
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
 
     // simple LRU cache
@@ -79,7 +79,7 @@ public class PersonLookup {
 
         // Get all e-mail addresses for that person.
         Cursor c = mResolver.query(
-                CONTENT_URI,
+                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
                 new String[]{ContactsContract.CommonDataKinds.Email.DATA},
                 ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{String.valueOf(personId)},
                 ContactsContract.CommonDataKinds.Email.IS_PRIMARY + " DESC");
