@@ -3,7 +3,8 @@ package com.zegoggles.smssync.mail;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.PhoneLookup;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,15 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static android.provider.ContactsContract.PhoneLookup.CONTENT_FILTER_URI;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class PersonLookup {
-    private static final String[] PHONE_PROJECTION = new String[] {
-        ContactsContract.Contacts._ID,
-        ContactsContract.Contacts.DISPLAY_NAME
-    };
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
 
     // simple LRU cache
@@ -46,18 +42,21 @@ public class PersonLookup {
         if (TextUtils.isEmpty(address)) {
             return new PersonRecord(0, null, null, "-1");
         } else if (!mPeopleCache.containsKey(address)) {
-            Uri personUri = Uri.withAppendedPath(CONTENT_FILTER_URI, Uri.encode(address));
+            Uri personUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
 
-            Cursor c = mResolver.query(personUri, PHONE_PROJECTION, null, null, null);
+            Cursor c = mResolver.query(personUri, new String[] {
+                PhoneLookup._ID,
+                PhoneLookup.DISPLAY_NAME
+            }, null, null, null);
             final PersonRecord record;
             if (c != null && c.moveToFirst()) {
-                long id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
+                final long id = c.getLong(0);
 
                 record = new PersonRecord(
                     id,
-                    c.getString(c.getColumnIndex(PHONE_PROJECTION[1])),
+                    c.getString(1),
                     getPrimaryEmail(id),
-                        address
+                    address
                 );
 
             } else {
@@ -79,11 +78,11 @@ public class PersonLookup {
 
         // Get all e-mail addresses for that person.
         Cursor c = mResolver.query(
-                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                new String[]{ContactsContract.CommonDataKinds.Email.DATA},
-                ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{String.valueOf(personId)},
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY + " DESC");
-        int columnIndex = c != null ? c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA) : -1;
+            Email.CONTENT_URI,
+            new String[]{ Email.DATA },
+            Email.CONTACT_ID + " = ?", new String[]{String.valueOf(personId)},
+            Email.IS_PRIMARY + " DESC");
+        int columnIndex = c != null ? c.getColumnIndex(Email.DATA) : -1;
 
         // Loop over cursor and find a Gmail address for that person.
         // If there is none, pick first e-mail address.
