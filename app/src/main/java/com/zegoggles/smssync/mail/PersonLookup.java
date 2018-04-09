@@ -48,7 +48,19 @@ public class PersonLookup {
         } else if (!mPeopleCache.containsKey(address)) {
             Uri personUri = Uri.withAppendedPath(CONTENT_FILTER_URI, Uri.encode(address));
 
-            Cursor c = mResolver.query(personUri, PHONE_PROJECTION, null, null, null);
+            Cursor c = null;
+            try {
+                // Issue #870
+                // Some phone numbers trigger a full app crash when reaching this line.
+                // The reason for the crash...
+                //   Caused by: java.lang.IllegalArgumentException: column 'data1' does not exist
+                // ...is unknown, hence the try-catch.
+                // TODO: Find a way to avoid the crash without the need for a try-catch
+                c = mResolver.query(personUri, PHONE_PROJECTION, null, null, null);
+            } catch (Exception e) {
+                Log.wtf(TAG, "Avoided a crash with address: " + address + "; Error Message: \"" + e.getMessage() + "\" in PersonLookup.java in lookupPerson(final String address) in c = mResolver.query(personUri, PHONE_PROJECTION, null, null, null);");
+            }
+
             final PersonRecord record;
             if (c != null && c.moveToFirst()) {
                 long id = c.getLong(c.getColumnIndex(PHONE_PROJECTION[0]));
