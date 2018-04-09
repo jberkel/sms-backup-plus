@@ -97,6 +97,16 @@ public class PersonLookupTest {
         assertThat(record.getEmail()).isEqualTo("foo@gmail.com");
     }
 
+    @Test
+    public void shouldIgnoreIllegalArgumentException() {
+        // https://github.com/jberkel/sms-backup-plus/issues/870
+        when(resolver.query(any(Uri.class), any(String[].class), (String) isNull(), (String[]) isNull(), (String) isNull()))
+            .thenThrow(new IllegalArgumentException("column 'data1' does not exist"));
+
+        PersonRecord record = lookup.lookupPerson("1234");
+        assertThat(record.isUnknown()).isTrue();
+    }
+
     private Cursor name(String... names) {
         MatrixCursor cursor = new MatrixCursor(new String[] {
             ContactsContract.Contacts._ID,

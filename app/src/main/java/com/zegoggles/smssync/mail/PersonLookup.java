@@ -42,12 +42,19 @@ public class PersonLookup {
         if (TextUtils.isEmpty(address)) {
             return new PersonRecord(0, null, null, "-1");
         } else if (!mPeopleCache.containsKey(address)) {
-            Uri personUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
+            final Uri personUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
 
-            Cursor c = mResolver.query(personUri, new String[] {
-                PhoneLookup._ID,
-                PhoneLookup.DISPLAY_NAME
-            }, null, null, null);
+            Cursor c = null;
+            try {
+                c = mResolver.query(personUri, new String[] {
+                    PhoneLookup._ID,
+                    PhoneLookup.DISPLAY_NAME
+                }, null, null, null);
+            } catch (IllegalArgumentException e) {
+                // https://github.com/jberkel/sms-backup-plus/issues/870
+                Log.wtf(TAG, "avoided a crash with address: " + address, e);
+            }
+
             final PersonRecord record;
             if (c != null && c.moveToFirst()) {
                 final long id = c.getLong(0);
@@ -58,7 +65,6 @@ public class PersonLookup {
                     getPrimaryEmail(id),
                     address
                 );
-
             } else {
                 if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
                 record = new PersonRecord(0, null, null, address);
