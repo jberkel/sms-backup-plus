@@ -1,7 +1,7 @@
 == 1.5.11 (1555) tbd
 
   * Fix crash with some numbers (#870)
-  * Updated translations: de,fr,gl,nl,tr,da,pl,zh-rCN
+  * Updated translations: de,fr,gl,nl,tr,da,pl,zh-rCN,zh-rTW
   * Handle incoming SMS during Restore (#809, #851)
   * Clean up security settings for IMAP servers (#839)
   * Implemented runtime permissions for Android 6.0+
