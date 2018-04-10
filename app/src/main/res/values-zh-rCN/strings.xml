@@ -3,9 +3,9 @@
   <string name="app_name">SMS Backup+</string>
 
   <string name="app_description">
-      备份您的信息到 Gmail。本软件是由 Christoph Studer
-      所编写的 SMS Backup 的增强版，支持信息还原功能，
-      并且完全向下兼容。
+      备份您的信息到 Gmail。本应用支持短信还原功能，
+	  是 Christoph Studer 所编写的 SMS Backup 的增强版。
+      本应用与 SMS Backup 完全向下兼容。
   </string>
 
   <string name="ui_sync_button_label_idle">备份</string>
@@ -24,9 +24,9 @@
   <string name="status_backup">正在备份</string>
   <string name="status_restore">正在还原</string>
 
-  <string name="status_backup_details">已备份 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 个项目\u2026</string>
-  <string name="status_restore_details">已还原 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 个项目\u2026</string>
-  <string name="status_login_details">登录中\u2026</string>
+  <string name="status_backup_details">已经备份 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 个项目\u2026</string>
+  <string name="status_restore_details">已经还原 <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> 个项目\u2026</string>
+  <string name="status_login_details">正在登录\u2026</string>
   <string name="status_updating_threads">正在更新会话\u2026</string>
   <string name="status_done">完成</string>
   <string name="status_backup_done_details_max_per_sync">已达到每次最多备份 %1$d 个项目的限制。请重新启动备份以继续。</string>
@@ -38,8 +38,8 @@
   </plurals>
 
   <plurals name="status_restore_done_details">
-    <item quantity="one">成功还原了 <xliff:g id="total_items">%1$d</xliff:g> 个项目 (有 %2$d 个重复)</item>
-    <item quantity="other">成功还原了 <xliff:g id="total_items">%1$d</xliff:g> 个项目 (有 %2$d 个重复)</item>
+    <item quantity="one">成功还原了 <xliff:g id="total_items">%1$d</xliff:g> 个项目（有 %2$d 个重复）</item>
+    <item quantity="other">成功还原了 <xliff:g id="total_items">%1$d</xliff:g> 个项目（有 %2$d 个重复）</item>
   </plurals>
 
   <string name="status_restore_canceled_details">成功还原了 %1$d/%2$d 个项目</string>
@@ -47,15 +47,15 @@
   <string name="status_unknown_error">错误</string>
   <string name="notification_general_error">SMS Backup+ 错误</string>
 
-  <string name="status_unknown_error_details">备份/还原时出错:\n<xliff:g id="error_description">%1$s</xliff:g></string>
+  <string name="status_unknown_error_details">备份/还原时出错：\n<xliff:g id="error_description">%1$s</xliff:g></string>
   <string name="status_auth_failure">登录失败</string>
   <string name="notification_auth_failure">SMS Backup+ 登录失败</string>
 
   <string name="status_permission_problem">权限问题</string>
 
   <plurals name="status_permission_problem_details">
-    <item quantity="one">需要以下权限: %1$s.</item>
-    <item quantity="other">需要以下权限: %1$s.</item>
+    <item quantity="one">需要以下权限：%1$s。</item>
+    <item quantity="other">需要以下权限：%1$s。</item>
   </plurals>
 
   <string name="permission_read_sms">访问短信</string>
@@ -63,7 +63,9 @@
   <string name="permission_read_contacts">访问联系人</string>
   <string name="permission_unknown">未知</string>
 
-  <string name="status_auth_failure_details_xoauth">XOAuth 验证失败。请确认您已经在 Gmail 账户设置中开启了 IMAP。</string>
+  <string name="notification_missing_permission" translatable="false">@string/status_permission_problem</string>
+
+  <string name="status_auth_failure_details_xoauth">XOAuth 验证失败。请确认您已经在 Gmail 账户中开启了 IMAP。</string>
   <string name="status_auth_failure_details_plain">IMAP 验证失败。
   请确认您填写的用户名或密码是否正确。</string>
   <string name="status_calc_details">正在计算\u2026</string>
@@ -74,26 +76,27 @@
   <string name="ui_settings_advanced_label">高级设置</string>
   <string name="ui_settings_advanced_desc">设置高级选项</string>
   <string name="ui_settings_advanced_server_label">IMAP 服务器设置</string>
-  <string name="ui_settings_advanced_server_desc">除非您清楚正在做什么，否则请勿修改这里的设置！</string>
+  <string name="ui_settings_advanced_server_desc">除非你知道怎么做，否则请勿修改这里的设置！</string>
 
   <string name="imap_settings">IMAP 设置</string>
   <string name="ui_login_label">用户名</string>
   <string name="ui_login_desc">您的 IMAP 账户名/邮箱地址。</string>
   <string name="ui_password_label">密码</string>
-  <string name="ui_password_desc">您的 IMAP 账号的密码。</string>
+  <string name="ui_password_desc">你的 IMAP 账号的密码。仅在 XOAuth 禁用时有效。</string>
   <string name="ui_password_dialog_msg">密码只会储存在这台设备上，并且仅供登录使用。</string>
   <string name="ui_server_label">服务器地址</string>
-  <string name="ui_server_desc">您想要同步的服务器地址，包括端口。</string>
+  <string name="ui_server_desc">你想要同步的服务器地址，包括端口。</string>
 
   <string name="ui_protocol_label">安全性</string>
-  <string name="ui_protocol_desc">服务器所使用的安全协议。</string>
+  <string name="ui_protocol_desc">服务器所使用的安全协议。Gmail 默认的安全协议为 “SSL（必需）”。</string>
 
   <string name="ui_protocol_trust_all_certificates_label">信任所有证书</string>
-  <string name="ui_protocol_trust_all_certificates_desc">不推荐。仅对使用了自签名证书的服务器启用。</string>
+  <string name="ui_protocol_trust_all_certificates_desc">不推荐。用以允许一个使用自签名证书的服务器。</string>
 
   <string name="ui_authentication_label">验证</string>
-  <string name="ui_authentication_desc">身份验证方法。</string>
-  <string name="plain">明文</string>
+  <string name="ui_authentication_desc">身份验证方法。Gmail 默认设置为“XOAuth”。</string>
+  <string name="plain">纯文本</string>
+  <string name="xoauth" translatable="false">XOAuth2 (Gmail)</string>
 
   <string name="ui_imap_folder_label">Gmail 标签</string>
   <string name="ui_imap_folder_desc">应用到短信的 Gmail 标签。</string>
@@ -106,7 +109,7 @@
   <string name="ui_max_items_per_restore_label">每次还原项目数</string>
   <string name="ui_max_items_per_restore_desc">每次还原的最大数量</string>
 
-  <string name="ui_restore_starred_only_label">星标项目</string>
+  <string name="ui_restore_starred_only_label">已加星号的项目</string>
   <string name="ui_restore_starred_only_desc">仅还原已加星标的信息</string>
 
   <string name="ui_backup_mms_label">备份彩信</string>
@@ -129,24 +132,24 @@
   <string name="ui_imap_folder_calllog_label_dialog_msg">备份的通话记录将在 Gmail 中以此标签标记。</string>
 
   <string name="ui_backup_calllog_after_call_label">通话后备份</string>
-  <string name="ui_backup_calllog_after_call_desc">在来电/拨号后自动备份 (使用新信息计划)。</string>
+  <string name="ui_backup_calllog_after_call_desc">在来电/去电后自动备份（使用“来电”定时计划）。</string>
 
-  <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
+  <string name="ui_mark_as_read_label">标记为已读（邮件）</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
 
   <string name="mark_as_read_always_read">始终标记为已读</string>
   <string name="mark_as_read_always_unread">始终标记为未读</string>
   <string name="mark_as_read_message_status">使用信息的状态</string>
 
-  <string name="ui_mark_as_read_restore_label">标记为已读 (短信)</string>
+  <string name="ui_mark_as_read_restore_label">标记为已读（短信）</string>
   <string name="ui_mark_as_read_restore_desc">是否将还原的短信标记为已读。</string>
 
   <string name="ui_email_address_style_label">邮件地址样式</string>
-  <string name="ui_email_address_style_desc">邮件地址的格式</string>
+  <string name="ui_email_address_style_desc">邮件地址的格式。</string>
 
   <string name="ui_enable_auto_sync_label">自动备份</string>
   <string name="ui_enable_auto_sync_desc">是否自动备份新短信。</string>
-  <string name="ui_enable_auto_sync_summary">自动备份 %1$s。</string>
+  <string name="ui_enable_auto_sync_summary">自动备份 %1$s</string>
   <string name="ui_enable_auto_sync_no_enabled_summary">未选择需备份的项目类型。</string>
 
   <string name="sd_card_disclaimer">当本程序安装在 SD 卡中时，自动备份可能无法正常工作。</string>
@@ -154,7 +157,7 @@
   <string name="ui_auto_backup_schedule_label">定时备份计划</string>
   <string name="ui_auto_backup_schedule_desc">何时备份短信</string>
 
-  <string name="ui_auto_backup_incoming_schedule_label">新信息计划</string>
+  <string name="ui_auto_backup_incoming_schedule_label">新信息备份</string>
   <string name="ui_auto_backup_incoming_schedule_desc">在接收到新信息后的一段时间备份</string>
 
   <string name="ui_wifi_only_label">需要 Wifi</string>
@@ -165,26 +168,27 @@
 
   <string name="error_wifi_only_no_connection">无 Wifi 连接</string>
   <string name="error_no_connection">没有互联网连接</string>
-  <string name="error_sms_provider_not_writable">短信提供方无法写入</string>
+  <string name="error_sms_provider_not_writable">无法写入短信提供程序</string>
 
   <string name="ui_dialog_missing_credentials_title">登录信息</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">您首先需要连接到 Gmail 账户。</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">您首先需要设置您的账户和密码。</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">您首先需要设置您的
+  账户和密码</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">无效的标签名称</string>
   <string name="ui_dialog_invalid_imap_folder_msg">标签名称开头或结尾不能包含空格。</string>
   <string name="ui_dialog_first_sync_title">首次备份</string>
   <string name="ui_dialog_first_sync_msg">备份或跳过当前存储在设备上的所有信息？</string>
   <string name="ui_dialog_first_sync_msg_batched">备份或跳过当前存储在设备上的信息？\n\n提示：这次备份将会以每次 %1$d 个项目的状态进行。</string>
-  <string name="ui_dialog_access_token_msg">访问请求中...</string>
+  <string name="ui_dialog_access_token_msg">请求访问中...</string>
 
   <string name="ui_dialog_access_token_error_title">认证失败</string>
   <string name="ui_dialog_access_token_error_msg">无法获取访问权限，请确认您选择了
-    “授权访问”。
+    “允许”。
   </string>
 
-  <string name="ui_dialog_connect_msg">将会开启一个浏览器, 提示您登录 Gmail 并授权 %1$s 访问您的邮件。</string>
+  <string name="ui_dialog_connect_msg">将会开启一个浏览器，提示您登录 Gmail 并授权 %1$s 访问您的邮件。</string>
   <string name="ui_dialog_disconnect_msg">您确认要断开连接吗？您将需要重新认证账户，并且本地的同步状态将被重置。</string>
 
   <string name="ui_sync">备份</string>
@@ -193,31 +197,34 @@
   <string name="menu_info">关于</string>
   <string name="menu_reset">重置</string>
   <string name="ui_dialog_reset_title">重置同步状态</string>
-  <string name="ui_dialog_reset_message">您想重置同步状态吗？您仍旧可以在之后选择跳过所有信息。</string>
+  <string name="ui_dialog_reset_message">您想重置同步状态？
+  您仍旧可以在之后选择跳过所有信息。</string>
   <string name="all_messages">全部</string>
 
-  <string name="gmail_needs_connecting">点此连接您的 Gmail 账户 (必需)</string>
+  <string name="gmail_needs_connecting">点此连接您的 Gmail 账户（必需）</string>
   <string name="gmail_already_connected">已经连接为 %1$s。</string>
-  <string name="custom_imap_not_configured">IMAP (未配置)</string>
+  <string name="custom_imap" translatable="false">IMAP %1$s.</string>
+  <string name="custom_imap_not_configured">IMAP（尚未配置）</string>
 
   <string name="ui_connected_label">连接</string>
 
-  <string name="call_incoming">已接来电</string>
-  <string name="call_outgoing">已拨电话</string>
+  <string name="call_incoming">来电</string>
+  <string name="call_outgoing">去电</string>
   <string name="call_missed">未接来电</string>
-  <string name="call_rejected">拒接来电</string>
-  <string name="call_voicemail">来电语音信息</string>
+  <string name="call_rejected">来电，已拒接</string>
+  <string name="call_voicemail">来电，语音邮件</string>
 
   <string name="call_missed_text">自 %1$s 的未接来电</string>
-  <string name="call_incoming_text">自 %1$s 的已接来电</string>
-  <string name="call_outgoing_text">至 %1$s 的已拨电话</string>
+  <string name="call_incoming_text">自 %1$s 的来电</string>
+  <string name="call_outgoing_text">至 %1$s 的去电</string>
   <string name="call_rejected_text">自 %1$s 的拒接来电</string>
-  <string name="call_voicemail_text">自 %1$s 的语音信息</string>
+  <string name="call_voicemail_text">自 %1$s 的来电（语音邮件）</string>
 
-  <string name="call_number_field">总数：%1$s</string>
-  <string name="call_duration_field">用时：%1$s</string>
+  <string name="call_number_field">号码：%1$s</string>
+  <string name="call_duration_field">时长：%1$s</string>
 
   <string name="sms_with_field">与 %1$s 的短信记录</string>
+  <string name="mms_with_field" translatable="false">@string/sms_with_field</string>
   <string name="call_with_field">与 %1$s 的通话记录</string>
 
   <string name="ui_backup_contact_group_label">要备份的联系人</string>
@@ -226,25 +233,27 @@
   <string name="everybody">所有人</string>
 
   <string name="call_type_everything">所有通话</string>
-  <string name="call_type_incoming">仅已接来电</string>
-  <string name="call_type_outgoing">仅已拨电话</string>
-  <string name="call_type_incoming_outgoing">已接来电和已拨电话</string>
+  <string name="call_type_incoming">仅来电</string>
+  <string name="call_type_outgoing">仅去电</string>
+  <string name="call_type_incoming_outgoing">来电和去电</string>
   <string name="call_type_missed">仅未接来电</string>
 
   <string name="email_address_style_name">姓名</string>
-  <string name="email_address_style_name_and_number">姓名 (+00 123456)</string>
+  <string name="email_address_style_name_and_number">姓名（+00 123456）</string>
   <string name="email_address_style_number">+00 123456</string>
 
   <string name="_1h">1 小时</string>
   <string name="_2h">2 小时</string>
   <string name="_6h">6 小时</string>
   <string name="_24h">24 小时</string>
-  <string name="never">禁用</string>
+  <string name="never">从不</string>
 
   <string name="_1min">1 分钟</string>
   <string name="_3mins">3 分钟</string>
   <string name="_30mins">30 分钟</string>
 
+  <string name="security_tls" translatable="false">TLS</string>
+  <string name="security_starttls" translatable="false">STARTTLS</string>
   <string name="security_none">无</string>
 
   <string name="ui_third_party_integration_label">第三方集成</string>
@@ -255,6 +264,7 @@
   <string name="ui_backup_calllog_settings_label">通话记录设置</string>
 
   <string name="auto_backup_settings">自动备份设置</string>
+  <string name="ui_auto_backup_settings_label" translatable="false">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">还原设置</string>
 
@@ -269,21 +279,23 @@
   <string name="mms">彩信</string>
   <string name="calllog">通话记录</string>
 
+
+
   <string name="app_log_skip_backup_already_running">已跳过，因为备份已在进行中</string>
   <string name="app_log_skip_backup_skip_messages">跳过所有信息</string>
-  <string name="app_log_skip_backup_no_items">已跳过 (没有找到项目)</string>
-  <string name="app_log_missing_credentials">已跳过 (没有授权)</string>
-  <string name="app_log_backup_requested">备份请求 (%1$s)</string>
-  <string name="app_log_start_backup">开始备份 (%1$s)</string>
-  <string name="app_log_backup_messages">正在备份 (%1$d 条短信, %2$d 条彩信, %3$d 条通话记录)</string>
-  <string name="app_log_backup_messages_with_config">使用配置：%1$s</string>
+  <string name="app_log_skip_backup_no_items">已跳过（没有找到项目）</string>
+  <string name="app_log_missing_credentials">已跳过（授权丢失）</string>
+  <string name="app_log_backup_requested">备份已请求（%1$s）</string>
+  <string name="app_log_start_backup">开始备份（%1$s）</string>
+  <string name="app_log_backup_messages">正在备份（%1$d 条短信, %2$d 条彩信, %3$d 条通话记录）</string>
+  <string name="app_log_backup_messages_with_config">正在使用配置：%1$s</string>
   <string name="app_log_backup_canceled">备份已取消</string>
   <string name="app_log_backup_finished">备份已完成</string>
 
   <string name="app_log_backup_failed_authentication">认证错误：%1$s</string>
   <string name="app_log_backup_failed_general_error">一般错误：%1$s</string>
   <string name="app_log_backup_failed_connectivity">备份已跳过，无网络连接</string>
-  <string name="app_log_scheduled_next_sync">下次备份将在 %1$s</string>
+  <string name="app_log_scheduled_next_sync">下次备份于 %1$s</string>
   <string name="app_log_no_next_sync">没有新的备份计划</string>
 
   <string name="menu_view_log">查看记录</string>
@@ -296,11 +308,11 @@
   <string name="pref_app_log_debug">额外调试信息</string>
   <string name="pref_app_log_debug_summary">在同步记录中启用额外调试记录</string>
 
-  <string name="pref_use_old_scheduler">旧备份计划</string>
-  <string name="pref_use_old_scheduler_summary">强制使用旧备份计划</string>
-  <string name="pref_use_old_scheduler_no_gcm_summary">Google Play Services 不可用</string>
+  <string name="pref_use_old_scheduler">旧版备份计划</string>
+  <string name="pref_use_old_scheduler_summary">强制使用旧版备份计划调度工具</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Google Play 服务不可用</string>
 
-  <string name="source_incoming">收到新消息</string>
+  <string name="source_incoming">来电</string>
   <string name="source_regular">定时</string>
   <string name="source_3rd_party">第三方</string>
   <string name="source_manual">手动</string>
@@ -327,16 +339,18 @@
   <string name="donation_error_unavailable">不可用</string>
   <string name="donation_error_canceled">已取消</string>
   <string name="donation_error_already_owned">您已经捐赠过了</string>
-  <string name="donation_unspecified_error">未指定的错误: %1$d</string>
+  <string name="donation_unspecified_error">未指定的错误：%1$d</string>
 
-  <string name="error_no_sms_default_package">未设置为默认的短信应用。</string>
-  <string name="ui_dialog_sms_default_package_change_title">需要更改短信应用</string>
+  <string name="error_no_sms_default_package">未设置默认短信应用。</string>
+  <string name="ui_dialog_sms_default_package_change_title">必需的应用变更</string>
   <string name="ui_dialog_sms_default_package_change_msg">
-   您需要在恢复时将 SMS Backup+ 设置为默认短信应用。当信息恢复完成时，您会被询问将此恢复为原设置。
-
-   恢复过程中任何新收到的短信会按平常方式存放，但不会弹出通知。
+   在进行短信还原时，您需要将 SMS Backup+ 设置为您的默认短信应用。
+   当信息恢复完成后，您会收到恢复为原设置的提示。
+   
+   在还原进行期间的所有新短信都会被正常接收，
+   但不会收到任何通知。
   </string>
 
-  <string name="ui_dark_theme_label">暗色主题</string>
-  <string name="theme_app_relaunch">需要手动重启应用</string>
+  <string name="ui_dark_theme_label">深色主题</string>
+  <string name="theme_app_relaunch">需要手动重新启动应用</string>
 </resources>
