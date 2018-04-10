@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.PhoneLookup;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -76,7 +77,7 @@ public class PersonLookup {
         return mPeopleCache.get(address);
     }
 
-    private String getPrimaryEmail(final long personId) {
+    private @Nullable String getPrimaryEmail(final long personId) {
         if (personId <= 0) {
             return null;
         }
