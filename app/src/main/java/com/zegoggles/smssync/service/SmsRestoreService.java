@@ -35,12 +35,12 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 public class SmsRestoreService extends ServiceBase {
     private static final int RESTORE_ID = 2;
 
-    @NonNull private RestoreState mState = new RestoreState();
+    @NonNull private RestoreState state = new RestoreState();
     @Nullable private static SmsRestoreService service;
 
     @Override @NonNull
     public RestoreState getState() {
-        return mState;
+        return state;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     private void postError(Exception exception) {
-        App.post(mState.transition(ERROR, exception));
+        App.post(state.transition(ERROR, exception));
     }
 
     private void asyncClearCache() {
@@ -136,10 +136,10 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     @Subscribe public void restoreStateChanged(final RestoreState state) {
-        mState = state;
-        if (mState.isInitialState()) return;
+        this.state = state;
+        if (this.state.isInitialState()) return;
 
-        if (mState.isRunning()) {
+        if (this.state.isRunning()) {
             notification = createNotification(R.string.status_restore)
                     .setContentTitle(getString(R.string.status_restore))
                     .setContentText(state.getNotificationLabel(getResources()))
@@ -148,14 +148,14 @@ public class SmsRestoreService extends ServiceBase {
 
             startForeground(RESTORE_ID, notification);
         } else {
-            Log.d(TAG, "stopping service, state"+mState);
+            Log.d(TAG, "stopping service, state"+ this.state);
             stopForeground(true);
             stopSelf();
         }
     }
 
     @Produce public RestoreState produceLastState() {
-        return mState;
+        return state;
     }
 
     @SuppressWarnings("deprecation")

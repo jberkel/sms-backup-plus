@@ -21,7 +21,7 @@ public class PersonLookup {
     private static final int MAX_PEOPLE_CACHE_SIZE = 500;
 
     // simple LRU cache
-    private final Map<String, PersonRecord> mPeopleCache =
+    private final Map<String, PersonRecord> personCache =
             new LinkedHashMap<String, PersonRecord>(MAX_PEOPLE_CACHE_SIZE + 1, .75F, true) {
                 @Override
                 public boolean removeEldestEntry(Map.Entry<String, PersonRecord> eldest) {
@@ -29,10 +29,10 @@ public class PersonLookup {
                 }
             };
 
-    private final ContentResolver mResolver;
+    private final ContentResolver resolver;
 
     public PersonLookup(ContentResolver resolver) {
-        mResolver = resolver;
+        this.resolver = resolver;
     }
 
     /**
@@ -42,12 +42,12 @@ public class PersonLookup {
     public @NonNull PersonRecord lookupPerson(final String address) {
         if (TextUtils.isEmpty(address)) {
             return new PersonRecord(0, null, null, "-1");
-        } else if (!mPeopleCache.containsKey(address)) {
+        } else if (!personCache.containsKey(address)) {
             final Uri personUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address));
 
             Cursor c = null;
             try {
-                c = mResolver.query(personUri, new String[] {
+                c = resolver.query(personUri, new String[] {
                     PhoneLookup._ID,
                     PhoneLookup.DISPLAY_NAME
                 }, null, null, null);
@@ -70,11 +70,11 @@ public class PersonLookup {
                 if (LOCAL_LOGV) Log.v(TAG, "Looked up unknown address: " + address);
                 record = new PersonRecord(0, null, null, address);
             }
-            mPeopleCache.put(address, record);
+            personCache.put(address, record);
 
             if (c != null) c.close();
         }
-        return mPeopleCache.get(address);
+        return personCache.get(address);
     }
 
     private @Nullable String getPrimaryEmail(final long personId) {
@@ -84,7 +84,7 @@ public class PersonLookup {
         String primaryEmail = null;
 
         // Get all e-mail addresses for that person.
-        Cursor c = mResolver.query(
+        Cursor c = resolver.query(
             Email.CONTENT_URI,
             new String[]{ Email.DATA },
             Email.CONTACT_ID + " = ?", new String[]{String.valueOf(personId)},

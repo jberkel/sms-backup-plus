@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 import com.firebase.jobdispatcher.Job;
@@ -50,7 +49,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static android.R.drawable.stat_sys_warning;
-import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.AppPermission.formatMissingPermissionDetails;
@@ -66,11 +64,11 @@ public class SmsBackupService extends ServiceBase {
     private static final int NOTIFICATION_ID_WARNING = 1;
 
     @Nullable private static SmsBackupService service;
-    @NonNull private BackupState mState = new BackupState();
+    @NonNull private BackupState state = new BackupState();
 
     @Override @NonNull
     public BackupState getState() {
-        return mState;
+        return state;
     }
 
     @Override
@@ -112,7 +110,7 @@ public class SmsBackupService extends ServiceBase {
 
         try {
             // set initial state
-            mState = new BackupState(INITIAL, 0, 0, backupType, null, null);
+            state = new BackupState(INITIAL, 0, 0, backupType, null, null);
             EnumSet<DataType> enabledTypes = getEnabledBackupTypes();
             checkPermissions(enabledTypes);
             if (backupType != SKIP) {
@@ -125,16 +123,16 @@ public class SmsBackupService extends ServiceBase {
             getBackupTask().execute(getBackupConfig(backupType, enabledTypes, getBackupImapStore()));
         } catch (MessagingException e) {
             Log.w(TAG, e);
-            moveToState(mState.transition(ERROR, e));
+            moveToState(state.transition(ERROR, e));
         } catch (ConnectivityException e) {
-            moveToState(mState.transition(ERROR, e));
+            moveToState(state.transition(ERROR, e));
         } catch (RequiresLoginException e) {
             appLog(R.string.app_log_missing_credentials);
-            moveToState(mState.transition(ERROR, e));
+            moveToState(state.transition(ERROR, e));
         } catch (BackupDisabledException e) {
-            moveToState(mState.transition(FINISHED_BACKUP, e));
+            moveToState(state.transition(FINISHED_BACKUP, e));
         } catch (MissingPermissionException e) {
-            moveToState(mState.transition(ERROR, e));
+            moveToState(state.transition(ERROR, e));
         }
     }
 
@@ -197,18 +195,18 @@ public class SmsBackupService extends ServiceBase {
 
     @Override
     protected boolean isBackgroundTask() {
-        return mState.backupType.isBackground();
+        return state.backupType.isBackground();
     }
 
     @Produce public BackupState produceLastState() {
-        return mState;
+        return state;
     }
 
     @Subscribe public void backupStateChanged(BackupState state) {
-        if (mState == state) return;
+        if (this.state == state) return;
 
-        mState = state;
-        if (mState.isInitialState()) return;
+        this.state = state;
+        if (this.state.isInitialState()) return;
 
         if (state.isError()) {
             handleErrorState(state);
@@ -312,6 +310,6 @@ public class SmsBackupService extends ServiceBase {
     }
 
     public BackupState transition(SmsSyncState newState, Exception e) {
-        return mState.transition(newState, e);
+        return state.transition(newState, e);
     }
 }

@@ -49,23 +49,23 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class MessageConverter {
-    private final Context mContext;
+    private final Context context;
     private final ThreadHelper threadHelper = new ThreadHelper();
 
-    private final MarkAsReadTypes mMarkAsReadType;
-    private final PersonLookup mPersonLookup;
-    private final MessageGenerator mMessageGenerator;
-    private final boolean mMarkAsReadOnRestore;
+    private final MarkAsReadTypes markAsReadType;
+    private final PersonLookup personLookup;
+    private final MessageGenerator messageGenerator;
+    private final boolean markAsReadOnRestore;
 
     public MessageConverter(Context context,
                             Preferences preferences,
                             String userEmail,
                             PersonLookup personLookup,
                             ContactAccessor contactAccessor) {
-        mContext = context;
-        mMarkAsReadType = preferences.getMarkAsReadType();
-        mPersonLookup = personLookup;
-        mMarkAsReadOnRestore = preferences.getMarkAsReadOnRestore();
+        this.context = context;
+        markAsReadType = preferences.getMarkAsReadType();
+        this.personLookup = personLookup;
+        markAsReadOnRestore = preferences.getMarkAsReadOnRestore();
 
         String referenceUid = preferences.getReferenceUid();
         if (referenceUid == null) {
@@ -77,20 +77,20 @@ public class MessageConverter {
         ContactGroupIds allowedIds = contactAccessor.getGroupContactIds(context.getContentResolver(), backupContactGroup);
         if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
 
-        mMessageGenerator = new MessageGenerator(mContext,
+        messageGenerator = new MessageGenerator(this.context,
                 new Address(userEmail),
                 preferences.getEmailAddressStyle(),
-                new HeaderGenerator(referenceUid, App.getVersionCode(mContext)),
-                mPersonLookup,
+                new HeaderGenerator(referenceUid, App.getVersionCode(this.context)),
+                this.personLookup,
                 preferences.getMailSubjectPrefix(),
                 allowedIds,
-                new MmsSupport(mContext.getContentResolver(), mPersonLookup),
+                new MmsSupport(this.context.getContentResolver(), this.personLookup),
                 preferences.getCallLogType(),
                 preferences.getDataTypePreferences());
     }
 
     private boolean markAsSeen(DataType dataType, Map<String, String> msgMap) {
-        switch (mMarkAsReadType) {
+        switch (markAsReadType) {
             case MESSAGE_STATUS:
                 switch (dataType) {
                     case SMS:
@@ -112,7 +112,7 @@ public class MessageConverter {
             throws MessagingException {
 
         final Map<String, String> msgMap = getMessageMap(cursor);
-        final Message m = mMessageGenerator.messageForDataType(msgMap, dataType);
+        final Message m = messageGenerator.messageForDataType(msgMap, dataType);
         final ConversionResult result = new ConversionResult(dataType);
         if (m != null) {
             m.setFlag(Flag.SEEN, markAsSeen(dataType, msgMap));
@@ -145,9 +145,9 @@ public class MessageConverter {
                 values.put(Telephony.TextBasedSmsColumns.SERVICE_CENTER, Headers.get(message, Headers.SERVICE_CENTER));
                 values.put(Telephony.TextBasedSmsColumns.DATE, Headers.get(message, Headers.DATE));
                 values.put(Telephony.TextBasedSmsColumns.STATUS, Headers.get(message, Headers.STATUS));
-                values.put(Telephony.TextBasedSmsColumns.THREAD_ID, threadHelper.getThreadId(mContext, address));
+                values.put(Telephony.TextBasedSmsColumns.THREAD_ID, threadHelper.getThreadId(context, address));
                 values.put(Telephony.TextBasedSmsColumns.READ,
-                        mMarkAsReadOnRestore ? "1" : Headers.get(message, Headers.READ));
+                        markAsReadOnRestore ? "1" : Headers.get(message, Headers.READ));
                 break;
             case CALLLOG:
                 values.put(CallLog.Calls.NUMBER, Headers.get(message, Headers.ADDRESS));
@@ -156,7 +156,7 @@ public class MessageConverter {
                 values.put(CallLog.Calls.DURATION, Long.valueOf(Headers.get(message, Headers.DURATION)));
                 values.put(CallLog.Calls.NEW, 0);
 
-                PersonRecord record = mPersonLookup.lookupPerson(Headers.get(message, Headers.ADDRESS));
+                PersonRecord record = personLookup.lookupPerson(Headers.get(message, Headers.ADDRESS));
                 if (!record.isUnknown()) {
                     values.put(CallLog.Calls.CACHED_NAME, record.getName());
                     values.put(CallLog.Calls.CACHED_NUMBER_TYPE, -2);

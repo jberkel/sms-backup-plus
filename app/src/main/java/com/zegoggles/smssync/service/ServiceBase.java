@@ -51,8 +51,8 @@ import static com.zegoggles.smssync.App.TAG;
 import static java.util.Locale.ENGLISH;
 
 public abstract class ServiceBase extends Service {
-    @Nullable private PowerManager.WakeLock mWakeLock;
-    @Nullable private WifiManager.WifiLock mWifiLock;
+    @Nullable private PowerManager.WakeLock wakeLock;
+    @Nullable private WifiManager.WifiLock wifiLock;
 
     private AppLog appLog;
     @Nullable Notification notification;
@@ -108,19 +108,19 @@ public abstract class ServiceBase extends Service {
     }
 
     protected synchronized void acquireLocks() {
-        if (mWakeLock == null) {
+        if (wakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            mWakeLock = pMgr.newWakeLock(wakeLockType(), TAG);
+            wakeLock = pMgr.newWakeLock(wakeLockType(), TAG);
         }
-        mWakeLock.acquire();
+        wakeLock.acquire();
 
         if (isConnectedViaWifi()) {
             // we have Wifi, lock it
             WifiManager wMgr = getWifiManager();
-            if (mWifiLock == null) {
-                mWifiLock = wMgr.createWifiLock(getWifiLockType(), TAG);
+            if (wifiLock == null) {
+                wifiLock = wMgr.createWifiLock(getWifiLockType(), TAG);
             }
-            mWifiLock.acquire();
+            wifiLock.acquire();
         }
     }
 
@@ -135,13 +135,13 @@ public abstract class ServiceBase extends Service {
     }
 
     protected synchronized void releaseLocks() {
-        if (mWakeLock != null && mWakeLock.isHeld()) {
-            mWakeLock.release();
-            mWakeLock = null;
+        if (wakeLock != null && wakeLock.isHeld()) {
+            wakeLock.release();
+            wakeLock = null;
         }
-        if (mWifiLock != null && mWifiLock.isHeld()) {
-            mWifiLock.release();
-            mWifiLock = null;
+        if (wifiLock != null && wifiLock.isHeld()) {
+            wifiLock.release();
+            wifiLock = null;
         }
     }
 

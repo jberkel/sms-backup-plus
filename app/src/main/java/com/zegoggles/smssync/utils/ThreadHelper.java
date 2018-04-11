@@ -20,7 +20,7 @@ public class ThreadHelper {
     private static final int MAX_THREAD_CACHE_SIZE = 500;
 
     @SuppressWarnings("serial")
-    private Map<String, Long> mThreadIdCache =
+    private Map<String, Long> threadIdCache =
             new LinkedHashMap<String, Long>(MAX_THREAD_CACHE_SIZE + 1, .75F, true) {
                 @Override
                 public boolean removeEldestEntry(Map.Entry<String, Long> eldest) {
@@ -31,8 +31,8 @@ public class ThreadHelper {
     public Long getThreadId(final Context context, final String recipient) {
         if (recipient == null || !threadsAvailable) return null;
 
-        if (mThreadIdCache.containsKey(recipient)) {
-            return mThreadIdCache.get(recipient);
+        if (threadIdCache.containsKey(recipient)) {
+            return threadIdCache.get(recipient);
         } else if (getOrCreateThreadId == null) {
             try {
                 telephonyThreads = Class.forName("android.provider.Telephony$Threads");
@@ -49,7 +49,7 @@ public class ThreadHelper {
             final Long id = (Long) getOrCreateThreadId.invoke(telephonyThreads,
                     context, recipient);
             if (LOCAL_LOGV) Log.v(TAG, "threadId for " + recipient + ": " + id);
-            if (id != null) mThreadIdCache.put(recipient, id);
+            if (id != null) threadIdCache.put(recipient, id);
 
             return id;
         } catch (InvocationTargetException e) {

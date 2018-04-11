@@ -7,10 +7,10 @@ import com.zegoggles.smssync.R;
 import java.util.Locale;
 
 public class CallFormatter {
-    private final Resources mResources;
+    private final Resources resources;
 
     public CallFormatter(Resources resources) {
-        mResources = resources;
+        this.resources = resources;
     }
 
     public String format(int callType, String number, int duration) {
@@ -31,14 +31,14 @@ public class CallFormatter {
 
     public String formatForCalendar(int callType, String number, int duration) {
         StringBuilder description = new StringBuilder();
-        description.append(mResources.getString(R.string.call_number_field, number))
+        description.append(resources.getString(R.string.call_number_field, number))
                 .append(" (")
                 .append(callTypeString(callType, null))
                 .append(")")
                 .append("\n");
 
         if (callType != CallLog.Calls.MISSED_TYPE) {
-            description.append(mResources.getString(R.string.call_duration_field,
+            description.append(resources.getString(R.string.call_duration_field,
                     formattedCallDuration(duration)));
         }
         return description.toString();
@@ -53,9 +53,9 @@ public class CallFormatter {
 
     public String callTypeString(int callType, String name) {
         if (name == null) {
-            return mResources.getString(mapCallType(callType));
+            return resources.getString(mapCallType(callType));
         } else {
-            return mResources.getString(mapTextCallType(callType), name);
+            return resources.getString(mapTextCallType(callType), name);
         }
     }
 

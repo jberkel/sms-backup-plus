@@ -75,17 +75,17 @@ class Attachment {
     }
 
     private static class ResolverBody extends Base64Body {
-        private ContentResolver mResolver;
-        private Uri mUri;
+        private ContentResolver resolver;
+        private Uri uri;
 
         public ResolverBody(ContentResolver contentResolver, Uri uri) {
-            mResolver = contentResolver;
-            mUri = uri;
+            resolver = contentResolver;
+            this.uri = uri;
         }
 
         public InputStream getInputStream() throws MessagingException {
             try {
-                return mResolver.openInputStream(mUri);
+                return resolver.openInputStream(uri);
             } catch (FileNotFoundException fnfe) {
                 /*
                  * Since it's completely normal for us to try to serve up attachments that

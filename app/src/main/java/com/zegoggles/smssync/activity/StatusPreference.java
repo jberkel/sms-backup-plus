@@ -116,9 +116,9 @@ public class StatusPreference extends Preference implements View.OnClickListener
 
         statusIcon = (ImageView) holder.findViewById(R.id.status_icon);
         statusLabel = (TextView) holder.findViewById(R.id.status_label);
-        View mSyncDetails = holder.findViewById(R.id.details_sync);
-        syncDetailsLabel = (TextView) mSyncDetails.findViewById(R.id.details_sync_label);
-        progressBar = (ProgressBar) mSyncDetails.findViewById(R.id.details_sync_progress);
+        View syncDetails = holder.findViewById(R.id.details_sync);
+        syncDetailsLabel = (TextView) syncDetails.findViewById(R.id.details_sync_label);
+        progressBar = (ProgressBar) syncDetails.findViewById(R.id.details_sync_progress);
 
         idle();
 
