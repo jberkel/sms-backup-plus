@@ -129,7 +129,7 @@
   <string name="ui_imap_folder_calllog_label_dialog_msg">备份的通话记录将在 Gmail 中以此标签标记。</string>
 
   <string name="ui_backup_calllog_after_call_label">通话后备份</string>
-  <string name="ui_backup_calllog_after_call_desc">在来电/拨号后自动备份 (使用新信息计划)。</string>
+  <string name="ui_backup_calllog_after_call_desc">在来电/拨号后自动备份 (使用“来电”计划)。</string>
 
   <string name="ui_mark_as_read_label">标记为已读 (邮件)</string>
   <string name="ui_mark_as_read_desc">是否在 Gmail 中将消息标记为已读。</string>
@@ -202,20 +202,20 @@
 
   <string name="ui_connected_label">连接</string>
 
-  <string name="call_incoming">已接来电</string>
-  <string name="call_outgoing">已拨电话</string>
+  <string name="call_incoming">来电</string>
+  <string name="call_outgoing">去电</string>
   <string name="call_missed">未接来电</string>
-  <string name="call_rejected">拒接来电</string>
-  <string name="call_voicemail">来电语音信息</string>
+  <string name="call_rejected">来电，已拒接</string>
+  <string name="call_voicemail">来电，语音邮件</string>
 
   <string name="call_missed_text">自 %1$s 的未接来电</string>
-  <string name="call_incoming_text">自 %1$s 的已接来电</string>
-  <string name="call_outgoing_text">至 %1$s 的已拨电话</string>
+  <string name="call_incoming_text">自 %1$s 的来电</string>
+  <string name="call_outgoing_text">至 %1$s 的去电</string>
   <string name="call_rejected_text">自 %1$s 的拒接来电</string>
-  <string name="call_voicemail_text">自 %1$s 的语音信息</string>
+  <string name="call_voicemail_text">自 %1$s 的来电（语音邮件）</string>
 
-  <string name="call_number_field">总数：%1$s</string>
-  <string name="call_duration_field">用时：%1$s</string>
+  <string name="call_number_field">号码：%1$s</string>
+  <string name="call_duration_field">时长：%1$s</string>
 
   <string name="sms_with_field">与 %1$s 的短信记录</string>
   <string name="call_with_field">与 %1$s 的通话记录</string>
@@ -226,9 +226,9 @@
   <string name="everybody">所有人</string>
 
   <string name="call_type_everything">所有通话</string>
-  <string name="call_type_incoming">仅已接来电</string>
-  <string name="call_type_outgoing">仅已拨电话</string>
-  <string name="call_type_incoming_outgoing">已接来电和已拨电话</string>
+  <string name="call_type_incoming">仅来电</string>
+  <string name="call_type_outgoing">仅去电</string>
+  <string name="call_type_incoming_outgoing">来电和去电</string>
   <string name="call_type_missed">仅未接来电</string>
 
   <string name="email_address_style_name">姓名</string>
@@ -300,7 +300,7 @@
   <string name="pref_use_old_scheduler_summary">强制使用旧备份计划</string>
   <string name="pref_use_old_scheduler_no_gcm_summary">Google Play Services 不可用</string>
 
-  <string name="source_incoming">收到新消息</string>
+  <string name="source_incoming">来电</string>
   <string name="source_regular">定时</string>
   <string name="source_3rd_party">第三方</string>
   <string name="source_manual">手动</string>
