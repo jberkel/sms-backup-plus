@@ -6,28 +6,18 @@ Issue Tracker:https://github.com/jberkel/sms-backup-plus/issues
 Changelog:https://github.com/jberkel/sms-backup-plus/blob/HEAD/CHANGES
 
 Auto Name:SMS Backup+
-Summary:Backup SMS and call logs to IMAP
+Summary:Backup SMS, MMS and call history to IMAP
 Description:
-'''N.B''' Works with any IMAP server (but defaults to Gmail). You don't have to
-use Gmail to backup your text messages: change Authentication to Plain text in
-"Advanced Settings - IMAP server settings", then change the server address /
-username and password accordingly. Make sure to set security to "SSL (Optional)"
-if the IMAP server you're connecting to has a self-signed certificate ("Unknown
-certificate" error during backup).
+Primarily designed for Gmail but also works on Google-free devices with a custom IMAP server.
 
-Backs up SMS and call log data from the device to a separate folder/label on an
-IMAP server. SMS stored on IMAP can be transferred back to the phone. Note: MMS
-are currently not restored. MMS backup support is only available on Android 2.x.
-It is important that you perform the first backup manually. SMS Backup+ needs to
-know whether you want to upload messages currently stored on your device or not.
-After you performed your initial backup, SMS Backup+ is ready to run in the
-background and finish uploading all of your current and future messages (check
-"Auto Backup"). Make sure that you have Background data enabled in your Android
-Accounts & Sync settings. You can safely restore to a phone which already has
-messages stored on it, SMS Backup+ will skip the restore of already existing
-messages. Please note that auto backup might not work reliably when SMS Backup+
-is installed on the SD card. See the source code page for more detailed
-instructions and an FAQ.
+Change authentication to "Plain text" in "Advanced Settings - Custom IMAP server", then
+change the server address, username and password accordingly. Check "Trust all certificates"
+if the server you are connecting to has a self-signed certificate.
+
+SMS and call log data from the device are copied to a separate IMAP folder from where they can
+can be restored at a later point.
+
+See the source code page for more detailed instructions and FAQ.
 .
 
 Repo Type:git
