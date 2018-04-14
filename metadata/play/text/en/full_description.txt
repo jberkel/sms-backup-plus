@@ -1,0 +1,12 @@
+Automatically backup SMS, MMS and call log entries using a separate label in Gmail / Google Calendar.
+It is also possible to restore SMS and call log entries back to the phone (MMS not supported yet).
+
+Remember to enable IMAP in Gmail.
+
+Please note that auto backup might not work reliably when SMS Backup+ is installed on the SD card.
+Future version will hopefully fix this, in the meantime please move it back to phone memory if possible.
+
+For those of you worried about app permissions: there is a detailed explanation in
+the FAQ section of the website.
+
+Also, please consult the FAQ on the website before sending me an email.
