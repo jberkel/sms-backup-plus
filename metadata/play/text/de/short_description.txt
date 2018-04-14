@@ -1,1 +1,1 @@
-Sichern Sie SMS, MMS und Anrufprotokolle in Gmail, Google Kalender oder IMAP.
+Sichern Sie SMS, MMS und Anrufprotokolle mit Gmail, Google Kalender oder IMAP.
