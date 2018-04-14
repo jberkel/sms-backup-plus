@@ -9,12 +9,9 @@ import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.filter.Base64OutputStream;
 import com.fsck.k9.mail.internet.MimeBodyPart;
 import com.fsck.k9.mail.internet.MimeHeader;
-import com.fsck.k9.mail.internet.TextBody;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,16 +28,8 @@ class Attachment {
 
     private Attachment() {}
 
-    public static MimeBodyPart createTextPart(String text) throws MessagingException {
-        return new MimeBodyPart(new TextBody(text));
-    }
-
-    public static MimeBodyPart createPartFromUri(ContentResolver resolver, Uri uri, String filename, String contentType) throws MessagingException {
+    static MimeBodyPart createPartFromUri(ContentResolver resolver, Uri uri, String filename, String contentType) throws MessagingException {
         return createPart(new ResolverBody(resolver, uri), filename, contentType);
-    }
-
-    public static MimeBodyPart createPartFromFile(File file, String contentType) throws MessagingException {
-        return createPart(new FileBody(file), file.getName(), contentType);
     }
 
     private static MimeBodyPart createPart(Body body, final String filename, final String contentType) throws MessagingException {
@@ -78,12 +67,12 @@ class Attachment {
         private ContentResolver resolver;
         private Uri uri;
 
-        public ResolverBody(ContentResolver contentResolver, Uri uri) {
+        ResolverBody(ContentResolver contentResolver, Uri uri) {
             resolver = contentResolver;
             this.uri = uri;
         }
 
-        public InputStream getInputStream() throws MessagingException {
+        public InputStream getInputStream() {
             try {
                 return resolver.openInputStream(uri);
             } catch (FileNotFoundException fnfe) {
@@ -96,32 +85,11 @@ class Attachment {
         }
 
         @Override
-        public void setEncoding(String s) throws MessagingException {
+        public void setEncoding(String s) {
         }
     }
 
-    private static class FileBody extends Base64Body {
-        private final File file;
-
-        public FileBody(File file) {
-            this.file = file;
-        }
-
-        @Override
-        public InputStream getInputStream() throws MessagingException {
-            try {
-                return new FileInputStream(file);
-            } catch (FileNotFoundException e) {
-                return new ByteArrayInputStream(new byte[0]);
-            }
-        }
-
-        @Override
-        public void setEncoding(String s) throws MessagingException {
-        }
-    }
-
-    protected static String encodeRFC2231(String key, String value) {
+    static String encodeRFC2231(String key, String value) {
         StringBuilder buf = new StringBuilder();
         boolean encoded = encodeRFC2231value(value, buf);
         if (encoded) {
