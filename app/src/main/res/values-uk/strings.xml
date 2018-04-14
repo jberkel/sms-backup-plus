@@ -56,9 +56,9 @@
 <string name="ui_server_label">Адреса серверу</string>
 <string name="ui_server_desc">Адреса і порт серверу для синхронізації.</string>
 <string name="ui_protocol_label">Безпека</string>
-<string name="ui_protocol_desc">Протокол безпеки на сервері. Типово для Gmail є \"SSL (обов’язково)\".</string>
+<string name="ui_protocol_desc">Протокол безпеки на сервері.</string>
 <string name="ui_authentication_label">Автентифікація</string>
-<string name="ui_authentication_desc">Метод перевірки автентичності. Типово для Gmail є \"XOAuth\".</string>
+<string name="ui_authentication_desc">Метод перевірки автентичності.</string>
 <string name="plain">Звичайний текст</string>
 <string name="ui_imap_folder_label">Мітки Gmail</string>
 <string name="ui_imap_folder_desc">Мітки Gmail для SMS.</string>

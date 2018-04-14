@@ -73,9 +73,9 @@
   <string name="ui_server_label">서버 주소</string>
   <string name="ui_server_desc">동기화 할 서버의 주소(포트 번호 포함).</string>
   <string name="ui_protocol_label">보안</string>
-  <string name="ui_protocol_desc">서버의 보안 프로토콜. Gmail의 기본값은 \"SSL\"입니다.</string>
+  <string name="ui_protocol_desc">서버의 보안 프로토콜.</string>
   <string name="ui_authentication_label">인증</string>
-  <string name="ui_authentication_desc">인증 방식. Gmail의 기본값은 \"XOAuth\" 입니다.</string>
+  <string name="ui_authentication_desc">인증 방식.</string>
   <string name="plain">일반 텍스트</string>
 
   <string name="ui_imap_folder_label">Gmail 라벨</string>

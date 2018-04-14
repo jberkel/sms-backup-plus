@@ -73,9 +73,9 @@
   <string name="ui_server_label">Server-adress</string>
   <string name="ui_server_desc">Adressen till servern som du vill synkronisera med, inkl. port.</string>
   <string name="ui_protocol_label">Säkerhet</string>
-  <string name="ui_protocol_desc">Serverns säkerhetsprotokoll. Standardinställning för Gmail är \"SSL (Required)\"."</string>
+  <string name="ui_protocol_desc">Serverns säkerhetsprotokoll.</string>
   <string name="ui_authentication_label">Autentisering</string>
-  <string name="ui_authentication_desc">Standardinställningen för Gmail är \"XOauth\".</string>
+  <string name="ui_authentication_desc">Standardinställningen för Gmail är \"XOAuth2\".</string>
   <string name="plain">Vanlig text</string>
 
   <string name="ui_imap_folder_label">Gmail-etikett</string>

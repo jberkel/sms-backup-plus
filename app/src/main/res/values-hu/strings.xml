@@ -74,9 +74,9 @@
   <string name="ui_server_label">Kiszolgáló címe</string>
   <string name="ui_server_desc">A kiszolgáló címe és portszáma, amellyel szinkronizálni szeretne.</string>
   <string name="ui_protocol_label">Biztonság</string>
-  <string name="ui_protocol_desc">A kiszolgáló által használt biztonsági protokoll. Alapértelmezett érték Gmailhez: \"SSL (kötelező)\"."</string>
+  <string name="ui_protocol_desc">A kiszolgáló által használt biztonsági protokoll.</string>
   <string name="ui_authentication_label">Hitelesítés</string>
-  <string name="ui_authentication_desc">Hitelesítési metódus. Alapértelmezett érték Gmailhez: \"XOAuth\".</string>
+  <string name="ui_authentication_desc">Hitelesítési metódus.</string>
   <string name="plain">Nyílt szöveg</string>
 
   <string name="ui_imap_folder_label">Gmail címke</string>

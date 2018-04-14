@@ -73,9 +73,9 @@
   <string name="ui_server_label">Адрес сервера</string>
   <string name="ui_server_desc">Адрес сервера для синхронизации и номер порта.</string>
   <string name="ui_protocol_label">Настройки безопасности</string>
-  <string name="ui_protocol_desc">Настройки протокола. По умолчанию для Gmail — «SSL (обязательно)»."</string>
+  <string name="ui_protocol_desc">Настройки протокола.</string>
   <string name="ui_authentication_label">Авторизация</string>
-  <string name="ui_authentication_desc">Метод авторизации. По умолчанию для gmail «XOauth».</string>
+  <string name="ui_authentication_desc">Метод авторизации.</string>
   <string name="plain">Обычный текст</string>
 
   <string name="ui_imap_folder_label">Ярлык Gmail</string>

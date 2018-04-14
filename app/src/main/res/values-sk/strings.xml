@@ -47,9 +47,9 @@
     <string name="ui_server_label">Adresa servera</string>
     <string name="ui_server_desc">Adresa servera s ktorým sa chcete synchronizovať</string>
     <string name="ui_protocol_label">Bezpečnosť</string>
-    <string name="ui_protocol_desc">Zabezpečené spojenie k serveru. Východzie pre GMail je "SSL (Odporúčané)"</string>
+    <string name="ui_protocol_desc">Zabezpečené spojenie k serveru.</string>
     <string name="ui_authentication_label">Prihlásenie</string>
-    <string name="ui_authentication_desc">Prihlasovacia metóda. Východzia pre GMail je "XOauth"</string>
+    <string name="ui_authentication_desc">Prihlasovacia metóda.</string>
     <string name="plain">Obyčajný text</string>
     <string name="ui_imap_folder_label">GMail zložka</string>
     <string name="ui_imap_folder_desc">GMail zložka pre SMS</string>

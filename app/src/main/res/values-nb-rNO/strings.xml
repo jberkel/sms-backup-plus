@@ -73,9 +73,9 @@
   <string name="ui_server_label">Tjener adresse</string>
   <string name="ui_server_desc">Adressen til tjeneren du vil synkronisere til inkl. port.</string>
   <string name="ui_protocol_label">Sikkerhet</string>
-  <string name="ui_protocol_desc">Tjenerens sikkerhetsprotokoll. Standart for Gmail er \"SSL (påkrevd)\"."</string>
+  <string name="ui_protocol_desc">Tjenerens sikkerhetsprotokoll.</string>
   <string name="ui_authentication_label">Autentisering</string>
-  <string name="ui_authentication_desc">Autentisering metoden. Standart for Gmail er \"XOauth\".</string>
+  <string name="ui_authentication_desc">Autentisering metoden.</string>
   <string name="plain">Ren tekst</string>
 
   <string name="ui_imap_folder_label">Gmail etikett</string>

@@ -88,7 +88,7 @@
   <string name="ui_server_desc">Het adres van de server waarmee u wilt synchroniseren, de poort incluis.</string>
 
   <string name="ui_protocol_label">Beveiliging</string>
-  <string name="ui_protocol_desc">Het beveiligingsprotocol van de server. \"SSL (vereist)\" is de standaard voor Gmail.</string>
+  <string name="ui_protocol_desc">Het beveiligingsprotocol van de server.</string>
 
   <string name="ui_protocol_trust_all_certificates_label">Alle certificaten vertrouwen</string>
   <string name="ui_protocol_trust_all_certificates_desc">Niet aanbevolen. Zet aan voor een server met zelf-getekend certificaat.</string>

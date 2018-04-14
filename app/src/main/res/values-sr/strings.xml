@@ -73,9 +73,9 @@
   <string name="ui_server_label">Адреса сервера</string>
   <string name="ui_server_desc">Адреса сервера са којим желите да се синхронизујете, укључујући и порт.</string>
   <string name="ui_protocol_label">Безбедност</string>
-  <string name="ui_protocol_desc">Безбедносни протокол сервера. Подразумевани за Gmail је „ССЛ“.</string>
+  <string name="ui_protocol_desc">Безбедносни протокол сервера.</string>
   <string name="ui_authentication_label">Аутентификација</string>
-  <string name="ui_authentication_desc">Начин аутентификације. Подразумевано за Gmail је „XOauth“.</string>
+  <string name="ui_authentication_desc">Начин аутентификације.</string>
   <string name="plain">Обичан текст</string>
 
   <string name="ui_imap_folder_label">Етикета за СМС</string>

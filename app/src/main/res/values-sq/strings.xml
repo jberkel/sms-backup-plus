@@ -54,9 +54,9 @@
   <string name="ui_server_label">Adresa e serverit</string>
   <string name="ui_server_desc">Adresa e serverit që ju dëshironi të sinkronizoni të përfshijë. portën e tij.</string>
   <string name="ui_protocol_label">Siguria</string>
-  <string name="ui_protocol_desc">Protokolli i sigurisë së serverit. Konfigurimi fillestar për gmail është \"SSL\"."</string>
+  <string name="ui_protocol_desc">Protokolli i sigurisë së serverit.</string>
   <string name="ui_authentication_label">Verifikim</string>
-  <string name="ui_authentication_desc">Metoda e verifikimit. Konfigurimi fillestar për gmail është \"XOAuth\".</string>
+  <string name="ui_authentication_desc">Metoda e verifikimit.</string>
   <string name="plain">Tekst i thjeshtë</string>
   <string name="ui_imap_folder_label">etiketë Gmail</string>
   <string name="ui_imap_folder_desc">etiketë e Gmail caktuar SMS.</string>

@@ -72,9 +72,9 @@
   <string name="ui_server_label">Indirizzo server</string>
   <string name="ui_server_desc">Indirizzo del server che vuoi sincronizzare inclusa la porta.</string>
   <string name="ui_protocol_label">Sicurezza</string>
-  <string name="ui_protocol_desc">Il protocollo di sicurezza del server. Il predefinito per gmail è \"SSL (Richiesto)\"."</string>
+  <string name="ui_protocol_desc">Il protocollo di sicurezza del server.</string>
   <string name="ui_authentication_label">Autenticazione</string>
-  <string name="ui_authentication_desc">Il metodo di autenticazione. Il predefinito per gmail è \"XOauth\".</string>
+  <string name="ui_authentication_desc">Il metodo di autenticazione.</string>
   <string name="plain">Testo semplice</string>
 
   <string name="ui_imap_folder_label">Etichetta Gmail</string>

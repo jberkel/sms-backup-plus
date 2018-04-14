@@ -71,9 +71,9 @@
   <string name="ui_server_label">Adresa serveru</string>
   <string name="ui_server_desc">Adresa serveru se kterým chcete provést synchronizaci.</string>
   <string name="ui_protocol_label">Bezpečnost</string>
-  <string name="ui_protocol_desc">Zabezpečené spojení k serveru. Výchozí pro GMail je \"SSL (Required)\"."</string>
+  <string name="ui_protocol_desc">Zabezpečené spojení k serveru.</string>
   <string name="ui_authentication_label">Přihlášení</string>
-  <string name="ui_authentication_desc">Přihlašovací metoda. Výchozí pro GMail je \"XOauth\".</string>
+  <string name="ui_authentication_desc">Přihlašovací metoda.</string>
   <string name="plain">Prostý text</string>
 
   <string name="ui_imap_folder_label">GMail složka</string>

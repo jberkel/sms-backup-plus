@@ -50,9 +50,9 @@
     <string name="ui_server_label">Adres serwera</string>
     <string name="ui_server_desc">Adres serwera z którym chcesz się połączyć, łącznie z portem.</string>
     <string name="ui_protocol_label">Zabezpieczenia</string>
-    <string name="ui_protocol_desc">Protokół zabezpieczeń serwera. Wartość domyślna dla gmail to \"SSL (wymagane)\".</string>
+    <string name="ui_protocol_desc">Protokół zabezpieczeń serwera.</string>
     <string name="ui_authentication_label">Uwierzytelnienie</string>
-    <string name="ui_authentication_desc">Metoda uwierzytelniania. Domyślnie dla gmail jest \"XOauth\".</string>
+    <string name="ui_authentication_desc">Metoda uwierzytelniania.</string>
     <string name="plain">Zwykły tekst</string>
     <string name="ui_imap_folder_label">Etykieta Gmail</string>
     <string name="ui_imap_folder_desc">Etykieta gmail oznaczająca SMSy.</string>
