@@ -227,15 +227,12 @@
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Sicherungseinstellungen</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
 
   <string name="ui_backup_calllog_settings_label">Anrufprotokoll-Einstellungen</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">Einstellungen der Automatischen Sicherung</string>
 
   <string name="ui_restore_settings_label">Wiederherstellungseinstellungen</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">SMS sichern</string>
   <string name="ui_backup_sms_desc">SMS Sicherung aktivieren</string>

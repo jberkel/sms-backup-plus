@@ -1,0 +1,1 @@
+Responda SMS, MMS e historial de chamadas a Gmail, Google Calendar ou IMAP.

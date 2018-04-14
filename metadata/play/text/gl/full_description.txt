@@ -1,0 +1,13 @@
+Copia de seguridade automática dos teus SMS, MMS e historial de chamadas cunha etiqueta separada en Gmail e Google Calendar.
+
+Máis tarde pode restaurar os datos gardados (excepto MMS) de volta ao teléfono, especialmente útil
+ao cambiar a un novo dispositivo.
+
+O acceso IMAP debe habilitarse manualmente en Gmail, consulte o sitio web e as preguntas frecuentes para máis información.
+Por suposto, pode usar o seu propio servidor IMAP para copias de seguridade, dándolle o control total dos seus datos.
+
+SMS Backup+ é un proxecto gratuíto de código aberto que estivo en desenvolvemento activo desde os primeiros días de
+Android, completamente publicitario e sen seguimento, apoiado a través de doazóns voluntarias.
+
+Moitas gracias ás numerosas persoas que doaron, contribuíron con comentarios, códigos ou traducións - detalladas
+Os créditos pódense atopar na aplicación ou no sitio web.
