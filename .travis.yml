@@ -7,5 +7,7 @@ android:
 
 jdk: oraclejdk8
 
+before_script:
+  - ./gradlew lint
 script:
   - ./gradlew build
