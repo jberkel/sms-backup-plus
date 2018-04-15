@@ -1,1 +1,1 @@
-Backup SMS, MMS og opkaldshistorik til Gmail, Google Kalender eller IMAP.
+Backup SMS, MMS og opkalds-historik til Gmail, Google Kalender eller IMAP.
