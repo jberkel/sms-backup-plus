@@ -1,7 +1,7 @@
 == 1.5.11 (1555) tbd
 
-  * Fix crash with some numbers (#870)
-  * Updated translations: de,fr,gl,nl,tr,da,pl,zh-rCN,zh-rTW
+  * Fix crash with some phone numbers (#870)
+  * Updated translations: de,fr,gl,nl,tr,da,pl,zh-rCN,zh-rTW,ko
   * Handle incoming SMS during Restore (#809, #851)
   * Clean up security settings for IMAP servers (#839)
   * Implemented runtime permissions for Android 6.0+
@@ -17,7 +17,6 @@
   * Gradle build support (#638)
   * Improve restore experience (#586)
   * Fixed unquoted blank in local part of email address (#595)
-  * Updated Korean translation (#592)
   * Updated notification images
   * Rebased K9 to current head (https://github.com/k9mail/k-9/commit/eb31a0fa46877d28266d09e29dee9eb2e0f945fb)
 
