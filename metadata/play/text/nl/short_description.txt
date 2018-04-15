@@ -1,1 +1,1 @@
-Maak een back-up van SMS, MMS en belgeschiedenis naar Gmail, Google Agenda of IMAP.
+Maak een back-up van SMS, MMS en belgeschiedenis naar Gmail, Agenda of IMAP.

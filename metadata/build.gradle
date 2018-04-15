@@ -1,0 +1,13 @@
+task lint {
+    fileTree(dir: 'play/text', include: '**/short_description.txt').each { File file ->
+        def lines = file.readLines()
+        assert(lines.size == 1)
+        assert(lines[0].length() <= 80)
+    }
+
+    fileTree(dir: 'play/text', include: '**/full_description.txt').each { File file ->
+        def lines = file.readLines()
+        assert(lines.size > 0)
+        assert(lines.join('\n').length() <= 4000)
+    }
+}
