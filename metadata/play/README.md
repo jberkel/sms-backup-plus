@@ -2,6 +2,7 @@
 
 * [Upload an app](https://support.google.com/googleplay/android-developer/answer/113469#store_listing)
 * [Graphic assets, screenshots, & video](https://support.google.com/googleplay/android-developer/answer/1078870)
+* [Metadata policy](https://play.google.com/about/storelisting-promotional/metadata/)
 
 ## Text
 
