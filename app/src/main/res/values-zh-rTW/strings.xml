@@ -109,8 +109,8 @@
   <string name="ui_restore_starred_only_label">已加星號的條目</string>
   <string name="ui_restore_starred_only_desc">僅還原已加星號的條目。</string>
 
-  <string name="ui_backup_mms_label">備份 MMS</string>
-  <string name="ui_backup_mms_desc">啟用 MMS 備份</string>
+  <string name="ui_backup_mms_label">備份多媒體訊息</string>
+  <string name="ui_backup_mms_desc">啟用多媒體訊息備份</string>
 
   <string name="ui_backup_calllog_label">備份通話記錄</string>
   <string name="ui_backup_calllog_desc">啟用通話記錄備份</string>

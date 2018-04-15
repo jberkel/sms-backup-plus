@@ -1,1 +1,1 @@
-將短信，彩信和通話記錄備份到Gmail，Google日曆或IMAP。
+備份簡訊、多媒體訊息與通話紀錄到 Gmail、Google 日曆或 IMAP 服務。
