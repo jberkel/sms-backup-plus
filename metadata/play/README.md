@@ -37,11 +37,11 @@ Your app's description on Google Play.
 
 [Google Play app description formatting](https://stackoverflow.com/questions/11071127/google-play-app-description-formatting)
 
-## Graphics 
+## Graphics
 
 ### Screenshots
 
-You can add up to 8 screenshots for each supported device type: Phone, Tablet 
+You can add up to 8 screenshots for each supported device type: Phone, Tablet
 (7 inch & 10 inch), Android TV, and Wear OS by Google.
 
 To publish your Store Listing, you must provide a minimum of 2 screenshots.
@@ -59,7 +59,7 @@ To publish your Store Listing, you must provide a minimum of 2 screenshots.
 
 ### Feature graphic
 
-Your feature graphic is a powerful tool to show off your creative assets and attract users. 
+Your feature graphic is a powerful tool to show off your creative assets and attract users.
 A feature graphic is required to be featured anywhere on Google Play.
 
  * JPEG or 24-bit PNG (no alpha)
