@@ -1,4 +1,4 @@
-# SMS Backup+ <img src="https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/graphic-assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/> [![Build Status SVG][]][Build Status] [![Open Source Helpers](https://www.codetriage.com/jberkel/sms-backup-plus/badges/users.svg)](https://www.codetriage.com/jberkel/sms-backup-plus)
+# SMS Backup+ <img src="https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/metadata/play/assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/> [![Build Status SVG][]][Build Status] [![Open Source Helpers](https://www.codetriage.com/jberkel/sms-backup-plus/badges/users.svg)](https://www.codetriage.com/jberkel/sms-backup-plus)
 
 <a href="https://play.google.com/store/apps/details?id=com.zegoggles.smssync">
     <img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/> </a> &nbsp; <a href="https://f-droid.org/packages/com.zegoggles.smssync/">
@@ -123,12 +123,12 @@ do so as well.
 👉 1.5.11: Call log backup is disabled by default. Permissions need to be confirmed
 separately for phone and calendar access.
 
-### <a name="RCS-support">Rich Communication Services</a>
+### <a id="RCS-support">Rich Communication Services</a>
 
 [Rich Communication Services](https://en.wikipedia.org/wiki/Rich_Communication_Services) is currently not supported, nor are there any plans to support it.
 Rich Communication Services is also known as _RCS_, _Advanced Messaging_, _Advanced Communications_, _joyn_ or _Message+_.
 
-### <a name="3rdparty">3rd party app integration</a>
+### <a id="3rdparty">3rd party app integration</a>
 
 If you want to trigger backups from another app, enable `3rd party integration`
 in Advanced Settings and send the broadcast intent
@@ -150,7 +150,7 @@ backup).
 Also note that Gmail labels simply correspond to IMAP folders that will
 automatically get created on the first backup.
 
-## <a name="faq">FAQ</a>
+## <a id="faq">FAQ</a>
 
 If you don't find an answer here you can also visit the [Google+ community][] which might be able
 to help.
@@ -183,9 +183,9 @@ to help.
     * [How can I revoke the app's access to my Gmail account?](#faq-authentication-revoke-access)
     * [When connecting, I get 'Could not obtain request token...'](#faq-authentication-request-token)
 
-### <a name="faq-general">General questions</a>
+### <a id="faq-general">General questions</a>
 
-#### <a name="faq-general-file-bug-report">I want to file a bug report, what should I do?</a>
+#### <a id="faq-general-file-bug-report">I want to file a bug report, what should I do?</a>
 
 First search [Github issues][] to see if the bug has already been reported. If not, create a new
 issue and attach the following details:
@@ -205,7 +205,7 @@ of posting the full content in the issue.
 It might also be worth to install the [current beta version](#beta) of SMS Backup+ to
 see if the bug is also present in the development version.
 
-#### <a name="faq-general-can-you-add-feature-x">Can you add feature X?</a>
+#### <a id="faq-general-can-you-add-feature-x">Can you add feature X?</a>
 
 Over the years a lot of features have been added, often as a result of
 requests by users. This has worked great initially but has made the product itself very unfocussed
@@ -218,7 +218,7 @@ not added. A more focussed product would be easier to maintain and use.
 Right now, SMS Backup+ is in maintenance mode; no new features will be added. Existing bugs will of
 course be addressed.
 
-#### <a name="faq-general-permissions">Why does it need so many permissions?</a>
+#### <a id="faq-general-permissions">Why does it need so many permissions?</a>
 
   * Read contacts - Needed to map phone numbers to names and email addresses
   * Your messages (read / write SMS) - Needed for backup+restore
@@ -233,15 +233,15 @@ course be addressed.
 👉 1.5.11 introduces runtime permissions (Android 6.0+) which means that you only grant the permissions
 for the features you actually use, after installing the application.
 
-#### <a name="faq-general-package-not-signed">When updating the app I get 'Package file was not signed correctly'</a>
+#### <a id="faq-general-package-not-signed">When updating the app I get 'Package file was not signed correctly'</a>
 
 Try uninstalling the app, then installing the new version. Make sure to select
 "Skip" when doing the first backup, otherwise messages will get backed up
 twice.
 
-### <a name="faq-backup">Backup questions</a>
+### <a id="faq-backup">Backup questions</a>
 
-#### <a name="faq-backup-automatic-backup">Automatic backup does not work / stopped working</a>
+#### <a id="faq-backup-automatic-backup">Automatic backup does not work / stopped working</a>
 
 If the automatic backup does not work first make sure that a manually
 initiated backup works as expected.
@@ -253,7 +253,7 @@ still reported problems. If the backups don't run automatically try changing the
 When reporting a bug related to auto backup it is essential to attach a sync log file. See
 the [relevant FAQ](#faq-general-file-bug-report) for more information on how to do this.
 
-#### <a name="faq-backup-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
+#### <a id="faq-backup-show-imap">I get the one of following errors during backup/restore: Command: SELECT "SMS"; response: \#6\# \[NO, Unknown, Mailbox; SMS, \[Failure\]\] (or response: \#6\# \[NO, \[NONEXISTENT\], unknown mailbox: SMS (failure)\])</a>
 
 Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 
@@ -262,18 +262,18 @@ Make sure you have the "Show IMAP" option checked in the Gmail label settings:
 If this is the case make sure that the label name is set correctly (capitalization
 matters!).
 
-#### <a name="faq-backup-reset">How can I make the app think that it has to do the backup again?</a>
+#### <a id="faq-backup-reset">How can I make the app think that it has to do the backup again?</a>
 
 Select "Reset" from the menu, and confirm that you want to reset the current
 sync state. All messages on the phone will be backed up on the next run.
 
-#### <a name="faq-backup-only-received">Only received messages are backed up, not the ones I sent</a>
+#### <a id="faq-backup-only-received">Only received messages are backed up, not the ones I sent</a>
 
 Do you use a non-standard app like Google Voice/Hangouts or Signal to send
 messages? It could also be a device specific problem.
 Related issues: [516][], [841][].
 
-#### <a name="faq-backup-inbox">Why do backed up SMS show up in my inbox?</a>
+#### <a id="faq-backup-inbox">Why do backed up SMS show up in my inbox?</a>
 
 This is probably related to Gmail's automatic priority inbox filing.
 A workaround is to set up a filter with "subject: SMS with", let the filter
@@ -282,11 +282,11 @@ mark it as not important.
 ![](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/20120106-tymk3rn4i5apshhr6e1hbd17qn.jpg)
 ![](https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/20120106-rsg7912rnus5gwe3e572rxwbae.jpg)
 
-#### <a name="faq-backup-to-inbox">I want the backed up messages to show up in my Gmail inbox!</a>
+#### <a id="faq-backup-to-inbox">I want the backed up messages to show up in my Gmail inbox!</a>
 
 Just set the label to "Inbox" instead of the default "SMS" or "Call log".
 
-#### <a name="faq-backup-schedule">What's the difference between regular and incoming backup schedule?</a>
+#### <a id="faq-backup-schedule">What's the difference between regular and incoming backup schedule?</a>
 
 Incoming backup schedule is used for incoming messages. 3 minutes here means
 that any incoming SMS will trigger a backup after 3 minutes. It is a full
@@ -300,13 +300,13 @@ means that the device will try to backup all messages every 2 hours.
 Fewer updates performed by the app means less energy consumed, so there's
 a trade-off data protection vs. battery life.
 
-#### <a name="faq-backup-scheduling">I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
+#### <a id="faq-backup-scheduling">I'd like SMS Backup+ to schedule a backup only at a given time of the day / when Wifi is available / etc.</a>
 
 If you require more control over the backup schedule than what SMS Backup+ already
 provides you can use a 3rd party app to trigger the backup. [Tasker][] for
 example supports SMS Backup+ since version 1.0.14.
 
-#### <a name="faq-backup-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
+#### <a id="faq-backup-gmail-100">The app saves only 100 SMS/MMS per contact!</a>
 
 This seems to be a limitation of Gmail. After the first hundred or so SMS being
 backed up, Gmail will cease to properly thread many of the conversations.
@@ -317,18 +317,18 @@ together.
 A way around this is to do a full backup 100 SMS at a time (see `Advanced
 settings`).
 
-#### <a name="faq-backup-threading">In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.</a>
+#### <a id="faq-backup-threading">In Gmail, I'd like to have all messages listed chronologically and not ordered by who sent them.</a>
 
 It's a Gmail feature, but you can disable it.
 In Gmail settings, set conversation view to `off`
 ([screenshot][converationviewoff]).
 
-#### <a name="faq-backup-does-it-sync">When I delete a text locally, will it delete the saved copy on Gmail?</a>
+#### <a id="faq-backup-does-it-sync">When I delete a text locally, will it delete the saved copy on Gmail?</a>
 
 No. SMS Backup+ does not do a "real" sync, once the text has been transferred
 to Gmail it won't get modified or deleted by the app.
 
-#### <a name="faq-backup-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
+#### <a id="faq-backup-untrusted-certificate">I get the error "Trust anchor for certification path not found"</a>
 
 This means that it is impossible to establish a trusted connection with the IMAP server. A few
 reasons why this might happen:
@@ -340,9 +340,9 @@ You can try to set the IMAP Server Setting `Security` to `SSL (optional / trust 
 
 👉 1.5.11: Added "Trust all certificates" option
 
-### <a name="faq-restore">Restore questions</a>
+### <a id="faq-restore">Restore questions</a>
 
-#### <a name="faq-restore-default-app">Why does SMS Backup+ ask to become the default SMS app?</a>
+#### <a id="faq-restore-default-app">Why does SMS Backup+ ask to become the default SMS app?</a>
 
 Google has changed the way SMS permissions work starting with Android 4.4
 (KitKat). In order to get write access to your messages an app has to be set as
@@ -352,19 +352,19 @@ be asked to set the previous choice (usually "Messaging") back as default.
 ⚠️ This last step is important, if you don't set the old default back you might
 lose new messages.
 
-#### <a name="faq-restore-MMS">Are there any plans to support restoring of MMS?</a>
+#### <a id="faq-restore-MMS">Are there any plans to support restoring of MMS?</a>
 
 No, for a variety of reasons: MMS are highly carrier-dependent, documentation is lacking and the
 Android Emulator does not support them.
 
 However SMS Backup+ is open source; patches are more than welcome.
 
-#### <a name="faq-restore-many-messages">I'm not able to restore all of my (insert huge number) messages!</a>
+#### <a id="faq-restore-many-messages">I'm not able to restore all of my (insert huge number) messages!</a>
 
 SMS Backup has not been designed to restore many thousands of messages. See the
 question "[How do I restore the last N weeks / N messages?](#faq-restore-partial)" for a way around that.
 
-#### <a name="faq-restore-partial">How do I restore the last N weeks / N messages?</a>
+#### <a id="faq-restore-partial">How do I restore the last N weeks / N messages?</a>
 
 If you have a lot of messages backed up (let's say over 5000) restoring can be
 very slow, especially if you're only interested in the most recent messages.
@@ -376,20 +376,20 @@ only keep a few hundred or so messages in the SMS label.
 Next time you restore it will only restore those messages and it will be a lot
 faster.
 
-### <a name="faq-authentication">Authentication questions</a>
+### <a id="faq-authentication">Authentication questions</a>
 
-#### <a name="faq-authentication-revoke-access">How can I revoke the app's access to my Gmail account?</a>
+#### <a id="faq-authentication-revoke-access">How can I revoke the app's access to my Gmail account?</a>
 
 Go to [Authorized Access to your Google Account][] and select "Remove Access"
 next to "SMS Backup+".
 
-#### <a name="faq-authentication-request-token">When connecting, I get 'Could not obtain request token...'</a>
+#### <a id="faq-authentication-request-token">When connecting, I get 'Could not obtain request token...'</a>
 
 If you get this error message and your network connection is active
 double-check that your time zone settings are correct, and that the local time is
 displaying correctly. The authentication process won't work otherwise.
 
-## <a name="beta">Beta testing</a>
+## <a id="beta">Beta testing</a>
 
 If you want to help beta testing, visit the [Play Store beta page]. You will be asked to opt in
 to the beta program (you can leave it anytime).
@@ -401,7 +401,7 @@ Alternatively you can download an APK from [Github releases][] and install it ma
 (⚠️ you won't get automatic updates this way). You can also install via [F-Droid][]
 which often has more recent versions than what is available on the Play Store.
 
-## <a name="contributing">Contributing</a>
+## <a id="contributing">Contributing</a>
 
 ### Installation from source
 
@@ -410,7 +410,7 @@ which often has more recent versions than what is available on the Play Store.
     $ ./gradlew assembleDebug
     $ adb install app/build/outputs/apk/app-debug.apk
 
-### <a name="translating">Translating the UI</a>
+### <a id="translating">Translating the UI</a>
 
 If you want to help translating the UI to other languages download and
 translate the following file, then send the translated version via email:
@@ -420,7 +420,7 @@ translate the following file, then send the translated version via email:
 However, if you're already familiar with Git you can just clone the
 repository and submit a [pull request][About pull requests].
 
-## <a name="credits">Credits</a>
+## <a id="credits">Credits</a>
 
   * [Christoph Studer](http://studer.tv/) Original author of SMS Backup (2009-2010)
   * [Ben Dodson](https://github.com/bjdodson) - Contacts 2.0 / MMS support
@@ -451,7 +451,7 @@ repository and submit a [pull request][About pull requests].
   * [László Gárdonyi](https://github.com/gLes) - Hungarian translation
   * Petr P. Gornostaev, [saratovout](https://github.com/saratovout) - Russian translation
 
-## <a name="screenhots">Screenshots</a>
+## <a id="screenhots">Screenshots</a>
 
 ### 1.5.11-BETA
 
@@ -466,7 +466,7 @@ repository and submit a [pull request][About pull requests].
 This application is released under the terms of the [Apache License, Version 2.0][].
 
 [Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
-[Build Status SVG]: https://secure.travis-ci.org/jberkel/sms-backup-plus.svg?branch=master
+[Build Status SVG]: https://api.travis-ci.org/jberkel/sms-backup-plus.svg?branch=master
 
 [Google Play Store]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [F-Droid]: https://f-droid.org/packages/com.zegoggles.smssync/
