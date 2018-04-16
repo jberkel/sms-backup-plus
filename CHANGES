@@ -1,10 +1,11 @@
 == 1.5.11 (1555) tbd
 
+  * WebView scroll position lost after device rotation (#878)
   * Fix crash with some phone numbers (#870)
-  * Updated translations: de,fr,gl,nl,tr,da,pl,zh-rCN,zh-rTW,ko
+  * Updated translations: da,de,fr,gl,ko,nl,tr,pl,zh-rCN,zh-rTW
   * Handle incoming SMS during Restore (#809, #851)
   * Clean up security settings for IMAP servers (#839)
-  * Implemented runtime permissions for Android 6.0+
+  * Implemented runtime permissions on Android 6.0+
   * Added dark/light theme switcher
   * Modernized UI (Material/AppCompat), added adaptive icon
   * Simplify IMAP search logic to prevent timeouts

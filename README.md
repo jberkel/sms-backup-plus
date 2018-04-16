@@ -429,7 +429,7 @@ repository and submit a [pull request][About pull requests].
   * [K-9 Mail](https://github.com/k9mail/k-9/) IMAP library, with some modifications ([k-9/sms-backup-plus](https://github.com/jberkel/k-9/tree/sms-backup-plus))
   * [signpost](https://github.com/mttkay/signpost) Matthias Käppler, Signpost OAuth library
   * Shimon Simon (new icon designs)
-  * [bbs.goapk.com](http://bbs.goapk.com) / [Chen Ma](https://github.com/marcher233) - Chinese translation
+  * [bbs.goapk.com](http://bbs.goapk.com) / [Chen Ma](https://github.com/marcher233), [Aaron LI](https://github.com/liweitianux) - Chinese translation
   * [Leszek Ciesielski](https://github.com/skolima) - Polish translation
   * Roberto Elena Ormad - Spanish translation
   * Gabriele Ravanetti / [Patryk Rzucidlo](http://www.ptkdev.it/) / [Chiara De Liberato](http://www.chiaradeliberato.it/) - Italian translation
