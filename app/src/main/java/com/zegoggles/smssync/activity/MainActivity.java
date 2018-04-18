@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.provider.Telephony.Sms;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -116,13 +117,14 @@ public class MainActivity extends ThemeActivity implements
     private static final int REQUEST_PERMISSIONS_BACKUP_SERVICE = 6;
 
     public static final String EXTRA_PERMISSIONS = "permissions";
-    private static final String SCREEN_TITLE = "title";
+    private static final String SCREEN_TITLE_RES = "titleRes";
 
     private Preferences preferences;
     private AuthPreferences authPreferences;
     private OAuth2Client oauth2Client;
     private Intent fallbackAuthIntent;
     private Intent changeDefaultPackageIntent;
+    private PreferenceTitles preferenceTitles;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -136,7 +138,7 @@ public class MainActivity extends ThemeActivity implements
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         fallbackAuthIntent = new Intent(this, OAuth2WebAuthActivity.class).setData(oauth2Client.requestUrl());
         changeDefaultPackageIntent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, getPackageName());
-
+        preferenceTitles = new PreferenceTitles(getResources(), R.xml.preferences);
         preferences = new Preferences(this);
         if (bundle == null) {
             showFragment(new MainSettings(), null);
@@ -237,8 +239,11 @@ public class MainActivity extends ThemeActivity implements
         if (LOCAL_LOGV) {
             Log.v(TAG, "onPreferenceStartFragment(" + preference + ")");
         }
-        final Fragment fragment = Fragment.instantiate(this, preference.getFragment(),
-                new BundleBuilder().putString(SCREEN_TITLE, String.valueOf(preference.getTitle())).build());
+        final Fragment fragment = Fragment.instantiate(
+            this,
+            preference.getFragment(),
+            new BundleBuilder().putInt(SCREEN_TITLE_RES, preferenceTitles.getTitleRes(preference.getKey())).build());
+
         showFragment(fragment, preference.getKey());
         return true;
     }
@@ -318,13 +323,13 @@ public class MainActivity extends ThemeActivity implements
         onBackStackChanged();
     }
 
-    private @Nullable CharSequence getCurrentTitle() {
+    private @StringRes int getCurrentTitle() {
         final int entryCount = getSupportFragmentManager().getBackStackEntryCount();
         if (entryCount == 0) {
-            return null;
+            return 0;
         } else {
             final BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(entryCount - 1);
-            return entry.getBreadCrumbTitle();
+            return entry.getBreadCrumbTitleRes();
         }
     }
 
@@ -409,7 +414,7 @@ public class MainActivity extends ThemeActivity implements
             .replace(R.id.preferences_container, fragment, rootKey);
         if (rootKey != null) {
             tx.addToBackStack(null);
-            tx.setBreadCrumbTitle(args.getString(SCREEN_TITLE));
+            tx.setBreadCrumbTitle(args.getInt(SCREEN_TITLE_RES));
         }
         tx.commit();
     }
