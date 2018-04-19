@@ -1,11 +1,9 @@
 package com.zegoggles.smssync.activity.donation;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClient.BillingResponse;
@@ -61,6 +59,7 @@ public class DonationActivity extends ThemeActivity implements
 
     private static boolean DEBUG_IAB = BuildConfig.DEBUG;
     private @Nullable BillingClient billingClient;
+    private boolean stateSaved;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,10 +95,21 @@ public class DonationActivity extends ThemeActivity implements
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        stateSaved = true;
+    }
+
+    @Override
     public void onSkuDetailsResponse(@BillingResponse int responseCode, List<SkuDetails> details) {
         log("onSkuDetailsResponse(" + responseCode + ", " + details + ")");
-        if (isFinishing() || responseCode != OK) {
+        if (responseCode != OK) {
             Log.w(TAG, "failed to query inventory: " + responseCode);
+            return;
+        }
+
+        if (isFinishing() || stateSaved) {
+            Log.w(TAG, "activity no longer active");
             return;
         }
 
@@ -153,19 +163,6 @@ public class DonationActivity extends ThemeActivity implements
             .setSku(sku)
             .build()
         );
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        // 🤔 suggested workaround from
-        // https://issuetracker.google.com/issues/37094575
-        super.onSaveInstanceState(outState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            final View rootView = findViewById(android.R.id.content);
-            if (rootView != null) {
-                rootView.cancelPendingInputEvents();
-            }
-        }
     }
 
     private void queryAvailableSkus() {
