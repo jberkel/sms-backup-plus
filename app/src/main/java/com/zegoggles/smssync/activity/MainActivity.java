@@ -98,6 +98,7 @@ import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACT
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_ACCOUNT;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_TOKEN;
 import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup;
+import static com.zegoggles.smssync.compat.SmsReceiver.isSmsBackupDefaultSmsApp;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
 import static com.zegoggles.smssync.service.BackupType.SKIP;
 
@@ -263,7 +264,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
-        if (newState.isFinished() && isSmsBackupDefaultSmsApp()) {
+        if (newState.isFinished() && isSmsBackupDefaultSmsApp(this)) {
              restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }
@@ -376,7 +377,7 @@ public class MainActivity extends ThemeActivity implements
         final Intent intent = new Intent(this, SmsRestoreService.class);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (isSmsBackupDefaultSmsApp()) {
+            if (isSmsBackupDefaultSmsApp(this)) {
                 startService(intent);
             } else {
                 final String defaultSmsPackage = Sms.getDefaultSmsPackage(this);
@@ -397,12 +398,6 @@ public class MainActivity extends ThemeActivity implements
         } else {
             startService(intent);
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private boolean isSmsBackupDefaultSmsApp() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-                getPackageName().equals(Sms.getDefaultSmsPackage(this));
     }
 
     private void showFragment(@NonNull Fragment fragment, @Nullable String rootKey) {
@@ -467,7 +462,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     private void checkDefaultSmsApp() {
-        if (isSmsBackupDefaultSmsApp() && SmsRestoreService.isServiceIdle()) {
+        if (isSmsBackupDefaultSmsApp(this) && SmsRestoreService.isServiceIdle()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }

@@ -1,10 +1,8 @@
 package com.zegoggles.smssync.service;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
-import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -28,6 +26,7 @@ import java.io.FilenameFilter;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.compat.SmsReceiver.isSmsBackupDefaultSmsApp;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
@@ -62,10 +61,9 @@ public class SmsRestoreService extends ServiceBase {
      * Android KitKat and above require SMS Backup+ to be the default SMS application in order to
      * write to the SMS Provider.
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private boolean canWriteToSmsProvider() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ||
-               getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(this));
+               isSmsBackupDefaultSmsApp(this);
     }
 
     @Override
@@ -120,7 +118,7 @@ public class SmsRestoreService extends ServiceBase {
         }.start();
     }
 
-    public synchronized void clearCache() {
+    synchronized void clearCache() {
         File tmp = getCacheDir();
         if (tmp == null) return; // not sure why this would return null
 

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
+import android.provider.Telephony.Sms;
+import android.support.annotation.NonNull;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import com.zegoggles.smssync.Consts;
@@ -22,18 +24,21 @@ import static com.zegoggles.smssync.App.TAG;
 public class SmsReceiver extends BroadcastReceiver {
     private final ThreadHelper threadHelper = new ThreadHelper();
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive("+intent+")");
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ||
-            !Telephony.Sms.getDefaultSmsPackage(context).equals(context.getPackageName())) {
-            return;
+        if (isSmsBackupDefaultSmsApp(context)) {
+            final SmsMessage[] messages = getMessagesFromIntent(intent);
+            if (messages != null && messages.length > 0) {
+                storeMessage(context, messages);
+            }
         }
+    }
 
-        final SmsMessage[] messages = getMessagesFromIntent(intent);
-        if (messages != null && messages.length > 0) {
-            storeMessage(context, messages);
-        }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static boolean isSmsBackupDefaultSmsApp(@NonNull Context context) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
+               context.getPackageName().equals(Sms.getDefaultSmsPackage(context));
     }
 
     // Adapted from
