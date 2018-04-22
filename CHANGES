@@ -1,4 +1,4 @@
-== 1.5.11 (1555) tbd
+== 1.5.11 (1576) 04-23-2018
 
   * WebView scroll position lost after device rotation (#878)
   * Fix crash with some phone numbers (#870)

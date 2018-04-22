@@ -453,7 +453,7 @@ repository and submit a [pull request][About pull requests].
 
 ## <a id="screenhots">Screenshots</a>
 
-### 1.5.11-BETA
+### 1.5.11
 
 ![SMS Backup+ material][smsbackup_screenshot_material]
 
