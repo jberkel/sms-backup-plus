@@ -11,7 +11,7 @@ SMS Backup+ is a tool to help you back up your text messages and call log
 information to an email account.
 
 To function properly it needs to have full access to various types of
-private data stored on your phone as well as your email account .
+private data stored on your phone as well as your email account.
 
 Your data is accessed and then transferred to a place of your choice, usually
 your Gmail account. SMS Backup+ does not store private data on your
@@ -102,14 +102,13 @@ Contact information as listed in [Google Play][playstore-url]:
 
 # Appendix
 
-## List of requested permissions
+## List of requested permissions (version 1.5.11)
 
 The permission names correspond to standard codes used by Android. Permissions
 marked with ⚠ are classified as “[dangerous permission][normal-and-dangerous-permissions]” by Google.
 
 | Name                          | Scope                                                         | Why needed?
 | ----------------------------- | --------------------------------------------------------------|-----------------------------------------
-| [RECEIVE_SMS][] ⚠             | Allows to receive SMS messages                                | Trigger backup after message arrival
 | [READ_SMS][] ⚠                | Allows to read all SMS messages                               | To backup SMS
 | [WRITE_SMS][]                 | Write SMS message (removed in Android 4.4)                    | To restore SMS
 | [READ_CALL_LOG][] ⚠           | Allows to read your phone's call log (incoming/outgoing)      | To backup call log
@@ -117,13 +116,14 @@ marked with ⚠ are classified as “[dangerous permission][normal-and-dangerous
 | [READ_CONTACTS][] ⚠           | Allows to read your contact data                              | To map phone numbers to emails
 | [WRITE_CONTACTS][] ⚠          | Allows to write your contact data                             | To restore SMS contact data
 | [GET_ACCOUNTS][] ⚠            | Allows access to the list of accounts in the Accounts Service | Authenticate with Gmail
-| [USE_CREDENTIALS][] ⚠         | Allows to request authentication tokens (removed in Android 6)| Authenticate with Gmail
 | [READ_CALENDAR][] ⚠           | Allows to read the your calendar data                         | To restore call log
 | [WRITE_CALENDAR][] ⚠          | Allows to write the your calendar data                        | To backup call log
 | [ACCESS_NETWORK_STATE][]      | Allows to access information about networks                   | Automatic backup
 | [ACCESS_WIFI_STATE][]         | Allows to access information about Wi-Fi networks.            | Automatic backup
-| [WRITE_EXTERNAL_STORAGE][] ⚠  | Allows to write to external storage                           | For logging
 | [BILLING][]                   | To use the Google Play application                            | optional in-app donation billing
+| [WAKE_LOCK][]                 | Allows the app to prevent the phone from going to sleep.      | Automatic backup
+| [RECEIVE_BOOT_COMPLETED][]    | Allows the app to start as soon after booting.                | Automatic backup (devices without Google Play only)
+| [RECEIVE_SMS][] ⚠             | Allows to receive SMS messages                                | Trigger backup after message arrival (devices without Google Play only)
 {:.table}
 
 [READ_SMS]: http://androidpermissions.com/permission/android.permission.READ_SMS
@@ -139,8 +139,9 @@ marked with ⚠ are classified as “[dangerous permission][normal-and-dangerous
 [READ_CALENDAR]: http://androidpermissions.com/permission/android.permission.READ_CALENDAR
 [WRITE_CALENDAR]: http://androidpermissions.com/permission/android.permission.WRITE_CALENDAR
 [WRITE_EXTERNAL_STORAGE]: http://androidpermissions.com/permission/android.permission.WRITE_EXTERNAL_STORAGE
-[USE_CREDENTIALS]: http://androidpermissions.com/permission/android.permission.USE_CREDENTIALS
 [BILLING]: https://developer.android.com/google/play/billing/billing_integrate.html#billing-permission
+[RECEIVE_BOOT_COMPLETED]: http://androidpermissions.com/permission/android.permission.RECEIVE_BOOT_COMPLETED
+[WAKE_LOCK]: http://androidpermissions.com/permission/android.permission.WAKE_LOCK
 
 [playstore-url]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [revoke-access]: https://myaccount.google.com/permissions
