@@ -1,3 +1,7 @@
+== 1.6.0 (xxx) dd-mm-2018
+
+  * Updated Swedish localization (#890)
+
 == 1.5.11 (1576) 04-23-2018
 
   * WebView scroll position lost after device rotation (#878)
