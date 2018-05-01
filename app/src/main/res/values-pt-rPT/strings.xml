@@ -13,7 +13,7 @@
   <string name="status_working">a processar</string>
   <string name="status_backup">A criar cópia de segurança</string>
   <string name="status_restore">A restaurar</string>
-  <string name="status_backup_details">Cópias de segurança<xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> itens\u2026</string>
+  <string name="status_backup_details">Cópias de segurança <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> itens\u2026</string>
   <string name="status_restore_details">Restauradas <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> itens\u2026</string>
   <string name="status_login_details">Registos em\u2026</string>
   <string name="status_updating_threads">Atualizando mensagens\u2026</string>
