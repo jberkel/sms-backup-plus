@@ -46,6 +46,8 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.LOGIN;
 
+import org.openintents.openpgp.util.OpenPgpServiceConnection;
+
 class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final SmsBackupService service;
     private final BackupItemsFetcher fetcher;
@@ -55,6 +57,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final Preferences preferences;
     private final ContactAccessor contactAccessor;
     private final TokenRefresher tokenRefresher;
+    private final OpenPgpServiceConnection mServiceConnection;
 
     BackupTask(@NonNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
@@ -68,8 +71,16 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
         PersonLookup personLookup = new PersonLookup(service.getContentResolver());
 
+        // bind to pgp service
+        if (preferences.isEncryptionAvailable()) {
+            this.mServiceConnection = new OpenPgpServiceConnection(context, preferences.getEncryptionProvider());
+            this.mServiceConnection.bindToService();
+        } else {
+            this.mServiceConnection = null;
+        }
+
         this.contactAccessor = new ContactAccessor();
-        this.converter = new MessageConverter(context, service.getPreferences(), authPreferences.getUserEmail(), personLookup, contactAccessor);
+        this.converter = new MessageConverter(context, service.getPreferences(), authPreferences.getUserEmail(), personLookup, contactAccessor, this.mServiceConnection);
 
         if (preferences.isCallLogCalendarSyncEnabled()) {
             calendarSyncer = new CalendarSyncer(
@@ -92,7 +103,8 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                AuthPreferences authPreferences,
                Preferences preferences,
                ContactAccessor accessor,
-               TokenRefresher refresher) {
+               TokenRefresher refresher,
+               OpenPgpServiceConnection serviceConnection) {
         this.service = service;
         this.fetcher = fetcher;
         this.converter = messageConverter;
@@ -101,6 +113,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         this.preferences = preferences;
         this.contactAccessor = accessor;
         this.tokenRefresher = refresher;
+        this.mServiceConnection = serviceConnection;
     }
 
     @Override
@@ -236,6 +249,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
     @Override
     protected void onPostExecute(BackupState result) {
+        if (this.mServiceConnection != null) {
+            this.mServiceConnection.unbindFromService();
+        }
         if (result != null) {
             post(result);
         }
@@ -244,6 +260,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
     @Override
     protected void onCancelled() {
+        if (this.mServiceConnection != null) {
+            this.mServiceConnection.unbindFromService();
+        }
         post(transition(CANCELED_BACKUP, null));
         App.unregister(this);
     }

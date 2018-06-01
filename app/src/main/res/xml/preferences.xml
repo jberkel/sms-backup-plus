@@ -224,6 +224,23 @@
 
         </PreferenceScreen>
 
+        <PreferenceScreen
+                android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Encryption"
+                android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Encryption"
+                android:title="@string/ui_encryption_title"
+                android:summary="@string/ui_encryption_desc"
+                android:persistent="false"
+                tools:targetApi="honeycomb">
+            <org.openintents.openpgp.util.OpenPgpAppPreference
+                    android:key="openpgp_provider_list"
+                    android:title="@string/ui_encryption_selectprov"
+                    android:summary="@string/ui_encryption_noprov"
+                    android:defaultValue=""/>
+            <org.openintents.openpgp.util.OpenPgpKeyPreference
+                    android:key="pgp_keys"
+                    android:title="@string/ui_encryption_selkeys"/>
+        </PreferenceScreen>
+
         <CheckBoxPreference
                 android:key="notifications"
                 android:title="@string/ui_notifications_label"

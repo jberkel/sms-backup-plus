@@ -326,6 +326,15 @@
   <string name="ui_dialog_account_manager_token_error">Could not get token from system. Do you want to try the browser authentication method?</string>
   <string name="select_google_account">Select a Google account</string>
 
+  <!-- encryption strings -->
+  <string name="ui_encryption_title">Encryption</string>
+  <string name="ui_encryption_desc">Encrypt backed up messages.</string>
+  <string name="ui_encryption_selectprov">Select OpenPGP Provider</string>
+  <string name="ui_encryption_noprov">No provider selected.</string>
+  <string name="ui_encryption_prov">PGP provider:\u0020</string>
+  <string name="ui_encryption_missingprov">Your chosen PGP provider does not appear to be installed.</string>
+  <string name="ui_encryption_selkeys">Select Keys</string>
+
   <!-- donation related -->
   <string name="donate">Donate</string>
   <string name="donate_summary">Using secure Google Play Store in-app payment.</string>

@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
+import org.openintents.openpgp.util.OpenPgpServiceConnection;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.EnumSet;
@@ -70,6 +71,7 @@ public class BackupTaskTest {
     @Mock Preferences preferences;
     @Mock ContactAccessor accessor;
     @Mock TokenRefresher tokenRefresher;
+    @Mock OpenPgpServiceConnection serviceConnection;
 
     @Before public void before() {
         initMocks(this);
@@ -78,7 +80,7 @@ public class BackupTaskTest {
         when(service.getState()).thenReturn(state);
         when(preferences.getDataTypePreferences()).thenReturn(dataTypePreferences);
 
-        task = new BackupTask(service, fetcher, converter, syncer, authPreferences, preferences, accessor, tokenRefresher);
+        task = new BackupTask(service, fetcher, converter, syncer, authPreferences, preferences, accessor, tokenRefresher, serviceConnection);
         context = RuntimeEnvironment.application;
     }
 

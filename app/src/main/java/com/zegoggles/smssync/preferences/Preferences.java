@@ -19,6 +19,7 @@ package com.zegoggles.smssync.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.support.annotation.StyleRes;
 import android.util.Log;
 import com.zegoggles.smssync.App;
@@ -38,6 +39,8 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CA
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CONFIRM_ACTION;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_THEME;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.ENABLE_AUTO_BACKUP;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_PROVIDER;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_KEYS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.FIRST_USE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.LAST_VERSION_CODE;
@@ -86,6 +89,8 @@ public class Preferences {
         WIFI_ONLY("wifi_only"),
         REFERENCE_UID("reference_uid"),
         MAIL_SUBJECT_PREFIX("mail_subject_prefix"),
+        ENCRYPTION_PROVIDER("openpgp_provider_list"),
+        ENCRYPTION_KEYS("pgp_keys"),
         RESTORE_STARRED_ONLY("restore_starred_only"),
         MARK_AS_READ_TYPES("mark_as_read_types"),
         MARK_AS_READ_ON_RESTORE("mark_as_read_on_restore"),
@@ -223,6 +228,26 @@ public class Preferences {
                 return false;
             }
         }
+        return true;
+    }
+
+    public String getEncryptionProvider() {
+        return preferences.getString(ENCRYPTION_PROVIDER.key, "");
+    }
+
+    public long[] getEncryptionKeyID() {
+        long[] retval = new long[1];
+        retval[0] = preferences.getLong(ENCRYPTION_KEYS.key, 0);
+        return retval;
+    }
+
+    public boolean isEncryptionAvailable() {
+		if (TextUtils.isEmpty(getEncryptionProvider()))
+            return false;
+
+        if (getEncryptionKeyID()[0] == 0)
+            return false;
+
         return true;
     }
 

@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.activity.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -47,7 +48,12 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_THEME;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.IMAP_SETTINGS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_PROVIDER;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_KEYS;
 import static com.zegoggles.smssync.utils.ListPreferenceHelper.initListPreference;
+
+import org.openintents.openpgp.util.OpenPgpAppPreference;
+import org.openintents.openpgp.util.OpenPgpKeyPreference;
 
 public class AdvancedSettings extends SMSBackupPreferenceFragment {
 
@@ -56,6 +62,67 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         public void onResume() {
             super.onResume();
             addPreferenceListener(new ThemeChangedEvent(), DARK_THEME.key);
+        }
+    }
+
+    public static class Encryption extends AdvancedSettings {
+        private OpenPgpAppPreference pgp_prov;
+        private OpenPgpKeyPreference pgp_keys;
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            pgp_prov = (OpenPgpAppPreference) findPreference(ENCRYPTION_PROVIDER.key);
+            pgp_keys = (OpenPgpKeyPreference) findPreference(ENCRYPTION_KEYS.key);
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            updateEncryption(null);
+            findPreference(ENCRYPTION_PROVIDER.key)
+                    .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+					         updateEncryption(newValue.toString());
+                             return true;
+                        }
+                    });
+        }
+
+        @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (pgp_keys.handleOnActivityResult(requestCode, resultCode, data)) {
+                // handled by OpenPgpKeyPreference
+                return;
+            }
+        }
+
+        private void updateEncryption(String new_prov) {
+            boolean enableOtherOptions;
+
+            if (new_prov == null) { //we aren't given a new value, load the old one
+                new_prov = pgp_prov.getValue();
+            }
+
+            if(!new_prov.isEmpty()) {
+                String prov_simplename = pgp_prov.getEntryByValue(new_prov);
+                if (prov_simplename == null) {
+                    pgp_prov.setSummary(getString(R.string.ui_encryption_missingprov));
+                    enableOtherOptions = false;
+                } else {
+                    pgp_prov.setSummary(getString(R.string.ui_encryption_prov) + prov_simplename);
+                    pgp_keys.setOpenPgpProvider(new_prov);
+                    enableOtherOptions = true;
+                }
+            } else {
+                pgp_prov.setSummary(getString(R.string.ui_encryption_noprov));
+                enableOtherOptions = false;
+            }
+
+            //find other options and set enabled to enableOtherOptions
+            pgp_keys.setEnabled(enableOtherOptions);
+            return;
         }
     }
 

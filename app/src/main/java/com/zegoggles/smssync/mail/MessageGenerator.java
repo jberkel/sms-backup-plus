@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.mail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.Telephony;
@@ -20,7 +21,12 @@ import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.CallLogTypes;
 import com.zegoggles.smssync.preferences.DataTypePreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -29,6 +35,9 @@ import static com.fsck.k9.mail.internet.MimeMessageHelper.setBody;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.Consts.MMS_PART;
+
+import org.openintents.openpgp.util.OpenPgpApi;
+import org.openintents.openpgp.util.OpenPgpServiceConnection;
 
 class MessageGenerator {
     private static final String ERROR_PARSING_DATE = "error parsing date";
@@ -43,6 +52,8 @@ class MessageGenerator {
     private final MmsSupport mmsSupport;
     private final CallLogTypes callLogTypes;
     private final DataTypePreferences dataTypePreferences;
+    private final OpenPgpServiceConnection mServiceConnection;
+    private final Preferences preferences;
 
     MessageGenerator(Context context,
                      Address userAddress,
@@ -53,7 +64,8 @@ class MessageGenerator {
                      @Nullable ContactGroupIds contactsToBackup,
                      MmsSupport mmsSupport,
                      CallLogTypes callLogTypes,
-                     DataTypePreferences dataTypePreferences) {
+                     DataTypePreferences dataTypePreferences,
+                     OpenPgpServiceConnection serviceConnection) {
         this.headerGenerator = headerGenerator;
         this.userAddress = userAddress;
         this.addressStyle = addressStyle;
@@ -63,8 +75,11 @@ class MessageGenerator {
         this.contactGroupIds = contactsToBackup;
         this.callFormatter = new CallFormatter(this.context.getResources());
         this.mmsSupport = mmsSupport;
+        // this looks like it should be changed to comply with new style
+        this.preferences = new Preferences(this.context);
         this.dataTypePreferences = dataTypePreferences;
         this.callLogTypes = callLogTypes;
+        this.mServiceConnection =  serviceConnection;
     }
 
     public  @Nullable Message messageForDataType(Map<String, String> msgMap, DataType dataType) throws MessagingException {
@@ -85,7 +100,31 @@ class MessageGenerator {
 
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.SMS, record));
-        setBody(msg, new TextBody(msgMap.get(Telephony.TextBasedSmsColumns.BODY)));
+
+        String msgTxt = msgMap.get(Telephony.TextBasedSmsColumns.BODY);
+
+        if (mServiceConnection != null) {
+            Intent data = new Intent();
+            ByteArrayOutputStream os;
+            InputStream is;
+            data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+            data.putExtra(OpenPgpApi.EXTRA_KEY_IDS, preferences.getEncryptionKeyID());
+            data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+            try {
+                is = new ByteArrayInputStream(msgTxt.getBytes("UTF-8"));
+                os = new ByteArrayOutputStream();
+                OpenPgpApi api = new OpenPgpApi(this.context, mServiceConnection.getService());
+                Intent result = api.executeApi(data, is, os);
+                switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+                    case OpenPgpApi.RESULT_CODE_SUCCESS: {
+                        msgTxt = os.toString("UTF-8");
+                        break;
+                    }
+                }
+            } catch (UnsupportedEncodingException e) {}
+        }
+
+        setBody(msg, new TextBody(msgTxt));
 
         final int messageType = toInt(msgMap.get(Telephony.TextBasedSmsColumns.TYPE));
         if (Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX == messageType) {

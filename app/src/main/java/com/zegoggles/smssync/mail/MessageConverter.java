@@ -48,6 +48,8 @@ import java.util.Random;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
+import org.openintents.openpgp.util.OpenPgpServiceConnection;
+
 public class MessageConverter {
     private final Context context;
     private final ThreadHelper threadHelper = new ThreadHelper();
@@ -61,7 +63,8 @@ public class MessageConverter {
                             Preferences preferences,
                             String userEmail,
                             PersonLookup personLookup,
-                            ContactAccessor contactAccessor) {
+                            ContactAccessor contactAccessor,
+                            OpenPgpServiceConnection serviceConnection) {
         this.context = context;
         markAsReadType = preferences.getMarkAsReadType();
         this.personLookup = personLookup;
@@ -84,9 +87,11 @@ public class MessageConverter {
                 this.personLookup,
                 preferences.getMailSubjectPrefix(),
                 allowedIds,
+
                 new MmsSupport(this.context.getContentResolver(), this.personLookup),
                 preferences.getCallLogType(),
-                preferences.getDataTypePreferences());
+                preferences.getDataTypePreferences(),
+                serviceConnection);
     }
 
     private boolean markAsSeen(DataType dataType, Map<String, String> msgMap) {

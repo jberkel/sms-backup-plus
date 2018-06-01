@@ -144,6 +144,7 @@ public class MainActivity extends ThemeActivity implements
         if (bundle == null) {
             showFragment(new MainSettings(), null);
         }
+
         if (preferences.shouldShowAboutDialog()) {
             showDialog(ABOUT);
         }

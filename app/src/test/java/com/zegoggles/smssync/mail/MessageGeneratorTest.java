@@ -57,8 +57,12 @@ public class MessageGeneratorTest {
                 false,
                 null,
                 mmsSupport,
+<<<<<<< HEAD
+                null
+=======
                 CallLogTypes.EVERYTHING,
                 dataTypePreferences
+>>>>>>> upstream/master
         );
     }
 
@@ -228,8 +232,12 @@ public class MessageGeneratorTest {
                 false,
                 groupIds,
                 mmsSupport,
+<<<<<<< HEAD
+                null
+=======
                 CallLogTypes.EVERYTHING,
                 dataTypePreferences
+>>>>>>> upstream/master
         );
         PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
         Map<String, String> map = mockMessage("1234", record);
