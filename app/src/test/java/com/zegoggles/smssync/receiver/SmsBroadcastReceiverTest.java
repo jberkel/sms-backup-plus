@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.service.BackupJobs;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(RobolectricTestRunner.class)
 public class SmsBroadcastReceiverTest {
     Context context;
-    @Mock Alarms alarms;
+    @Mock BackupJobs backupJobs;
     @Mock Preferences preferences;
     @Mock AuthPreferences authPreferences;
     SmsBroadcastReceiver receiver;
@@ -27,8 +27,8 @@ public class SmsBroadcastReceiverTest {
         initMocks(this);
         context = RuntimeEnvironment.application;
         receiver = new SmsBroadcastReceiver() {
-            @Override protected Alarms getAlarms(Context context) {
-                return alarms;
+            @Override protected BackupJobs getBackupJobs(Context context) {
+                return backupJobs;
             }
 
             @Override protected Preferences getPreferences(Context context) {
@@ -41,42 +41,37 @@ public class SmsBroadcastReceiverTest {
         };
     }
 
-    @Test public void shouldScheduleBootupBackupAfterBootup() throws Exception {
-        mockScheduled();
-        receiver.onReceive(context, new Intent().setAction(Intent.ACTION_BOOT_COMPLETED));
-        verify(alarms, times(1)).scheduleBootupBackup();
-    }
-
     @Test public void shouldScheduleIncomingBackupAfterIncomingMessage() throws Exception {
         mockScheduled();
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
-        verify(alarms, times(1)).scheduleIncomingBackup();
+        verify(backupJobs, times(1)).scheduleIncoming();
     }
 
-    @Test public void shouldNotScheduleIfAutoSyncIsDisabled() throws Exception {
+    @Test public void shouldNotScheduleIfAutoBackupIsDisabled() throws Exception {
         mockScheduled();
-        when(preferences.isEnableAutoSync()).thenReturn(false);
+        when(preferences.isAutoBackupEnabled()).thenReturn(false);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
-        verifyZeroInteractions(alarms);
+        verifyZeroInteractions(backupJobs);
     }
 
     @Test public void shouldNotScheduleIfLoginInformationIsNotSet() throws Exception {
         mockScheduled();
         when(authPreferences.isLoginInformationSet()).thenReturn(false);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
-        verifyZeroInteractions(alarms);
+        verifyZeroInteractions(backupJobs);
     }
 
     @Test public void shouldNotScheduleIfFirstBackupHasNotBeenRun() throws Exception {
         mockScheduled();
         when(preferences.isFirstBackup()).thenReturn(true);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
-        verifyZeroInteractions(alarms);
+        verifyZeroInteractions(backupJobs);
     }
 
     private void mockScheduled() {
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
-        when(preferences.isEnableAutoSync()).thenReturn(true);
+        when(preferences.isAutoBackupEnabled()).thenReturn(true);
         when(preferences.isFirstBackup()).thenReturn(false);
+        when(preferences.isUseOldScheduler()).thenReturn(true);
     }
 }

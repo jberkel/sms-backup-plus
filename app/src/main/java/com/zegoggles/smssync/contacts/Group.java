@@ -6,7 +6,7 @@ public class Group {
     final String title;
     final int _id, count;
 
-    public Group(int id, String title, int count) {
+    Group(int id, String title, int count) {
         this._id = id;
         this.title = title;
         this.count = count;

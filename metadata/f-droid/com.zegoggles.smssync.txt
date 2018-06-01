@@ -1,0 +1,229 @@
+Categories:Phone & SMS
+License:Apache-2.0
+Web Site:
+Source Code:https://github.com/jberkel/sms-backup-plus
+Issue Tracker:https://github.com/jberkel/sms-backup-plus/issues
+Changelog:https://github.com/jberkel/sms-backup-plus/blob/HEAD/CHANGES
+
+Auto Name:SMS Backup+
+Summary:Backup SMS, MMS and call history to IMAP
+Description:
+Primarily designed for Gmail but also works on Google-free devices with a custom
+IMAP server.
+
+Change authentication to "Plain text" in "Advanced Settings - Custom IMAP
+server", then change the server address, username and password accordingly.
+Check "Trust all certificates" if the server you are connecting to has a
+self-signed certificate.
+
+SMS and call log data from the device are copied to a separate IMAP folder from
+where they can be restored at a later point.
+
+See the source code page for more detailed instructions and FAQ.
+.
+
+Repo Type:git
+Repo:https://github.com/jberkel/sms-backup-plus.git
+
+Build:1.4.3,1404
+    disable=non-free paypal jar at 1.4.3
+    commit=1.4.3
+
+Build:1.4.4,1405
+    disable=non-free paypal jar at 1.4.4
+    commit=1.4.4
+    prebuild=mv lib libs
+    target=android-10
+
+Build:1.4.6,1407
+    disable=paypal jar
+    commit=unknown - see disabled
+    prebuild=mv lib libs
+    target=android-10
+
+Build:1.4.8,1409
+    commit=1.4.8
+    srclibs=K9Mail-XOAUTH@70c41c71cd
+    prebuild=mv $$K9Mail-XOAUTH$$/compile-only-libs $$K9Mail-XOAUTH$$/libs && \
+        ant clean jar -f $$K9Mail-XOAUTH$$/build.xml && \
+        mv $$K9Mail-XOAUTH$$/bin/k9-imapstore.jar libs/
+
+Build:1.5.5,1531
+    disable=doesn't build
+    commit=1.5.5
+    gradle=yes
+    srclibs=whassup@0.0.4,PayMe@0.0.2,K9Mail-XOAUTH@70c41c71cd
+    prebuild=pushd $$whassup$$ && \
+        $$MVN3$$ install && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ install && \
+        popd && \
+        sed -i -e '14,17d' build.gradle && \
+        sed -i -e '/mavenCentral/amavenLocal()\njCenter()' build.gradle && \
+        mv $$K9Mail-XOAUTH$$/compile-only-libs $$K9Mail-XOAUTH$$/libs && \
+        ant clean jar -f $$K9Mail-XOAUTH$$/build.xml && \
+        $$MVN3$$ install:install-file -Dfile=$$K9Mail-XOAUTH$$/bin/k9-imapstore.jar -DgroupId=com.zegoggles -DartifactId=k9-imapstore -Dversion=0.1 -Dpackaging=jar
+
+Build:1.5.6-beta,1539
+    commit=d858918f88b5763ceba7f369f3733a3829a400e1
+    maven=yes
+    srclibs=whassup@bfe515d821681bdcfac3013f0801da6027bef97c,PayMe@0.0.3,K9Mail-XOAUTH@f0580a8a739d818188df63ec7ee3023166b21033
+    forceversion=yes
+    prebuild=sed -i -e 's@<version>3.8.2</version>@<version>3.7.0</version>@g' -e '/<repositories>/,/<\/repositories>/d' pom.xml $$whassup$$/pom.xml $$PayMe$$/pom.xml && \
+        pushd $$whassup$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        mv $$K9Mail-XOAUTH$$/compile-only-libs $$K9Mail-XOAUTH$$/libs && \
+        ant clean jar -f $$K9Mail-XOAUTH$$/build.xml && \
+        $$MVN3$$ install:install-file -Dmaven.test.skip=true -Dfile=$$K9Mail-XOAUTH$$/bin/k9-imapstore.jar -DgroupId=com.zegoggles -DartifactId=k9-imapstore -Dversion=0.2 -Dpackaging=jar && \
+        $$MVN3$$ install:install-file -DgroupId=android -DartifactId=android -Dversion=4.4_r1 -Dpackaging=jar -Dfile=$$SDK$$/platforms/android-19/android.jar
+
+Build:1.5.6-beta4,1542
+    commit=1.5.6-BETA4
+    maven=yes
+    srclibs=whassup@bfe515d821681bdcfac3013f0801da6027bef97c,PayMe@0.0.3,K9Mail-XOAUTH@f0580a8a739d818188df63ec7ee3023166b21033
+    forceversion=yes
+    prebuild=sed -i -e 's@<version>3.8.2</version>@<version>3.7.0</version>@g' -e '/<repositories>/,/<\/repositories>/d' pom.xml $$whassup$$/pom.xml $$PayMe$$/pom.xml && \
+        pushd $$whassup$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        mv $$K9Mail-XOAUTH$$/compile-only-libs $$K9Mail-XOAUTH$$/libs && \
+        ant clean jar -f $$K9Mail-XOAUTH$$/build.xml && \
+        $$MVN3$$ install:install-file -Dmaven.test.skip=true -Dfile=$$K9Mail-XOAUTH$$/bin/k9-imapstore.jar -DgroupId=com.zegoggles -DartifactId=k9-imapstore -Dversion=0.2 -Dpackaging=jar && \
+        $$MVN3$$ install:install-file -DgroupId=android -DartifactId=android -Dversion=4.4_r1 -Dpackaging=jar -Dfile=$$SDK$$/platforms/android-19/android.jar
+
+Build:1.5.6-beta5,1543
+    commit=1.5.6-BETA5
+    maven=yes
+    srclibs=whassup@bfe515d821681bdcfac3013f0801da6027bef97c,PayMe@0.0.3,K9Mail-XOAUTH@445f0d6cc5b9538d92a6d89d14420d2c613a7048
+    forceversion=yes
+    prebuild=sed -i -e 's@<version>3.8.2</version>@<version>3.7.0</version>@g' -e '/<repositories>/,/<\/repositories>/d' pom.xml $$whassup$$/pom.xml $$PayMe$$/pom.xml && \
+        pushd $$whassup$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        mv $$K9Mail-XOAUTH$$/compile-only-libs $$K9Mail-XOAUTH$$/libs && \
+        ant clean jar -f $$K9Mail-XOAUTH$$/build.xml && \
+        $$MVN3$$ install:install-file -Dmaven.test.skip=true -Dfile=$$K9Mail-XOAUTH$$/bin/k9-imapstore.jar -DgroupId=com.zegoggles -DartifactId=k9-imapstore -Dversion=0.3 -Dpackaging=jar && \
+        $$MVN3$$ install:install-file -DgroupId=android -DartifactId=android -Dversion=4.4_r1 -Dpackaging=jar -Dfile=$$SDK$$/platforms/android-19/android.jar
+
+Build:1.5.6,1546
+    disable=todo; k9lib failed
+    commit=1.5.6
+    maven=yes
+    srclibs=whassup@0.0.6,PayMe@0.0.3,k9lib@fe8e779b32eaa80321cc0c2a4b58a9a77aaf885d
+    forceversion=yes
+    prebuild=sed -i -e 's@<version>3.8.2</version>@<version>3.7.0</version>@g' -e '/<repositories>/,/<\/repositories>/d' pom.xml $$whassup$$/pom.xml $$PayMe$$/pom.xml && \
+        pushd $$whassup$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        pushd $$k9lib$$ && \
+        gradle install && \
+        popd && \
+        $$MVN3$$ install:install-file -DgroupId=android -DartifactId=android -Dversion=4.4_r1 -Dpackaging=jar -Dfile=$$SDK$$/platforms/android-19/android.jar
+
+Build:1.5.8,1550
+    commit=1.5.8
+    maven=yes
+    srclibs=whassup@0.0.7,PayMe@0.0.4,k9lib@f7b2f260265e230ba74be11469f4cf3db4c5745e
+    prebuild=$$MVN3$$ install:install-file -DgroupId=android -DartifactId=android -Dversion=4.4_r1 -Dpackaging=jar -Dfile=$$SDK$$/platforms/android-19/android.jar && \
+        pushd $$k9lib$$/k9mail-library && \
+        sed -i -e '/mavenDeployer/a/*' -e '/pom.project/i*/' build.gradle && \
+        sed -i -e '/mavenDeployer/adef sha = "git rev-parse --short HEAD".execute().text' build.gradle && \
+        sed -i -e '/mavenDeployer/arepository(url: mavenLocal().url) {' build.gradle && \
+        gradle uploadArchives && \
+        popd && \
+        pushd $$whassup$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd
+
+Build:1.5.9,1551
+    disable=unreleased
+    commit=1.5.9
+    maven=yes
+    srclibs=whassup@0.0.7,PayMe@0.0.4,k9lib@f7b2f260265e230ba74be11469f4cf3db4c5745e
+    prebuild=$$MVN3$$ install:install-file -DgroupId=android -DartifactId=android -Dversion=4.4_r1 -Dpackaging=jar -Dfile=$$SDK$$/platforms/android-19/android.jar && \
+        pushd $$k9lib$$/k9mail-library && \
+        sed -i -e '/mavenDeployer/a/*' -e '/pom.project/i*/' build.gradle && \
+        sed -i -e '/mavenDeployer/adef sha = "git rev-parse --short HEAD".execute().text' build.gradle && \
+        sed -i -e '/mavenDeployer/arepository(url: mavenLocal().url) {' build.gradle && \
+        gradle uploadArchives && \
+        popd && \
+        pushd $$whassup$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd
+
+Build:1.5.9,1553
+    commit=1.5.9
+    maven=yes
+    srclibs=PayMe@0.0.4,k9lib@96a00c1802845f26e5febcb3d4a6cc39d7fb0dd0
+    prebuild=$$MVN3$$ install:install-file -DgroupId=android -DartifactId=android -Dversion=4.4_r1 -Dpackaging=jar -Dfile=$$SDK$$/platforms/android-19/android.jar && \
+        pushd $$k9lib$$/k9mail-library && \
+        sed -i -e '/mavenDeployer/a/*' -e '/pom.project/i*/' build.gradle && \
+        sed -i -e '/mavenDeployer/adef sha = "git rev-parse --short HEAD".execute().text' build.gradle && \
+        sed -i -e '/mavenDeployer/arepository(url: mavenLocal().url) {' build.gradle && \
+        gradle uploadArchives && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd
+
+Build:1.5.10,1554
+    commit=1.5.10
+    maven=yes
+    srclibs=PayMe@0.0.4,k9lib@96a00c1802845f26e5febcb3d4a6cc39d7fb0dd0
+    prebuild=$$MVN3$$ install:install-file -DgroupId=android -DartifactId=android -Dversion=4.4_r1 -Dpackaging=jar -Dfile=$$SDK$$/platforms/android-19/android.jar && \
+        pushd $$k9lib$$/k9mail-library && \
+        sed -i -e '/mavenDeployer/a/*' -e '/pom.project/i*/' build.gradle && \
+        sed -i -e '/mavenDeployer/adef sha = "git rev-parse --short HEAD".execute().text' build.gradle && \
+        sed -i -e '/mavenDeployer/arepository(url: mavenLocal().url) {' build.gradle && \
+        gradle uploadArchives && \
+        popd && \
+        pushd $$PayMe$$ && \
+        $$MVN3$$ -Dmaven.test.skip=true install && \
+        popd
+
+Build:1.5.11-beta4,1557
+    commit=171aed735b5858e09ad957c556d6069f7b5ad9ab
+    subdir=app
+    gradle=yes
+    prebuild=sed -i -e 's/"https:\/\/dl.bintray.com\/jberkel\/maven"/"https:\/\/jitpack.io"/' ../build.gradle && \
+        sed -i -e 's/com.fsck.k9.mail:lib:0.0.1.75bb293/com.github.jberkel:k-9:75bb293984/' build.gradle
+
+Build:1.5.11-beta7,1560
+    commit=4b4287055a9ee6cdea26db38425ce914727d6511
+    subdir=app
+    gradle=yes
+
+Build:1.5.11-beta13,1566
+    commit=66f4d77cb20e8533d4090c1312ce0a18b2f35724
+    subdir=app
+    gradle=yes
+
+Build:1.5.11,1576
+    commit=1.5.11
+    subdir=app
+    gradle=yes
+
+Auto Update Mode:Version %v
+Update Check Mode:Tags ^[0-9.]*$
+Current Version:1.5.11
+Current Version Code:1576

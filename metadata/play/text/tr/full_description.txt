@@ -1,0 +1,13 @@
+Gmail ve Google Takvim’deki SMS, MMS ve arama geçmişinizi otomatik olarak ayrı bir etiketle yedekleyin.
+
+Daha sonra, kayıtlı verileri (MMS hariç) telefona geri yükleyebilirsiniz, özellikle yararlı
+yeni bir cihaza geçerken.
+
+IMAP erişiminin Gmail'de manuel olarak etkinleştirilmesi gerekiyor, daha fazla bilgi için web sitesine ve SSS'ye bakın.
+Elbette, verileriniz üzerinde tam kontrol sahibi olmanız için kendi IMAP sunucunuzu yedeklemeler için kullanabilirsiniz.
+
+SMS Backup+, ilk günlerden beri aktif olarak geliştirilmekte olan ücretsiz açık kaynaklı bir projedir.
+Android, tamamen reklam ve takip özgürlüğü, gönüllü bağışlarla destekleniyor.
+
+Bağışlanan sayısız kişiye çok teşekkürler, geri bildirim, kod veya çeviriler ekledi - detaylı
+Kredi app veya web sitesinde bulunabilir.

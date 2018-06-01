@@ -1,13 +1,15 @@
 package com.zegoggles.smssync.preferences;
 
-import com.zegoggles.smssync.mail.DataType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
+import static com.zegoggles.smssync.mail.DataType.MMS;
+import static com.zegoggles.smssync.mail.DataType.SMS;
 
 @RunWith(RobolectricTestRunner.class)
 public class PreferencesTest {
@@ -26,29 +28,17 @@ public class PreferencesTest {
     }
 
     @Test public void shouldTestForFirstBackupSMS() throws Exception {
-        DataType.SMS.setMaxSyncedDate(preferences.preferences, 1234);
+        preferences.getDataTypePreferences().setMaxSyncedDate(SMS, 1234);
         assertThat(preferences.isFirstBackup()).isFalse();
     }
 
     @Test public void shouldTestForFirstBackupMMS() throws Exception {
-        DataType.MMS.setMaxSyncedDate(preferences.preferences, 1234);
+        preferences.getDataTypePreferences().setMaxSyncedDate(MMS, 1234);
         assertThat(preferences.isFirstBackup()).isFalse();
     }
 
     @Test public void shouldTestForFirstBackupCallLog() throws Exception {
-        DataType.CALLLOG.setMaxSyncedDate(preferences.preferences, 1234);
+        preferences.getDataTypePreferences().setMaxSyncedDate(CALLLOG, 1234);
         assertThat(preferences.isFirstBackup()).isFalse();
-    }
-
-    @Test public void shouldGetVersion() throws Exception {
-        assertThat(preferences.getVersion(false)).matches("\\d+\\.\\d+\\.\\d+(-\\w+)?");
-    }
-
-    @Test public void shouldGetVersionWithCode() throws Exception {
-        assertThat(preferences.getVersion(true)).matches("\\d+");
-    }
-
-    @Test public void shouldTestOnSDCARD() throws Exception {
-        assertThat(preferences.isInstalledOnSDCard()).isFalse();
     }
 }

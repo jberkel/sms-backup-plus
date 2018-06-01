@@ -67,19 +67,16 @@
   <string name="imap_settings">IMAP innstillinger</string>
   <string name="ui_login_label">Brukernavn</string>
   <string name="ui_login_desc">Din IMAP konto/epost adresse.</string>
-  <string name="ui_login_dialog_msg">Advarsel: Forandring av brukernavn ved bruk av XOAuth, kann føre til feil.</string>
   <string name="ui_password_label">Passord</string>
   <string name="ui_password_desc">Ditt IMAP passord. Brukes kun om XOAuth er avslått.</string>
   <string name="ui_password_dialog_msg">Passordet er lagret på denne enheten og brukes kun for å logge inn.</string>
   <string name="ui_server_label">Tjener adresse</string>
   <string name="ui_server_desc">Adressen til tjeneren du vil synkronisere til inkl. port.</string>
-  <string name="ui_server_dialog_msg">Standart for Gmail er \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Sikkerhet</string>
-  <string name="ui_protocol_desc">Tjenerens sikkerhetsprotokoll. Standart for Gmail er \"SSL (påkrevd)\"."</string>
+  <string name="ui_protocol_desc">Tjenerens sikkerhetsprotokoll.</string>
   <string name="ui_authentication_label">Autentisering</string>
-  <string name="ui_authentication_desc">Autentisering metoden. Standart for Gmail er \"XOauth\".</string>
+  <string name="ui_authentication_desc">Autentisering metoden.</string>
   <string name="plain">Ren tekst</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail etikett</string>
   <string name="ui_imap_folder_desc">Gmail etikett for meldinger.</string>
@@ -97,7 +94,6 @@
 
   <string name="ui_backup_mms_label">Sikkerhetskopier MMS</string>
   <string name="ui_backup_mms_desc">Aktiver MMS sikkerhetskopiering</string>
-  <string name="ui_backup_mms_not_supported">MMS sikkerhetskopiering er ikke støttet på denne enheten.</string>
 
   <string name="ui_backup_calllog_label">Sikkerhetskopier samtalelogg</string>
   <string name="ui_backup_calllog_desc">Aktiver sikkerhetskopiering av samtalelogg (beta).</string>
@@ -130,8 +126,6 @@
 
   <string name="sd_card_disclaimer">Automatisk sikkerhetskopiering virker kanskje ikke om appen er installert på SD-kortet.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Du må også aktivere bakgrunnsdata.</string>
-
   <string name="ui_auto_backup_schedule_label">Vanlig tidsplan</string>
   <string name="ui_auto_backup_schedule_desc">Når meldinger skal sikkerhetskopieres.</string>
 
@@ -158,7 +152,6 @@
   <string name="ui_dialog_first_sync_title">Første sikkerhetskopiering</string>
   <string name="ui_dialog_first_sync_msg">Sikkerhetskopier eller hopp over alle meldinger på denne enheten?</string>
   <string name="ui_dialog_first_sync_msg_batched">Sikkerhetskopier eller hopp over alle meldinger på denne enheten?\n\nVarsel: Sikkerhetskopiering vil deles i samlinger med %1$d meldinger.</string>
-  <string name="ui_dialog_request_token_msg">Kontaker Google...</string>
   <string name="ui_dialog_access_token_msg">Spør om tilgang...</string>
 
   <string name="ui_dialog_access_token_error_title">Autorisasjons feil</string>
@@ -167,18 +160,9 @@
   </string>
 
   <string name="ui_dialog_connect_msg">Et nettleser vindu vil åpnes og be deg om å logge inn på Gmail for å tillate %1$s tilgang til din epost.</string>
-  <string name="ui_dialog_connect_token_error">Mottok ikke forespørselsbrikke fra Goolge. Sørg for at du er koblet til internett og tid/tidssone er konfigurert riktig.</string>
   <string name="ui_dialog_disconnect_msg">Er du sikker? Du må da reautorisere mot din konto og synkroniserings-status vil bli tilbakestilt.</string>
 
-  <string name="ui_dialog_upgrade_title">Oppgraderings informasjon</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ er fult kompatibel med SMS Backup. Men sørg for at \"Auto sikkerhetskopiering\" kun er aktiv i en applikasjon, ellers vil det kunne oppstå duplikater. Du bør også velge \"Hopp over\" meldinger ved din første synkronisering om meldinger har blitt sikkerhetskopiert tidligere.
-  </string>
-
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS feil</string>
-  <string name="ui_dialog_brokendroidx_msg">Det er en feil i Droid X som
-  forhindrer denne applikasjonen fra å sikkerhetskopiere innkommende
-  meldinger. Se FAQ på nettsiden for mer informasjon.</string>
+  <!--<string name="ui_dialog_upgrade_title">Oppgraderings informasjon</string>-->
 
   <string name="ui_sync">Sikkerhetskopier</string>
   <string name="ui_skip">Hopp over</string>
@@ -194,7 +178,6 @@
   <string name="gmail_already_connected">Koblet til som %1$s.</string>
 
   <string name="ui_connected_label">Koble til</string>
-  <string name="ui_connected_desc">Din konto må kobles til.</string>
 
   <string name="call_incoming">innkommende anrop</string>
   <string name="call_outgoing">utgående anrop</string>
@@ -209,7 +192,6 @@
 
   <string name="sms_with_field">Melding med %1$s</string>
   <!-- the subject line needs to be identical otherwise threading will be messed up -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Samtale med %1$s</string>
 
   <string name="ui_backup_contact_group_label">Kontakter å sikkerhetskopiere</string>
@@ -237,13 +219,10 @@
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
 
-  <string name="ssl_required">SSL (påkrevd)</string>
-  <string name="ssl_optional">SSL (valgfritt)</string>
-  <string name="tls_required">TLS (påkrevd)</string>
-  <string name="tls_optional">TLS (valgfritt)</string>
-  <string name="none">Ingen</string>
+  <string name="security_none">Ingen</string>
 
   <string name="ui_third_party_integration_label">Tredjeparts integrasjon</string>
   <string name="ui_third_party_integration_desc">Tillat andre applikasjon å starte sikkerhetskopiering ved valgt kringkasting.</string>
+    <string name="ui_dark_theme_label">Mørkt tema</string>
 </resources>
 <!-- new ui -->

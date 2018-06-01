@@ -4,11 +4,10 @@ import android.provider.CallLog;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class CallFormatterTest {
@@ -22,18 +21,29 @@ public class CallFormatterTest {
     @Test public void shouldFormatIncoming() throws Exception {
         assertThat(formatter.format(CallLog.Calls.INCOMING_TYPE, "Foo", 100))
                 .isEqualTo("100s (00:01:40)\n" +
-                        "Foo (incoming call)");
+                          "Foo (incoming call)");
     }
 
     @Test public void shouldFormatOutgoing() throws Exception {
         assertThat(formatter.format(CallLog.Calls.OUTGOING_TYPE, "Foo", 100))
                 .isEqualTo("100s (00:01:40)\n" +
-                        "Foo (outgoing call)");
+                           "Foo (outgoing call)");
     }
 
     @Test public void shouldFormatMissing() throws Exception {
         assertThat(formatter.format(CallLog.Calls.MISSED_TYPE, "Foo", 100))
                 .isEqualTo("Foo (missed call)");
+    }
+
+    @Test public void shouldFormatRejected() throws Exception {
+        assertThat(formatter.format(CallLog.Calls.REJECTED_TYPE, "Foo", 0))
+                .isEqualTo("Foo (incoming call, rejected)");
+    }
+
+    @Test public void shouldFormatVoicemail() throws Exception {
+        assertThat(formatter.format(CallLog.Calls.VOICEMAIL_TYPE, "Foo", 100))
+                .isEqualTo("100s (00:01:40)\n" +
+                           "Foo (incoming call, voicemail)");
     }
 
     @Test public void shouldFormatCallIncoming() throws Exception {

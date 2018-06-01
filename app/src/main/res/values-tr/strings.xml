@@ -15,17 +15,17 @@
   <string name="ui_restore_button_label_idle">Geri Yükle</string>
   <string name="ui_restore_button_label_restoring">Dur</string>
 
-  <string name="status_idle">Boşta</string>
+  <string name="status_idle">Boş</string>
   <string name="status_idle_details">Son yedekleme tarihi: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
-  <string name="status_idle_details_never">Asla</string>
+  <string name="status_idle_details_never">yok</string>
 
   <string name="status_working">Çalışıyor</string>
 
   <string name="status_backup">Yedekleniyor</string>
   <string name="status_restore">Geri yükleniyor</string>
 
-  <string name="status_backup_details">Yedeklenen mesajlar: <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
-  <string name="status_restore_details">Geri yüklenen mesajlar: <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_backup_details">Yedeklenme: <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
+  <string name="status_restore_details">Geri yüklenme: <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> items\u2026</string>
   <string name="status_login_details">Giriş yapılıyor\u2026</string>
   <string name="status_updating_threads">Başlıklar güncelleniyor\u2026</string>
   <string name="status_done">Tamamlandı</string>
@@ -51,39 +51,54 @@
   <string name="status_auth_failure">Giriş hatası</string>
   <string name="notification_auth_failure">SMSBackup+ giriş hatası</string>
 
+    <string name="status_permission_problem">Yetki problemi</string>
+
+  <plurals name="status_permission_problem_details">
+    <item quantity="one">Bu yetki gerekiyor: %1$s.</item>
+    <item quantity="other">Bu yetkiler gerekiyor: %1$s.</item>
+  </plurals>
+
+  <string name="permission_read_sms">SMS Mesajlarına Erişim</string>
+  <string name="permission_read_call_log">Arama Kaydına Erişim</string>
+  <string name="permission_read_contacts">Rehbere Erişim</string>
+  <string name="permission_unknown">Bilinmiyor</string>
+
   <string name="status_auth_failure_details_xoauth">XOAuth yetki hatası. Lütfen Gmail hesap ayarlarındaki IMAP seçeneğinin açık olduğundan emin olun.</string>
   <string name="status_auth_failure_details_plain">IMAP yetki hatası.
   Kullanıcı adı ve şifrenizi doğru girdiğinize emin olun.</string>
   <string name="status_calc_details">Hesaplanıyor\u2026</string>
   <string name="status_canceled">Vazgeçildi</string>
   <string name="status_canceled_details">%1$d/%2$d öğe başarıyla yedeklendi.</string>
+    <string name="status_gmail_temp_error">Gmail IMAP hatası, daha sonra tekrar deneyin.</string>
 
   <string name="ui_settings_advanced_label">Gelişmiş ayarlar</string>
-  <string name="ui_settings_advanced_desc">Gelişmiş tercihleri ayarlayın.</string>
+  <string name="ui_settings_advanced_desc">Gelişmiş seçenekleri ayarlayın.</string>
   <string name="ui_settings_advanced_server_label">Sunucu ayarları</string>
   <string name="ui_settings_advanced_server_desc">Ne yaptığınızdan emin değilseniz bu ayarları değiştirmeyin!</string>
 
   <string name="imap_settings">IMAP ayarları</string>
   <string name="ui_login_label">Kullanıcı adı</string>
   <string name="ui_login_desc">IMAP hesabınız/e-posta adresiniz.</string>
-  <string name="ui_login_dialog_msg">UYARI: Kullanıcı adını değiştirmek XOAuth kullanımında bazı sıkıntılara sebep olabilir.</string>
   <string name="ui_password_label">Şifre</string>
-  <string name="ui_password_desc">IMAP hesap şifreniz. Sadece XOAuth devre dışı bırakıldığında kullanılır.</string>
+  <string name="ui_password_desc">IMAP hesap şifreniz.</string>
   <string name="ui_password_dialog_msg">Bu şifre telefonunuzda saklanır ve sadece giriş yapılacağı zaman kullanılır.</string>
   <string name="ui_server_label">Sunucu adresi</string>
-  <string name="ui_server_desc">Senkronizasyon için kullanmak istediğiniz sunucu adresi ve portu.</string>
-  <string name="ui_server_dialog_msg">Gmail için varsayılan sunucu: \"imap.gmail.com:993\"</string>
+  <string name="ui_server_desc">Kullanmak istediğiniz sunucu adresi ve portu.</string>
+
   <string name="ui_protocol_label">Güvenlik</string>
-  <string name="ui_protocol_desc">Sunucunun kullandığı güvenlik protokolu. Gmail için varsayılan protokol: \"SSL (Required)\"."</string>
+  <string name="ui_protocol_desc">Sunucunun kullandığı güvenlik protokolü.</string>
+
+   <string name="ui_protocol_trust_all_certificates_label">Tüm sertifikalara güven</string>
+  <string name="ui_protocol_trust_all_certificates_desc">Önerilmez. Yarı-imzalı sertifikaya sahip sunucular için etkinleştirin.</string>
+
   <string name="ui_authentication_label">Kimlik Denetleme</string>
-  <string name="ui_authentication_desc">Kimlik denetleme metodu. Gmail için varsayılan metod: \"XOauth\".</string>
+  <string name="ui_authentication_desc">Kimlik denetleme metodu.</string>
   <string name="plain">Düz yazı</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Gmail etiketi</string>
   <string name="ui_imap_folder_desc">SMS\'ler için atanacak Gmail etiketi.</string>
   <string name="ui_imap_folder_label_dialog_msg">SMS\'ler yedeklendiğinde Gmail hesabınızda bu şekilde etiketlenecek.</string>
-  <string name="ui_mail_subject_prefix_label">Eposta konu ön eki</string>
+  <string name="ui_mail_subject_prefix_label">Eposta ön eki</string>
   <string name="ui_mail_subject_prefix_desc">Eposta konusuna IMAP klasör adını ön ek olarak kullan</string>
 
   <string name="ui_max_items_per_sync_label">Yedeklenecek öğe sayısı</string>
@@ -92,14 +107,37 @@
   <string name="ui_max_items_per_restore_desc">Bir seferde geri yüklenecek maksimum mesaj sayısı.</string>
 
   <string name="ui_restore_starred_only_label">Yıldızlı SMS</string>
-  <string name="ui_restore_starred_only_desc">Sadece yıldızla işaretlenmiş olan mesajları geri yükle.</string>
+  <string name="ui_restore_starred_only_desc">Sadece yıldızlı mesajları geri yükle.</string>
 
   <string name="ui_backup_mms_label">MMS\'leri Yedekle</string>
-  <string name="ui_backup_mms_desc">MMS yedeklemeyi etkinleştir(beta)</string>
-  <string name="ui_backup_mms_not_supported">MMS yedekleme bu platformda desteklenmiyor.</string>
+  <string name="ui_backup_mms_desc">MMS yedeklemeyi etkinleştir</string>
 
-  <string name="ui_mark_as_read_label">Okundu olarak işaretle (eposta)</string>
+  <string name="ui_backup_calllog_label">Arama günlüğünü yedekle</string>
+  <string name="ui_backup_calllog_desc">Arama günlüğünü yedeklemeyi etkinleştir</string>
+
+  <string name="ui_backup_calllog_sync_calendar_enabled_label">Takvim senkronu</string>
+  <string name="ui_backup_calllog_sync_calendar_enabled_desc">Arama günlüklerini takvime ekle</string>
+
+  <string name="ui_backup_calllog_types_label">Arama türleri</string>
+  <string name="ui_backup_calllog_types_desc">Hangi arama türleri yedekleecek</string>
+
+  <string name="ui_backup_calllog_sync_calendar_label">Hiçbiri</string>
+  <string name="ui_backup_calllog_sync_calendar_desc">Arama günlükleri için kullanılan takvim</string>
+
+  <string name="ui_imap_folder_calllog_label">Arama günlüğü etiketi</string>
+  <string name="ui_imap_folder_calllog_desc">Arama günlüğüne atanacak gmail etiketi.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Yedeklenen arama günlüğü kayıtları bu Gmail etiketiyle işaretlenecek.</string>
+
+  <string name="ui_backup_calllog_after_call_label">Arama sonrası yedekle</string>
+  <string name="ui_backup_calllog_after_call_desc">Gelen/giden aramaları otomatik olarak yedekler.</string>
+
+  <string name="ui_mark_as_read_label">Okundu olarak işaretle (epostaları)</string>
   <string name="ui_mark_as_read_desc">Gmailde mesajların okunup okunmadığına bakmaksızın okundu olarak işaretle.</string>
+
+  <string name="mark_as_read_always_read">Her zaman okundu olarak işaretle</string>
+  <string name="mark_as_read_always_unread">Her zaman okunmadı olarak işaretle</string>
+  <string name="mark_as_read_message_status">Mesajın durumunu kullan</string>
+
   <string name="ui_mark_as_read_restore_label">Okundu olarak işaretle (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Geri yüklenen mesajları okunup okunmadığına bakmaksızın okundu olarak işaretle.</string>
 
@@ -108,15 +146,18 @@
 
   <string name="ui_enable_auto_sync_label">Otomatik yedekleme</string>
   <string name="ui_enable_auto_sync_desc">Yeni mesaj olsa da, olmasa da otomatik olarak yedekle.</string>
+  <string name="ui_enable_auto_sync_summary">Otomatik yedekleme %1$s.</string>
+  <string name="ui_enable_auto_sync_no_enabled_summary">Seçilecek yedek öğe türü yok.</string>
 
-  <string name="auto_backup_settings">Otomatik yedekleme</string>
-  <string name="ui_auto_backup_schedule_label">Düzenli yedek</string>
+    <string name="sd_card_disclaimer">Uygulama SD karta yüklendiğinde otomatik yedekleme güvenilir şekilde çalışmayabilir.</string>
+
+    <string name="ui_auto_backup_schedule_label">Düzenli yedek</string>
   <string name="ui_auto_backup_schedule_desc">SMS\'lerin yedekleme aralığı</string>
 
   <string name="ui_auto_backup_incoming_schedule_label">Mesaj geldiğinde</string>
   <string name="ui_auto_backup_incoming_schedule_desc">Yeni bir SMS geldiğinde (geldikten sonra)</string>
 
-  <string name="ui_wifi_only_label">Wifi Gerekli</string>
+  <string name="ui_wifi_only_label">Wifi Kontrol</string>
   <string name="ui_wifi_only_desc">Sadece Wifi ile bağlanıldığında yedekle/geri yükle</string>
 
   <string name="ui_notifications_label">Bildirimler</string>
@@ -124,19 +165,20 @@
 
   <string name="error_wifi_only_no_connection">Wifi bağlantısı yok</string>
   <string name="error_no_connection">İnternet bağlantısı yok</string>
+  <string name="error_sms_provider_not_writable">SMS sağlayıcıya yazılamıyor</string>
 
   <string name="ui_dialog_missing_credentials_title">Giriş bilgisi</string>
 
   <string name="ui_dialog_missing_credentials_msg_xoauth">Öncelikle Gmail hesabınıza bağlanmanız gerekiyor.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Kullanıcı adı ve şifrenizi girmelisiniz.</string>
+  <string name="ui_dialog_missing_credentials_msg_plain">Kullanıcı adı ve şifrenizi
+  girmelisiniz.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Hatalı etiket adı</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Etiket adı sadece harfler, rakamlar (A-Z, a-z, 0-9), \'/\', \'.\' ve boşluk içerebilir (başında ve sonunda olmamak şartıyla).</string>
   <string name="ui_dialog_first_sync_title">İlk yedek</string>
   <string name="ui_dialog_first_sync_msg">Telefondaki tüm mesajlar yedeklensin mi yoksa bu işlem atlansın mı?</string>
   <string name="ui_dialog_first_sync_msg_batched">Telefondaki tüm mesajlar yedeklensin mi yoksa bu işlem atlansın mı?\n\nNot: Yedek %1$d mesajdan oluşan yığınla birleştirilecek.</string>
-  <string name="ui_dialog_request_token_msg">Google\'a bağlanılıyor...</string>
-  <string name="ui_dialog_access_token_msg">Erişim isteği yollanıyor...</string>
+  <string name="ui_dialog_access_token_msg">Erişim isteniyor...</string>
 
   <string name="ui_dialog_access_token_error_title">Kimlik doğrulama başarısız</string>
   <string name="ui_dialog_access_token_error_msg">Hesabınıza erişilemedi. \"Erişim izni\"
@@ -144,18 +186,7 @@
   </string>
 
   <string name="ui_dialog_connect_msg">%1$s programının Gmail hesabınıza erişebilmesi için açılan tarayıcı ekranında hesabınıza giriş yapmalısınız.</string>
-  <string name="ui_dialog_connect_token_error">Googledan veri erişim isteği alınamadı. Ağ bağlantınızın etkin olduğundan ve zaman / zaman dilimi ayarınızın düzgün bir şekilde ayarlandığından emin olun.</string>
-  <string name="ui_dialog_disconnect_msg">Emin misiniz? Bağlantınızı kesip tekrar kimlik doğrulaması yapmanız durumunda yerel senkronizason durumu sıfırlanacak.</string>
-
-  <string name="ui_dialog_upgrade_title">Güncelleme bilgisi</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+, SMS Backup ile tamamen uyumludur. Sadece \"Otomatik yedekleme\" seçeneğinin akif olduğundan emin olun, aksi takdirde mükerrer mesajlar oluşabilir. Ayrıca eğer telefondaki mesajlarınızı daha önce zaten yedeklemişseniz ilk senkronizasyon işlemi esnasında \"Atla\" seçeneğini seçin.
-  </string>
-
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS Hatası</string>
-  <string name="ui_dialog_brokendroidx_msg">Droid X\'te yedekleme işlemi sırasında mesaj almayı
-  engelleyen bir hata var. Daha fazla bilgi için
-  websitemizdeki SSS bölümüne göz atın.</string>
+  <string name="ui_dialog_disconnect_msg">Emin misiniz? Bağlantınızı kesip tekrar kimlik doğrulaması yapmanız durumunda yerel senkronizasyon durumu sıfırlanacak.</string>
 
   <string name="ui_sync">Yedekle</string>
   <string name="ui_skip">Atla</string>
@@ -168,10 +199,39 @@
   <string name="all_messages">Hepsi</string>
 
   <string name="gmail_needs_connecting">Gmail hesabınıza bağlanmak için hafifçe dokunun (önerilir).</string>
-  <string name="gmail_already_connected">%1$s hesabına bağlanıldı (bağlantıyı kesmek için dokunun).</string>
+  <string name="gmail_already_connected">%1$s olarak bağlandı.</string>
+  <string name="custom_imap_not_configured">IMAP (ayarlanmadı)</string>
 
   <string name="ui_connected_label">Bağlan</string>
-  <string name="ui_connected_desc">Hesabınıza bağlanmanız gerekiyor.</string>
+
+   <string name="call_incoming">gelen çağrı</string>
+  <string name="call_outgoing">giden çağrı</string>
+  <string name="call_missed">cevapsız çağrı</string>
+  <string name="call_rejected">reddedilen çağrı</string>
+  <string name="call_voicemail">sesli mesaj</string>
+
+  <string name="call_missed_text">Şu kişiden cevapsız çağrı: %1$s</string>
+  <string name="call_incoming_text">Şu kişiden çağrı: %1$s</string>
+  <string name="call_outgoing_text">Arayan: %1$s</string>
+  <string name="call_rejected_text">Şu kişiden reddedilmiş çağrı: %1$s</string>
+  <string name="call_voicemail_text">Şu kişiden sesli mesaj: %1$s </string>
+
+  <string name="call_number_field">Numara: %1$s</string>
+  <string name="call_duration_field">Süre: %1$s</string>
+
+  <string name="sms_with_field">%1$s ile SMS</string>
+  <string name="call_with_field">%1$s ile çağrı</string>
+
+  <string name="ui_backup_contact_group_label">Yedeklenecek kişiler</string>
+  <string name="ui_backup_contact_group_desc">Yalnızca belirli bir gruptaki yedek öğeler</string>
+
+  <string name="everybody">Herkes</string>
+
+  <string name="call_type_everything">Herşey</string>
+  <string name="call_type_incoming">Sadece gelen çağrılar</string>
+  <string name="call_type_outgoing">Sadece giden çağrılar</string>
+  <string name="call_type_incoming_outgoing">Gelen &amp; Giden</string>
+  <string name="call_type_missed">Sadece cevapsız çağrılar</string>
 
   <string name="email_address_style_name">İsim</string>
   <string name="email_address_style_name_and_number">İsim (+90 123456)</string>
@@ -187,9 +247,102 @@
   <string name="_3mins">3 dakika</string>
   <string name="_30mins">30 dakika</string>
 
-  <string name="ssl_required">SSL (Önerilir)</string>
-  <string name="ssl_optional">SSL (İsteğe bağlı)</string>
-  <string name="tls_required">TLS (Önerilir)</string>
-  <string name="tls_optional">TLS (İsteğe bağlı)</string>
-  <string name="none">Yok</string>
+  <string name="security_none">Yok</string>
+
+  <string name="ui_third_party_integration_label">Üçüncü parti entegrasyon</string>
+  <string name="ui_third_party_integration_desc">Diğer uygulamaların yedeklemeleri tetiklemesine izin ver</string>
+
+  <!-- new ui -->
+  <string name="ui_backup_settings_label">Yedekleme seçenekleri</string>
+  <string name="ui_backup_calllog_settings_label">Arama günlüğü seçenekleri</string>
+
+  <string name="auto_backup_settings">Otomatik yedekleme seçenekleri</string>
+
+  <string name="ui_restore_settings_label">Geri yükleme seçenekleri</string>
+
+  <string name="ui_backup_sms_label">SMS Yedekleme</string>
+  <string name="ui_backup_sms_desc">SMS yedeklemeyi etkinleştir</string>
+
+  <string name="ui_restore_sms_label">SMSleri Geri Yükle</string>
+
+  <string name="ui_restore_calllog_label">Çağrı günlüğünü geri yükle</string>
+
+  <string name="sms">SMS</string>
+  <string name="mms">MMS</string>
+  <string name="calllog">Çağrı günlüğü</string>
+
+
+
+  <string name="app_log_skip_backup_already_running">Yedekleme zaten çalıştığı için atlandı</string>
+  <string name="app_log_skip_backup_skip_messages">Tüm mesajları atla</string>
+  <string name="app_log_skip_backup_no_items">Atlandı (öğe bulunamadı)</string>
+  <string name="app_log_missing_credentials">Atlandı (eksik kimlik bilgileri)</string>
+  <string name="app_log_backup_requested">Yedekleme talep edildi (%1$s)</string>
+  <string name="app_log_start_backup">Yedekleme başlıyor (%1$s)</string>
+  <string name="app_log_backup_messages">Yedekleniyor (%1$d SMS, %2$d MMS, %3$d çağrı günlüğü)</string>
+  <string name="app_log_backup_messages_with_config">Kullanılan yapılandırma: %1$s</string>
+  <string name="app_log_backup_canceled">Yedeklemeden vazgeçildi</string>
+  <string name="app_log_backup_finished">Yedekleme tamamlandı</string>
+
+  <string name="app_log_backup_failed_authentication">Yetkilendirme hatası: %1$s</string>
+  <string name="app_log_backup_failed_general_error">Genel hata: %1$s</string>
+  <string name="app_log_backup_failed_connectivity">Bağlantı olmadığından yedekleme atlandı</string>
+  <string name="app_log_scheduled_next_sync">Yedekleme için sonraki program: %1$s</string>
+  <string name="app_log_no_next_sync">Programlanmış bir yedekleme yok</string>
+
+  <string name="menu_view_log">Günlüğü gör</string>
+  <string name="app_log_empty">Günlük boş. \"Gelişmiş Seçenekler\" altından etkinleştirin.</string>
+
+  <string name="pref_app_log">Senkronizasyon Günlüğü</string>
+  <string name="pref_app_log_enabled">Günlük \"sms_backup_plus.log\" adıyla kaydedildi.</string>
+  <string name="pref_app_log_disabled">Devre dışı</string>
+
+  <string name="pref_app_log_debug">Ekstra hata ayıklama bilgisi</string>
+  <string name="pref_app_log_debug_summary">Senkronizasyon günlüğünde ek hata ayıklama bilgilerini etkinleştirir</string>
+
+  <string name="pref_use_old_scheduler">Eski yedekleme zamanlayıcısı</string>
+  <string name="pref_use_old_scheduler_summary">Eski yedekleme zamanlayıcı kullanımını zorla</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Google Play Servisleri mevcut değil</string>
+
+  <string name="source_incoming">gelen</string>
+  <string name="source_regular">düzenli</string>
+  <string name="source_3rd_party">Üçüncü parti</string>
+  <string name="source_manual">elle</string>
+  <string name="source_unknown">bilinmiyor</string>
+
+  <string name="ui_confirm_action_label">Eylemleri onayla</string>
+  <string name="ui_confirm_action_desc">Yedeklemeden veya geri yüklemeden önce sor</string>
+  <string name="ui_dialog_confirm_action_title">Eylemi Onayla</string>
+  <string name="ui_dialog_confirm_action_msg">Eylemi gerçekleştirmek istediğinizden emin misiniz?</string>
+
+  <string name="ui_dialog_account_manager_token_error">Sistemden bilgi alınamadı. Tarayıcı kimlik doğrulama yöntemini denemek ister misiniz?</string>
+  <string name="select_google_account">Bir Google hesabı seçiniz</string>
+
+  <!-- donation related -->
+  <string name="donate">Bağış</string>
+  <string name="donate_summary">Güvenli Google Play Store uygulama içi ödemelerini kullan.</string>
+
+  <string name="ui_dialog_donate_message">Lütfen tutarı belirtiniz:</string>
+  <string name="ui_donation_success_message">Bağış başarılı, teşekkürler!</string>
+  <string name="ui_donation_failure_message">Bağış yapılamadı: %1$s</string>
+
+  <!-- purchase errors -->
+  <string name="donation_error_iab_unavailable">Uygulama içi faturalama mevcut değil</string>
+  <string name="donation_error_unavailable">mevcut değil</string>
+  <string name="donation_error_canceled">vazgeçildi</string>
+  <string name="donation_error_already_owned">zaten bağış yaptınız</string>
+  <string name="donation_unspecified_error">belirtilmemiş hata: %1$d</string>
+
+  <string name="error_no_sms_default_package">Varsayılan SMS paketi yok.</string>
+  <string name="ui_dialog_sms_default_package_change_title">Uygulama değişikliği gerekli</string>
+  <string name="ui_dialog_sms_default_package_change_msg">
+    Geri yükleme işlemi sırasında SMS Backup+ \'ı varsayılan SMS uygulamanız olarak ayarlamanız gerekir.
+	Tamamlandıktan sonra, orijinal ayarlara geri döndürmeniz istenecektir.
+
+    Geri yükleme sırasında gelen SMS mesajları her zamanki gibi teslim edilir
+    ancak bildirim oluşmayacak.
+  </string>
+
+  <string name="ui_dark_theme_label">Karanlık tema</string>
+  <string name="theme_app_relaunch">Uygulamanın yeniden başlatılması gerekli</string>
 </resources>

@@ -4,17 +4,14 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.ContactsContract;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -66,7 +63,7 @@ public class PersonLookupTest {
         )).thenReturn(name("Testor Test"));
 
         when(resolver.query(
-                MessageConverter.ECLAIR_CONTENT_URI,
+                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
                 new String[] { ContactsContract.CommonDataKinds.Email.DATA },
                 ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
                 new String[] { String.valueOf(1) },
@@ -88,7 +85,7 @@ public class PersonLookupTest {
         )).thenReturn(name("Testor Test"));
 
         when(resolver.query(
-                MessageConverter.ECLAIR_CONTENT_URI,
+                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
                 new String[] { ContactsContract.CommonDataKinds.Email.DATA },
                 ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
                 new String[] { String.valueOf(1) },
@@ -98,6 +95,16 @@ public class PersonLookupTest {
         PersonRecord record = lookup.lookupPerson("1234");
         assertThat(record).isNotNull();
         assertThat(record.getEmail()).isEqualTo("foo@gmail.com");
+    }
+
+    @Test
+    public void shouldIgnoreIllegalArgumentException() {
+        // https://github.com/jberkel/sms-backup-plus/issues/870
+        when(resolver.query(any(Uri.class), any(String[].class), (String) isNull(), (String[]) isNull(), (String) isNull()))
+            .thenThrow(new IllegalArgumentException("column 'data1' does not exist"));
+
+        PersonRecord record = lookup.lookupPerson("1234");
+        assertThat(record.isUnknown()).isTrue();
     }
 
     private Cursor name(String... names) {

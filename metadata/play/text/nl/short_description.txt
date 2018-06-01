@@ -1,0 +1,1 @@
+Back-up sms, mms en oproepgeschiedenis naar Gmail, Google Agenda of IMAP.

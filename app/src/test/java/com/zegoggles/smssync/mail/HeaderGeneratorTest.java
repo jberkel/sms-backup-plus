@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.mail.Headers.get;
-import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class HeaderGeneratorTest {
@@ -23,7 +23,7 @@ public class HeaderGeneratorTest {
 
     @Before
     public void before() {
-        generator = new HeaderGenerator("ref", "1.0");
+        generator = new HeaderGenerator("ref", 1);
     }
 
     @Test public void testShouldGenerateStandardHeaders() throws Exception {

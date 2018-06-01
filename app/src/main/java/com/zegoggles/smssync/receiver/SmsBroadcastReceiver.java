@@ -22,7 +22,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.service.BackupJobs;
 import com.zegoggles.smssync.utils.AppLog;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -35,24 +35,16 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (LOCAL_LOGV) Log.v(TAG, "onReceive(" + context + "," + intent + ")");
 
-        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            bootup(context);
-        } else if (SMS_RECEIVED.equals(intent.getAction())) {
+        if (SMS_RECEIVED.equals(intent.getAction())) {
             incomingSMS(context);
-        }
-    }
-
-    private void bootup(Context context) {
-        if (shouldSchedule(context)) {
-            getAlarms(context).scheduleBootupBackup();
         } else {
-            Log.i(TAG, "Received bootup but not set up to back up.");
+            Log.w(TAG, "unhandled intent: "+intent);
         }
     }
 
     private void incomingSMS(Context context) {
         if (shouldSchedule(context)) {
-            getAlarms(context).scheduleIncomingBackup();
+            getBackupJobs(context).scheduleIncoming();
         } else {
             Log.i(TAG, "Received SMS but not set up to back up.");
         }
@@ -61,18 +53,17 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     private boolean shouldSchedule(Context context) {
         final Preferences preferences = getPreferences(context);
 
-        final boolean autoSync = preferences.isEnableAutoSync();
+        final boolean autoBackupEnabled = preferences.isAutoBackupEnabled();
         final boolean loginInformationSet = getAuthPreferences(context).isLoginInformationSet();
         final boolean firstBackup = preferences.isFirstBackup();
-        final boolean schedule = (autoSync && loginInformationSet && !firstBackup);
+
+        final boolean schedule = (autoBackupEnabled && loginInformationSet && !firstBackup);
 
         if (!schedule) {
-            final String message = new StringBuilder()
-                .append("Not set up to back up. ")
-                .append("autoSync=").append(autoSync)
-                .append(", loginInfoSet=").append(loginInformationSet)
-                .append(", firstBackup=").append(firstBackup)
-                .toString();
+            final String message = "Not set up to back up. " +
+                    "autoBackup=" + autoBackupEnabled +
+                    ", loginInfoSet=" + loginInformationSet +
+                    ", firstBackup=" + firstBackup;
 
             log(context, message, preferences.isAppLogDebug());
         }
@@ -82,13 +73,12 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
     private void log(Context context, String message, boolean appLog) {
         Log.d(TAG, message);
         if (appLog) {
-            new AppLog(DateFormat.getDateFormatOrder(context))
-                    .appendAndClose(message);
+            new AppLog(context).appendAndClose(message);
         }
     }
 
-    protected Alarms getAlarms(Context context) {
-        return new Alarms(context);
+    protected BackupJobs getBackupJobs(Context context) {
+        return new BackupJobs(context);
     }
 
     protected Preferences getPreferences(Context context) {

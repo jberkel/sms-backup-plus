@@ -18,7 +18,6 @@ public class BackupConfigTest {
     public void shouldCheckForDataTypesEmpty() throws Exception {
         new BackupConfig(mock(BackupImapStore.class),
                 0,
-                false,
                 -1,
                 ContactGroup.EVERYBODY,
                 BackupType.MANUAL,
@@ -32,7 +31,6 @@ public class BackupConfigTest {
     public void shouldCheckForDataTypesNull() throws Exception {
         new BackupConfig(mock(BackupImapStore.class),
                 0,
-                false,
                 -1,
                 ContactGroup.EVERYBODY,
                 BackupType.MANUAL,
@@ -45,7 +43,6 @@ public class BackupConfigTest {
     public void shouldCheckForPositiveTry() throws Exception {
         new BackupConfig(mock(BackupImapStore.class),
                 -1,
-                false,
                 -1,
                 ContactGroup.EVERYBODY,
                 BackupType.MANUAL,

@@ -1,0 +1,13 @@
+Automatically backup your SMS, MMS and call history with a separate label in Gmail and Google Calendar.
+
+Later you can restore the saved data (except MMS) back to the phone, especially useful
+when switching to a new device.
+
+IMAP access needs to be manually enabled in Gmail, see the website and FAQ for more information.
+You can of course use your own IMAP server for backups, giving you full control over your data.
+
+SMS Backup+ is a free open-source project which has been in active development since the early days of
+Android, completely ad and tracking-free, supported through voluntary donations.
+
+Many thanks to the numerous people who have donated, contributed feedback, code or translations – detailed
+credits can be found in the app or on the website.

@@ -3,44 +3,48 @@ package com.zegoggles.smssync.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import com.fsck.k9.mail.AuthType;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefresher;
-import com.zegoggles.smssync.auth.XOAuthConsumer;
-import org.apache.commons.codec.binary.Base64;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
 
+import static android.util.Base64.NO_WRAP;
 import static com.zegoggles.smssync.App.TAG;
-import static com.zegoggles.smssync.preferences.ServerPreferences.Defaults.SERVER_PROTOCOL;
+import static com.zegoggles.smssync.preferences.Preferences.getDefaultType;
 
 public class AuthPreferences {
     private static final String UTF_8 = "UTF-8";
     private final Context context;
     private final SharedPreferences preferences;
-    private final ServerPreferences serverPreferences;
     private SharedPreferences credentials;
 
-    /**
-     * Preference key containing the Google account username.
-     */
-    public static final String LOGIN_USER = "login_user";
-    /**
-     * Preference key containing the Google account password.
-     */
-    public static final String LOGIN_PASSWORD = "login_password";
     public static final String SERVER_AUTHENTICATION = "server_authentication";
-    @Deprecated private static final String OAUTH_TOKEN = "oauth_token";
-    @Deprecated private static final String OAUTH_TOKEN_SECRET = "oauth_token_secret";
-    @Deprecated private static final String OAUTH_USER = "oauth_user";
+
     private static final String OAUTH2_USER = "oauth2_user";
     private static final String OAUTH2_TOKEN = "oauth2_token";
     private static final String OAUTH2_REFRESH_TOKEN = "oauth2_refresh_token";
+
+    public static final String IMAP_USER = "login_user";
+    public static final String IMAP_PASSWORD = "login_password";
+
+    /**
+     * Preference key containing the server address
+     */
+    public static final String SERVER_ADDRESS = "server_address";
+    /**
+     * Preference key containing the server protocol
+     */
+    private static final String SERVER_PROTOCOL = "server_protocol";
+
+    private static final String SERVER_TRUST_ALL_CERTIFICATES = "server_trust_all_certificates";
 
     /**
      * IMAP URI.
@@ -56,22 +60,12 @@ public class AuthPreferences {
      */
     private static final String IMAP_URI = "imap%s://%s:%s:%s@%s";
 
+    private static final String DEFAULT_SERVER_ADDRESS = "imap.gmail.com:993";
+    private static final String DEFAULT_SERVER_PROTOCOL = "+ssl+";
+
     public AuthPreferences(Context context) {
-        this(context,  new ServerPreferences(context));
-    }
-
-    /* package */ AuthPreferences(Context context, ServerPreferences serverPreferences) {
         this.context = context.getApplicationContext();
-        this.serverPreferences = serverPreferences;
-        this.preferences =  PreferenceManager.getDefaultSharedPreferences(this.context);
-    }
-
-    @Deprecated
-    public XOAuthConsumer getOAuthConsumer() {
-        return new XOAuthConsumer(
-                getOauthUsername(),
-                getOauthToken(),
-                getOauthTokenSecret());
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public String getOauth2Token() {
@@ -82,24 +76,9 @@ public class AuthPreferences {
         return getCredentials().getString(OAUTH2_REFRESH_TOKEN, null);
     }
 
-    @Deprecated
-    public boolean hasOauthTokens() {
-        return getOauthUsername() != null &&
-                getOauthToken() != null &&
-                getOauthTokenSecret() != null;
-    }
-
     public boolean hasOAuth2Tokens() {
         return getOauth2Username() != null &&
                 getOauth2Token() != null;
-    }
-
-    public String getUsername() {
-        return preferences.getString(OAUTH_USER, getOauth2Username());
-    }
-
-    public boolean needsMigration() {
-        return hasOauthTokens() && !hasOAuth2Tokens();
     }
 
     public void setOauth2Token(String username, String accessToken, String refreshToken) {
@@ -112,15 +91,6 @@ public class AuthPreferences {
                 .commit();
         getCredentials().edit()
                 .putString(OAUTH2_REFRESH_TOKEN, refreshToken)
-                .commit();
-    }
-
-    @Deprecated
-    public void clearOAuth1Data() {
-        preferences.edit().remove(OAUTH_USER).commit();
-        getCredentials().edit()
-                .remove(OAUTH_TOKEN)
-                .remove(OAUTH_TOKEN_SECRET)
                 .commit();
     }
 
@@ -146,21 +116,21 @@ public class AuthPreferences {
     }
 
     public void setImapPassword(String s) {
-        getCredentials().edit().putString(LOGIN_PASSWORD, s).commit();
+        getCredentials().edit().putString(IMAP_PASSWORD, s).commit();
     }
 
     public void setImapUser(String s) {
-        preferences.edit().putString(LOGIN_USER, s).commit();
+        preferences.edit().putString(IMAP_USER, s).commit();
     }
 
     public boolean useXOAuth() {
-        return getAuthMode() == AuthMode.XOAUTH && serverPreferences.isGmail();
+        return getAuthMode() == AuthMode.XOAUTH;
     }
 
     public String getUserEmail() {
         switch (getAuthMode()) {
             case XOAUTH:
-                return getUsername();
+                return getOauth2Username();
             default:
                 return getImapUsername();
         }
@@ -170,9 +140,10 @@ public class AuthPreferences {
         switch (getAuthMode()) {
             case PLAIN:
                 return !TextUtils.isEmpty(getImapPassword()) &&
-                        !TextUtils.isEmpty(getImapUsername());
+                       !TextUtils.isEmpty(getImapUsername()) &&
+                       !TextUtils.isEmpty(getServerAddress());
             case XOAUTH:
-                return hasOauthTokens() || hasOAuth2Tokens();
+                return hasOAuth2Tokens();
             default:
                 return false;
         }
@@ -181,55 +152,54 @@ public class AuthPreferences {
     public String getStoreUri() {
         if (useXOAuth()) {
             if (hasOAuth2Tokens()) {
-                return formatUri(AuthType.XOAUTH2, SERVER_PROTOCOL, getOauth2Username(), generateXOAuth2Token());
+                return formatUri(
+                    AuthType.XOAUTH2,
+                        DEFAULT_SERVER_PROTOCOL,
+                        getOauth2Username(),
+                        generateXOAuth2Token(),
+                        DEFAULT_SERVER_ADDRESS);
             } else {
-                Log.w(TAG, "No valid xoauth1/2 tokens");
+                Log.w(TAG, "No valid xoauth2 tokens");
                 return null;
             }
         } else {
             return formatUri(AuthType.PLAIN,
-                    serverPreferences.getServerProtocol(),
-                    getImapUsername(),
-                    getImapPassword());
+                getServerProtocol(),
+                getImapUsername(),
+                getImapPassword(),
+                getServerAddress());
         }
     }
 
-    private String formatUri(AuthType authType, String serverProtocol, String username, String password) {
+    private String getServerAddress() {
+        return preferences.getString(SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
+    }
+
+    private String getServerProtocol() {
+        return preferences.getString(SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
+    }
+
+    public boolean isTrustAllCertificates() {
+        return preferences.getBoolean(SERVER_TRUST_ALL_CERTIFICATES, false);
+    }
+
+    private String formatUri(AuthType authType, String serverProtocol, String username, String password, String serverAddress) {
         return String.format(IMAP_URI,
-                serverProtocol,
-                authType.name().toUpperCase(Locale.US),
-                // NB: there's a bug in K9mail-library which requires double-encoding of uris
-                // https://github.com/k9mail/k-9/commit/b0d401c3b73c6b57402dc81d3cfd6488a71a1b98
-                encode(encode(username)),
-                encode(encode(password)),
-                serverPreferences.getServerAddress());
+            serverProtocol,
+            authType.name().toUpperCase(Locale.US),
+            // NB: there's a bug in K9mail-library which requires double-encoding of uris
+            // https://github.com/k9mail/k-9/commit/b0d401c3b73c6b57402dc81d3cfd6488a71a1b98
+            encode(encode(username)),
+            encode(encode(password)),
+            serverAddress);
     }
 
-    @Deprecated
-    private String getOauthTokenSecret() {
-        return getCredentials().getString(OAUTH_TOKEN_SECRET, null);
-    }
-
-    @Deprecated
-    private String getOauthToken() {
-        return getCredentials().getString(OAUTH_TOKEN, null);
-    }
-
-    @Deprecated
-    private String getOauthUsername() {
-        return preferences.getString(OAUTH_USER, null);
-    }
-
-    private String getOauth2Username() {
+    public String getOauth2Username() {
         return preferences.getString(OAUTH2_USER, null);
     }
 
     private AuthMode getAuthMode() {
-        return new Preferences(context, preferences).getDefaultType(SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
-    }
-
-    /* package */ void setServerAuthMode(AuthType authType) {
-        preferences.edit().putString(AuthPreferences.SERVER_AUTHENTICATION, authType.name()).commit();
+        return getDefaultType(preferences, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
     }
 
     // All sensitive information is stored in a separate prefs file so we can
@@ -241,12 +211,16 @@ public class AuthPreferences {
         return credentials;
     }
 
-    private String getImapUsername() {
-        return preferences.getString(LOGIN_USER, null);
+    public String getServername() {
+        return preferences.getString(SERVER_ADDRESS, null);
+    }
+
+    public String getImapUsername() {
+        return preferences.getString(IMAP_USER, null);
     }
 
     private String getImapPassword() {
-        return getCredentials().getString(LOGIN_PASSWORD, null);
+        return getCredentials().getString(IMAP_PASSWORD, null);
     }
 
     /**
@@ -266,12 +240,12 @@ public class AuthPreferences {
      * @see <a href="https://developers.google.com/google-apps/gmail/xoauth2_protocol#the_sasl_xoauth2_mechanism">
      *      The SASL XOAUTH2 Mechanism</a>
      */
-    private String generateXOAuth2Token() {
+    private @NonNull String generateXOAuth2Token() {
         final String username = getOauth2Username();
         final String token = getOauth2Token();
         final String formatted = "user=" + username + "\001auth=Bearer " + token + "\001\001";
         try {
-            return new String(Base64.encodeBase64(formatted.getBytes(UTF_8)), UTF_8);
+            return Base64.encodeToString(formatted.getBytes(UTF_8), NO_WRAP);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -282,6 +256,20 @@ public class AuthPreferences {
             return s == null ? "" : URLEncoder.encode(s, UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void migrate() {
+        if (useXOAuth()) {
+            return;
+        }
+        // convert deprecated authentication methods
+        if ("+ssl".equals(getServerProtocol()) ||
+            "+tls".equals(getServerProtocol())) {
+            preferences.edit()
+                .putBoolean(SERVER_TRUST_ALL_CERTIFICATES, true)
+                .putString(SERVER_PROTOCOL, getServerProtocol()+"+")
+                .commit();
         }
     }
 }

@@ -1,0 +1,10 @@
+Sichern Sie Ihre SMS, MMS und Anruflisten automatisch mit einem separaten Label in Google Mail und Google Kalender.
+
+Später können Sie die gespeicherten Daten (außer MMS) wieder auf das Telefon herstellen, besonders nützlich bei Wechsel zu einem neuen Gerät.
+
+Der IMAP-Zugriff muss in Gmail manuell aktiviert werden. Weitere Informationen finden Sie auf der Webseite und in der FAQ.
+Sie können natürlich auch Ihren eigenen IMAP-Server für Sicherungen verwenden, wodurch Sie die volle Kontrolle über Ihre Daten haben.
+
+SMS Backup+ ist ein kostenloses Open-Source-Projekt, existiert seit den ersten Androidversionen, ist komplett werbe- und tracking-frei und wird durch freiwillige Spenden unterstützt.
+
+Vielen Dank an die zahlreichen Personen welche spendeten, Rückmeldungen gaben und Code oder Übersetzungen beisteuerten – eine detaillierte Liste befindet sich in der App und auf der Webseite.

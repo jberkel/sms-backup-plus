@@ -1,22 +1,34 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools">
 
-    <CheckBoxPreference
+    <com.zegoggles.smssync.activity.StatusPreference
+            xmlns:custom="http://schemas.android.com/apk/res/com.zegoggles.smssync"
+            android:selectable="false"
+            android:persistent="false"
+            android:layout="@layout/status"
+            custom:statusIdle="?attr/colorPrimary"
+            custom:statusSyncing="@color/syncing"
+            custom:statusDone="?attr/colorPrimaryDark"
+            custom:statusError="@color/accent_dark"
+    />
+
+    <android.support.v7.preference.SwitchPreferenceCompat
             android:key="connected"
             android:title="@string/ui_connected_label"
-            android:summary="@string/ui_connected_desc"
-            android:persistent="true"
-            android:defaultValue="false"/>
+            android:defaultValue="off"/>
 
     <CheckBoxPreference
             android:key="enable_auto_sync"
             android:title="@string/ui_enable_auto_sync_label"
             android:summary="@string/ui_enable_auto_sync_desc"
-            android:persistent="true"
             android:defaultValue="false"/>
 
     <PreferenceScreen
-            android:key="auto_backup_settings_screen"
-            android:title="@string/ui_auto_backup_settings_label">
+            android:fragment="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
+            android:key="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
+            android:persistent="false"
+            android:title="@string/ui_auto_backup_settings_label"
+            tools:targetApi="honeycomb">
 
         <ListPreference
                 android:key="auto_backup_schedule"
@@ -24,8 +36,7 @@
                 android:summary="@string/ui_auto_backup_schedule_desc"
                 android:entries="@array/auto_backup_schedule_entries"
                 android:entryValues="@array/auto_backup_schedule_values"
-                android:defaultValue="7200"
-                android:persistent="true"/>
+                android:defaultValue="7200"/>
 
         <ListPreference
                 android:key="auto_backup_incoming_schedule"
@@ -33,72 +44,77 @@
                 android:summary="@string/ui_auto_backup_incoming_schedule_desc"
                 android:entries="@array/auto_backup_incoming_schedule_entries"
                 android:entryValues="@array/auto_backup_incoming_schedule_values"
-                android:defaultValue="180"
-                android:persistent="true"/>
+                android:defaultValue="60"/>
 
         <CheckBoxPreference
                 android:key="wifi_only"
                 android:title="@string/ui_wifi_only_label"
                 android:summary="@string/ui_wifi_only_desc"
-                android:persistent="true"
                 android:defaultValue="false"/>
 
         <CheckBoxPreference
                 android:key="third_party_integration"
                 android:title="@string/ui_third_party_integration_label"
                 android:summary="@string/ui_third_party_integration_desc"
-                android:persistent="true"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="use_old_scheduler"
+                android:title="@string/pref_use_old_scheduler"
+                android:summary="@string/pref_use_old_scheduler_summary"
                 android:defaultValue="false"/>
     </PreferenceScreen>
 
     <PreferenceScreen
+            android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Main"
+            android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Main"
+            android:persistent="false"
             android:title="@string/ui_settings_advanced_label"
-            android:summary="@string/ui_settings_advanced_desc">
+            android:summary="@string/ui_settings_advanced_desc"
+            tools:targetApi="honeycomb">
 
         <PreferenceScreen
-                android:title="@string/ui_backup_settings_label">
+                android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup"
+                android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup"
+                android:title="@string/ui_backup_settings_label"
+                tools:targetApi="honeycomb">
 
             <CheckBoxPreference
                     android:key="backup_sms"
                     android:title="@string/ui_backup_sms_label"
                     android:summary="@string/ui_backup_sms_desc"
-                    android:persistent="true"
                     android:defaultValue="true"/>
 
             <CheckBoxPreference
                     android:key="backup_mms"
                     android:title="@string/ui_backup_mms_label"
                     android:summary="@string/ui_backup_mms_desc"
-                    android:persistent="true"
                     android:defaultValue="true"/>
 
             <CheckBoxPreference
                     android:key="backup_calllog"
                     android:title="@string/ui_backup_calllog_label"
                     android:summary="@string/ui_backup_calllog_desc"
-                    android:persistent="true"
-                    android:defaultValue="true"/>
+                    android:defaultValue="false"/>
 
             <PreferenceScreen
-                    android:title="@string/ui_backup_calllog_settings_label"
-                    android:dependency="backup_calllog">
+                    android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup$CallLog"
+                    android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup$CallLog"
+                    android:persistent="false"
+                    android:title="@string/ui_backup_calllog_settings_label">
 
                 <EditTextPreference
                         android:key="imap_folder_calllog"
-                        android:dependency="backup_calllog"
                         android:title="@string/ui_imap_folder_calllog_label"
                         android:summary="@string/ui_imap_folder_calllog_desc"
                         android:singleLine="true"
                         android:dialogMessage="@string/ui_imap_folder_calllog_label_dialog_msg"
-                        android:persistent="true"
-                        android:defaultValue="Call log"/>
+                        android:defaultValue="@string/imap_folder_calllog_default"/>
 
                 <ListPreference
                         android:key="backup_calllog_types"
-                        android:dependency="backup_calllog"
                         android:title="@string/ui_backup_calllog_types_label"
-                        android:persistent="true"
-                        android:defaultValue="everything"
+                        android:defaultValue="@string/call_type_everything_value"
                         android:summary="@string/ui_backup_calllog_types_desc"
                         android:entries="@array/backup_calllog_types_entries"
                         android:entryValues="@array/backup_calllog_types_values"/>
@@ -107,16 +123,20 @@
                 <CheckBoxPreference
                         android:key="backup_calllog_sync_calendar_enabled"
                         android:title="@string/ui_backup_calllog_sync_calendar_enabled_label"
-                        android:persistent="true"
                         android:defaultValue="false"
                         android:summary="@string/ui_backup_calllog_sync_calendar_enabled_desc"/>
 
                 <ListPreference
                         android:key="backup_calllog_sync_calendar"
                         android:dependency="backup_calllog_sync_calendar_enabled"
-                        android:persistent="true"
                         android:defaultValue="-1"
                         android:summary="@string/ui_backup_calllog_sync_calendar_desc"/>
+
+                <CheckBoxPreference
+                        android:key="backup_calllog_after_call"
+                        android:title="@string/ui_backup_calllog_after_call_label"
+                        android:defaultValue="false"
+                        android:summary="@string/ui_backup_calllog_after_call_desc"/>
             </PreferenceScreen>
 
             <ListPreference
@@ -126,7 +146,7 @@
                     android:entries="@array/max_items_per_sync_entries"
                     android:entryValues="@array/max_items_per_sync_values"
                     android:defaultValue="-1"
-                    android:persistent="true"/>
+            />
 
             <ListPreference
                     android:key="mark_as_read_types"
@@ -134,8 +154,7 @@
                     android:summary="@string/ui_mark_as_read_desc"
                     android:entries="@array/mark_as_read_entries"
                     android:entryValues="@array/mark_as_read_values"
-                    android:persistent="true"
-                    android:defaultValue="read"/>
+                    android:defaultValue="@string/read"/>
 
             <EditTextPreference
                     android:key="imap_folder"
@@ -143,14 +162,12 @@
                     android:summary="@string/ui_imap_folder_desc"
                     android:singleLine="true"
                     android:dialogMessage="@string/ui_imap_folder_label_dialog_msg"
-                    android:persistent="true"
-                    android:defaultValue="SMS"/>
+                    android:defaultValue="@string/imap_folder_default"/>
 
             <ListPreference
                     android:key="backup_contact_group"
                     android:title="@string/ui_backup_contact_group_label"
-                    android:summary="@string/ui_backup_contact_group_desc"
-                    android:persistent="true"/>
+                    android:summary="@string/ui_backup_contact_group_desc"/>
 
             <ListPreference
                     android:key="email_address_style"
@@ -158,48 +175,37 @@
                     android:summary="@string/ui_email_address_style_desc"
                     android:entries="@array/email_address_style_entries"
                     android:entryValues="@array/email_address_style_values"
-                    android:defaultValue="name"
-                    android:persistent="true"/>
+                    android:defaultValue="@string/name"/>
 
             <CheckBoxPreference
                     android:key="mail_subject_prefix"
                     android:title="@string/ui_mail_subject_prefix_label"
-                    android:persistent="true"
                     android:defaultValue="false"
                     android:summary="@string/ui_mail_subject_prefix_desc"/>
 
         </PreferenceScreen>
 
         <PreferenceScreen
-                android:title="@string/ui_restore_settings_label">
+                android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Restore"
+                android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Restore"
+                android:title="@string/ui_restore_settings_label"
+                android:persistent="false"
+                tools:targetApi="honeycomb">
 
             <CheckBoxPreference
                     android:key="restore_sms"
                     android:title="@string/ui_restore_sms_label"
-                    android:summary="@string/ui_restore_sms_desc"
-                    android:persistent="true"
                     android:defaultValue="true"/>
-
-            <CheckBoxPreference
-                    android:key="restore_mms"
-                    android:title="@string/ui_restore_mms_label"
-                    android:summary="@string/ui_restore_mms_desc"
-                    android:persistent="true"
-                    android:enabled="false"
-                    android:defaultValue="false"/>
 
             <CheckBoxPreference
                     android:key="restore_calllog"
                     android:title="@string/ui_restore_calllog_label"
-                    android:summary="@string/ui_restore_calllog_desc"
-                    android:persistent="true"
                     android:defaultValue="true"/>
 
             <CheckBoxPreference
                     android:key="restore_starred_only"
                     android:title="@string/ui_restore_starred_only_label"
                     android:summary="@string/ui_restore_starred_only_desc"
-                    android:persistent="true"
                     android:defaultValue="false"/>
 
             <ListPreference
@@ -208,42 +214,41 @@
                     android:summary="@string/ui_max_items_per_restore_desc"
                     android:entries="@array/max_items_per_restore_entries"
                     android:entryValues="@array/max_items_per_restore_values"
-                    android:defaultValue="500"
-                    android:persistent="true"/>
+                    android:defaultValue="@string/max_items_per_restore_default"/>
 
             <CheckBoxPreference
                     android:key="mark_as_read_on_restore"
                     android:title="@string/ui_mark_as_read_restore_label"
                     android:summary="@string/ui_mark_as_read_restore_desc"
-                    android:persistent="true"
                     android:defaultValue="true"/>
 
         </PreferenceScreen>
 
         <PreferenceScreen
-            android:key="encryption"
-            android:title="@string/ui_encryption_title"
-            android:summary="@string/ui_encryption_desc">
+                android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Encryption"
+                android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Encryption"
+                android:title="@string/ui_encryption_title"
+                android:summary="@string/ui_encryption_desc"
+                android:persistent="false"
+                tools:targetApi="honeycomb">
             <org.openintents.openpgp.util.OpenPgpAppPreference
-                android:key="openpgp_provider_list"
-                android:title="@string/ui_encryption_selectprov"
-                android:summary="@string/ui_encryption_noprov"
-                android:defaultValue=""/>
+                    android:key="openpgp_provider_list"
+                    android:title="@string/ui_encryption_selectprov"
+                    android:summary="@string/ui_encryption_noprov"
+                    android:defaultValue=""/>
             <org.openintents.openpgp.util.OpenPgpKeyPreference
-                android:key="pgp_keys"
-                android:title="@string/ui_encryption_selkeys"/>
+                    android:key="pgp_keys"
+                    android:title="@string/ui_encryption_selkeys"/>
         </PreferenceScreen>
 
         <CheckBoxPreference
                 android:key="notifications"
                 android:title="@string/ui_notifications_label"
                 android:summary="@string/ui_notifications_desc"
-                android:persistent="true"
                 android:defaultValue="false"/>
 
         <CheckBoxPreference
                 android:title="@string/ui_confirm_action_label"
-                android:persistent="true"
                 android:key="confirm_action"
                 android:summary="@string/ui_confirm_action_desc"
                 android:defaultValue="false"/>
@@ -253,7 +258,6 @@
                 android:title="@string/pref_app_log"
                 android:summaryOn="@string/pref_app_log_enabled"
                 android:summaryOff="@string/pref_app_log_disabled"
-                android:persistent="true"
                 android:defaultValue="false"/>
 
         <CheckBoxPreference
@@ -261,12 +265,15 @@
                 android:dependency="app_log"
                 android:title="@string/pref_app_log_debug"
                 android:summary="@string/pref_app_log_debug_summary"
-                android:persistent="true"
                 android:defaultValue="false"/>
 
         <PreferenceScreen
+                android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Server"
+                android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Server"
+                android:persistent="false"
                 android:title="@string/ui_settings_advanced_server_label"
-                android:summary="@string/ui_settings_advanced_server_desc">
+                android:summary="@string/ui_settings_advanced_server_desc"
+                tools:targetApi="honeycomb">
 
             <ListPreference
                     android:key="server_authentication"
@@ -274,8 +281,7 @@
                     android:summary="@string/ui_authentication_desc"
                     android:entries="@array/server_authentication_entries"
                     android:entryValues="@array/server_authentication_values"
-                    android:defaultValue="xoauth"
-                    android:persistent="true"/>
+                    android:defaultValue="@string/xoauth_value"/>
 
             <PreferenceCategory
                     android:key="imap_settings"
@@ -286,27 +292,15 @@
                         android:key="server_address"
                         android:title="@string/ui_server_label"
                         android:summary="@string/ui_server_desc"
-                        android:singleLine="true"
-                        android:dialogMessage="@string/ui_server_dialog_msg"
-                        android:defaultValue="imap.gmail.com:993"
-                        android:persistent="true"/>
-
-                <ListPreference
-                        android:key="server_protocol"
-                        android:title="@string/ui_protocol_label"
-                        android:summary="@string/ui_protocol_desc"
-                        android:entries="@array/server_protocol_entries"
-                        android:entryValues="@array/server_protocol_entryValues"
-                        android:defaultValue="+ssl+"
-                        android:persistent="true"/>
+                        android:dialogMessage="imap.example.com:993"
+                        android:singleLine="true"/>
 
                 <EditTextPreference
                         android:key="login_user"
                         android:title="@string/ui_login_label"
                         android:summary="@string/ui_login_desc"
-                        android:singleLine="true"
-                        android:dialogMessage="@string/ui_login_dialog_msg"
-                        android:persistent="true"/>
+                        android:inputType="text|textEmailAddress"
+                        android:singleLine="true"/>
 
                 <EditTextPreference
                         android:key="login_password"
@@ -314,11 +308,31 @@
                         android:summary="@string/ui_password_desc"
                         android:singleLine="true"
                         android:password="true"
+                        android:inputType="textPassword"
                         android:dialogMessage="@string/ui_password_dialog_msg"
                         android:persistent="false"/>
+
+                <ListPreference
+                        android:key="server_protocol"
+                        android:title="@string/ui_protocol_label"
+                        android:summary="@string/ui_protocol_desc"
+                        android:entries="@array/server_protocol_entries"
+                        android:entryValues="@array/server_protocol_entryValues"
+                        android:defaultValue="@string/plus_ssl_plus"/>
+
+                <CheckBoxPreference
+                        android:key="server_trust_all_certificates"
+                        android:title="@string/ui_protocol_trust_all_certificates_label"
+                        android:summary="@string/ui_protocol_trust_all_certificates_desc"
+                        android:defaultValue="false"/>
             </PreferenceCategory>
         </PreferenceScreen>
 
+        <android.support.v7.preference.SwitchPreferenceCompat
+                android:key="dark_theme"
+                android:title="@string/ui_dark_theme_label"
+                android:defaultValue="off"
+            />
     </PreferenceScreen>
 
     <Preference
@@ -327,8 +341,7 @@
             android:summary="@string/donate_summary"
             >
 
-        <intent
-                android:targetClass="com.zegoggles.smssync.activity.donation.DonationActivity"
+        <intent android:targetClass="com.zegoggles.smssync.activity.donation.DonationActivity"
                 android:targetPackage="com.zegoggles.smssync"/>
     </Preference>
 </PreferenceScreen>

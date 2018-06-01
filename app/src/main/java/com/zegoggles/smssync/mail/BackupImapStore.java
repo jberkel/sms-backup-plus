@@ -18,8 +18,6 @@ package com.zegoggles.smssync.mail;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,7 +25,6 @@ import com.fsck.k9.mail.FetchProfile;
 import com.fsck.k9.mail.Folder;
 import com.fsck.k9.mail.Folder.FolderType;
 import com.fsck.k9.mail.Message;
-import com.fsck.k9.mail.MessageRetrievalListener;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.ssl.DefaultTrustedSocketFactory;
 import com.fsck.k9.mail.ssl.TrustedSocketFactory;
@@ -36,11 +33,9 @@ import com.fsck.k9.mail.store.imap.ImapMessage;
 import com.fsck.k9.mail.store.imap.ImapResponse;
 import com.fsck.k9.mail.store.imap.ImapSearcher;
 import com.fsck.k9.mail.store.imap.ImapStore;
-import com.zegoggles.smssync.MmsConsts;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -48,29 +43,29 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
+import static com.zegoggles.smssync.mail.Headers.DATATYPE;
 import static java.util.Collections.sort;
+import static java.util.Locale.ENGLISH;
 
 public class BackupImapStore extends ImapStore {
-    private final Context context;
     private final Map<DataType, BackupFolder> openFolders = new HashMap<DataType, BackupFolder>();
 
-    public BackupImapStore(final Context context, final String uri) throws MessagingException {
+    public BackupImapStore(final Context context, final String uri,
+                           boolean trustAllCertificates) throws MessagingException {
         super(new BackupStoreConfig(uri),
-                getTrustedSocketFactory(context, uri),
-                (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE));
-        this.context = context;
+            trustAllCertificates ? AllTrustedSocketFactory.INSTANCE : new DefaultTrustedSocketFactory(context),
+            (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE));
     }
 
-    public BackupFolder getFolder(DataType type) throws MessagingException {
+    public BackupFolder getFolder(DataType type, DataTypePreferences preferences) throws MessagingException {
         BackupFolder folder = openFolders.get(type);
         if (folder == null) {
-            String label = type.getFolder(PreferenceManager.getDefaultSharedPreferences(context));
+            String label = preferences.getFolder(type);
             if (label == null) throw new IllegalStateException("label is null");
 
             folder = createAndOpenFolder(type, label);
@@ -101,11 +96,12 @@ public class BackupImapStore extends ImapStore {
      * @return a uri which can be used for logging (i.e. with credentials masked)
      */
     public String getStoreUriForLogging() {
-        Uri uri = Uri.parse(this.mStoreConfig.getStoreUri());
+        Uri uri = Uri.parse(mStoreConfig.getStoreUri());
         String userInfo = uri.getUserInfo();
 
         if (!TextUtils.isEmpty(userInfo) && userInfo.contains(":")) {
             String[] parts = userInfo.split(":", 2);
+            //noinspection ReplaceAllDot
             userInfo = parts[0]+":"+(parts[1].replaceAll(".", "X"));
             String host = uri.getHost();
             if (uri.getPort() != -1) {
@@ -144,7 +140,7 @@ public class BackupImapStore extends ImapStore {
     public class BackupFolder extends ImapFolder {
         private final DataType type;
 
-        public BackupFolder(ImapStore store, String name, DataType type) {
+        BackupFolder(ImapStore store, String name, DataType type) {
             super(store, name);
             this.type = type;
         }
@@ -152,20 +148,13 @@ public class BackupImapStore extends ImapStore {
         public List<ImapMessage> getMessages(final int max, final boolean flagged, final Date since)
                 throws MessagingException {
             if (LOCAL_LOGV)
-                Log.v(TAG, String.format(Locale.ENGLISH, "getMessages(%d, %b, %s)", max, flagged, since));
+                Log.v(TAG, String.format(ENGLISH, "getMessages(%d, %b, %s)", max, flagged, since));
 
             final List<ImapMessage> messages;
             final ImapSearcher searcher = new ImapSearcher() {
                 @Override
                 public List<ImapResponse> search() throws IOException, MessagingException {
-                    final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
-                            .append(' ')
-                            .append(getQuery())
-                            .append(" UNDELETED");
-                    if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.get().format(since));
-                    if (flagged) sb.append(" FLAGGED");
-
-                    return executeSimpleCommand(sb.toString().trim());
+                    return executeSimpleCommand(buildSearchQuery(type, since, flagged));
                 }
             };
 
@@ -196,42 +185,14 @@ public class BackupImapStore extends ImapStore {
             return messages;
         }
 
-        private String getQuery() {
-            switch (this.type) {
-            /* MMS/SMS are special cases since we need to support legacy backup headers */
-                case SMS:
-                    return
-                            String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" (OR HEADER %s \"%d\" HEADER %s \"%d\")))",
-                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
-                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
-                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), Telephony.TextBasedSmsColumns.MESSAGE_TYPE_INBOX,
-                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), Telephony.TextBasedSmsColumns.MESSAGE_TYPE_SENT);
-                case MMS:
-                    return
-                            String.format(Locale.ENGLISH, "(OR HEADER %s \"%s\" (NOT HEADER %s \"\" HEADER %s \"%s\"))",
-                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type,
-                                    Headers.DATATYPE.toUpperCase(Locale.ENGLISH),
-                                    Headers.TYPE.toUpperCase(Locale.ENGLISH), MmsConsts.LEGACY_HEADER);
-
-                default:
-                    return String.format(Locale.ENGLISH, "(HEADER %s \"%s\")", Headers.DATATYPE.toUpperCase(Locale.ENGLISH), type);
-            }
-        }
-
-        // TODO should not have to override these methods, but mockito fails to generate working mocks otherwise :/
-        @Override
-        public boolean equals(Object o) {
-            return super.equals(o);
-        }
-
-        @Override
-        public void fetch(List<ImapMessage> messages, FetchProfile fp, MessageRetrievalListener<ImapMessage> listener) throws MessagingException {
-            super.fetch(messages, fp, listener);
-        }
-
-        @Override
-        public Map<String, String> appendMessages(List<? extends Message> messages) throws MessagingException {
-            return super.appendMessages(messages);
+        private String buildSearchQuery(DataType dataType, Date since, boolean flagged) {
+            final StringBuilder sb = new StringBuilder("UID SEARCH 1:*")
+                    .append(' ')
+                    .append(String.format(ENGLISH, "(HEADER %s \"%s\")", DATATYPE.toUpperCase(ENGLISH), dataType))
+                    .append(" UNDELETED");
+            if (since != null) sb.append(" SENTSINCE ").append(RFC3501_DATE.get().format(since));
+            if (flagged) sb.append(" FLAGGED");
+            return sb.toString().trim();
         }
     }
 
@@ -255,30 +216,13 @@ public class BackupImapStore extends ImapStore {
         if (TextUtils.isEmpty(uri)) return false;
         Uri parsed = Uri.parse(uri);
         return parsed != null &&
-                !TextUtils.isEmpty(parsed.getAuthority()) &&
-                !TextUtils.isEmpty(parsed.getHost()) &&
-                !TextUtils.isEmpty(parsed.getScheme()) &&
-                ("imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
-                "imap+ssl".equalsIgnoreCase(parsed.getScheme()) ||
-                "imap".equalsIgnoreCase(parsed.getScheme()) ||
-                "imap+tls+".equalsIgnoreCase(parsed.getScheme()) ||
-                "imap+tls".equalsIgnoreCase(parsed.getScheme()));
-    }
-
-    // reimplement trust-all logic which was removed in
-    // https://github.com/k9mail/k-9/commit/daea7f1ecdb4515298a6c57dd5a829689426c2c9
-    private static TrustedSocketFactory getTrustedSocketFactory(Context context, String storeUri) {
-        try {
-            if (isInsecureStoreUri(new URI(storeUri))) {
-                Log.d(TAG, "insecure store uri specified, trusting ALL certificates");
-                return AllTrustedSocketFactory.INSTANCE;
-            }
-        } catch (URISyntaxException ignored) {
-        }
-        return new DefaultTrustedSocketFactory(context);
-    }
-
-    private static boolean isInsecureStoreUri(URI uri) {
-        return "imap+tls".equals(uri.getScheme()) || "imap+ssl".equals(uri.getScheme());
+            !TextUtils.isEmpty(parsed.getAuthority()) &&
+            !TextUtils.isEmpty(parsed.getHost()) &&
+            !TextUtils.isEmpty(parsed.getScheme()) &&
+            (
+            "imap".equalsIgnoreCase(parsed.getScheme()) ||
+            "imap+ssl+".equalsIgnoreCase(parsed.getScheme()) ||
+            "imap+tls+".equalsIgnoreCase(parsed.getScheme())
+            );
     }
 }

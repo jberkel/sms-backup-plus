@@ -14,10 +14,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.AUTH_TOKEN_TYPE;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.GOOGLE_TYPE;
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.fest.assertions.api.Assertions.fail;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -46,10 +46,11 @@ public class TokenRefresherTest {
 
     @Test public void shouldInvalidateTokenOnRefresh() throws Exception {
         when(authPreferences.getOauth2Token()).thenReturn("token");
-        when(authPreferences.getUsername()).thenReturn("username");
+        when(authPreferences.getOauth2Username()).thenReturn("username");
 
         when(accountManager.getAuthToken(notNull(Account.class),
                 anyString(),
+                isNull(Bundle.class),
                 anyBoolean(),
                 any(AccountManagerCallback.class),
                 any(Handler.class))).thenReturn(mock(AccountManagerFuture.class));
@@ -65,12 +66,13 @@ public class TokenRefresherTest {
 
     @Test public void shouldHandleExceptionsThrownByFuture() throws Exception {
         when(authPreferences.getOauth2Token()).thenReturn("token");
-        when(authPreferences.getUsername()).thenReturn("username");
+        when(authPreferences.getOauth2Username()).thenReturn("username");
 
 
         AccountManagerFuture<Bundle> future = mock(AccountManagerFuture.class);
         when(accountManager.getAuthToken(notNull(Account.class),
                 anyString(),
+                isNull(Bundle.class),
                 anyBoolean(),
                 any(AccountManagerCallback.class),
                 any(Handler.class))).thenReturn(future);
@@ -91,13 +93,13 @@ public class TokenRefresherTest {
 
     @Test public void shouldSetNewTokenAfterRefresh() throws Exception {
         when(authPreferences.getOauth2Token()).thenReturn("token");
-        when(authPreferences.getUsername()).thenReturn("username");
+        when(authPreferences.getOauth2Username()).thenReturn("username");
 
         AccountManagerFuture<Bundle> future = mock(AccountManagerFuture.class);
 
         when(accountManager.getAuthToken(
                 new Account("username", GOOGLE_TYPE),
-                AUTH_TOKEN_TYPE, true, null, null)
+                AUTH_TOKEN_TYPE, null,true, null, null)
         ).thenReturn(future);
 
         Bundle bundle = new Bundle();
@@ -113,7 +115,7 @@ public class TokenRefresherTest {
     @Test public void shouldUseOAuth2ClientWhenRefreshTokenIsPresent() throws Exception {
         when(authPreferences.getOauth2Token()).thenReturn("token");
         when(authPreferences.getOauth2RefreshToken()).thenReturn("refresh");
-        when(authPreferences.getUsername()).thenReturn("username");
+        when(authPreferences.getOauth2Username()).thenReturn("username");
 
         when(oauth2Client.refreshToken("refresh")).thenReturn(new OAuth2Token("newToken", "type", null, 0, null));
 
@@ -125,7 +127,7 @@ public class TokenRefresherTest {
     @Test public void shouldUpdateRefreshTokenIfPresentInResponse() throws Exception {
         when(authPreferences.getOauth2Token()).thenReturn("token");
         when(authPreferences.getOauth2RefreshToken()).thenReturn("refresh");
-        when(authPreferences.getUsername()).thenReturn("username");
+        when(authPreferences.getOauth2Username()).thenReturn("username");
 
         when(oauth2Client.refreshToken("refresh")).thenReturn(new OAuth2Token("newToken", "type", "newRefresh", 0, null));
 

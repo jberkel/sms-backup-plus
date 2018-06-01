@@ -2,10 +2,8 @@ package com.zegoggles.smssync.service;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.preference.PreferenceManager;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.internet.MimeMessage;
 import com.fsck.k9.mail.store.imap.XOAuth2AuthenticationFailedException;
@@ -19,6 +17,7 @@ import com.zegoggles.smssync.mail.ConversionResult;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
@@ -35,15 +34,16 @@ import org.robolectric.RuntimeEnvironment;
 import java.util.EnumSet;
 import java.util.HashMap;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.service.BackupItemsFetcher.emptyCursor;
-import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.notNull;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.anyListOf;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -59,7 +59,6 @@ public class BackupTaskTest {
     BackupTask task;
     BackupConfig config;
     Context context;
-    SharedPreferences sharedPreferences;
     @Mock BackupImapStore store;
     @Mock BackupImapStore.BackupFolder folder;
     @Mock SmsBackupService service;
@@ -68,6 +67,7 @@ public class BackupTaskTest {
     @Mock MessageConverter converter;
     @Mock CalendarSyncer syncer;
     @Mock AuthPreferences authPreferences;
+    @Mock DataTypePreferences dataTypePreferences;
     @Mock Preferences preferences;
     @Mock ContactAccessor accessor;
     @Mock TokenRefresher tokenRefresher;
@@ -78,14 +78,14 @@ public class BackupTaskTest {
         config = getBackupConfig(EnumSet.of(SMS));
         when(service.getApplicationContext()).thenReturn(RuntimeEnvironment.application);
         when(service.getState()).thenReturn(state);
+        when(preferences.getDataTypePreferences()).thenReturn(dataTypePreferences);
 
         task = new BackupTask(service, fetcher, converter, syncer, authPreferences, preferences, accessor, tokenRefresher, serviceConnection);
         context = RuntimeEnvironment.application;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     private BackupConfig getBackupConfig(EnumSet<DataType> types) {
-        return new BackupConfig(store, 0, false, 100, new ContactGroup(-1), BackupType.MANUAL, types,
+        return new BackupConfig(store, 0, 100, new ContactGroup(-1), BackupType.MANUAL, types,
                 false
         );
     }
@@ -103,7 +103,7 @@ public class BackupTaskTest {
     @Test public void shouldVerifyStoreSettings() throws Exception {
         mockFetch(SMS, 1);
         when(converter.convertMessages(any(Cursor.class), eq(SMS))).thenReturn(result(SMS, 1));
-        when(store.getFolder(SMS)).thenReturn(folder);
+        when(store.getFolder(SMS, dataTypePreferences)).thenReturn(folder);
         task.doInBackground(config);
         verify(store).checkSettings();
     }
@@ -112,7 +112,7 @@ public class BackupTaskTest {
         mockFetch(SMS, 1);
 
         when(converter.convertMessages(any(Cursor.class), eq(SMS))).thenReturn(result(SMS, 1));
-        when(store.getFolder(notNull(DataType.class))).thenReturn(folder);
+        when(store.getFolder(notNull(DataType.class), same(dataTypePreferences))).thenReturn(folder);
 
         BackupState finalState = task.doInBackground(config);
 
@@ -132,7 +132,7 @@ public class BackupTaskTest {
     public void shouldBackupMultipleTypes() throws Exception {
         mockFetch(SMS, 1);
         mockFetch(MMS, 2);
-        when(store.getFolder(notNull(DataType.class))).thenReturn(folder);
+        when(store.getFolder(notNull(DataType.class), same(dataTypePreferences))).thenReturn(folder);
         when(converter.convertMessages(any(Cursor.class), any(DataType.class))).thenReturn(result(SMS, 1));
 
         BackupState finalState = task.doInBackground(getBackupConfig(EnumSet.of(SMS, MMS)));
@@ -146,19 +146,19 @@ public class BackupTaskTest {
         mockFetch(SMS, 1);
 
         when(converter.convertMessages(any(Cursor.class), eq(SMS))).thenReturn(result(SMS, 1));
-        when(store.getFolder(notNull(DataType.class))).thenReturn(folder);
+        when(store.getFolder(notNull(DataType.class), same(dataTypePreferences))).thenReturn(folder);
 
         task.doInBackground(config);
 
-        verify(store).getFolder(SMS);
-        verify(store, never()).getFolder(MMS);
-        verify(store, never()).getFolder(CALLLOG);
+        verify(store).getFolder(SMS, dataTypePreferences);
+        verify(store, never()).getFolder(MMS, dataTypePreferences);
+        verify(store, never()).getFolder(CALLLOG, dataTypePreferences);
     }
 
     @Test public void shouldCloseImapFolderAfterBackup() throws Exception {
         mockFetch(SMS, 1);
         when(converter.convertMessages(any(Cursor.class), eq(SMS))).thenReturn(result(SMS, 1));
-        when(store.getFolder(notNull(DataType.class))).thenReturn(folder);
+        when(store.getFolder(notNull(DataType.class), same(dataTypePreferences))).thenReturn(folder);
 
         task.doInBackground(config);
 
@@ -175,12 +175,11 @@ public class BackupTaskTest {
         when(fetcher.getMostRecentTimestamp(any(DataType.class))).thenReturn(-23L);
 
         BackupState finalState = task.doInBackground(new BackupConfig(
-            store, 0, true, 100, new ContactGroup(-1), BackupType.MANUAL, EnumSet.of(SMS), false
+            store, 0, 100, new ContactGroup(-1), BackupType.SKIP, EnumSet.of(SMS), false
             )
         );
-        assertThat(DataType.SMS.getMaxSyncedDate(sharedPreferences)).isEqualTo(-23);
-        assertThat(DataType.MMS.getMaxSyncedDate(sharedPreferences)).isEqualTo(-1);
-        assertThat(DataType.CALLLOG.getMaxSyncedDate(sharedPreferences)).isEqualTo(-1);
+        verify(dataTypePreferences).setMaxSyncedDate(DataType.SMS, -23);
+        verifyZeroInteractions(dataTypePreferences);
 
         assertThat(finalState).isNotNull();
         assertThat(finalState.isFinished()).isTrue();
@@ -193,7 +192,7 @@ public class BackupTaskTest {
         XOAuth2AuthenticationFailedException exception = mock(XOAuth2AuthenticationFailedException.class);
         when(exception.getStatus()).thenReturn(400);
 
-        when(store.getFolder(notNull(DataType.class))).thenThrow(exception);
+        when(store.getFolder(notNull(DataType.class), same(dataTypePreferences))).thenThrow(exception);
 
         doThrow(new TokenRefreshException("failed")).when(tokenRefresher).refreshOAuth2Token();
 
@@ -214,7 +213,7 @@ public class BackupTaskTest {
         XOAuth2AuthenticationFailedException exception = mock(XOAuth2AuthenticationFailedException.class);
         when(exception.getStatus()).thenReturn(400);
 
-        when(store.getFolder(notNull(DataType.class))).thenThrow(exception);
+        when(store.getFolder(notNull(DataType.class), same(dataTypePreferences))).thenThrow(exception);
         when(service.getBackupImapStore()).thenReturn(store);
 
         task.doInBackground(config);

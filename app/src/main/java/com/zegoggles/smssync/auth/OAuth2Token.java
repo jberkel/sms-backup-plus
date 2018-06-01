@@ -16,7 +16,7 @@ public class OAuth2Token {
     public final int expiresIn;
     public final String userName;
 
-    public OAuth2Token(String accessToken, String tokenType, String refreshToken, int expiresIn, String userName) {
+    OAuth2Token(String accessToken, String tokenType, String refreshToken, int expiresIn, String userName) {
         this.accessToken = accessToken;
         this.tokenType = tokenType;
         this.refreshToken = refreshToken;
@@ -38,7 +38,7 @@ public class OAuth2Token {
         }
     }
 
-    public static OAuth2Token fromJSON(JSONObject object) throws IOException {
+    private static OAuth2Token fromJSON(JSONObject object) throws IOException {
         try {
             return new OAuth2Token(
                 object.getString("access_token"),
@@ -57,6 +57,7 @@ public class OAuth2Token {
         return getTokenForLogging();
     }
 
+    @SuppressWarnings("ReplaceAllDot")
     public String getTokenForLogging() {
         return "Token{" +
                 "accessToken='" + (accessToken != null ? accessToken.replaceAll(".", "X") : null) + '\'' +

@@ -1,0 +1,13 @@
+Automatisk backup af din SMS, MMS og opkalds-historik med en separat etiket i Gmail og Google Kalender.
+
+Senere kan du gendanne de gemte data (undtagen MMS) på telefonen, det er især nyttigt
+når du skifter til en ny enhed.
+
+IMAP-adgang skal aktiveres manuelt i Gmail, se webstedet og ofte stillede spørgsmål for at få flere oplysninger.
+Du kan selvfølgelig bruge din egen IMAP-server til sikkerhedskopiering, hvilket giver dig fuld kontrol over dine data.
+
+SMS Backup+ er et gratis open source-projekt, der har været i aktiv udvikling siden de tidlige dage af
+Android, helt annonce og sporingsfri, understøttet gennem frivillige donationer.
+
+Mange tak til de mange mennesker, der har doneret, bidraget feedback, kode eller oversættelser - detaljeret
+anerkendelse kan findes i appen eller på hjemmesiden.

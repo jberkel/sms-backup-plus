@@ -2,11 +2,12 @@ language: android
 android:
  components:
     - tools
-    - build-tools-26.0.0
+    - build-tools-26.0.2
     - android-26
-    - extra-android-m2repository
 
 jdk: oraclejdk8
 
+before_script:
+  - ./gradlew lint
 script:
   - ./gradlew build

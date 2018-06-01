@@ -8,6 +8,9 @@ import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.internet.MimeHeader;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
 import com.zegoggles.smssync.preferences.AddressStyle;
+import com.zegoggles.smssync.preferences.CallLogTypes;
+import com.zegoggles.smssync.preferences.DataTypePreferences;
+import com.zegoggles.smssync.preferences.Preferences;
 import org.apache.james.mime4j.util.MimeUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +23,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static android.provider.CallLog.Calls.INCOMING_TYPE;
+import static android.provider.CallLog.Calls.MISSED_TYPE;
+import static android.provider.CallLog.Calls.OUTGOING_TYPE;
+import static com.google.common.truth.Truth.assertThat;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -37,6 +44,7 @@ public class MessageGeneratorTest {
     @Mock private MmsSupport mmsSupport;
     @Mock private Address me;
     @Mock private ContactGroupIds groupIds;
+    @Mock private DataTypePreferences dataTypePreferences;
 
     @Before public void before() {
         initMocks(this);
@@ -49,7 +57,12 @@ public class MessageGeneratorTest {
                 false,
                 null,
                 mmsSupport,
+<<<<<<< HEAD
                 null
+=======
+                CallLogTypes.EVERYTHING,
+                dataTypePreferences
+>>>>>>> upstream/master
         );
     }
 
@@ -103,7 +116,7 @@ public class MessageGeneratorTest {
 
     @Test public void testShouldGenerateMessageForCallLogOutgoing() throws Exception {
         PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
-        Message msg = generator.messageForDataType(mockCalllogMessage("1234", CallLog.Calls.OUTGOING_TYPE, record), DataType.CALLLOG);
+        Message msg = generator.messageForDataType(mockCalllogMessage("1234", OUTGOING_TYPE, record), CALLLOG);
         assertThat(msg).isNotNull();
         assertThat(msg.getSubject()).isEqualTo("Call with Test Testor");
         assertThat(msg.getFrom()[0]).isEqualTo(me);
@@ -112,25 +125,26 @@ public class MessageGeneratorTest {
 
     @Test public void testShouldGenerateMessageForCallLogIncoming() throws Exception {
         PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
-        Message msg = generator.messageForDataType(mockCalllogMessage("1234", CallLog.Calls.INCOMING_TYPE, record), DataType.CALLLOG);
-        assertThat(msg).isNotNull();
-        assertThat(msg.getSubject()).isEqualTo("Call with Test Testor");
-        assertThat(msg.getFrom()[0].toString()).isEqualTo("Test Testor <unknown.number@unknown.email>");
-        assertThat(msg.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
+        Message message = generator.messageForDataType(mockCalllogMessage("1234", INCOMING_TYPE, record), CALLLOG);
+        assertMessage(message);
     }
 
     @Test public void testShouldGenerateMessageForCallLogMissed() throws Exception {
         PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
-        Message msg = generator.messageForDataType(mockCalllogMessage("1234", CallLog.Calls.MISSED_TYPE, record), DataType.CALLLOG);
-        assertThat(msg).isNotNull();
-        assertThat(msg.getSubject()).isEqualTo("Call with Test Testor");
-        assertThat(msg.getFrom()[0].toString()).isEqualTo("Test Testor <unknown.number@unknown.email>");
-        assertThat(msg.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
+        Message message = generator.messageForDataType(mockCalllogMessage("1234", MISSED_TYPE, record), CALLLOG);
+        assertMessage(message);
+    }
+
+    private void assertMessage(Message message) {
+        assertThat(message).isNotNull();
+        assertThat(message.getSubject()).isEqualTo("Call with Test Testor");
+        assertThat(message.getFrom()[0].toString()).isEqualTo("Test Testor <unknown.number@unknown.email>");
+        assertThat(message.getRecipients(Message.RecipientType.TO)[0]).isEqualTo(me);
     }
 
     @Test public void testShouldGenerateMessageForCallLogIncomingUnknown() throws Exception {
         PersonRecord record = new PersonRecord(0, null, null, "-1");
-        Message msg = generator.messageForDataType(mockCalllogMessage("", CallLog.Calls.INCOMING_TYPE, record), DataType.CALLLOG);
+        Message msg = generator.messageForDataType(mockCalllogMessage("", INCOMING_TYPE, record), CALLLOG);
         assertThat(msg).isNotNull();
         assertThat(msg.getSubject()).isEqualTo("Call with Unknown");
         assertThat(msg.getFrom()[0].toString()).isEqualTo("Unknown <unknown.number@unknown.email>");
@@ -139,7 +153,7 @@ public class MessageGeneratorTest {
 
     @Test public void testShouldGenerateCallLogMessageWithCorrectEncoding() throws Exception {
         PersonRecord record = new PersonRecord(-1, "Test Testor", null, null);
-        Message msg = generator.messageForDataType(mockCalllogMessage("1234", CallLog.Calls.OUTGOING_TYPE, record), DataType.CALLLOG);
+        Message msg = generator.messageForDataType(mockCalllogMessage("1234", OUTGOING_TYPE, record), CALLLOG);
         assertThat(msg.getHeader(MimeHeader.HEADER_CONTENT_TRANSFER_ENCODING)).isEqualTo(new String[] {
                 MimeUtil.ENC_QUOTED_PRINTABLE
         });
@@ -218,7 +232,12 @@ public class MessageGeneratorTest {
                 false,
                 groupIds,
                 mmsSupport,
+<<<<<<< HEAD
                 null
+=======
+                CallLogTypes.EVERYTHING,
+                dataTypePreferences
+>>>>>>> upstream/master
         );
         PersonRecord record = new PersonRecord(1, "Test Testor", "test@test.com", "1234");
         Map<String, String> map = mockMessage("1234", record);

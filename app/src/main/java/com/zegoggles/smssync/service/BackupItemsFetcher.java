@@ -1,7 +1,7 @@
 package com.zegoggles.smssync.service;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteException;
@@ -15,28 +15,29 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class BackupItemsFetcher {
-    private final Context context;
     private final ContentResolver resolver;
     private final BackupQueryBuilder queryBuilder;
 
-    public BackupItemsFetcher(@NonNull Context context,
-                              @NonNull ContentResolver resolver,
-                              @NonNull BackupQueryBuilder queryBuilder) {
+    BackupItemsFetcher(@NonNull ContentResolver resolver,
+                       @NonNull BackupQueryBuilder queryBuilder) {
         if (resolver == null) throw new IllegalArgumentException("resolver cannot be null");
         if (queryBuilder == null) throw new IllegalArgumentException("queryBuilder cannot be null");
 
         this.queryBuilder = queryBuilder;
-        this.context = context;
         this.resolver = resolver;
     }
 
-    public
-    @NonNull
-    Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
+    public @NonNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
         return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
     }
 
+    /**
+     * Gets the most recent timestamp for given datatype.
+     * @param dataType the data type
+     * @return timestamp
+     * @throws SecurityException if app does not hold necessary permissions
+     */
     public long getMostRecentTimestamp(DataType dataType) {
         return getMostRecentTimestampForQuery(queryBuilder.buildMostRecentQueryForDataType(dataType));
     }
@@ -54,9 +55,8 @@ public class BackupItemsFetcher {
         }
     }
 
-    private
-    @NonNull
-    Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
+    @SuppressLint("Recycle")
+    private @NonNull Cursor performQuery(@Nullable BackupQueryBuilder.Query query) {
         if (query == null) return emptyCursor();
         try {
             final Cursor cursor = resolver.query(

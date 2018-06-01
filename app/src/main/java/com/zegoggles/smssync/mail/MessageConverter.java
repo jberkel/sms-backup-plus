@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
-import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.Telephony;
 import android.support.annotation.NonNull;
@@ -30,11 +29,10 @@ import com.fsck.k9.mail.Flag;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.MimeUtility;
-import com.zegoggles.smssync.MmsConsts;
+import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.contacts.ContactGroupIds;
-import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.MarkAsReadTypes;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.utils.ThreadHelper;
@@ -53,27 +51,24 @@ import static com.zegoggles.smssync.App.TAG;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
 
 public class MessageConverter {
-    //ContactsContract.CommonDataKinds.Email.CONTENT_URI
-    public static final Uri ECLAIR_CONTENT_URI =
-            Uri.parse("content://com.android.contacts/data/emails");
-
-    private final Context mContext;
+    private final Context context;
     private final ThreadHelper threadHelper = new ThreadHelper();
 
-    private final MarkAsReadTypes mMarkAsReadType;
-    private final PersonLookup mPersonLookup;
-    private final MessageGenerator mMessageGenerator;
-    private final boolean mMarkAsReadOnRestore;
+    private final MarkAsReadTypes markAsReadType;
+    private final PersonLookup personLookup;
+    private final MessageGenerator messageGenerator;
+    private final boolean markAsReadOnRestore;
 
-    public MessageConverter(Context context, Preferences preferences,
+    public MessageConverter(Context context,
+                            Preferences preferences,
                             String userEmail,
                             PersonLookup personLookup,
                             ContactAccessor contactAccessor,
                             OpenPgpServiceConnection serviceConnection) {
-        mContext = context;
-        mMarkAsReadType = preferences.getMarkAsReadType();
-        mPersonLookup = personLookup;
-        mMarkAsReadOnRestore = preferences.getMarkAsReadOnRestore();
+        this.context = context;
+        markAsReadType = preferences.getMarkAsReadType();
+        this.personLookup = personLookup;
+        markAsReadOnRestore = preferences.getMarkAsReadOnRestore();
 
         String referenceUid = preferences.getReferenceUid();
         if (referenceUid == null) {
@@ -85,19 +80,22 @@ public class MessageConverter {
         ContactGroupIds allowedIds = contactAccessor.getGroupContactIds(context.getContentResolver(), backupContactGroup);
         if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
 
-        mMessageGenerator = new MessageGenerator(mContext,
+        messageGenerator = new MessageGenerator(this.context,
                 new Address(userEmail),
-                AddressStyle.getEmailAddressStyle(preferences),
-                new HeaderGenerator(referenceUid, preferences.getVersion(true)),
-                mPersonLookup,
+                preferences.getEmailAddressStyle(),
+                new HeaderGenerator(referenceUid, App.getVersionCode(this.context)),
+                this.personLookup,
                 preferences.getMailSubjectPrefix(),
                 allowedIds,
-                new MmsSupport(mContext.getContentResolver(), mPersonLookup),
+
+                new MmsSupport(this.context.getContentResolver(), this.personLookup),
+                preferences.getCallLogType(),
+                preferences.getDataTypePreferences(),
                 serviceConnection);
     }
 
     private boolean markAsSeen(DataType dataType, Map<String, String> msgMap) {
-        switch (mMarkAsReadType) {
+        switch (markAsReadType) {
             case MESSAGE_STATUS:
                 switch (dataType) {
                     case SMS:
@@ -119,7 +117,7 @@ public class MessageConverter {
             throws MessagingException {
 
         final Map<String, String> msgMap = getMessageMap(cursor);
-        final Message m = mMessageGenerator.messageForDataType(msgMap, dataType);
+        final Message m = messageGenerator.messageForDataType(msgMap, dataType);
         final ConversionResult result = new ConversionResult(dataType);
         if (m != null) {
             m.setFlag(Flag.SEEN, markAsSeen(dataType, msgMap));
@@ -152,9 +150,9 @@ public class MessageConverter {
                 values.put(Telephony.TextBasedSmsColumns.SERVICE_CENTER, Headers.get(message, Headers.SERVICE_CENTER));
                 values.put(Telephony.TextBasedSmsColumns.DATE, Headers.get(message, Headers.DATE));
                 values.put(Telephony.TextBasedSmsColumns.STATUS, Headers.get(message, Headers.STATUS));
-                values.put(Telephony.TextBasedSmsColumns.THREAD_ID, threadHelper.getThreadId(mContext, address));
+                values.put(Telephony.TextBasedSmsColumns.THREAD_ID, threadHelper.getThreadId(context, address));
                 values.put(Telephony.TextBasedSmsColumns.READ,
-                        mMarkAsReadOnRestore ? "1" : Headers.get(message, Headers.READ));
+                        markAsReadOnRestore ? "1" : Headers.get(message, Headers.READ));
                 break;
             case CALLLOG:
                 values.put(CallLog.Calls.NUMBER, Headers.get(message, Headers.ADDRESS));
@@ -163,7 +161,7 @@ public class MessageConverter {
                 values.put(CallLog.Calls.DURATION, Long.valueOf(Headers.get(message, Headers.DURATION)));
                 values.put(CallLog.Calls.NEW, 0);
 
-                PersonRecord record = mPersonLookup.lookupPerson(Headers.get(message, Headers.ADDRESS));
+                PersonRecord record = personLookup.lookupPerson(Headers.get(message, Headers.ADDRESS));
                 if (!record.isUnknown()) {
                     values.put(CallLog.Calls.CACHED_NAME, record.getName());
                     values.put(CallLog.Calls.CACHED_NUMBER_TYPE, -2);
@@ -177,23 +175,15 @@ public class MessageConverter {
         return values;
     }
 
-    public DataType getDataType(Message message) {
+    public DataType getDataType(Message message) throws MessagingException {
         final String dataTypeHeader = Headers.get(message, Headers.DATATYPE);
-        final String typeHeader = Headers.get(message, Headers.TYPE);
-        //we have two possible header sets here
-        //legacy:  there is Headers.DATATYPE .Headers.TYPE
-        //         contains either the string "mms" or an integer which is the internal type of the sms
-        //current: there IS a Headers.DATATYPE containing a string representation of Headers.DataType
-        //         Headers.TYPE then contains the type of the sms, mms or calllog entry
-        //The current header set was introduced in version 1.2.00
         if (dataTypeHeader == null) {
-            return MmsConsts.LEGACY_HEADER.equalsIgnoreCase(typeHeader) ? DataType.MMS : DataType.SMS;
-        } else {
-            try {
-                return DataType.valueOf(dataTypeHeader.toUpperCase(Locale.ENGLISH));
-            } catch (IllegalArgumentException e) {
-                return DataType.SMS; // whateva
-            }
+            throw new MessagingException("Datatype header is missing");
+        }
+        try {
+            return DataType.valueOf(dataTypeHeader.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException e) {
+            throw new MessagingException("Invalid header: "+dataTypeHeader, e);
         }
     }
 

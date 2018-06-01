@@ -10,6 +10,7 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.service.exception.ConnectivityException;
 import com.zegoggles.smssync.service.exception.LocalizableException;
+import com.zegoggles.smssync.service.exception.MissingPermissionException;
 import com.zegoggles.smssync.service.exception.RequiresLoginException;
 
 import java.util.EnumSet;
@@ -19,7 +20,7 @@ public abstract class State {
     public final Exception exception;
     public final @Nullable DataType dataType;
 
-    public State(SmsSyncState state, @Nullable DataType dataType, Exception exception) {
+    State(SmsSyncState state, @Nullable DataType dataType, Exception exception) {
         this.state = state;
         this.exception = exception;
         this.dataType = dataType;
@@ -61,11 +62,11 @@ public abstract class State {
 
     public boolean isRunning() {
         return EnumSet.of(
-                SmsSyncState.LOGIN,
-                SmsSyncState.CALC,
-                SmsSyncState.BACKUP,
-                SmsSyncState.RESTORE,
-                SmsSyncState.UPDATING_THREADS).contains(state);
+            SmsSyncState.LOGIN,
+            SmsSyncState.CALC,
+            SmsSyncState.BACKUP,
+            SmsSyncState.RESTORE,
+            SmsSyncState.UPDATING_THREADS).contains(state);
     }
 
     public boolean isFinished() {
@@ -78,6 +79,10 @@ public abstract class State {
         return exception instanceof XOAuth2AuthenticationFailedException ||
                exception instanceof AuthenticationFailedException ||
                exception instanceof RequiresLoginException;
+    }
+
+    public boolean isPermissionException() {
+        return exception instanceof MissingPermissionException;
     }
 
     public boolean isConnectivityError() {
@@ -98,6 +103,15 @@ public abstract class State {
             case CALC:  return resources.getString(R.string.status_calc_details);
             case ERROR: return getErrorMessage(resources);
             default: return null;
+        }
+    }
+
+    public String[] getMissingPermissions() {
+        if (isPermissionException()) {
+            MissingPermissionException mpe = (MissingPermissionException)exception;
+            return mpe.permissions.toArray(new String[mpe.permissions.size()]);
+        } else {
+            return new String[0];
         }
     }
 }

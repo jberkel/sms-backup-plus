@@ -30,22 +30,12 @@ import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 
 public class CalendarAccessorPre40 implements CalendarAccessor {
-    private static final Uri CALENDAR_URI = Uri.parse("content://calendar");
-    private static final Uri CALENDAR_URI_2_2 = Uri.parse("content://com.android.calendar");
-    private static final Uri CALENDAR;
+    private static final Uri CALENDAR = Uri.parse("content://com.android.calendar");
 
     private ContentResolver resolver;
 
-    public CalendarAccessorPre40(ContentResolver resolver) {
+    CalendarAccessorPre40(ContentResolver resolver) {
         this.resolver = resolver;
-    }
-
-    static {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            CALENDAR = CALENDAR_URI_2_2;
-        } else {
-            CALENDAR = CALENDAR_URI;
-        }
     }
 
     /**

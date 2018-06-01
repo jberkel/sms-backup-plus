@@ -67,19 +67,16 @@
   <string name="imap_settings">Поставке ИМАП-а</string>
   <string name="ui_login_label">Корисничко име</string>
   <string name="ui_login_desc">Ваш ИМАП налог/е-адреса.</string>
-  <string name="ui_login_dialog_msg">УПОЗОРЕЊЕ: Промена корисничког имена може да поквари неке ствари када користите XOAuth.</string>
   <string name="ui_password_label">Лозинка</string>
   <string name="ui_password_desc">Лозинка вашег ИМАП налога. Користи се само када је XOAuth онемогућен.</string>
   <string name="ui_password_dialog_msg">Лозинка је сачувана на овом уређају и користи се само за пријаву.</string>
   <string name="ui_server_label">Адреса сервера</string>
   <string name="ui_server_desc">Адреса сервера са којим желите да се синхронизујете, укључујући и порт.</string>
-  <string name="ui_server_dialog_msg">Подразумевано за Gmail је „imap.gmail.com:993“</string>
   <string name="ui_protocol_label">Безбедност</string>
-  <string name="ui_protocol_desc">Безбедносни протокол сервера. Подразумевани за Gmail је „ССЛ“.</string>
+  <string name="ui_protocol_desc">Безбедносни протокол сервера.</string>
   <string name="ui_authentication_label">Аутентификација</string>
-  <string name="ui_authentication_desc">Начин аутентификације. Подразумевано за Gmail је „XOauth“.</string>
+  <string name="ui_authentication_desc">Начин аутентификације.</string>
   <string name="plain">Обичан текст</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Етикета за СМС</string>
   <string name="ui_imap_folder_desc">Етикета која се додељује СМС порукама.</string>
@@ -97,7 +94,6 @@
 
   <string name="ui_backup_mms_label">Копирај ММС</string>
   <string name="ui_backup_mms_desc">Омогући копирање ММС порука</string>
-  <string name="ui_backup_mms_not_supported">Прављење резервне копије ММС порука није подржано на овој платформи.</string>
 
   <string name="ui_backup_calllog_label">Копирај евид. позива</string>
   <string name="ui_backup_calllog_desc">Омогући копирање евиденције позива</string>
@@ -135,8 +131,6 @@
 
   <string name="sd_card_disclaimer">Аутоматско прављење резервне копије можда неће радити поуздано ако је апликација инсталирана на СД картици.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Такође је потребно да омогућите размену података у позадини.</string>
-
   <string name="ui_auto_backup_schedule_label">Редован распоред</string>
   <string name="ui_auto_backup_schedule_desc">Када копирати СМС поруке</string>
 
@@ -164,7 +158,6 @@
   <string name="ui_dialog_first_sync_title">Прва резерва</string>
   <string name="ui_dialog_first_sync_msg">Копирати или прескочити све поруке тренутно смештене на овом уређају?</string>
   <string name="ui_dialog_first_sync_msg_batched">Копирати или прескочити све поруке тренутно смештене на овом уређају?\n\nНапомена: Резервна копија ће бити подељена у гране са по %1$d порука.</string>
-  <string name="ui_dialog_request_token_msg">Контактирам Гугл…</string>
   <string name="ui_dialog_access_token_msg">Захтевам приступ…</string>
 
   <string name="ui_dialog_access_token_error_title">Неуспех овлашћења</string>
@@ -173,18 +166,9 @@
   </string>
 
   <string name="ui_dialog_connect_msg">Отвориће се прозор прегледача који ће тражити од вас да се пријавите на Gmail и дозволите %1$s да приступи вашој е-пошти.</string>
-  <string name="ui_dialog_connect_token_error">Нисам могао да добијем токен за захтев од Гугла. Уверите се да је веза са мрежом активна и да су време и временска зона исправно постављени.</string>
   <string name="ui_dialog_disconnect_msg">Желите ли сигурно? Биће потребна поновно овлашћење вашег налога након што прекинете везу, а локална синхронизација биће поништена.</string>
 
-  <string name="ui_dialog_upgrade_title">Подаци о надоградњи</string>
-  <string name="ui_dialog_upgrade_msg">
-   СМС бекап+ је у потпуности уназад компатибилан са апликацијом СМС бекап. Међутим, уверите се да је „Аутоматско копирање“ омогућено у само једној апликацији, у супротном, можете имати дупликате. Такође, требали бисте да изаберете „Прескочи“ приликом прве синхронизације ако су поруке са телефона копиране раније.
-  </string>
-
-  <string name="ui_dialog_brokendroidx_title">DROID X СМС грешка</string>
-  <string name="ui_dialog_brokendroidx_msg">Постоји грешка у Droid X која
-  спречава ову апликацију да направи копију долазних порука. Прочитајте
-  Најчешћа питања са вебсајта за више информација.</string>
+  <!--<string name="ui_dialog_upgrade_title">Подаци о надоградњи</string>-->
 
   <string name="ui_sync">Копирај</string>
   <string name="ui_skip">Прескочи</string>
@@ -200,7 +184,6 @@
   <string name="gmail_already_connected">Повезан као %1$s.</string>
 
   <string name="ui_connected_label">Повежи</string>
-  <string name="ui_connected_desc">Ваш налог мора бити повезан.</string>
 
   <string name="call_incoming">долазни позиви</string>
   <string name="call_outgoing">одлазни позиви</string>
@@ -214,7 +197,6 @@
   <string name="call_duration_field">Трајање: %1$s</string>
 
   <string name="sms_with_field">Преписка са %1$s</string>
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Разговор са %1$s</string>
 
   <string name="ui_backup_contact_group_label">Контакти за копирање</string>
@@ -242,11 +224,7 @@
   <string name="_3mins">3 мин.</string>
   <string name="_30mins">30 мин.</string>
 
-  <string name="ssl_required">ССЛ</string>
-  <string name="ssl_optional">ССЛ (опционо)</string>
-  <string name="tls_required">ТЛС</string>
-  <string name="tls_optional">ТЛС (опционо)</string>
-  <string name="none">Ништа</string>
+  <string name="security_none">Ништа</string>
 
   <string name="ui_third_party_integration_label">Интеграција других апл.</string>
   <string name="ui_third_party_integration_desc">Дозволи другим апликацијама да започну копирање путем емитовања намере</string>
@@ -259,7 +237,6 @@
   <!-- <string name="ui_backup_calllog_settings_desc">Поставке евиденције позива</string> -->
 
   <string name="auto_backup_settings">Подеш. аутом. копирања</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Поставке враћања</string>
   <!-- <string name="ui_restore_settings_desc">Поставке враћања</string> -->
@@ -268,23 +245,13 @@
   <string name="ui_backup_sms_desc">Омогући копирање СМС порука</string>
 
   <string name="ui_restore_sms_label">Врати СМС</string>
-  <string name="ui_restore_sms_desc"/>
-
-  <string name="ui_feature_not_available_yet">(функција још није доступна)</string>
-
-  <string name="ui_restore_mms_label">Врати ММС</string>
-  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Врати евид. позива</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">СМС</string>
   <string name="mms">ММС</string>
   <string name="calllog">Евиденција позива</string>
 
-  <string name="pref_acra_disabled">Онемогућено</string>
-
-  <string name="app_log_skip_backup_background_data">Прескочено, јер је онемогућена размена података у позадини</string>
   <string name="app_log_skip_backup_already_running">Прескочено, јер је већ покренуто прављење резервне копије</string>
   <string name="app_log_skip_backup_skip_messages">Прескочи све поруке</string>
   <string name="app_log_skip_backup_no_items">Прескочено (нема ставки)</string>
@@ -307,7 +274,7 @@
 
   <string name="pref_app_log">Дневник синхрон.</string>
   <string name="pref_app_log_enabled">Дневник је смештен на СД картици као „sms_backup_plus.log“.</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Онемогућено</string>
 
   <string name="pref_app_log_debug">Додатни подаци испр. грешака</string>
   <string name="pref_app_log_debug_summary">Омогућује додатне записе у дневнику синхронизације</string>
@@ -323,8 +290,6 @@
   <string name="ui_dialog_confirm_action_title">Потврда радње</string>
   <string name="ui_dialog_confirm_action_msg">Желите ли заиста да извршите ову радњу?</string>
 
-  <string name="loading">Учитавам…</string>
-  <string name="ssl_error">ССЛ грешка</string>
   <string name="ui_dialog_account_manager_token_error">
       Нисам добио токен од система. Желите ли да покушате методу аутентификације помоћу прегледача?
   </string>

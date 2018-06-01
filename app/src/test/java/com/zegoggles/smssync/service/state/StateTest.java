@@ -14,7 +14,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import java.io.IOException;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class StateTest {

@@ -16,15 +16,14 @@
 
 package com.zegoggles.smssync.preferences;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.support.annotation.StyleRes;
 import android.util.Log;
+import com.zegoggles.smssync.App;
+import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
 
@@ -34,9 +33,11 @@ import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.APP_LOG_DEBUG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_GROUP;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CONFIRM_ACTION;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_THEME;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.ENABLE_AUTO_BACKUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_PROVIDER;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.ENCRYPTION_KEYS;
@@ -44,7 +45,6 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.FIRST_USE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.LAST_VERSION_CODE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAIL_SUBJECT_PREFIX;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ_ON_RESTORE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ_TYPES;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
@@ -56,12 +56,13 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.RESTORE_STARRED
 import static com.zegoggles.smssync.preferences.Preferences.Keys.SMS_DEFAULT_PACKAGE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.SMS_DEFAULT_PACKAGE_CHANGE_SEEN;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.THIRD_PARTY_INTEGRATION;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.USE_OLD_SCHEDULER;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.WIFI_ONLY;
 
 public class Preferences {
-    private static final String ERROR = "error";
     private final Context context;
-    public final SharedPreferences preferences;
+    private final SharedPreferences preferences;
+    private final DataTypePreferences dataTypePreferences;
 
     public Preferences(Context context) {
         this(context.getApplicationContext(),
@@ -71,6 +72,7 @@ public class Preferences {
     public Preferences(Context context, SharedPreferences preferences) {
         this.context = context;
         this.preferences = preferences;
+        this.dataTypePreferences = new DataTypePreferences(preferences);
     }
 
     public enum Keys {
@@ -81,6 +83,7 @@ public class Preferences {
         MAX_ITEMS_PER_RESTORE ("max_items_per_restore"),
         CALLLOG_SYNC_CALENDAR ("backup_calllog_sync_calendar"),
         CALLLOG_SYNC_CALENDAR_ENABLED ("backup_calllog_sync_calendar_enabled"),
+        CALLLOG_BACKUP_AFTER_CALL ("backup_calllog_after_call"),
         BACKUP_CONTACT_GROUP("backup_contact_group"),
         CONNECTED("connected"),
         WIFI_ONLY("wifi_only"),
@@ -89,8 +92,6 @@ public class Preferences {
         ENCRYPTION_PROVIDER("openpgp_provider_list"),
         ENCRYPTION_KEYS("pgp_keys"),
         RESTORE_STARRED_ONLY("restore_starred_only"),
-        @Deprecated
-        MARK_AS_READ("mark_as_read"),
         MARK_AS_READ_TYPES("mark_as_read_types"),
         MARK_AS_READ_ON_RESTORE("mark_as_read_on_restore"),
         THIRD_PARTY_INTEGRATION("third_party_integration"),
@@ -102,16 +103,21 @@ public class Preferences {
         FIRST_USE("first_use"),
         IMAP_SETTINGS("imap_settings"),
         DONATE("donate"),
-        BACKUP_SETTINGS_SCREEN("auto_backup_settings_screen"),
+        BACKUP_SETTINGS_SCREEN("com.zegoggles.smssync.activity.fragments.AutoBackupSettings"),
         SMS_DEFAULT_PACKAGE("sms_default_package"),
         SMS_DEFAULT_PACKAGE_CHANGE_SEEN("sms_default_package_change_seen"),
-        ;
+        USE_OLD_SCHEDULER("use_old_scheduler"),
+        DARK_THEME("dark_theme"),
+        EMAIL_ADDRESS_STYLE("email_address_style");
 
         public final String key;
-        private Keys(String key) {
+        Keys(String key) {
             this.key = key;
         }
     }
+    private static final String CALLLOG_TYPES = "backup_calllog_types";
+
+    public DataTypePreferences getDataTypePreferences() { return dataTypePreferences; }
 
     public boolean isAppLogEnabled() {
         return preferences.getBoolean(APP_LOG.key, false);
@@ -131,9 +137,16 @@ public class Preferences {
                     preferences.getBoolean(CALLLOG_SYNC_CALENDAR_ENABLED.key, false);
     }
 
+    public boolean isCallLogBackupAfterCallEnabled() {
+        return preferences.getBoolean(CALLLOG_BACKUP_AFTER_CALL.key, false);
+    }
 
     public int getCallLogCalendarId() {
         return getStringAsInt(CALLLOG_SYNC_CALENDAR, -1);
+    }
+
+    public  CallLogTypes getCallLogType() {
+        return getDefaultType(preferences, CALLLOG_TYPES, CallLogTypes.class, CallLogTypes.EVERYTHING);
     }
 
     public boolean isRestoreStarredOnly() {
@@ -185,8 +198,8 @@ public class Preferences {
         }
     }
 
-    public boolean isEnableAutoSync() {
-        return preferences.getBoolean(ENABLE_AUTO_BACKUP.key, Defaults.ENABLE_AUTO_SYNC);
+    public boolean isAutoBackupEnabled() {
+        return preferences.getBoolean(ENABLE_AUTO_BACKUP.key, Defaults.ENABLE_AUTO_BACKUP);
     }
 
     public int getIncomingTimeoutSecs() {
@@ -197,22 +210,16 @@ public class Preferences {
         return getStringAsInt(REGULAR_TIMEOUT_SECONDS, Defaults.REGULAR_TIMEOUT_SECONDS);
     }
 
-    public void migrateMarkAsRead() {
-        if (preferences.contains(MARK_AS_READ.key)) {
-            SharedPreferences.Editor editor = preferences.edit();
-            boolean markAsRead = preferences.getBoolean(MARK_AS_READ.key, true);
-            editor.putString(MARK_AS_READ_TYPES.key, markAsRead ? MarkAsReadTypes.READ.name() : MarkAsReadTypes.UNREAD.name());
-            editor.remove(MARK_AS_READ.key);
-            editor.commit();
-        }
-    }
-
     public MarkAsReadTypes getMarkAsReadType() {
-        return getDefaultType(MARK_AS_READ_TYPES.key, MarkAsReadTypes.class, MarkAsReadTypes.READ);
+        return getDefaultType(preferences, MARK_AS_READ_TYPES.key, MarkAsReadTypes.class, MarkAsReadTypes.READ);
     }
 
     public boolean getMarkAsReadOnRestore() {
         return preferences.getBoolean(MARK_AS_READ_ON_RESTORE.key, Defaults.MARK_AS_READ_ON_RESTORE);
+    }
+
+    public AddressStyle getEmailAddressStyle() {
+        return getDefaultType(preferences, Keys.EMAIL_ADDRESS_STYLE.key, AddressStyle.class, AddressStyle.NAME);
     }
 
     public boolean isFirstBackup() {
@@ -253,8 +260,8 @@ public class Preferences {
         }
     }
 
-    public boolean setSmsDefaultPackage(String smsPackage) {
-        return preferences.edit().putString(SMS_DEFAULT_PACKAGE.key, smsPackage).commit();
+    public void setSmsDefaultPackage(String smsPackage) {
+        preferences.edit().putString(SMS_DEFAULT_PACKAGE.key, smsPackage).commit();
     }
 
     public String getSmsDefaultPackage() {
@@ -265,15 +272,15 @@ public class Preferences {
         return preferences.contains(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key);
     }
 
-    public boolean setSeenSmsDefaultPackageChangeDialog() {
-        return preferences.edit().putBoolean(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key, true).commit();
+    public void setSeenSmsDefaultPackageChangeDialog() {
+        preferences.edit().putBoolean(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key, true).commit();
     }
 
     public void reset() {
         preferences.edit()
-                .remove(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key)
-                .remove(SMS_DEFAULT_PACKAGE.key)
-                .commit();
+            .remove(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key)
+            .remove(SMS_DEFAULT_PACKAGE.key)
+            .commit();
     }
 
     public boolean isNotificationEnabled() {
@@ -284,78 +291,35 @@ public class Preferences {
         return preferences.getBoolean(CONFIRM_ACTION.key, false);
     }
 
-    public String getVersion(boolean code) {
-        PackageInfo pInfo;
-        try {
-            pInfo = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(),
-                    PackageManager.GET_META_DATA);
-            return "" + (code ? pInfo.versionCode : pInfo.versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, ERROR, e);
-            return null;
-        }
-    }
-
-    @TargetApi(8)
-    public boolean isInstalledOnSDCard() {
-        PackageInfo pInfo;
-        try {
-            pInfo = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(),
-                    PackageManager.GET_META_DATA);
-
-            return (pInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, ERROR, e);
-            return false;
-        }
-    }
-
-    public boolean shouldShowUpgradeMessage() {
-        final String key = "upgrade_message_seen";
-        boolean seen = preferences.getBoolean(key, false);
-        if (!seen && isOldSmsBackupInstalled()) {
-            preferences.edit().putBoolean(key, true).commit();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public boolean shouldShowAboutDialog() {
-        int code;
-        try {
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(
-                    context.getPackageName(),
-                    PackageManager.GET_META_DATA);
-            code = pInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, ERROR, e);
-            code = -1;
-        }
-
-        int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, -1);
-        if (lastSeenCode < code) {
-            preferences.edit().putInt(LAST_VERSION_CODE.key, code).commit();
+        final int currentVersionCode = App.getVersionCode(context);
+        final int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, 0);
+        if (lastSeenCode < currentVersionCode) {
+            preferences.edit().putInt(LAST_VERSION_CODE.key, currentVersionCode).commit();
             return true;
         } else {
             return false;
         }
     }
 
-    boolean isOldSmsBackupInstalled() {
-        try {
-            context.getPackageManager().getPackageInfo(
-                    "tv.studer.smssync",
-                    PackageManager.GET_META_DATA);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
+    public boolean isUseOldScheduler() {
+        return preferences.getBoolean(USE_OLD_SCHEDULER.key, false);
     }
 
-    <T extends Enum<T>> T getDefaultType(String pref, Class<T> tClazz, T defaultType) {
+    public void setUseOldScheduler(boolean enabled) {
+        preferences.edit().putBoolean(USE_OLD_SCHEDULER.key, enabled).commit();
+    }
+
+    public @StyleRes int getAppTheme() {
+        final boolean darkMode = preferences.getBoolean(DARK_THEME.key, false);
+        return darkMode ? R.style.SMSBackupPlusTheme_Dark : R.style.SMSBackupPlusTheme_Light;
+    }
+
+    public void migrate() {
+        new AuthPreferences(context).migrate();
+    }
+
+    static <T extends Enum<T>> T getDefaultType(SharedPreferences preferences, String pref, Class<T> tClazz, T defaultType) {
         try {
             final String s = preferences.getString(pref, null);
             return s == null ? defaultType : Enum.valueOf(tClazz, s.toUpperCase(Locale.ENGLISH));

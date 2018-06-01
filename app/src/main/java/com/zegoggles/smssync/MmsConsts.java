@@ -25,7 +25,4 @@ public interface MmsConsts {
     String INSERT_ADDRESS_TOKEN = "insert-address-token";
 
     String DELIVERY_REPORT = "134"; // 0x86
-
-    @Deprecated
-    String LEGACY_HEADER = "mms";
 }

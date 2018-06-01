@@ -1,35 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="donate">Darowizna</string>
-    <string name="app_name">SMS Backup+Restore</string>
-    <string name="app_description">Użyj Gmail do przechowywania kopii zapasowej swoich SMSów. Ta wersja programu SMS Backup została stworzona przez Christoph\'a Studer\'a i obsługuje przywracanie wiadomości.</string>
+    <string name="app_name">SMS Backup+</string>
+    <string name="app_description">
+	Użyj Gmail do przechowywania kopii zapasowej swoich SMSów.
+	Ta wersja programu SMS Backup została stworzona przez Christoph\'a Studer\'a i obsługuje przywracanie wiadomości.
+	Jest w pełni zgodna z poprzednim SMS Backup.
+	</string>
     <string name="ui_sync_button_label_idle">Kopia zapasowa</string>
     <string name="ui_sync_button_label_canceling">Zatrzymywanie</string>
     <string name="ui_sync_button_label_syncing">Zatrzymaj</string>
     <string name="ui_restore_button_label_idle">Przywróć</string>
     <string name="ui_restore_button_label_restoring">Zatrzymaj</string>
     <string name="status_idle">Bezczynny</string>
-    <string name="status_idle_details">Ostatnia kopia zapasowa: %1$s</string>
+    <string name="status_idle_details">Ostatnia kopia zapasowa: <xliff:g id="last_backup_date">%1$s</xliff:g></string>
     <string name="status_idle_details_never">Nigdy</string>
     <string name="status_working">Pracuję</string>
     <string name="status_backup">Tworzenie kopii zapasowej</string>
     <string name="status_restore">Przywracanie</string>
-    <string name="status_backup_details">Kopia zapasowa %1$d/%2$d elementy…</string>
-    <string name="status_restore_details">Przywrócone %1$d/%2$d elementy…</string>
-    <string name="status_login_details">Uwierzytelnianie…</string>
-    <string name="status_updating_threads">Aktualizuję wątki…</string>
+    <string name="status_backup_details">Kopia zapasowa <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementy\u2026</string>
+    <string name="status_restore_details">Przywrócone <xliff:g id="backed_up_items">%1$d</xliff:g>/<xliff:g id="total_items">%2$d</xliff:g> elementy\u2026</string>
+    <string name="status_login_details">Uwierzytelnianie\u2026</string>
+    <string name="status_updating_threads">Aktualizuję wątki\u2026</string>
     <string name="status_done">Zakończono</string>
     <string name="status_backup_done_details_max_per_sync">Maksymalna liczba %1$d elementów na jeden cykl osiągnięta. Wykonaj ponownie kopię zapasową by kontynuować.</string>
     <string name="status_backup_done_details_noitems">Nie było żadnych elementów wymagających kopii zapasowej.</string>
     <string name="status_restore_canceled_details">%1$d/%2$d elementów poprawnie przywróconych.</string>
     <string name="status_unknown_error">Błąd</string>
     <string name="notification_general_error">SMSBackup+ błąd</string>
-    <string name="status_unknown_error_details">Błąd podczas wykonywania kopii zapasowej/przywracania:\n %1$s</string>
+    <string name="status_unknown_error_details">Błąd podczas wykonywania kopii zapasowej/przywracania:\n<xliff:g id="error_description">%1$s</xliff:g></string>
     <string name="status_auth_failure">Błąd podczas logowania</string>
     <string name="notification_auth_failure">SMSBackup+ błąd logowania</string>
     <string name="status_auth_failure_details_xoauth">Upewnij się, że IMAP jest włączony w ustawienia konta Gmail.</string>
     <string name="status_auth_failure_details_plain">Błąd autoryzacji IMAP. Upewnij się, że nazwa użytkownika i hasło zostały poprawnie wprowadzone.</string>
-    <string name="status_calc_details">Obliczanie…</string>
+    <string name="status_calc_details">Obliczanie\u2026</string>
     <string name="status_canceled">Anulowane</string>
     <string name="status_canceled_details">%1$d/%2$d elementów poprawnie zapisanych.</string>
     <string name="status_gmail_temp_error">Chwilowy błąd Gmail IMAP, spróbuj ponownie później.</string>
@@ -40,19 +44,16 @@
     <string name="imap_settings">Ustawienia IMAP</string>
     <string name="ui_login_label">Nazwa użytkownika</string>
     <string name="ui_login_desc">Nazwa konta Google/adres e-mail.</string>
-    <string name="ui_login_dialog_msg">UWAGA: Zmiana nazwy użytkownika wyczyści także hasło oraz wszystkie informacje o kopii zapasowej.</string>
     <string name="ui_password_label">Hasło</string>
     <string name="ui_password_desc">Hasło do konta IMAP. Używane tylko gdy XOAuth jest wyłączone.</string>
     <string name="ui_password_dialog_msg">Hasło jest przechowywane na tym urządzeniu i jest używane tylko do logowania w Gmailu.</string>
     <string name="ui_server_label">Adres serwera</string>
     <string name="ui_server_desc">Adres serwera z którym chcesz się połączyć, łącznie z portem.</string>
-    <string name="ui_server_dialog_msg">UWAGA: Zmiana adresu serwera skasuje hasło oraz wszystkie informacje o kopii zapasowej. Wartość domyślna dla Gmail to \"imap.gmail.com:993\"</string>
     <string name="ui_protocol_label">Zabezpieczenia</string>
-    <string name="ui_protocol_desc">Protokół zabezpieczeń serwera. Wartość domyślna dla gmail to \"SSL (wymagane)\".</string>
+    <string name="ui_protocol_desc">Protokół zabezpieczeń serwera.</string>
     <string name="ui_authentication_label">Uwierzytelnienie</string>
-    <string name="ui_authentication_desc">Metoda uwierzytelniania. Domyślnie dla gmail jest \"XOauth\".</string>
+    <string name="ui_authentication_desc">Metoda uwierzytelniania.</string>
     <string name="plain">Zwykły tekst</string>
-    <string name="xoauth">XOAuth2</string>
     <string name="ui_imap_folder_label">Etykieta Gmail</string>
     <string name="ui_imap_folder_desc">Etykieta gmail oznaczająca SMSy.</string>
     <string name="ui_imap_folder_label_dialog_msg">Kopie zapasowe SMS będą oznaczone tą etykietą w Gmailu.</string>
@@ -66,7 +67,6 @@
     <string name="ui_restore_starred_only_desc">Przywróć tylko wiadomości z gwiazdką.</string>
     <string name="ui_backup_mms_label">Kopia zapasowa MMS-ów</string>
     <string name="ui_backup_mms_desc">Włącz kopię zapasową dla MMS-ów</string>
-    <string name="ui_backup_mms_not_supported">Kopia zapasowa MMS-ów nie jest obsługiwana przez tą platformę.</string>
     <string name="ui_backup_calllog_label">Kopia zapasowa historii połączeń</string>
     <string name="ui_backup_calllog_desc">Włącz kopię dla historii połączeń</string>
     <string name="ui_backup_calllog_sync_calendar_enabled_label">Synchronizuj z kalendarzem</string>
@@ -88,7 +88,6 @@
     <string name="ui_enable_auto_sync_desc">Czy automatycznie tworzyć kopię zapasową nowych SMSów.</string>
     <string name="ui_enable_auto_sync_summary">Automatyczna kopia %1$s.</string>
     <string name="sd_card_disclaimer">Może nie działać prawidłowo gdy aplikacja jest zainstalowana na karcie SD.</string>
-    <string name="ui_enable_auto_sync_bg_data">Wymagane jest włączenie przesyłu danych w tle.</string>
     <string name="ui_auto_backup_schedule_label">Harmonogram podstawowy</string>
     <string name="ui_auto_backup_schedule_desc">Kiedy wykonać kopię SMSów</string>
     <string name="ui_auto_backup_incoming_schedule_label">Harmonogram przychodzący</string>
@@ -107,17 +106,12 @@
     <string name="ui_dialog_first_sync_title">Pierwsza kopia zapasowa</string>
     <string name="ui_dialog_first_sync_msg">Wykonać kopię zapasową czy pominąć wszystkie wiadomości aktualnie przechowywane na tym urządzeniu?</string>
     <string name="ui_dialog_first_sync_msg_batched">Wykonać kopię zapasową czy pominąć wszystkie wiadomości aktualnie przechowywane na tym urządzeniu?\n\nUwaga: kopia zapasowa będzie wykonana w partiach po %1$d wiadomości.</string>
-    <string name="ui_dialog_request_token_msg">Uzyskiwanie żetonu żądania...</string>
     <string name="ui_dialog_access_token_msg">Żądanie dostępu...</string>
     <string name="ui_dialog_access_token_error_title">Uwierzytelnianie nie powiodło się</string>
     <string name="ui_dialog_access_token_error_msg">Nie można uzyskać żetonu dostępu. Upewnij się, że wybrano opcję \"Pozwól na dostęp\".</string>
     <string name="ui_dialog_connect_msg">Zostanie otwarte okno przeglądarki, w którym należy zalogować się do gmail i autoryzować ten program %1$s</string>
-    <string name="ui_dialog_connect_token_error">Nie można uzyskać żetonu żądania od Google. Upewnij się, że telefon jest podłączony do Internetu.</string>
     <string name="ui_dialog_disconnect_msg">Na pewno? Trzeba będzie powtórzyć uwierzytelnianie po odłączenie tego konta</string>
-    <string name="ui_dialog_upgrade_title">Informacje o aktualizacji</string>
-    <string name="ui_dialog_upgrade_msg">SMS Backup+ jest całkowicie zgodny wstecz z SMS Backup. Należy jednak upewnić się, że \"Automatyczne wykonywanie kopii zapasowej\" jest włączone tylko w jednym programie, w przeciwnym razie powstaną duplikaty wiadomości. Należy również wybrać \"Pomiń\" przy pierwszej synchronizacji, jeśli wcześniej została już utworzona kopia zapasowa.</string>
-    <string name="ui_dialog_brokendroidx_title">Błąd SMS w DROID X</string>
-    <string name="ui_dialog_brokendroidx_msg">W Droid X jest błąd który uniemożliwia aplikacji SMS Backup + tworzenie kopii zapasowej dla wiadomości przychodzących. Więcej informacji znajdziesz w FAQ na naszej stronie internetowej.</string>
+    <!--<string name="ui_dialog_upgrade_title">Informacje o aktualizacji</string>-->
     <string name="ui_sync">Kopia zapasowa</string>
     <string name="ui_skip">Pomiń</string>
     <string name="err_sync_requires_login_info">Nie można utworzyć kopii zapasowej bez danych logowania.</string>
@@ -129,7 +123,6 @@
     <string name="gmail_needs_connecting">Dotknij by połączyć ze swoim kontem Gmail (wymagane).</string>
     <string name="gmail_already_connected">Konto Gmail połączone %1$s (dotknij by rozłączyć).</string>
     <string name="ui_connected_label">Połącz</string>
-    <string name="ui_connected_desc">Twoje konto musi być uwierzytelnione.</string>
     <string name="call_incoming">Połączenie przychodzące</string>
     <string name="call_outgoing">połączenie wychodzące</string>
     <string name="call_missed">nieodebrane połączenie</string>
@@ -139,7 +132,6 @@
     <string name="call_number_field">Numer: %1$s</string>
     <string name="call_duration_field">Czas połączenia: %1$s</string>
     <string name="sms_with_field">SMS od %1$s</string>
-    <item type="string" name="mms_with_field">@string/sms_with_field</item>
     <string name="call_with_field">Połączenie z %1$s</string>
     <string name="ui_backup_contact_group_label">Grupa do backupu</string>
     <string name="ui_backup_contact_group_desc">Twórz kopię tylko dla wybranych grup</string>
@@ -160,39 +152,27 @@
     <string name="_1min">1 min.</string>
     <string name="_3mins">3 min.</string>
     <string name="_30mins">30 min.</string>
-    <string name="ssl_required">SSL (wymagane)</string>
-    <string name="ssl_optional">SSL (opcjonalne)</string>
-    <string name="tls_required">TLS (wymagane)</string>
-    <string name="tls_optional">TLS (opcjonalne)</string>
-    <string name="none">brak</string>
+    <string name="security_none">brak</string>
     <string name="ui_third_party_integration_label">3rd party integration</string>
     <string name="ui_third_party_integration_desc">Allow other apps to trigger backups via intent broadcasts</string>
     <string name="ui_backup_settings_label">Ustawienia kopii zapasowej</string>
     <string name="ui_backup_calllog_settings_label">Ustawienia historii połączeń</string>
     <string name="auto_backup_settings">Ustawienia harmonogramu kopii zapasowej</string>
-    <item type="string" name="ui_auto_backup_settings_label">@string/auto_backup_settings</item>
     <string name="ui_restore_settings_label">Ustawienia przywracania</string>
     <string name="ui_backup_sms_label">Kopia zapasowa SMS-ów</string>
     <string name="ui_backup_sms_desc">Włącz kopię SMS-ów</string>
     <string name="ui_restore_sms_label">Przywróć SMS-y</string>
-    <string name="ui_restore_sms_desc" />
-    <string name="ui_feature_not_available_yet">(opcja jeszcze niedostępna)</string>
-    <string name="ui_restore_mms_label">Przywróć MMS-y</string>
-    <item type="string" name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</item>
     <string name="ui_restore_calllog_label">Przywróć historię połączeń</string>
-    <string name="ui_restore_calllog_desc" />
     <string name="sms">SMS</string>
-    <string name="calllog">Call log</string>
+    <string name="calllog">Historia połaczeń</string>
     <string name="ui_dialog_donate_message">Określ kwotę i walutę:</string>
     <string name="ui_donation_success_message">Darowizna dokonana. Dziekuję bardzo!</string>
     <string name="ui_donation_failure_message">Darowizna nieudana: %1$s</string>
-    <string name="pref_acra_disabled">Wyłączone</string>
-    <string name="app_log_skip_backup_background_data">Pomijam, dane w tle sa wyłączone</string>
     <string name="app_log_skip_backup_already_running">Pomijam, kopia zapasowa własnie sie wykonuje</string>
     <string name="app_log_skip_backup_skip_messages">Pomiń wszystkie wiadomości</string>
     <string name="app_log_skip_backup_no_items">Pomijam (nie znaleziono pozycji)</string>
-    <string name="app_log_missing_credentials">Pomijam (missing credentials)</string>
-    <string name="app_log_backup_requested">Backup requested (%1$s)</string>
+    <string name="app_log_missing_credentials">Pomijam (brak uwierzytelnienia)</string>
+    <string name="app_log_backup_requested">Rozpoczęto kopię zapasową (%1$s)</string>
     <string name="app_log_start_backup">Uruchamiam tworzenie kopii zapasowej (%1$s)</string>
     <string name="app_log_backup_messages">Kopiuję (%1$d SMS-ów, %2$d MMS-ów, %3$d historii połaczeń)</string>
     <string name="app_log_backup_canceled">Tworzenie kopii anulowane</string>
@@ -206,10 +186,53 @@
     <string name="app_log_empty">Plik logu jest pusty. Włącz go w \"Ustawieniach zaawansowanych\".</string>
     <string name="pref_app_log">Log synchronizacji</string>
     <string name="pref_app_log_enabled">Plik logu został zapisany na karcie SD jako \"sms_backup_plus.log\".</string>
-    <item type="string" name="pref_app_log_disabled">@string/pref_acra_disabled</item>
-    <string name="source_incoming">incoming</string>
-    <string name="source_regular">regular</string>
-    <string name="source_3rd_party">3rd party</string>
-    <string name="source_manual">manual</string>
-    <string name="source_unknown">unknown</string>
+    <item type="string" name="pref_app_log_disabled">Wyłączone</item>
+    <string name="source_incoming">przychodzące</string>
+    <string name="source_regular">zwykłe</string>
+    <string name="source_3rd_party">3cia strona</string>
+    <string name="source_manual">ręcznie</string>
+    <string name="source_unknown">nieznane</string>
+    <string name="ui_dark_theme_label">Ciemny motyw</string>
+    <string name="status_permission_problem">Brak uprawnień</string>
+    <string name="permission_read_sms">Dostęp do SMSów</string>
+    <string name="permission_read_call_log">Dostęp do historii połączeń</string>
+    <string name="permission_read_contacts">Dostęp do kontaktów</string>
+    <string name="permission_unknown">Nieznane</string>
+    <string name="ui_protocol_trust_all_certificates_label">Ufaj wszystkim certyfikatom</string>
+    <string name="ui_protocol_trust_all_certificates_desc">Nie zalecane. Włącz dla samodzielnie podpisanych certyfikatów.</string>
+    <string name="ui_backup_calllog_after_call_label">Kopia zapasowa po rozmowie telefonicznej</string>
+    <string name="ui_backup_calllog_after_call_desc">Automatycznie wykonaj kopię bezpieczeństwa po każdej rozmowie telefonicznej (używa harmonogramu dla rozmów przychodzących).</string>
+    <string name="mark_as_read_always_read">Zawsze oznacz jako przeczytany</string>
+    <string name="mark_as_read_always_unread">Zawsze oznacz jako nieprzeczytany</string>
+    <string name="mark_as_read_message_status">Użyj statusu wiadomości</string>
+    <string name="ui_enable_auto_sync_no_enabled_summary">Nie wybrano typu obiektów do kopii zapasowej.</string>
+    <string name="error_sms_provider_not_writable">Nie można zapisać SMS</string>
+    <string name="custom_imap_not_configured">IMAP (nie skonfigurowane)</string>
+    <string name="call_rejected">połączenie przychodzące, odrzucone</string>
+    <string name="call_voicemail">połączenie przychodzące, skrzynka głosowa</string>
+    <string name="call_rejected_text">Odrzucone połączenie od %1$s</string>
+    <string name="call_voicemail_text">Połączenie od %1$s (skrzynka głosowa)</string>
+    <string name="mms">MMS</string>
+    <string name="app_log_backup_messages_with_config">Używam konfiguracji: %1$s</string>
+    <string name="pref_app_log_debug">Rozszerzone informacje debugowania</string>
+    <string name="pref_app_log_debug_summary">Włącza dodatkowe informacje debugowania w pliku logu synchronizacji</string>
+    <string name="pref_use_old_scheduler">Stary kod harmonogramu zadań</string>
+    <string name="pref_use_old_scheduler_summary">Wymusza użycie starego kodu harmonogramu zadań</string>
+    <string name="pref_use_old_scheduler_no_gcm_summary">Usługi Google Play nie są dostępne</string>
+    <string name="ui_confirm_action_label">Potwierdź operacje</string>
+    <string name="ui_dialog_confirm_action_title">Potwierdź operację</string>
+    <string name="ui_confirm_action_desc">Pytaj przed wykonaniem kopii bezpieczeństwa lub odtworzeniem danych</string>
+    <string name="ui_dialog_confirm_action_msg">Czy na pewno chcesz wykonać tą operację?</string>
+    <string name="ui_dialog_account_manager_token_error">Nie udało się uzyskać uwierzytelnienia od systemu. Czy chcesz spróbować uwierzytelnienia przez przeglądarkę?</string>
+    <string name="select_google_account">Wybierz konto Google</string>
+    <string name="donate_summary">Używa bezpiecznej metody płatności przez sklep Google Play.</string>
+    <string name="donation_error_iab_unavailable">Płatności w aplikacji nie są dostępne</string>
+    <string name="donation_error_unavailable">niedostępne</string>
+    <string name="donation_error_canceled">anulowano</string>
+    <string name="donation_error_already_owned">już dokonano darowizny</string>
+    <string name="donation_unspecified_error">nieokreślony błąd: %1$d</string>
+    <string name="error_no_sms_default_package">Nie wybrano domyślnego pakietu SMS.</string>
+    <string name="ui_dialog_sms_default_package_change_title">Wymagana zmiana aplikacji</string>
+    <string name="theme_app_relaunch">Konieczne ponowne ręczne uruchomienie aplikacji</string>
+    <string name="ui_dialog_sms_default_package_change_msg">Musisz ustawić SMS Backup+ jako swoją domyślną aplikację do SMS na czas odtwarzania z kopii zapasowej. Po zakończeniu operacji przypomnimy Ci, żeby wrócić do poprzednich ustawień. SMSy otrzymane w trakcie odtwarzania z kopii zostanę dostarczone normalnie, ale nie wygenerują powiadominień.</string>
 </resources>

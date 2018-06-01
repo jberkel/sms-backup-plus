@@ -3,11 +3,11 @@ package com.zegoggles.smssync.calendar;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.MatrixCursor;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.text.format.Time;
-import org.fest.assertions.data.MapEntry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,8 @@ import java.util.Date;
 import java.util.Map;
 
 import static android.provider.CalendarContract.Events;
-import static org.fest.assertions.api.Assertions.assertThat;
+import static android.provider.CalendarContract.Events.CONTENT_URI;
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -90,6 +91,16 @@ public class CalendarAccessorPost40Test {
 
         Map<String, String> calendars = accessor.getCalendars();
         assertThat(calendars).hasSize(1);
-        assertThat(calendars).contains(MapEntry.entry("12", "Testing"));
+        assertThat(calendars).containsEntry("12", "Testing");
+    }
+
+    @Test
+    public void shouldIgnoreSQLiteException() {
+        when(resolver.insert(eq(CONTENT_URI), any(ContentValues.class))).thenThrow(SQLiteException.class);
+        boolean result = accessor.addEntry(
+                12,
+                new Date(), 100, "Title", "Desc");
+
+        assertThat(result).isFalse();
     }
 }

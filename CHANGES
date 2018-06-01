@@ -1,11 +1,27 @@
-== 1.5.11 (1555) tbd
+== 1.6.0 (xxx) dd-mm-2018
 
+  * Updated Swedish localization (#890)
+
+== 1.5.11 (1576) 04-23-2018
+
+  * WebView scroll position lost after device rotation (#878)
+  * Fix crash with some phone numbers (#870)
+  * Updated translations: da,de,fr,gl,ko,nl,tr,pl,zh-rCN,zh-rTW
+  * Handle incoming SMS during Restore (#809, #851)
+  * Clean up security settings for IMAP servers (#839)
+  * Implemented runtime permissions on Android 6.0+
+  * Added dark/light theme switcher
+  * Modernized UI (Material/AppCompat), added adaptive icon
+  * Simplify IMAP search logic to prevent timeouts
+  * Retry connection timeouts more aggressively
+  * Call logs: support rejected / voicemail
+  * Optionally trigger a backup after incoming/outgoing calls
+  * Use JobManager to run backups in the background (#572, #810, #822)
   * Replaced WebView auth with browser (#767)
   * Replaced pay-me with Play Billing Library
   * Gradle build support (#638)
   * Improve restore experience (#586)
   * Fixed unquoted blank in local part of email address (#595)
-  * Updated Korean translation (#592)
   * Updated notification images
   * Rebased K9 to current head (https://github.com/k9mail/k-9/commit/eb31a0fa46877d28266d09e29dee9eb2e0f945fb)
 

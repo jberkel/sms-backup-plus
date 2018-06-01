@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.mail.Attachment.encodeRFC2231;
-import static org.fest.assertions.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class AttachmentTest {

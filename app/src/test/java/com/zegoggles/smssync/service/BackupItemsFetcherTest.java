@@ -2,12 +2,11 @@ package com.zegoggles.smssync.service;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.preferences.Preferences;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,11 +14,15 @@ import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
-import static com.zegoggles.smssync.mail.DataType.*;
-import static org.fest.assertions.api.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
+import static com.zegoggles.smssync.mail.DataType.CALLLOG;
+import static com.zegoggles.smssync.mail.DataType.MMS;
+import static com.zegoggles.smssync.mail.DataType.SMS;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(RobolectricTestRunner.class)
@@ -28,26 +31,25 @@ public class BackupItemsFetcherTest {
     @Mock BackupQueryBuilder queryBuilder;
     @Mock ContentResolver resolver;
     Context context;
-    SharedPreferences preferences;
+    Preferences preferences;
 
     @Before public void before() {
         initMocks(this);
         context = RuntimeEnvironment.application;
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences = new Preferences(context);
         fetcher = new BackupItemsFetcher(
-                context,
                 resolver,
                 queryBuilder);
     }
 
     @Test public void shouldGetItemsForDataType() throws Exception {
-        SMS.setBackupEnabled(preferences, true);
+        preferences.getDataTypePreferences().setBackupEnabled(true, SMS);
         assertThat(fetcher.getItemsForDataType(SMS, null, -1).getCount()).isEqualTo(0);
         verifyZeroInteractions(resolver);
     }
 
     @Test public void shouldCatchSQLiteExceptions() throws Exception {
-        SMS.setBackupEnabled(preferences, true);
+        preferences.getDataTypePreferences().setBackupEnabled(true, SMS);
         when(resolver.query(any(Uri.class), any(String[].class), anyString(), any(String[].class), anyString()))
                 .thenThrow(new SQLiteException());
 
@@ -57,7 +59,7 @@ public class BackupItemsFetcherTest {
     }
 
     @Test public void shouldCatchNullPointerExceptions() throws Exception {
-        SMS.setBackupEnabled(preferences, true);
+        preferences.getDataTypePreferences().setBackupEnabled(true, SMS);
         when(resolver.query(any(Uri.class), any(String[].class), anyString(), any(String[].class), anyString()))
                 .thenThrow(new NullPointerException());
 
@@ -72,12 +74,12 @@ public class BackupItemsFetcherTest {
         }
     }
 
-    @Test public void shouldGetgetMostRecentTimestampForItemTypeSMS() throws Exception {
+    @Test public void shouldGetMostRecentTimestampForItemTypeSMS() throws Exception {
         mockMostRecentTimestampForType(SMS, 23L);
         assertThat(fetcher.getMostRecentTimestamp(SMS)).isEqualTo(23L);
     }
 
-    @Test public void shouldgetMostRecentTimestampForItemTypeMMS() throws Exception {
+    @Test public void shouldMostRecentTimestampForItemTypeMMS() throws Exception {
         mockMostRecentTimestampForType(MMS, 23L);
         assertThat(fetcher.getMostRecentTimestamp(MMS)).isEqualTo(23L);
     }

@@ -20,8 +20,9 @@
     <item>@string/mark_as_read_message_status</item>
   </string-array>
 
+  <string name="read" translatable="false">read</string>
   <string-array name="mark_as_read_values">
-    <item>read</item>
+    <item>@string/read</item>
     <item>unread</item>
     <item>message_status</item>
   </string-array>
@@ -46,8 +47,9 @@
     <item>@string/email_address_style_number</item>
   </string-array>
 
+  <string name="name" translatable="false">name</string>
   <string-array name="email_address_style_values">
-    <item>name</item>
+    <item>@string/name</item>
     <item>name_and_number</item>
     <item>number</item>
   </string-array>
@@ -60,8 +62,9 @@
     <item>@string/call_type_missed</item>
   </string-array>
 
+  <string name="call_type_everything_value" translatable="false">everything</string>
   <string-array name="backup_calllog_types_values">
-    <item>everything</item>
+    <item>@string/call_type_everything_value</item>
     <item>incoming</item>
     <item>outgoing</item>
     <item>incoming_outgoing</item>
@@ -103,18 +106,18 @@
   </string-array>
 
   <string-array name="server_protocol_entries">
-    <item>@string/ssl_required</item>
-    <item>@string/ssl_optional</item>
-    <item>@string/tls_required</item>
-    <item>@string/tls_optional</item>
-    <item>@string/none</item>
+    <!-- only connect via TLS, no plain sockets -->
+    <item>@string/security_tls</item>
+    <!-- connect via plain, then upgrade to TLS -->
+    <item>@string/security_starttls</item>
+    <!-- connect via plain socket -->
+    <item>@string/security_none</item>
   </string-array>
 
+  <string name="plus_ssl_plus" translatable="false">+ssl+</string>
   <string-array name="server_protocol_entryValues">
-    <item>+ssl+</item>
-    <item>+ssl</item>
+    <item>@string/plus_ssl_plus</item> <!-- default -->
     <item>+tls+</item>
-    <item>+tls</item>
     <item/>
   </string-array>
 
@@ -123,9 +126,11 @@
     <item>@string/plain</item>
   </string-array>
 
-  <string-array name="server_authentication_values">
-    <item>xoauth</item>
-    <item>plain</item>
-  </string-array>
+  <string name="xoauth_value" translatable="false">xoauth</string>
+  <string name="plain_value" translatable="false">plain</string>
 
+  <string-array name="server_authentication_values">
+    <item>@string/xoauth_value</item>
+    <item>@string/plain_value</item>
+  </string-array>
 </resources>

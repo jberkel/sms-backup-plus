@@ -19,7 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.Alarms;
+import com.zegoggles.smssync.service.BackupJobs;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -39,7 +39,7 @@ public class BackupBroadcastReceiver extends BroadcastReceiver {
     private void backupRequested(Context context, Intent intent) {
         if (new Preferences(context).isAllow3rdPartyIntegration()) {
             Log.d(TAG, "backup requested via broadcast intent");
-            new Alarms(context).scheduleImmediateBackup();
+            new BackupJobs(context).scheduleImmediate();
         } else {
             Log.d(TAG, "backup requested via broadcast intent but ignored");
         }

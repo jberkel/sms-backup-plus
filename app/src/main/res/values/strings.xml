@@ -51,6 +51,20 @@
   <string name="status_auth_failure">Login error</string>
   <string name="notification_auth_failure">SMSBackup+ login error</string>
 
+  <string name="status_permission_problem">Permission problem</string>
+
+  <plurals name="status_permission_problem_details">
+    <item quantity="one">The following permission is required: %1$s.</item>
+    <item quantity="other">The following permissions are required: %1$s.</item>
+  </plurals>
+
+  <string name="permission_read_sms">Access SMS Messages</string>
+  <string name="permission_read_call_log">Access Call Log</string>
+  <string name="permission_read_contacts">Access contacts</string>
+  <string name="permission_unknown">Unknown</string>
+
+  <string name="notification_missing_permission" translatable="false">@string/status_permission_problem</string>
+
   <string name="status_auth_failure_details_xoauth">XOAuth authorization error. Please make sure you enabled IMAP in your Gmail account settings.</string>
   <string name="status_auth_failure_details_plain">IMAP authorization error.
   Make sure login and password are set correctly.</string>
@@ -61,25 +75,28 @@
 
   <string name="ui_settings_advanced_label">Advanced settings</string>
   <string name="ui_settings_advanced_desc">Set advanced preferences.</string>
-  <string name="ui_settings_advanced_server_label">IMAP server settings</string>
+  <string name="ui_settings_advanced_server_label">Custom IMAP server</string>
   <string name="ui_settings_advanced_server_desc">Do not change unless you know what you are doing!</string>
 
   <string name="imap_settings">IMAP settings</string>
   <string name="ui_login_label">Username</string>
   <string name="ui_login_desc">Your IMAP account/e-mail address.</string>
-  <string name="ui_login_dialog_msg">WARNING: Changing the username might break things when using XOAuth.</string>
   <string name="ui_password_label">Password</string>
-  <string name="ui_password_desc">Your IMAP account password. Only used when XOAuth is disabled.</string>
+  <string name="ui_password_desc">Your IMAP account password.</string>
   <string name="ui_password_dialog_msg">The password is stored on this device and is only used to login.</string>
   <string name="ui_server_label">Server address</string>
-  <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
-  <string name="ui_server_dialog_msg">Default for gmail is \"imap.gmail.com:993\"</string>
+  <string name="ui_server_desc">The address of the server incl. its port.</string>
+
   <string name="ui_protocol_label">Security</string>
-  <string name="ui_protocol_desc">The security protocol of the server. Default for gmail is \"SSL\"."</string>
+  <string name="ui_protocol_desc">The security protocol of the server.</string>
+
+  <string name="ui_protocol_trust_all_certificates_label">Trust all certificates</string>
+  <string name="ui_protocol_trust_all_certificates_desc">Not recommended. Enable for a server with a self-signed certificate.</string>
+
   <string name="ui_authentication_label">Authentication</string>
-  <string name="ui_authentication_desc">The authentication method. Default for gmail is \"XOAuth\".</string>
+  <string name="ui_authentication_desc">The authentication method.</string>
   <string name="plain">Plain text</string>
-  <string name="xoauth">XOAuth2</string>
+  <string name="xoauth" translatable="false">XOAuth2 (Gmail)</string>
 
   <string name="ui_imap_folder_label">Gmail label</string>
   <string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
@@ -97,7 +114,6 @@
 
   <string name="ui_backup_mms_label">Backup MMS</string>
   <string name="ui_backup_mms_desc">Enable MMS backup</string>
-  <string name="ui_backup_mms_not_supported">MMS backup not supported on this platform.</string>
 
   <string name="ui_backup_calllog_label">Backup Call log</string>
   <string name="ui_backup_calllog_desc">Enable Call log backup</string>
@@ -113,7 +129,10 @@
 
   <string name="ui_imap_folder_calllog_label">Call log label</string>
   <string name="ui_imap_folder_calllog_desc">Gmail label assigned to call log.</string>
-   <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
+
+  <string name="ui_backup_calllog_after_call_label">Backup after call</string>
+  <string name="ui_backup_calllog_after_call_desc">Automatically backup after incoming/outgoing call (uses Incoming schedule).</string>
 
   <string name="ui_mark_as_read_label">Mark as read (emails)</string>
   <string name="ui_mark_as_read_desc">Whether to mark messages in Gmail as read or not.</string>
@@ -134,8 +153,6 @@
   <string name="ui_enable_auto_sync_no_enabled_summary">No item type to backup selected.</string>
 
   <string name="sd_card_disclaimer">Auto backup might not work reliably when app is installed on SD card.</string>
-
-  <string name="ui_enable_auto_sync_bg_data">You will also need to enable background data.</string>
 
   <string name="ui_auto_backup_schedule_label">Regular schedule</string>
   <string name="ui_auto_backup_schedule_desc">When to backup SMS</string>
@@ -164,7 +181,6 @@
   <string name="ui_dialog_first_sync_title">First backup</string>
   <string name="ui_dialog_first_sync_msg">Backup or skip all messages currently stored on this device?</string>
   <string name="ui_dialog_first_sync_msg_batched">Backup or skip all messages currently stored on this device?\n\nNote: The backup will be split into batches of %1$d messages.</string>
-  <string name="ui_dialog_request_token_msg">Contacting Google…</string>
   <string name="ui_dialog_access_token_msg">Requesting access…</string>
 
   <string name="ui_dialog_access_token_error_title">Authorisation failure</string>
@@ -173,18 +189,7 @@
   </string>
 
   <string name="ui_dialog_connect_msg">A browser window will open, prompting you to log into Gmail to grant %1$s access to your emails.</string>
-  <string name="ui_dialog_connect_token_error">Could not obtain request token from Google. Make sure the network connection is active and your time / time zone is configured properly.</string>
   <string name="ui_dialog_disconnect_msg">Are you sure? You will need to reauthorize your account after disconnecting and the local sync state will be reset.</string>
-
-  <string name="ui_dialog_upgrade_title">Upgrade information</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ is fully backwards compatible with SMS Backup. However make sure that \"Auto backup\" is only enabled in one app, otherwise you might get duplicates. Also you should select \"Skip\" messages for your first sync if the messages on the phone have already been backed up previously.
-  </string>
-
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
-  <string name="ui_dialog_brokendroidx_msg">There is a bug in Droid X which
-  prevents this application from backing up incoming messages. See the FAQ
-  on the website for more information.</string>
 
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Skip</string>
@@ -198,23 +203,28 @@
 
   <string name="gmail_needs_connecting">Tap to connect your Gmail account (required).</string>
   <string name="gmail_already_connected">Connected as %1$s.</string>
+  <string name="custom_imap" translatable="false">IMAP %1$s.</string>
+  <string name="custom_imap_not_configured">IMAP (not configured)</string>
 
   <string name="ui_connected_label">Connect</string>
-  <string name="ui_connected_desc">Your account needs to be connected.</string>
 
   <string name="call_incoming">incoming call</string>
   <string name="call_outgoing">outgoing call</string>
   <string name="call_missed">missed call</string>
+  <string name="call_rejected">incoming call, rejected</string>
+  <string name="call_voicemail">incoming call, voicemail</string>
 
   <string name="call_missed_text">Missed call from %1$s</string>
   <string name="call_incoming_text">Call from %1$s</string>
   <string name="call_outgoing_text">Called %1$s</string>
+  <string name="call_rejected_text">Rejected call from %1$s</string>
+  <string name="call_voicemail_text">Call from %1$s (voicemail)</string>
 
   <string name="call_number_field">Number: %1$s</string>
   <string name="call_duration_field">Duration: %1$s</string>
 
   <string name="sms_with_field">SMS with %1$s</string>
-  <string name="mms_with_field">@string/sms_with_field</string>
+  <string name="mms_with_field" translatable="false">@string/sms_with_field</string>
   <string name="call_with_field">Call with %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contacts to backup</string>
@@ -242,49 +252,35 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="ssl_required">SSL</string>
-  <string name="ssl_optional">SSL (trust all)</string>
-  <string name="tls_required">TLS</string>
-  <string name="tls_optional">TLS (trust all)</string>
-  <string name="none">None</string>
+  <string name="security_tls" translatable="false">TLS</string>
+  <string name="security_starttls" translatable="false">STARTTLS</string>
+  <string name="security_none">None</string>
 
   <string name="ui_third_party_integration_label">3rd party integration</string>
   <string name="ui_third_party_integration_desc">Allow other apps to trigger backups via broadcast intents</string>
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Backup settings</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
-
   <string name="ui_backup_calllog_settings_label">Call log settings</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
 
   <string name="auto_backup_settings">Auto backup settings</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
+  <string name="ui_auto_backup_settings_label" translatable="false">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Restore settings</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">Backup SMS</string>
   <string name="ui_backup_sms_desc">Enable SMS backup</string>
 
   <string name="ui_restore_sms_label">Restore SMS</string>
-  <string name="ui_restore_sms_desc"/>
-
-  <string name="ui_feature_not_available_yet">(Feature not available yet)</string>
-
-  <string name="ui_restore_mms_label">Restore MMS</string>
-  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Restore call log</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Call log</string>
 
-  <string name="pref_acra_disabled">Disabled</string>
 
-  <string name="app_log_skip_backup_background_data">Skipped because background data is disabled</string>
+
   <string name="app_log_skip_backup_already_running">Skipped because backup already running</string>
   <string name="app_log_skip_backup_skip_messages">Skip all messages</string>
   <string name="app_log_skip_backup_no_items">Skipped (no items found)</string>
@@ -306,11 +302,15 @@
   <string name="app_log_empty">Log is empty. Enable it in \"Advanced settings\".</string>
 
   <string name="pref_app_log">Sync log</string>
-  <string name="pref_app_log_enabled">Log is stored on SD card as \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_enabled">Log is stored as \"sms_backup_plus.log\".</string>
+  <string name="pref_app_log_disabled">Disabled</string>
 
   <string name="pref_app_log_debug">Extra debug information</string>
   <string name="pref_app_log_debug_summary">Enables extra debug logging in sync log</string>
+
+  <string name="pref_use_old_scheduler">Old backup scheduler</string>
+  <string name="pref_use_old_scheduler_summary">Force use of old backup scheduler</string>
+  <string name="pref_use_old_scheduler_no_gcm_summary">Google Play Services not available</string>
 
   <string name="source_incoming">incoming</string>
   <string name="source_regular">regular</string>
@@ -323,11 +323,7 @@
   <string name="ui_dialog_confirm_action_title">Confirm Action</string>
   <string name="ui_dialog_confirm_action_msg">Are you sure want to perform the action?</string>
 
-  <string name="loading">Loading…</string>
-  <string name="ssl_error">SSL error</string>
-  <string name="ui_dialog_account_manager_token_error">
-      Could not get token from system. Do you want to try the browser authentication method?
-  </string>
+  <string name="ui_dialog_account_manager_token_error">Could not get token from system. Do you want to try the browser authentication method?</string>
   <string name="select_google_account">Select a Google account</string>
 
   <!-- encryption strings -->
@@ -354,10 +350,16 @@
   <string name="donation_error_already_owned">you have already donated</string>
   <string name="donation_unspecified_error">unspecified error: %1$d</string>
 
-  <string name="ui_dialog_sms_default_package_change_title">Upgrade notice</string>
+  <string name="error_no_sms_default_package">No default SMS package set.</string>
+  <string name="ui_dialog_sms_default_package_change_title">Required app change</string>
   <string name="ui_dialog_sms_default_package_change_msg">
-    In order to restore your messages on Android KitKat and Lollipop you need
-    to set SMS Backup+ as your SMS app during the restore operation. You will
-    get asked to change it back to the original setting after restoring.
+    You need to set SMS Backup+ as your default SMS app during the restore operation.
+    After completion you will be prompted to change it back to the original setting.
+
+    Any incoming SMS messages during restore will get delivered as usual
+    but won\'t generate notifications.
   </string>
+
+  <string name="ui_dark_theme_label">Dark theme</string>
+  <string name="theme_app_relaunch">Manual app relaunch required</string>
 </resources>

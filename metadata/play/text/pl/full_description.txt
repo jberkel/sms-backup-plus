@@ -1,0 +1,11 @@
+Automatycznie twórz kopie zapasowe wiadomości SMS, MMS i historii połączeń za pomocą oddzielnej etykiety w Gmailu i Kalendarzu Google.
+
+Później możesz przywrócić zapisane dane (za wyjątkiem MMS) z powrotem do telefonu - szczególnie przydatne
+po przejściu na nowe urządzenie.
+
+Dostęp IMAP musi być ręcznie włączony w Gmailu, więcej informacji znajdziesz na stronie internetowej i FAQ.
+Możesz oczywiście użyć własnego serwera IMAP do tworzenia kopii zapasowych, by zachować pełną kontrolę nad swoimi danymi.
+
+SMS Backup+ to darmowy projekt typu open-source, aktywnie rozwijany od wczesnych lat Androida. Całkowicie bez reklam i śledzenia, wspierany dobrowolnymi darowiznami.
+
+Wielkie podziękowania dla licznych osób, które przekazały darowiznę, przesłały opinie, kod lub tłumaczenia - ich listę można znaleźć w aplikacji i na stronie internetowej.

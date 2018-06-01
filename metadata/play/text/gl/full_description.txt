@@ -1,0 +1,10 @@
+Garde automáticamente os seus SMS, MMS ou historial de chamadas con etiquetas distintas en Gmail e Google Calendar.
+
+Poderá restaurar máis tarde no teléfono os datos gardados (agás os MMS). Moi útil, sobre todo, cando cambia de dispositivo.
+
+O acceso IMAP debe ser habilitado manualmente en Gmail, consulte o sitio web e as FAQ para obter máis información.
+Por suposto, pode usar o seu propio servidor IMAP para realizar as copias de seguridade, o que lle outorgará control total sobre os seus datos.
+
+SMS Backup+ é un proxecto gratuíto e de código aberto que leva desenvolvéndose activamente dende os primeiros días de Android, completamente libre de anuncios ou rastrexo, financiado a base de doazóns voluntarias.
+
+Moitas grazas ás numerosas persoas que realizaron doazóns, contribuíron con comentarios, código ou traducións - pode atopar créditos detallados na aplicación ou no sitio web.

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="imap_folder_calllog_default" translatable="false">Call log</string>
+    <string name="imap_folder_default" translatable="false">SMS</string>
+    <string name="max_items_per_restore_default" translatable="false">500</string>
+</resources>

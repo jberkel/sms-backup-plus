@@ -1,0 +1,13 @@
+Maak automatisch een back-up van uw sms'en, mms'en en oproepgeschiedenis met een apart label in Gmail en Google Agenda.
+
+Later kunt u de opgeslagen gegevens (behalve mms) terug naar de telefoon herstellen, zeer handig
+bij het overschakelen naar een nieuw apparaat.
+
+IMAP-toegang moet handmatig worden ingeschakeld in Gmail, zie de website en veelgestelde vragen voor meer informatie.
+U kunt natuurlijk uw eigen IMAP-server gebruiken voor back-ups, zodat u volledige controle over uw gegevens hebt.
+
+SMS Backup+ is een gratis open-sourceproject dat sinds de beginjaren van Android actief ontwikkeld wordt,
+volledig advertentie- en trackingvrij, ondersteund door vrijwillige donaties.
+
+Veel dank aan de vele mensen die hebben gedoneerd, feedback gegeven hebben, code of vertalingen - gedetailleerd
+credits zijn te vinden in de app of op de website.

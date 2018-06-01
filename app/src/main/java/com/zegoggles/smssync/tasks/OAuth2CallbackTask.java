@@ -36,13 +36,13 @@ public class OAuth2CallbackTask extends AsyncTask<String, Void, OAuth2Token> {
 
     @Override
     protected void onPostExecute(OAuth2Token token) {
-        App.bus.post(new OAuth2CallbackEvent(token));
+        App.post(new OAuth2CallbackEvent(token));
     }
 
     public static class OAuth2CallbackEvent {
         public final OAuth2Token token;
 
-        public OAuth2CallbackEvent(OAuth2Token token) {
+        OAuth2CallbackEvent(OAuth2Token token) {
             this.token = token;
         }
 

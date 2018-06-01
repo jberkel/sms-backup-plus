@@ -1,9 +1,7 @@
 package com.zegoggles.smssync.service;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
@@ -36,9 +34,11 @@ import java.util.Locale;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
-import static com.zegoggles.smssync.mail.DataType.Defaults;
+import static com.zegoggles.smssync.mail.DataType.Defaults.MAX_SYNCED_DATE;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
+import static com.zegoggles.smssync.service.BackupType.MANUAL;
+import static com.zegoggles.smssync.service.BackupType.SKIP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.CALC;
 import static com.zegoggles.smssync.service.state.SmsSyncState.CANCELED_BACKUP;
@@ -55,7 +55,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final CalendarSyncer calendarSyncer;
     private final AuthPreferences authPreferences;
     private final Preferences preferences;
-    private final SharedPreferences sharedPreferences;
     private final ContactAccessor contactAccessor;
     private final TokenRefresher tokenRefresher;
     private final OpenPgpServiceConnection mServiceConnection;
@@ -63,13 +62,12 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     BackupTask(@NonNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
         this.service = service;
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(service);
         this.authPreferences = service.getAuthPreferences();
         this.preferences = service.getPreferences();
 
-        this.fetcher = new BackupItemsFetcher(context,
+        this.fetcher = new BackupItemsFetcher(
                 context.getContentResolver(),
-                new BackupQueryBuilder(sharedPreferences));
+                new BackupQueryBuilder(preferences.getDataTypePreferences()));
 
         PersonLookup personLookup = new PersonLookup(service.getContentResolver());
 
@@ -81,8 +79,8 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             this.mServiceConnection = null;
         }
 
-        this.converter = new MessageConverter(context, preferences, authPreferences.getUserEmail(), personLookup, ContactAccessor.Get.instance(), this.mServiceConnection);
-        this.contactAccessor = ContactAccessor.Get.instance();
+        this.contactAccessor = new ContactAccessor();
+        this.converter = new MessageConverter(context, service.getPreferences(), authPreferences.getUserEmail(), personLookup, contactAccessor, this.mServiceConnection);
 
         if (preferences.isCallLogCalendarSyncEnabled()) {
             calendarSyncer = new CalendarSyncer(
@@ -116,22 +114,26 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         this.contactAccessor = accessor;
         this.tokenRefresher = refresher;
         this.mServiceConnection = serviceConnection;
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(service.getApplicationContext());
     }
 
     @Override
     protected void onPreExecute() {
-        App.bus.register(this);
+        App.register(this);
     }
 
-    @Subscribe public void userCanceled(UserCanceled canceled) {
-        cancel(false);
+    @Subscribe public void canceled(CancelEvent cancelEvent) {
+        if (LOCAL_LOGV) {
+            Log.v(TAG, "canceled("+cancelEvent+")");
+        }
+        cancel(cancelEvent.mayInterruptIfRunning());
     }
 
     @Override protected BackupState doInBackground(BackupConfig... params) {
-        if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
+        if (params == null || params.length == 0) {
+            throw new IllegalArgumentException("No config passed");
+        }
         final BackupConfig config = params[0];
-        if (config.skip) {
+        if (config.backupType == SKIP) {
             return skip(config.typesToBackup);
         } else {
             return acquireLocksAndBackup(config);
@@ -168,8 +170,8 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 if (preferences.isFirstBackup()) {
                     // If this is the first backup we need to write something to MAX_SYNCED_DATE
                     // such that we know that we've performed a backup before.
-                    SMS.setMaxSyncedDate(sharedPreferences, Defaults.MAX_SYNCED_DATE);
-                    MMS.setMaxSyncedDate(sharedPreferences, Defaults.MAX_SYNCED_DATE);
+                    preferences.getDataTypePreferences().setMaxSyncedDate(SMS, MAX_SYNCED_DATE);
+                    preferences.getDataTypePreferences().setMaxSyncedDate(MMS, MAX_SYNCED_DATE);
                 }
                 Log.i(TAG, "Nothing to do.");
                 return transition(FINISHED_BACKUP, null);
@@ -179,6 +181,8 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         } catch (AuthenticationFailedException e) {
             return transition(ERROR, e);
         } catch (MessagingException e) {
+            return transition(ERROR, e);
+        } catch (SecurityException e) {
             return transition(ERROR, e);
         } finally {
             if (cursors != null) {
@@ -214,10 +218,14 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private BackupState skip(Iterable<DataType> types) {
         appLog(R.string.app_log_skip_backup_skip_messages);
         for (DataType type : types) {
-            type.setMaxSyncedDate(sharedPreferences, fetcher.getMostRecentTimestamp(type));
+            try {
+                preferences.getDataTypePreferences().setMaxSyncedDate(type, fetcher.getMostRecentTimestamp(type));
+            } catch (SecurityException e ) {
+                return new BackupState(ERROR, 0, 0, MANUAL, type, e);
+            }
         }
         Log.i(TAG, "All messages skipped.");
-        return new BackupState(FINISHED_BACKUP, 0, 0, BackupType.MANUAL, null, null);
+        return new BackupState(FINISHED_BACKUP, 0, 0, MANUAL, null, null);
     }
 
     private void appLog(int id, Object... args) {
@@ -247,7 +255,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         if (result != null) {
             post(result);
         }
-        App.bus.unregister(this);
+        App.unregister(this);
     }
 
     @Override
@@ -256,12 +264,12 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             this.mServiceConnection.unbindFromService();
         }
         post(transition(CANCELED_BACKUP, null));
-        App.bus.unregister(this);
+        App.unregister(this);
     }
 
     private void post(BackupState state) {
         if (state == null) return;
-        App.bus.post(state);
+        App.post(state);
     }
 
     private BackupState backupCursors(BackupCursors cursors, BackupImapStore store, BackupType backupType, int itemsToSync)
@@ -286,12 +294,12 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                                 messages.size(), cursor.type));
                     }
 
-                    store.getFolder(cursor.type).appendMessages(messages);
+                    store.getFolder(cursor.type, preferences.getDataTypePreferences()).appendMessages(messages);
 
                     if (cursor.type == CALLLOG && calendarSyncer != null) {
                         calendarSyncer.syncCalendar(result);
                     }
-                    cursor.type.setMaxSyncedDate(sharedPreferences, result.getMaxDate());
+                    preferences.getDataTypePreferences().setMaxSyncedDate(cursor.type, result.getMaxDate());
                     backedUpItems += messages.size();
                 } else {
                     Log.w(TAG, "no messages converted");
@@ -311,10 +319,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private void publish(SmsSyncState state) {
-        publish(state, null);
-    }
-
-    private void publish(SmsSyncState state, Exception exception) {
-        publishProgress(service.transition(state, exception));
+        publishProgress(service.transition(state, null));
     }
 }

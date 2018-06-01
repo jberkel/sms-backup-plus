@@ -66,19 +66,16 @@
   <string name="imap_settings">Configuración IMAP</string>
   <string name="ui_login_label">Nombre de usuario</string>
   <string name="ui_login_desc">Su cuenta de Google/dirección de e-mail.</string>
-  <string name="ui_login_dialog_msg">ADVERTENCIA: Cambiar el nombre de usuario restablecerá toda la información de copia de seguridad y su contraseña.</string>
   <string name="ui_password_label">Contraseña</string>
   <string name="ui_password_desc">Su contraseña de cuenta IMAP. Sólo se usa cuando XOAuth está deshabilitado.</string>
   <string name="ui_password_dialog_msg">La contraseña es almacenada en este dispositivo y sólo se utiliza para iniciar sesión en Gmail.</string>
   <string name="ui_server_label">Dirección del servidor</string>
   <string name="ui_server_desc">La dirección del servidor al que desea sincronizar incl. su puerto.</string>
-  <string name="ui_server_dialog_msg">ADVERTENCIA: Cambiar la dirección del servidor restablecerá toda la información de copia de seguridad y su contraseña. Predeterminado para gmail es \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Seguridad</string>
-  <string name="ui_protocol_desc">El protocolo de seguridad del servidor. Predeterminado para gmail es \"SSL (Obligatorio)\"."</string>
+  <string name="ui_protocol_desc">El protocolo de seguridad del servidor.</string>
   <string name="ui_authentication_label">Autenticación</string>
-  <string name="ui_authentication_desc">El método de autenticación. Predeterminado para gmail es \"XOauth\".</string>
+  <string name="ui_authentication_desc">El método de autenticación.</string>
   <string name="plain">Texto legible</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
   <string name="ui_imap_folder_desc">Etiqueta de Gmail asignada a SMS.</string>
@@ -96,7 +93,6 @@
 
   <string name="ui_backup_mms_label">Añadir los MMS</string>
   <string name="ui_backup_mms_desc">Activar la copia de los MMS</string>
-  <string name="ui_backup_mms_not_supported">La copia de los MMS no es soportada en esta plataforma.</string>
 
   <string name="ui_backup_calllog_label">Copiar el registro de llamadas</string>
   <string name="ui_backup_calllog_desc">Activar la copia del registro de llamadas (beta)</string>
@@ -145,7 +141,6 @@
   <string name="ui_dialog_first_sync_title">Primera copia de seguridad</string>
   <string name="ui_dialog_first_sync_msg">Copia de seguridad o saltarse todos los mensajes almacenados actualmente en este dispositivo?</string>
   <string name="ui_dialog_first_sync_msg_batched">¿Copia de seguridad o saltarse todos los mensajes almacenados actualmente en este dispositivo?\n\nNota: La copia de seguridad se dividirá en lotes de %1$d mensajes.</string>
-  <string name="ui_dialog_request_token_msg">Obteniendo token de solicitud...</string>
   <string name="ui_dialog_access_token_msg">Solicitando acceso...</string>
 
   <string name="ui_dialog_access_token_error_title">Fallo de autorización</string>
@@ -154,18 +149,9 @@
 
 
   <string name="ui_dialog_connect_msg">Se abrirá una ventana de navegador, donde usted necesitará iniciar sesión en gmail y autorizar esta aplicación %1$s</string>
-  <string name="ui_dialog_connect_token_error">No se pudo obtener el token de solicitud de Google. Asegúrese de que el teléfono está conectado a internet.</string>
   <string name="ui_dialog_disconnect_msg">¿Está seguro? Necesitará autorizar de nuevo después de desconectar esta cuenta</string>
 
-  <string name="ui_dialog_upgrade_title">Información de actualización</string>
-  <string name="ui_dialog_upgrade_msg">SMS Backup+ es completamente compatible con SMS Backup. Sin embargo asegúrese de que \"Copia de seguridad automática\" está sólo habilitada en una aplicación, de lo contrario podría obtener duplicados. También debe seleccionar \"Saltar\" mensajes para su primera sincronización, si ya ha hecho previamente copia de seguridad de los mensajes en el teléfono.</string>
-
-
-
-  <string name="ui_dialog_brokendroidx_title">Bug SMS de DROID X</string>
-  <string name="ui_dialog_brokendroidx_msg">Hay un bug en el DROID X que impede esta applicacion de copiar los mensajes entrantes. Mas informacion en la FAQ de sitio web.</string>
-
-
+  <!--<string name="ui_dialog_upgrade_title">Información de actualización</string>-->
 
   <string name="ui_sync">Copia de seguridad</string>
   <string name="ui_skip">Saltar</string>
@@ -181,7 +167,6 @@
   <string name="gmail_already_connected">Cuenta de Gmail %1$s conectada (toque para desconectar).</string>
 
   <string name="ui_connected_label">Conectar</string>
-  <string name="ui_connected_desc">Su cuenta necesita ser autorizada.</string>
 
   <string name="email_address_style_name">Nombre</string>
   <string name="email_address_style_name_and_number">Nombre (+00 123456)</string>
@@ -193,9 +178,9 @@
   <string name="_24h">24 h</string>
   <string name="never">Nunca</string>
 
-  <string name="ssl_required">SSL (Obligatorio)</string>
-  <string name="ssl_optional">SSL (Opcional)</string>
-  <string name="tls_required">TLS (Obligatorio)</string>
-  <string name="tls_optional">TLS (Opcional)</string>
-  <string name="none">Ninguno</string>
+  <string name="security_none">Ninguno</string>
+    <string name="_1min">1 min</string>
+    <string name="_3mins">3 mins</string>
+    <string name="_30mins">30 mins</string>
+    <string name="ui_dark_theme_label">Tema oscuro</string>
 </resources>

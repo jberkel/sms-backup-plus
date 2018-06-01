@@ -29,7 +29,7 @@ import static com.zegoggles.smssync.App.TAG;
  */
 public class OAuth2Client {
     private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
-    public static final String TOKEN_URL = "https://www.googleapis.com/oauth2/v3/token";
+    private static final String TOKEN_URL = "https://www.googleapis.com/oauth2/v3/token";
 
     /**
      * When choosing a URI scheme to associate with the app, apps MUST use a
@@ -129,11 +129,11 @@ public class OAuth2Client {
 
     public Uri requestUrl() {
         return Uri.parse(AUTH_URL)
-                .buildUpon()
-                .appendQueryParameter(SCOPE, DEFAULT_SCOPE)
-                .appendQueryParameter(CLIENT_ID, clientId)
-                .appendQueryParameter(RESPONSE_TYPE, "code")
-                .appendQueryParameter(REDIRECT_URI, REDIRECT_URL.toString()).build();
+            .buildUpon()
+            .appendQueryParameter(SCOPE, DEFAULT_SCOPE)
+            .appendQueryParameter(CLIENT_ID, clientId)
+            .appendQueryParameter(RESPONSE_TYPE, "code")
+            .appendQueryParameter(REDIRECT_URI, REDIRECT_URL.toString()).build();
     }
 
     public OAuth2Token getToken(String code) throws IOException {
@@ -242,10 +242,6 @@ public class OAuth2Client {
         xmlReader.setContentHandler(feedHandler);
         xmlReader.parse(new InputSource(inputStream));
         return feedHandler.getEmail();
-    }
-
-    public String getClientId() {
-        return clientId;
     }
 
     private static class FeedHandler extends DefaultHandler {

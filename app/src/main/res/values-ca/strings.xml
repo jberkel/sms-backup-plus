@@ -67,19 +67,16 @@
   <string name="imap_settings">Configuració d\'IMAP</string>
   <string name="ui_login_label">Nom d\'usuari</string>
   <string name="ui_login_desc">Compte IMAP/adreça de correu electrònic.</string>
-  <string name="ui_login_dialog_msg">AVÍS: El canvi del nom d\'usuari pot fer malbé coses en utilitzar XOAuth.</string>
   <string name="ui_password_label">Contrasenya</string>
   <string name="ui_password_desc">La contrasenya del compte IMAP. Només s\'utilitza quan XOAuth està inhabilitat.</string>
   <string name="ui_password_dialog_msg">La contrasenya es desa al dispositiu i només s\'utilitza per iniciar la sessió.</string>
   <string name="ui_server_label">Adreça del servidor</string>
   <string name="ui_server_desc">L\'adreça del servidor de sincronització, incloent el port.</string>
-  <string name="ui_server_dialog_msg">El predeterminat de Gmail és \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Seguretat</string>
-  <string name="ui_protocol_desc">El protocol de seguretat del servidor. El predeterminat de Gmail és \"SSL (Requerit)\"."</string>
+  <string name="ui_protocol_desc">El protocol de seguretat del servidor.</string>
   <string name="ui_authentication_label">Autentificació</string>
-  <string name="ui_authentication_desc">Mètode d\'autentificació. El predeterminat de Gmail és \"XOAuth\".</string>
+  <string name="ui_authentication_desc">Mètode d\'autentificació.</string>
   <string name="plain">Text net</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
   <string name="ui_imap_folder_desc">Etiqueta de Gmail assignada als SMS.</string>
@@ -97,7 +94,6 @@
 
   <string name="ui_backup_mms_label">Còpia d\'MMS</string>
   <string name="ui_backup_mms_desc">Habilita la còpia d\'MMS</string>
-  <string name="ui_backup_mms_not_supported">La còpia d\'MMS no és compatible amb aquesta plataforma.</string>
 
   <string name="ui_backup_calllog_label">Còpia del registre de trucades</string>
   <string name="ui_backup_calllog_desc">Habilita la còpia del registre de trucades</string>
@@ -131,8 +127,6 @@
 
   <string name="sd_card_disclaimer">És possible que la còpia automàtica no funcioni de forma fiable si l\'aplicació està instal·lada a la targeta SD.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">També caldrà que habiliteu les dades en segon pla.</string>
-
   <string name="ui_auto_backup_schedule_label">Planificació regular</string>
   <string name="ui_auto_backup_schedule_desc">Quan s\'han de copiar els SMS</string>
 
@@ -160,7 +154,6 @@
   <string name="ui_dialog_first_sync_title">Primera còpia de seguretat</string>
   <string name="ui_dialog_first_sync_msg">S\'ha de copiar o ignorar tots els missatges que hi ha emmagatzemats actualment al dispositiu?</string>
   <string name="ui_dialog_first_sync_msg_batched">S\'ha de copiar o ignorar tots els missatges que hi ha emmagatzemats actualment al dispositiu?\n\nNota: La còpia es dividirà en lots de %1$d missatges.</string>
-  <string name="ui_dialog_request_token_msg">S\'està contactant amb Google…</string>
   <string name="ui_dialog_access_token_msg">S\'està sol·licitant accés…</string>
 
   <string name="ui_dialog_access_token_error_title">Ha fallat l\'autorització</string>
@@ -169,18 +162,9 @@
   </string>
 
   <string name="ui_dialog_connect_msg">S\'obrirà una finestra del navegador que us demanarà que inicieu la sessió a Gmail per concedir %1$s accés al correu electrònic.</string>
-  <string name="ui_dialog_connect_token_error">No s\'ha pogut aconseguir el testimoni d\'accés de Google. Assegureu-vos que la connexió de xarxa està activa i que l\'hora i la zona horària estan ben configurats.</string>
   <string name="ui_dialog_disconnect_msg">Segur? Caldrà que torneu a autoritzar el compte després de la desconnexió i l\'estat de sincronització local es restablirà.</string>
 
-  <string name="ui_dialog_upgrade_title">Informació d\'actualització</string>
-  <string name="ui_dialog_upgrade_msg">
-   L\'SMS Backup+ és totalment compatible cap enrere amb l\'SMS Backup. Assegureu-vos però que la \"Còpia automàtica\" només està habilitada en una aplicació, en cas contrari us podríeu trobar duplicats. També hauríeu de seleccionar \"Omet\" els missatges per a la primera sincronització si ja s\'ha fet una còpia dels missatges del telèfon.
-  </string>
-
-  <string name="ui_dialog_brokendroidx_title">Error d\'SMS DROID X</string>
-  <string name="ui_dialog_brokendroidx_msg">Hi ha un error al Droid X que
-  no permet que l\'aplicació copiï els missatges d\'entrada. Vegeu les PMFS
-  al lloc web per a més informació.</string>
+  <!--<string name="ui_dialog_upgrade_title">Informació d\'actualització</string>-->
 
   <string name="ui_sync">Copia</string>
   <string name="ui_skip">Omet</string>
@@ -196,7 +180,6 @@
   <string name="gmail_already_connected">Connectat com a %1$s.</string>
 
   <string name="ui_connected_label">Connexió</string>
-  <string name="ui_connected_desc">Cal que el compte estigui connectat.</string>
 
   <string name="call_incoming">trucada entrant</string>
   <string name="call_outgoing">trucada sortint</string>
@@ -211,7 +194,6 @@
 
   <string name="sms_with_field">SMS amb %1$s</string>
   <!-- la línia del tema ha de ser idèntica, en cas contrari s\'embolicaran els fils -->
-  <string name="mms_with_field">@string/sms_with_field</string>
   <string name="call_with_field">Truca amb %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contactes a copiar</string>
@@ -239,11 +221,7 @@
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
 
-  <string name="ssl_required">SSL (Necessari)</string>
-  <string name="ssl_optional">SSL (Opcional)</string>
-  <string name="tls_required">TLS (Necessari)</string>
-  <string name="tls_optional">TLS (Opcional)</string>
-  <string name="none">Cap</string>
+  <string name="security_none">Cap</string>
 
   <string name="ui_third_party_integration_label">Integració amb tercers</string>
   <string name="ui_third_party_integration_desc">Permet que altres aplicacions iniciïn còpies de seguretat mitjançant intents de difusió</string>
@@ -256,7 +234,6 @@
   <!-- <string name="ui_backup_calllog_settings_desc">Configuració del registre de trucades</string> -->
 
   <string name="auto_backup_settings">Configuració de còpia automàtica</string>
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
 
   <string name="ui_restore_settings_label">Configuració de restauració</string>
   <!-- <string name="ui_restore_settings_desc">Configuració de restauració</string> -->
@@ -265,22 +242,13 @@
   <string name="ui_backup_sms_desc">Habilita la còpia dels SMS</string>
 
   <string name="ui_restore_sms_label">Restaura els SMS</string>
-  <string name="ui_restore_sms_desc"/>
-
-  <string name="ui_feature_not_available_yet">(Característica encara no disponible)</string>
-
-  <string name="ui_restore_mms_label">Restaura els MMS</string>
-  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
 
   <string name="ui_restore_calllog_label">Restaura el registre de trucades</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
   <string name="calllog">Registre de trucades</string>
-  <string name="pref_acra_disabled">Inhabilitats</string>
 
-  <string name="app_log_skip_backup_background_data">S\'ha omès perquè les dades en segon pla estan inhabilitades</string>
   <string name="app_log_skip_backup_already_running">S\'ha omès perquè ja s\'està fent una còpia de seguretat</string>
   <string name="app_log_skip_backup_skip_messages">Omet tots els missatges</string>
   <string name="app_log_skip_backup_no_items">S\'ha omès (no s\'ha trobat cap element)</string>
@@ -303,7 +271,7 @@
 
   <string name="pref_app_log">Registre de sincronització</string>
   <string name="pref_app_log_enabled">El registre està desat a la targeta SD com a \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Inhabilitats</string>
 
   <string name="pref_app_log_debug">Informació de depuració addicional</string>
   <string name="pref_app_log_debug_summary">Habilita el registre de depuració addicional al registre de sincronització</string>
@@ -319,8 +287,6 @@
   <string name="ui_dialog_confirm_action_title">Confirmació de l\'acció</string>
   <string name="ui_dialog_confirm_action_msg">Segur que voleu realitzar l\'acció?</string>
 
-  <string name="loading">S\'està carregant…</string>
-  <string name="ssl_error">Error d\'SSL</string>
   <string name="ui_dialog_account_manager_token_error">
       No s\'ha pogut obtenir el testimoni del sistema. Voleu intentar el mètode d\'autentificació pel navegador?
   </string>
@@ -339,4 +305,5 @@
   <string name="donation_error_unavailable">no disponible</string>
   <string name="donation_error_canceled">cancel·lat</string>
   <string name="donation_error_already_owned">ja heu donat anteriorment</string>
+    <string name="ui_dark_theme_label">Tema fosc</string>
 </resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/adaptive_icon_background"/>
+    <foreground>
+        <!-- resized to fit into 66dp circle ("safe zone") inside 108dp square
+             https://medium.com/google-design/designing-adaptive-icons-515af294c783
+        -->
+        <vector xmlns:android="http://schemas.android.com/apk/res/android"
+                android:width="108dp"
+                android:height="108dp"
+                android:viewportWidth="9072"
+                android:viewportHeight="9072">
+
+            <path android:fillColor="#E93D2F" android:pathData="M2660.083 5301.188l980.262 558.041-980.262 551.296z" />
+            <path android:fillColor="#A8251B" android:pathData="M4587.512 5301.188v1109.337h-1927.43z" />
+            <path android:fillColor="#D8D8D8" android:pathData="M3632.334 4533.206l955.178 767.982-969.83 557.602-957.6-557.602z" />
+            <path android:fillColor="#439F06" android:pathData="M3883.43 2864.376c0-145.117 60.374-204.347 208.277-204.347H6202.5c147.903 0 208.28 59.23 208.28 204.347v1663.411c0 145.118-60.377 204.348-208.28 204.348h-1753.34l-466.279 373.217c-14.743 22.165-100.2 89.81-99.145-24.328l-0.307-2216.648z" />
+            <path android:fillColor="#F1F1F1" android:pathData="M5995.678 3160.557v193.547H4298.091v-193.547h1697.587zm0 445.051v193.593H4298.091v-193.593h1697.587zm-585.27 431.825v193.593H4293.69v-193.593h1116.717z" />
+        </vector>
+    </foreground>
+</adaptive-icon>

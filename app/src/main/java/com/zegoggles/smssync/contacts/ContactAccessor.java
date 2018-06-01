@@ -16,61 +16,70 @@
 package com.zegoggles.smssync.contacts;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
-import android.support.annotation.Nullable;
+import android.database.Cursor;
+import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.Groups;
+import com.zegoggles.smssync.R;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public interface ContactAccessor {
-    int EVERYBODY_ID = -1;
+
+public class ContactAccessor {
+    static final int EVERYBODY_ID = -1;
 
     /**
-     * @param context the context
-     * @return the email address of the Android phone owner, or null if not known
-     */
-    @SuppressWarnings("UnusedDeclaration")
-    String getOwnerEmail(Context context);
-
-    /**
-     *
-     * @param resolver the resolver
-     * @param group   the group
-     * @return All contacts from a group
-     */
-    @Nullable ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group);
-
-    /**
-     * All groups a user has
-     *
-     *
-     *
      * @param resolver the resolver
      * @param resources the resources
-     * @return the ids and groups
+     * @return the ids and groups a user has
+     * @throws SecurityException if READ_CONTACTS permission is missing
      */
-    Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources);
+    public Map<Integer, Group> getGroups(ContentResolver resolver, Resources resources) {
+        final Map<Integer, Group> map = new LinkedHashMap<Integer, Group>();
 
-    public static class Get {
-        private static ContactAccessor sContactAccessor;
+        map.put(EVERYBODY_ID, new Group(EVERYBODY_ID, resources.getString(R.string.everybody), 0));
 
-        private Get() {}
+        final Cursor c = resolver.query(
+                Groups.CONTENT_SUMMARY_URI,
+                new String[]{Groups._ID, Groups.TITLE, Groups.SUMMARY_COUNT},
+                null,
+                null,
+                Groups.TITLE + " ASC");
 
-        public static ContactAccessor instance() {
-            final int sdkVersion = Build.VERSION.SDK_INT;
-            if (sContactAccessor == null) {
-                try {
-                    if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
-                        sContactAccessor = new ContactAccessorPre20();
-                    } else {
-                        sContactAccessor = new ContactAccessorPost20();
-                    }
-                } catch (Exception e) {
-                    throw new IllegalStateException(e);
-                }
-            }
-            return sContactAccessor;
+        while (c != null && c.moveToNext()) {
+            map.put(c.getInt(0), new Group(c.getInt(0), c.getString(1), c.getInt(2)));
         }
+
+        if (c != null) c.close();
+        return map;
+    }
+
+    /**
+     * @param resolver the resolver
+     * @param group  the group
+     * @return all contacts from a group
+     * @throws SecurityException if READ_CONTACTS permission is missing
+     */
+    public ContactGroupIds getGroupContactIds(ContentResolver resolver, ContactGroup group) {
+        if (group.isEveryBody()) return null;
+
+        final ContactGroupIds contactIds = new ContactGroupIds();
+        Cursor c = resolver.query(
+                Data.CONTENT_URI,
+                new String[]{
+                        GroupMembership.CONTACT_ID,
+                        GroupMembership.RAW_CONTACT_ID,
+                        GroupMembership.GROUP_ROW_ID
+                },
+                GroupMembership.GROUP_ROW_ID + " = ? AND " + GroupMembership.MIMETYPE + " = ?",
+                new String[]{String.valueOf(group._id), GroupMembership.CONTENT_ITEM_TYPE},
+                null);
+        while (c != null && c.moveToNext()) {
+            contactIds.add(c.getLong(0), c.getLong(1));
+        }
+        if (c != null) c.close();
+        return contactIds;
     }
 }

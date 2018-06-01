@@ -66,19 +66,16 @@
   <string name="imap_settings">Impostazioni IMAP</string>
   <string name="ui_login_label">Username</string>
   <string name="ui_login_desc">Indirizzo email/account IMAP.</string>
-  <string name="ui_login_dialog_msg">ATTENZIONE: Cambiare lo username potrebbe impedire il corretto funzionamento quando si usa XOAuth.</string>
   <string name="ui_password_label">Password</string>
   <string name="ui_password_desc">Password account IMAP. Utilizzata quando XOAuth è disattivato.</string>
   <string name="ui_password_dialog_msg">La password è memorizzata sul dispositivo e verrà usata solo per il login.</string>
   <string name="ui_server_label">Indirizzo server</string>
   <string name="ui_server_desc">Indirizzo del server che vuoi sincronizzare inclusa la porta.</string>
-  <string name="ui_server_dialog_msg">Il predefinito per gmail è \"imap.gmail.com:993\"</string>
   <string name="ui_protocol_label">Sicurezza</string>
-  <string name="ui_protocol_desc">Il protocollo di sicurezza del server. Il predefinito per gmail è \"SSL (Richiesto)\"."</string>
+  <string name="ui_protocol_desc">Il protocollo di sicurezza del server.</string>
   <string name="ui_authentication_label">Autenticazione</string>
-  <string name="ui_authentication_desc">Il metodo di autenticazione. Il predefinito per gmail è \"XOauth\".</string>
+  <string name="ui_authentication_desc">Il metodo di autenticazione.</string>
   <string name="plain">Testo semplice</string>
-  <string name="xoauth">XOAuth2</string>
 
   <string name="ui_imap_folder_label">Etichetta Gmail</string>
   <string name="ui_imap_folder_desc">Etichetta Gmail assegnata agli SMS.</string>
@@ -96,7 +93,6 @@
 
   <string name="ui_backup_mms_label">Backup MMS</string>
   <string name="ui_backup_mms_desc">Abilita backup MMS</string>
-  <string name="ui_backup_mms_not_supported">Il backup MMS non è supportato su questa piattaforma.</string>
 
   <string name="ui_backup_calllog_label">Backup registro chiamate</string>
   <string name="ui_imap_folder_calllog_desc">Etichetta Gmail assegnata al registro chiamate.</string>
@@ -128,8 +124,6 @@
 
   <string name="sd_card_disclaimer">Il salvataggio automatico potrebbe rivelarsi non affidabile se l\'applicazione viene installata su una memoria SD.</string>
 
-  <string name="ui_enable_auto_sync_bg_data">Sarà necessario inoltre abilitare i dati in background.</string>
-
   <string name="ui_auto_backup_schedule_label">Intervalli regolari</string>
   <string name="ui_auto_backup_schedule_desc">Quando salvare gli SMS</string>
 
@@ -156,7 +150,6 @@
   <string name="ui_dialog_first_sync_title">Primo backup</string>
   <string name="ui_dialog_first_sync_msg">Salva o ignora tutti i messaggi attualmente memorizzati su questo dispositivo?</string>
   <string name="ui_dialog_first_sync_msg_batched">Salva o ignora tutti i messaggi attualmente memorizzati su questo dispositivo?\n\nNota: Il backup potrebbe essere diviso in gruppi da %1$d messaggi.</string>
-  <string name="ui_dialog_request_token_msg">Connessione a Google...</string>
   <string name="ui_dialog_access_token_msg">Richiesta accesso...</string>
 
   <string name="ui_dialog_access_token_error_title">Autorizzazione non riuscita</string>
@@ -165,18 +158,9 @@
   </string>
 
   <string name="ui_dialog_connect_msg">Si aprirà una finestra del browser per richiedere il consenso di accesso all\'account Gmail da parte di %1$s per accedere alle email.</string>
-  <string name="ui_dialog_connect_token_error">Impossibile ottenere il token di richiesta da Google. Assicurarsi che la connessione di rete sia attiva.</string>
   <string name="ui_dialog_disconnect_msg">Sei sicuro? Sarà necessario autorizzare nuovamente il tuo account dopo averlo disconnesso e lo stato di sincronizzazione locale sarà resettato.</string>
 
-  <string name="ui_dialog_upgrade_title">Aggiorna informazioni</string>
-  <string name="ui_dialog_upgrade_msg">
-   SMS Backup+ è compatibile al 100%% con SMS Backup. Tuttavia assicurati che \"Backup automatico\" sia abilitato solo su una delle due applicazioni, altrimenti si potrebbero ottenere dei duplicati. Inoltre è necessario selezionare \"Ignora\" messaggi per la tua prima sincronizzazione se i messaggi sul telefono sono già stati salvati precedentemente.
-  </string>
-
-  <string name="ui_dialog_brokendroidx_title">DROID X SMS Bug</string>
-  <string name="ui_dialog_brokendroidx_msg">Questo è un bug del Droid X che
-  impedisce all\' applicazione di effettuare il backup dei messaggi arrivati. Guarda le FAQ
-  sul nostro sito web per maggiori informazioni.</string>
+  <!--<string name="ui_dialog_upgrade_title">Aggiorna informazioni</string>-->
 
   <string name="ui_sync">Backup</string>
   <string name="ui_skip">Ignora</string>
@@ -192,7 +176,6 @@
   <string name="gmail_already_connected">Connesso come %1$s (premere per disconnettersi).</string>
 
   <string name="ui_connected_label">Connessione</string>
-  <string name="ui_connected_desc">Il proprio account deve essere connesso.</string>
 
   <string name="call_incoming">Chiamata in arrivo</string>
   <string name="call_outgoing">Chiamata in uscita</string>
@@ -206,7 +189,6 @@
   <string name="call_duration_field">Durata: %1$s</string>
 
   <string name="sms_with_field">SMS con %1$s</string>
-  <string name="mms_with_field">SMS con %1$s</string>
   <string name="call_with_field">Chiamata con %1$s</string>
 
   <string name="ui_backup_contact_group_label">Contatti da salvare</string>
@@ -234,41 +216,21 @@
   <string name="_3mins">3 min</string>
   <string name="_30mins">30 min</string>
 
-  <string name="ssl_required">SSL (Necessario)</string>
-  <string name="ssl_optional">SSL (Facoltativo)</string>
-  <string name="tls_required">TLS (Necessario)</string>
-  <string name="tls_optional">TLS (Facoltativo)</string>
-  <string name="none">Nessuno</string>
+  <string name="security_none">Nessuno</string>
 
   <string name="ui_third_party_integration_label">Accesso da terze parti</string>
   <string name="ui_third_party_integration_desc">Permetti alle applicazioni esterne di eseguire backup</string>
 
   <!-- new ui -->
   <string name="ui_backup_settings_label">Impostazioni Di Backup</string>
-  <!-- <string name="ui_backup_settings_desc">Backup settings</string> -->
-
   <string name="ui_backup_calllog_settings_label">Impostazioni Registro Chiamate</string>
-  <!-- <string name="ui_backup_calllog_settings_desc">Call log settings</string> -->
-
-  <!-- <string name="auto_backup_settings">Auto-Backup delle impostazioni</string> -->
-  <string name="ui_auto_backup_settings_label">@string/auto_backup_settings</string>
-
   <string name="ui_restore_settings_label">Recupera impostazioni</string>
-  <!-- <string name="ui_restore_settings_desc">Restore settings</string> -->
 
   <string name="ui_backup_sms_label">Backup SMS</string>
   <string name="ui_backup_sms_desc">Abilita il backup degli SMS</string>
 
   <string name="ui_restore_sms_label">Recupera SMS</string>
-  <string name="ui_restore_sms_desc"/>
-
-  <string name="ui_feature_not_available_yet">(Funzione non ancora disponibile)</string>
-
-  <string name="ui_restore_mms_label">Recupera MMS</string>
-  <string name="ui_restore_mms_desc">@string/ui_feature_not_available_yet</string>
-
   <string name="ui_restore_calllog_label">Recupera il Registro chiamate</string>
-  <string name="ui_restore_calllog_desc"/>
 
   <string name="sms">SMS</string>
   <string name="mms">MMS</string>
@@ -278,9 +240,6 @@
   <string name="ui_donation_success_message">Donazione avvenuta con successo, grazie!</string>
   <string name="ui_donation_failure_message">Donazione fallita: %1$s</string>
 
-  <string name="pref_acra_disabled">Disattivato</string>
-
-  <string name="app_log_skip_backup_background_data">Ignorato perchè la connessione dati è disattivata</string>
   <string name="app_log_skip_backup_already_running">Ignorato perchè il backup è in corso</string>
   <string name="app_log_skip_backup_skip_messages">Ignora tutti i messaggi</string>
   <string name="app_log_skip_backup_no_items">Fallito (nessun oggetto trovato)</string>
@@ -302,12 +261,13 @@
 
   <string name="pref_app_log">Sincronizza i log</string>
   <string name="pref_app_log_enabled">I log sono salvati nella memoria SD \"sms_backup_plus.log\".</string>
-  <string name="pref_app_log_disabled">@string/pref_acra_disabled</string>
+  <string name="pref_app_log_disabled">Disattivato</string>
 
   <string name="source_incoming">in corso</string>
   <string name="source_regular">regolare</string>
   <string name="source_3rd_party">di terze parti</string>
   <string name="source_manual">manuale</string>
   <string name="source_unknown">sconosciuto</string>
+    <string name="ui_dark_theme_label">Tema scuro</string>
 
 </resources>
