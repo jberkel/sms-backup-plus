@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="com.zegoggles.smssync"
-          android:description="@string/app_description">
+          android:description="@string/app_description"
+          android:installLocation="auto">
 
     <!-- “dangerous” permissions -->
 
