@@ -35,7 +35,7 @@ class PreferenceTitles {
                 } else if (PREFERENCE_SCREEN.equals(parser.getName()) && parser.getAttributeCount() > 0) {
                     final @StringRes int titleRes = parser.getAttributeResourceValue(NS, "title", 0);
                     final String key = parser.getAttributeValue(NS, "key");
-                    if (titleRes > 0 && key != null) {
+                    if (titleRes != 0 && key != null) {
                         titleResources.put(key, titleRes);
                     }
                 }

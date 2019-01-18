@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="NotificationIconCompatibility" severity="ignore"/>
     <issue id="TypographyEllipsis" severity="ignore"/>
     <issue id="TypographyDashes" severity="ignore"/>
     <issue id="Typos" severity="ignore"/>

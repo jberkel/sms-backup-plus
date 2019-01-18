@@ -29,7 +29,7 @@ class MmsSupport {
     private final PersonLookup personLookup;
     private final ContentResolver resolver;
 
-    MmsSupport(ContentResolver resolver, PersonLookup personLookup) {
+    MmsSupport(@NonNull ContentResolver resolver, @NonNull PersonLookup personLookup) {
         this.resolver = resolver;
         this.personLookup = personLookup;
     }

@@ -17,7 +17,6 @@ package com.zegoggles.smssync.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -49,7 +48,6 @@ import static android.R.drawable.ic_dialog_info;
 import static android.R.string.cancel;
 import static android.R.string.ok;
 import static android.R.string.yes;
-import static android.app.ProgressDialog.STYLE_SPINNER;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static com.zegoggles.smssync.activity.MainActivity.REQUEST_CHANGE_DEFAULT_SMS_PACKAGE;
 import static com.zegoggles.smssync.activity.MainActivity.REQUEST_WEB_AUTH;
@@ -224,13 +222,14 @@ public class Dialogs {
     }
 
     public static class AccessTokenProgress extends BaseFragment {
+        @SuppressWarnings("deprecation")
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // NB: progress dialog is not AppCompat-ready, and will not appear themed
             //     correctly on older devices
-            ProgressDialog progress = new ProgressDialog(getContext());
+            android.app.ProgressDialog progress = new android.app.ProgressDialog(getContext());
             progress.setTitle(null);
-            progress.setProgressStyle(STYLE_SPINNER);
+            progress.setProgressStyle(android.app.ProgressDialog.STYLE_SPINNER);
             progress.setMessage(getString(R.string.ui_dialog_access_token_msg));
             progress.setIndeterminate(true);
             progress.setCancelable(false);

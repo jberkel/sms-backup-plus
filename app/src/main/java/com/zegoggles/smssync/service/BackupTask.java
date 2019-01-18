@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -47,6 +48,7 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.LOGIN;
 
 class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
+    @SuppressLint("StaticFieldLeak")
     private final SmsBackupService service;
     private final BackupItemsFetcher fetcher;
     private final MessageConverter converter;

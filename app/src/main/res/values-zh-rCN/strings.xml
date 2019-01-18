@@ -338,5 +338,4 @@
   </string>
 
   <string name="ui_dark_theme_label">暗色主题</string>
-  <string name="theme_app_relaunch">需要手动重启应用</string>
 </resources>

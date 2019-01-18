@@ -24,7 +24,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -132,6 +131,7 @@ public class App extends Application {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static int getVersionCode(Context context) {
         PackageInfo pInfo;
         try {
@@ -183,14 +183,12 @@ public class App extends Application {
     }
 
     private void setupStrictMode() {
-        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 //                    .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()
-                .penaltyFlashScreen()
-                .build());
-        }
+            .detectDiskWrites()
+            .detectNetwork()
+            .penaltyFlashScreen()
+            .build());
     }
 
     private static class LoggingContentObserver extends ContentObserver {

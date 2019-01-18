@@ -345,5 +345,4 @@
   </string>
 
   <string name="ui_dark_theme_label">어두운 테마</string>
-  <string name="theme_app_relaunch">수동 앱 재실행이 필요함</string>
 </resources>

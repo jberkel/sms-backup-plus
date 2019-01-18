@@ -65,12 +65,25 @@ public class DonationActivity extends ThemeActivity implements
         super.onCreate(savedInstanceState);
         billingClient = BillingClient.newBuilder(this).setListener(this).build();
         billingClient.startConnection(new BillingClientStateListener() {
+
             @Override public void onBillingSetupFinished(@BillingResponse int resultCode) {
                 log("onBillingSetupFinished(" + resultCode + ")" + Thread.currentThread().getName());
+
                 switch (resultCode) {
                     case OK:
                         queryAvailableSkus();
                         break;
+
+                    case BillingResponse.BILLING_UNAVAILABLE:
+                    case BillingResponse.DEVELOPER_ERROR:
+                    case BillingResponse.ERROR:
+                    case BillingResponse.FEATURE_NOT_SUPPORTED:
+                    case BillingResponse.ITEM_ALREADY_OWNED:
+                    case BillingResponse.ITEM_NOT_OWNED:
+                    case BillingResponse.ITEM_UNAVAILABLE:
+                    case BillingResponse.SERVICE_DISCONNECTED:
+                    case BillingResponse.SERVICE_UNAVAILABLE:
+                    case BillingResponse.USER_CANCELED:
                     default:
                         Toast.makeText(DonationActivity.this, R.string.donation_error_iab_unavailable, LENGTH_LONG).show();
                         Log.w(TAG, "Problem setting up in-app billing: " + resultCode);
@@ -130,23 +143,33 @@ public class DonationActivity extends ThemeActivity implements
     public void onPurchasesUpdated(@BillingResponse int responseCode, @Nullable List<Purchase> purchases) {
         log("onPurchasesUpdated(" + responseCode + ", " + purchases + ")");
         String message;
-        if (responseCode == OK) {
-            message = getString(R.string.ui_donation_success_message);
-        } else {
-            switch (responseCode) {
-                case ITEM_UNAVAILABLE:
-                    message = getString(R.string.donation_error_unavailable);
-                    break;
-                case ITEM_ALREADY_OWNED:
-                    message = getString(R.string.donation_error_already_owned);
-                    break;
-                case USER_CANCELED:
-                    message = getString(R.string.donation_error_canceled);
-                    break;
-                default:
-                    message = getString(R.string.donation_unspecified_error, responseCode);
-            }
-            message = getString(R.string.ui_donation_failure_message, message);
+        switch (responseCode) {
+            case OK:
+                message = getString(R.string.ui_donation_success_message);
+                break;
+            case ITEM_UNAVAILABLE:
+                message = getString(R.string.ui_donation_failure_message,
+                          getString(R.string.donation_error_unavailable));
+                break;
+            case ITEM_ALREADY_OWNED:
+                message = getString(R.string.ui_donation_failure_message,
+                          getString(R.string.donation_error_already_owned));
+                break;
+            case USER_CANCELED:
+                message = getString(R.string.ui_donation_failure_message,
+                          getString(R.string.donation_error_canceled));
+                break;
+            case BillingResponse.BILLING_UNAVAILABLE:
+            case BillingResponse.DEVELOPER_ERROR:
+            case BillingResponse.ERROR:
+            case BillingResponse.FEATURE_NOT_SUPPORTED:
+            case BillingResponse.ITEM_NOT_OWNED:
+            case BillingResponse.SERVICE_DISCONNECTED:
+            case BillingResponse.SERVICE_UNAVAILABLE:
+            default:
+                message = getString(R.string.ui_donation_failure_message,
+                          getString(R.string.donation_unspecified_error, responseCode));
+                break;
         }
         Toast.makeText(this, message, LENGTH_LONG).show();
         finish();

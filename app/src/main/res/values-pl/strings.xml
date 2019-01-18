@@ -233,6 +233,5 @@
     <string name="donation_unspecified_error">nieokreślony błąd: %1$d</string>
     <string name="error_no_sms_default_package">Nie wybrano domyślnego pakietu SMS.</string>
     <string name="ui_dialog_sms_default_package_change_title">Wymagana zmiana aplikacji</string>
-    <string name="theme_app_relaunch">Konieczne ponowne ręczne uruchomienie aplikacji</string>
     <string name="ui_dialog_sms_default_package_change_msg">Musisz ustawić SMS Backup+ jako swoją domyślną aplikację do SMS na czas odtwarzania z kopii zapasowej. Po zakończeniu operacji przypomnimy Ci, żeby wrócić do poprzednich ustawień. SMSy otrzymane w trakcie odtwarzania z kopii zostanę dostarczone normalnie, ale nie wygenerują powiadominień.</string>
 </resources>

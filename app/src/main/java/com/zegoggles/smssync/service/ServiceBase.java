@@ -110,9 +110,9 @@ public abstract class ServiceBase extends Service {
     protected synchronized void acquireLocks() {
         if (wakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            wakeLock = pMgr.newWakeLock(wakeLockType(), TAG);
+            wakeLock = pMgr.newWakeLock(wakeLockType(), "com.zegoggles.smssync:"+TAG);
         }
-        wakeLock.acquire();
+        wakeLock.acquire(10*60*1000L /*10 minutes*/);
 
         if (isConnectedViaWifi()) {
             // we have Wifi, lock it
@@ -128,10 +128,8 @@ public abstract class ServiceBase extends Service {
         return PowerManager.PARTIAL_WAKE_LOCK;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
     private int getWifiLockType() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1 ?
-                WifiManager.WIFI_MODE_FULL_HIGH_PERF : WifiManager.WIFI_MODE_FULL;
+        return WifiManager.WIFI_MODE_FULL_HIGH_PERF;
     }
 
     protected synchronized void releaseLocks() {
@@ -180,6 +178,7 @@ public abstract class ServiceBase extends Service {
         return (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
+    @SuppressWarnings("deprecation")
     @NonNull NotificationCompat.Builder createNotification(int resId) {
         return new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.ic_notification)
@@ -217,6 +216,7 @@ public abstract class ServiceBase extends Service {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("deprecation")
     private boolean isConnectedViaWifi_SDK21() {
         for (Network network : getConnectivityManager().getAllNetworks()) {
             final NetworkInfo networkInfo = getConnectivityManager().getNetworkInfo(network);

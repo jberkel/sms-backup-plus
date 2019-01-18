@@ -316,7 +316,6 @@
   <string name="pref_use_old_scheduler_summary">Erzwinge die Benutzung des alten Zeitplaners</string>
   <string name="select_google_account">Wählen Sie ein Google-Konto</string>
   <string name="status_permission_problem">Erlaubnisproblem</string>
-  <string name="theme_app_relaunch">Manueller Neustart der App erforderlich</string>
   <string name="ui_backup_calllog_after_call_desc">Automatisches Sichern nach ein/ausgehendem Anruf</string>
   <string name="ui_backup_calllog_after_call_label">Sichern nach Anruf</string>
   <string name="ui_dialog_sms_default_package_change_title">Benötige Änderung</string>
