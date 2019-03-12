@@ -248,6 +248,9 @@
   <string name="_24h">24 h</string>
   <string name="never">Never</string>
 
+
+  <string name="_5seconds">5 seconds</string>
+  <string name="_10seconds">10 seconds</string>
   <string name="_1min">1 min</string>
   <string name="_3mins">3 mins</string>
   <string name="_30mins">30 mins</string>
