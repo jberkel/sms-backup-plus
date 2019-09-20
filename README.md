@@ -1,9 +1,6 @@
 # SMS Backup+ <img src="https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/metadata/play/assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/> [![Build Status SVG][]][Build Status] [![Open Source Helpers](https://www.codetriage.com/jberkel/sms-backup-plus/badges/users.svg)](https://www.codetriage.com/jberkel/sms-backup-plus)
 
-<a href="https://play.google.com/store/apps/details?id=com.zegoggles.smssync">
-    <img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/> </a> &nbsp; <a href="https://f-droid.org/packages/com.zegoggles.smssync/">
-    <img alt="Get it on F-Droid" src="https://jberkel.github.io/sms-backup-plus/assets/img/f-droid-badge.svg" height="80pt"/>
-</a>
+[<img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/>](https://play.google.com/store/apps/details?id=com.zegoggles.smssync) [<img alt="Get it on F-Droid" src="https://jberkel.github.io/sms-backup-plus/assets/img/f-droid-badge.svg" height="80pt"/>](https://f-droid.org/packages/com.zegoggles.smssync/)
 
 This is a fork of the now defunct Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms). It uses Gmail/IMAP to perform SMS, MMS and call log backups over
@@ -12,12 +9,12 @@ the network.
 Main features/improvements:
 
   * Restore. SMS/Call logs stored on Gmail can be transferred back to the phone.
-    ⚠️ MMS are not restored.
+    * ⚠️ MMS are not restored.
 
   * Security. SMS Backup+ does not need your Gmail password.
     * Where possible, SMS Backup+ uses [XOAuth2], including when matching phone numbers against
       contact names, and writing call log records into your calendar. This access can be revoked at any time.
-    * In June 2019 Google [changed their API policy], introducing [sensitivity scopes], and
+    * ⚠️ In June 2019 Google [changed their API policy], introducing [sensitivity scopes], and
       as a result SMS Backup+ [can no longer use XOAuth2] to save messages into your mailbox;
       instead a "password" is required to access Gmail via IMAP, but it can be a generated
       application password (which can be revoked without affecting your real password).
@@ -31,14 +28,14 @@ Main features/improvements:
 
 Tested with Android 2.3.x (Gingerbread) - 8.1.x. (Oreo)
 
-SMS Backup+ is available for free in the [Google Play Store][] and on [F-Droid][],
+SMS Backup+ is available for free in the [Google Play Store] and on [F-Droid],
 there will never be a pro / paid version.
 
 But if you find the app useful and want to support its development you can make a donation
 using the secure in-app Play Store payment mechanism.
 
 To get updates more frequently join the [beta programme](#beta) or download the latest beta manually
-from [Github releases][].
+from [Github releases].
 
 Also make sure to read the [Privacy Policy][].
 
