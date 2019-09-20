@@ -11,17 +11,21 @@ the network.
 
 Main features/improvements:
 
-  * Restore. SMS/Call logs stored on Gmail can be transferred back to the
-  phone. ⚠️ MMS are not restored.
+  * Restore. SMS/Call logs stored on Gmail can be transferred back to the phone.
+    ⚠️ MMS are not restored.
 
-  * Security. SMS Backup+ will never ask you for your Gmail password. Instead it
-  uses [XOAuth2](https://developers.google.com/gmail/imap/xoauth2-protocol) to get access to your
-  data. You can revoke the access rights at any time.
+  * Security. SMS Backup+ does not need your Gmail password.
+    * Where possible, SMS Backup+ uses [XOAuth2], including when matching phone numbers against
+      contact names, and writing call log records into your calendar. This access can be revoked at any time.
+    * In June 2019 Google [changed their API policy], introducing [sensitivity scopes], and
+      as a result SMS Backup+ [can no longer use XOAuth2] to save messages into your mailbox;
+      instead a "password" is required to access Gmail via IMAP, but it can be a generated
+      application password (which can be revoked without affecting your real password).
 
   * MMS backup support (added in version 1.1)
 
   * Call log backup (version 1.2), with Google Calendar integration
-  (1.3) and restore (1.4).
+    (1.3) and restore (1.4).
 
   * Works with any IMAP server (but defaults to Gmail).
 
@@ -467,6 +471,11 @@ This application is released under the terms of the [Apache License, Version 2.0
 
 [Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
 [Build Status SVG]: https://api.travis-ci.org/jberkel/sms-backup-plus.svg?branch=master
+
+[XOAuth2]: https://developers.google.com/gmail/imap/xoauth2-protocol
+[changed their API policy]: https://cloud.google.com/blog/products/g-suite/elevating-user-trust-in-our-api-ecosystems
+[sensitivity scopes]: https://developers.google.com/gmail/api/auth/scopes
+[can no longer use XOAuth2]: https://arstechnica.com/gadgets/2019/06/gmails-api-lockdown-will-kill-some-third-party-app-access-starting-july-15/
 
 [Google Play Store]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [F-Droid]: https://f-droid.org/packages/com.zegoggles.smssync/
