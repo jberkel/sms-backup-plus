@@ -5,8 +5,7 @@
         <!-- resized to fit into 66dp circle ("safe zone") inside 108dp square
              https://medium.com/google-design/designing-adaptive-icons-515af294c783
         -->
-        <vector xmlns:android="http://schemas.android.com/apk/res/android"
-                android:width="108dp"
+        <vector android:width="108dp"
                 android:height="108dp"
                 android:viewportWidth="9072"
                 android:viewportHeight="9072">
