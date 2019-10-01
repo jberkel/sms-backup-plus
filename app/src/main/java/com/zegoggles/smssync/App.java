@@ -16,6 +16,7 @@
 
 package com.zegoggles.smssync;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import com.fsck.k9.mail.K9MailLib;
 import com.squareup.otto.Bus;
@@ -86,7 +88,9 @@ public class App extends Application {
 
         if (gcmAvailable && DEBUG) {
             getContentResolver().registerContentObserver(Consts.SMS_PROVIDER, true, new LoggingContentObserver());
-            getContentResolver().registerContentObserver(Consts.CALLLOG_PROVIDER, true, new LoggingContentObserver());
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
+                getContentResolver().registerContentObserver(Consts.CALLLOG_PROVIDER, true, new LoggingContentObserver());
+            }
         }
         register(this);
     }
