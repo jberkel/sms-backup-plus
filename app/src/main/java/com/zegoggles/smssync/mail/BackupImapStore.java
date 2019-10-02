@@ -18,7 +18,7 @@ package com.zegoggles.smssync.mail;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.FetchProfile;

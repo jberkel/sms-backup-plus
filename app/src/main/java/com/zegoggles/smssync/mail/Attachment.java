@@ -2,7 +2,7 @@ package com.zegoggles.smssync.mail;
 
 import android.content.ContentResolver;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.Body;

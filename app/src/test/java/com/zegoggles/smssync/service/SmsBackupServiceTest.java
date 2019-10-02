@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.contacts.ContactGroup;

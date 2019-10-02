@@ -1,13 +1,14 @@
 package com.zegoggles.smssync.activity.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.Preference.OnPreferenceChangeListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.Preference.OnPreferenceChangeListener;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -376,7 +377,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             preference.setTitle(imapFolder);
             return true;
         } else {
-            INVALID_IMAP_FOLDER.instantiate(getActivity(), null).show(getFragmentManager(), null);
+            INVALID_IMAP_FOLDER.instantiate(getActivity().getSupportFragmentManager(), null).show(getFragmentManager(), null);
             return false;
         }
     }

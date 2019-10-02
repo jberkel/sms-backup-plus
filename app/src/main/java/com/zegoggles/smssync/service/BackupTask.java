@@ -3,7 +3,7 @@ package com.zegoggles.smssync.service;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.Message;

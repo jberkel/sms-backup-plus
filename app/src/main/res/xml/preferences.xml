@@ -12,7 +12,7 @@
             custom:statusError="@color/accent_dark"
     />
 
-    <android.support.v7.preference.SwitchPreferenceCompat
+    <androidx.preference.SwitchPreferenceCompat
             android:key="connected"
             android:title="@string/ui_connected_label"
             android:defaultValue="off"/>
@@ -310,7 +310,7 @@
             </PreferenceCategory>
         </PreferenceScreen>
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
                 android:key="dark_theme"
                 android:title="@string/ui_dark_theme_label"
                 android:defaultValue="off"

@@ -1,6 +1,6 @@
 package com.zegoggles.smssync.service;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;

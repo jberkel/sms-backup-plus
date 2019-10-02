@@ -10,12 +10,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
@@ -95,8 +96,13 @@ public class AccountManagerAuthActivity extends ThemeActivity {
             finish();
         } else {
             Bundle args = new BundleBuilder().putParcelableArray(ACCOUNTS, accounts).build();
-            ((DialogFragment)Fragment.instantiate(this, AccountDialogs.class.getName(), args))
-                    .show(getSupportFragmentManager(), null);
+
+            Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
+                    getClassLoader(),
+                    AccountDialogs.class.getName()
+            );
+            fragment.setArguments(args);
+            ((DialogFragment) fragment).show(getSupportFragmentManager(), null);
         }
     }
 

@@ -18,6 +18,8 @@ package com.zegoggles.smssync;
 
 import android.Manifest;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -25,10 +27,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import com.fsck.k9.mail.K9MailLib;
 import com.squareup.otto.Bus;
@@ -49,6 +54,7 @@ public class App extends Application {
     public static final boolean LOCAL_LOGV = DEBUG;
     public static final String TAG = "SMSBackup+";
     public static final String LOG = "sms_backup_plus.log";
+    public static final String CHANNEL_ID = "sms_backup_plus";
 
     private static final Bus bus = new Bus();
     /** Google Play Services present on this device? */
@@ -64,6 +70,10 @@ public class App extends Application {
         gcmAvailable = GooglePlayServices.isAvailable(this);
         preferences = new Preferences(this);
         preferences.migrate();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel();
+        }
 
         backupJobs = new BackupJobs(this);
 
@@ -156,6 +166,14 @@ public class App extends Application {
             Log.e(TAG, "error", e);
             return false;
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createNotificationChannel() {
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                "default",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManagerCompat.from(this).createNotificationChannel(channel);
     }
 
     private void setBroadcastReceiversEnabled(boolean enabled) {

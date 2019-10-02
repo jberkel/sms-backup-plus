@@ -24,11 +24,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialogFragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentFactory;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -77,8 +80,12 @@ public class Dialogs {
             this.fragment = fragment;
         }
 
-        public BaseFragment instantiate(Context context, @Nullable Bundle args) {
-            return (BaseFragment) Fragment.instantiate(context, fragment.getName(), args);
+        public BaseFragment instantiate(FragmentManager fragmentManager, @Nullable Bundle args) {
+            Fragment fragment = fragmentManager.getFragmentFactory().instantiate(
+                    getClass().getClassLoader(),
+                    this.fragment.getName());
+            fragment.setArguments(args);
+            return (BaseFragment) fragment;
         }
     }
 

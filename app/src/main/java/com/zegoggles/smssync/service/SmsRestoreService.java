@@ -3,8 +3,8 @@ package com.zegoggles.smssync.service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
@@ -24,6 +24,7 @@ import com.zegoggles.smssync.service.state.RestoreState;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import static com.zegoggles.smssync.App.CHANNEL_ID;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.compat.SmsReceiver.isSmsBackupDefaultSmsApp;
@@ -33,6 +34,7 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 
 public class SmsRestoreService extends ServiceBase {
     private static final int RESTORE_ID = 2;
+
 
     @NonNull private RestoreState state = new RestoreState();
     @Nullable private static SmsRestoreService service;
@@ -142,6 +144,7 @@ public class SmsRestoreService extends ServiceBase {
                     .setContentTitle(getString(R.string.status_restore))
                     .setContentText(state.getNotificationLabel(getResources()))
                     .setContentIntent(getPendingIntent(null))
+                    .setChannelId(CHANNEL_ID)
                     .build();
 
             startForeground(RESTORE_ID, notification);

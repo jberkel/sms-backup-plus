@@ -1,13 +1,14 @@
 package com.zegoggles.smssync.activity.fragments;
 
 import android.os.Bundle;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.Preference.OnPreferenceChangeListener;
-import android.support.v7.preference.TwoStatePreference;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.TwoStatePreference;
+
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
@@ -60,7 +61,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
         checkUserDonationStatus();
         updateAutoBackupPreferences();
-        updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        updateConnected().setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object change) {
                 App.post(new AccountConnectionChangedEvent((Boolean) change));
                 return false; // will be set later

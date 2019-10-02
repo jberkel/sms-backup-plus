@@ -3,8 +3,8 @@ package com.zegoggles.smssync.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import com.zegoggles.smssync.R;
 
@@ -64,7 +64,7 @@ public enum AppPermission {
      * with the user is interrupted. In this case you will receive empty permissions
      * and results arrays which should be treated as a cancellation.“
      *
-     * {@link android.support.v4.app.FragmentActivity#onRequestPermissionsResult(int, String[], int[])}
+     * {@link androidx.core.app.FragmentActivity#onRequestPermissionsResult(int, String[], int[])}
      */
     public static boolean allGranted(@NonNull int[] grantResults) {
         if (grantResults.length == 0) {

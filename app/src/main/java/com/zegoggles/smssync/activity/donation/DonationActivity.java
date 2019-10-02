@@ -2,7 +2,7 @@ package com.zegoggles.smssync.activity.donation;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 import com.android.billingclient.api.BillingClient;

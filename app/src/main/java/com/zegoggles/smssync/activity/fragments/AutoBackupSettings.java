@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.activity.fragments;
 
-import android.support.v7.preference.Preference;
+import androidx.preference.Preference;
+
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 

@@ -1,6 +1,6 @@
 package com.zegoggles.smssync.mail;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.fsck.k9.mail.Message;
 
 public final class Headers {

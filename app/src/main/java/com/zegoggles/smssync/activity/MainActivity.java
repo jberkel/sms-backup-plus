@@ -21,20 +21,18 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony.Sms;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentManager.BackStackEntry;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback;
-import android.support.v7.preference.PreferenceFragmentCompat.OnPreferenceStartScreenCallback;
-import android.support.v7.preference.PreferenceScreen;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -69,11 +67,10 @@ import com.zegoggles.smssync.utils.BundleBuilder;
 import java.util.Arrays;
 import java.util.List;
 
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
 import static android.provider.Telephony.Sms.Intents.EXTRA_PACKAGE_NAME;
-import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
+import static androidx.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.App.post;
@@ -107,8 +104,8 @@ import static com.zegoggles.smssync.service.BackupType.SKIP;
  * providing controls to configure it.
  */
 public class MainActivity extends ThemeActivity implements
-        OnPreferenceStartFragmentCallback,
-        OnPreferenceStartScreenCallback,
+        PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
+        PreferenceFragmentCompat.OnPreferenceStartScreenCallback,
         FragmentManager.OnBackStackChangedListener {
     static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
@@ -131,7 +128,7 @@ public class MainActivity extends ThemeActivity implements
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
@@ -240,10 +237,11 @@ public class MainActivity extends ThemeActivity implements
         if (LOCAL_LOGV) {
             Log.v(TAG, "onPreferenceStartFragment(" + preference + ")");
         }
-        final Fragment fragment = Fragment.instantiate(
-            this,
-            preference.getFragment(),
-            new BundleBuilder().putInt(SCREEN_TITLE_RES, preferenceTitles.getTitleRes(preference.getKey())).build());
+
+        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
+                getClassLoader(),
+                preference.getFragment());
+        fragment.setArguments(new BundleBuilder().putInt(SCREEN_TITLE_RES, preferenceTitles.getTitleRes(preference.getKey())).build());
 
         showFragment(fragment, preference.getKey());
         return true;
@@ -324,7 +322,7 @@ public class MainActivity extends ThemeActivity implements
         if (entryCount == 0) {
             return 0;
         } else {
-            final BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(entryCount - 1);
+            final FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(entryCount - 1);
             return entry.getBreadCrumbTitleRes();
         }
     }
@@ -425,7 +423,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     private void showDialog(@NonNull Dialogs.Type dialog, @Nullable Bundle args) {
-        dialog.instantiate(this, args).show(getSupportFragmentManager(), dialog.name());
+        dialog.instantiate(getSupportFragmentManager(), args).show(getSupportFragmentManager(), dialog.name());
     }
 
     private void requestDefaultSmsPackageChange() {

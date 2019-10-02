@@ -2,9 +2,9 @@ package com.zegoggles.smssync.activity;
 
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.annotation.XmlRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.annotation.XmlRes;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

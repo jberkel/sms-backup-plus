@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
 import android.provider.Telephony.Sms;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import com.zegoggles.smssync.Consts;

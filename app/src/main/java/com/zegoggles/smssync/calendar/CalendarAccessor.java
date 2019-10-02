@@ -2,7 +2,7 @@ package com.zegoggles.smssync.calendar;
 
 import android.content.ContentResolver;
 import android.os.Build;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Date;
 import java.util.Map;

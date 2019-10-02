@@ -1,7 +1,7 @@
 package com.zegoggles.smssync.service.state;
 
 import android.content.res.Resources;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.MessagingException;
