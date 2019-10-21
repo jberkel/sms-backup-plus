@@ -144,7 +144,6 @@ public class SmsRestoreService extends ServiceBase {
                     .setContentTitle(getString(R.string.status_restore))
                     .setContentText(state.getNotificationLabel(getResources()))
                     .setContentIntent(getPendingIntent(null))
-                    .setChannelId(CHANNEL_ID)
                     .build();
 
             startForeground(RESTORE_ID, notification);

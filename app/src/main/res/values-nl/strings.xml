@@ -75,8 +75,6 @@
 
   <string name="ui_settings_advanced_label">Geavanceerde instellingen</string>
   <string name="ui_settings_advanced_desc">Stel geavanceerde instellingen in.</string>
-  <string name="ui_settings_advanced_server_label">IMAP-serverinstellingen</string>
-  <string name="ui_settings_advanced_server_desc">Niet veranderen tenzij u weet wat u doet!</string>
 
   <string name="imap_settings">IMAP-instellingen</string>
   <string name="ui_login_label">Gebruikersnaam</string>
@@ -88,18 +86,15 @@
   <string name="ui_server_desc">Het adres van de server waarmee u wilt synchroniseren, de poort incluis.</string>
 
   <string name="ui_protocol_label">Beveiliging</string>
-  <string name="ui_protocol_desc">Het beveiligingsprotocol van de server.</string>
 
   <string name="ui_protocol_trust_all_certificates_label">Alle certificaten vertrouwen</string>
   <string name="ui_protocol_trust_all_certificates_desc">Niet aanbevolen. Zet aan voor een server met zelf-getekend certificaat.</string>
 
   <string name="ui_authentication_label">Authenticatie</string>
-  <string name="ui_authentication_desc">De authenticatiemethode \"XOAuth\" is de standaard voor Gmail.</string>
   <string name="plain">Gewone tekst</string>
 
 
   <string name="ui_imap_folder_label">Gmail-label</string>
-  <string name="ui_imap_folder_desc">Gmail-label voor sms.</string>
   <string name="ui_imap_folder_label_dialog_msg">Geback-upte sms\'en zullen dit label krijgen im Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Voorvoegsel e-mailonderwerp</string>
   <string name="ui_mail_subject_prefix_desc">Gebruik IMAP-mapnaam als voorvoegsel in e-mailonderwerp</string>
@@ -128,7 +123,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Agenda voor gesprekkenlijst</string>
 
   <string name="ui_imap_folder_calllog_label">Gesprekkenlijstlabel</string>
-  <string name="ui_imap_folder_calllog_desc">Gmail-label voor gesprekkenlijst.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Geback-upte gesprekkenlijsten zullen dit label krijgen in Gmail.</string>
 
   <string name="ui_backup_calllog_after_call_label">Back-up na oproep</string>

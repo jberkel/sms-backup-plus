@@ -11,7 +11,7 @@ import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.preferences.Preferences;
 
-public class SMSBackupPreferenceFragment extends PreferenceFragmentCompat {
+public abstract class SMSBackupPreferenceFragment extends PreferenceFragmentCompat {
     protected Preferences preferences;
     private Handler handler;
 

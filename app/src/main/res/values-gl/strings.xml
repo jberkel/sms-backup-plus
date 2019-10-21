@@ -72,8 +72,6 @@
 
   <string name="ui_settings_advanced_label">Configuración avanzada</string>
   <string name="ui_settings_advanced_desc">Establecer preferencias avanzadas.</string>
-  <string name="ui_settings_advanced_server_label">Servidor IMAP personalizado</string>
-  <string name="ui_settings_advanced_server_desc">Non cambiar a menos que saiba o que está a facer!</string>
 
   <string name="imap_settings">Configuración IMAP</string>
   <string name="ui_login_label">Nome de usuario</string>
@@ -85,17 +83,14 @@
   <string name="ui_server_desc">O enderezo do servidor, incluíndo o porto.</string>
 
   <string name="ui_protocol_label">Seguridade</string>
-  <string name="ui_protocol_desc">O protocolo de seguridade do servidor.</string>
 
   <string name="ui_protocol_trust_all_certificates_label">Confiar en todos os certificados</string>
   <string name="ui_protocol_trust_all_certificates_desc">Non se recomenda. Activar para un servidor con certificado autoasinado.</string>
 
   <string name="ui_authentication_label">Autenticación</string>
-  <string name="ui_authentication_desc">O método de autenticación.</string>
   <string name="plain">Texto plano</string>
 
   <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
-  <string name="ui_imap_folder_desc">A etiqueta de Gmail asignada ás SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">As SMS gardadas serán etiquetadas en GMail con este texto.</string>
   <string name="ui_mail_subject_prefix_label">Prefixo do asunto do correo electrónico</string>
   <string name="ui_mail_subject_prefix_desc">Usar como prefixo o nome do directorio IMAP no asunto do correo electrónico</string>
@@ -124,7 +119,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Calendario que se usará para o historial de chamadas</string>
 
   <string name="ui_imap_folder_calllog_label">Etiqueta do historial de chamadas</string>
-  <string name="ui_imap_folder_calllog_desc">Etiqueta Gmail asignada ao historial de chamadas.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">As entradas gardadas do historial de chamadas etiquetaranse en GMail con este texto.</string>
 
   <string name="ui_backup_calllog_after_call_label">Gardar despois das chamadas</string>

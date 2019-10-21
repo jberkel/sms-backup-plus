@@ -73,8 +73,6 @@
 
   <string name="ui_settings_advanced_label">進階設定</string>
   <string name="ui_settings_advanced_desc">設定進階參數。</string>
-  <string name="ui_settings_advanced_server_label">IMAP 伺服器設定</string>
-  <string name="ui_settings_advanced_server_desc">除非你知道該怎麼做，否則請勿變更這些設定！</string>
 
   <string name="imap_settings">IMAP 設定</string>
   <string name="ui_login_label">登入名稱</string>
@@ -86,17 +84,14 @@
   <string name="ui_server_desc">你想要進行同步的伺服器地址及其連接埠。</string>
 
   <string name="ui_protocol_label">安全性</string>
-  <string name="ui_protocol_desc">伺服器的安全協定。</string>
 
   <string name="ui_protocol_trust_all_certificates_label">信任所有憑證</string>
   <string name="ui_protocol_trust_all_certificates_desc">不推薦。用以允許一個使用自簽憑證的伺服器。</string>
 
   <string name="ui_authentication_label">身份驗證</string>
-  <string name="ui_authentication_desc">身份驗證方法。Gmail 的預設為“XOAuth”。</string>
   <string name="plain">明文</string>
 
   <string name="ui_imap_folder_label">Gmail 標籤</string>
-  <string name="ui_imap_folder_desc">套用到簡訊的 Gmail 標籤。</string>
   <string name="ui_imap_folder_label_dialog_msg">備份的簡訊將會在 Gmail 中套用此標籤。</string>
   <string name="ui_mail_subject_prefix_label">電郵主旨前綴</string>
   <string name="ui_mail_subject_prefix_desc">使用 IMAP 資料夾名稱作為電郵主旨的前綴。</string>
@@ -125,7 +120,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">用於通話記錄的日曆</string>
 
   <string name="ui_imap_folder_calllog_label">通話記錄標籤</string>
-  <string name="ui_imap_folder_calllog_desc">套用到通話記錄的 Gmail 標籤。</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">備份的通話記錄將會在 Gmail 中套用此標籤。</string>
 
   <string name="ui_backup_calllog_after_call_label">通話后備份</string>

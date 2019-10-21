@@ -61,8 +61,6 @@
 
   <string name="ui_settings_advanced_label">Paramètres avancés</string>
   <string name="ui_settings_advanced_desc">Définir les réglages avancés</string>
-  <string name="ui_settings_advanced_server_label">Paramètres de serveur</string>
-  <string name="ui_settings_advanced_server_desc">Ne pas modifier si vous ne vous y connaissez pas !</string>
 
   <string name="imap_settings">Paramètres IMAP</string>
   <string name="ui_login_label">Nom d\'utilisateur</string>
@@ -73,13 +71,10 @@
   <string name="ui_server_label">Adresse du serveur</string>
   <string name="ui_server_desc">L\'adresse du serveur auquel vous voulez synchroniser votre appareil, ainsi que le port désiré.</string>
   <string name="ui_protocol_label">Sécurité</string>
-  <string name="ui_protocol_desc">Le protocole de sécurité utilisé par le serveur.</string>
   <string name="ui_authentication_label">Authentification</string>
-  <string name="ui_authentication_desc">Méthode d\'authentification.</string>
   <string name="plain">Texte simple</string>
 
   <string name="ui_imap_folder_label">Libellé Gmail</string>
-  <string name="ui_imap_folder_desc">Le libellé Gmail associé aux SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Les SMS sauvegardés seront classés avec ce libellé dans Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Préfixe dans le sujet de l\'email</string>
   <string name="ui_mail_subject_prefix_desc">Utiliser le nom du dossier IMAP comme préfixe dans le sujet de l\'email</string>
@@ -108,7 +103,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Calendrier utilisé pour le journal d\'appels.</string>
 
   <string name="ui_imap_folder_calllog_label">Libellé du journal d\'appels</string>
-  <string name="ui_imap_folder_calllog_desc">Libellé Gmail pour les appels.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Les appels sauvegardées seront classés avec ce libellé dans Gmail.</string>
 
   <string name="ui_mark_as_read_label">Marquer comme lus (e-mails)</string>

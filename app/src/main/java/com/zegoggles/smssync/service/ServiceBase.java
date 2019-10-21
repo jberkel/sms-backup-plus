@@ -46,6 +46,7 @@ import com.zegoggles.smssync.utils.AppLog;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.net.ConnectivityManager.TYPE_WIFI;
+import static com.zegoggles.smssync.App.CHANNEL_ID;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static java.util.Locale.ENGLISH;
@@ -183,6 +184,7 @@ public abstract class ServiceBase extends Service {
         return new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.ic_notification)
             .setTicker(getString(resId))
+            .setChannelId(CHANNEL_ID)
             .setWhen(System.currentTimeMillis())
             .setOngoing(true);
     }

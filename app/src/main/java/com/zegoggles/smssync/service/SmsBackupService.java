@@ -269,7 +269,6 @@ public class SmsBackupService extends ServiceBase {
         notification = builder.setContentTitle(getString(R.string.status_backup))
                 .setContentText(state.getNotificationLabel(getResources()))
                 .setContentIntent(getPendingIntent(null))
-                .setChannelId(CHANNEL_ID)
                 .build();
         startForeground(BACKUP_ID, notification);
     }
@@ -296,6 +295,7 @@ public class SmsBackupService extends ServiceBase {
     private NotificationCompat.Builder notificationBuilder(int icon, String title, String text) {
         return new NotificationCompat.Builder(this)
             .setSmallIcon(icon)
+            .setChannelId(CHANNEL_ID)
             .setWhen(System.currentTimeMillis())
             .setOnlyAlertOnce(true)
             .setAutoCancel(true)

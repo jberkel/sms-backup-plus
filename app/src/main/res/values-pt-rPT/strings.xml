@@ -42,8 +42,6 @@
   <string name="status_gmail_temp_error">Erro temporário no IMAP do Gmail, por favor tente mais tarde.</string>
   <string name="ui_settings_advanced_label">Configurações avançadas</string>
   <string name="ui_settings_advanced_desc">Configurar definições avançadas</string>
-  <string name="ui_settings_advanced_server_label">Definições do servidor</string>
-  <string name="ui_settings_advanced_server_desc">Só alterar se tiver conhecimentos para o fazer!</string>
   <string name="imap_settings">Definições de IMAP</string>
   <string name="ui_login_label">Utilizador</string>
   <string name="ui_login_desc">Nome de utilizador/e-mail da sua conta IMAP.</string>
@@ -53,12 +51,9 @@
   <string name="ui_server_label">Endereço do servidor</string>
   <string name="ui_server_desc">Endereço do servidor e porta com o qual pretende sincronizar.</string>
   <string name="ui_protocol_label">Segurança</string>
-  <string name="ui_protocol_desc">Protocolo de segurança do servidor.</string>
   <string name="ui_authentication_label">Autenticação</string>
-  <string name="ui_authentication_desc">Método de autenticação.</string>
   <string name="plain">Texto simples</string>
   <string name="ui_imap_folder_label">Marcador no Gmail</string>
-  <string name="ui_imap_folder_desc">Marcador no Gmail atribuído às SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">A cópia das SMS terão este marcador no Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Prefixo no assunto do email</string>
   <string name="ui_mail_subject_prefix_desc">Utilizar o nome da pasta IMAP como prefixo no assunto do email.</string>
@@ -79,7 +74,6 @@
   <string name="ui_backup_calllog_sync_calendar_label">Nenhum</string>
   <string name="ui_backup_calllog_sync_calendar_desc">Usar o Calendário para o registo de chamadas</string>
   <string name="ui_imap_folder_calllog_label">Marcador do registo de chamadas</string>
-  <string name="ui_imap_folder_calllog_desc">Marcador escolhido para o registo de chamadas no Gmail.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">A cópia de segurança do registo de chamadas terá este marcador no Gmail.</string>
   <string name="ui_mark_as_read_label">Marcar como lidas (emails)</string>
   <string name="ui_mark_as_read_desc">Marcar ou não as cópias das SMS como lidas no Gmail.</string>

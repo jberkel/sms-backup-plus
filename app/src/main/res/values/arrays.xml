@@ -122,15 +122,15 @@
   </string-array>
 
   <string-array name="server_authentication_entries">
-    <item>@string/xoauth</item>
     <item>@string/plain</item>
+    <item>@string/xoauth</item>
   </string-array>
 
   <string name="xoauth_value" translatable="false">xoauth</string>
   <string name="plain_value" translatable="false">plain</string>
 
   <string-array name="server_authentication_values">
-    <item>@string/xoauth_value</item>
     <item>@string/plain_value</item>
+    <item>@string/xoauth_value</item>
   </string-array>
 </resources>

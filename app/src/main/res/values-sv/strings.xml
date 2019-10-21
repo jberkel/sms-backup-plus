@@ -73,8 +73,6 @@
 
   <string name="ui_settings_advanced_label">Avancerad inställningar</string>
   <string name="ui_settings_advanced_desc">Ställ in avancerade inställningar.</string>
-  <string name="ui_settings_advanced_server_label">Anpassad IMAP-server</string>
-  <string name="ui_settings_advanced_server_desc">Ändra inte såvida du inte vet vad du gör!</string>
 
   <string name="imap_settings">IMAP-inställningar</string>
   <string name="ui_login_label">Användarnamn</string>
@@ -86,17 +84,14 @@
   <string name="ui_server_desc">Adressen till servern, inkl. dess port.</string>
 
   <string name="ui_protocol_label">Säkerhet</string>
-  <string name="ui_protocol_desc">Säkerhetsprotokollet för servern.</string>
 
   <string name="ui_protocol_trust_all_certificates_label">Acceptera alla certifikat</string>
   <string name="ui_protocol_trust_all_certificates_desc">Inte rekomenderat. Aktivera för en server med ett självsignerat certifikat.</string>
 
   <string name="ui_authentication_label">Autentisering</string>
-  <string name="ui_authentication_desc">Autentiseringsmetoden.</string>
   <string name="plain">Vanlig text</string>
 
   <string name="ui_imap_folder_label">Gmail-etikett</string>
-  <string name="ui_imap_folder_desc">Etikett i Gmail som tilldelas SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Säkerhetskopierade SMS kommer att markeras med denna etikett i Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Prefix på ämnesrad</string>
   <string name="ui_mail_subject_prefix_desc">Använd IMAP-mappens namn som prefix i ämnesraden</string>
@@ -125,7 +120,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Kalender som används för samtalshistorik</string>
 
   <string name="ui_imap_folder_calllog_label">Etikett för samtalshistorik</string>
-  <string name="ui_imap_folder_calllog_desc">Etikett i Gmail för samtalshistorik.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Säkerhetskopierad samtalshistorik kommer att markeras med denna etikett i Gmail.</string>
 
   <string name="ui_backup_calllog_after_call_label">Backup efter samtal</string>

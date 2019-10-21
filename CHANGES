@@ -1,5 +1,6 @@
 == 1.5.12 (xxx) dd-mm-2019
 
+  * Deprecated unsupported authentication via Google OAuth
   * Updated Swedish localization (#890)
 
 == 1.5.11 (1576) 04-23-2018

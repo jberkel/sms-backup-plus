@@ -123,19 +123,24 @@ public class AuthPreferences {
         preferences.edit().putString(IMAP_USER, s).commit();
     }
 
+    @SuppressWarnings("deprecation")
     public boolean useXOAuth() {
         return getAuthMode() == AuthMode.XOAUTH;
     }
 
+    public boolean usePlain() {
+        return getAuthMode() == AuthMode.PLAIN;
+    }
+
     public String getUserEmail() {
-        switch (getAuthMode()) {
-            case XOAUTH:
-                return getOauth2Username();
-            default:
-                return getImapUsername();
+        if (getAuthMode() == AuthMode.PLAIN) {
+            return getImapUsername();
+        } else {
+            return getOauth2Username();
         }
     }
 
+    @SuppressWarnings("deprecation")
     public boolean isLoginInformationSet() {
         switch (getAuthMode()) {
             case PLAIN:
@@ -199,7 +204,7 @@ public class AuthPreferences {
     }
 
     private AuthMode getAuthMode() {
-        return getDefaultType(preferences, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
+        return getDefaultType(preferences, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.PLAIN);
     }
 
     // All sensitive information is stored in a separate prefs file so we can
@@ -259,7 +264,7 @@ public class AuthPreferences {
         }
     }
 
-    public void migrate() {
+    void migrate() {
         if (useXOAuth()) {
             return;
         }

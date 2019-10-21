@@ -39,8 +39,6 @@
     <string name="status_gmail_temp_error">Chwilowy błąd Gmail IMAP, spróbuj ponownie później.</string>
     <string name="ui_settings_advanced_label">Ustawienia zaawansowane</string>
     <string name="ui_settings_advanced_desc">Ustaw zaawansowaną konfigurację.</string>
-    <string name="ui_settings_advanced_server_label">Ustawienia serwera</string>
-    <string name="ui_settings_advanced_server_desc">Nie zmieniaj jeśli nie wiesz co robisz!</string>
     <string name="imap_settings">Ustawienia IMAP</string>
     <string name="ui_login_label">Nazwa użytkownika</string>
     <string name="ui_login_desc">Nazwa konta Google/adres e-mail.</string>
@@ -50,12 +48,9 @@
     <string name="ui_server_label">Adres serwera</string>
     <string name="ui_server_desc">Adres serwera z którym chcesz się połączyć, łącznie z portem.</string>
     <string name="ui_protocol_label">Zabezpieczenia</string>
-    <string name="ui_protocol_desc">Protokół zabezpieczeń serwera.</string>
     <string name="ui_authentication_label">Uwierzytelnienie</string>
-    <string name="ui_authentication_desc">Metoda uwierzytelniania.</string>
     <string name="plain">Zwykły tekst</string>
     <string name="ui_imap_folder_label">Etykieta Gmail</string>
-    <string name="ui_imap_folder_desc">Etykieta gmail oznaczająca SMSy.</string>
     <string name="ui_imap_folder_label_dialog_msg">Kopie zapasowe SMS będą oznaczone tą etykietą w Gmailu.</string>
     <string name="ui_mail_subject_prefix_label">Prefix tematu emaila</string>
     <string name="ui_mail_subject_prefix_desc">Użyj nazwy folderu jako prefix w temacie emaila</string>
@@ -76,7 +71,6 @@
     <string name="ui_backup_calllog_sync_calendar_label">Nie</string>
     <string name="ui_backup_calllog_sync_calendar_desc">Użyj tego kalendarza dla historii połączeń</string>
     <string name="ui_imap_folder_calllog_label">Etykieta historii połączeń</string>
-    <string name="ui_imap_folder_calllog_desc">Etykieta Gmail przypisana dla historii połączeń.</string>
     <string name="ui_imap_folder_calllog_label_dialog_msg">Kopia historii połączeń będzie oznaczana w Gmailu tą etykietą.</string>
     <string name="ui_mark_as_read_label">Oznacz jako przeczytany (e-mail)</string>
     <string name="ui_mark_as_read_desc">Czy należy oznaczyć wiadomości w Gmail jako przeczytane.</string>

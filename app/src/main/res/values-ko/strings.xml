@@ -74,8 +74,6 @@
 
   <string name="ui_settings_advanced_label">고급 설정</string>
   <string name="ui_settings_advanced_desc">고급 설정을 설정합니다.</string>
-  <string name="ui_settings_advanced_server_label">IMAP 서버 설정</string>
-  <string name="ui_settings_advanced_server_desc">무슨 일을 하고 있는지 잘 모른다면 바꾸지 마세요!</string>
 
   <string name="imap_settings">IMAP 설정</string>
   <string name="ui_login_label">사용자 이름</string>
@@ -87,17 +85,14 @@
   <string name="ui_server_desc">동기화 할 서버의 주소(포트 번호 포함).</string>
 
   <string name="ui_protocol_label">보안</string>
-  <string name="ui_protocol_desc">서버의 보안 프로토콜.</string>
 
   <string name="ui_protocol_trust_all_certificates_label">모든 인증서 신뢰</string>
   <string name="ui_protocol_trust_all_certificates_desc">권장하지 않음. 자체 서명 인증서를 가진 서버에 활성하세요.</string>
 
   <string name="ui_authentication_label">인증</string>
-  <string name="ui_authentication_desc">인증 방식.</string>
   <string name="plain">일반 텍스트</string>
 
   <string name="ui_imap_folder_label">Gmail 라벨</string>
-  <string name="ui_imap_folder_desc">SMS에 할당될 Gmail 라벨.</string>
   <string name="ui_imap_folder_label_dialog_msg">백업된 SMS 메시지는 Gmail 안에서 이 라벨이 붙을 것입니다.</string>
   <string name="ui_mail_subject_prefix_label">이메일 제목 접두사</string>
   <string name="ui_mail_subject_prefix_desc">이메일 제목에 IMAP 폴더 이름을 접두사로 사용</string>
@@ -126,7 +121,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">통화 기록을 위해 사용할 캘린더</string>
 
   <string name="ui_imap_folder_calllog_label">통화 기록 라벨</string>
-  <string name="ui_imap_folder_calllog_desc">통화 기록에 할당될 Gmail 라벨.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">백업된 통화 기록 목록은 Gmail 안에서 이 라벨이 붙을 것입니다.</string>
 
   <string name="ui_backup_calllog_after_call_label">통화 후 백업</string>

@@ -75,8 +75,6 @@
 
   <string name="ui_settings_advanced_label">Advanced settings</string>
   <string name="ui_settings_advanced_desc">Set advanced preferences.</string>
-  <string name="ui_settings_advanced_server_label">Custom IMAP server</string>
-  <string name="ui_settings_advanced_server_desc">Do not change unless you know what you are doing!</string>
 
   <string name="imap_settings">IMAP settings</string>
   <string name="ui_login_label">Username</string>
@@ -88,18 +86,15 @@
   <string name="ui_server_desc">The address of the server incl. its port.</string>
 
   <string name="ui_protocol_label">Security</string>
-  <string name="ui_protocol_desc">The security protocol of the server.</string>
 
   <string name="ui_protocol_trust_all_certificates_label">Trust all certificates</string>
   <string name="ui_protocol_trust_all_certificates_desc">Not recommended. Enable for a server with a self-signed certificate.</string>
 
   <string name="ui_authentication_label">Authentication</string>
-  <string name="ui_authentication_desc">The authentication method.</string>
-  <string name="plain">Plain text</string>
+  <string name="plain">IMAP username/password</string>
   <string name="xoauth" translatable="false">XOAuth2 (Gmail)</string>
 
-  <string name="ui_imap_folder_label">Gmail label</string>
-  <string name="ui_imap_folder_desc">Gmail label assigned to SMS.</string>
+  <string name="ui_imap_folder_label">Gmail label / IMAP folder</string>
   <string name="ui_imap_folder_label_dialog_msg">Backed up SMS messages will be tagged with this label in Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Email subject prefix</string>
   <string name="ui_mail_subject_prefix_desc">Use IMAP folder name as prefix in email subject</string>
@@ -128,7 +123,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Calendar used for call logs</string>
 
   <string name="ui_imap_folder_calllog_label">Call log label</string>
-  <string name="ui_imap_folder_calllog_desc">Gmail label assigned to call log.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Backed up call log entries will be tagged with this label in Gmail.</string>
 
   <string name="ui_backup_calllog_after_call_label">Backup after call</string>
@@ -201,7 +195,7 @@
   state? You can still choose to skip all messages later.</string>
   <string name="all_messages">All</string>
 
-  <string name="gmail_needs_connecting">Tap to connect your Gmail account (required).</string>
+  <string name="gmail_needs_connecting">Connect your Gmail account (unsupported).</string>
   <string name="gmail_already_connected">Connected as %1$s.</string>
   <string name="custom_imap" translatable="false">IMAP %1$s.</string>
   <string name="custom_imap_not_configured">IMAP (not configured)</string>
@@ -352,4 +346,6 @@
   </string>
 
   <string name="ui_dark_theme_label">Dark theme</string>
+  <string name="legacy_settings">Legacy settings</string>
+  <string name="legacy_settings_summary">XOAuth2 is no longer supported.</string>
 </resources>
