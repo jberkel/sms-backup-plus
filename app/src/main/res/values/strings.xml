@@ -197,7 +197,6 @@
 
   <string name="gmail_needs_connecting">Connect your Gmail account (unsupported).</string>
   <string name="gmail_already_connected">Connected as %1$s.</string>
-  <string name="custom_imap" translatable="false">IMAP %1$s.</string>
   <string name="custom_imap_not_configured">IMAP (not configured)</string>
 
   <string name="ui_connected_label">Connect</string>
