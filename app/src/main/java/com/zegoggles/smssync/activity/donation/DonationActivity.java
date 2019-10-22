@@ -5,6 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
@@ -38,6 +41,7 @@ import static com.android.billingclient.api.BillingClient.BillingResponseCode.SE
 import static com.android.billingclient.api.BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE;
 import static com.android.billingclient.api.BillingClient.BillingResponseCode.USER_CANCELED;
 import static com.android.billingclient.api.BillingClient.SkuType.INAPP;
+import static com.android.billingclient.api.Purchase.PurchaseState.PURCHASED;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.Consts.Billing.ALL_SKUS;
 import static com.zegoggles.smssync.Consts.Billing.DONATION_PREFIX;
@@ -151,6 +155,11 @@ public class DonationActivity extends ThemeActivity implements
         String message;
         switch (result.getResponseCode()) {
             case OK:
+                if (purchases != null)  {
+                    for (Purchase p : purchases) {
+                        acknowledgePurchase(p);
+                    }
+                }
                 message = getString(R.string.ui_donation_success_message);
                 break;
             case ITEM_UNAVAILABLE:
@@ -224,9 +233,31 @@ public class DonationActivity extends ThemeActivity implements
         }
     }
 
+    // https://developer.android.com/google/play/billing/billing_library_overview#acknowledge
+    private void acknowledgePurchase(final Purchase purchase) {
+        if (purchase.getPurchaseState() == PURCHASED && !purchase.isAcknowledged() && billingClient != null) {
+            AcknowledgePurchaseParams params = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.getPurchaseToken())
+                    .build();
+
+            billingClient.acknowledgePurchase(params, new AcknowledgePurchaseResponseListener() {
+                @Override
+                public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
+                    log("onAcknowledgePurchaseResponse(" + billingResult + ")");
+                    if (billingResult.getResponseCode() != OK) {
+                        Log.w(TAG, "not acknowledged purchase " + purchase + ":" + billingResult);
+                    }
+                }
+            });
+        }
+    }
+
+
     public static void checkUserDonationStatus(Context context,
                                                final DonationStatusListener listener) {
-        final BillingClient helper = BillingClient.newBuilder(context).setListener(new PurchasesUpdatedListener() {
+        final BillingClient helper = BillingClient.newBuilder(context)
+                .enablePendingPurchases()
+                .setListener(new PurchasesUpdatedListener() {
             @Override
             public void onPurchasesUpdated(BillingResult result, @Nullable List<Purchase> purchases) {
                 log("onPurchasesUpdated("+result+", "+purchases+")");
