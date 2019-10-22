@@ -80,7 +80,7 @@
   <string name="ui_login_label">Username</string>
   <string name="ui_login_desc">Your IMAP account/e-mail address.</string>
   <string name="ui_password_label">Password</string>
-  <string name="ui_password_desc">Your IMAP account password.</string>
+  <string name="ui_password_desc">Your IMAP account password. App Password required with 2-Step enabled on Gmail. </string>
   <string name="ui_password_dialog_msg">The password is stored on this device and is only used to login.</string>
   <string name="ui_server_label">Server address</string>
   <string name="ui_server_desc">The address of the server incl. its port.</string>
