@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.core:core-role:1.0.0-alpha01'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3.1'

@@ -16,8 +16,10 @@
 package com.zegoggles.smssync.receiver;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import com.zegoggles.smssync.preferences.AuthPreferences;
@@ -25,6 +27,9 @@ import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.BackupJobs;
 import com.zegoggles.smssync.utils.AppLog;
 
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+import static android.content.pm.PackageManager.DONT_KILL_APP;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 

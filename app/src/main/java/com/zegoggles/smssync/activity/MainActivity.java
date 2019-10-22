@@ -17,10 +17,18 @@
 package com.zegoggles.smssync.activity;
 
 import android.annotation.TargetApi;
+import android.app.role.RoleManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony.Sms;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -33,15 +41,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage;
 import com.zegoggles.smssync.activity.Dialogs.WebConnect;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
@@ -54,8 +56,10 @@ import com.zegoggles.smssync.activity.events.PerformAction.Actions;
 import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
+import com.zegoggles.smssync.compat.SmsReceiver;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
@@ -70,6 +74,7 @@ import java.util.List;
 import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
 import static android.provider.Telephony.Sms.Intents.EXTRA_PACKAGE_NAME;
 import static android.widget.Toast.LENGTH_LONG;
+import static androidx.core.role.RoleManagerCompat.ROLE_SMS;
 import static androidx.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -121,7 +126,6 @@ public class MainActivity extends ThemeActivity implements
     private AuthPreferences authPreferences;
     private OAuth2Client oauth2Client;
     private Intent fallbackAuthIntent;
-    private Intent changeDefaultPackageIntent;
     private PreferenceTitles preferenceTitles;
 
     @Override
@@ -135,7 +139,6 @@ public class MainActivity extends ThemeActivity implements
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         fallbackAuthIntent = new Intent(this, OAuth2WebAuthActivity.class).setData(oauth2Client.requestUrl());
-        changeDefaultPackageIntent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, getPackageName());
         preferenceTitles = new PreferenceTitles(getResources(), R.xml.preferences);
         preferences = new Preferences(this);
         if (bundle == null) {
@@ -377,7 +380,6 @@ public class MainActivity extends ThemeActivity implements
                 Log.d(TAG, "default SMS package: " + defaultSmsPackage);
                 if (!TextUtils.isEmpty(defaultSmsPackage)) {
                     preferences.setSmsDefaultPackage(defaultSmsPackage);
-
                     if (preferences.hasSeenSmsDefaultPackageChangeDialog()) {
                         requestDefaultSmsPackageChange();
                     } else {
@@ -416,8 +418,7 @@ public class MainActivity extends ThemeActivity implements
                 arguments.putBoolean(USE_XOAUTH, authPreferences.useXOAuth()); break;
             case WEB_CONNECT:
                 arguments.putParcelable(WebConnect.INTENT, fallbackAuthIntent); break;
-            case SMS_DEFAULT_PACKAGE_CHANGE:
-                arguments.putParcelable(SmsDefaultPackage.INTENT, changeDefaultPackageIntent); break;
+            case SMS_DEFAULT_PACKAGE_CHANGE: break;
         }
         showDialog(dialog, arguments);
     }
@@ -426,17 +427,29 @@ public class MainActivity extends ThemeActivity implements
         dialog.instantiate(getSupportFragmentManager(), args).show(getSupportFragmentManager(), dialog.name());
     }
 
-    private void requestDefaultSmsPackageChange() {
-        startActivityForResult(changeDefaultPackageIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+    void requestDefaultSmsPackageChange() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            RoleManager roleManager = (RoleManager) getSystemService(Context.ROLE_SERVICE);
+            if (roleManager != null && !roleManager.isRoleHeld(ROLE_SMS)) {
+                SmsReceiver.enable(this);
+                Intent intent = roleManager.createRequestRoleIntent(ROLE_SMS);
+                startActivityForResult(intent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+            }
+        } else {
+            Intent intent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, getPackageName());
+            startActivityForResult(intent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+        }
     }
 
     private void restoreDefaultSmsProvider(String smsPackage) {
         Log.d(TAG, "restoring SMS provider "+smsPackage);
-        if (!TextUtils.isEmpty(smsPackage)) {
-            final Intent changeDefaultIntent = new Intent(ACTION_CHANGE_DEFAULT)
-                    .putExtra(EXTRA_PACKAGE_NAME, smsPackage);
-
-            startActivity(changeDefaultIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // release role by disabling receiver:
+            // this will kill the app if the permission is revoked
+            SmsReceiver.disable(this);
+        } else if (!TextUtils.isEmpty(smsPackage)) {
+            final Intent intent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, smsPackage);
+            startActivity(intent);
         }
     }
 
