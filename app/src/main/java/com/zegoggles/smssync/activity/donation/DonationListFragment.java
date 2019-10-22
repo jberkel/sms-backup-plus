@@ -9,8 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import android.text.TextUtils;
+
+import com.android.billingclient.api.SkuDetails;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +26,7 @@ public class DonationListFragment extends Dialogs.BaseFragment {
     private SkuSelectionListener listener;
 
     interface SkuSelectionListener {
-        void selectedSku(String sku);
+        void selectedSku(SkuDetails sku);
     }
 
     @Override
@@ -38,12 +42,17 @@ public class DonationListFragment extends Dialogs.BaseFragment {
     @Override @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final ArrayList<Sku> skus = getArguments().getParcelableArrayList(SKUS);
+
         return new AlertDialog.Builder(getContext())
             .setTitle(R.string.ui_dialog_donate_message)
             .setItems(getOptions(skus), new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    listener.selectedSku(skus.get(which).getSku());
+                    try {
+                        listener.selectedSku(new SkuDetails(skus.get(which).getOriginalJson()));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             })
             .setNegativeButton(cancel, new OnClickListener() {

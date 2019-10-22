@@ -6,9 +6,9 @@ import androidx.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClient.BillingResponse;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.Purchase.PurchasesResult;
 import com.android.billingclient.api.PurchasesUpdatedListener;
@@ -27,11 +27,16 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
-import static com.android.billingclient.api.BillingClient.BillingResponse.BILLING_UNAVAILABLE;
-import static com.android.billingclient.api.BillingClient.BillingResponse.ITEM_ALREADY_OWNED;
-import static com.android.billingclient.api.BillingClient.BillingResponse.ITEM_UNAVAILABLE;
-import static com.android.billingclient.api.BillingClient.BillingResponse.OK;
-import static com.android.billingclient.api.BillingClient.BillingResponse.USER_CANCELED;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.*;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.BILLING_UNAVAILABLE;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_NOT_OWNED;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_UNAVAILABLE;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.OK;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.SERVICE_DISCONNECTED;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.USER_CANCELED;
 import static com.android.billingclient.api.BillingClient.SkuType.INAPP;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.Consts.Billing.ALL_SKUS;
@@ -63,27 +68,28 @@ public class DonationActivity extends ThemeActivity implements
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        billingClient = BillingClient.newBuilder(this).setListener(this).build();
+        billingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
         billingClient.startConnection(new BillingClientStateListener() {
 
-            @Override public void onBillingSetupFinished(@BillingResponse int resultCode) {
+            @Override public void onBillingSetupFinished(BillingResult resultCode) {
                 log("onBillingSetupFinished(" + resultCode + ")" + Thread.currentThread().getName());
 
-                switch (resultCode) {
+                switch (resultCode.getResponseCode()) {
                     case OK:
                         queryAvailableSkus();
                         break;
 
-                    case BillingResponse.BILLING_UNAVAILABLE:
-                    case BillingResponse.DEVELOPER_ERROR:
-                    case BillingResponse.ERROR:
-                    case BillingResponse.FEATURE_NOT_SUPPORTED:
-                    case BillingResponse.ITEM_ALREADY_OWNED:
-                    case BillingResponse.ITEM_NOT_OWNED:
-                    case BillingResponse.ITEM_UNAVAILABLE:
-                    case BillingResponse.SERVICE_DISCONNECTED:
-                    case BillingResponse.SERVICE_UNAVAILABLE:
-                    case BillingResponse.USER_CANCELED:
+                    case BILLING_UNAVAILABLE:
+                    case DEVELOPER_ERROR:
+                    case ERROR:
+                    case FEATURE_NOT_SUPPORTED:
+                    case ITEM_ALREADY_OWNED:
+                    case ITEM_NOT_OWNED:
+                    case ITEM_UNAVAILABLE:
+                    case SERVICE_DISCONNECTED:
+                    case SERVICE_UNAVAILABLE:
+                    case USER_CANCELED:
+                    case SERVICE_TIMEOUT:
                     default:
                         Toast.makeText(DonationActivity.this, R.string.donation_error_iab_unavailable, LENGTH_LONG).show();
                         Log.w(TAG, "Problem setting up in-app billing: " + resultCode);
@@ -114,10 +120,10 @@ public class DonationActivity extends ThemeActivity implements
     }
 
     @Override
-    public void onSkuDetailsResponse(@BillingResponse int responseCode, List<SkuDetails> details) {
-        log("onSkuDetailsResponse(" + responseCode + ", " + details + ")");
-        if (responseCode != OK) {
-            Log.w(TAG, "failed to query inventory: " + responseCode);
+    public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> details) {
+        log("onSkuDetailsResponse(" + billingResult + ", " + details + ")");
+        if (billingResult.getResponseCode() != OK) {
+            Log.w(TAG, "failed to query inventory: " + billingResult);
             return;
         }
 
@@ -136,55 +142,56 @@ public class DonationActivity extends ThemeActivity implements
     }
 
     /**
-     * @param responseCode response code of the update
+     * @param result response code of the update
      * @param purchases list of updated purchases if present
      */
     @Override
-    public void onPurchasesUpdated(@BillingResponse int responseCode, @Nullable List<Purchase> purchases) {
-        log("onPurchasesUpdated(" + responseCode + ", " + purchases + ")");
+    public void onPurchasesUpdated(BillingResult result, @Nullable List<Purchase> purchases) {
+        log("onPurchasesUpdated(" + result + ", " + purchases + ")");
         String message;
-        switch (responseCode) {
+        switch (result.getResponseCode()) {
             case OK:
                 message = getString(R.string.ui_donation_success_message);
                 break;
             case ITEM_UNAVAILABLE:
                 message = getString(R.string.ui_donation_failure_message,
-                          getString(R.string.donation_error_unavailable));
+                        getString(R.string.donation_error_unavailable));
                 break;
             case ITEM_ALREADY_OWNED:
                 message = getString(R.string.ui_donation_failure_message,
-                          getString(R.string.donation_error_already_owned));
+                        getString(R.string.donation_error_already_owned));
                 break;
             case USER_CANCELED:
                 message = getString(R.string.ui_donation_failure_message,
-                          getString(R.string.donation_error_canceled));
+                        getString(R.string.donation_error_canceled));
                 break;
-            case BillingResponse.BILLING_UNAVAILABLE:
-            case BillingResponse.DEVELOPER_ERROR:
-            case BillingResponse.ERROR:
-            case BillingResponse.FEATURE_NOT_SUPPORTED:
-            case BillingResponse.ITEM_NOT_OWNED:
-            case BillingResponse.SERVICE_DISCONNECTED:
-            case BillingResponse.SERVICE_UNAVAILABLE:
+            case BILLING_UNAVAILABLE:
+            case FEATURE_NOT_SUPPORTED:
+            case ITEM_NOT_OWNED:
+            case SERVICE_DISCONNECTED:
+            case SERVICE_UNAVAILABLE:
+            case DEVELOPER_ERROR:
+            case ERROR:
+            case SERVICE_TIMEOUT:
             default:
                 message = getString(R.string.ui_donation_failure_message,
-                          getString(R.string.donation_unspecified_error, responseCode));
+                        getString(R.string.donation_unspecified_error, result.getResponseCode()));
                 break;
         }
+
         Toast.makeText(this, message, LENGTH_LONG).show();
         finish();
     }
 
     @Override
-    public void selectedSku(String sku) {
+    public void selectedSku(SkuDetails details) {
         if (billingClient == null) return;
         if (DEBUG_IAB) {
-            Log.v(TAG, "selectedSku("+sku+")");
+            Log.v(TAG, "selectedSku("+details+")");
         }
         billingClient.launchBillingFlow(this, BillingFlowParams.newBuilder()
-            .setType(INAPP)
-            .setSku(sku)
-            .build()
+                .setSkuDetails(details)
+                .build()
         );
     }
 
@@ -221,24 +228,24 @@ public class DonationActivity extends ThemeActivity implements
                                                final DonationStatusListener listener) {
         final BillingClient helper = BillingClient.newBuilder(context).setListener(new PurchasesUpdatedListener() {
             @Override
-            public void onPurchasesUpdated(@BillingResponse int responseCode, @Nullable List<Purchase> purchases) {
-                log("onPurchasesUpdated("+responseCode+", "+purchases+")");
+            public void onPurchasesUpdated(BillingResult result, @Nullable List<Purchase> purchases) {
+                log("onPurchasesUpdated("+result+", "+purchases+")");
             }
         }).build();
         helper.startConnection(new BillingClientStateListener() {
             @Override
-            public void onBillingSetupFinished(@BillingResponse int resultCode) {
-                    log("checkUserHasDonated: onBillingSetupFinished("+resultCode+")");
+            public void onBillingSetupFinished(BillingResult result) {
+                    log("checkUserHasDonated: onBillingSetupFinished("+result+")");
                 try {
-                    if (resultCode == OK) {
-                        PurchasesResult result = helper.queryPurchases(INAPP);
+                    if (result.getResponseCode() == OK) {
+                        PurchasesResult purchasesResult = helper.queryPurchases(INAPP);
                         if (result.getResponseCode() == OK) {
-                            listener.userDonationState(userHasDonated(result.getPurchasesList()) ? DONATED : NOT_DONATED);
+                            listener.userDonationState(userHasDonated(purchasesResult.getPurchasesList()) ? DONATED : NOT_DONATED);
                         } else {
                             listener.userDonationState(UNKNOWN);
                         }
                     } else {
-                        listener.userDonationState(resultCode == BILLING_UNAVAILABLE ? NOT_AVAILABLE : UNKNOWN);
+                        listener.userDonationState(result.getResponseCode() == BILLING_UNAVAILABLE ? NOT_AVAILABLE : UNKNOWN);
                     }
                 } finally {
                     try {

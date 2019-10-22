@@ -1,6 +1,6 @@
 package com.zegoggles.smssync.activity.donation;
 
-import com.android.billingclient.api.BillingClient.BillingResponse;
+import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +9,11 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.Collections;
 
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.ERROR;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_UNAVAILABLE;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.OK;
+import static com.android.billingclient.api.BillingClient.BillingResponseCode.USER_CANCELED;
 import static com.google.common.truth.Truth.assertThat;
 import static org.robolectric.Robolectric.buildActivity;
 import static org.robolectric.shadows.ShadowToast.getTextOfLatestToast;
@@ -23,27 +28,27 @@ public class DonationActivityTest {
     }
 
     @Test public void testResultMessageOK() {
-        activity.onPurchasesUpdated(BillingResponse.OK, Collections.<Purchase>emptyList());
+        activity.onPurchasesUpdated(BillingResult.newBuilder().setResponseCode(OK).build(), Collections.<Purchase>emptyList());
         assertToast("Donation successful, thank you!");
     }
 
     @Test public void testResultMessageItemUnavailable() {
-        activity.onPurchasesUpdated(BillingResponse.ITEM_UNAVAILABLE, Collections.<Purchase>emptyList());
+        activity.onPurchasesUpdated(BillingResult.newBuilder().setResponseCode(ITEM_UNAVAILABLE).build(), Collections.<Purchase>emptyList());
         assertToast("Donation failed: not available");
     }
 
     @Test public void testResultMessageItemAlreadyOwned() {
-        activity.onPurchasesUpdated(BillingResponse.ITEM_ALREADY_OWNED, Collections.<Purchase>emptyList());
+        activity.onPurchasesUpdated(BillingResult.newBuilder().setResponseCode(ITEM_ALREADY_OWNED).build(), Collections.<Purchase>emptyList());
         assertToast("Donation failed: you have already donated");
     }
 
     @Test public void testResultMessageUserCanceled() {
-        activity.onPurchasesUpdated(BillingResponse.USER_CANCELED, Collections.<Purchase>emptyList());
+        activity.onPurchasesUpdated(BillingResult.newBuilder().setResponseCode(USER_CANCELED).build(), Collections.<Purchase>emptyList());
         assertToast("Donation failed: canceled");
     }
 
     @Test public void testResultMessageError() {
-        activity.onPurchasesUpdated(BillingResponse.ERROR, Collections.<Purchase>emptyList());
+        activity.onPurchasesUpdated(BillingResult.newBuilder().setResponseCode(ERROR).build(), Collections.<Purchase>emptyList());
         assertToast("Donation failed: unspecified error: 6");
     }
 

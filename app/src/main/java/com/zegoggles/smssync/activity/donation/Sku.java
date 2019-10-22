@@ -1,8 +1,11 @@
 package com.zegoggles.smssync.activity.donation;
 
 import android.os.Parcel;
+import android.os.ParcelFormatException;
 import android.os.Parcelable;
 import com.android.billingclient.api.SkuDetails;
+
+import org.json.JSONException;
 
 import static com.android.billingclient.api.BillingClient.SkuType.INAPP;
 
@@ -16,9 +19,10 @@ public class Sku implements Parcelable, Comparable<Sku> {
     private final String title;
     private final String description;
     private final long priceAmountMicros;
+    private final String originalJson;
 
     Sku(SkuDetails detail) {
-        this(detail.getType(), detail.getSku(), detail.getPrice(), detail.getTitle(), detail.getDescription(), detail.getPriceAmountMicros());
+        this(detail.getType(), detail.getSku(), detail.getPrice(), detail.getTitle(), detail.getDescription(), detail.getPriceAmountMicros(), detail.getOriginalJson());
     }
 
     /**
@@ -29,22 +33,32 @@ public class Sku implements Parcelable, Comparable<Sku> {
      * @param description the description of the product
      * @param priceAmountMicros the price in micro-units, where 1,000,000 micro-units equal one unit of the currency
      */
-    Sku(String type, String sku, String price, String title, String description, long priceAmountMicros) {
+    Sku(String type, String sku, String price, String title, String description, long priceAmountMicros, String originalJson) {
         this.type = type;
         this.sku = sku;
         this.price = price;
         this.title = title;
         this.description = description;
         this.priceAmountMicros = priceAmountMicros;
+        this.originalJson = originalJson;
     }
 
     private Sku(Parcel in) {
-        type = in.readString();
-        sku = in.readString();
-        price = in.readString();
-        title = in.readString();
-        description = in.readString();
-        priceAmountMicros = in.readLong();
+        originalJson = in.readString();
+        if (originalJson == null) {
+            throw new ParcelFormatException();
+        }
+        try {
+            SkuDetails skuDetails = new SkuDetails(originalJson);
+            sku = skuDetails.getSku();
+            price = skuDetails.getPrice();
+            type = skuDetails.getType();
+            title = skuDetails.getTitle();
+            description = skuDetails.getPrice();
+            priceAmountMicros = skuDetails.getPriceAmountMicros();
+        } catch (JSONException e) {
+           throw new ParcelFormatException(e.getMessage());
+        }
     }
 
     public static final Creator<Sku> CREATOR = new Creator<Sku>() {
@@ -75,6 +89,10 @@ public class Sku implements Parcelable, Comparable<Sku> {
         return description;
     }
 
+    public String getOriginalJson() {
+        return originalJson;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -82,12 +100,7 @@ public class Sku implements Parcelable, Comparable<Sku> {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(type);
-        parcel.writeString(sku);
-        parcel.writeString(price);
-        parcel.writeString(title);
-        parcel.writeString(description);
-        parcel.writeLong(priceAmountMicros);
+        parcel.writeString(originalJson);
     }
 
     @Override
@@ -122,7 +135,7 @@ public class Sku implements Parcelable, Comparable<Sku> {
          * using these responses.
          */
         static final Sku PURCHASED =
-                new Sku(INAPP, TEST_PREFIX + "purchased", TEST_PRICE, "Test (purchased)", "Purchased", 0);
+                new Sku(INAPP, TEST_PREFIX + "purchased", TEST_PRICE, "Test (purchased)", "Purchased", 0, null);
 
 
         /**
@@ -131,7 +144,7 @@ public class Sku implements Parcelable, Comparable<Sku> {
          * such as an invalid credit card, or when you cancel a user's order before it is charged.
          */
         static final Sku CANCELED =
-                new Sku(INAPP, TEST_PREFIX + "canceled", TEST_PRICE, "Test (canceled)", "Canceled", 0);
+                new Sku(INAPP, TEST_PREFIX + "canceled", TEST_PRICE, "Test (canceled)", "Canceled", 0, null);
 
         /**
          * When you make an In-app Billing request with this product ID, Google Play responds as though
@@ -147,14 +160,14 @@ public class Sku implements Parcelable, Comparable<Sku> {
          * </a>.
          */
         static final Sku REFUNDED =
-                new Sku(INAPP, TEST_PREFIX + "refunded", TEST_PRICE, "Test (refunded)", "Refunded", 0);
+                new Sku(INAPP, TEST_PREFIX + "refunded", TEST_PRICE, "Test (refunded)", "Refunded", 0, null);
 
         /**
          * When you make an In-app Billing request with this product ID, Google Play responds as though
          * the item being purchased was not listed in your application's product list.
          */
         static final Sku UNAVAILABLE =
-                new Sku(INAPP, TEST_PREFIX + "item_unavailable", TEST_PRICE, "Test (unavailable)", "Unavailable", 0);
+                new Sku(INAPP, TEST_PREFIX + "item_unavailable", TEST_PRICE, "Test (unavailable)", "Unavailable", 0, null);
 
         static final Sku[] SKUS = {
                 PURCHASED, CANCELED, REFUNDED, UNAVAILABLE
