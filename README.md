@@ -2,6 +2,19 @@
 
 [<img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/>][Google Play Store] [<img alt="Get it on F-Droid" src="https://jberkel.github.io/sms-backup-plus/assets/img/f-droid-badge.svg" height="80pt"/>][F-Droid]
 
+---------------------
+
+# NOTE:
+**Due to a recent change in Google's application permissions regarding XOAUTH, this app may not work as intended.**
+The issue is being discussed heavily in the [issue tracker](https://github.com/jberkel/sms-backup-plus/issues/959).
+- For a workaround, please refer to the instructions referenced [here](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-513018820)
+- If you wish to backup to a non-Gmail address, follow the instructions referenced [here](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-507385460)
+
+Please understand that the issues linked are intended to provide information.
+As such, please keep comments focused on resolving the issue, as well as following the [GitHub Community Guidelines](https://help.github.com/en/articles/github-community-guidelines).
+
+---------------------
+
 This is a fork of the now defunct Android backup tool
 [SMS Backup](http://code.google.com/p/android-sms). It uses Gmail/IMAP to perform SMS, MMS and call log backups over
 the network.
