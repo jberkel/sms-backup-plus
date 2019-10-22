@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -221,7 +220,7 @@ public abstract class ServiceBase extends Service {
     @SuppressWarnings("deprecation")
     private boolean isConnectedViaWifi_SDK21() {
         for (Network network : getConnectivityManager().getAllNetworks()) {
-            final NetworkInfo networkInfo = getConnectivityManager().getNetworkInfo(network);
+            final android.net.NetworkInfo networkInfo = getConnectivityManager().getNetworkInfo(network);
             if (networkInfo != null && networkInfo.getType() == TYPE_WIFI && networkInfo.isConnectedOrConnecting()) {
                 return true;
             }

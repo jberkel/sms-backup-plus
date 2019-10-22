@@ -17,7 +17,6 @@
 package com.zegoggles.smssync.service;
 
 import android.content.Intent;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -177,7 +176,7 @@ public class SmsBackupService extends ServiceBase {
 
     @SuppressWarnings("deprecation")
     private void legacyCheckConnectivity() throws ConnectivityException {
-        NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
+        android.net.NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
         if (active == null || !active.isConnectedOrConnecting()) {
             throw new NoConnectionException();
         }
