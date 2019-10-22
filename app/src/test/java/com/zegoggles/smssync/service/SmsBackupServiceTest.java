@@ -120,7 +120,6 @@ public class SmsBackupServiceTest {
         Intent intent = new Intent();
         when(preferences.isWifiOnly()).thenReturn(true);
         shadowConnectivityManager.setBackgroundDataSetting(true);
-        shadowWifiManager.setWifiEnabled(false);
         service.handleIntent(intent);
 
         verifyZeroInteractions(backupTask);
@@ -132,7 +131,6 @@ public class SmsBackupServiceTest {
             when(preferences.isWifiOnly()).thenReturn(true);
         shadowConnectivityManager.setBackgroundDataSetting(true);
         shadowConnectivityManager.setActiveNetworkInfo(connectedViaEdge());
-        shadowWifiManager.setWifiEnabled(true);
         service.handleIntent(intent);
 
         verifyZeroInteractions(backupTask);
