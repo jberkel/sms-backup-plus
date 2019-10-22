@@ -141,6 +141,14 @@ public class AuthPreferences {
         }
     }
 
+    public String toString() {
+        if (DEFAULT_SERVER_ADDRESS.equals(getServername())) {
+            return getImapUsername() + " (Gmail)";
+        } else {
+            return getImapUsername() + "@" + getServername();
+        }
+    }
+
     @SuppressWarnings("deprecation")
     public boolean isLoginInformationSet() {
         switch (getAuthMode()) {

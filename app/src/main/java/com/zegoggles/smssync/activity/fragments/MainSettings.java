@@ -42,7 +42,7 @@ public class MainSettings extends SMSBackupPreferenceFragment {
             @Override
             public CharSequence provideSummary(Preference preference) {
                 if (authPreferences.usePlain() && authPreferences.isLoginInformationSet()) {
-                    return authPreferences.getImapUsername() + "@" + authPreferences.getServername();
+                    return authPreferences.toString();
                 } else {
                     return getString(R.string.custom_imap_not_configured);
                 }
