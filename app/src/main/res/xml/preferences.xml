@@ -58,54 +58,6 @@
                 android:defaultValue="false"/>
     </PreferenceScreen>
 
-
-    <CheckBoxPreference
-            android:key="enable_auto_sync"
-            android:title="@string/ui_enable_auto_sync_label"
-            android:summary="@string/ui_enable_auto_sync_desc"
-            android:defaultValue="false"/>
-
-    <PreferenceScreen
-            android:fragment="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
-            android:key="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
-            android:persistent="false"
-            android:title="@string/ui_auto_backup_settings_label">
-
-        <ListPreference
-                android:key="auto_backup_schedule"
-                android:title="@string/ui_auto_backup_schedule_label"
-                android:summary="@string/ui_auto_backup_schedule_desc"
-                android:entries="@array/auto_backup_schedule_entries"
-                android:entryValues="@array/auto_backup_schedule_values"
-                android:defaultValue="7200"/>
-
-        <ListPreference
-                android:key="auto_backup_incoming_schedule"
-                android:title="@string/ui_auto_backup_incoming_schedule_label"
-                android:summary="@string/ui_auto_backup_incoming_schedule_desc"
-                android:entries="@array/auto_backup_incoming_schedule_entries"
-                android:entryValues="@array/auto_backup_incoming_schedule_values"
-                android:defaultValue="60"/>
-
-        <CheckBoxPreference
-                android:key="wifi_only"
-                android:title="@string/ui_wifi_only_label"
-                android:summary="@string/ui_wifi_only_desc"
-                android:defaultValue="false"/>
-
-        <CheckBoxPreference
-                android:key="third_party_integration"
-                android:title="@string/ui_third_party_integration_label"
-                android:summary="@string/ui_third_party_integration_desc"
-                android:defaultValue="false"/>
-
-        <CheckBoxPreference
-                android:key="use_old_scheduler"
-                android:title="@string/pref_use_old_scheduler"
-                android:summary="@string/pref_use_old_scheduler_summary"
-                android:defaultValue="false"/>
-    </PreferenceScreen>
-
     <PreferenceScreen
             android:fragment="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup"
             android:key="com.zegoggles.smssync.activity.fragments.AdvancedSettings$Backup"
@@ -214,6 +166,53 @@
                 android:title="@string/ui_mail_subject_prefix_label"
                 android:defaultValue="false"
                 android:summary="@string/ui_mail_subject_prefix_desc"/>
+    </PreferenceScreen>
+
+    <CheckBoxPreference
+            android:key="enable_auto_sync"
+            android:title="@string/ui_enable_auto_sync_label"
+            android:summary="@string/ui_enable_auto_sync_desc"
+            android:defaultValue="false"/>
+
+    <PreferenceScreen
+            android:fragment="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
+            android:key="com.zegoggles.smssync.activity.fragments.AutoBackupSettings"
+            android:persistent="false"
+            android:title="@string/ui_auto_backup_settings_label">
+
+        <ListPreference
+                android:key="auto_backup_schedule"
+                android:title="@string/ui_auto_backup_schedule_label"
+                android:summary="@string/ui_auto_backup_schedule_desc"
+                android:entries="@array/auto_backup_schedule_entries"
+                android:entryValues="@array/auto_backup_schedule_values"
+                android:defaultValue="7200"/>
+
+        <ListPreference
+                android:key="auto_backup_incoming_schedule"
+                android:title="@string/ui_auto_backup_incoming_schedule_label"
+                android:summary="@string/ui_auto_backup_incoming_schedule_desc"
+                android:entries="@array/auto_backup_incoming_schedule_entries"
+                android:entryValues="@array/auto_backup_incoming_schedule_values"
+                android:defaultValue="60"/>
+
+        <CheckBoxPreference
+                android:key="wifi_only"
+                android:title="@string/ui_wifi_only_label"
+                android:summary="@string/ui_wifi_only_desc"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="third_party_integration"
+                android:title="@string/ui_third_party_integration_label"
+                android:summary="@string/ui_third_party_integration_desc"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="use_old_scheduler"
+                android:title="@string/pref_use_old_scheduler"
+                android:summary="@string/pref_use_old_scheduler_summary"
+                android:defaultValue="false"/>
     </PreferenceScreen>
 
     <PreferenceScreen
