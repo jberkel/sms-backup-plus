@@ -59,7 +59,6 @@ import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.compat.SmsReceiver;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
 import com.zegoggles.smssync.service.BackupType;
 import com.zegoggles.smssync.service.SmsBackupService;
 import com.zegoggles.smssync.service.SmsRestoreService;
@@ -282,7 +281,7 @@ public class MainActivity extends ThemeActivity implements
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
         if (event.valid()) {
             authPreferences.setOauth2Token(event.token.userName, event.token.accessToken, event.token.refreshToken);
-            onAuthenticated();
+            App.post(new AccountAddedEvent());
         } else {
             showDialog(OAUTH2_ACCESS_TOKEN_ERROR);
         }
@@ -327,14 +326,6 @@ public class MainActivity extends ThemeActivity implements
         } else {
             final FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(entryCount - 1);
             return entry.getBreadCrumbTitleRes();
-        }
-    }
-
-    private void onAuthenticated() {
-        App.post(new AccountAddedEvent());
-        // Invite user to perform a backup, but only once
-        if (preferences.isFirstUse()) {
-            showDialog(FIRST_SYNC);
         }
     }
 
@@ -458,7 +449,7 @@ public class MainActivity extends ThemeActivity implements
         final String account = data.getStringExtra(EXTRA_ACCOUNT);
         if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
             authPreferences.setOauth2Token(account, token, null);
-            onAuthenticated();
+            App.post(new AccountAddedEvent());
         } else {
             String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
             if (!TextUtils.isEmpty(error)) {
