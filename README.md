@@ -33,7 +33,7 @@ Main features/improvements:
     * ⚠️ In June 2019 Google [changed their API policy], introducing [sensitivity scopes], and
       as a result SMS Backup+ [can no longer use XOAuth2] to save messages into your mailbox;
       instead a "password" is required to access Gmail via IMAP, but it can be a generated
-      [application password](https://support.google.com/accounts/answer/185833?hl=en)
+      [application password][Sign in using App Passwords]
       (which can be revoked without affecting your real password).
 
   * MMS backup support (added in version 1.1)
