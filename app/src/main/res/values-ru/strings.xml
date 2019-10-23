@@ -135,8 +135,7 @@
 
     <string name="ui_dialog_missing_credentials_title">Информация о подключении</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Вы должны быть подключены к своей учётной записи.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Введите логин и пароль</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Введите логин и пароль</string>
 
    <string name="ui_dialog_invalid_imap_folder_title">Недопустимое имя ярлыка</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Нельзя использовать пробел в качестве первого или последнего символа.</string>

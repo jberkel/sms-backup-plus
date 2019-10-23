@@ -136,8 +136,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Πληροφορίες Login</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Πρώτα πρέπει να συνδεθείτε στο Gmail λογαριασμό σας.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Πρώτα πρέπει να ορίσετε το username και password σας.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Πρώτα πρέπει να ορίσετε το username και password σας.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Μη έγκυρο όνομα ετικέτας</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Το όνομα ετικέτας ίσως δεν περιλαμβάνει κενά (στην αρχή ή στο τέλος).</string>

@@ -99,8 +99,7 @@
   <string name="error_no_connection">Nuk ka lidhje me internet</string>
   <string name="error_sms_provider_not_writable">Nuk mund të shkruaj tek shërbyesi i SMS-ve</string>
   <string name="ui_dialog_missing_credentials_title">Informacion hyrjeje</string>
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Ju duhet të lidhni fillimisht llogarinë tuaj të Gmail-it.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Ju duhet të vendosni fillimisht
+    <string name="ui_dialog_missing_credentials_msg_plain">Ju duhet të vendosni fillimisht
   emrin tuaj të përdoruesit dhe fjalëkalimin.</string>
   <string name="ui_dialog_invalid_imap_folder_title">Emër etikete jo i saktë</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Emri i etiketës mund të mos përmbajë hapsira (në fillim ose fund).</string>

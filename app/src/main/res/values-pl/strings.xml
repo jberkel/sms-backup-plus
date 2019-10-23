@@ -93,7 +93,6 @@
     <string name="error_wifi_only_no_connection">Brak połącznia Wifi</string>
     <string name="error_no_connection">Brak połączenia z Internetem</string>
     <string name="ui_dialog_missing_credentials_title">Dane logowania</string>
-    <string name="ui_dialog_missing_credentials_msg_xoauth">Musisz najpierw podłączyć konto Gmail.</string>
     <string name="ui_dialog_missing_credentials_msg_plain">Musisz najpierw ustawić nazwę użytkownika i hasło.</string>
     <string name="ui_dialog_invalid_imap_folder_title">Nieprawidłowa etykieta</string>
     <string name="ui_dialog_invalid_imap_folder_msg">Etykieta może zawierać tylko litery, bez polskich znaków (A-Z, a-z).</string>

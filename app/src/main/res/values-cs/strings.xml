@@ -123,8 +123,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Přihlašovací informace</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Nejdříve se musíte připojit k GMail účtu.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Nejdříve musíte vložit uživatele a heslo.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Nejdříve musíte vložit uživatele a heslo.</string>
   <string name="ui_dialog_invalid_imap_folder_title">Neplatný název složky</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Název složky nesmí mít mezery (na začátku nebo na konci).</string>
   <string name="ui_dialog_first_sync_title">První záloha</string>

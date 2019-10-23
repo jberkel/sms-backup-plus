@@ -81,7 +81,6 @@ import static com.zegoggles.smssync.App.post;
 import static com.zegoggles.smssync.activity.AppPermission.allGranted;
 import static com.zegoggles.smssync.activity.Dialogs.ConfirmAction.ACTION;
 import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
-import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ABOUT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR;
 import static com.zegoggles.smssync.activity.Dialogs.Type.CONFIRM_ACTION;
@@ -405,11 +404,11 @@ public class MainActivity extends ThemeActivity implements
         switch (dialog) {
             case FIRST_SYNC:
                 arguments.putInt(MAX_ITEMS_PER_SYNC, preferences.getMaxItemsPerSync()); break;
-            case MISSING_CREDENTIALS:
-                arguments.putBoolean(USE_XOAUTH, authPreferences.useXOAuth()); break;
             case WEB_CONNECT:
                 arguments.putParcelable(WebConnect.INTENT, fallbackAuthIntent); break;
-            case SMS_DEFAULT_PACKAGE_CHANGE: break;
+            case MISSING_CREDENTIALS:
+            case SMS_DEFAULT_PACKAGE_CHANGE:
+                break;
         }
         showDialog(dialog, arguments);
     }

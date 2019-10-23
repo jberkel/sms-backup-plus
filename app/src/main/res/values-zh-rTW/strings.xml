@@ -163,8 +163,7 @@
 
   <string name="ui_dialog_missing_credentials_title">登入訊息</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">您需要首先連接到您的 Gmail 帳戶。</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">您需要首先設定你的
+    <string name="ui_dialog_missing_credentials_msg_plain">您需要首先設定你的
   登入名稱與密碼。</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">無效的標籤名稱</string>

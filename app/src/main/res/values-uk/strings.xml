@@ -101,8 +101,7 @@
 <string name="error_no_connection">Немає підключення до інтернету</string>
 <string name="error_sms_provider_not_writable">Не можливо записати до sms-провайдера</string>
 <string name="ui_dialog_missing_credentials_title">Інформація про вхід</string>
-<string name="ui_dialog_missing_credentials_msg_xoauth">Перш за все вам необхідно підключити ваш обліковий запис Gmail.</string>
-<string name="ui_dialog_missing_credentials_msg_plain">Спочатку потрібно встановити ваше ім’я користувача та пароль.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Спочатку потрібно встановити ваше ім’я користувача та пароль.</string>
 <string name="ui_dialog_invalid_imap_folder_title">Невірна назва мітки</string>
 <string name="ui_dialog_invalid_imap_folder_msg">Назва мітки не може містити пробіли (на початку або в кінці).</string>
 <string name="ui_dialog_first_sync_title">Перша резервна копія</string>

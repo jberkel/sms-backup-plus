@@ -163,8 +163,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Giriş bilgisi</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Öncelikle Gmail hesabınıza bağlanmanız gerekiyor.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Kullanıcı adı ve şifrenizi
+    <string name="ui_dialog_missing_credentials_msg_plain">Kullanıcı adı ve şifrenizi
   girmelisiniz.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Hatalı etiket adı</string>

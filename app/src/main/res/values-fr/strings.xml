@@ -143,8 +143,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Informations d\'identification</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Vous devez d\'abord vous connecter à votre compte Gmail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Vous devez d\'abord définir vos identifiants.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Vous devez d\'abord définir vos identifiants.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Nom du libellé invalide</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Le nom du libellé ne peut contenir que des lettres non accentuées et des chiffres (A-Z, a-z, 0-9), \'/\'.</string>

@@ -163,8 +163,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Inloggningsuppgifter</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Du måste ansluta ditt Gmail-konto först</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Du måste ange ditt
+    <string name="ui_dialog_missing_credentials_msg_plain">Du måste ange ditt
   användarnamn och lösenord först.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Ogiltigt etikett-namn</string>

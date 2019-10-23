@@ -137,8 +137,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Innloggingsinformasjon</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Du må koble til en Gmail konto først.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Du må angi
+    <string name="ui_dialog_missing_credentials_msg_plain">Du må angi
   brukernavn og passord først.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Ugyldig etikett navn</string>

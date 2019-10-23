@@ -139,8 +139,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Informació d\'inici de sessió</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Primer us heu de connectar al compte de Gmail account.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Primer heu d\'establir el
+    <string name="ui_dialog_missing_credentials_msg_plain">Primer heu d\'establir el
   nom d\'usuari i la contrasenya.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Nom d\'etiqueta no vàlid</string>

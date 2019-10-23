@@ -164,8 +164,7 @@
 
   <string name="ui_dialog_missing_credentials_title">로그인 정보</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Gmail 계정에 먼저 연결해야 합니다.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">먼저 사용자 이름과
+    <string name="ui_dialog_missing_credentials_msg_plain">먼저 사용자 이름과
   암호를 설정해야 합니다.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">부적합한 라벨 이름</string>

@@ -95,8 +95,7 @@
   <string name="error_wifi_only_no_connection">Sem rede Wifi</string>
   <string name="error_no_connection">Sem ligação à internet</string>
   <string name="ui_dialog_missing_credentials_title">Dados de início de sessão</string>
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Primeiro deve estabelecer a sua ligação ao Gmail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Primeiro deve definir o seu nome de utilizador e palavra-passe.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Primeiro deve definir o seu nome de utilizador e palavra-passe.</string>
   <string name="ui_dialog_invalid_imap_folder_title">Marcador IMAP inválido</string>
   <string name="ui_dialog_invalid_imap_folder_msg">O marcador IMAP não pode conter espaços(antes ou depois)</string>
   <string name="ui_dialog_first_sync_title">Cópia inicial</string>

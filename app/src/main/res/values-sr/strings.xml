@@ -143,8 +143,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Подаци за пријаву</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Најпре морате да се повежете са вашим Gmail налогом.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Најпре морате да да поставите
+    <string name="ui_dialog_missing_credentials_msg_plain">Најпре морате да да поставите
   ваше корисничко име и лозинку.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Неисправно име етикете</string>

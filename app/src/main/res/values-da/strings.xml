@@ -137,8 +137,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Login information</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Du skal først oprette forbindelse til din Gmail konto.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Du skal først sætte brugernavn og password.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Du skal først sætte brugernavn og password.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Ugyldigt etiket navn</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Etiketten må ikke indeholde mellemrum i starten eller slutningen.</string>

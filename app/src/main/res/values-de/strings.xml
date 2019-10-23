@@ -140,8 +140,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Anmeldungs-Informationen</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Sie müssen sich zuerst bei Gmail anmelden.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Sie müssen zuerst Ihren
+    <string name="ui_dialog_missing_credentials_msg_plain">Sie müssen zuerst Ihren
   Benutzernamen und Ihr Passwort eintragen.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Ungültiges Label</string>

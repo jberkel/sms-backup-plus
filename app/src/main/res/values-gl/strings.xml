@@ -162,8 +162,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Información de inicio de sesión</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Necesita conectar a súa conta de GMail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Necesita establecer o nome de usuario e contrasinal.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Necesita establecer o nome de usuario e contrasinal.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Nome de etiqueta non válido</string>
   <string name="ui_dialog_invalid_imap_folder_msg">O nome da etiqueta non pode conter espazos (ao principio ou ao final).</string>

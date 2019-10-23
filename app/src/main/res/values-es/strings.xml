@@ -124,8 +124,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Información de inicio de sesión</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Necesita conectar su cuenta de Gmail en primer lugar.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Necesita configurar su nombre de usuario y contraseña en primer lugar.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Necesita configurar su nombre de usuario y contraseña en primer lugar.</string>
 
 
 

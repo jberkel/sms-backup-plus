@@ -144,8 +144,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Bejelentkezési információk</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Először kapcsolódnia kell a Gmail fiókjához.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Először meg kell adnia a felhasználói nevét és jelszavát.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Először meg kell adnia a felhasználói nevét és jelszavát.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Érvénytelen címke név</string>
   <string name="ui_dialog_invalid_imap_folder_msg">A címke neve nem tartalmazhat szóközt (az elején vagy a végén).</string>

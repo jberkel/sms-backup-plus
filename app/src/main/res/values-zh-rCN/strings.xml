@@ -163,8 +163,7 @@
 
   <string name="ui_dialog_missing_credentials_title">登录信息</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">您首先需要连接到 Gmail 账户。</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">您首先需要设置您的账户和密码。</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">您首先需要设置您的账户和密码。</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">无效的标签名称</string>
   <string name="ui_dialog_invalid_imap_folder_msg">标签名称开头或结尾不能包含空格。</string>

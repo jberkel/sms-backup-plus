@@ -99,17 +99,12 @@ public class Dialogs {
     }
 
     public static class MissingCredentials extends BaseFragment {
-        static final String USE_XOAUTH = "use_xoauth";
-
         @Override @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final boolean useXOAuth = getArguments().getBoolean(USE_XOAUTH);
-            final String title = getString(R.string.ui_dialog_missing_credentials_title);
-            final String msg = useXOAuth ?
-                    getString(R.string.ui_dialog_missing_credentials_msg_xoauth) :
-                    getString(R.string.ui_dialog_missing_credentials_msg_plain);
-
-            return createMessageDialog(title, msg, ic_dialog_alert);
+            return createMessageDialog(
+                getString(R.string.ui_dialog_missing_credentials_title),
+                getString(R.string.ui_dialog_missing_credentials_msg_plain),
+                ic_dialog_alert);
         }
     }
 

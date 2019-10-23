@@ -90,7 +90,6 @@
     <string name="error_wifi_only_no_connection">Nie je pripojené WiFi</string>
     <string name="error_no_connection">Nie je internetové pripojenie</string>
     <string name="ui_dialog_missing_credentials_title">Prihlasovacie informácie</string>
-    <string name="ui_dialog_missing_credentials_msg_xoauth">Najskôr sa musíte pripojiť k GMail účtu</string>
     <string name="ui_dialog_missing_credentials_msg_plain">Najskôr musíte vložiť meno a heslo</string>
     <string name="ui_dialog_invalid_imap_folder_title">Neplatný názov zložky</string>
     <string name="ui_dialog_invalid_imap_folder_msg">Názov zložky nesmie mať medzery (na začiatku alebo na konci)</string>

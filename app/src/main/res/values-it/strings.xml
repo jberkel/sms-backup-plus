@@ -135,8 +135,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Informazioni login</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">E\' necessario prima connettersi all\'account Gmail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">E\' necessario impostare prima
+    <string name="ui_dialog_missing_credentials_msg_plain">E\' necessario impostare prima
   username e password.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Nome etichetta non valido</string>

@@ -166,8 +166,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Aanmeldingsinformatie</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">U moet eerst verbinden met uw Gmail-account.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">U moet eerst uw gebruikersnaam en wachtwoord instellen.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">U moet eerst uw gebruikersnaam en wachtwoord instellen.</string>
 
 
   <string name="ui_dialog_invalid_imap_folder_title">Ongeldig labelnaam</string>
