@@ -7,7 +7,7 @@
 # NOTE:
 **Due to a recent change in Google's application permissions regarding XOAUTH, this app may not work as intended.**
 The issue is being discussed heavily in the [issue tracker](https://github.com/jberkel/sms-backup-plus/issues/959).
-- For a workaround, please refer to the instructions referenced [here](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-513018820)
+- For a workaround, please refer to the instructions referenced in the [issue tracker](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-513018820) or this [Android Police article](https://www.androidpolice.com/2019/08/12/sms-backup-is-now-broken-due-to-gmails-api-changes-but-theres-a-workaround/)
 - If you wish to backup to a non-Gmail address, follow the instructions referenced [here](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-507385460)
 
 Please understand that the issues linked are intended to provide information.
