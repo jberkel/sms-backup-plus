@@ -7,11 +7,14 @@
 # NOTE:
 **Due to a recent change in Google's application permissions regarding XOAUTH, this app may not work as intended.**
 The issue is being discussed heavily in the [issue tracker](https://github.com/jberkel/sms-backup-plus/issues/959).
-- For a workaround, please refer to the instructions referenced in the [issue tracker](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-513018820) or this [Android Police article](https://www.androidpolice.com/2019/08/12/sms-backup-is-now-broken-due-to-gmails-api-changes-but-theres-a-workaround/)
-- If you wish to backup to a non-Gmail address, follow the instructions referenced [here](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-507385460)
+ * For a workaround, please refer to the instructions referenced in the
+   [issue tracker](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-513018820)
+   or this [Android Police article][].
+ * If you wish to backup to a non-Gmail address, follow the instructions referenced
+   [here](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-507385460)
 
 Please understand that the issues linked are intended to provide information.
-As such, please keep comments focused on resolving the issue, as well as following the [GitHub Community Guidelines](https://help.github.com/en/articles/github-community-guidelines).
+As such, please keep comments focused on resolving the issue, as well as following the [GitHub Community Guidelines][].
 
 ---------------------
 
@@ -30,7 +33,8 @@ Main features/improvements:
     * ⚠️ In June 2019 Google [changed their API policy], introducing [sensitivity scopes], and
       as a result SMS Backup+ [can no longer use XOAuth2] to save messages into your mailbox;
       instead a "password" is required to access Gmail via IMAP, but it can be a generated
-      application password (which can be revoked without affecting your real password).
+      [application password](https://support.google.com/accounts/answer/185833?hl=en)
+      (which can be revoked without affecting your real password).
 
   * MMS backup support (added in version 1.1)
 
@@ -486,6 +490,10 @@ This application is released under the terms of the [Apache License, Version 2.0
 [changed their API policy]: https://cloud.google.com/blog/products/g-suite/elevating-user-trust-in-our-api-ecosystems
 [sensitivity scopes]: https://developers.google.com/gmail/api/auth/scopes
 [can no longer use XOAuth2]: https://arstechnica.com/gadgets/2019/06/gmails-api-lockdown-will-kill-some-third-party-app-access-starting-july-15/
+
+[GitHub Community Guidelines]: https://help.github.com/en/articles/github-community-guidelines
+[Android Police article]: https://www.androidpolice.com/2019/08/12/sms-backup-is-now-broken-due-to-gmails-api-changes-but-theres-a-workaround/
+[Sign in using App Passwords]: https://support.google.com/accounts/answer/185833?hl=en
 
 [Google Play Store]: https://play.google.com/store/apps/details?id=com.zegoggles.smssync
 [F-Droid]: https://f-droid.org/packages/com.zegoggles.smssync/
