@@ -58,6 +58,11 @@ public abstract class ServiceBase extends Service {
     @Nullable Notification notification;
 
     @Override
+    public void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+    }
+
+    @Override
     public IBinder onBind(Intent arg0) {
         return null;
     }
