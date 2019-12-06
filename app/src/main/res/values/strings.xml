@@ -71,7 +71,7 @@
   <string name="status_calc_details">Calculating\u2026</string>
   <string name="status_canceled">Canceled</string>
   <string name="status_canceled_details">%1$d/%2$d items successfully backed up.</string>
-  <string name="status_gmail_temp_error">Temporary Gmail IMAP error, try again later.</string>
+  <string name="status_gmail_temp_error">Temporary IMAP error, try again later.</string>
 
   <string name="ui_settings_advanced_label">Advanced settings</string>
   <string name="ui_settings_advanced_desc">Set advanced preferences.</string>
