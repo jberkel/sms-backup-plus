@@ -2,7 +2,7 @@ package com.zegoggles.smssync.receiver;
 
 import android.content.Context;
 import android.content.Intent;
-import com.zegoggles.smssync.service.BackupJobs;
+import com.zegoggles.smssync.service.FirebaseBackupJobs;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,13 +16,14 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(RobolectricTestRunner.class)
 public class BootReceiverTest {
-    @Mock BackupJobs backupJobs;
+    @Mock
+    FirebaseBackupJobs backupJobs;
     BootReceiver receiver;
 
     @Before public void before() {
         initMocks(this);
         receiver = new BootReceiver() {
-            @Override protected BackupJobs getBackupJobs(Context context) {
+            @Override protected FirebaseBackupJobs getBackupJobs(Context context) {
                 return backupJobs;
             }
         };

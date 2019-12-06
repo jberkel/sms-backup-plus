@@ -304,8 +304,8 @@ public class SmsBackupService extends ServiceBase {
             .setContentIntent(getPendingIntent(null));
     }
 
-    protected BackupJobs getBackupJobs() {
-        return new BackupJobs(this);
+    protected FirebaseBackupJobs getBackupJobs() {
+        return new FirebaseBackupJobs(this);
     }
 
     public static boolean isServiceWorking() {

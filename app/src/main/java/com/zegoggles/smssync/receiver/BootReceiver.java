@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import com.zegoggles.smssync.service.BackupJobs;
+import com.zegoggles.smssync.service.FirebaseBackupJobs;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -25,7 +25,7 @@ public class BootReceiver extends BroadcastReceiver {
         getBackupJobs(context).scheduleBootup();
     }
 
-    protected BackupJobs getBackupJobs(Context context) {
-        return new BackupJobs(context);
+    protected FirebaseBackupJobs getBackupJobs(Context context) {
+        return new FirebaseBackupJobs(context);
     }
 }

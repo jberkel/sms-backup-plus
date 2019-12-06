@@ -28,8 +28,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-public class BackupJobsTest {
-    private BackupJobs subject;
+public class FirebaseBackupJobsTest {
+    private FirebaseBackupJobs subject;
 
     @Mock private Preferences preferences;
     @Mock private DataTypePreferences dataTypePreferences;
@@ -48,7 +48,7 @@ public class BackupJobsTest {
         ri.isDefault = true;
 
         pm.addResolveInfoForIntent(executeIntent, ri);
-        subject = new BackupJobs(RuntimeEnvironment.application, preferences);
+        subject = new FirebaseBackupJobs(RuntimeEnvironment.application, preferences);
         when(preferences.getDataTypePreferences()).thenReturn(dataTypePreferences);
     }
 

@@ -52,18 +52,18 @@ import static com.zegoggles.smssync.service.BackupType.INCOMING;
 import static com.zegoggles.smssync.service.BackupType.REGULAR;
 
 
-public class BackupJobs {
+public class FirebaseBackupJobs {
     private static final int BOOT_BACKUP_DELAY = 60;
     static final String CONTENT_TRIGGER_TAG = "contentTrigger";
 
     private final Preferences preferences;
     private final FirebaseJobDispatcher firebaseJobDispatcher;
 
-    public BackupJobs(Context context) {
+    public FirebaseBackupJobs(Context context) {
         this(context, new Preferences(context));
     }
 
-    BackupJobs(Context context, Preferences preferences) {
+    FirebaseBackupJobs(Context context, Preferences preferences) {
         this.preferences = preferences;
         firebaseJobDispatcher = new FirebaseJobDispatcher(
             preferences.isUseOldScheduler() ?

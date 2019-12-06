@@ -23,7 +23,7 @@ public class SmsJobServiceTest {
 
     @Test public void testOnStartJob() {
         final JobParameters jobParameters = mock(JobParameters.class);
-        when(jobParameters.getTag()).thenReturn(BackupJobs.CONTENT_TRIGGER_TAG);
+        when(jobParameters.getTag()).thenReturn(FirebaseBackupJobs.CONTENT_TRIGGER_TAG);
 
         boolean moreWork = smsJobService.onStartJob(jobParameters);
         assertThat(moreWork).isFalse();

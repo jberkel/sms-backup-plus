@@ -126,7 +126,7 @@ public class SmsJobService extends JobService {
     }
 
     private boolean wasTriggeredByContentUri(JobParameters jobParameters) {
-        return BackupJobs.CONTENT_TRIGGER_TAG.equals(jobParameters.getTag());
+        return FirebaseBackupJobs.CONTENT_TRIGGER_TAG.equals(jobParameters.getTag());
     }
 
     private boolean shouldRun(JobParameters jobParameters) {
@@ -143,7 +143,7 @@ public class SmsJobService extends JobService {
         }
     }
 
-    private BackupJobs getBackupJobs() {
-        return new BackupJobs(this);
+    private FirebaseBackupJobs getBackupJobs() {
+        return new FirebaseBackupJobs(this);
     }
 }

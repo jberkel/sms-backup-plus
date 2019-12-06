@@ -56,7 +56,8 @@ public class SmsBackupServiceTest {
     @Mock Preferences preferences;
     @Mock DataTypePreferences dataTypePreferences;
     @Mock BackupTask backupTask;
-    @Mock BackupJobs backupJobs;
+    @Mock
+    FirebaseBackupJobs backupJobs;
 
     @Before public void before() {
         initMocks(this);
@@ -65,7 +66,7 @@ public class SmsBackupServiceTest {
             @Override public Context getApplicationContext() { return RuntimeEnvironment.application; }
             @Override public Resources getResources() { return getApplicationContext().getResources(); }
             @Override protected BackupTask getBackupTask() { return backupTask; }
-            @Override protected BackupJobs getBackupJobs() { return backupJobs; }
+            @Override protected FirebaseBackupJobs getBackupJobs() { return backupJobs; }
             @Override protected Preferences getPreferences() { return preferences; }
             @Override public int checkPermission(String permission, int pid, int uid) { return PERMISSION_GRANTED; }
             @Override protected AuthPreferences getAuthPreferences() { return authPreferences; }

@@ -43,7 +43,7 @@ import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.BootReceiver;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
-import com.zegoggles.smssync.service.BackupJobs;
+import com.zegoggles.smssync.service.FirebaseBackupJobs;
 
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
@@ -61,7 +61,7 @@ public class App extends Application {
     public static boolean gcmAvailable;
 
     private Preferences preferences;
-    private BackupJobs backupJobs;
+    private FirebaseBackupJobs backupJobs;
 
     @Override
     public void onCreate() {
@@ -75,7 +75,7 @@ public class App extends Application {
             createNotificationChannel();
         }
 
-        backupJobs = new BackupJobs(this);
+        backupJobs = new FirebaseBackupJobs(this);
 
         if (gcmAvailable) {
             setBroadcastReceiversEnabled(false);

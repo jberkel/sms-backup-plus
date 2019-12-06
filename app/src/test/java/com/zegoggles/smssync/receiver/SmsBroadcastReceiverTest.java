@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
-import com.zegoggles.smssync.service.BackupJobs;
+import com.zegoggles.smssync.service.FirebaseBackupJobs;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(RobolectricTestRunner.class)
 public class SmsBroadcastReceiverTest {
     Context context;
-    @Mock BackupJobs backupJobs;
+    @Mock
+    FirebaseBackupJobs backupJobs;
     @Mock Preferences preferences;
     @Mock AuthPreferences authPreferences;
     SmsBroadcastReceiver receiver;
@@ -27,7 +28,7 @@ public class SmsBroadcastReceiverTest {
         initMocks(this);
         context = RuntimeEnvironment.application;
         receiver = new SmsBroadcastReceiver() {
-            @Override protected BackupJobs getBackupJobs(Context context) {
+            @Override protected FirebaseBackupJobs getBackupJobs(Context context) {
                 return backupJobs;
             }
 
