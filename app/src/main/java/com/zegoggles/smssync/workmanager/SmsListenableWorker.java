@@ -1,15 +1,18 @@
 package com.zegoggles.smssync.workmanager;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
-import androidx.work.ListenableWorker;
+import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.google.common.util.concurrent.ListenableFuture;
+import com.zegoggles.smssync.App;
 
-public class SmsListenableWorker extends ListenableWorker {
+import static com.zegoggles.smssync.App.TAG;
+
+public class SmsListenableWorker extends Worker {
     /**
      * @param appContext   The application {@link Context}
      * @param workerParams Parameters to setup the internal state of this worker
@@ -18,24 +21,12 @@ public class SmsListenableWorker extends ListenableWorker {
         super(appContext, workerParams);
     }
 
-    /**
-     * Override this method to start your actual background processing. This method is called on
-     * the main thread.
-     * <p>
-     * A ListenableWorker is given a maximum of ten minutes to finish its execution and return a
-     * {@link Result}.  After this time has expired, the worker will be signalled to stop and its
-     * {@link ListenableFuture} will be cancelled.
-     *
-     * @return A {@link ListenableFuture} with the {@link Result} of the computation.  If you
-     *         cancel this Future, WorkManager will treat this unit of work as failed.
-     */
     @NonNull
     @Override
-    public ListenableFuture<Result> startWork() {
-        Data input = getInputData();
-
-        // Return a ListenableFuture<>
-        return null;
+    public Result doWork() {
+        Data inputData = getInputData();
+        Log.d(TAG, "doWork(" + inputData + ")");
+        return Result.success();
     }
 
     @Override

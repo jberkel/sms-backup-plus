@@ -44,6 +44,7 @@ import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.BootReceiver;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
 import com.zegoggles.smssync.service.FirebaseBackupJobs;
+import com.zegoggles.smssync.workmanager.WorkManagerBackupJobs;
 
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
@@ -61,7 +62,8 @@ public class App extends Application {
     public static boolean gcmAvailable;
 
     private Preferences preferences;
-    private FirebaseBackupJobs backupJobs;
+//    private FirebaseBackupJobs backupJobs;
+    private WorkManagerBackupJobs workManagerBackupJobs;
 
     @Override
     public void onCreate() {
@@ -75,7 +77,8 @@ public class App extends Application {
             createNotificationChannel();
         }
 
-        backupJobs = new FirebaseBackupJobs(this);
+        //backupJobs = new FirebaseBackupJobs(this);
+        workManagerBackupJobs = new WorkManagerBackupJobs(this, preferences);
 
         if (gcmAvailable) {
             setBroadcastReceiversEnabled(false);
@@ -193,13 +196,16 @@ public class App extends Application {
     }
 
     private void rescheduleJobs() {
-        backupJobs.cancelAll();
+        //backupJobs.cancelAll();
+        workManagerBackupJobs.cancelAll();
 
         if (preferences.isAutoBackupEnabled()) {
-            backupJobs.scheduleRegular();
+            //backupJobs.scheduleRegular();
+            workManagerBackupJobs.enqueueRegular();
 
             if (preferences.getIncomingTimeoutSecs() > 0 && !preferences.isUseOldScheduler()) {
-                backupJobs.scheduleContentTriggerJob();
+                //backupJobs.scheduleContentTriggerJob();
+                workManagerBackupJobs.enqueueContentTriggerWork();
             }
         }
     }
