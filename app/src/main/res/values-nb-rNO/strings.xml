@@ -61,8 +61,6 @@
 
   <string name="ui_settings_advanced_label">Avanserte innstillinger</string>
   <string name="ui_settings_advanced_desc">Gjør avanserte innstillinger.</string>
-  <string name="ui_settings_advanced_server_label">Tjenerinnstillinger</string>
-  <string name="ui_settings_advanced_server_desc">Ikke forandre noe om ikke du vet hva du gjør!</string>
 
   <string name="imap_settings">IMAP innstillinger</string>
   <string name="ui_login_label">Brukernavn</string>
@@ -73,13 +71,10 @@
   <string name="ui_server_label">Tjener adresse</string>
   <string name="ui_server_desc">Adressen til tjeneren du vil synkronisere til inkl. port.</string>
   <string name="ui_protocol_label">Sikkerhet</string>
-  <string name="ui_protocol_desc">Tjenerens sikkerhetsprotokoll.</string>
   <string name="ui_authentication_label">Autentisering</string>
-  <string name="ui_authentication_desc">Autentisering metoden.</string>
   <string name="plain">Ren tekst</string>
 
   <string name="ui_imap_folder_label">Gmail etikett</string>
-  <string name="ui_imap_folder_desc">Gmail etikett for meldinger.</string>
   <string name="ui_imap_folder_label_dialog_msg">Sikkerhetskopierte meldinger vil ha denne etiketten.</string>
   <string name="ui_mail_subject_prefix_label">Epost emne prefiks</string>
   <string name="ui_mail_subject_prefix_desc">Bruk IMAP mappenavn som prefiks i epostemne.</string>
@@ -108,7 +103,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Kalender for samtalelogg.</string>
 
   <string name="ui_imap_folder_calllog_label">Samtalelogg etikett</string>
-  <string name="ui_imap_folder_calllog_desc">Gmail etikett for samtalelogg.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Sikkerhetskopiert samtalelogg vil ha denne etiketten i Gmail.</string>
 
   <string name="ui_mark_as_read_label">Marker som lest (epost)</string>
@@ -143,8 +137,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Innloggingsinformasjon</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Du må koble til en Gmail konto først.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Du må angi
+    <string name="ui_dialog_missing_credentials_msg_plain">Du må angi
   brukernavn og passord først.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Ugyldig etikett navn</string>

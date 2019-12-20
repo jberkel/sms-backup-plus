@@ -60,11 +60,9 @@
 
   <string name="ui_settings_advanced_label">Расширенные настройки</string>
   <string name="ui_settings_advanced_desc">Настройки расписания, уведомлений и пр.</string>
-  <string name="ui_settings_advanced_server_label">Настройки сервера</string>
-  <string name="ui_settings_advanced_server_desc">Не изменяйте настройки, если не уверены!</string>
 
 
-  <string name="imap_settings">Настройки IMAP</string>
+    <string name="imap_settings">Настройки IMAP</string>
   <string name="ui_login_label">Логин</string>
   <string name="ui_login_desc">Ваш логин или адрес email.</string>
   <string name="ui_password_label">Пароль</string>
@@ -73,14 +71,11 @@
   <string name="ui_server_label">Адрес сервера</string>
   <string name="ui_server_desc">Адрес сервера для синхронизации и номер порта.</string>
   <string name="ui_protocol_label">Настройки безопасности</string>
-  <string name="ui_protocol_desc">Настройки протокола.</string>
-  <string name="ui_authentication_label">Авторизация</string>
-  <string name="ui_authentication_desc">Метод авторизации.</string>
-  <string name="plain">Обычный текст</string>
+    <string name="ui_authentication_label">Авторизация</string>
+    <string name="plain">Обычный текст</string>
 
   <string name="ui_imap_folder_label">Ярлык Gmail</string>
-  <string name="ui_imap_folder_desc">Ярлык Gmail для SMS.</string>
-  <string name="ui_imap_folder_label_dialog_msg">Сохранённым SMS будет присвоен этот ярлык Gmail.</string>
+    <string name="ui_imap_folder_label_dialog_msg">Сохранённым SMS будет присвоен этот ярлык Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Заголовок email</string>
   <string name="ui_mail_subject_prefix_desc">Использовать имя IMAP папки как заголовок email</string>
 
@@ -109,8 +104,7 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Какой календарь использовать</string>
 
    <string name="ui_imap_folder_calllog_label">Ярлык для журнала вызовов</string>
-  <string name="ui_imap_folder_calllog_desc">Ярлык Gmail для журнала вызовов.</string>
-  <string name="ui_imap_folder_calllog_label_dialog_msg">Сохранённым звонкам будет присвоен этот ярлык Gmail.</string>
+    <string name="ui_imap_folder_calllog_label_dialog_msg">Сохранённым звонкам будет присвоен этот ярлык Gmail.</string>
 
 
   <string name="ui_mark_as_read_label">Отметить как прочитанные</string>
@@ -141,8 +135,7 @@
 
     <string name="ui_dialog_missing_credentials_title">Информация о подключении</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Вы должны быть подключены к своей учётной записи.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Введите логин и пароль</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Введите логин и пароль</string>
 
    <string name="ui_dialog_invalid_imap_folder_title">Недопустимое имя ярлыка</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Нельзя использовать пробел в качестве первого или последнего символа.</string>

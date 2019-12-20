@@ -24,15 +24,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.zegoggles.smssync.App;
@@ -46,6 +45,7 @@ import com.zegoggles.smssync.utils.AppLog;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.net.ConnectivityManager.TYPE_WIFI;
+import static com.zegoggles.smssync.App.CHANNEL_ID;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static java.util.Locale.ENGLISH;
@@ -56,6 +56,11 @@ public abstract class ServiceBase extends Service {
 
     private AppLog appLog;
     @Nullable Notification notification;
+
+    @Override
+    public void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+    }
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -110,9 +115,9 @@ public abstract class ServiceBase extends Service {
     protected synchronized void acquireLocks() {
         if (wakeLock == null) {
             PowerManager pMgr = (PowerManager) getSystemService(POWER_SERVICE);
-            wakeLock = pMgr.newWakeLock(wakeLockType(), TAG);
+            wakeLock = pMgr.newWakeLock(wakeLockType(), "com.zegoggles.smssync:"+TAG);
         }
-        wakeLock.acquire();
+        wakeLock.acquire(10*60*1000L /*10 minutes*/);
 
         if (isConnectedViaWifi()) {
             // we have Wifi, lock it
@@ -128,10 +133,8 @@ public abstract class ServiceBase extends Service {
         return PowerManager.PARTIAL_WAKE_LOCK;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
     private int getWifiLockType() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1 ?
-                WifiManager.WIFI_MODE_FULL_HIGH_PERF : WifiManager.WIFI_MODE_FULL;
+        return WifiManager.WIFI_MODE_FULL_HIGH_PERF;
     }
 
     protected synchronized void releaseLocks() {
@@ -180,10 +183,12 @@ public abstract class ServiceBase extends Service {
         return (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
+    @SuppressWarnings("deprecation")
     @NonNull NotificationCompat.Builder createNotification(int resId) {
         return new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.ic_notification)
             .setTicker(getString(resId))
+            .setChannelId(CHANNEL_ID)
             .setWhen(System.currentTimeMillis())
             .setOngoing(true);
     }
@@ -217,9 +222,10 @@ public abstract class ServiceBase extends Service {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("deprecation")
     private boolean isConnectedViaWifi_SDK21() {
         for (Network network : getConnectivityManager().getAllNetworks()) {
-            final NetworkInfo networkInfo = getConnectivityManager().getNetworkInfo(network);
+            final android.net.NetworkInfo networkInfo = getConnectivityManager().getNetworkInfo(network);
             if (networkInfo != null && networkInfo.getType() == TYPE_WIFI && networkInfo.isConnectedOrConnecting()) {
                 return true;
             }

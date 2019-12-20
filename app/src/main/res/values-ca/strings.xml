@@ -61,8 +61,6 @@
 
   <string name="ui_settings_advanced_label">Configuració avançada</string>
   <string name="ui_settings_advanced_desc">Establiu paràmetres avançats.</string>
-  <string name="ui_settings_advanced_server_label">Configuració del servidor IMAP</string>
-  <string name="ui_settings_advanced_server_desc">No ho canvieu si no sabeu què esteu fent!</string>
 
   <string name="imap_settings">Configuració d\'IMAP</string>
   <string name="ui_login_label">Nom d\'usuari</string>
@@ -73,13 +71,10 @@
   <string name="ui_server_label">Adreça del servidor</string>
   <string name="ui_server_desc">L\'adreça del servidor de sincronització, incloent el port.</string>
   <string name="ui_protocol_label">Seguretat</string>
-  <string name="ui_protocol_desc">El protocol de seguretat del servidor.</string>
   <string name="ui_authentication_label">Autentificació</string>
-  <string name="ui_authentication_desc">Mètode d\'autentificació.</string>
   <string name="plain">Text net</string>
 
   <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
-  <string name="ui_imap_folder_desc">Etiqueta de Gmail assignada als SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Els SMS copiats es marcaran amb aquesta etiqueta a Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Prefix de l\'assumpte de correu electrònic</string>
   <string name="ui_mail_subject_prefix_desc">Utilitza el nom de la carpeta IMAP com a prefix a l\'assumpte de correu electrònic</string>
@@ -108,7 +103,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Calendari que s\'utilitzarà per al registre de trucades</string>
 
   <string name="ui_imap_folder_calllog_label">Etiqueta del registre de trucades</string>
-  <string name="ui_imap_folder_calllog_desc">Etiqueta de Gmail assignada al registre de trucades.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Les entrades del registre de trucades copiades es marcaran amb aquesta etiqueta a Gmail.</string>
 
   <string name="ui_mark_as_read_label">Marca com a llegits (correus electrònics)</string>
@@ -145,8 +139,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Informació d\'inici de sessió</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Primer us heu de connectar al compte de Gmail account.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Primer heu d\'establir el
+    <string name="ui_dialog_missing_credentials_msg_plain">Primer heu d\'establir el
   nom d\'usuari i la contrasenya.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Nom d\'etiqueta no vàlid</string>

@@ -61,8 +61,6 @@
 
   <string name="ui_settings_advanced_label">Напредне поставке</string>
   <string name="ui_settings_advanced_desc">Уредите напредне поставке.</string>
-  <string name="ui_settings_advanced_server_label">Поставке ИМАП сервера</string>
-  <string name="ui_settings_advanced_server_desc">Не мењајте ову опцију осим ако знате шта радите!</string>
 
   <string name="imap_settings">Поставке ИМАП-а</string>
   <string name="ui_login_label">Корисничко име</string>
@@ -73,13 +71,10 @@
   <string name="ui_server_label">Адреса сервера</string>
   <string name="ui_server_desc">Адреса сервера са којим желите да се синхронизујете, укључујући и порт.</string>
   <string name="ui_protocol_label">Безбедност</string>
-  <string name="ui_protocol_desc">Безбедносни протокол сервера.</string>
   <string name="ui_authentication_label">Аутентификација</string>
-  <string name="ui_authentication_desc">Начин аутентификације.</string>
   <string name="plain">Обичан текст</string>
 
   <string name="ui_imap_folder_label">Етикета за СМС</string>
-  <string name="ui_imap_folder_desc">Етикета која се додељује СМС порукама.</string>
   <string name="ui_imap_folder_label_dialog_msg">Копиране СМС поруке ће бити означене овом етикетом у Gmail сандучету.</string>
   <string name="ui_mail_subject_prefix_label">Префикс предмета е-поште</string>
   <string name="ui_mail_subject_prefix_desc">Користи име ИМАП фасцикле за префикс у предмету е-поште</string>
@@ -108,7 +103,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Календар се користи за евиденцију позива</string>
 
   <string name="ui_imap_folder_calllog_label">Етикета за евиденцију позива</string>
-  <string name="ui_imap_folder_calllog_desc">Етикета која се додељује евиденцији позива.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Копирана евиденција позива ће бити означена овом етикетом у Gmail сандучету.</string>
 
   <string name="ui_mark_as_read_label">Означи пошту прочитаном</string>
@@ -149,8 +143,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Подаци за пријаву</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Најпре морате да се повежете са вашим Gmail налогом.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Најпре морате да да поставите
+    <string name="ui_dialog_missing_credentials_msg_plain">Најпре морате да да поставите
   ваше корисничко име и лозинку.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Неисправно име етикете</string>

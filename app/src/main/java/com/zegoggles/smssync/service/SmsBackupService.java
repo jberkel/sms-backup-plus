@@ -17,11 +17,10 @@
 package com.zegoggles.smssync.service;
 
 import android.content.Intent;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 import com.firebase.jobdispatcher.Job;
@@ -49,6 +48,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static android.R.drawable.stat_sys_warning;
+import static com.zegoggles.smssync.App.CHANNEL_ID;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.activity.AppPermission.formatMissingPermissionDetails;
@@ -174,8 +174,9 @@ public class SmsBackupService extends ServiceBase {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void legacyCheckConnectivity() throws ConnectivityException {
-        NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
+        android.net.NetworkInfo active = getConnectivityManager().getActiveNetworkInfo();
         if (active == null || !active.isConnectedOrConnecting()) {
             throw new NoConnectionException();
         }
@@ -289,9 +290,11 @@ public class SmsBackupService extends ServiceBase {
         getNotifier().notify(notificationId, builder.build());
     }
 
+    @SuppressWarnings("deprecation")
     private NotificationCompat.Builder notificationBuilder(int icon, String title, String text) {
         return new NotificationCompat.Builder(this)
             .setSmallIcon(icon)
+            .setChannelId(CHANNEL_ID)
             .setWhen(System.currentTimeMillis())
             .setOnlyAlertOnce(true)
             .setAutoCancel(true)

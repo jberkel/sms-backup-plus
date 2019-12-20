@@ -59,8 +59,6 @@
 
   <string name="ui_settings_advanced_label">Avancerede indstillinger</string>
   <string name="ui_settings_advanced_desc">Indstil avancerede indstillinger.</string>
-  <string name="ui_settings_advanced_server_label">IMAP server indstillinger</string>
-  <string name="ui_settings_advanced_server_desc">Undgå ændringer med mindre du ved hvad du laver!</string>
 
   <string name="imap_settings">IMAP indstillinger</string>
   <string name="ui_login_label">Brugernavn</string>
@@ -71,13 +69,10 @@
   <string name="ui_server_label">Server adresse</string>
   <string name="ui_server_desc">Adressen og porten på den server der skal sync\'es til.</string>
   <string name="ui_protocol_label">Sikkerhed</string>
-  <string name="ui_protocol_desc">Sikkerheds protokollen til serveren.</string>
   <string name="ui_authentication_label">Autentificering</string>
-  <string name="ui_authentication_desc">Autentificerings metoden.</string>
   <string name="plain">Klar tekst</string>
 
   <string name="ui_imap_folder_label">Gmail label</string>
-  <string name="ui_imap_folder_desc">Gmail label til SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">SMS beskeder der er backed op bliver tagged med denne label i Gmail.</string>
   <string name="ui_mail_subject_prefix_label">E-mail emne prefix</string>
   <string name="ui_mail_subject_prefix_desc">Brug IMAP folder navn som prefix i e-mail emne feltet.</string>
@@ -106,8 +101,7 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Hvilken kalender der bruges til opkalds logs</string>
 
   <string name="ui_imap_folder_calllog_label">Opkalds log etiket</string>
-  <string name="ui_imap_folder_calllog_desc">Gmail etiket til opkalds log.</string>
-   <string name="ui_imap_folder_calllog_label_dialog_msg">Opkald vil få denne etiket når de backes op til Gmail.</string>
+  <string name="ui_imap_folder_calllog_label_dialog_msg">Opkald vil få denne etiket når de backes op til Gmail.</string>
 
   <string name="ui_mark_as_read_label">Marker som læst (emails)</string>
   <string name="ui_mark_as_read_desc">Skal beskeder i Gmail markeres som læst eller ej.</string>
@@ -143,8 +137,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Login information</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Du skal først oprette forbindelse til din Gmail konto.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Du skal først sætte brugernavn og password.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Du skal først sætte brugernavn og password.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Ugyldigt etiket navn</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Etiketten må ikke indeholde mellemrum i starten eller slutningen.</string>

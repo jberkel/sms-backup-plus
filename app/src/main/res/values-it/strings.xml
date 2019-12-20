@@ -60,8 +60,6 @@
 
   <string name="ui_settings_advanced_label">Impostazioni avanzate</string>
   <string name="ui_settings_advanced_desc">Imposta preferenze avanzate.</string>
-  <string name="ui_settings_advanced_server_label">Impostazioni server IMAP</string>
-  <string name="ui_settings_advanced_server_desc">Non modificare se non si è sicuri di quello che si sta facendo!</string>
 
   <string name="imap_settings">Impostazioni IMAP</string>
   <string name="ui_login_label">Username</string>
@@ -72,13 +70,10 @@
   <string name="ui_server_label">Indirizzo server</string>
   <string name="ui_server_desc">Indirizzo del server che vuoi sincronizzare inclusa la porta.</string>
   <string name="ui_protocol_label">Sicurezza</string>
-  <string name="ui_protocol_desc">Il protocollo di sicurezza del server.</string>
   <string name="ui_authentication_label">Autenticazione</string>
-  <string name="ui_authentication_desc">Il metodo di autenticazione.</string>
   <string name="plain">Testo semplice</string>
 
   <string name="ui_imap_folder_label">Etichetta Gmail</string>
-  <string name="ui_imap_folder_desc">Etichetta Gmail assegnata agli SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">I messaggi SMS salvati saranno contrassegnati in gmail con questa etichetta.</string>
   <string name="ui_mail_subject_prefix_label">Prefisso oggetto email</string>
   <string name="ui_mail_subject_prefix_desc">Utilizza l\'etichetta Gmail come prefisso da inserire nell\'oggetto dell\'email</string>
@@ -95,7 +90,6 @@
   <string name="ui_backup_mms_desc">Abilita backup MMS</string>
 
   <string name="ui_backup_calllog_label">Backup registro chiamate</string>
-  <string name="ui_imap_folder_calllog_desc">Etichetta Gmail assegnata al registro chiamate.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Gli elementi del registro chiamate salvati verranno contrassegnati su Gmail con questa etichetta.</string>
 
   <string name="ui_backup_calllog_sync_calendar_enabled_label">Sincronizza calendario</string>
@@ -141,8 +135,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Informazioni login</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">E\' necessario prima connettersi all\'account Gmail.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">E\' necessario impostare prima
+    <string name="ui_dialog_missing_credentials_msg_plain">E\' necessario impostare prima
   username e password.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Nome etichetta non valido</string>

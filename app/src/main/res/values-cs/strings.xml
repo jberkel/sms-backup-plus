@@ -59,8 +59,6 @@
 
   <string name="ui_settings_advanced_label">Pokročilé nastavení</string>
   <string name="ui_settings_advanced_desc">Nastavit pokročilé možnosti.</string>
-  <string name="ui_settings_advanced_server_label">Nastavení serveru</string>
-  <string name="ui_settings_advanced_server_desc">Neměňte, dokud nevíte, co děláte!</string>
 
   <string name="imap_settings">IMAP nastavení</string>
   <string name="ui_login_label">Uživatel</string>
@@ -71,13 +69,10 @@
   <string name="ui_server_label">Adresa serveru</string>
   <string name="ui_server_desc">Adresa serveru se kterým chcete provést synchronizaci.</string>
   <string name="ui_protocol_label">Bezpečnost</string>
-  <string name="ui_protocol_desc">Zabezpečené spojení k serveru.</string>
   <string name="ui_authentication_label">Přihlášení</string>
-  <string name="ui_authentication_desc">Přihlašovací metoda.</string>
   <string name="plain">Prostý text</string>
 
   <string name="ui_imap_folder_label">GMail složka</string>
-  <string name="ui_imap_folder_desc">GMail složka pro SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Zálohované zprávy budou na GMailu uloženy v této složce.</string>
   <string name="ui_mail_subject_prefix_label">Prefix v předmětu emailu</string>
   <string name="ui_mail_subject_prefix_desc">Použít název složky jako prefix v předmětu emailu</string>
@@ -97,7 +92,6 @@
   <string name="ui_backup_calllog_desc">Polovit zálohu výpisu volání (beta)</string>
 
   <string name="ui_imap_folder_calllog_label">Složka pro výpisy</string>
-  <string name="ui_imap_folder_calllog_desc">Složka GMailu přiřazená výpisům.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Zálohované výpisy hovorů budou uloženy v této složce.</string>
 
   <string name="ui_mark_as_read_label">Označit za přečtené (emaily)</string>
@@ -129,8 +123,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Přihlašovací informace</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Nejdříve se musíte připojit k GMail účtu.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Nejdříve musíte vložit uživatele a heslo.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Nejdříve musíte vložit uživatele a heslo.</string>
   <string name="ui_dialog_invalid_imap_folder_title">Neplatný název složky</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Název složky nesmí mít mezery (na začátku nebo na konci).</string>
   <string name="ui_dialog_first_sync_title">První záloha</string>

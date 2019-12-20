@@ -43,8 +43,6 @@
   <string name="status_gmail_temp_error">Gabim i përkohshëm Gmail IMAP, provoni përsëri më vonë.</string>
   <string name="ui_settings_advanced_label">Aranzhimet e avancuara</string>
   <string name="ui_settings_advanced_desc">Vendosni preferencat e avancuara.</string>
-  <string name="ui_settings_advanced_server_label">Aranzhimet e serverit IMAP</string>
-  <string name="ui_settings_advanced_server_desc">Mos e ndryshoni përvec se jeni duke e ditur cfarë po bëni!</string>
   <string name="imap_settings">Aranzhimet e IMAP</string>
   <string name="ui_login_label">Emri i Përdoruesit</string>
   <string name="ui_login_desc">Llogaria juaj e IMAP/adresa juaj e e-mail.</string>
@@ -54,12 +52,9 @@
   <string name="ui_server_label">Adresa e serverit</string>
   <string name="ui_server_desc">Adresa e serverit që ju dëshironi të sinkronizoni të përfshijë. portën e tij.</string>
   <string name="ui_protocol_label">Siguria</string>
-  <string name="ui_protocol_desc">Protokolli i sigurisë së serverit.</string>
   <string name="ui_authentication_label">Verifikim</string>
-  <string name="ui_authentication_desc">Metoda e verifikimit.</string>
   <string name="plain">Tekst i thjeshtë</string>
   <string name="ui_imap_folder_label">etiketë Gmail</string>
-  <string name="ui_imap_folder_desc">etiketë e Gmail caktuar SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Mesazhet SMS e ruajtura rezervë do të shënohen me këtë etiketë në Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Prefiksi i subjektit të Email-it</string>
   <string name="ui_mail_subject_prefix_desc">Përdorni emrin e dosjes së IMAP si prefiks në subjektin e emailit</string>
@@ -80,7 +75,6 @@
   <string name="ui_backup_calllog_sync_calendar_label">Asnjë</string>
   <string name="ui_backup_calllog_sync_calendar_desc">Kalendari i përdorur për ditarin e thirrjeve</string>
   <string name="ui_imap_folder_calllog_label">Etiketa e ditarit të thirrjeve</string>
-  <string name="ui_imap_folder_calllog_desc">Etiketa e Gmail e caktuar për ditarin e thirrjeve.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Shënimet e ruajtura rezervë të ditarit të thirrjeve do të etiketohen me këtë etiketë në Gmail.</string>
   <string name="ui_mark_as_read_label">Shënoni si të lexuara (e-maile)</string>
   <string name="ui_mark_as_read_desc">Nëse do të shënohen mesazhet në Gmail si të lexuara apo jo.</string>
@@ -105,8 +99,7 @@
   <string name="error_no_connection">Nuk ka lidhje me internet</string>
   <string name="error_sms_provider_not_writable">Nuk mund të shkruaj tek shërbyesi i SMS-ve</string>
   <string name="ui_dialog_missing_credentials_title">Informacion hyrjeje</string>
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Ju duhet të lidhni fillimisht llogarinë tuaj të Gmail-it.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Ju duhet të vendosni fillimisht
+    <string name="ui_dialog_missing_credentials_msg_plain">Ju duhet të vendosni fillimisht
   emrin tuaj të përdoruesit dhe fjalëkalimin.</string>
   <string name="ui_dialog_invalid_imap_folder_title">Emër etikete jo i saktë</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Emri i etiketës mund të mos përmbajë hapsira (në fillim ose fund).</string>

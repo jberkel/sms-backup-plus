@@ -2,8 +2,9 @@ package com.zegoggles.smssync.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
+
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -123,19 +124,32 @@ public class AuthPreferences {
         preferences.edit().putString(IMAP_USER, s).commit();
     }
 
+    @SuppressWarnings("deprecation")
     public boolean useXOAuth() {
         return getAuthMode() == AuthMode.XOAUTH;
     }
 
+    public boolean usePlain() {
+        return getAuthMode() == AuthMode.PLAIN;
+    }
+
     public String getUserEmail() {
-        switch (getAuthMode()) {
-            case XOAUTH:
-                return getOauth2Username();
-            default:
-                return getImapUsername();
+        if (getAuthMode() == AuthMode.PLAIN) {
+            return getImapUsername();
+        } else {
+            return getOauth2Username();
         }
     }
 
+    public String toString() {
+        if (DEFAULT_SERVER_ADDRESS.equals(getServername())) {
+            return getImapUsername() + " (Gmail)";
+        } else {
+            return getImapUsername() + "@" + getServername();
+        }
+    }
+
+    @SuppressWarnings("deprecation")
     public boolean isLoginInformationSet() {
         switch (getAuthMode()) {
             case PLAIN:
@@ -199,7 +213,7 @@ public class AuthPreferences {
     }
 
     private AuthMode getAuthMode() {
-        return getDefaultType(preferences, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.XOAUTH);
+        return getDefaultType(preferences, SERVER_AUTHENTICATION, AuthMode.class, AuthMode.PLAIN);
     }
 
     // All sensitive information is stored in a separate prefs file so we can
@@ -259,7 +273,7 @@ public class AuthPreferences {
         }
     }
 
-    public void migrate() {
+    void migrate() {
         if (useXOAuth()) {
             return;
         }

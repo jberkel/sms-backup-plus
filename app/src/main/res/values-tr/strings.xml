@@ -73,10 +73,8 @@
 
   <string name="ui_settings_advanced_label">Gelişmiş ayarlar</string>
   <string name="ui_settings_advanced_desc">Gelişmiş seçenekleri ayarlayın.</string>
-  <string name="ui_settings_advanced_server_label">Sunucu ayarları</string>
-  <string name="ui_settings_advanced_server_desc">Ne yaptığınızdan emin değilseniz bu ayarları değiştirmeyin!</string>
 
-  <string name="imap_settings">IMAP ayarları</string>
+    <string name="imap_settings">IMAP ayarları</string>
   <string name="ui_login_label">Kullanıcı adı</string>
   <string name="ui_login_desc">IMAP hesabınız/e-posta adresiniz.</string>
   <string name="ui_password_label">Şifre</string>
@@ -86,18 +84,15 @@
   <string name="ui_server_desc">Kullanmak istediğiniz sunucu adresi ve portu.</string>
 
   <string name="ui_protocol_label">Güvenlik</string>
-  <string name="ui_protocol_desc">Sunucunun kullandığı güvenlik protokolü.</string>
 
-   <string name="ui_protocol_trust_all_certificates_label">Tüm sertifikalara güven</string>
+    <string name="ui_protocol_trust_all_certificates_label">Tüm sertifikalara güven</string>
   <string name="ui_protocol_trust_all_certificates_desc">Önerilmez. Yarı-imzalı sertifikaya sahip sunucular için etkinleştirin.</string>
 
   <string name="ui_authentication_label">Kimlik Denetleme</string>
-  <string name="ui_authentication_desc">Kimlik denetleme metodu.</string>
-  <string name="plain">Düz yazı</string>
+    <string name="plain">Düz yazı</string>
 
   <string name="ui_imap_folder_label">Gmail etiketi</string>
-  <string name="ui_imap_folder_desc">SMS\'ler için atanacak Gmail etiketi.</string>
-  <string name="ui_imap_folder_label_dialog_msg">SMS\'ler yedeklendiğinde Gmail hesabınızda bu şekilde etiketlenecek.</string>
+    <string name="ui_imap_folder_label_dialog_msg">SMS\'ler yedeklendiğinde Gmail hesabınızda bu şekilde etiketlenecek.</string>
   <string name="ui_mail_subject_prefix_label">Eposta ön eki</string>
   <string name="ui_mail_subject_prefix_desc">Eposta konusuna IMAP klasör adını ön ek olarak kullan</string>
 
@@ -125,8 +120,7 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Arama günlükleri için kullanılan takvim</string>
 
   <string name="ui_imap_folder_calllog_label">Arama günlüğü etiketi</string>
-  <string name="ui_imap_folder_calllog_desc">Arama günlüğüne atanacak gmail etiketi.</string>
-  <string name="ui_imap_folder_calllog_label_dialog_msg">Yedeklenen arama günlüğü kayıtları bu Gmail etiketiyle işaretlenecek.</string>
+    <string name="ui_imap_folder_calllog_label_dialog_msg">Yedeklenen arama günlüğü kayıtları bu Gmail etiketiyle işaretlenecek.</string>
 
   <string name="ui_backup_calllog_after_call_label">Arama sonrası yedekle</string>
   <string name="ui_backup_calllog_after_call_desc">Gelen/giden aramaları otomatik olarak yedekler.</string>
@@ -169,8 +163,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Giriş bilgisi</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Öncelikle Gmail hesabınıza bağlanmanız gerekiyor.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Kullanıcı adı ve şifrenizi
+    <string name="ui_dialog_missing_credentials_msg_plain">Kullanıcı adı ve şifrenizi
   girmelisiniz.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Hatalı etiket adı</string>
@@ -344,5 +337,4 @@
   </string>
 
   <string name="ui_dark_theme_label">Karanlık tema</string>
-  <string name="theme_app_relaunch">Uygulamanın yeniden başlatılması gerekli</string>
 </resources>

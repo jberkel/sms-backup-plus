@@ -8,10 +8,10 @@ import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class SkuTest {
-    private Sku sku1 = new Sku("test", "test.sku.1", "$10.00", "Test 1", "Test 1", 10000);
-    private Sku sku2 = new Sku("test", "test.sku.2", "$7.00", "Test 2", "Test 2", 7000);
-    private Sku sku3 = new Sku("test", "test.sku.3", "$3.50", "Test 3", "Test 3", 3500);
-    private Sku sku4 = new Sku("test", "test.sku.4", "$3.50", "Test 4", "Test 3", 3500);
+    private Sku sku1 = new Sku("test", "test.sku.1", "$10.00", "Test 1", "Test 1", 10000, null);
+    private Sku sku2 = new Sku("test", "test.sku.2", "$7.00", "Test 2", "Test 2", 7000, null);
+    private Sku sku3 = new Sku("test", "test.sku.3", "$3.50", "Test 3", "Test 3", 3500, null);
+    private Sku sku4 = new Sku("test", "test.sku.4", "$3.50", "Test 4", "Test 3", 3500, null);
 
     @Test public void testComparableComparesByPrice() {
         assertThat(sku1).isGreaterThan(sku2);

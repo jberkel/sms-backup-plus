@@ -73,6 +73,9 @@
     <!-- android.permission-group.APP_INFO -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+    <!-- Apps wanting to use foreground services must now request the FOREGROUND_SERVICE permission first. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
 

@@ -76,9 +76,13 @@ public class SmsJobService extends JobService {
             getBackupJobs().scheduleIncoming();
             return false;
         } else if (shouldRun(jobParameters)) {
-            startService(new Intent(this, SmsBackupService.class)
-                .setAction(jobParameters.getTag())
-                .putExtras(extras));
+            // Since API level 26, an app in background cannot start a background service,
+            // so just instantiate service manually
+            // https://developer.android.com/about/versions/oreo/background.html#services
+            SmsBackupService service = new SmsBackupService();
+            service.attachBaseContext(this);
+            service.handleIntent(new Intent(jobParameters.getTag()).putExtras(extras));
+
             jobs.put(jobParameters.getTag(), jobParameters);
             return true;
         } else {

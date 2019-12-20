@@ -2,7 +2,7 @@ package com.zegoggles.smssync.mail;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import com.zegoggles.smssync.R;
 
 import java.util.HashSet;

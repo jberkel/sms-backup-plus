@@ -73,8 +73,6 @@
 
   <string name="ui_settings_advanced_label">高级设置</string>
   <string name="ui_settings_advanced_desc">设置高级选项</string>
-  <string name="ui_settings_advanced_server_label">IMAP 服务器设置</string>
-  <string name="ui_settings_advanced_server_desc">除非您清楚正在做什么，否则请勿修改这里的设置！</string>
 
   <string name="imap_settings">IMAP 设置</string>
   <string name="ui_login_label">用户名</string>
@@ -86,17 +84,14 @@
   <string name="ui_server_desc">您想要同步的服务器地址，包括端口。</string>
 
   <string name="ui_protocol_label">安全性</string>
-  <string name="ui_protocol_desc">服务器所使用的安全协议。</string>
 
   <string name="ui_protocol_trust_all_certificates_label">信任所有证书</string>
   <string name="ui_protocol_trust_all_certificates_desc">不推荐。仅对使用了自签名证书的服务器启用。</string>
 
   <string name="ui_authentication_label">验证</string>
-  <string name="ui_authentication_desc">身份验证方法。</string>
   <string name="plain">明文</string>
 
   <string name="ui_imap_folder_label">Gmail 标签</string>
-  <string name="ui_imap_folder_desc">应用到短信的 Gmail 标签。</string>
   <string name="ui_imap_folder_label_dialog_msg">备份的短信将在 Gmail 中以此标签标记。</string>
   <string name="ui_mail_subject_prefix_label">邮件主题前缀</string>
   <string name="ui_mail_subject_prefix_desc">以 IMAP 文件夹名称作为邮件主题前缀</string>
@@ -125,7 +120,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">用于通话记录的日历</string>
 
   <string name="ui_imap_folder_calllog_label">通话记录标签</string>
-  <string name="ui_imap_folder_calllog_desc">应用到通话记录的 Gmail 标签</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">备份的通话记录将在 Gmail 中以此标签标记。</string>
 
   <string name="ui_backup_calllog_after_call_label">通话后备份</string>
@@ -169,8 +163,7 @@
 
   <string name="ui_dialog_missing_credentials_title">登录信息</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">您首先需要连接到 Gmail 账户。</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">您首先需要设置您的账户和密码。</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">您首先需要设置您的账户和密码。</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">无效的标签名称</string>
   <string name="ui_dialog_invalid_imap_folder_msg">标签名称开头或结尾不能包含空格。</string>
@@ -338,5 +331,4 @@
   </string>
 
   <string name="ui_dark_theme_label">暗色主题</string>
-  <string name="theme_app_relaunch">需要手动重启应用</string>
 </resources>

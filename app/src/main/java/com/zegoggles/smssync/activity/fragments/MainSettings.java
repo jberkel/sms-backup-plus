@@ -1,20 +1,19 @@
 package com.zegoggles.smssync.activity.fragments;
 
 import android.os.Bundle;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.Preference.OnPreferenceChangeListener;
-import android.support.v7.preference.TwoStatePreference;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
 import com.zegoggles.smssync.activity.donation.DonationActivity.DonationStatusListener;
 import com.zegoggles.smssync.activity.events.AccountAddedEvent;
-import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
 import com.zegoggles.smssync.activity.events.AccountRemovedEvent;
 import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
@@ -26,7 +25,6 @@ import java.util.List;
 
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_SETTINGS_SCREEN;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.CONNECTED;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.DONATE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.ENABLE_AUTO_BACKUP;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOUT_SECONDS;
@@ -40,6 +38,16 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     public void onCreatePreferences(Bundle bundle, String rootKey) {
         super.onCreatePreferences(bundle, rootKey);
         authPreferences = new AuthPreferences(getContext());
+        findPreference(AdvancedSettings.Server.class.getName()).setSummaryProvider(new Preference.SummaryProvider() {
+            @Override
+            public CharSequence provideSummary(Preference preference) {
+                if (authPreferences.usePlain() && authPreferences.isLoginInformationSet()) {
+                    return authPreferences.toString();
+                } else {
+                    return getString(R.string.custom_imap_not_configured);
+                }
+            }
+        });
     }
 
     @Override
@@ -49,8 +57,8 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
     }
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         App.unregister(this);
     }
 
@@ -60,17 +68,10 @@ public class MainSettings extends SMSBackupPreferenceFragment {
 
         checkUserDonationStatus();
         updateAutoBackupPreferences();
-        updateConnected().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object change) {
-                App.post(new AccountConnectionChangedEvent((Boolean) change));
-                return false; // will be set later
-            }
-        });
         addPreferenceListener(ENABLE_AUTO_BACKUP.key);
     }
 
     @Subscribe public void onAccountAdded(AccountAddedEvent event) {
-        updateConnected();
         updateAutoBackupPreferences();
     }
 
@@ -78,8 +79,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         authPreferences.clearOauth2Data();
         preferences.getDataTypePreferences().clearLastSyncData();
         findAutoBackupPreference().setChecked(false);
-
-        updateConnected();
         updateAutoBackupPreferences();
     }
 
@@ -90,23 +89,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     @Subscribe public void onSettingsReset(SettingsResetEvent event) {
         preferences.getDataTypePreferences().clearLastSyncData();
         preferences.reset();
-
-        updateConnected();
-    }
-
-    private TwoStatePreference updateConnected() {
-        TwoStatePreference connected = (TwoStatePreference) findPreference(CONNECTED.key);
-
-        connected.setEnabled(authPreferences.useXOAuth());
-        connected.setChecked(authPreferences.hasOAuth2Tokens());
-
-        final String summary = getConnectedSummary(connected);
-        if (connected.isChecked()) {
-            connected.setSummary(summary);
-        } else {
-            connected.setSummaryOff(summary);
-        }
-        return connected;
     }
 
     private void updateAutoBackupPreferences() {
@@ -117,20 +99,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         final Preference autoBackupSettings = findPreference(BACKUP_SETTINGS_SCREEN.key);
         autoBackupSettings.setSummary(summarizeBackupScheduleSettings(autoBackup.isChecked()));
         autoBackupSettings.setEnabled(autoBackup.isEnabled() && autoBackup.isChecked());
-    }
-
-    private String getConnectedSummary(TwoStatePreference connected) {
-        final String username = authPreferences.getOauth2Username();
-        if (connected.isEnabled()) {
-            return connected.isChecked() && !TextUtils.isEmpty(username) ?
-                    getString(R.string.gmail_already_connected, username) :
-                    getString(R.string.gmail_needs_connecting);
-        } else if (authPreferences.isLoginInformationSet()) {
-            return getString(R.string.custom_imap,
-                    authPreferences.getImapUsername() + "@" + authPreferences.getServername());
-        } else {
-            return getString(R.string.custom_imap_not_configured);
-        }
     }
 
     private String summarizeAutoBackupSettings() {
@@ -156,8 +124,8 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         }
 
         final StringBuilder summary = new StringBuilder();
-        final ListPreference regSchedule = (ListPreference) findPreference(REGULAR_TIMEOUT_SECONDS.key);
-        final ListPreference incomingSchedule = (ListPreference) findPreference(INCOMING_TIMEOUT_SECONDS.key);
+        final ListPreference regSchedule = findPreference(REGULAR_TIMEOUT_SECONDS.key);
+        final ListPreference incomingSchedule = findPreference(INCOMING_TIMEOUT_SECONDS.key);
 
         // values are out-of sync
         regSchedule.setValue(String.valueOf(preferences.getRegularTimeoutSecs()));

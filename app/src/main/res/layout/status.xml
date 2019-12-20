@@ -76,12 +76,14 @@
 
             <Button
                     android:id="@+id/sync_button"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:gravity="center"
                     android:text="@string/ui_sync_button_label_idle"
                     />
 
             <Button
                     android:id="@+id/restore_button"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:gravity="center"
                     android:text="@string/ui_restore_button_label_idle"
                     />

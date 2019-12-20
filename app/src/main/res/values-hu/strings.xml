@@ -62,8 +62,6 @@
 
   <string name="ui_settings_advanced_label">Haladó beállítások</string>
   <string name="ui_settings_advanced_desc">Haladó beállítások módosítása.</string>
-  <string name="ui_settings_advanced_server_label">IMAP kiszolgáló beállítások</string>
-  <string name="ui_settings_advanced_server_desc">Ne módosítson semmit, hacsak nem tudja, hogy mit csinál!</string>
 
   <string name="imap_settings">IMAP beállítások</string>
   <string name="ui_login_label">Felhasználónév</string>
@@ -74,13 +72,10 @@
   <string name="ui_server_label">Kiszolgáló címe</string>
   <string name="ui_server_desc">A kiszolgáló címe és portszáma, amellyel szinkronizálni szeretne.</string>
   <string name="ui_protocol_label">Biztonság</string>
-  <string name="ui_protocol_desc">A kiszolgáló által használt biztonsági protokoll.</string>
   <string name="ui_authentication_label">Hitelesítés</string>
-  <string name="ui_authentication_desc">Hitelesítési metódus.</string>
   <string name="plain">Nyílt szöveg</string>
 
   <string name="ui_imap_folder_label">Gmail címke</string>
-  <string name="ui_imap_folder_desc">SMS-ek mentése az itt megadott címke alá.</string>
   <string name="ui_imap_folder_label_dialog_msg">Az elmentett SMS üzenetek a megadott címkével lesznek megjelölve Gmailben.</string>
   <string name="ui_mail_subject_prefix_label">Email tárgy előtag</string>
   <string name="ui_mail_subject_prefix_desc">IMAP mappa nevének használata előtagként az üzenetek tárgyában</string>
@@ -109,7 +104,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">A hívásnapló mentése ebbe a naptárba</string>
 
   <string name="ui_imap_folder_calllog_label">Hívásnapló címkéje</string>
-  <string name="ui_imap_folder_calllog_desc">Hívásnapló bejegyzések mentése az itt megadott Gmail címke alá.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">A feltöltött hívásnapló bejegyzések az itt megadott címkével lesznek megjelölve Gmailben.</string>
 
   <string name="ui_mark_as_read_label">Megjelölés olvasottként (email)</string>
@@ -150,8 +144,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Bejelentkezési információk</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Először kapcsolódnia kell a Gmail fiókjához.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Először meg kell adnia a felhasználói nevét és jelszavát.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Először meg kell adnia a felhasználói nevét és jelszavát.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Érvénytelen címke név</string>
   <string name="ui_dialog_invalid_imap_folder_msg">A címke neve nem tartalmazhat szóközt (az elején vagy a végén).</string>

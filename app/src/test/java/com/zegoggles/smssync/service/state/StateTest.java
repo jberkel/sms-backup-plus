@@ -63,7 +63,7 @@ public class StateTest {
         BackupState state = new BackupState(SmsSyncState.ERROR, 0, 0,
                 BackupType.REGULAR, DataType.SMS, new MessagingException("Unable to get IMAP prefix"));
 
-        assertThat(state.getErrorMessage(resources)).isEqualTo("Temporary Gmail IMAP error, try again later.");
+        assertThat(state.getErrorMessage(resources)).isEqualTo("Temporary IMAP error, try again later.");
     }
 
     @Test public void shouldGetNotificationLabelLogin() throws Exception {

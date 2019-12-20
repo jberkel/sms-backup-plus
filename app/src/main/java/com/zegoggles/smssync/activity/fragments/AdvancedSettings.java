@@ -1,33 +1,40 @@
 package com.zegoggles.smssync.activity.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.Preference.OnPreferenceChangeListener;
+import androidx.preference.TwoStatePreference;
+
+import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
+import com.zegoggles.smssync.activity.events.AccountAddedEvent;
+import com.zegoggles.smssync.activity.events.AccountConnectionChangedEvent;
+import com.zegoggles.smssync.activity.events.AccountRemovedEvent;
 import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
+import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.contacts.Group;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
-import com.zegoggles.smssync.preferences.AuthMode;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.DataTypePreferences;
 
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,38 +50,95 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.BACKUP_CONTACT_
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_BACKUP_AFTER_CALL;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.CALLLOG_SYNC_CALENDAR_ENABLED;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.CONNECTED;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.DARK_THEME;
-import static com.zegoggles.smssync.preferences.Preferences.Keys.IMAP_SETTINGS;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
 import static com.zegoggles.smssync.utils.ListPreferenceHelper.initListPreference;
 
-public class AdvancedSettings extends SMSBackupPreferenceFragment {
+public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
+    public static class Main extends SMSBackupPreferenceFragment {
+        private AuthPreferences authPreferences;
+        private TwoStatePreference connected;
 
-    public static class Main extends AdvancedSettings {
+        @Override
+        public void onStart() {
+            super.onStart();
+            App.register(this);
+
+        }
+        @Override
+        public void onStop() {
+            super.onStop();
+            App.unregister(this);
+        }
+
         @Override
         public void onResume() {
             super.onResume();
+            updateConnected();
             addPreferenceListener(new ThemeChangedEvent(), DARK_THEME.key);
+        }
+
+        @Override
+        public void onCreatePreferences(Bundle bundle, String rootKey) {
+            super.onCreatePreferences(bundle, rootKey);
+            authPreferences = new AuthPreferences(getContext());
+            connected = findPreference(CONNECTED.key);
+            assert connected != null;
+            connected.setSummaryProvider(new Preference.SummaryProvider<TwoStatePreference>() {
+                @Override
+                public CharSequence provideSummary(TwoStatePreference preference) {
+                    final String username = authPreferences.getOauth2Username();
+                    if (preference.isEnabled()) {
+                        return preference.isChecked() && !TextUtils.isEmpty(username) ?
+                                getString(R.string.gmail_already_connected, username) :
+                                getString(R.string.gmail_needs_connecting);
+                    } else {
+                        return null;
+                    }
+                }
+            });
+            connected.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object change) {
+                    App.post(new AccountConnectionChangedEvent((Boolean) change));
+                    return false; // will be set later
+                }
+            });
+        }
+
+        @Subscribe public void onAccountAdded(AccountAddedEvent event) {
+            updateConnected();
+        }
+
+        @Subscribe public void onAccountRemoved(AccountRemovedEvent event) {
+            updateConnected();
+        }
+
+        @Subscribe public void onSettingsReset(SettingsResetEvent event) {
+            updateConnected();
+        }
+
+        private void updateConnected() {
+            connected.setChecked(authPreferences.hasOAuth2Tokens());
         }
     }
 
-    public static class Backup extends AdvancedSettings {
+    public static class Backup extends SMSBackupPreferenceFragment {
         private static final int REQUEST_CALL_LOG_PERMISSIONS = 0;
         private CheckBoxPreference callLogPreference;
 
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            callLogPreference = (CheckBoxPreference) findPreference(CALLLOG.backupEnabledPreference);
+            callLogPreference = findPreference(CALLLOG.backupEnabledPreference);
         }
 
         @Override
         public void onResume() {
             super.onResume();
             updateMaxItemsPerSync(null);
-            updateImapFolderLabelFromPref();
-            updateImapCallogFolderLabelFromPref();
+
             updateBackupContactGroupLabelFromPref();
             updateLastBackupTimes();
             initGroups();
@@ -134,18 +198,8 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             }
         }
 
-        private void updateImapFolderLabelFromPref() {
-            String imapFolder = preferences.getDataTypePreferences().getFolder(SMS);
-            findPreference(SMS.folderPreference).setTitle(imapFolder);
-        }
-
-        private void updateImapCallogFolderLabelFromPref() {
-            String imapFolder = preferences.getDataTypePreferences().getFolder(CALLLOG);
-            findPreference(CALLLOG.folderPreference).setTitle(imapFolder);
-        }
-
         private void updateMaxItemsPerSync(String newValue) {
-            updateMaxItems(MAX_ITEMS_PER_SYNC.key, preferences.getMaxItemsPerSync(), newValue);
+            updateMaxItems(findPreference(MAX_ITEMS_PER_SYNC.key), preferences.getMaxItemsPerSync(), newValue);
         }
 
         private void updateLastBackupTimes() {
@@ -174,13 +228,13 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             findPreference(SMS.folderPreference)
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                         public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                            return checkValidImapFolder(preference, newValue.toString());
+                            return checkValidImapFolder(getFragmentManager(), newValue.toString());
                         }
                     });
         }
 
         private void initGroups() {
-            final ListPreference preference = (ListPreference) findPreference(BACKUP_CONTACT_GROUP.key);
+            final ListPreference preference = findPreference(BACKUP_CONTACT_GROUP.key);
             if (ContextCompat.checkSelfPermission(getContext(), READ_CONTACTS) == PERMISSION_GRANTED) {
                 ContactAccessor contacts = new ContactAccessor();
                 final Map<Integer, Group> groups = contacts.getGroups(getContext().getContentResolver(), getResources());
@@ -190,7 +244,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             }
         }
 
-        public static class CallLog extends AdvancedSettings {
+        public static class CallLog extends SMSBackupPreferenceFragment {
             private static final int REQUEST_CALENDAR_ACCESS = 0;
             private CheckBoxPreference enabledPreference;
             private ListPreference calendarPreference;
@@ -199,8 +253,8 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             @Override
             public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
                 super.onViewCreated(view, savedInstanceState);
-                enabledPreference = (CheckBoxPreference) findPreference(CALLLOG_SYNC_CALENDAR_ENABLED.key);
-                calendarPreference = (ListPreference) findPreference(CALLLOG_SYNC_CALENDAR.key);
+                enabledPreference = findPreference(CALLLOG_SYNC_CALENDAR_ENABLED.key);
+                calendarPreference = findPreference(CALLLOG_SYNC_CALENDAR.key);
                 folderPreference = findPreference(CALLLOG.folderPreference);
             }
 
@@ -264,14 +318,14 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
             private void registerValidCallLogFolderCheck() {
                 folderPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, final Object newValue) {
-                        return checkValidImapFolder(preference, newValue.toString());
+                        return checkValidImapFolder(getFragmentManager(), newValue.toString());
                     }
                 });
             }
         }
     }
 
-    public static class Restore extends AdvancedSettings {
+    public static class Restore extends SMSBackupPreferenceFragment {
         @Override
         public void onResume() {
             super.onResume();
@@ -286,7 +340,7 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         }
 
         private void updateMaxItemsPerRestore(String newValue) {
-            updateMaxItems(MAX_ITEMS_PER_RESTORE.key, preferences.getMaxItemsPerRestore(), newValue);
+            updateMaxItems(findPreference(MAX_ITEMS_PER_RESTORE.key), preferences.getMaxItemsPerRestore(), newValue);
         }
     }
 
@@ -302,37 +356,6 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
         @Override
         public void onResume() {
             super.onResume();
-            updateUsernameLabel(authPreferences.getImapUsername());
-            updateServerNameLabel(authPreferences.getServername());
-            updateImapSettings(!authPreferences.useXOAuth());
-
-            findPreference(AuthPreferences.SERVER_AUTHENTICATION)
-                    .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            final boolean plain = AuthMode.valueOf(newValue.toString().toUpperCase(Locale.ENGLISH))
-                                    == AuthMode.PLAIN;
-                            updateImapSettings(plain);
-                            return true;
-                        }
-                    });
-
-
-            findPreference(AuthPreferences.SERVER_ADDRESS)
-                    .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            updateServerNameLabel(newValue.toString());
-                            return true;
-                        }
-                    });
-
-            findPreference(AuthPreferences.IMAP_USER)
-                    .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            updateUsernameLabel(newValue.toString());
-                            return true;
-                        }
-                    });
 
             findPreference(AuthPreferences.IMAP_PASSWORD)
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -342,41 +365,21 @@ public class AdvancedSettings extends SMSBackupPreferenceFragment {
                         }
                     });
         }
-
-        private void updateImapSettings(boolean enabled) {
-            findPreference(IMAP_SETTINGS.key).setEnabled(enabled);
-        }
-
-        private void updateUsernameLabel(String username) {
-            if (TextUtils.isEmpty(username)) {
-                username = getString(R.string.ui_login_label);
-            }
-            findPreference(AuthPreferences.IMAP_USER).setTitle(username);
-        }
-
-        private void updateServerNameLabel(String servername) {
-            if (TextUtils.isEmpty(servername)) {
-                servername = getString(R.string.ui_server_label);
-            }
-            findPreference(AuthPreferences.SERVER_ADDRESS).setTitle(servername);
-        }
     }
 
-    void updateMaxItems(String prefKey, int currentValue, String newValue) {
-        Preference pref = findPreference(prefKey);
+    static void updateMaxItems(Preference preference, int currentValue, String newValue) {
         if (newValue == null) {
             newValue = String.valueOf(currentValue);
         }
         // XXX
-        pref.setTitle("-1".equals(newValue) ? getString(R.string.all_messages) : newValue);
+        preference.setTitle("-1".equals(newValue) ? preference.getContext().getString(R.string.all_messages) : newValue);
     }
 
-    boolean checkValidImapFolder(Preference preference, String imapFolder) {
+    static boolean checkValidImapFolder(FragmentManager fragmentManager, String imapFolder) {
         if (BackupImapStore.isValidImapFolder(imapFolder)) {
-            preference.setTitle(imapFolder);
             return true;
         } else {
-            INVALID_IMAP_FOLDER.instantiate(getActivity(), null).show(getFragmentManager(), null);
+            INVALID_IMAP_FOLDER.instantiate(fragmentManager, null).show(fragmentManager, null);
             return false;
         }
     }

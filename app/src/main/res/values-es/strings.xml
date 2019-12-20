@@ -60,10 +60,8 @@
 
   <string name="ui_settings_advanced_label">Configuración avanzada</string>
   <string name="ui_settings_advanced_desc">Establecer preferencias avanzadas.</string>
-  <string name="ui_settings_advanced_server_label">Configuración del servidor</string>
-  <string name="ui_settings_advanced_server_desc">¡No cambiar a menos que sepa lo que está haciendo!</string>
 
-  <string name="imap_settings">Configuración IMAP</string>
+    <string name="imap_settings">Configuración IMAP</string>
   <string name="ui_login_label">Nombre de usuario</string>
   <string name="ui_login_desc">Su cuenta de Google/dirección de e-mail.</string>
   <string name="ui_password_label">Contraseña</string>
@@ -72,14 +70,11 @@
   <string name="ui_server_label">Dirección del servidor</string>
   <string name="ui_server_desc">La dirección del servidor al que desea sincronizar incl. su puerto.</string>
   <string name="ui_protocol_label">Seguridad</string>
-  <string name="ui_protocol_desc">El protocolo de seguridad del servidor.</string>
-  <string name="ui_authentication_label">Autenticación</string>
-  <string name="ui_authentication_desc">El método de autenticación.</string>
-  <string name="plain">Texto legible</string>
+    <string name="ui_authentication_label">Autenticación</string>
+    <string name="plain">Texto legible</string>
 
   <string name="ui_imap_folder_label">Etiqueta de Gmail</string>
-  <string name="ui_imap_folder_desc">Etiqueta de Gmail asignada a SMS.</string>
-  <string name="ui_imap_folder_label_dialog_msg">Los SMS respaldados serán marcados con esta etiqueta en Gmail.</string>
+    <string name="ui_imap_folder_label_dialog_msg">Los SMS respaldados serán marcados con esta etiqueta en Gmail.</string>
   <string name="ui_mail_subject_prefix_label">Prefijo del sujeto de los mails</string>
   <string name="ui_mail_subject_prefix_desc">Use el nombre del archivo IMAP como prefijo en el sujeto de los mails</string>
 
@@ -98,8 +93,7 @@
   <string name="ui_backup_calllog_desc">Activar la copia del registro de llamadas (beta)</string>
 
   <string name="ui_imap_folder_calllog_label">Label del registro de llamadas</string>
-  <string name="ui_imap_folder_calllog_desc">Label Gmail del registro de llamadas.</string>
-  <string name="ui_imap_folder_calllog_label_dialog_msg">Las llamadas copiadas en Gmail tendaran este label.</string>
+    <string name="ui_imap_folder_calllog_label_dialog_msg">Las llamadas copiadas en Gmail tendaran este label.</string>
 
  <string name="ui_mark_as_read_label">Marcar como leído (emails)</string>
   <string name="ui_mark_as_read_desc">Si se marcan los mensajes en Gmail como leídos o no.</string>
@@ -130,8 +124,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Información de inicio de sesión</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Necesita conectar su cuenta de Gmail en primer lugar.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Necesita configurar su nombre de usuario y contraseña en primer lugar.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Necesita configurar su nombre de usuario y contraseña en primer lugar.</string>
 
 
 

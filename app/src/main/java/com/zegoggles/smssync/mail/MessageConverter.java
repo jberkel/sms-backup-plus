@@ -22,7 +22,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.provider.CallLog;
 import android.provider.Telephony;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.Flag;
@@ -77,14 +77,14 @@ public class MessageConverter {
         ContactGroupIds allowedIds = contactAccessor.getGroupContactIds(context.getContentResolver(), backupContactGroup);
         if (LOCAL_LOGV) Log.v(TAG, "whitelisted ids for backup: " + allowedIds);
 
-        messageGenerator = new MessageGenerator(this.context,
+        messageGenerator = new MessageGenerator(context,
                 new Address(userEmail),
                 preferences.getEmailAddressStyle(),
-                new HeaderGenerator(referenceUid, App.getVersionCode(this.context)),
-                this.personLookup,
+                new HeaderGenerator(referenceUid, App.getVersionCode(context)),
+                personLookup,
                 preferences.getMailSubjectPrefix(),
                 allowedIds,
-                new MmsSupport(this.context.getContentResolver(), this.personLookup),
+                new MmsSupport(context.getContentResolver(), personLookup),
                 preferences.getCallLogType(),
                 preferences.getDataTypePreferences());
     }

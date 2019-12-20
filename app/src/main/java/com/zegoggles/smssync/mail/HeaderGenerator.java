@@ -2,7 +2,7 @@ package com.zegoggles.smssync.mail;
 
 import android.provider.CallLog;
 import android.provider.Telephony;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 

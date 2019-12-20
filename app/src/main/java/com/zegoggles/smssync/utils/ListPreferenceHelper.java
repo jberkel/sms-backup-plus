@@ -15,9 +15,8 @@
  */
 package com.zegoggles.smssync.utils;
 
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.Preference.OnPreferenceChangeListener;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +49,7 @@ public class ListPreferenceHelper {
             pref.setEntryValues(ev.toArray(new CharSequence[ev.size()]));
         }
 
-        pref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, final Object newValue) {
                 pref.setTitle(

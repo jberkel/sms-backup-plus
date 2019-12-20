@@ -45,9 +45,7 @@
 <string name="status_gmail_temp_error">Тимчасова помилка Gmail IMAP, будь ласка, повторіть спробу пізніше.</string>
 <string name="ui_settings_advanced_label">Розширені налаштування</string>
 <string name="ui_settings_advanced_desc">Налаштування розкладу, сповіщень, журналу тощо.</string>
-<string name="ui_settings_advanced_server_label">Налаштування серверу IMAP</string>
-<string name="ui_settings_advanced_server_desc">Не змінюйте налаштування, якщо ви не знаєте, що ви робите!</string>
-<string name="imap_settings">Налаштування IMAP</string>
+    <string name="imap_settings">Налаштування IMAP</string>
 <string name="ui_login_label">Ім’я користувача</string>
 <string name="ui_login_desc">IMAP логін або адреса електронної пошти.</string>
 <string name="ui_password_label">Пароль</string>
@@ -56,13 +54,10 @@
 <string name="ui_server_label">Адреса серверу</string>
 <string name="ui_server_desc">Адреса і порт серверу для синхронізації.</string>
 <string name="ui_protocol_label">Безпека</string>
-<string name="ui_protocol_desc">Протокол безпеки на сервері.</string>
-<string name="ui_authentication_label">Автентифікація</string>
-<string name="ui_authentication_desc">Метод перевірки автентичності.</string>
-<string name="plain">Звичайний текст</string>
+    <string name="ui_authentication_label">Автентифікація</string>
+    <string name="plain">Звичайний текст</string>
 <string name="ui_imap_folder_label">Мітки Gmail</string>
-<string name="ui_imap_folder_desc">Мітки Gmail для SMS.</string>
-<string name="ui_imap_folder_label_dialog_msg">Збережені SMS повідомлення будуть позначені цією міткою в Gmail.</string>
+    <string name="ui_imap_folder_label_dialog_msg">Збережені SMS повідомлення будуть позначені цією міткою в Gmail.</string>
 <string name="ui_mail_subject_prefix_label">Тема електронного листа</string>
 <string name="ui_mail_subject_prefix_desc">Використання назви IMAP-тек як префікс теми листа</string>
 <string name="ui_max_items_per_sync_label">Елементів для резервної копії</string>
@@ -82,8 +77,7 @@
 <string name="ui_backup_calllog_sync_calendar_label">Немає</string>
 <string name="ui_backup_calllog_sync_calendar_desc">Який календар використовувати для збереження журналів викликів</string>
 <string name="ui_imap_folder_calllog_label">Мітки для журналу викликів</string>
-<string name="ui_imap_folder_calllog_desc">Мітки Gmail для журналу викликів.</string>
-<string name="ui_imap_folder_calllog_label_dialog_msg">Збережені записи журналу викликів будуть позначені цією міткою в Gmail.</string>
+    <string name="ui_imap_folder_calllog_label_dialog_msg">Збережені записи журналу викликів будуть позначені цією міткою в Gmail.</string>
 <string name="ui_mark_as_read_label">Позначити як прочитані (електроні листи)</string>
 <string name="ui_mark_as_read_desc">Позначати повідомлення в Gmail як прочитані.</string>
 <string name="ui_mark_as_read_restore_label">Позначити як прочитане (SMS)</string>
@@ -107,8 +101,7 @@
 <string name="error_no_connection">Немає підключення до інтернету</string>
 <string name="error_sms_provider_not_writable">Не можливо записати до sms-провайдера</string>
 <string name="ui_dialog_missing_credentials_title">Інформація про вхід</string>
-<string name="ui_dialog_missing_credentials_msg_xoauth">Перш за все вам необхідно підключити ваш обліковий запис Gmail.</string>
-<string name="ui_dialog_missing_credentials_msg_plain">Спочатку потрібно встановити ваше ім’я користувача та пароль.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Спочатку потрібно встановити ваше ім’я користувача та пароль.</string>
 <string name="ui_dialog_invalid_imap_folder_title">Невірна назва мітки</string>
 <string name="ui_dialog_invalid_imap_folder_msg">Назва мітки не може містити пробіли (на початку або в кінці).</string>
 <string name="ui_dialog_first_sync_title">Перша резервна копія</string>

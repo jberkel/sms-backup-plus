@@ -18,8 +18,9 @@ package com.zegoggles.smssync.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.annotation.StyleRes;
+import androidx.annotation.StyleRes;
+import androidx.preference.PreferenceManager;
+
 import android.util.Log;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;

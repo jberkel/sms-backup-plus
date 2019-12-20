@@ -60,8 +60,6 @@
 
   <string name="ui_settings_advanced_label">Erweiterte Einstellungen</string>
   <string name="ui_settings_advanced_desc">Zum Setzen erweiterter Einstellungen</string>
-  <string name="ui_settings_advanced_server_label">IMAP Server Einstellungen</string>
-  <string name="ui_settings_advanced_server_desc">Nicht verändern, es sei denn Sie wissen was Sie tun!</string>
 
   <string name="imap_settings">IMAP Einstellungen</string>
   <string name="ui_login_label">Benutzername</string>
@@ -72,13 +70,10 @@
   <string name="ui_server_label">Server-Adresse</string>
   <string name="ui_server_desc">Adresse inkl. Port des Mailservers mit dem Sie synchronisieren möchten</string>
   <string name="ui_protocol_label">Sicherheit</string>
-  <string name="ui_protocol_desc">Sicherheitsprotokoll des Server.</string>
   <string name="ui_authentication_label">Authentifizierung</string>
-  <string name="ui_authentication_desc">Authentifizierungsmethode.</string>
   <string name="plain">Klartext</string>
 
   <string name="ui_imap_folder_label">Gmail-Label</string>
-  <string name="ui_imap_folder_desc">Gmail-Label für SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg">Gesicherte SMS-Nachrichten werden in Gmail mit diesem Label markiert</string>
   <string name="ui_mail_subject_prefix_label">E-Mail Betreffpräfix</string>
   <string name="ui_mail_subject_prefix_desc">IMAP Ordner als Präfix im Mail-Betreff benutzen</string>
@@ -107,7 +102,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc">Kalender für das Anrufprotokoll</string>
 
   <string name="ui_imap_folder_calllog_label">Anrufprotokoll Label</string>
-  <string name="ui_imap_folder_calllog_desc">Gmail-Label für Anrufe.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg">Gesicherte Protokoll-Einträge werden in Gmail mit diesem Label gekennzeichnet.</string>
 
   <string name="ui_mark_as_read_label">Gelesen markieren (E-Mails)</string>
@@ -146,8 +140,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Anmeldungs-Informationen</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Sie müssen sich zuerst bei Gmail anmelden.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Sie müssen zuerst Ihren
+    <string name="ui_dialog_missing_credentials_msg_plain">Sie müssen zuerst Ihren
   Benutzernamen und Ihr Passwort eintragen.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Ungültiges Label</string>
@@ -316,7 +309,6 @@
   <string name="pref_use_old_scheduler_summary">Erzwinge die Benutzung des alten Zeitplaners</string>
   <string name="select_google_account">Wählen Sie ein Google-Konto</string>
   <string name="status_permission_problem">Erlaubnisproblem</string>
-  <string name="theme_app_relaunch">Manueller Neustart der App erforderlich</string>
   <string name="ui_backup_calllog_after_call_desc">Automatisches Sichern nach ein/ausgehendem Anruf</string>
   <string name="ui_backup_calllog_after_call_label">Sichern nach Anruf</string>
   <string name="ui_dialog_sms_default_package_change_title">Benötige Änderung</string>

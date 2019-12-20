@@ -1,0 +1,20 @@
+task lint {
+    def textDir = 'play/text'
+    // https://github.com/jberkel/sms-backup-plus/blob/master/metadata/play/README.md
+    def shortDescriptionMinimum = 80
+    def fullDescriptionMinimum  = 4000
+
+    doFirst {
+        fileTree(dir: textDir, include: '**/short_description.txt').each { File file ->
+            def lines = file.readLines()
+            assert(lines.size == 1)
+            assert(lines[0].length() <= shortDescriptionMinimum)
+        }
+
+        fileTree(dir: textDir, include: '**/full_description.txt').each { File file ->
+            def lines = file.readLines()
+            assert(lines.size > 0)
+            assert(lines.join('\n').length() <= fullDescriptionMinimum)
+        }
+    }
+}

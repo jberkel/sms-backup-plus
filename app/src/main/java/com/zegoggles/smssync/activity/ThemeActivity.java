@@ -3,9 +3,10 @@ package com.zegoggles.smssync.activity;
 import android.annotation.TargetApi;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.preferences.Preferences;
 

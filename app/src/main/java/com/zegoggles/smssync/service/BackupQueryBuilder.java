@@ -3,7 +3,7 @@ package com.zegoggles.smssync.service;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.provider.Telephony;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import com.zegoggles.smssync.Consts;

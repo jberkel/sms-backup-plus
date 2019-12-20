@@ -3,7 +3,7 @@ package com.zegoggles.smssync.mail;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import com.fsck.k9.mail.Address;
@@ -29,7 +29,7 @@ class MmsSupport {
     private final PersonLookup personLookup;
     private final ContentResolver resolver;
 
-    MmsSupport(ContentResolver resolver, PersonLookup personLookup) {
+    MmsSupport(@NonNull ContentResolver resolver, @NonNull PersonLookup personLookup) {
         this.resolver = resolver;
         this.personLookup = personLookup;
     }

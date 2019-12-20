@@ -1,5 +1,6 @@
 package com.zegoggles.smssync.service;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -7,7 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CallLog;
 import android.provider.Telephony;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.FetchProfile;
@@ -50,6 +51,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private Set<String> callLogIds = new HashSet<String>();
     private Set<String> uids = new HashSet<String>();
 
+    @SuppressLint("StaticFieldLeak")
     private final SmsRestoreService service;
     private final ContentResolver resolver;
     private final MessageConverter converter;

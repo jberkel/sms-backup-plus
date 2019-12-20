@@ -1,10 +1,17 @@
-== 1.5.11 (1555) tbd
+== 1.6.0 (xxx) dd-mm-2019
 
-  * Fix crash with some numbers (#870)
-  * Updated translations: de,fr,gl,nl,tr,da,pl,zh-rCN,zh-rTW
+  * Android minSdk now 14 (4.0, Ice Cream Sandwich)
+  * Deprecated unsupported authentication via Google OAuth
+  * Updated Swedish localization (#890)
+
+== 1.5.11 (1576) 04-23-2018
+
+  * WebView scroll position lost after device rotation (#878)
+  * Fix crash with some phone numbers (#870)
+  * Updated translations: da,de,fr,gl,ko,nl,tr,pl,zh-rCN,zh-rTW
   * Handle incoming SMS during Restore (#809, #851)
   * Clean up security settings for IMAP servers (#839)
-  * Implemented runtime permissions for Android 6.0+
+  * Implemented runtime permissions on Android 6.0+
   * Added dark/light theme switcher
   * Modernized UI (Material/AppCompat), added adaptive icon
   * Simplify IMAP search logic to prevent timeouts
@@ -17,7 +24,6 @@
   * Gradle build support (#638)
   * Improve restore experience (#586)
   * Fixed unquoted blank in local part of email address (#595)
-  * Updated Korean translation (#592)
   * Updated notification images
   * Rebased K9 to current head (https://github.com/k9mail/k-9/commit/eb31a0fa46877d28266d09e29dee9eb2e0f945fb)
 

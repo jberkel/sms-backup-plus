@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +11,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
+
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
@@ -117,8 +119,8 @@ public class StatusPreference extends Preference implements View.OnClickListener
         statusIcon = (ImageView) holder.findViewById(R.id.status_icon);
         statusLabel = (TextView) holder.findViewById(R.id.status_label);
         View syncDetails = holder.findViewById(R.id.details_sync);
-        syncDetailsLabel = (TextView) syncDetails.findViewById(R.id.details_sync_label);
-        progressBar = (ProgressBar) syncDetails.findViewById(R.id.details_sync_progress);
+        syncDetailsLabel = syncDetails.findViewById(R.id.details_sync_label);
+        progressBar = syncDetails.findViewById(R.id.details_sync_progress);
 
         idle();
 

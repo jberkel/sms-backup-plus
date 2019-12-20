@@ -17,32 +17,33 @@
 package com.zegoggles.smssync.activity;
 
 import android.annotation.TargetApi;
+import android.app.role.RoleManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony.Sms;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentManager.BackStackEntry;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback;
-import android.support.v7.preference.PreferenceFragmentCompat.OnPreferenceStartScreenCallback;
-import android.support.v7.preference.PreferenceScreen;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
+
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.activity.Dialogs.SmsDefaultPackage;
 import com.zegoggles.smssync.activity.Dialogs.WebConnect;
 import com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity;
 import com.zegoggles.smssync.activity.auth.OAuth2WebAuthActivity;
@@ -55,6 +56,7 @@ import com.zegoggles.smssync.activity.events.PerformAction.Actions;
 import com.zegoggles.smssync.activity.events.ThemeChangedEvent;
 import com.zegoggles.smssync.activity.fragments.MainSettings;
 import com.zegoggles.smssync.auth.OAuth2Client;
+import com.zegoggles.smssync.compat.SmsReceiver;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.BackupType;
@@ -68,18 +70,17 @@ import com.zegoggles.smssync.utils.BundleBuilder;
 import java.util.Arrays;
 import java.util.List;
 
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.provider.Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT;
 import static android.provider.Telephony.Sms.Intents.EXTRA_PACKAGE_NAME;
-import static android.support.v7.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static android.widget.Toast.LENGTH_LONG;
+import static androidx.core.role.RoleManagerCompat.ROLE_SMS;
+import static androidx.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.App.post;
 import static com.zegoggles.smssync.activity.AppPermission.allGranted;
 import static com.zegoggles.smssync.activity.Dialogs.ConfirmAction.ACTION;
 import static com.zegoggles.smssync.activity.Dialogs.FirstSync.MAX_ITEMS_PER_SYNC;
-import static com.zegoggles.smssync.activity.Dialogs.MissingCredentials.USE_XOAUTH;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ABOUT;
 import static com.zegoggles.smssync.activity.Dialogs.Type.ACCOUNT_MANAGER_TOKEN_ERROR;
 import static com.zegoggles.smssync.activity.Dialogs.Type.CONFIRM_ACTION;
@@ -97,6 +98,7 @@ import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.ACT
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_ACCOUNT;
 import static com.zegoggles.smssync.activity.auth.AccountManagerAuthActivity.EXTRA_TOKEN;
 import static com.zegoggles.smssync.activity.events.PerformAction.Actions.Backup;
+import static com.zegoggles.smssync.compat.SmsReceiver.isSmsBackupDefaultSmsApp;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
 import static com.zegoggles.smssync.service.BackupType.SKIP;
 
@@ -105,8 +107,8 @@ import static com.zegoggles.smssync.service.BackupType.SKIP;
  * providing controls to configure it.
  */
 public class MainActivity extends ThemeActivity implements
-        OnPreferenceStartFragmentCallback,
-        OnPreferenceStartScreenCallback,
+        PreferenceFragmentCompat.OnPreferenceStartFragmentCallback,
+        PreferenceFragmentCompat.OnPreferenceStartScreenCallback,
         FragmentManager.OnBackStackChangedListener {
     static final int REQUEST_CHANGE_DEFAULT_SMS_PACKAGE = 1;
     private static final int REQUEST_PICK_ACCOUNT = 2;
@@ -116,27 +118,26 @@ public class MainActivity extends ThemeActivity implements
     private static final int REQUEST_PERMISSIONS_BACKUP_SERVICE = 6;
 
     public static final String EXTRA_PERMISSIONS = "permissions";
-    private static final String SCREEN_TITLE = "title";
+    private static final String SCREEN_TITLE_RES = "titleRes";
 
     private Preferences preferences;
     private AuthPreferences authPreferences;
     private OAuth2Client oauth2Client;
     private Intent fallbackAuthIntent;
-    private Intent changeDefaultPackageIntent;
+    private PreferenceTitles preferenceTitles;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
         authPreferences = new AuthPreferences(this);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         fallbackAuthIntent = new Intent(this, OAuth2WebAuthActivity.class).setData(oauth2Client.requestUrl());
-        changeDefaultPackageIntent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, getPackageName());
-
+        preferenceTitles = new PreferenceTitles(getResources(), R.xml.preferences);
         preferences = new Preferences(this);
         if (bundle == null) {
             showFragment(new MainSettings(), null);
@@ -237,8 +238,12 @@ public class MainActivity extends ThemeActivity implements
         if (LOCAL_LOGV) {
             Log.v(TAG, "onPreferenceStartFragment(" + preference + ")");
         }
-        final Fragment fragment = Fragment.instantiate(this, preference.getFragment(),
-                new BundleBuilder().putString(SCREEN_TITLE, String.valueOf(preference.getTitle())).build());
+
+        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
+                getClassLoader(),
+                preference.getFragment());
+        fragment.setArguments(new BundleBuilder().putInt(SCREEN_TITLE_RES, preferenceTitles.getTitleRes(preference.getKey())).build());
+
         showFragment(fragment, preference.getKey());
         return true;
     }
@@ -258,7 +263,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     @Subscribe public void restoreStateChanged(final RestoreState newState) {
-        if (newState.isFinished() && isSmsBackupDefaultSmsApp()) {
+        if (newState.isFinished() && isSmsBackupDefaultSmsApp(this)) {
              restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }
@@ -275,7 +280,7 @@ public class MainActivity extends ThemeActivity implements
     @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
         if (event.valid()) {
             authPreferences.setOauth2Token(event.token.userName, event.token.accessToken, event.token.refreshToken);
-            onAuthenticated();
+            App.post(new AccountAddedEvent());
         } else {
             showDialog(OAUTH2_ACCESS_TOKEN_ERROR);
         }
@@ -299,12 +304,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     @Subscribe public void themeChangedEvent(ThemeChangedEvent event) {
-        if (Build.VERSION.SDK_INT >= HONEYCOMB) {
-            recreate();
-        } else {
-            Toast.makeText(this, R.string.theme_app_relaunch, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        recreate();
     }
 
     @Override public void onBackStackChanged() {
@@ -318,21 +318,13 @@ public class MainActivity extends ThemeActivity implements
         onBackStackChanged();
     }
 
-    private @Nullable CharSequence getCurrentTitle() {
+    private @StringRes int getCurrentTitle() {
         final int entryCount = getSupportFragmentManager().getBackStackEntryCount();
         if (entryCount == 0) {
-            return null;
+            return 0;
         } else {
-            final BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(entryCount - 1);
-            return entry.getBreadCrumbTitle();
-        }
-    }
-
-    private void onAuthenticated() {
-        App.post(new AccountAddedEvent());
-        // Invite user to perform a backup, but only once
-        if (preferences.isFirstUse()) {
-            showDialog(FIRST_SYNC);
+            final FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(entryCount - 1);
+            return entry.getBreadCrumbTitleRes();
         }
     }
 
@@ -371,14 +363,13 @@ public class MainActivity extends ThemeActivity implements
         final Intent intent = new Intent(this, SmsRestoreService.class);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (isSmsBackupDefaultSmsApp()) {
+            if (isSmsBackupDefaultSmsApp(this)) {
                 startService(intent);
             } else {
                 final String defaultSmsPackage = Sms.getDefaultSmsPackage(this);
                 Log.d(TAG, "default SMS package: " + defaultSmsPackage);
                 if (!TextUtils.isEmpty(defaultSmsPackage)) {
                     preferences.setSmsDefaultPackage(defaultSmsPackage);
-
                     if (preferences.hasSeenSmsDefaultPackageChangeDialog()) {
                         requestDefaultSmsPackageChange();
                     } else {
@@ -394,12 +385,6 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private boolean isSmsBackupDefaultSmsApp() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-                getPackageName().equals(Sms.getDefaultSmsPackage(this));
-    }
-
     private void showFragment(@NonNull Fragment fragment, @Nullable String rootKey) {
         Bundle args = fragment.getArguments() == null ? new Bundle() : fragment.getArguments();
         args.putString(ARG_PREFERENCE_ROOT, rootKey);
@@ -409,7 +394,7 @@ public class MainActivity extends ThemeActivity implements
             .replace(R.id.preferences_container, fragment, rootKey);
         if (rootKey != null) {
             tx.addToBackStack(null);
-            tx.setBreadCrumbTitle(args.getString(SCREEN_TITLE));
+            tx.setBreadCrumbTitle(args.getInt(SCREEN_TITLE_RES));
         }
         tx.commit();
     }
@@ -419,31 +404,42 @@ public class MainActivity extends ThemeActivity implements
         switch (dialog) {
             case FIRST_SYNC:
                 arguments.putInt(MAX_ITEMS_PER_SYNC, preferences.getMaxItemsPerSync()); break;
-            case MISSING_CREDENTIALS:
-                arguments.putBoolean(USE_XOAUTH, authPreferences.useXOAuth()); break;
             case WEB_CONNECT:
                 arguments.putParcelable(WebConnect.INTENT, fallbackAuthIntent); break;
+            case MISSING_CREDENTIALS:
             case SMS_DEFAULT_PACKAGE_CHANGE:
-                arguments.putParcelable(SmsDefaultPackage.INTENT, changeDefaultPackageIntent); break;
+                break;
         }
         showDialog(dialog, arguments);
     }
 
     private void showDialog(@NonNull Dialogs.Type dialog, @Nullable Bundle args) {
-        dialog.instantiate(this, args).show(getSupportFragmentManager(), dialog.name());
+        dialog.instantiate(getSupportFragmentManager(), args).show(getSupportFragmentManager(), dialog.name());
     }
 
-    private void requestDefaultSmsPackageChange() {
-        startActivityForResult(changeDefaultPackageIntent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+    void requestDefaultSmsPackageChange() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            RoleManager roleManager = (RoleManager) getSystemService(Context.ROLE_SERVICE);
+            if (roleManager != null && !roleManager.isRoleHeld(ROLE_SMS)) {
+                SmsReceiver.enable(this);
+                Intent intent = roleManager.createRequestRoleIntent(ROLE_SMS);
+                startActivityForResult(intent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+            }
+        } else {
+            Intent intent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, getPackageName());
+            startActivityForResult(intent, REQUEST_CHANGE_DEFAULT_SMS_PACKAGE);
+        }
     }
 
     private void restoreDefaultSmsProvider(String smsPackage) {
         Log.d(TAG, "restoring SMS provider "+smsPackage);
-        if (!TextUtils.isEmpty(smsPackage)) {
-            final Intent changeDefaultIntent = new Intent(ACTION_CHANGE_DEFAULT)
-                    .putExtra(EXTRA_PACKAGE_NAME, smsPackage);
-
-            startActivity(changeDefaultIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // release role by disabling receiver:
+            // this will kill the app if the permission is revoked
+            SmsReceiver.disable(this);
+        } else if (!TextUtils.isEmpty(smsPackage)) {
+            final Intent intent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, smsPackage);
+            startActivity(intent);
         }
     }
 
@@ -452,7 +448,7 @@ public class MainActivity extends ThemeActivity implements
         final String account = data.getStringExtra(EXTRA_ACCOUNT);
         if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
             authPreferences.setOauth2Token(account, token, null);
-            onAuthenticated();
+            App.post(new AccountAddedEvent());
         } else {
             String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
             if (!TextUtils.isEmpty(error)) {
@@ -462,7 +458,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     private void checkDefaultSmsApp() {
-        if (isSmsBackupDefaultSmsApp() && SmsRestoreService.isServiceIdle()) {
+        if (isSmsBackupDefaultSmsApp(this) && SmsRestoreService.isServiceIdle()) {
             restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }

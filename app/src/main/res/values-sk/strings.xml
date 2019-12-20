@@ -36,8 +36,6 @@
     <string name="status_gmail_temp_error">Dočasná chyba Gmail IMAP, opakujte neskôr</string>
     <string name="ui_settings_advanced_label">Pokročilé nastavenia</string>
     <string name="ui_settings_advanced_desc">Nastaviť pokročilé možnosti</string>
-    <string name="ui_settings_advanced_server_label">Nastavenia servera</string>
-    <string name="ui_settings_advanced_server_desc">Nemeňte, pokiaľ si nie ste istý!</string>
     <string name="imap_settings">IMAP nastavenia</string>
     <string name="ui_login_label">Užívateľ</string>
     <string name="ui_login_desc">Váš IMAP užívateľ/emailová adresa</string>
@@ -47,12 +45,9 @@
     <string name="ui_server_label">Adresa servera</string>
     <string name="ui_server_desc">Adresa servera s ktorým sa chcete synchronizovať</string>
     <string name="ui_protocol_label">Bezpečnosť</string>
-    <string name="ui_protocol_desc">Zabezpečené spojenie k serveru.</string>
     <string name="ui_authentication_label">Prihlásenie</string>
-    <string name="ui_authentication_desc">Prihlasovacia metóda.</string>
     <string name="plain">Obyčajný text</string>
     <string name="ui_imap_folder_label">GMail zložka</string>
-    <string name="ui_imap_folder_desc">GMail zložka pre SMS</string>
     <string name="ui_imap_folder_label_dialog_msg">Zálohované správy budú na GMaily uložené v tejto zložke</string>
     <string name="ui_mail_subject_prefix_label">Prefix v predmete emailu</string>
     <string name="ui_mail_subject_prefix_desc">Použiť názov zložky ako prefix v predmete emailu</string>
@@ -73,7 +68,6 @@
     <string name="ui_backup_calllog_sync_calendar_label">Žiadny</string>
     <string name="ui_backup_calllog_sync_calendar_desc">Kalendár, ktorý sa použije pre záznam hovorov</string>
     <string name="ui_imap_folder_calllog_label">Zložka pre výpisy</string>
-    <string name="ui_imap_folder_calllog_desc">Zložka GMailu priradená k výpisom</string>
     <string name="ui_imap_folder_calllog_label_dialog_msg">Zálohované výpisy hovorov budú uložené v tejto zložke</string>
     <string name="ui_mark_as_read_label">Označiť za prečítané (emaily)</string>
     <string name="ui_mark_as_read_desc">Či chcete označiť správy v GMail-u ako prečítané alebo nie</string>
@@ -96,7 +90,6 @@
     <string name="error_wifi_only_no_connection">Nie je pripojené WiFi</string>
     <string name="error_no_connection">Nie je internetové pripojenie</string>
     <string name="ui_dialog_missing_credentials_title">Prihlasovacie informácie</string>
-    <string name="ui_dialog_missing_credentials_msg_xoauth">Najskôr sa musíte pripojiť k GMail účtu</string>
     <string name="ui_dialog_missing_credentials_msg_plain">Najskôr musíte vložiť meno a heslo</string>
     <string name="ui_dialog_invalid_imap_folder_title">Neplatný názov zložky</string>
     <string name="ui_dialog_invalid_imap_folder_msg">Názov zložky nesmie mať medzery (na začiatku alebo na konci)</string>

@@ -60,8 +60,6 @@
 
   <string name="ui_settings_advanced_label">Ρυθμίσεις για προχωρημένους</string>
   <string name="ui_settings_advanced_desc">Ορισμός ρυθμίσεων για προχωρημένους.</string>
-  <string name="ui_settings_advanced_server_label"> Ρυθμίσεις IMAP server </string>
-  <string name="ui_settings_advanced_server_desc">Μην κάνετε αλλαγές αν δεν γνωρίζετε τι κάνετε!</string>
 
   <string name="imap_settings">Ρυθμίσεις IMAP</string>
   <string name="ui_login_label">Username</string>
@@ -72,13 +70,10 @@
   <string name="ui_server_label"> Διεύθυνση Server </string>
   <string name="ui_server_desc">The address of the server you wish to sync to incl. its port.</string>
   <string name="ui_protocol_label">Ασφάλεια</string>
-  <string name="ui_protocol_desc">Το πρωτόκολλο ασφαλείας του server.</string>
   <string name="ui_authentication_label">Πιστοποίηση</string>
-  <string name="ui_authentication_desc">Μέθοδος πιστοποίησης. Default for gmail is \"XOAuth\".</string>
   <string name="plain">Απλό κείμενο</string>
 
   <string name="ui_imap_folder_label"> Ετικέτα Gmail</string>
-  <string name="ui_imap_folder_desc"> Η ετικέτα Gmail που ανατέθηκε σε SMS.</string>
   <string name="ui_imap_folder_label_dialog_msg"> Τα αποθηκευμένα μηνύματα SMS θα έχουν αυτή την ετικέτα στο Gmail.</string>
   <string name="ui_mail_subject_prefix_label"> Πρόθεμα θέματος Email </string>
   <string name="ui_mail_subject_prefix_desc">Χρησιμοποιείτε το όνομα του φάκελο IMAP ως πρόθεμα στο θέμα του email</string>
@@ -107,7 +102,6 @@
   <string name="ui_backup_calllog_sync_calendar_desc"> Ημερολόγιο που χρησιμοποιείται για τις κλήσεις</string>
 
   <string name="ui_imap_folder_calllog_label">Ετικέτα κλήσης</string>
-  <string name="ui_imap_folder_calllog_desc"> Η ετικέτα Gmail που ανατέθηκε σε κλήση.</string>
   <string name="ui_imap_folder_calllog_label_dialog_msg"> Οι αποθηκευμένες κλήσεις θα έχουν αυτή την ετικέτα στο Gmail.</string>
 
   <string name="ui_mark_as_read_label">Ορισμός ως αναγνωσμένου (email)</string>
@@ -142,8 +136,7 @@
 
   <string name="ui_dialog_missing_credentials_title">Πληροφορίες Login</string>
 
-  <string name="ui_dialog_missing_credentials_msg_xoauth">Πρώτα πρέπει να συνδεθείτε στο Gmail λογαριασμό σας.</string>
-  <string name="ui_dialog_missing_credentials_msg_plain">Πρώτα πρέπει να ορίσετε το username και password σας.</string>
+    <string name="ui_dialog_missing_credentials_msg_plain">Πρώτα πρέπει να ορίσετε το username και password σας.</string>
 
   <string name="ui_dialog_invalid_imap_folder_title">Μη έγκυρο όνομα ετικέτας</string>
   <string name="ui_dialog_invalid_imap_folder_msg">Το όνομα ετικέτας ίσως δεν περιλαμβάνει κενά (στην αρχή ή στο τέλος).</string>
