@@ -1,5 +1,5 @@
 
-#Analysing Android / ACRA error reports using the Google visualisation API
+# Analysing Android / ACRA error reports using the Google visualisation API
 
 Analysing data from [ACRA][] with the [Google Visualization API][]. Also read
 the [blog post][].
