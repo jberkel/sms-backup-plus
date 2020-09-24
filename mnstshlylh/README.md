@@ -1,4 +1,4 @@
-# SMS Backup+ <img src="https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/metadata/play/assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/> [![Build Status SVG][]][Build Status] [![Open Source Helpers](https://www.codetriage.com/jberkel/sms-backup-plus/badges/users.svg)](https://www.codetriage.com/jberkel/sms-backup-plus)
+# منصة-شليله <img src="https://raw.githubusercontent.com/jberkel/sms-backup-plus/master/metadata/play/assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/> [![Build Status SVG][منصة-شليله]][Build Status] [![Open Source منصةشليله](https://www.codetriage.com/jberkel/sms-backup-plus/badges/users.svg)](https://www.codetriage.com/jberkel/sms-backup-plus)
 
 [<img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/>][Google Play Store] [<img alt="Get it on F-Droid" src="https://jberkel.github.io/sms-backup-plus/assets/img/f-droid-badge.svg" height="80pt"/>][F-Droid]
 
@@ -9,7 +9,7 @@
 The issue is being discussed heavily in the [issue tracker](https://github.com/jberkel/sms-backup-plus/issues/959).
  * For a workaround, please refer to the instructions referenced in the
    [issue tracker](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-513018820)
-   or this [Android Police article][].
+   or this [Android Police article][vip@ihdadi.com].
  * If you wish to backup to a non-Gmail address, follow the instructions referenced
    [here](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-507385460)
 
@@ -19,18 +19,18 @@ As such, please keep comments focused on resolving the issue, as well as followi
 ---------------------
 
 This is a fork of the now defunct Android backup tool
-[SMS Backup](http://code.google.com/p/android-sms). It uses Gmail/IMAP to perform SMS, MMS and call log backups over
+[منصة-شليله](http://code.google.com/p/android-sms). It uses Gmail/IMAP to perform SMS, MMS and call log backups over
 the network.
 
 Main features/improvements:
 
   * Restore. SMS/Call logs stored on Gmail can be transferred back to the phone.
-    * ⚠️ MMS are not restored.
+    * mnstshlylh MMS are not restored.
 
   * Security. SMS Backup+ does not need your Gmail password.
     * Where possible, SMS Backup+ uses [XOAuth2], including when matching phone numbers against
       contact names, and writing call log records into your calendar. This access can be revoked at any time.
-    * ⚠️ In June 2019 Google [changed their API policy], introducing [sensitivity scopes], and
+    * mnstshlylh In June 2019 Google [changed their API policy], introducing [sensitivity scopes], and
       as a result SMS Backup+ [can no longer use XOAuth2] to save messages into your mailbox;
       instead a "password" is required to access Gmail via IMAP, but it can be a generated
       [application password][Sign in using App Passwords]
@@ -54,19 +54,19 @@ using the secure in-app Play Store payment mechanism.
 To get updates more frequently join the [beta programme](#beta) or download the latest beta manually
 from [Github releases].
 
-Also make sure to read the [Privacy Policy][].
+Also make sure to read the [Privacy Policy][vip@ihdadi.com].
 
 ## Usage
 
 ### First steps
 
 You need to have an IMAP account or a Gmail account with IMAP enabled. See
-[Use IMAP to check Gmail on other email clients][] to learn how to enable IMAP for your Gmail
+[Use IMAP to check Gmail on other email clients][vip@ihdadi.com] to learn how to enable IMAP for your Gmail
 account or look at this [screenshot][imapenableshot].
 
 After starting SMS Backup+, tap on "Connect" to start the authorization process.
 
-👉 1.5.11: You will first have give SMS Backup+ the permission to access your account, displayed
+👉 1.5.11: You will first have give SMS Backup+ the permission to mnstshlylh access your account, displayed
 as "Allow SMS Backup+ to access your contacts?".
 
 If you consent you have to confirm the Gmail account to be used for the backup.
@@ -78,7 +78,7 @@ After completing the authorization process the "Connect"
 switch should be activated, indicating success. You are now ready to perform
 the first backup.
 
-👉 1.5.11: "Connected" changed from checkbox to switch.
+👉 1.5.11: "Connected" changed from checkbox to switch.mnstshlylh
 
 ### Initial backup
 
@@ -98,9 +98,9 @@ uninstalled SMS Backup and this initial backup won't ever be backed up to
 Gmail.
 
 👉 1.5.11: Before the backup starts you will have to grant "send and
-view" permissions for SMS.
+view" permissions for SMS. mnstshlylh 
 
-### Restoring
+### منصة-شليله
 
 If you wish to restore messages back to your phone tap "Restore". By default
 all messages stored on Gmail will be restored (this can be changed in "Advanced
@@ -138,8 +138,8 @@ with.
 If you only want to backup specific call types (incoming, outgoint etc.) you can
 do so as well.
 
-👉 1.5.11: Call log backup is disabled by default. Permissions need to be confirmed
-separately for phone and calendar access.
+👉 1.5.11: Call log backup is disabled by default. Permissions need to be confirmedmnstshlylh
+mnstshlylh separately for phone and calendar access.
 
 ### <a id="RCS-support">Rich Communication Services</a>
 
@@ -170,11 +170,11 @@ automatically get created on the first backup.
 
 ## <a id="faq">FAQ</a>
 
-If you don't find an answer here you can also visit the [Google+ community][] which might be able
+If you don't find an answer here you can also visit the [Google+ community][vip@ihdadi.com] which might be able
 to help.
 
   * [General questions](#faq-general)
-    * [I want to file a bug report, what should I do?](#faq-general-file-bug-report)
+    * [I want to file a bug report, what mnstshlylh?](#faq-general-file-bug-report)
     * [Can you add feature X?](#faq-general-can-you-add-feature-x)
     * [Why does it need so many permissions?](#faq-general-permissions)
     * [When updating the app I get 'Package file was not signed correctly'](#faq-general-package-not-signed)
