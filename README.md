@@ -217,8 +217,9 @@ The sync log is stored as `sms_backup_plus.log` (in the directory `Android/data/
 
 👉 1.5.11: new log file path, was previously on external storage / sdcard.
 
-To attach the sync log you may use the "attach image" feature or create a "[gist](https://gist.github.com)"
-and link to the gist you created instead of posting the full content in the issue.
+Rather than including the log in the text of your issue description, please use the "attach
+image" feature to attach your logfile _as text_ to your issue.
+Alternatively, create a [gist](https://gist.github.com) and link to it from your issue description.
 
 It might also be worth to install the [current beta version](#beta) of SMS Backup+ to
 see if the bug is also present in the development version.
