@@ -11,7 +11,7 @@ If your problem is connected any of the following issues, please add your commen
     [here](https://github.com/jberkel/sms-backup-plus/issues/959#issuecomment-507385460)
   * Some comments suggest that you can work around this limitation by signing into Google via another app such as Chrome; this is fragile as it relies in bugs that may be fixed at any time. Instead please use the `IMAP` access method as explained in #959.
   * Never tell `SMS Backup+` your main Gmail password; instead, create an "application password" and use that instead.
-2. **Recording phone calls in a Calendar doesn't work** for some users.
+2. **Saving phone calls as Calendar events doesn't work** for some users.
   The symptoms including being unable to choose a calendar, or having events recorded in the wrong calendar, or being unable to enable or disable recording of calendar events.
   See issue #963 for details.
 
