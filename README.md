@@ -476,8 +476,8 @@ repository and submit a [pull request][About pull requests].
 
 This application is released under the terms of the [Apache License, Version 2.0][].
 
-[Build Status]: http://travis-ci.org/jberkel/sms-backup-plus
-[Build Status SVG]: https://api.travis-ci.org/jberkel/sms-backup-plus.svg?branch=master
+[Build Status]: http://travis-ci.com/jberkel/sms-backup-plus
+[Build Status SVG]: https://api.travis-ci.com/jberkel/sms-backup-plus.svg?branch=master
 
 [XOAuth2]: https://developers.google.com/gmail/imap/xoauth2-protocol
 [changed their API policy]: https://cloud.google.com/blog/products/g-suite/elevating-user-trust-in-our-api-ecosystems
