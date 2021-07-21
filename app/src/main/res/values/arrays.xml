@@ -31,6 +31,10 @@
     <item>100</item>
     <item>200</item>
     <item>500</item>
+    <item>1000</item>
+    <item>2500</item>
+    <item>5000</item>
+    <item>10000</item>
     <item>@string/all_messages</item>
   </string-array>
 
@@ -38,6 +42,10 @@
     <item>100</item>
     <item>200</item>
     <item>500</item>
+    <item>1000</item>
+    <item>2500</item>
+    <item>5000</item>
+    <item>10000</item>
     <item>-1</item>
   </string-array>
 
