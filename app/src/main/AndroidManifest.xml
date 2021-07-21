@@ -9,12 +9,15 @@
     <!-- android.permission-group.MESSAGES -->
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.WRITE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
 
     <!-- Allows the app to receive and process SMS messages. This means the app could monitor or delete
          messages sent to your device without showing them to you. -->
     <!-- android.permission-group.MESSAGES -->
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-
+    <uses-permission android:name="android.permission.RECEIVE_MMS" />
+          
     <!-- android.permission-group.SOCIAL_INFO -->
     <!-- introduced in API level 16 (Jelly Bean), previously part of READ_CONTACTS -->
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
