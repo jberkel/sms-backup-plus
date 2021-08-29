@@ -15,6 +15,7 @@ If your problem is connected any of the following issues, please add your commen
   The symptoms including being unable to choose a calendar, or having events recorded in the wrong calendar, or being unable to enable or disable recording of calendar events.
   See issue #963 for details.
 3. **Misattribution of MMS**. Some devices swap the sender and receiver of MMS messages when presenting them to the app; this may be consistent or random depending on the device. This results in a range of issues from the obvious "sender and receiver are swapped", to failure to keep conversations threaded properly, and (we suspect) some cases where one side of a conversation seems to disappear entirely.
+4. **No messages backed up**. There is a setting intended to restrict the number of messages that will be backed up or restored in a single session. A recent change to Android means that if this setting is anything other than `unlimited`, the backup or restoration will completely fail. Please ensure it is set to `unlimited` before reporting bugs for "no messages backed up" or "no messages restored".
 
 Please understand that github issues are intended to provide information to assist with fixing bugs or improving documentation. As such, please keep comments focused on resolving the issue, as well as following the [GitHub Community Guidelines](https://help.github.com/en/articles/github-community-guidelines).
 
