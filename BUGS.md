@@ -14,6 +14,7 @@ If your problem is connected any of the following issues, please add your commen
 2. **Saving phone calls as Calendar events doesn't work** for some users.
   The symptoms including being unable to choose a calendar, or having events recorded in the wrong calendar, or being unable to enable or disable recording of calendar events.
   See issue #963 for details.
+3. **Misattribution of MMS**. Some devices swap the sender and receiver of MMS messages when presenting them to the app; this may be consistent or random depending on the device. This results in a range of issues from the obvious "sender and receiver are swapped", to failure to keep conversations threaded properly, and (we suspect) some cases where one side of a conversation seems to disappear entirely.
 
 Please understand that github issues are intended to provide information to assist with fixing bugs or improving documentation. As such, please keep comments focused on resolving the issue, as well as following the [GitHub Community Guidelines](https://help.github.com/en/articles/github-community-guidelines).
 
