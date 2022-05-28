@@ -44,7 +44,7 @@ public class BackupItemsFetcherTest {
 
     @Test public void shouldGetItemsForDataType() throws Exception {
         preferences.getDataTypePreferences().setBackupEnabled(true, SMS);
-        assertThat(fetcher.getItemsForDataType(SMS, null, -1).getCount()).isEqualTo(0);
+        assertThat(fetcher.getItemsForDataType(SMS, null, 0, -1).getCount()).isEqualTo(0);
         verifyZeroInteractions(resolver);
     }
 
@@ -55,7 +55,7 @@ public class BackupItemsFetcherTest {
 
         mockEmptyQuery();
 
-        assertThat(fetcher.getItemsForDataType(SMS, null, -1).getCount()).isEqualTo(0);
+        assertThat(fetcher.getItemsForDataType(SMS, null, 0, -1).getCount()).isEqualTo(0);
     }
 
     @Test public void shouldCatchNullPointerExceptions() throws Exception {
@@ -65,7 +65,7 @@ public class BackupItemsFetcherTest {
 
         mockEmptyQuery();
 
-        assertThat(fetcher.getItemsForDataType(SMS, null, -1).getCount()).isEqualTo(0);
+        assertThat(fetcher.getItemsForDataType(SMS, null, 0, -1).getCount()).isEqualTo(0);
     }
 
     @Test public void shouldReturnDefaultIfDataTypeCannotBeRead() throws Exception {
@@ -105,6 +105,6 @@ public class BackupItemsFetcherTest {
 
     private void mockEmptyQuery() {
         BackupQueryBuilder.Query query = mock(BackupQueryBuilder.Query.class);
-        when(queryBuilder.buildQueryForDataType(SMS, null, -1)).thenReturn(query);
+        when(queryBuilder.buildQueryForDataType(SMS, null, 0, -1)).thenReturn(query);
     }
 }

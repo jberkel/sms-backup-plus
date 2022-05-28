@@ -12,12 +12,10 @@ import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
-import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.mail.PersonLookup;
-import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.service.exception.SmsProviderNotWritableException;
 import com.zegoggles.smssync.service.state.RestoreState;
 
@@ -89,7 +87,7 @@ public class SmsRestoreService extends ServiceBase {
             );
 
             RestoreConfig config = new RestoreConfig(
-                getBackupImapStore(),
+                getBackupImapStores(),
                 0,
                 restoreSms,
                 restoreCallLog,
@@ -98,9 +96,7 @@ public class SmsRestoreService extends ServiceBase {
                 0
             );
 
-            final AuthPreferences authPreferences = new AuthPreferences(this);
-            new RestoreTask(this, converter, getContentResolver(),
-                    new TokenRefresher(service, new OAuth2Client(authPreferences.getOAuth2ClientId()), authPreferences)).execute(config);
+            new RestoreTask(this, converter, getContentResolver()).execute(config);
 
         } catch (MessagingException e) {
             postError(e);

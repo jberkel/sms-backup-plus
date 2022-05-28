@@ -62,10 +62,10 @@ public class BackupImapStore extends ImapStore {
             (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE));
     }
 
-    public BackupFolder getFolder(DataType type, DataTypePreferences preferences) throws MessagingException {
+    public BackupFolder getFolder(DataType type, DataTypePreferences preferences, Integer settingsId) throws MessagingException {
         BackupFolder folder = openFolders.get(type);
         if (folder == null) {
-            String label = preferences.getFolder(type);
+            String label = preferences.getFolder(type, settingsId);
             if (label == null) throw new IllegalStateException("label is null");
 
             folder = createAndOpenFolder(type, label);

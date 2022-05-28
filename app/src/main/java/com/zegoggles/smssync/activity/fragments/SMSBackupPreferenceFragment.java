@@ -5,11 +5,14 @@ import android.os.Handler;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
 
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.preferences.Preferences;
+
+import java.util.HashMap;
 
 public abstract class SMSBackupPreferenceFragment extends PreferenceFragmentCompat {
     protected Preferences preferences;
@@ -40,6 +43,31 @@ public abstract class SMSBackupPreferenceFragment extends PreferenceFragmentComp
                             return true;
                         }
                     });
+        }
+    }
+
+    protected void insertPreference(int position, PreferenceGroup preferenceList, Preference item) {
+        HashMap<Integer, Preference> listItems = new HashMap<Integer, Preference>();
+        int prefCount = preferenceList.getPreferenceCount();
+        for(int i = 0; i < prefCount; i++) {
+            Preference preference = preferenceList.getPreference(i);
+            listItems.put(preference.getOrder(), preference);
+        }
+
+        Integer cnt = 0;
+        for (Integer i : listItems.keySet()) {
+            Preference preference = listItems.get(i);
+            if (cnt<position) {
+                preference.setOrder(cnt);
+            }
+            else {
+                if (cnt == position) {
+                    preferenceList.addPreference(item);
+                    item.setOrder(position);
+                }
+                preference.setOrder(cnt+1);
+            }
+            cnt++;
         }
     }
 }

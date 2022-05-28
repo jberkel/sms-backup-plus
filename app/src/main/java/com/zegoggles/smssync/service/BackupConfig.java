@@ -6,9 +6,10 @@ import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public class BackupConfig {
-    public final BackupImapStore imapStore;
+    public final List<BackupImapStore> imapStores;
     public final int currentTry;
     public final int maxItemsPerSync;
     public final ContactGroup groupToBackup;
@@ -16,18 +17,18 @@ public class BackupConfig {
     public final boolean debug;
     public final EnumSet<DataType> typesToBackup;
 
-    BackupConfig(@NonNull BackupImapStore imapStore,
+    BackupConfig(@NonNull List<BackupImapStore> imapStores,
                  int currentTry,
                  int maxItemsPerSync,
                  @NonNull ContactGroup groupToBackup,
                  @NonNull BackupType backupType,
                  @NonNull EnumSet<DataType> typesToBackup,
                  boolean debug) {
-        if (imapStore == null) throw new IllegalArgumentException("need imapstore");
+        if (imapStores == null) throw new IllegalArgumentException("need imapstores");
         if (typesToBackup == null || typesToBackup.isEmpty()) throw new IllegalArgumentException("need to specify types to backup");
         if (currentTry < 0) throw new IllegalArgumentException("currentTry < 0");
 
-        this.imapStore = imapStore;
+        this.imapStores = imapStores;
         this.currentTry = currentTry;
         this.maxItemsPerSync = maxItemsPerSync;
         this.groupToBackup = groupToBackup;
@@ -36,8 +37,8 @@ public class BackupConfig {
         this.typesToBackup = typesToBackup;
     }
 
-    public BackupConfig retryWithStore(BackupImapStore store) {
-        return new BackupConfig(store, currentTry + 1,
+    public BackupConfig retryWithStore(List<BackupImapStore> stores) {
+        return new BackupConfig(stores, currentTry + 1,
                 maxItemsPerSync,
                 groupToBackup,
                 backupType,
@@ -47,13 +48,23 @@ public class BackupConfig {
 
     @Override public String toString() {
         return "BackupConfig{" +
-                "imap=" + imapStore +
-                ", currentTry=" + currentTry +
+                GetImapString() +
+                "currentTry=" + currentTry +
                 ", maxItemsPerSync=" + maxItemsPerSync +
                 ", groupToBackup=" + groupToBackup +
                 ", backupType=" + backupType +
                 ", debug=" + debug +
                 ", typesToBackup=" + typesToBackup +
                 '}';
+    }
+
+    private String GetImapString() {
+        String imapStoreString = "";
+        Integer cnt = 0;
+        for(BackupImapStore store: imapStores) {
+            imapStoreString += "imap" + cnt.toString() + "=" + store.toString() + ", ";
+            cnt++;
+         }
+         return imapStoreString;
     }
 }

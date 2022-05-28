@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -116,6 +117,8 @@ public class MainActivity extends ThemeActivity implements
     private static final int REQUEST_PERMISSIONS_BACKUP_MANUAL = 4;
     private static final int REQUEST_PERMISSIONS_BACKUP_MANUAL_SKIP = 5;
     private static final int REQUEST_PERMISSIONS_BACKUP_SERVICE = 6;
+    private static final int REQUEST_PERMISSIONS_PHONE = 7;
+
 
     public static final String EXTRA_PERMISSIONS = "permissions";
     private static final String SCREEN_TITLE_RES = "titleRes";
@@ -134,7 +137,8 @@ public class MainActivity extends ThemeActivity implements
         setSupportActionBar(toolbar);
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
-        authPreferences = new AuthPreferences(this);
+        //XOAuth2 is legacy and therefore not considered for multi-sim (authPreferences only used in this context here)
+        authPreferences = new AuthPreferences(this, 0);
         oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
         fallbackAuthIntent = new Intent(this, OAuth2WebAuthActivity.class).setData(oauth2Client.requestUrl());
         preferenceTitles = new PreferenceTitles(getResources(), R.xml.preferences);
@@ -147,6 +151,7 @@ public class MainActivity extends ThemeActivity implements
         }
         checkDefaultSmsApp();
         requestPermissionsIfNeeded();
+        requestPhoneStatePermission();
     }
 
     @Override
@@ -309,7 +314,9 @@ public class MainActivity extends ThemeActivity implements
 
     @Override public void onBackStackChanged() {
         if (getSupportActionBar() == null) return;
-        getSupportActionBar().setSubtitle(getCurrentTitle());
+        @StringRes Integer title = getCurrentTitle();
+        if (title == null) return;
+        getSupportActionBar().setSubtitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(getSupportFragmentManager().getBackStackEntryCount() > 0);
     }
 
@@ -318,10 +325,14 @@ public class MainActivity extends ThemeActivity implements
         onBackStackChanged();
     }
 
-    private @StringRes int getCurrentTitle() {
+    private @StringRes Integer getCurrentTitle() {
         final int entryCount = getSupportFragmentManager().getBackStackEntryCount();
+        final List<Fragment> fragments = getSupportFragmentManager().getFragments();
         if (entryCount == 0) {
             return 0;
+        } else if (fragments.size() > 0 && fragments.get(fragments.size() - 1)
+                   instanceof com.zegoggles.smssync.activity.fragments.AdvancedSettings.Server) {
+            return null;
         } else {
             final FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(entryCount - 1);
             return entry.getBreadCrumbTitleRes();
@@ -329,10 +340,10 @@ public class MainActivity extends ThemeActivity implements
     }
 
     @Subscribe public void performAction(PerformAction action) {
-        if (authPreferences.isLoginInformationSet()) {
+        if (atLeastOneLoginInformationSet(this)) {
             if (action.confirm) {
                 showDialog(CONFIRM_ACTION, new BundleBuilder().putString(ACTION, action.action.name()).build());
-            } else if (preferences.isFirstBackup() && action.action == Backup) {
+            } else if (preferences.isFirstBackup(0) && action.action == Backup) {
                 showDialog(FIRST_SYNC);
             } else {
                 doPerform(action.action);
@@ -463,6 +474,18 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
+    private void requestPhoneStatePermission() {
+        String phonePermission;
+        if (Build.VERSION.SDK_INT > 29) {
+            phonePermission=Manifest.permission.READ_PHONE_NUMBERS;
+        }
+        else
+        {
+            phonePermission=Manifest.permission.READ_PHONE_STATE;
+        }
+        ActivityCompat.requestPermissions(this, new String[]{phonePermission}, REQUEST_PERMISSIONS_PHONE);
+    }
+
     private void requestPermissionsIfNeeded() {
         final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_PERMISSIONS)) {
@@ -470,6 +493,13 @@ public class MainActivity extends ThemeActivity implements
             Log.v(TAG, "requesting permissions "+ Arrays.toString(permissions));
             ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS_BACKUP_SERVICE);
         }
+    }
+
+    private boolean atLeastOneLoginInformationSet(Context context) {
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            if (new AuthPreferences(context, settingsId).isLoginInformationSet()) return true;
+        }
+        return false;
     }
 
     @Override

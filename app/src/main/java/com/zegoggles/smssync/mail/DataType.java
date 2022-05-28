@@ -65,8 +65,8 @@ public enum DataType {
     }
 
     public static class PreferenceKeys {
-        static final String IMAP_FOLDER = "imap_folder";
-        static final String IMAP_FOLDER_CALLLOG = "imap_folder_calllog";
+        public static final String IMAP_FOLDER = "imap_folder";
+        public static final String IMAP_FOLDER_CALLLOG = "imap_folder_calllog";
 
         static final String BACKUP_SMS = "backup_sms";
         static final String BACKUP_MMS = "backup_mms";

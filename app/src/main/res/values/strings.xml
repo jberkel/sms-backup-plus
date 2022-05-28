@@ -138,6 +138,9 @@
   <string name="ui_mark_as_read_restore_label">Mark as read (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Whether to mark all restored SMS as read or not.</string>
 
+  <string name="ui_use_icc_id_for_restore_label">Use IccId for multisim</string>
+  <string name="ui_use_icc_id_for_restore_desc">Whether to use IccId for Calllog to differentiate between multiple sim-cards (device dependant and only used on mulitsim devices)</string>
+
   <string name="ui_email_address_style_label">Email address style</string>
   <string name="ui_email_address_style_desc">Format of email addresses</string>
 
@@ -279,7 +282,7 @@
   <string name="app_log_missing_credentials">Skipped (missing credentials)</string>
   <string name="app_log_backup_requested">Backup requested (%1$s)</string>
   <string name="app_log_start_backup">Starting backup (%1$s)</string>
-  <string name="app_log_backup_messages">Backing up (%1$d SMS, %2$d MMS, %3$d call log)</string>
+  <string name="app_log_backup_messages">Backing up (%1$d SMS, %2$d MMS, %3$d call log) from number %4$s</string>
   <string name="app_log_backup_messages_with_config">Using config: %1$s</string>
   <string name="app_log_backup_canceled">Backup canceled</string>
   <string name="app_log_backup_finished">Backup finished</string>
@@ -349,4 +352,6 @@
   <string name="ui_dark_theme_label">Dark theme</string>
   <string name="legacy_settings">Legacy settings</string>
   <string name="legacy_settings_summary">XOAuth2 is no longer supported.</string>
+  <string name="ui_server_takeover">Settings from SIM 1</string>
+  <string name="ui_server_takeover_summary">Takeover settings from SIM 1</string>
 </resources>

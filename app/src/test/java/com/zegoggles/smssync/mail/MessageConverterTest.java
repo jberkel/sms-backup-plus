@@ -13,6 +13,8 @@ import com.zegoggles.smssync.contacts.ContactAccessor;
 import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.MarkAsReadTypes;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.utils.SimCard;
+import com.zegoggles.smssync.App;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +48,7 @@ public class MessageConverterTest {
 
     @Test(expected = MessagingException.class)
     public void testMessageToContentValuesWithNullMessageThrowsMessagingException() throws Exception {
-        messageConverter.messageToContentValues(null);
+        messageConverter.messageToContentValues(0, null);
     }
 
     @Test(expected = MessagingException.class)
@@ -65,11 +67,11 @@ public class MessageConverterTest {
                 "Some Text";
 
         final MimeMessage mimeMessage = MimeMessage.parseMimeMessage(new ByteArrayInputStream(message.getBytes()), true);
-        messageConverter.messageToContentValues(mimeMessage);
+        messageConverter.messageToContentValues(0, mimeMessage);
     }
 
     @Test public void testMessageToContentValuesWithSMS() throws Exception {
-        final ContentValues values = messageConverter.messageToContentValues(createSMSMessage());
+        final ContentValues values = messageConverter.messageToContentValues(0, createSMSMessage());
         assertThat(values.getAsString(Telephony.TextBasedSmsColumns.ADDRESS)).isEqualTo("+121332");
         assertThat(values.getAsString(Telephony.TextBasedSmsColumns.TYPE)).isEqualTo("2");
         assertThat(values.getAsString(Telephony.TextBasedSmsColumns.PROTOCOL)).isNull();
@@ -81,11 +83,26 @@ public class MessageConverterTest {
         assertThat(values.getAsString(Telephony.TextBasedSmsColumns.BODY)).isEqualTo("DasßAsß");
     }
 
+    @Test public void testMessageToContentValuesWithSMSAndOneSimCard() throws Exception {
+        final ContentValues values = messageConverter.messageToContentValues(0, createSMSMessage());
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.SUBSCRIPTION_ID)).isEqualTo(null);
+    }
+
+
+    @Test public void testMessageToContentValuesWithSMSAndMoreThanOneSimCard() throws Exception {
+        SimCard[] simCards = new SimCard[2];
+        simCards[0] = new SimCard("0", "0");
+        simCards[1] = new SimCard("1", "1");
+        App.SimCards = simCards;
+        final ContentValues values = messageConverter.messageToContentValues(0, createSMSMessage());
+        assertThat(values.getAsString(Telephony.TextBasedSmsColumns.SUBSCRIPTION_ID)).isEqualTo("0");
+    }
+
 
     @Test public void testMessageToContentValuesWithCalllog() throws Exception {
         PersonRecord record = new PersonRecord(1, "The name", "email@foo.com", "+1234");
         when(personLookup.lookupPerson("+12121")).thenReturn(record);
-        final ContentValues values = messageConverter.messageToContentValues(createCallLogMessage());
+        final ContentValues values = messageConverter.messageToContentValues(0, createCallLogMessage());
         assertThat(values.getAsString(CallLog.Calls.NUMBER)).isEqualTo("+12121");
         assertThat(values.getAsString(CallLog.Calls.TYPE)).isEqualTo("3");
         assertThat(values.getAsString(CallLog.Calls.DATE)).isEqualTo("1419163218194");
@@ -95,10 +112,29 @@ public class MessageConverterTest {
         assertThat(values.getAsInteger(CallLog.Calls.CACHED_NUMBER_TYPE)).isEqualTo(-2);
     }
 
+    @Test public void testMessageToContentValuesWithCalllogAndOneSimCard() throws Exception {
+        PersonRecord record = new PersonRecord(1, "The name", "email@foo.com", "+1234");
+        when(personLookup.lookupPerson("+12121")).thenReturn(record);
+        final ContentValues values = messageConverter.messageToContentValues(0, createCallLogMessage());
+        assertThat(values.getAsString(CallLog.Calls.PHONE_ACCOUNT_ID)).isEqualTo(null);
+    }
+
+
+    @Test public void testMessageToContentValuesWithCalllogAndMoreThanOneSimCard() throws Exception {
+        PersonRecord record = new PersonRecord(1, "The name", "email@foo.com", "+1234");
+        when(personLookup.lookupPerson("+12121")).thenReturn(record);
+        SimCard[] simCards = new SimCard[2];
+        simCards[0] = new SimCard("0", "0");
+        simCards[1] = new SimCard("1", "1");
+        App.SimCards = simCards;
+        final ContentValues values = messageConverter.messageToContentValues(0, createCallLogMessage());
+        assertThat(values.getAsString(CallLog.Calls.PHONE_ACCOUNT_ID)).isEqualTo("1");
+    }
+
     @Test public void testMessageToContentValuesWithCalllogFromUnknownPerson() throws Exception {
         PersonRecord record = new PersonRecord(-1, null, null, null);
         when(personLookup.lookupPerson("+12121")).thenReturn(record);
-        final ContentValues values = messageConverter.messageToContentValues(createCallLogMessage());
+        final ContentValues values = messageConverter.messageToContentValues(0, createCallLogMessage());
         assertThat(values.containsKey(CallLog.Calls.CACHED_NAME)).isFalse();
         assertThat(values.containsKey(CallLog.Calls.CACHED_NUMBER_TYPE)).isFalse();
     }
@@ -117,11 +153,11 @@ public class MessageConverterTest {
         messageConverter = new MessageConverter(RuntimeEnvironment.application,
                 preferences, "foo@example.com", personLookup, contactAccessor);
 
-        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
+        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS, 0);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isFalse();
 
         cursor.moveToNext();
-        res = messageConverter.convertMessages(cursor, DataType.SMS);
+        res = messageConverter.convertMessages(cursor, DataType.SMS, 0);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isTrue();
     }
 
@@ -139,11 +175,11 @@ public class MessageConverterTest {
         messageConverter = new MessageConverter(RuntimeEnvironment.application,
                 preferences, "foo@example.com", personLookup, contactAccessor);
 
-        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
+        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS, 0);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isFalse();
 
         cursor.moveToNext();
-        res = messageConverter.convertMessages(cursor, DataType.SMS);
+        res = messageConverter.convertMessages(cursor, DataType.SMS, 0);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isFalse();
     }
 
@@ -161,11 +197,11 @@ public class MessageConverterTest {
         messageConverter = new MessageConverter(RuntimeEnvironment.application,
                 preferences, "foo@example.com", personLookup, contactAccessor);
 
-        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS);
+        ConversionResult res = messageConverter.convertMessages(cursor, DataType.SMS, 0);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isTrue();
 
         cursor.moveToNext();
-        res = messageConverter.convertMessages(cursor, DataType.SMS);
+        res = messageConverter.convertMessages(cursor, DataType.SMS, 0);
         assertThat(res.getMessages().get(0).isSet(Flag.SEEN)).isTrue();
     }
 

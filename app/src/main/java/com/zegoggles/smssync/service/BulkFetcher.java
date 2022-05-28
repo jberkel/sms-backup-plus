@@ -18,12 +18,13 @@ public class BulkFetcher {
 
     public @NonNull BackupCursors fetch(final @NonNull EnumSet<DataType> types,
                                         final @Nullable ContactGroupIds groups,
+                                        final Integer settingsId,
                                         final int maxItems) {
 
         int max = maxItems;
         BackupCursors cursors = new BackupCursors();
         for (DataType type : types) {
-            Cursor cursor = itemsFetcher.getItemsForDataType(type, groups, max);
+            Cursor cursor = itemsFetcher.getItemsForDataType(type, groups, settingsId, max);
             cursors.add(type, cursor);
 
             if (max > 0) {

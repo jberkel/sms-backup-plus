@@ -20,17 +20,20 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.auth.TokenRefreshException;
 import com.zegoggles.smssync.auth.TokenRefresher;
+import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
+import com.zegoggles.smssync.preferences.AuthPreferences;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -57,16 +60,18 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private final MessageConverter converter;
     private final TokenRefresher tokenRefresher;
     private final Preferences preferences;
+    private final AuthPreferences authPreferences;
 
     RestoreTask(SmsRestoreService service,
                 MessageConverter converter,
-                ContentResolver resolver,
-                TokenRefresher tokenRefresher) {
+                ContentResolver resolver) {
         this.service = service;
+        this.authPreferences = service.getAuthPreferences();
         this.converter = converter;
         this.resolver = resolver;
-        this.tokenRefresher = tokenRefresher;
         this.preferences = service.getPreferences();
+
+        this.tokenRefresher = new TokenRefresher(service, new OAuth2Client(authPreferences.getOAuth2ClientId()), authPreferences);
     }
 
     @Override
@@ -95,66 +100,93 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     }
 
     private RestoreState restore(RestoreConfig config) {
-        final BackupImapStore imapStore = config.imapStore;
-
+        int itemsToRestoreCount = 0;
+        Exception lastException = null;
+        HashMap<Integer, List<Message>> msgList = new HashMap<Integer, List<Message>>();
         int currentRestoredItem = config.currentRestoredItem;
-        try {
-            publishProgress(LOGIN);
-            imapStore.checkSettings();
 
-            publishProgress(CALC);
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            final BackupImapStore imapStore = config.imapStores.get(settingsId);
 
-            final List<Message> msgs = new ArrayList<Message>();
+            try {
+                publishProgress(LOGIN);
+                imapStore.checkSettings();
 
-            if (config.restoreSms) {
-                msgs.addAll(imapStore.getFolder(SMS, preferences.getDataTypePreferences()).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
-            }
-            if (config.restoreCallLog) {
-                msgs.addAll(imapStore.getFolder(CALLLOG, preferences.getDataTypePreferences()).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
-            }
+                publishProgress(CALC);
 
-            final int itemsToRestoreCount = config.maxRestore <= 0 ? msgs.size() : Math.min(msgs.size(), config.maxRestore);
-
-            if (itemsToRestoreCount > 0) {
-                for (; currentRestoredItem < itemsToRestoreCount && !isCancelled(); currentRestoredItem++) {
-                    DataType dataType = importMessage(msgs.get(currentRestoredItem));
-
-                    msgs.set(currentRestoredItem, null); // help gc
-                    publishProgress(new RestoreState(RESTORE, currentRestoredItem, itemsToRestoreCount, 0, 0, dataType, null));
-                    if (currentRestoredItem % 50 == 0) {
-                        //clear cache periodically otherwise SD card fills up
-                        service.clearCache();
-                    }
+                if (config.restoreSms) {
+                    List<Message> msgs = new ArrayList<Message>();
+                    msgs.addAll(imapStore.getFolder(SMS, preferences.getDataTypePreferences(), settingsId).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+                    msgList.put(settingsId, msgs);
                 }
-                updateAllThreadsIfAnySmsRestored();
-            } else {
-                Log.d(TAG, "nothing to restore");
-            }
+                if (config.restoreCallLog) {
+                    List<Message> msgs = new ArrayList<Message>();
+                    msgs.addAll(imapStore.getFolder(CALLLOG, preferences.getDataTypePreferences(), settingsId).getMessages(config.maxRestore, config.restoreOnlyStarred, null));
+                    msgList.put(settingsId, msgs);
+                }
 
-            final int restoredCount = smsIds.size() + callLogIds.size();
+                itemsToRestoreCount += config.maxRestore <= 0 ? msgList.get(settingsId).size() : Math.min(msgList.get(settingsId).size(), config.maxRestore);
+            } catch (XOAuth2AuthenticationFailedException e) {
+                try {
+                    return handleAuthError(config, currentRestoredItem, e);
+                } catch (XOAuth2AuthenticationFailedException eInner) {
+                    lastException = eInner;
+                }
+            } catch (AuthenticationFailedException e) {
+                lastException = e;
+            } catch (MessagingException e) {
+                Log.e(TAG, ERROR, e);
+                updateAllThreadsIfAnySmsRestored();
+                lastException = e;
+            } catch (IllegalStateException e) {
+                // usually memory problems (Couldn't init cursor window)
+                lastException = e;
+            } finally {
+                imapStore.closeFolders();
+            }
+        }
+
+        int restoredCount = 0;
+        for (int settingsId : msgList.keySet()) {
+                List<Message> msgs = msgList.get(settingsId);
+                try {
+                    if (msgs.size() > 0) {
+                        for (; currentRestoredItem < msgs.size() && !isCancelled(); currentRestoredItem++) {
+                            DataType dataType = importMessage(settingsId, msgs.get(currentRestoredItem));
+
+                            msgs.set(currentRestoredItem, null); // help gc
+                            publishProgress(new RestoreState(RESTORE, restoredCount + currentRestoredItem, itemsToRestoreCount, 0, 0, dataType, null));
+                            if (currentRestoredItem % 50 == 0) {
+                                //clear cache periodically otherwise SD card fills up
+                                service.clearCache();
+                            }
+                        }
+                        updateAllThreadsIfAnySmsRestored();
+
+                        restoredCount += smsIds.size() + callLogIds.size();
+                    }
+                } catch (IllegalStateException e) {
+                    // usually memory problems (Couldn't init cursor window)
+                    lastException = e;
+                }
+        }
+
+        if (lastException != null) return transition(SmsSyncState.ERROR, lastException);
+
+        if (itemsToRestoreCount > 0) {
             return new RestoreState(isCancelled() ? CANCELED_RESTORE : FINISHED_RESTORE,
-                    currentRestoredItem,
+                    restoredCount,
                     itemsToRestoreCount,
                     restoredCount,
                     Math.max(0, uids.size() - restoredCount),
                     null, null);
-        } catch (XOAuth2AuthenticationFailedException e) {
-            return handleAuthError(config, currentRestoredItem, e);
-        } catch (AuthenticationFailedException e) {
-            return transition(SmsSyncState.ERROR, e);
-        } catch (MessagingException e) {
-            Log.e(TAG, ERROR, e);
-            updateAllThreadsIfAnySmsRestored();
-            return transition(SmsSyncState.ERROR, e);
-        } catch (IllegalStateException e) {
-            // usually memory problems (Couldn't init cursor window)
-            return transition(SmsSyncState.ERROR, e);
-        } finally {
-            imapStore.closeFolders();
+        }  else {
+            Log.d(TAG, "nothing to restore");
+            return new RestoreState(FINISHED_RESTORE, 0, 0, 0, 0, null, null);
         }
     }
 
-    private RestoreState handleAuthError(RestoreConfig config, int currentRestoredItem, XOAuth2AuthenticationFailedException e) {
+    private RestoreState handleAuthError(RestoreConfig config, int currentRestoredItem, XOAuth2AuthenticationFailedException e) throws XOAuth2AuthenticationFailedException {
         if (e.getStatus() == 400) {
             Log.d(TAG, "need to perform xoauth2 token refresh");
             if (config.tries < 1) {
@@ -162,7 +194,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                     tokenRefresher.refreshOAuth2Token();
                     // we got a new token, let's retry one more time - we need to pass in a new store object
                     // since the auth params on it are immutable
-                    return restore(config.retryWithStore(currentRestoredItem, service.getBackupImapStore()));
+                    return restore(config.retryWithStore(currentRestoredItem, service.getBackupImapStores()));
                 } catch (MessagingException ignored) {
                     Log.w(TAG, ignored);
                 } catch (TokenRefreshException refreshException) {
@@ -174,7 +206,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         } else {
             Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
         }
-        return transition(SmsSyncState.ERROR, e);
+        throw e;
     }
 
     private void publishProgress(SmsSyncState smsSyncState) {
@@ -214,7 +246,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     }
 
     @SuppressWarnings("unchecked")
-    private DataType importMessage(Message message) {
+    private DataType importMessage(Integer settingsId, Message message) {
         uids.add(message.getUid());
 
         FetchProfile fp = new FetchProfile();
@@ -227,10 +259,10 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
             //only restore sms+call log for now
             switch (dataType) {
                 case CALLLOG:
-                    importCallLog(message);
+                    importCallLog(settingsId, message);
                     break;
                 case SMS:
-                    importSms(message);
+                    importSms(settingsId, message);
                     break;
                 default:
                     if (LOCAL_LOGV) Log.d(TAG, "ignoring restore of type: " + dataType);
@@ -247,9 +279,9 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         return dataType;
     }
 
-    private void importSms(final Message message) throws IOException, MessagingException {
+    private void importSms(Integer settingsId, final Message message) throws IOException, MessagingException {
         if (LOCAL_LOGV) Log.v(TAG, "importSms(" + message + ")");
-        final ContentValues values = converter.messageToContentValues(message);
+        final ContentValues values = converter.messageToContentValues(settingsId, message);
         final Integer type = values.getAsInteger(Telephony.TextBasedSmsColumns.TYPE);
 
         // only restore inbox messages and sent messages - otherwise sms might get sent on restore
@@ -263,8 +295,8 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                 smsIds.add(uri.getLastPathSegment());
                 Long timestamp = values.getAsLong(Telephony.TextBasedSmsColumns.DATE);
 
-                if (timestamp != null && preferences.getDataTypePreferences().getMaxSyncedDate(SMS) < timestamp) {
-                    preferences.getDataTypePreferences().setMaxSyncedDate(SMS, timestamp);
+                if (timestamp != null && preferences.getDataTypePreferences().getMaxSyncedDate(SMS, settingsId) < timestamp) {
+                    preferences.getDataTypePreferences().setMaxSyncedDate(SMS, timestamp, settingsId);
                 }
 
                 if (LOCAL_LOGV) Log.v(TAG, "inserted " + uri);
@@ -274,9 +306,9 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         }
     }
 
-    private void importCallLog(final Message message) throws MessagingException, IOException {
+    private void importCallLog(Integer settingsId, final Message message) throws MessagingException, IOException {
         if (LOCAL_LOGV) Log.v(TAG, "importCallLog(" + message + ")");
-        final ContentValues values = converter.messageToContentValues(message);
+        final ContentValues values = converter.messageToContentValues(settingsId, message);
         if (!callLogExists(values)) {
             final Uri uri = resolver.insert(Consts.CALLLOG_PROVIDER, values);
             if (uri != null) callLogIds.add(uri.getLastPathSegment());

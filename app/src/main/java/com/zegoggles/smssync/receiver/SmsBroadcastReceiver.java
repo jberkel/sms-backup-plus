@@ -26,6 +26,7 @@ import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.BackupJobs;
 import com.zegoggles.smssync.utils.AppLog;
+import com.zegoggles.smssync.App;
 
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
@@ -59,8 +60,8 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         final Preferences preferences = getPreferences(context);
 
         final boolean autoBackupEnabled = preferences.isAutoBackupEnabled();
-        final boolean loginInformationSet = getAuthPreferences(context).isLoginInformationSet();
-        final boolean firstBackup = preferences.isFirstBackup();
+        final boolean loginInformationSet = atLeastOneLoginInformationSet(context);
+        final boolean firstBackup = preferences.isFirstBackup(0);
 
         final boolean schedule = (autoBackupEnabled && loginInformationSet && !firstBackup);
 
@@ -90,7 +91,10 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
         return new Preferences(context);
     }
 
-    protected AuthPreferences getAuthPreferences(Context context) {
-        return new AuthPreferences(context);
+    protected boolean atLeastOneLoginInformationSet(Context context) {
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            if (new AuthPreferences(context, settingsId).isLoginInformationSet()) return true;
+        }
+        return false;
     }
 }

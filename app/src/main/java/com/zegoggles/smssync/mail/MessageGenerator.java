@@ -67,16 +67,16 @@ class MessageGenerator {
         this.callLogTypes = callLogTypes;
     }
 
-    public  @Nullable Message messageForDataType(Map<String, String> msgMap, DataType dataType) throws MessagingException {
+    public  @Nullable Message messageForDataType(Map<String, String> msgMap, DataType dataType, Integer settingsId) throws MessagingException {
         switch (dataType) {
-            case SMS: return messageFromMapSms(msgMap);
-            case MMS: return messageFromMapMms(msgMap);
-            case CALLLOG: return messageFromMapCallLog(msgMap);
+            case SMS: return messageFromMapSms(msgMap, settingsId);
+            case MMS: return messageFromMapMms(msgMap, settingsId);
+            case CALLLOG: return messageFromMapCallLog(msgMap, settingsId);
             default: return null;
         }
     }
 
-    private @Nullable Message messageFromMapSms(Map<String, String> msgMap) throws MessagingException {
+    private @Nullable Message messageFromMapSms(Map<String, String> msgMap, Integer settingsId) throws MessagingException {
         final String address = msgMap.get(Telephony.TextBasedSmsColumns.ADDRESS);
         if (TextUtils.isEmpty(address)) return null;
 
@@ -84,7 +84,7 @@ class MessageGenerator {
         if (!includePersonInBackup(record, DataType.SMS)) return null;
 
         final Message msg = new MimeMessage();
-        msg.setSubject(getSubject(DataType.SMS, record));
+        msg.setSubject(getSubject(DataType.SMS, record, settingsId));
         setBody(msg, new TextBody(msgMap.get(Telephony.TextBasedSmsColumns.BODY)));
 
         final int messageType = toInt(msgMap.get(Telephony.TextBasedSmsColumns.TYPE));
@@ -110,7 +110,7 @@ class MessageGenerator {
         return msg;
     }
 
-    private @Nullable Message messageFromMapMms(Map<String, String> msgMap) throws MessagingException {
+    private @Nullable Message messageFromMapMms(Map<String, String> msgMap, Integer settingsId) throws MessagingException {
         if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
         final Uri mmsUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(Telephony.BaseMmsColumns._ID));
@@ -125,7 +125,7 @@ class MessageGenerator {
         }
 
         final Message msg = new MimeMessage();
-        msg.setSubject(getSubject(DataType.MMS, details.getRecipient()));
+        msg.setSubject(getSubject(DataType.MMS, details.getRecipient(), settingsId));
 
         if (details.inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
@@ -155,7 +155,7 @@ class MessageGenerator {
         return msg;
     }
 
-    private  @Nullable Message messageFromMapCallLog(Map<String, String> msgMap) throws MessagingException {
+    private  @Nullable Message messageFromMapCallLog(Map<String, String> msgMap, Integer settingsId) throws MessagingException {
         final String address = msgMap.get(CallLog.Calls.NUMBER);
         final int callType = toInt(msgMap.get(CallLog.Calls.TYPE));
 
@@ -167,7 +167,7 @@ class MessageGenerator {
         if (!includePersonInBackup(record, DataType.CALLLOG)) return null;
 
         final Message msg = new MimeMessage();
-        msg.setSubject(getSubject(DataType.CALLLOG, record));
+        msg.setSubject(getSubject(DataType.CALLLOG, record, settingsId));
 
         switch (callType) {
             case CallLog.Calls.OUTGOING_TYPE:
@@ -204,9 +204,9 @@ class MessageGenerator {
         return msg;
     }
 
-    private String getSubject(@NonNull DataType type, @NonNull PersonRecord record) {
+    private String getSubject(@NonNull DataType type, @NonNull PersonRecord record, Integer settingsId) {
         return prefix ?
-                String.format(Locale.ENGLISH, "[%s] %s", dataTypePreferences.getFolder(type), record.getName()) :
+                String.format(Locale.ENGLISH, "[%s] %s", dataTypePreferences.getFolder(type, settingsId), record.getName()) :
                 context.getString(type.withField, record.getName());
     }
 

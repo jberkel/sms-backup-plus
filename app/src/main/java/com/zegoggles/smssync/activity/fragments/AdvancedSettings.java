@@ -14,6 +14,10 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.TwoStatePreference;
+import androidx.preference.PreferenceScreen;
+import androidx.preference.EditTextPreference;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
 
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
@@ -31,12 +35,15 @@ import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.DataTypePreferences;
+import com.zegoggles.smssync.utils.SimCardHelper;
 
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.WRITE_CALENDAR;
@@ -83,7 +90,9 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
         @Override
         public void onCreatePreferences(Bundle bundle, String rootKey) {
             super.onCreatePreferences(bundle, rootKey);
-            authPreferences = new AuthPreferences(getContext());
+
+            //XOAuth2 is legacy and therefore not considered for multi-sim (authPreferences only used in this context here)
+            authPreferences = new AuthPreferences(getContext(), 0);
             connected = findPreference(CONNECTED.key);
             assert connected != null;
             connected.setSummaryProvider(new Preference.SummaryProvider<TwoStatePreference>() {
@@ -128,6 +137,30 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
         private static final int REQUEST_CALL_LOG_PERMISSIONS = 0;
         private CheckBoxPreference callLogPreference;
 
+        public void onCreatePreferences(Bundle bundle, String rootKey) {
+            super.onCreatePreferences(bundle, rootKey);
+
+            PreferenceScreen mainSettings = getPreferenceScreen();
+            for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+                if (settingsId>0) {
+                    EditTextPreference imapFolder = findPreference(DataType.PreferenceKeys.IMAP_FOLDER);
+                    EditTextPreference cloneImapFolder = new EditTextPreference(getContext());
+                    cloneImapFolder.setTitle(SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.ui_imap_folder_label), settingsId));
+                    cloneImapFolder.setKey(SimCardHelper.addSettingsId(DataType.PreferenceKeys.IMAP_FOLDER, settingsId));
+                    cloneImapFolder.setDialogTitle(SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.ui_imap_folder_label), settingsId));
+                    cloneImapFolder.setDialogMessage(getString(R.string.ui_imap_folder_label_dialog_msg));
+                    cloneImapFolder.setDefaultValue(getString(R.string.imap_folder_default));
+                    cloneImapFolder.setSummaryProvider(EditTextPreference.SimpleSummaryProvider.getInstance());
+                    insertPreference(imapFolder.getOrder()+1, mainSettings, cloneImapFolder);
+                }
+                registerValidImapFolderCheck(settingsId);
+            }
+
+            EditTextPreference imapFolder = findPreference(DataType.PreferenceKeys.IMAP_FOLDER);
+            imapFolder.setTitle(SimCardHelper.addPhoneNumberIfMultiSim(imapFolder.getTitle().toString(), 0));
+            imapFolder.setDialogTitle(SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.ui_imap_folder_label), 0));
+        }
+
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
@@ -142,7 +175,7 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
             updateBackupContactGroupLabelFromPref();
             updateLastBackupTimes();
             initGroups();
-            registerValidImapFolderCheck();
+
             findPreference(MAX_ITEMS_PER_SYNC.key)
                 .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -204,9 +237,12 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
 
         private void updateLastBackupTimes() {
             for (DataType type : DataType.values()) {
-                findPreference(type.backupEnabledPreference).setSummary(
-                        getLastSyncText(preferences.getDataTypePreferences().getMaxSyncedDate(type))
-                );
+                long maxSyncedDate = 0;
+                for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+                    long maxSyncedDateForSettingsId = preferences.getDataTypePreferences().getMaxSyncedDate(type, settingsId);
+                    if (maxSyncedDateForSettingsId>maxSyncedDate) maxSyncedDate = maxSyncedDateForSettingsId;
+                }
+                findPreference(type.backupEnabledPreference).setSummary(getLastSyncText(maxSyncedDate));
             }
         }
 
@@ -224,8 +260,8 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
                     getString(R.string.ui_backup_contact_group_label));
         }
 
-        private void registerValidImapFolderCheck() {
-            findPreference(SMS.folderPreference)
+        private void registerValidImapFolderCheck(Integer settingsId) {
+            findPreference(SimCardHelper.addSettingsId(SMS.folderPreference, settingsId))
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                         public boolean onPreferenceChange(Preference preference, final Object newValue) {
                             return checkValidImapFolder(getFragmentManager(), newValue.toString());
@@ -247,15 +283,51 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
         public static class CallLog extends SMSBackupPreferenceFragment {
             private static final int REQUEST_CALENDAR_ACCESS = 0;
             private CheckBoxPreference enabledPreference;
-            private ListPreference calendarPreference;
-            private Preference folderPreference;
+
+            public void onCreatePreferences(Bundle bundle, String rootKey) {
+                super.onCreatePreferences(bundle, rootKey);
+
+                PreferenceScreen mainSettings = getPreferenceScreen();
+
+                for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+                    if (settingsId>0) {
+                        addImapFolder(mainSettings, settingsId);
+                        addCalendar(mainSettings, settingsId);
+                    }
+                    registerValidCallLogFolderCheck(settingsId);
+                }
+
+                EditTextPreference imapFolder = findPreference(DataType.PreferenceKeys.IMAP_FOLDER_CALLLOG);
+                imapFolder.setTitle(SimCardHelper.addPhoneNumberIfMultiSim(imapFolder.getTitle().toString(), 0));
+                imapFolder.setDialogTitle(SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.ui_imap_folder_calllog_label), 0));
+            }
+
+            private void addImapFolder(PreferenceScreen mainSettings, Integer settingsId) {
+                EditTextPreference imapFolder = findPreference(DataType.PreferenceKeys.IMAP_FOLDER_CALLLOG);
+                EditTextPreference cloneImapFolder = new EditTextPreference(getContext());
+                cloneImapFolder.setTitle(SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.ui_imap_folder_calllog_label), settingsId));
+                cloneImapFolder.setKey(SimCardHelper.addSettingsId(DataType.PreferenceKeys.IMAP_FOLDER_CALLLOG, settingsId));
+                cloneImapFolder.setDialogTitle(SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.ui_imap_folder_calllog_label), settingsId));
+                cloneImapFolder.setDialogMessage(getString(R.string.ui_imap_folder_calllog_label_dialog_msg));
+                cloneImapFolder.setDefaultValue(getString(R.string.imap_folder_calllog_default));
+                cloneImapFolder.setSummaryProvider(EditTextPreference.SimpleSummaryProvider.getInstance());
+                insertPreference(imapFolder.getOrder()+1, mainSettings, cloneImapFolder);
+            }
+
+            private void addCalendar(PreferenceScreen mainSettings, Integer settingsId) {
+                ListPreference calendarPreference = findPreference(CALLLOG_SYNC_CALENDAR.key);
+                ListPreference cloneCalendarPreference = new ListPreference(getContext());
+                cloneCalendarPreference.setTitle(SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.ui_backup_calllog_sync_calendar_label), settingsId));
+                cloneCalendarPreference.setSummary(calendarPreference.getSummary());
+                cloneCalendarPreference.setKey(SimCardHelper.addSettingsId(CALLLOG_SYNC_CALENDAR.key, settingsId));
+                cloneCalendarPreference.setDefaultValue("-1");
+                insertPreference(calendarPreference.getOrder()+1, mainSettings, cloneCalendarPreference);
+            }
 
             @Override
             public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
                 super.onViewCreated(view, savedInstanceState);
                 enabledPreference = findPreference(CALLLOG_SYNC_CALENDAR_ENABLED.key);
-                calendarPreference = findPreference(CALLLOG_SYNC_CALENDAR.key);
-                folderPreference = findPreference(CALLLOG.folderPreference);
             }
 
             @Override
@@ -264,7 +336,6 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
                 initCalendars();
 
                 updateCallLogCalendarLabelFromPref();
-                registerValidCallLogFolderCheck();
                 registerCalendarSyncEnabledCallback();
 
                 addPreferenceListener(CALLLOG_BACKUP_AFTER_CALL.key);
@@ -304,19 +375,25 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
             }
 
             private void updateCallLogCalendarLabelFromPref() {
-                calendarPreference.setTitle(calendarPreference.getEntry() != null ? calendarPreference.getEntry() :
-                        getString(R.string.ui_backup_calllog_sync_calendar_label));
+                for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+                    ListPreference calendarPreference = findPreference(SimCardHelper.addSettingsId(CALLLOG_SYNC_CALENDAR.key,settingsId));
+                    calendarPreference.setTitle(calendarPreference.getEntry() != null ? calendarPreference.getEntry() : SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.ui_backup_calllog_sync_calendar_label), settingsId));
+                }
             }
 
             private void initCalendars() {
                 if (needCalendarPermission()) return;
 
                 CalendarAccessor calendars = CalendarAccessor.Get.instance(getContext().getContentResolver());
-                initListPreference(calendarPreference, calendars.getCalendars(), false);
+                for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+                    ListPreference calendarPreference = findPreference(SimCardHelper.addSettingsId(CALLLOG_SYNC_CALENDAR.key,settingsId));
+                    initListPreference(calendarPreference, calendars.getCalendars(), false);
+                }
             }
 
-            private void registerValidCallLogFolderCheck() {
-                folderPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            private void registerValidCallLogFolderCheck(Integer settingsId) {
+                findPreference(SimCardHelper.addSettingsId(CALLLOG.folderPreference, settingsId))
+                .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, final Object newValue) {
                         return checkValidImapFolder(getFragmentManager(), newValue.toString());
                     }
@@ -346,24 +423,92 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
 
     public static class Server extends SMSBackupPreferenceFragment {
         private AuthPreferences authPreferences;
+        private Integer settingsId;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String rootKey) {
+            settingsId = 0;
+            Pattern p = Pattern.compile("^(.*)_(\\d*)$");
+            Matcher m = p.matcher(rootKey);
+            if (m.find()) {
+                settingsId=Integer.parseInt(m.group(2));
+                rootKey=m.group(1);
+            }
+
             super.onCreatePreferences(bundle, rootKey);
-            authPreferences = new AuthPreferences(getContext());
+
+            authPreferences = new AuthPreferences(getContext(), settingsId);
+
+            if (settingsId > 0) {
+                setPreferenceScreen(cloneSettings());
+                insertTakeOverCheckBox();
+
+                setServerState(authPreferences.getTakeOver());
+
+                findPreference(SimCardHelper.addSettingsId(AuthPreferences.SERVER_TAKEOVER, settingsId))
+                        .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                                setServerState((Boolean)newValue);
+                                return true;
+                            }
+                        });
+            }
+        }
+
+        private void setServerState(Boolean takeOver) {
+            Boolean state = !takeOver;
+            findPreference(SimCardHelper.addSettingsId(AuthPreferences.SERVER_ADDRESS, settingsId)).setEnabled(state);
+            findPreference(SimCardHelper.addSettingsId(AuthPreferences.IMAP_USER, settingsId)).setEnabled(state);
+            findPreference(SimCardHelper.addSettingsId(AuthPreferences.IMAP_PASSWORD, settingsId)).setEnabled(state);
+            findPreference(SimCardHelper.addSettingsId(AuthPreferences.SERVER_PROTOCOL, settingsId)).setEnabled(state);
+            findPreference(SimCardHelper.addSettingsId(AuthPreferences.SERVER_TRUST_ALL_CERTIFICATES, settingsId)).setEnabled(state);
+        }
+
+        private void insertTakeOverCheckBox() {
+            PreferenceScreen preferenceScreen = getPreferenceScreen();
+
+            CheckBoxPreference checkbox = new CheckBoxPreference(getContext());
+            checkbox.setTitle(R.string.ui_server_takeover);
+            checkbox.setSummary(R.string.ui_server_takeover_summary);
+            checkbox.setDefaultValue(true);
+            checkbox.setKey(SimCardHelper.addSettingsId(AuthPreferences.SERVER_TAKEOVER, settingsId));
+            insertPreference(0, preferenceScreen, checkbox);
+        }
+
+        private PreferenceScreen cloneSettings() {
+            PreferenceScreen originalScreen = getPreferenceScreen();
+            PreferenceScreen copyScreen = getPreferenceManager().createPreferenceScreen(getContext());
+
+            while(originalScreen.getPreferenceCount() > 0) {
+                Preference pref = originalScreen.getPreference(0);
+                pref.setKey(pref.getKey()+"_"+settingsId.toString());
+
+                originalScreen.removePreference(pref);
+                copyScreen.addPreference(pref);
+            }
+            return copyScreen;
         }
 
         @Override
         public void onResume() {
             super.onResume();
 
-            findPreference(AuthPreferences.IMAP_PASSWORD)
+            findPreference(SimCardHelper.addSettingsId(AuthPreferences.IMAP_PASSWORD, settingsId))
                     .setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
                             authPreferences.setImapPassword(newValue.toString());
                             return true;
                         }
                     });
+        }
+
+        @Override public void onStart() {
+            super.onStart();
+
+            ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+            if ( actionBar == null) return;
+            actionBar.setSubtitle(SimCardHelper.addPhoneNumberIfMultiSim(getString(R.string.imap_settings), settingsId));
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 

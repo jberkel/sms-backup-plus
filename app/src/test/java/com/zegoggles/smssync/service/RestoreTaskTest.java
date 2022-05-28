@@ -8,12 +8,12 @@ import android.provider.Telephony;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.store.imap.ImapMessage;
 import com.zegoggles.smssync.Consts;
-import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.mail.BackupImapStore;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.DataTypePreferences;
 import com.zegoggles.smssync.preferences.Preferences;
+import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,19 +45,23 @@ public class RestoreTaskTest {
     @Mock RestoreState state;
     @Mock MessageConverter converter;
     @Mock ContentResolver resolver;
-    @Mock TokenRefresher tokenRefresher;
+    @Mock AuthPreferences authPreferences;
 
     @Before
     public void before() throws MessagingException {
         initMocks(this);
-        config = new RestoreConfig(store, 0, true, false, false, -1, 0);
+        List<BackupImapStore> imapStores = new ArrayList<BackupImapStore>();
+        imapStores.add(store);
+        config = new RestoreConfig(imapStores, 0, true, false, false, -1, 0);
         when(service.getApplicationContext()).thenReturn(RuntimeEnvironment.application);
         when(service.getState()).thenReturn(state);
+        when(service.getAuthPreferences()).thenReturn(authPreferences);
+        when(authPreferences.getOAuth2ClientId()).thenReturn("123");
         when(service.getPreferences()).thenReturn(new Preferences(RuntimeEnvironment.application));
 
-        when(store.getFolder(any(DataType.class), any(DataTypePreferences.class))).thenReturn(folder);
+        when(store.getFolder(any(DataType.class), any(DataTypePreferences.class), anyInt())).thenReturn(folder);
 
-        task = new RestoreTask(service, converter, resolver, tokenRefresher);
+        task = new RestoreTask(service, converter, resolver);
     }
 
     @Test public void shouldAcquireAndReleaseLocksDuringRestore() throws Exception {
@@ -87,7 +91,7 @@ public class RestoreTaskTest {
         ImapMessage mockMessage = mock(ImapMessage.class);
         when(mockMessage.getFolder()).thenReturn(folder);
         when(converter.getDataType(mockMessage)).thenReturn(DataType.SMS);
-        when(converter.messageToContentValues(mockMessage)).thenReturn(values);
+        when(converter.messageToContentValues(0, mockMessage)).thenReturn(values);
 
         messages.add(mockMessage);
 
@@ -98,7 +102,7 @@ public class RestoreTaskTest {
         verify(resolver).insert(Consts.SMS_PROVIDER, values);
         verify(resolver).delete(Uri.parse("content://sms/conversations/-1"), null, null);
 
-        assertThat(service.getPreferences().getDataTypePreferences().getMaxSyncedDate(DataType.SMS)).isEqualTo(now.getTime());
+        assertThat(service.getPreferences().getDataTypePreferences().getMaxSyncedDate(DataType.SMS, 0)).isEqualTo(now.getTime());
         assertThat(task.getSmsIds()).containsExactly("123");
 
         verify(store).closeFolders();
