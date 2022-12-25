@@ -1,0 +1,146 @@
+name: Bug report
+description: Report a bug or anomaly
+title: "<title>"
+labels: "bug"
+assignees:
+  - jberkel
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before you report your issue, please consider perusing the [FAQ](https://github.com/jberkel/sms-backup-plus#faq) and searching the issues page to see if it has already been reported.
+  - type: textarea
+    id: expected_behaviour
+    attributes:
+      label: Expected behaviour
+      description: What did you *expect* to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual_behaviour
+    attributes:
+      label: Actual behaviour
+      description: What happened instead?
+      placeholder: Tell us what you saw!
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce_by
+    attributes:
+      label: Reproduce by
+      description: Steps to reproduce the behaviour
+    validations:
+      required: false
+  - type: dropdown
+    id: android_version
+    attributes:
+      label: Android version
+      description: Check "About Phone" in your device settings
+      options:
+        -
+        - 13 (2022)
+        - 12 (2021)
+        - 11 (2020)
+        - 10 (2019)
+        - 9 (Pie 2018)
+        - 8.1 (Oreo 2018)
+        - 8.0 (Oreo 2017)
+        - 7.1 (Nougat 2017)
+        - 7.0 (Nougat 2016)
+        - 6.0 (Marshmallow 2015)
+        - 5.1 (Lollipop 2015)
+        - 5.0 (Lollipop 2014)
+        - 4.4 (KitKat 2013)
+        - 4.3 (Jelly Bean 2013)
+        - 4.2 (Jelly Bean 2012)
+        - 4.1 (Jelly Bean 2012)
+        - 4.0 (Ice Cream Sandwich 2011)
+    validations:
+      required: true
+  - type: input
+    id: device_brand
+    attributes:
+      label: Phone brand
+    validations:
+      required: true
+  - type: input
+    id: device_model
+    attributes:
+      label: Phone model number
+  - type: dropdown
+    id: version
+    attributes:
+      label: SMS Backup+ version
+      description: Check "About" in the app
+      options:
+        -
+        - 1.5.11
+        - 1.5.10 
+        - 1.5.9
+        - 1.5.8
+        - 1.5.7
+        - 1.5.6
+        - 1.6.0β2
+        - 1.6.0β1
+        - 1.5.11β22
+        - 1.5.11β21
+        - 1.5.11β20
+        - 1.5.11β19
+        - 1.5.11β18
+        - 1.5.11β17
+        - 1.5.11β16
+        - 1.5.11β15
+        - 1.5.11β14
+        - 1.5.11β13
+        - 1.5.11β12
+        - 1.5.11β11
+        - 1.5.11β10
+        - 1.5.11β9
+        - 1.5.11β8
+        - 1.5.11β7
+        - 1.5.11β6
+        - 1.5.11β5
+        - 1.5.11β4
+        - 1.5.11β3
+        - 1.5.11β2
+        - 1.5.11β1
+        - 1.5.10β1
+        - 1.5.9β6
+        - 1.5.9β5
+        - 1.5.9β4
+        - 1.5.9β3
+        - 1.5.9β2
+        - 1.5.9β1
+        - 1.5.8β2
+        - 1.5.8β1
+        - 1.5.7β2
+        - 1.5.7β1
+        - 1.5.6-rc1
+        - 1.5.6β11
+        - 1.5.6β10
+        - 1.5.6β9
+        - 1.5.6β8
+        - 1.5.6β7
+        - 1.5.6β6-debug
+        - 1.5.6β5
+        - 1.5.6β4
+        - 1.5.6β3
+        - 1.5.6β2
+        - 1.5.6β1
+    validations:
+      required: true
+  - type: input
+    id: messaging_app
+    attributes:
+      label: Messaging app
+      description: If your phone uses something other than Google Messages, please let us know
+      placeholder: Google Messages
+    validations:
+      required: false
+  - type: textarea
+    id: details
+    attributes:
+      label: Other details
+      placeholder: Anything else you think is relevant
+    validations:
+      required: false
