@@ -1,6 +1,6 @@
 name: Bug report
 description: Report a bug or anomaly
-title: "<title>"
+title: ""
 labels: "bug"
 assignees:
   - jberkel
@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Before you report your issue, please consider perusing the [FAQ](https://github.com/jberkel/sms-backup-plus#faq) and searching the issues page to see if it has already been reported.
+        Before submitting this report, please read the [FAQ](../#faq) and [search the issues list](../issues) to see if it has already been reported.
   - type: textarea
     id: expected_behaviour
     attributes:
@@ -74,59 +74,59 @@ body:
       description: Check "About" in the app
       options:
         -
-        - 1.5.11
-        - 1.5.10 
-        - 1.5.9
-        - 1.5.8
-        - 1.5.7
-        - 1.5.6
-        - 1.6.0β2
-        - 1.6.0β1
-        - 1.5.11β22
-        - 1.5.11β21
-        - 1.5.11β20
-        - 1.5.11β19
-        - 1.5.11β18
-        - 1.5.11β17
-        - 1.5.11β16
-        - 1.5.11β15
-        - 1.5.11β14
-        - 1.5.11β13
-        - 1.5.11β12
-        - 1.5.11β11
-        - 1.5.11β10
-        - 1.5.11β9
-        - 1.5.11β8
-        - 1.5.11β7
-        - 1.5.11β6
-        - 1.5.11β5
-        - 1.5.11β4
-        - 1.5.11β3
-        - 1.5.11β2
-        - 1.5.11β1
-        - 1.5.10β1
-        - 1.5.9β6
-        - 1.5.9β5
-        - 1.5.9β4
-        - 1.5.9β3
-        - 1.5.9β2
-        - 1.5.9β1
-        - 1.5.8β2
-        - 1.5.8β1
-        - 1.5.7β2
-        - 1.5.7β1
-        - 1.5.6-rc1
-        - 1.5.6β11
-        - 1.5.6β10
-        - 1.5.6β9
-        - 1.5.6β8
-        - 1.5.6β7
-        - 1.5.6β6-debug
-        - 1.5.6β5
-        - 1.5.6β4
-        - 1.5.6β3
-        - 1.5.6β2
-        - 1.5.6β1
+        - v1.5.11
+        - v1.5.10
+        - v1.5.9
+        - v1.5.8
+        - v1.5.7
+        - v1.5.6
+        - v1.6.0β2
+        - v1.6.0β1
+        - v1.5.11β22
+        - v1.5.11β21
+        - v1.5.11β20
+        - v1.5.11β19
+        - v1.5.11β18
+        - v1.5.11β17
+        - v1.5.11β16
+        - v1.5.11β15
+        - v1.5.11β14
+        - v1.5.11β13
+        - v1.5.11β12
+        - v1.5.11β11
+        - v1.5.11β10
+        - v1.5.11β9
+        - v1.5.11β8
+        - v1.5.11β7
+        - v1.5.11β6
+        - v1.5.11β5
+        - v1.5.11β4
+        - v1.5.11β3
+        - v1.5.11β2
+        - v1.5.11β1
+        - v1.5.10β1
+        - v1.5.9β6
+        - v1.5.9β5
+        - v1.5.9β4
+        - v1.5.9β3
+        - v1.5.9β2
+        - v1.5.9β1
+        - v1.5.8β2
+        - v1.5.8β1
+        - v1.5.7β2
+        - v1.5.7β1
+        - v1.5.6-rc1
+        - v1.5.6β11
+        - v1.5.6β10
+        - v1.5.6β9
+        - v1.5.6β8
+        - v1.5.6β7
+        - v1.5.6β6
+        - v1.5.6β5
+        - v1.5.6β4
+        - v1.5.6β3
+        - v1.5.6β2
+        - v1.5.6β1
     validations:
       required: true
   - type: input
