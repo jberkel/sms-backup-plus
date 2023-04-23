@@ -119,7 +119,7 @@ class MessageGenerator {
         if (details.isEmpty()) {
             Log.w(TAG, "no recipients found");
             return null;
-        } else if (!includeInBackup(DataType.MMS, details.records)) {
+        } else if (!includeInBackup(DataType.MMS, details.getRecipients())) {
             Log.w(TAG, "no recipients included");
             return null;
         }
@@ -127,12 +127,23 @@ class MessageGenerator {
         final Message msg = new MimeMessage();
         msg.setSubject(getSubject(DataType.MMS, details.getRecipient()));
 
-        if (details.inbound) {
+
+        Boolean inbound;
+        if (Integer.parseInt(msgMap.get(Telephony.BaseMmsColumns.MESSAGE_BOX)) == Telephony.BaseMmsColumns.MESSAGE_BOX_INBOX) {
+            inbound = true;
+        } else if (Integer.parseInt(msgMap.get(Telephony.BaseMmsColumns.MESSAGE_BOX)) == Telephony.BaseMmsColumns.MESSAGE_BOX_SENT) {
+            inbound = false;
+        } else {
+            // fallback to "probably not the best way to determine if a message is inbound or outbound"
+            inbound = details.inbound;
+        }
+
+        if (inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
-            msg.setFrom(details.getRecipientAddress());
+            msg.setFrom(details.getSender().getAddress(addressStyle));
             msg.setRecipient(Message.RecipientType.TO, userAddress);
         } else {
-            msg.setRecipients(Message.RecipientType.TO, details.getAddresses());
+            msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle));
             msg.setFrom(userAddress);
         }
 
@@ -144,7 +155,7 @@ class MessageGenerator {
             sentDate = new Date();
         }
         final int msg_box = toInt(msgMap.get("msg_box"));
-        headerGenerator.setHeaders(msg, msgMap, DataType.MMS, details.address, details.getRecipient(), sentDate, msg_box);
+        headerGenerator.setHeaders(msg, msgMap, DataType.MMS, details.getFirstRawAddress(), details.getRecipient(), sentDate, msg_box);
         MimeMultipart body = MimeMultipart.newInstance();
 
         for (BodyPart p : mmsSupport.getMMSBodyParts(Uri.withAppendedPath(mmsUri, MMS_PART))) {
