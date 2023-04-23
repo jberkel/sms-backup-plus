@@ -111,7 +111,7 @@ class MessageGenerator {
             Log.e(TAG, ERROR_PARSING_DATE, n);
             sentDate = new Date();
         }
-        headerGenerator.setHeaders(msg, msgMap, DataType.SMS, address, record, sentDate, messageType);
+        headerGenerator.setHeaders(msg, msgMap, DataType.SMS, address, record.getId(), sentDate, messageType);
         return msg;
     }
 
@@ -119,6 +119,7 @@ class MessageGenerator {
         if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
         final Uri mmsUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(Telephony.BaseMmsColumns._ID));
+
         MmsSupport.MmsDetails details = mmsSupport.getDetails(mmsUri, addressStyle);
 
         if (details.isEmpty()) {
@@ -161,7 +162,28 @@ class MessageGenerator {
             sentDate = new Date();
         }
         final int msg_box = toInt(msgMap.get("msg_box"));
-        headerGenerator.setHeaders(msg, msgMap, DataType.MMS, details.getFirstRawAddress(), details.getRecipient(), sentDate, msg_box);
+
+        // We could thread by contact ID, not by thread ID. Original author thought this value was more stable.
+        // It works pretty badly with MMS threads though.
+//        String mmsThreadId = details.getRecipient();
+
+        // We could grab all the raw addresses (phone numbers), and sort/unique/join them for gmail's thread id
+        // This doesn't work well, because sometimes phone numbers have a "+1" prefix, sometimes not.
+//        Set<String> rawAddresses = new HashSet<>();
+//        rawAddresses.addAll(details.rawAddresses);
+//        List<String> rawAddressesSorted = new ArrayList<>(rawAddresses.size());
+//        rawAddressesSorted.addAll(rawAddresses);
+//        Collections.sort(rawAddressesSorted);
+//        String mmsThreadId = stringJoin(rawAddressesSorted, "-");
+
+        // We could thread by the messaging app's thread ID. The original author thought this wasn't very stable,
+        // but it's the best option for MMS so far, and it looks good from limited testing.
+        String mmsThreadId = msgMap.get(Telephony.BaseMmsColumns.THREAD_ID);
+
+        // Tip - if you want to try different strategies for computing mmsThreadId against the same messages,
+        // make sure to generate a new MESSAGE_ID as well. It seems like gmail caches REFERENCES if you reuse the same MESSAGE_ID.
+
+        headerGenerator.setHeaders(msg, msgMap, DataType.MMS, details.getFirstRawAddress(), mmsThreadId, sentDate, msg_box);
         MimeMultipart body = MimeMultipart.newInstance();
 
         for (BodyPart p : mmsSupport.getMMSBodyParts(Uri.withAppendedPath(mmsUri, MMS_PART))) {
@@ -217,7 +239,7 @@ class MessageGenerator {
             Log.e(TAG, ERROR_PARSING_DATE, n);
             sentDate = new Date();
         }
-        headerGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record, sentDate, callType);
+        headerGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record.getId(), sentDate, callType);
         return msg;
     }
 
@@ -236,21 +258,26 @@ class MessageGenerator {
         allNamesSorted.addAll(allNames);
         Collections.sort(allNamesSorted); // keep subjects stable so gmail can keep threads consistent
 
-        StringBuilder namesJoinedBySlash = new StringBuilder();
+        String namesJoinedBySlash = stringJoin(allNamesSorted, "/");
+
+        return prefix ?
+                String.format(Locale.ENGLISH, "[%s] %s", dataTypePreferences.getFolder(type), namesJoinedBySlash) :
+                context.getString(type.withField, namesJoinedBySlash);
+    }
+
+    private String stringJoin(List<String> allNamesSorted, String delimeter) {
+        StringBuilder builder = new StringBuilder();
 
         boolean isFirst = true;
         for (String name : allNamesSorted) {
             if (!isFirst) {
-                namesJoinedBySlash.append("/");
+                builder.append(delimeter);
             }
             isFirst = false;
 
-            namesJoinedBySlash.append(name);
+            builder.append(name);
         }
-
-        return prefix ?
-                String.format(Locale.ENGLISH, "[%s] %s", dataTypePreferences.getFolder(type), namesJoinedBySlash.toString()) :
-                context.getString(type.withField, namesJoinedBySlash.toString());
+        return builder.toString();
     }
 
     private String getSubject(@NonNull DataType type, @NonNull PersonRecord record) {

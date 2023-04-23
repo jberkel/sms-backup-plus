@@ -39,21 +39,17 @@ class MmsSupport {
         public final boolean inbound;
         public final PersonRecord sender;
         public final List<PersonRecord> recipients;
-        public final  String firstRawAddress;
+        public final List<String> rawAddresses;
 
         public MmsDetails(boolean inbound,
                           PersonRecord sender,
                           @NonNull List<PersonRecord> recipients,
-                          String firstRawAddress) {
-
-            if (firstRawAddress == null) {
-                firstRawAddress = "Unknown";
-            }
+                          List<String> rawAddresses) {
 
             this.inbound = inbound;
             this.sender = sender;
             this.recipients = recipients;
-            this.firstRawAddress = firstRawAddress;
+            this.rawAddresses = rawAddresses;
         }
 
         public boolean isEmpty() {
@@ -82,7 +78,11 @@ class MmsSupport {
         }
 
         public String getFirstRawAddress() {
-            return firstRawAddress;
+            if (rawAddresses.size() == 0) {
+                return  "Unknown";
+            }
+
+            return rawAddresses.get(0);
         }
     }
 
@@ -94,14 +94,12 @@ class MmsSupport {
         List<PersonRecord> recipients = new ArrayList<PersonRecord>();
         PersonRecord sender = null;
 
-        String firstRawAddress = null;
+        List<String> rawAddresses = new ArrayList<>();
 
         while (cursor != null && cursor.moveToNext()) {
             final String address = cursor.getString(cursor.getColumnIndex("address"));
 
-            if (firstRawAddress == null) {
-                firstRawAddress = address;
-            }
+            rawAddresses.add(address);
 
             // https://stackoverflow.com/questions/52186442/how-to-get-phone-numbers-of-mms-group-conversation-participants
             String PduHeadersFROM  = "137";
@@ -127,7 +125,7 @@ class MmsSupport {
         }
         if (cursor != null) cursor.close();
 
-        return new MmsDetails(inbound, sender, recipients, firstRawAddress);
+        return new MmsDetails(inbound, sender, recipients, rawAddresses);
     }
 
     public List<BodyPart> getMMSBodyParts(final Uri uriPart) throws MessagingException {

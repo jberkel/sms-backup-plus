@@ -2,6 +2,8 @@ package com.zegoggles.smssync.mail;
 
 import android.provider.CallLog;
 import android.provider.Telephony;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
@@ -14,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.utils.Sanitizer.sanitize;
 
 /**
@@ -36,12 +39,11 @@ class HeaderGenerator {
                            final Map<String, String> msgMap,
                            final DataType dataType,
                            final String address,
-                           final @NonNull PersonRecord contact,
+                           final String referenceId,
                            final Date sentDate,
                            final int status) throws MessagingException {
 
-        // Threading by contact ID, not by thread ID. I think this value is more stable.
-        message.setHeader(Headers.REFERENCES, String.format(REFERENCE_UID_TEMPLATE, reference, contact.getId()));
+        message.setHeader(Headers.REFERENCES, String.format(REFERENCE_UID_TEMPLATE, reference, referenceId));
         message.setHeader(Headers.MESSAGE_ID, createMessageId(sentDate, address, status));
         message.setHeader(Headers.ADDRESS,  sanitize(address));
         message.setHeader(Headers.DATATYPE, dataType.toString());
