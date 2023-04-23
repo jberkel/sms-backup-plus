@@ -21,7 +21,10 @@ import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.CallLogTypes;
 import com.zegoggles.smssync.preferences.DataTypePreferences;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -125,7 +128,7 @@ class MessageGenerator {
         }
 
         final Message msg = new MimeMessage();
-        msg.setSubject(getSubject(DataType.MMS, details.getRecipient()));
+        msg.setSubject(getSubject(DataType.MMS, details));
 
 
         Boolean inbound;
@@ -141,7 +144,8 @@ class MessageGenerator {
         if (inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
             msg.setFrom(details.getSender().getAddress(addressStyle));
-            msg.setRecipient(Message.RecipientType.TO, userAddress);
+//            msg.setRecipient(Message.RecipientType.TO, userAddress); // first attempt. Makes it look like the MMS only went to me, not to many people.
+            msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle));
         } else {
             msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle));
             msg.setFrom(userAddress);
@@ -213,6 +217,35 @@ class MessageGenerator {
         }
         headerGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record, sentDate, callType);
         return msg;
+    }
+
+    private String getSubject(@NonNull DataType type, @NonNull MmsSupport.MmsDetails details) {
+        // If you're in a group text with several people, ensure the email subject will look like
+        // "SMS with Alice/Bob/Charles/YourName"
+
+        List<String> allNames = new ArrayList<>();
+
+        for (PersonRecord recipient : details.getRecipients()) {
+            allNames.add(recipient.getName());
+        }
+        allNames.add(details.sender.getName());
+        Collections.sort(allNames); // keep subjects stable so gmail can keep threads consistent
+
+        StringBuilder namesJoinedBySlash = new StringBuilder();
+
+        boolean isFirst = true;
+        for (String name : allNames) {
+            if (!isFirst) {
+                namesJoinedBySlash.append("/");
+            }
+            isFirst = false;
+
+            namesJoinedBySlash.append(name);
+        }
+
+        return prefix ?
+                String.format(Locale.ENGLISH, "[%s] %s", dataTypePreferences.getFolder(type), namesJoinedBySlash.toString()) :
+                context.getString(type.withField, namesJoinedBySlash.toString());
     }
 
     private String getSubject(@NonNull DataType type, @NonNull PersonRecord record) {
