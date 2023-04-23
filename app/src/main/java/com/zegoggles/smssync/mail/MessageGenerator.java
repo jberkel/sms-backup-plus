@@ -24,9 +24,11 @@ import com.zegoggles.smssync.preferences.DataTypePreferences;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static com.fsck.k9.mail.internet.MimeMessageHelper.setBody;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -145,7 +147,7 @@ class MessageGenerator {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
             msg.setFrom(details.getSender().getAddress(addressStyle));
 //            msg.setRecipient(Message.RecipientType.TO, userAddress); // first attempt. Makes it look like the MMS only went to me, not to many people.
-            msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle));
+            msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle)); // Includes everyone that received the MMS in the email "to" field.
         } else {
             msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle));
             msg.setFrom(userAddress);
@@ -223,18 +225,21 @@ class MessageGenerator {
         // If you're in a group text with several people, ensure the email subject will look like
         // "SMS with Alice/Bob/Charles/YourName"
 
-        List<String> allNames = new ArrayList<>();
+        Set<String> allNames = new HashSet<>(); // eliminate duplicates. There will be some - android's MMS apis are weird.
 
         for (PersonRecord recipient : details.getRecipients()) {
             allNames.add(recipient.getName());
         }
         allNames.add(details.sender.getName());
-        Collections.sort(allNames); // keep subjects stable so gmail can keep threads consistent
+
+        List<String> allNamesSorted = new ArrayList<>(allNames.size());
+        allNamesSorted.addAll(allNames);
+        Collections.sort(allNamesSorted); // keep subjects stable so gmail can keep threads consistent
 
         StringBuilder namesJoinedBySlash = new StringBuilder();
 
         boolean isFirst = true;
-        for (String name : allNames) {
+        for (String name : allNamesSorted) {
             if (!isFirst) {
                 namesJoinedBySlash.append("/");
             }
