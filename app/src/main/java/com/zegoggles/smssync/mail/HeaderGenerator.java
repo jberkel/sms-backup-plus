@@ -44,7 +44,10 @@ class HeaderGenerator {
                            final int status) throws MessagingException {
 
         message.setHeader(Headers.REFERENCES, String.format(REFERENCE_UID_TEMPLATE, reference, referenceId));
-        message.setHeader(Headers.MESSAGE_ID, createMessageId(sentDate, address, status));
+        // "v2" effectively versions how we hash each message.
+        // This goes along with a fix for how MMS messages are grouped, and allows users to
+        // reset the app state and re-backup their existing messages to fix older threads.
+        message.setHeader(Headers.MESSAGE_ID, createMessageId(sentDate, address + "v2", status));
         message.setHeader(Headers.ADDRESS,  sanitize(address));
         message.setHeader(Headers.DATATYPE, dataType.toString());
         message.setHeader(Headers.BACKUP_TIME, toGMTString(new Date()));
