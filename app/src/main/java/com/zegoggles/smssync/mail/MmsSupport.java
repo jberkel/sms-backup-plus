@@ -106,12 +106,13 @@ class MmsSupport {
             // https://stackoverflow.com/questions/52186442/how-to-get-phone-numbers-of-mms-group-conversation-participants
             String PduHeadersFROM  = "137";
             String PduHeadersTO  = "151";
+            String PduHeadersCC  = "130"; // https://android.googlesource.com/platform/frameworks/opt/mms/+/4bfcd8501f09763c10255442c2b48fad0c796baa/src/java/com/google/android/mms/pdu/PduHeaders.java
 
             String type = cursor.getString(cursor.getColumnIndex("type"));
             if (type.equals(PduHeadersFROM)) {
                 PersonRecord record = personLookup.lookupPerson(address);
                 sender = record;
-            } else if (type.equals(PduHeadersTO)) {
+            } else if (type.equals(PduHeadersTO) || type.equals(PduHeadersCC)) {
                 PersonRecord record = personLookup.lookupPerson(address);
                 recipients.add(record);
             } else {

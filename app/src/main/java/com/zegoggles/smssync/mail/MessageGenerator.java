@@ -141,7 +141,6 @@ class MessageGenerator {
         if (details.inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
             msg.setFrom(details.getSender().getAddress(addressStyle));
-//            msg.setRecipient(Message.RecipientType.TO, userAddress); // first attempt. Makes it look like the MMS only went to me, not to many people.
             msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle)); // Includes everyone that received the MMS in the email "to" field.
         } else {
             msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle));
@@ -239,7 +238,7 @@ class MessageGenerator {
 
     private String getSubject(@NonNull DataType type, @NonNull MmsSupport.MmsDetails details) {
         // If you're in a group text with several people, ensure the email subject will look like
-        // "SMS with Alice/Bob/Charles/YourName"
+        // "SMS with Alice/Bob/Charles/YourPhoneNumber"
 
         Set<String> allNames = new HashSet<>(); // eliminate duplicates. There will be some - android's MMS apis are weird.
 
