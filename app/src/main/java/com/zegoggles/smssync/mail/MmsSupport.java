@@ -134,6 +134,20 @@ class MmsSupport {
             inbound = false;
         }
 
+        // Strip recipient if it's also the sender. Ensures that incoming messages in RCS threads
+        // between 2 people don't include your own phone number, so that the thread doesn't get split.
+        if (sender != null) {
+            List<PersonRecord> recipientsWithoutSender = new ArrayList<>();
+
+            for (PersonRecord recipient : recipients) {
+                if (!recipient.getId().equals(sender.getId())) {
+                    recipientsWithoutSender.add(recipient);
+                }
+            }
+
+            recipients = recipientsWithoutSender;
+        }
+
         return new MmsDetails(inbound, sender, recipients, rawAddresses);
     }
 
