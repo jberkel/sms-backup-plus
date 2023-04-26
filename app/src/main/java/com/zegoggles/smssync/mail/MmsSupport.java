@@ -3,6 +3,7 @@ package com.zegoggles.smssync.mail;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -20,6 +21,7 @@ import com.zegoggles.smssync.preferences.AddressStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -86,7 +88,7 @@ class MmsSupport {
         }
     }
 
-    public MmsDetails getDetails(Uri mmsUri, AddressStyle style) {
+    public MmsDetails getDetails(Uri mmsUri, AddressStyle style, Map<String, String> msgMap) {
 
         Cursor cursor = resolver.query(Uri.withAppendedPath(mmsUri, "addr"), null, null, null, null);
 
@@ -116,7 +118,7 @@ class MmsSupport {
                 Log.w(TAG, "New logic for to/from did not work, falling back to old logic");
 
                 if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
-                    inbound = false;
+                    inbound = false; // probably not the best way to determine if a message is inbound or outbound (legacy logic)
                 } else {
                     PersonRecord record = personLookup.lookupPerson(address);
                     recipients.add(record);
@@ -124,6 +126,13 @@ class MmsSupport {
             }
         }
         if (cursor != null) cursor.close();
+
+        // If neither of these are true, then the legacy logic will give us a fallback value.
+        if (Integer.parseInt(msgMap.get(Telephony.BaseMmsColumns.MESSAGE_BOX)) == Telephony.BaseMmsColumns.MESSAGE_BOX_INBOX) {
+            inbound = true;
+        } else if (Integer.parseInt(msgMap.get(Telephony.BaseMmsColumns.MESSAGE_BOX)) == Telephony.BaseMmsColumns.MESSAGE_BOX_SENT) {
+            inbound = false;
+        }
 
         return new MmsDetails(inbound, sender, recipients, rawAddresses);
     }

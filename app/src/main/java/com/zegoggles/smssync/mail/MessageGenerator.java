@@ -111,7 +111,11 @@ class MessageGenerator {
             Log.e(TAG, ERROR_PARSING_DATE, n);
             sentDate = new Date();
         }
-        headerGenerator.setHeaders(msg, msgMap, DataType.SMS, address, record.getId(), sentDate, messageType);
+
+        // see mmsThreadId. Aligning with the MMS thread ID is necessary for a mixed SMS/MMS thread to stay combined in gmail.
+        String smsThreadId = msgMap.get(Telephony.BaseMmsColumns.THREAD_ID);
+
+        headerGenerator.setHeaders(msg, msgMap, DataType.SMS, address, smsThreadId, sentDate, messageType);
         return msg;
     }
 
@@ -120,7 +124,7 @@ class MessageGenerator {
 
         final Uri mmsUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(Telephony.BaseMmsColumns._ID));
 
-        MmsSupport.MmsDetails details = mmsSupport.getDetails(mmsUri, addressStyle);
+        MmsSupport.MmsDetails details = mmsSupport.getDetails(mmsUri, addressStyle, msgMap);
 
         if (details.isEmpty()) {
             Log.w(TAG, "no recipients found");
@@ -134,17 +138,7 @@ class MessageGenerator {
         msg.setSubject(getSubject(DataType.MMS, details));
 
 
-        Boolean inbound;
-        if (Integer.parseInt(msgMap.get(Telephony.BaseMmsColumns.MESSAGE_BOX)) == Telephony.BaseMmsColumns.MESSAGE_BOX_INBOX) {
-            inbound = true;
-        } else if (Integer.parseInt(msgMap.get(Telephony.BaseMmsColumns.MESSAGE_BOX)) == Telephony.BaseMmsColumns.MESSAGE_BOX_SENT) {
-            inbound = false;
-        } else {
-            // fallback to "probably not the best way to determine if a message is inbound or outbound"
-            inbound = details.inbound;
-        }
-
-        if (inbound) {
+        if (details.inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
             msg.setFrom(details.getSender().getAddress(addressStyle));
 //            msg.setRecipient(Message.RecipientType.TO, userAddress); // first attempt. Makes it look like the MMS only went to me, not to many people.
@@ -249,10 +243,27 @@ class MessageGenerator {
 
         Set<String> allNames = new HashSet<>(); // eliminate duplicates. There will be some - android's MMS apis are weird.
 
-        for (PersonRecord recipient : details.getRecipients()) {
-            allNames.add(recipient.getName());
+        // Try to eliminate the current user's number from this, so MMS subjects align with SMS subjects, so that they get a single thread in gmail.
+        // Only supported for MMS messages with 1 other person.
+        // For group texts (more than 2 people involved), it's not as important to remove current user,
+        // b/c the thread is entirely MMS, so it doesn't need to align with SMS.
+        // Of course it would be nice/cleaner to remove the current user's phone number from group MMS subjects too.
+        // But when we parse sender/recipients in MmsSupport.getDetails(), there's no apparent way to determine
+        // which recipient is the current user. So this avoids adding another mechanism to grab the current user's phone number(s).
+        if (details.getRecipients().size() == 1 && details.inbound) {
+            // We don't need to add the one recipient (the current user)
+        } else {
+            for (PersonRecord recipient : details.getRecipients()) {
+                allNames.add(recipient.getName());
+            }
         }
-        allNames.add(details.sender.getName());
+
+        if (details.getRecipients().size() == 1 && !details.inbound) {
+            // for outgoing MMS messages, we don't want to include the sender (aligns with SMS)
+        } else {
+            allNames.add(details.sender.getName());
+        }
+
 
         List<String> allNamesSorted = new ArrayList<>(allNames.size());
         allNamesSorted.addAll(allNames);
