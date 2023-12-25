@@ -475,15 +475,7 @@ public class MainActivity extends ThemeActivity implements
     }
 
     private void requestPhoneStatePermission() {
-        String phonePermission;
-        if (Build.VERSION.SDK_INT > 29) {
-            phonePermission=Manifest.permission.READ_PHONE_NUMBERS;
-        }
-        else
-        {
-            phonePermission=Manifest.permission.READ_PHONE_STATE;
-        }
-        ActivityCompat.requestPermissions(this, new String[]{phonePermission}, REQUEST_PERMISSIONS_PHONE);
+        ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.READ_PHONE_STATE }, REQUEST_PERMISSIONS_PHONE);
     }
 
     private void requestPermissionsIfNeeded() {

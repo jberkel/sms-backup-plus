@@ -80,9 +80,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <!-- Get Information about simcards (needed for multisim) -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"
-                     android:maxSdkVersion="29" />
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
