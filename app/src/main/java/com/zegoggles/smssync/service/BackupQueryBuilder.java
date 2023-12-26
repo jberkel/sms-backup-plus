@@ -80,6 +80,14 @@ class BackupQueryBuilder {
         return App.SimCards[settingsId].IccId;
     }
 
+    private String singleSIMCondition() {
+        if (App.SimCards.length == 1)
+        {
+            return "1 OR";
+        }
+        return "";
+    }
+
     public @Nullable Query buildMostRecentQueryForDataType(DataType type) {
         switch (type) {
             case MMS:
@@ -112,10 +120,11 @@ class BackupQueryBuilder {
         return new Query(Consts.SMS_PROVIDER,
             null,
             String.format(Locale.ENGLISH,
-                "%s > ? AND %s <> ? %s AND %s = ?",
+                "%s > ? AND %s <> ? %s AND (%s %s = ?)",
                     Telephony.TextBasedSmsColumns.DATE,
                     Telephony.TextBasedSmsColumns.TYPE,
                     groupSelection(SMS, groupIds),
+                    singleSIMCondition(),
                     Telephony.TextBasedSmsColumns.SUBSCRIPTION_ID
                     ).trim(),
             new String[] {
@@ -135,10 +144,11 @@ class BackupQueryBuilder {
         return new Query(
             Consts.MMS_PROVIDER,
             null,
-            String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s AND %s = ?",
+            String.format(Locale.ENGLISH, "%s > ? AND %s <> ? %s AND (%s %s = ?)",
                     Telephony.BaseMmsColumns.DATE,
                     Telephony.BaseMmsColumns.MESSAGE_TYPE,
                     groupSelection(DataType.MMS, group),
+                    singleSIMCondition(),
                     Telephony.BaseMmsColumns.SUBSCRIPTION_ID
                     ).trim(),
             new String[] {
@@ -153,7 +163,7 @@ class BackupQueryBuilder {
         return new Query(
             Consts.CALLLOG_PROVIDER,
             CALLLOG_PROJECTION,
-            String.format(Locale.ENGLISH, "%s > ? AND (%s = ? OR %s = ?)", CallLog.Calls.DATE, CallLog.Calls.PHONE_ACCOUNT_ID, CallLog.Calls.PHONE_ACCOUNT_ID),
+            String.format(Locale.ENGLISH, "%s > ? AND (%s %s = ? OR %s = ?)", CallLog.Calls.DATE, singleSIMCondition(), CallLog.Calls.PHONE_ACCOUNT_ID, CallLog.Calls.PHONE_ACCOUNT_ID),
             new String[] {
                 String.valueOf(preferences.getMaxSyncedDate(CALLLOG, settingsId)),
                 getSimCardNumber(settingsId),
