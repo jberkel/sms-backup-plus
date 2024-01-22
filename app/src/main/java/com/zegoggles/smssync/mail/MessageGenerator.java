@@ -21,9 +21,14 @@ import com.zegoggles.smssync.preferences.AddressStyle;
 import com.zegoggles.smssync.preferences.CallLogTypes;
 import com.zegoggles.smssync.preferences.DataTypePreferences;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static com.fsck.k9.mail.internet.MimeMessageHelper.setBody;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
@@ -106,7 +111,11 @@ class MessageGenerator {
             Log.e(TAG, ERROR_PARSING_DATE, n);
             sentDate = new Date();
         }
-        headerGenerator.setHeaders(msg, msgMap, DataType.SMS, address, record, sentDate, messageType);
+
+        // see mmsThreadId. Aligning with the MMS thread ID is necessary for a mixed SMS/MMS thread to stay combined in gmail.
+        String smsThreadId = msgMap.get(Telephony.BaseMmsColumns.THREAD_ID);
+
+        headerGenerator.setHeaders(msg, msgMap, DataType.SMS, address, smsThreadId, sentDate, messageType);
         return msg;
     }
 
@@ -114,25 +123,27 @@ class MessageGenerator {
         if (LOCAL_LOGV) Log.v(TAG, "messageFromMapMms(" + msgMap + ")");
 
         final Uri mmsUri = Uri.withAppendedPath(Consts.MMS_PROVIDER, msgMap.get(Telephony.BaseMmsColumns._ID));
-        MmsSupport.MmsDetails details = mmsSupport.getDetails(mmsUri, addressStyle);
+
+        MmsSupport.MmsDetails details = mmsSupport.getDetails(mmsUri, addressStyle, msgMap);
 
         if (details.isEmpty()) {
             Log.w(TAG, "no recipients found");
             return null;
-        } else if (!includeInBackup(DataType.MMS, details.records)) {
+        } else if (!includeInBackup(DataType.MMS, details.getRecipients())) {
             Log.w(TAG, "no recipients included");
             return null;
         }
 
         final Message msg = new MimeMessage();
-        msg.setSubject(getSubject(DataType.MMS, details.getRecipient()));
+        msg.setSubject(getSubject(DataType.MMS, details));
+
 
         if (details.inbound) {
             // msg_box == MmsConsts.MESSAGE_BOX_INBOX does not work
-            msg.setFrom(details.getRecipientAddress());
-            msg.setRecipient(Message.RecipientType.TO, userAddress);
+            msg.setFrom(details.getSender().getAddress(addressStyle));
+            msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle)); // Includes everyone that received the MMS in the email "to" field.
         } else {
-            msg.setRecipients(Message.RecipientType.TO, details.getAddresses());
+            msg.setRecipients(Message.RecipientType.TO, details.getRecipientAddresses(addressStyle));
             msg.setFrom(userAddress);
         }
 
@@ -144,7 +155,28 @@ class MessageGenerator {
             sentDate = new Date();
         }
         final int msg_box = toInt(msgMap.get("msg_box"));
-        headerGenerator.setHeaders(msg, msgMap, DataType.MMS, details.address, details.getRecipient(), sentDate, msg_box);
+
+        // We could thread by contact ID, not by thread ID. Original author thought this value was more stable.
+        // It works pretty badly with MMS threads though.
+//        String mmsThreadId = details.getRecipient();
+
+        // We could grab all the raw addresses (phone numbers), and sort/unique/join them for gmail's thread id
+        // This doesn't work well, because sometimes phone numbers have a "+1" prefix, sometimes not.
+//        Set<String> rawAddresses = new HashSet<>();
+//        rawAddresses.addAll(details.rawAddresses);
+//        List<String> rawAddressesSorted = new ArrayList<>(rawAddresses.size());
+//        rawAddressesSorted.addAll(rawAddresses);
+//        Collections.sort(rawAddressesSorted);
+//        String mmsThreadId = stringJoin(rawAddressesSorted, "-");
+
+        // We could thread by the messaging app's thread ID. The original author thought this wasn't very stable,
+        // but it's the best option for MMS so far, and it looks good from limited testing.
+        String mmsThreadId = msgMap.get(Telephony.BaseMmsColumns.THREAD_ID);
+
+        // Tip - if you want to try different strategies for computing mmsThreadId against the same messages,
+        // make sure to generate a new MESSAGE_ID as well. It seems like gmail caches REFERENCES if you reuse the same MESSAGE_ID.
+
+        headerGenerator.setHeaders(msg, msgMap, DataType.MMS, details.getFirstRawAddress(), mmsThreadId, sentDate, msg_box);
         MimeMultipart body = MimeMultipart.newInstance();
 
         for (BodyPart p : mmsSupport.getMMSBodyParts(Uri.withAppendedPath(mmsUri, MMS_PART))) {
@@ -200,8 +232,62 @@ class MessageGenerator {
             Log.e(TAG, ERROR_PARSING_DATE, n);
             sentDate = new Date();
         }
-        headerGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record, sentDate, callType);
+        headerGenerator.setHeaders(msg, msgMap, DataType.CALLLOG, address, record.getId(), sentDate, callType);
         return msg;
+    }
+
+    private String getSubject(@NonNull DataType type, @NonNull MmsSupport.MmsDetails details) {
+        // If you're in a group text with several people, ensure the email subject will look like
+        // "SMS with Alice/Bob/Charles/YourPhoneNumber"
+
+        Set<String> allNames = new HashSet<>(); // eliminate duplicates. There will be some - android's MMS apis are weird.
+
+        // Try to eliminate the current user's number from this, so MMS subjects align with SMS subjects, so that they get a single thread in gmail.
+        // Only supported for MMS messages with 1 other person.
+        // For group texts (more than 2 people involved), it's not as important to remove current user,
+        // b/c the thread is entirely MMS, so it doesn't need to align with SMS.
+        // Of course it would be nice/cleaner to remove the current user's phone number from group MMS subjects too.
+        // But when we parse sender/recipients in MmsSupport.getDetails(), there's no apparent way to determine
+        // which recipient is the current user. So this avoids adding another mechanism to grab the current user's phone number(s).
+        if (details.getRecipients().size() == 1 && details.inbound) {
+            // We don't need to add the one recipient (the current user)
+        } else {
+            for (PersonRecord recipient : details.getRecipients()) {
+                allNames.add(recipient.getName());
+            }
+        }
+
+        if (details.getRecipients().size() == 1 && !details.inbound) {
+            // for outgoing MMS messages, we don't want to include the sender (aligns with SMS)
+        } else {
+            allNames.add(details.sender.getName());
+        }
+
+
+        List<String> allNamesSorted = new ArrayList<>(allNames.size());
+        allNamesSorted.addAll(allNames);
+        Collections.sort(allNamesSorted); // keep subjects stable so gmail can keep threads consistent
+
+        String namesJoinedBySlash = stringJoin(allNamesSorted, "/");
+
+        return prefix ?
+                String.format(Locale.ENGLISH, "[%s] %s", dataTypePreferences.getFolder(type), namesJoinedBySlash) :
+                context.getString(type.withField, namesJoinedBySlash);
+    }
+
+    private String stringJoin(List<String> allNamesSorted, String delimeter) {
+        StringBuilder builder = new StringBuilder();
+
+        boolean isFirst = true;
+        for (String name : allNamesSorted) {
+            if (!isFirst) {
+                builder.append(delimeter);
+            }
+            isFirst = false;
+
+            builder.append(name);
+        }
+        return builder.toString();
     }
 
     private String getSubject(@NonNull DataType type, @NonNull PersonRecord record) {

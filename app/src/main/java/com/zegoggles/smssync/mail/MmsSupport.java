@@ -3,9 +3,12 @@ package com.zegoggles.smssync.mail;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import androidx.annotation.NonNull;
+import android.provider.Telephony;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.fsck.k9.mail.Address;
 import com.fsck.k9.mail.BodyPart;
 import com.fsck.k9.mail.MessagingException;
@@ -16,9 +19,9 @@ import com.zegoggles.smssync.MmsConsts;
 import com.zegoggles.smssync.preferences.AddressStyle;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -36,82 +39,117 @@ class MmsSupport {
 
     static class MmsDetails {
         public final boolean inbound;
-        public final List<String> recipients;
-        public final List<PersonRecord> records;
-        public final List<Address> addresses;
-
-        public final String address;
-
+        public final PersonRecord sender;
+        public final List<PersonRecord> recipients;
+        public final List<String> rawAddresses;
 
         public MmsDetails(boolean inbound,
-                          @NonNull List<String> recipients,
-                          List<PersonRecord> records,
-                          List<Address> addresses) {
+                          PersonRecord sender,
+                          @NonNull List<PersonRecord> recipients,
+                          List<String> rawAddresses) {
 
-            if (recipients.isEmpty()) {
-                address = "Unknown";
-            } else {
-                address = recipients.get(0);
-            }
-
-            this.recipients = recipients;
             this.inbound = inbound;
-            this.records = records;
-            this.addresses = addresses;
-        }
-
-        public MmsDetails(boolean inbound,
-                          String recipient,
-                          PersonRecord record,
-                          Address address) {
-            this(inbound, Arrays.asList(recipient), Arrays.asList(record), Arrays.asList(address));
+            this.sender = sender;
+            this.recipients = recipients;
+            this.rawAddresses = rawAddresses;
         }
 
         public boolean isEmpty() {
             return recipients.isEmpty();
         }
 
-        public Address[] getAddresses() {
-            return addresses.toArray(new Address[addresses.size()]);
+        public PersonRecord getSender() {
+            return sender;
+        }
+
+        public List<PersonRecord> getRecipients() {
+            return recipients;
+        }
+
+        public Address[] getRecipientAddresses(AddressStyle style) {
+            List<Address> recipientAddresses = new ArrayList<>(recipients.size());
+            for (PersonRecord recipient : recipients) {
+                recipientAddresses.add(recipient.getAddress(style));
+            }
+
+            return recipientAddresses.toArray(new Address[0]);
         }
 
         public PersonRecord getRecipient() {
-            return records.get(0);
+            return recipients.get(0);
         }
 
-        public Address getRecipientAddress() {
-            return addresses.get(0);
+        public String getFirstRawAddress() {
+            if (rawAddresses.size() == 0) {
+                return  "Unknown";
+            }
+
+            return rawAddresses.get(0);
         }
     }
 
-    public MmsDetails getDetails(Uri mmsUri, AddressStyle style) {
+    public MmsDetails getDetails(Uri mmsUri, AddressStyle style, Map<String, String> msgMap) {
 
         Cursor cursor = resolver.query(Uri.withAppendedPath(mmsUri, "addr"), null, null, null, null);
 
-        // TODO: this is probably not the best way to determine if a message is inbound or outbound
         boolean inbound = true;
-        final List<String> recipients = new ArrayList<String>();
+        List<PersonRecord> recipients = new ArrayList<PersonRecord>();
+        PersonRecord sender = null;
+
+        List<String> rawAddresses = new ArrayList<>();
+
         while (cursor != null && cursor.moveToNext()) {
             final String address = cursor.getString(cursor.getColumnIndex("address"));
-            //final int type       = addresses.getInt(addresses.getColumnIndex("type"));
-            if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
-                inbound = false;
+
+            rawAddresses.add(address);
+
+            // https://stackoverflow.com/questions/52186442/how-to-get-phone-numbers-of-mms-group-conversation-participants
+            String PduHeadersFROM  = "137";
+            String PduHeadersTO  = "151";
+            String PduHeadersCC  = "130"; // https://android.googlesource.com/platform/frameworks/opt/mms/+/4bfcd8501f09763c10255442c2b48fad0c796baa/src/java/com/google/android/mms/pdu/PduHeaders.java
+
+            String type = cursor.getString(cursor.getColumnIndex("type"));
+            if (type.equals(PduHeadersFROM)) {
+                PersonRecord record = personLookup.lookupPerson(address);
+                sender = record;
+            } else if (type.equals(PduHeadersTO) || type.equals(PduHeadersCC)) {
+                PersonRecord record = personLookup.lookupPerson(address);
+                recipients.add(record);
             } else {
-                recipients.add(address);
+                Log.w(TAG, "New logic for to/from did not work, falling back to old logic");
+
+                if (MmsConsts.INSERT_ADDRESS_TOKEN.equals(address)) {
+                    inbound = false; // probably not the best way to determine if a message is inbound or outbound (legacy logic)
+                } else {
+                    PersonRecord record = personLookup.lookupPerson(address);
+                    recipients.add(record);
+                }
             }
         }
         if (cursor != null) cursor.close();
 
-        List<PersonRecord> records = new ArrayList<PersonRecord>(recipients.size());
-        List<Address> addresses = new ArrayList<Address>(recipients.size());
-        if (!recipients.isEmpty()) {
-            for (String s : recipients) {
-                PersonRecord record = personLookup.lookupPerson(s);
-                records.add(record);
-                addresses.add(record.getAddress(style));
-            }
+        // If neither of these are true, then the legacy logic will give us a fallback value.
+        if (Integer.parseInt(msgMap.get(Telephony.BaseMmsColumns.MESSAGE_BOX)) == Telephony.BaseMmsColumns.MESSAGE_BOX_INBOX) {
+            inbound = true;
+        } else if (Integer.parseInt(msgMap.get(Telephony.BaseMmsColumns.MESSAGE_BOX)) == Telephony.BaseMmsColumns.MESSAGE_BOX_SENT) {
+            inbound = false;
         }
-        return new MmsDetails(inbound, recipients, records, addresses);
+
+        // Strip recipient if it's also the sender. Ensures that incoming messages in RCS threads
+        // between 2 people don't include your own phone number, so that the thread doesn't get split.
+        if (sender != null) {
+            List<PersonRecord> recipientsWithoutSender = new ArrayList<>();
+
+            for (PersonRecord recipient : recipients) {
+                if (!recipient.getId().equals(sender.getId())) {
+                    recipientsWithoutSender.add(recipient);
+                }
+            }
+
+            recipients = recipientsWithoutSender;
+        }
+
+        return new MmsDetails(inbound, sender, recipients, rawAddresses);
     }
 
     public List<BodyPart> getMMSBodyParts(final Uri uriPart) throws MessagingException {
