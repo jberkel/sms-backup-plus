@@ -38,6 +38,7 @@ body:
       description: Check "About Phone" in your device settings
       options:
         -
+        - 14 (2023)
         - 13 (2022)
         - 12 (2021)
         - 11 (2020)
@@ -74,6 +75,7 @@ body:
       description: Check "About" in the app
       options:
         -
+        - v1.6β
         - v1.5.11
         - v1.5.10
         - v1.5.9
