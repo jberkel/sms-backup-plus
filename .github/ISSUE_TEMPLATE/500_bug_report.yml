@@ -4,6 +4,7 @@ title: "[BUG] <title>"
 labels: "bug"
 assignees:
   - jberkel
+  - kurahaupo
 body:
   - type: markdown
     attributes:
