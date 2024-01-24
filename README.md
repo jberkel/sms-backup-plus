@@ -419,7 +419,16 @@ which often has more recent versions than what is available on the Play Store.
     $ git clone https://github.com/jberkel/sms-backup-plus.git
     $ cd sms-backup-plus
     $ ./gradlew assembleDebug
-    $ adb install app/build/outputs/apk/app-debug.apk
+    $ adb install app/build/outputs/apk/debug/app-debug.apk
+
+### Usage of docker
+#### Connecting via Wifi
+- connect with USB-Connection and enter: adb tcpip [arbitrary port]
+- create .env-file in .devcontainer and add: mobiledev=[ipaddress of phone:same arbitrary port]
+- after starting with docker launch "Connect adb"
+- if something goes wrong launch "Kill adb"
+- Add android:debuggable="true" to AndroidManifest.xml to start in debug-mode
+- then you can launch "Build App" and "Debug App"
 
 ### <a id="translating">Translating the UI</a>
 
