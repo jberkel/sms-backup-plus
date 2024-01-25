@@ -2,6 +2,8 @@ package com.zegoggles.smssync.preferences;
 
 import android.content.SharedPreferences;
 import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.utils.SimCardHelper;
+import com.zegoggles.smssync.App;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -49,15 +51,15 @@ public class DataTypePreferences implements SharedPreferences.OnSharedPreference
         return enabledTypes.isEmpty() ? EnumSet.noneOf(DataType.class) : EnumSet.copyOf(enabledTypes);
     }
 
-    public String getFolder(DataType dataType) {
-        return sharedPreferences.getString(dataType.folderPreference, dataType.defaultFolder);
+    public String getFolder(DataType dataType, Integer settingsId) {
+        return sharedPreferences.getString(SimCardHelper.addSettingsId(dataType.folderPreference, settingsId), dataType.defaultFolder);
     }
 
     /**
      * @return returns the last synced date in milliseconds (epoch)
      */
-    public long getMaxSyncedDate(DataType dataType) {
-        final long maxSynced = sharedPreferences.getLong(dataType.maxSyncedPreference, MAX_SYNCED_DATE);
+    public long getMaxSyncedDate(DataType dataType, Integer settingsId) {
+        final long maxSynced = sharedPreferences.getLong(SimCardHelper.addSettingsId(dataType.maxSyncedPreference, settingsId), MAX_SYNCED_DATE);
         if (dataType == MMS && maxSynced > 0) {
             return maxSynced * 1000L;
         } else {
@@ -65,21 +67,23 @@ public class DataTypePreferences implements SharedPreferences.OnSharedPreference
         }
     }
 
-    public boolean setMaxSyncedDate(DataType dataType, long max) {
-        return sharedPreferences.edit().putLong(dataType.maxSyncedPreference, max).commit();
+    public boolean setMaxSyncedDate(DataType dataType, long max, Integer settingsId) {
+        return sharedPreferences.edit().putLong(SimCardHelper.addSettingsId(dataType.maxSyncedPreference, settingsId), max).commit();
     }
 
-    public long getMostRecentSyncedDate() {
+    public long getMostRecentSyncedDate(Integer settingsId) {
         return Math.max(Math.max(
-            getMaxSyncedDate(DataType.SMS),
-            getMaxSyncedDate(DataType.CALLLOG)),
-            getMaxSyncedDate(DataType.MMS));
+            getMaxSyncedDate(DataType.SMS, settingsId),
+            getMaxSyncedDate(DataType.CALLLOG, settingsId)),
+            getMaxSyncedDate(DataType.MMS, settingsId));
     }
 
     public void clearLastSyncData() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        for (DataType type : DataType.values()) {
-            editor.remove(type.maxSyncedPreference);
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            for (DataType type : DataType.values()) {
+                editor.remove(SimCardHelper.addSettingsId(type.maxSyncedPreference, settingsId));
+            }
         }
         editor.commit();
     }

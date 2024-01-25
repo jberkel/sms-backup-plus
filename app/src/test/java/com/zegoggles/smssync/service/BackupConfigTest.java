@@ -6,6 +6,8 @@ import com.zegoggles.smssync.mail.DataType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.EnumSet;
 
@@ -16,7 +18,9 @@ public class BackupConfigTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldCheckForDataTypesEmpty() throws Exception {
-        new BackupConfig(mock(BackupImapStore.class),
+        List<BackupImapStore> imapStores = new ArrayList<BackupImapStore>();
+        imapStores.add(mock(BackupImapStore.class));
+        new BackupConfig(imapStores,
                 0,
                 -1,
                 ContactGroup.EVERYBODY,
@@ -29,7 +33,9 @@ public class BackupConfigTest {
     @SuppressWarnings("ConstantConditions")
     @Test(expected = IllegalArgumentException.class)
     public void shouldCheckForDataTypesNull() throws Exception {
-        new BackupConfig(mock(BackupImapStore.class),
+        List<BackupImapStore> imapStores = new ArrayList<BackupImapStore>();
+        imapStores.add(mock(BackupImapStore.class));
+        new BackupConfig(imapStores,
                 0,
                 -1,
                 ContactGroup.EVERYBODY,
@@ -41,7 +47,9 @@ public class BackupConfigTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldCheckForPositiveTry() throws Exception {
-        new BackupConfig(mock(BackupImapStore.class),
+        List<BackupImapStore> imapStores = new ArrayList<BackupImapStore>();
+        imapStores.add(mock(BackupImapStore.class));
+        new BackupConfig(imapStores,
                 -1,
                 -1,
                 ContactGroup.EVERYBODY,

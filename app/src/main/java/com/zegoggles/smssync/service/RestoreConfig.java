@@ -1,6 +1,7 @@
 package com.zegoggles.smssync.service;
 
 import com.zegoggles.smssync.mail.BackupImapStore;
+import java.util.List;
 
 public class RestoreConfig {
     final int tries;
@@ -9,9 +10,9 @@ public class RestoreConfig {
     final boolean restoreOnlyStarred;
     final int maxRestore;
     final int currentRestoredItem;
-    final BackupImapStore imapStore;
+    final List<BackupImapStore> imapStores;
 
-    public RestoreConfig(BackupImapStore imapStore,
+    public RestoreConfig(List<BackupImapStore> imapStores,
                          int tries,
                          boolean restoreSms,
                          boolean restoreCallLog,
@@ -20,7 +21,7 @@ public class RestoreConfig {
                          int currentRestoredItem) {
 
         this.tries = tries;
-        this.imapStore = imapStore;
+        this.imapStores = imapStores;
         this.restoreSms = restoreSms;
         this.restoreCallLog = restoreCallLog;
         this.restoreOnlyStarred = restoreOnlyStarred;
@@ -28,9 +29,9 @@ public class RestoreConfig {
         this.currentRestoredItem = currentRestoredItem;
     }
 
-    public RestoreConfig retryWithStore(int currentItem, BackupImapStore backupImapStore) {
+    public RestoreConfig retryWithStore(int currentItem, List<BackupImapStore> backupImapStores) {
         return new RestoreConfig(
-                backupImapStore,
+                backupImapStores,
                 tries + 1,
                 restoreSms,
                 restoreCallLog,
@@ -48,7 +49,17 @@ public class RestoreConfig {
                 ", restoreOnlyStarred=" + restoreOnlyStarred +
                 ", maxRestore=" + maxRestore +
                 ", currentRestoredItem=" + currentRestoredItem +
-                ", imapStore=" + imapStore +
+                GetImapString() +
                 '}';
+    }
+
+    private String GetImapString() {
+        String imapStoreString = "";
+        Integer cnt = 0;
+        for(BackupImapStore store: imapStores) {
+            imapStoreString += ", imapStore" + cnt.toString() + "=" + store.toString();
+            cnt++;
+         }
+         return imapStoreString;
     }
 }

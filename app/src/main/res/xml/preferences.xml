@@ -258,6 +258,12 @@
                     android:summary="@string/ui_mark_as_read_restore_desc"
                     android:defaultValue="true"/>
 
+            <CheckBoxPreference
+                    android:key="use_icc_id_for_restore"
+                    android:title="@string/ui_use_icc_id_for_restore_label"
+                    android:summary="@string/ui_use_icc_id_for_restore_desc"
+                    android:defaultValue="true"/>
+
         </PreferenceScreen>
 
         <CheckBoxPreference

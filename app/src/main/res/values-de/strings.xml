@@ -114,6 +114,9 @@
   <string name="ui_mark_as_read_restore_label">Gelesen markieren (SMS)</string>
   <string name="ui_mark_as_read_restore_desc">Ob alle wiederhergestellten SMS als gelesen markiert werden sollen oder nicht.</string>
 
+  <string name="ui_use_icc_id_for_restore_label">IccId für MultiSim verwenden</string>
+  <string name="ui_use_icc_id_for_restore_desc">Ob IccId für das Anrufprotokoll verwendet werden soll, um zwischen Sim-Karten zu unterscheiden (geräteabhängig und nur verwendet auf MultiSim-Geräten)</string>
+
   <string name="ui_email_address_style_label">E-Mail Adress-Stil</string>
   <string name="ui_email_address_style_desc">Format der E-Mail-Adressen</string>
 
@@ -252,7 +255,7 @@
   <string name="app_log_missing_credentials">Übersprungen (Anmeldedaten fehlen)</string>
   <string name="app_log_backup_requested">Sicherung angefordert (%1$s)</string>
   <string name="app_log_start_backup">Starte Sicherung (%1$s)</string>
-  <string name="app_log_backup_messages">Sichere (%1$d SMS, %2$d MMS, %3$d call log)</string>
+  <string name="app_log_backup_messages">Sichere (%1$d SMS, %2$d MMS, %3$d call log) von Telefonnummer %4$s</string>
   <string name="app_log_backup_canceled">Sicherung abgebrochen</string>
   <string name="app_log_backup_finished">Sicherung fertiggestellt</string>
 
@@ -317,6 +320,8 @@
   </string>
   <string name="ui_protocol_trust_all_certificates_label">Allen Zertifikaten trauen</string>
   <string name="app_log_backup_messages_with_config">Benuzte Konfiguration: %1$s</string>
+  <string name="ui_server_takeover">Einstellungen von SIM 1</string>
+  <string name="ui_server_takeover_summary">Einstellungen von SIM 1 übernehmen</string>
 
 
 </resources>

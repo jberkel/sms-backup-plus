@@ -49,6 +49,8 @@ import static com.zegoggles.smssync.App.CHANNEL_ID;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static java.util.Locale.ENGLISH;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ServiceBase extends Service {
     @Nullable private PowerManager.WakeLock wakeLock;
@@ -96,16 +98,25 @@ public abstract class ServiceBase extends Service {
         return getState().isRunning();
     }
 
-    protected BackupImapStore getBackupImapStore() throws MessagingException {
-        final String uri = getAuthPreferences().getStoreUri();
-        if (!BackupImapStore.isValidUri(uri)) {
-            throw new MessagingException("No valid IMAP URI: "+uri);
+    protected List<BackupImapStore> getBackupImapStores() throws MessagingException {
+        List<BackupImapStore> backupImapStores = new ArrayList<BackupImapStore>();
+
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            final String uri = getAuthPreferences(settingsId).getStoreUri();
+            if (!BackupImapStore.isValidUri(uri)) {
+                throw new MessagingException("No valid IMAP URI: "+uri);
+            }
+            backupImapStores.add(new BackupImapStore(getApplicationContext(), uri, getAuthPreferences(settingsId).isTrustAllCertificates()));
         }
-        return new BackupImapStore(getApplicationContext(), uri, getAuthPreferences().isTrustAllCertificates());
+        return backupImapStores;
     }
 
     protected AuthPreferences getAuthPreferences() {
-        return new AuthPreferences(this);
+        return getAuthPreferences(0);
+    }
+
+    protected AuthPreferences getAuthPreferences(Integer settingsId) {
+        return new AuthPreferences(this, settingsId);
     }
 
     protected Preferences getPreferences() {

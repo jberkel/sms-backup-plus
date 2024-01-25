@@ -12,6 +12,7 @@ import com.fsck.k9.mail.AuthType;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefresher;
+import com.zegoggles.smssync.utils.SimCardHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -25,7 +26,10 @@ public class AuthPreferences {
     private static final String UTF_8 = "UTF-8";
     private final Context context;
     private final SharedPreferences preferences;
+    private final Integer settingsId;
     private SharedPreferences credentials;
+
+    public static final String SERVER_TAKEOVER = "server_takeover";
 
     public static final String SERVER_AUTHENTICATION = "server_authentication";
 
@@ -43,9 +47,9 @@ public class AuthPreferences {
     /**
      * Preference key containing the server protocol
      */
-    private static final String SERVER_PROTOCOL = "server_protocol";
+    public static final String SERVER_PROTOCOL = "server_protocol";
 
-    private static final String SERVER_TRUST_ALL_CERTIFICATES = "server_trust_all_certificates";
+    public static final String SERVER_TRUST_ALL_CERTIFICATES = "server_trust_all_certificates";
 
     /**
      * IMAP URI.
@@ -64,9 +68,11 @@ public class AuthPreferences {
     private static final String DEFAULT_SERVER_ADDRESS = "imap.gmail.com:993";
     private static final String DEFAULT_SERVER_PROTOCOL = "+ssl+";
 
-    public AuthPreferences(Context context) {
+    public AuthPreferences(Context context, Integer settingsId) {
         this.context = context.getApplicationContext();
         this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        //settingsId has no effect on XOAuth2 (deprecated)
+        this.settingsId = settingsId;
     }
 
     public String getOauth2Token() {
@@ -117,11 +123,11 @@ public class AuthPreferences {
     }
 
     public void setImapPassword(String s) {
-        getCredentials().edit().putString(IMAP_PASSWORD, s).commit();
+        getCredentials().edit().putString(addSettingsId(IMAP_PASSWORD), s).commit();
     }
 
     public void setImapUser(String s) {
-        preferences.edit().putString(IMAP_USER, s).commit();
+        preferences.edit().putString(addSettingsId(IMAP_USER), s).commit();
     }
 
     @SuppressWarnings("deprecation")
@@ -185,16 +191,32 @@ public class AuthPreferences {
         }
     }
 
+    private String addSettingsId(String stringWithoutSettingsId) {
+        if (getTakeOver()) {
+            return SimCardHelper.addSettingsId(stringWithoutSettingsId, 0);
+        } else {
+            return SimCardHelper.addSettingsId(stringWithoutSettingsId, settingsId);
+        }
+    }
+
+    public Boolean getTakeOver() {
+        if (settingsId == 0) {
+            return false;
+        } else {
+            return preferences.getBoolean(SimCardHelper.addSettingsId(SERVER_TAKEOVER, settingsId), true);
+        }
+    }
+
     private String getServerAddress() {
-        return preferences.getString(SERVER_ADDRESS, DEFAULT_SERVER_ADDRESS);
+        return preferences.getString(addSettingsId(SERVER_ADDRESS), DEFAULT_SERVER_ADDRESS);
     }
 
     private String getServerProtocol() {
-        return preferences.getString(SERVER_PROTOCOL, DEFAULT_SERVER_PROTOCOL);
+        return preferences.getString(addSettingsId(SERVER_PROTOCOL), DEFAULT_SERVER_PROTOCOL);
     }
 
     public boolean isTrustAllCertificates() {
-        return preferences.getBoolean(SERVER_TRUST_ALL_CERTIFICATES, false);
+        return preferences.getBoolean(addSettingsId(SERVER_TRUST_ALL_CERTIFICATES), false);
     }
 
     private String formatUri(AuthType authType, String serverProtocol, String username, String password, String serverAddress) {
@@ -226,15 +248,15 @@ public class AuthPreferences {
     }
 
     public String getServername() {
-        return preferences.getString(SERVER_ADDRESS, null);
+        return preferences.getString(addSettingsId(SERVER_ADDRESS), null);
     }
 
     public String getImapUsername() {
-        return preferences.getString(IMAP_USER, null);
+        return preferences.getString(addSettingsId(IMAP_USER), null);
     }
 
     private String getImapPassword() {
-        return getCredentials().getString(IMAP_PASSWORD, null);
+        return getCredentials().getString(addSettingsId(IMAP_PASSWORD), null);
     }
 
     /**
@@ -281,8 +303,8 @@ public class AuthPreferences {
         if ("+ssl".equals(getServerProtocol()) ||
             "+tls".equals(getServerProtocol())) {
             preferences.edit()
-                .putBoolean(SERVER_TRUST_ALL_CERTIFICATES, true)
-                .putString(SERVER_PROTOCOL, getServerProtocol()+"+")
+                .putBoolean(addSettingsId(SERVER_TRUST_ALL_CERTIFICATES), true)
+                .putString(addSettingsId(SERVER_PROTOCOL), getServerProtocol()+"+")
                 .commit();
         }
     }

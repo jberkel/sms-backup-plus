@@ -27,9 +27,9 @@ public class BackupItemsFetcher {
         this.resolver = resolver;
     }
 
-    public @NonNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, int max) {
+    public @NonNull Cursor getItemsForDataType(DataType dataType, ContactGroupIds group, Integer settingsId, int max) {
         if (LOCAL_LOGV) Log.v(TAG, "getItemsForDataType(type=" + dataType + ", max=" + max + ")");
-        return performQuery(queryBuilder.buildQueryForDataType(dataType, group, max));
+        return performQuery(queryBuilder.buildQueryForDataType(dataType, group, settingsId, max));
     }
 
     /**

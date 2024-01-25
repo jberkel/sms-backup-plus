@@ -15,7 +15,6 @@ import com.zegoggles.smssync.preferences.DataTypePreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.exception.BackupDisabledException;
 import com.zegoggles.smssync.service.exception.NoConnectionException;
-import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.SmsSyncState;
 import org.junit.After;
@@ -68,7 +67,7 @@ public class SmsBackupServiceTest {
             @Override protected BackupJobs getBackupJobs() { return backupJobs; }
             @Override protected Preferences getPreferences() { return preferences; }
             @Override public int checkPermission(String permission, int pid, int uid) { return PERMISSION_GRANTED; }
-            @Override protected AuthPreferences getAuthPreferences() { return authPreferences; }
+            @Override protected AuthPreferences getAuthPreferences(Integer settingsId) { return authPreferences; }
             @Override protected void notifyUser(int icon, NotificationCompat.Builder builder) {
                 sentNotifications.add(builder);
             }
@@ -135,15 +134,6 @@ public class SmsBackupServiceTest {
 
         verifyZeroInteractions(backupTask);
         assertThat(service.getState().exception).isInstanceOf(RequiresWifiException.class);
-    }
-
-    @Test public void shouldCheckForLoginCredentials() throws Exception {
-        Intent intent = new Intent();
-        when(authPreferences.isLoginInformationSet()).thenReturn(false);
-        shadowConnectivityManager.setBackgroundDataSetting(true);
-        service.handleIntent(intent);
-        verifyZeroInteractions(backupTask);
-        assertThat(service.getState().exception).isInstanceOf(RequiresLoginException.class);
     }
 
     @Test public void shouldCheckForEnabledDataTypes() throws Exception {

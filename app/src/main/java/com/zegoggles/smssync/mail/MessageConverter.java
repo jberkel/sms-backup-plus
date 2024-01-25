@@ -50,6 +50,7 @@ import static com.zegoggles.smssync.App.TAG;
 
 public class MessageConverter {
     private final Context context;
+    private final Preferences preferences;
     private final ThreadHelper threadHelper = new ThreadHelper();
 
     private final MarkAsReadTypes markAsReadType;
@@ -63,6 +64,7 @@ public class MessageConverter {
                             PersonLookup personLookup,
                             ContactAccessor contactAccessor) {
         this.context = context;
+        this.preferences = preferences;
         markAsReadType = preferences.getMarkAsReadType();
         this.personLookup = personLookup;
         markAsReadOnRestore = preferences.getMarkAsReadOnRestore();
@@ -108,11 +110,11 @@ public class MessageConverter {
         }
     }
 
-    public @NonNull ConversionResult convertMessages(final Cursor cursor, DataType dataType)
+    public @NonNull ConversionResult convertMessages(final Cursor cursor, DataType dataType, Integer settingsId)
             throws MessagingException {
 
         final Map<String, String> msgMap = getMessageMap(cursor);
-        final Message m = messageGenerator.messageForDataType(msgMap, dataType);
+        final Message m = messageGenerator.messageForDataType(msgMap, dataType, settingsId);
         final ConversionResult result = new ConversionResult(dataType);
         if (m != null) {
             m.setFlag(Flag.SEEN, markAsSeen(dataType, msgMap));
@@ -123,7 +125,7 @@ public class MessageConverter {
     }
 
 
-    public @NonNull ContentValues messageToContentValues(final Message message)
+    public @NonNull ContentValues messageToContentValues(Integer settingsId, final Message message)
             throws IOException, MessagingException {
         if (message == null) throw new MessagingException("message is null");
 
@@ -148,6 +150,9 @@ public class MessageConverter {
                 values.put(Telephony.TextBasedSmsColumns.THREAD_ID, threadHelper.getThreadId(context, address));
                 values.put(Telephony.TextBasedSmsColumns.READ,
                         markAsReadOnRestore ? "1" : Headers.get(message, Headers.READ));
+                if (App.SimCards.length > 1) {
+                    values.put(Telephony.TextBasedSmsColumns.SUBSCRIPTION_ID, settingsId);
+                }
                 break;
             case CALLLOG:
                 values.put(CallLog.Calls.NUMBER, Headers.get(message, Headers.ADDRESS));
@@ -155,6 +160,9 @@ public class MessageConverter {
                 values.put(CallLog.Calls.DATE, Headers.get(message, Headers.DATE));
                 values.put(CallLog.Calls.DURATION, Long.valueOf(Headers.get(message, Headers.DURATION)));
                 values.put(CallLog.Calls.NEW, 0);
+                if (App.SimCards.length > 1) {
+                    values.put(CallLog.Calls.PHONE_ACCOUNT_ID, getSimCardNumberOrIccId(settingsId));
+                }
 
                 PersonRecord record = personLookup.lookupPerson(Headers.get(message, Headers.ADDRESS));
                 if (!record.isUnknown()) {
@@ -168,6 +176,15 @@ public class MessageConverter {
         }
 
         return values;
+    }
+
+    private String getSimCardNumberOrIccId(Integer settingsId) {
+        if (preferences.getUseIccIdForRestore()) {
+            return App.SimCards[settingsId].IccId;
+        } else {
+            Integer simCardNumber = settingsId + 1;
+            return simCardNumber.toString();
+        }
     }
 
     public DataType getDataType(Message message) throws MessagingException {

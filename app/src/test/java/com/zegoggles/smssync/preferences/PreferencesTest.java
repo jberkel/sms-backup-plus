@@ -24,21 +24,26 @@ public class PreferencesTest {
         assertThat(preferences.isFirstUse()).isFalse();
     }
     @Test public void shouldTestForFirstBackup() throws Exception {
-        assertThat(preferences.isFirstBackup()).isTrue();
+        assertThat(preferences.isFirstBackup(0)).isTrue();
     }
 
     @Test public void shouldTestForFirstBackupSMS() throws Exception {
-        preferences.getDataTypePreferences().setMaxSyncedDate(SMS, 1234);
-        assertThat(preferences.isFirstBackup()).isFalse();
+        preferences.getDataTypePreferences().setMaxSyncedDate(SMS, 1234, 0);
+        assertThat(preferences.isFirstBackup(0)).isFalse();
+    }
+
+    @Test public void shouldTestForFirstBackupSMSForSecondSIM() throws Exception {
+        preferences.getDataTypePreferences().setMaxSyncedDate(SMS, 1234, 1);
+        assertThat(preferences.isFirstBackup(1)).isFalse();
     }
 
     @Test public void shouldTestForFirstBackupMMS() throws Exception {
-        preferences.getDataTypePreferences().setMaxSyncedDate(MMS, 1234);
-        assertThat(preferences.isFirstBackup()).isFalse();
+        preferences.getDataTypePreferences().setMaxSyncedDate(MMS, 1234, 0);
+        assertThat(preferences.isFirstBackup(0)).isFalse();
     }
 
     @Test public void shouldTestForFirstBackupCallLog() throws Exception {
-        preferences.getDataTypePreferences().setMaxSyncedDate(CALLLOG, 1234);
-        assertThat(preferences.isFirstBackup()).isFalse();
+        preferences.getDataTypePreferences().setMaxSyncedDate(CALLLOG, 1234, 0);
+        assertThat(preferences.isFirstBackup(0)).isFalse();
     }
 }

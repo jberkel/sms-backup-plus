@@ -17,28 +17,36 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(RobolectricTestRunner.class)
 public class SmsBroadcastReceiverTest {
+
+    public class TestSmsBroadcastReceiver extends SmsBroadcastReceiver {
+        private boolean atLeastOneLoginInformationSet;
+
+        public void SetAtLeastOneLoginInformationSet(boolean value) {
+            atLeastOneLoginInformationSet = value;
+        }
+
+        @Override protected BackupJobs getBackupJobs(Context context) {
+            return backupJobs;
+        }
+
+        @Override protected Preferences getPreferences(Context context) {
+            return preferences;
+        }
+
+        @Override protected boolean atLeastOneLoginInformationSet(Context context) {
+            return atLeastOneLoginInformationSet;
+        }
+    }
+
     Context context;
     @Mock BackupJobs backupJobs;
     @Mock Preferences preferences;
-    @Mock AuthPreferences authPreferences;
-    SmsBroadcastReceiver receiver;
+    TestSmsBroadcastReceiver receiver;
 
     @Before public void before() {
         initMocks(this);
         context = RuntimeEnvironment.application;
-        receiver = new SmsBroadcastReceiver() {
-            @Override protected BackupJobs getBackupJobs(Context context) {
-                return backupJobs;
-            }
-
-            @Override protected Preferences getPreferences(Context context) {
-                return preferences;
-            }
-
-            @Override protected AuthPreferences getAuthPreferences(Context context) {
-                return authPreferences;
-            }
-        };
+        receiver = new TestSmsBroadcastReceiver();
     }
 
     @Test public void shouldScheduleIncomingBackupAfterIncomingMessage() throws Exception {
@@ -56,22 +64,22 @@ public class SmsBroadcastReceiverTest {
 
     @Test public void shouldNotScheduleIfLoginInformationIsNotSet() throws Exception {
         mockScheduled();
-        when(authPreferences.isLoginInformationSet()).thenReturn(false);
+        receiver.SetAtLeastOneLoginInformationSet(false);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
         verifyZeroInteractions(backupJobs);
     }
 
     @Test public void shouldNotScheduleIfFirstBackupHasNotBeenRun() throws Exception {
         mockScheduled();
-        when(preferences.isFirstBackup()).thenReturn(true);
+        when(preferences.isFirstBackup(0)).thenReturn(true);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
         verifyZeroInteractions(backupJobs);
     }
 
     private void mockScheduled() {
-        when(authPreferences.isLoginInformationSet()).thenReturn(true);
+        receiver.SetAtLeastOneLoginInformationSet(true);
         when(preferences.isAutoBackupEnabled()).thenReturn(true);
-        when(preferences.isFirstBackup()).thenReturn(false);
+        when(preferences.isFirstBackup(0)).thenReturn(false);
         when(preferences.isUseOldScheduler()).thenReturn(true);
     }
 }

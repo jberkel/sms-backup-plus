@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceScreen;
 
 import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
@@ -19,6 +20,7 @@ import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
 import com.zegoggles.smssync.activity.events.SettingsResetEvent;
 import com.zegoggles.smssync.mail.DataType;
 import com.zegoggles.smssync.preferences.AuthPreferences;
+import com.zegoggles.smssync.utils.SimCardHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +39,27 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     @Override
     public void onCreatePreferences(Bundle bundle, String rootKey) {
         super.onCreatePreferences(bundle, rootKey);
-        authPreferences = new AuthPreferences(getContext());
-        findPreference(AdvancedSettings.Server.class.getName()).setSummaryProvider(new Preference.SummaryProvider() {
+
+        //XOAuth2 is legacy and therefore not considered for multi-sim (authPreferences only used in this context here)
+        authPreferences = new AuthPreferences(getContext(), 0);
+
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            if (settingsId>0) {
+                addAdvancedSettingsForMultipleSimCards(settingsId);
+            }
+
+            setSummaryForAdvancedServerSettings(settingsId);
+        }
+
+        PreferenceScreen advancedSettings = findPreference(AdvancedSettings.Server.class.getName());
+        advancedSettings.setTitle(SimCardHelper.addPhoneNumberIfMultiSim(advancedSettings.getTitle().toString(), 0));
+    }
+
+    private void setSummaryForAdvancedServerSettings(final Integer settingsId) {
+        findPreference(SimCardHelper.addSettingsId(AdvancedSettings.Server.class.getName(), settingsId)).setSummaryProvider(new Preference.SummaryProvider() {
             @Override
             public CharSequence provideSummary(Preference preference) {
+                authPreferences = new AuthPreferences(getContext(), settingsId);
                 if (authPreferences.usePlain() && authPreferences.isLoginInformationSet()) {
                     return authPreferences.toString();
                 } else {
@@ -54,7 +73,6 @@ public class MainSettings extends SMSBackupPreferenceFragment {
     public void onStart() {
         super.onStart();
         App.register(this);
-
     }
     @Override
     public void onDestroy() {
@@ -169,5 +187,28 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         } catch (Exception e) {
             Log.w(TAG, e);
         }
+    }
+
+    private void addAdvancedSettingsForMultipleSimCards(Integer settingsId) {
+        PreferenceScreen advancedSettings = findPreference(AdvancedSettings.Server.class.getName());
+        PreferenceScreen mainSettings = getPreferenceScreen();
+        if (advancedSettings != null) {
+            try {
+                PreferenceScreen clone = clonePreferenceScreen(advancedSettings, settingsId);
+                clone.setTitle(SimCardHelper.addPhoneNumberIfMultiSim(clone.getTitle().toString(), settingsId));
+                insertPreference(advancedSettings.getOrder()+1, mainSettings, clone);
+            } catch (Exception e) {
+                Log.w(TAG, "couldn't add advanced settings more than once");
+            }
+
+        }
+    }
+
+    private PreferenceScreen clonePreferenceScreen(PreferenceScreen advancedSettings, Integer settingsId) throws Exception {
+        PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(getContext());
+        screen.setTitle(advancedSettings.getTitle());
+        screen.setKey(SimCardHelper.addSettingsId(advancedSettings.getKey(), settingsId));
+        screen.setFragment(advancedSettings.getFragment());
+        return screen;
     }
 }

@@ -37,7 +37,6 @@ import com.zegoggles.smssync.service.exception.BackupDisabledException;
 import com.zegoggles.smssync.service.exception.ConnectivityException;
 import com.zegoggles.smssync.service.exception.MissingPermissionException;
 import com.zegoggles.smssync.service.exception.NoConnectionException;
-import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
@@ -46,6 +45,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 import static android.R.drawable.stat_sys_warning;
 import static com.zegoggles.smssync.App.CHANNEL_ID;
@@ -114,20 +114,16 @@ public class SmsBackupService extends ServiceBase {
             EnumSet<DataType> enabledTypes = getEnabledBackupTypes();
             checkPermissions(enabledTypes);
             if (backupType != SKIP) {
-                checkCredentials();
                 if (getPreferences().isUseOldScheduler()) {
                     legacyCheckConnectivity();
                 }
             }
             appLog(R.string.app_log_start_backup, backupType);
-            getBackupTask().execute(getBackupConfig(backupType, enabledTypes, getBackupImapStore()));
+            getBackupTask().execute(getBackupConfig(backupType, enabledTypes, getBackupImapStores()));
         } catch (MessagingException e) {
             Log.w(TAG, e);
             moveToState(state.transition(ERROR, e));
         } catch (ConnectivityException e) {
-            moveToState(state.transition(ERROR, e));
-        } catch (RequiresLoginException e) {
-            appLog(R.string.app_log_missing_credentials);
             moveToState(state.transition(ERROR, e));
         } catch (BackupDisabledException e) {
             moveToState(state.transition(FINISHED_BACKUP, e));
@@ -148,9 +144,9 @@ public class SmsBackupService extends ServiceBase {
 
     private BackupConfig getBackupConfig(BackupType backupType,
                                          EnumSet<DataType> enabledTypes,
-                                         BackupImapStore imapStore) {
+                                         List<BackupImapStore> imapStores) {
         return new BackupConfig(
-            imapStore,
+            imapStores,
             0,
             getPreferences().getMaxItemsPerSync(),
             getPreferences().getBackupContactGroup(),
@@ -166,12 +162,6 @@ public class SmsBackupService extends ServiceBase {
             throw new BackupDisabledException();
         }
         return dataTypes;
-    }
-
-    private void checkCredentials() throws RequiresLoginException {
-        if (!getAuthPreferences().isLoginInformationSet()) {
-            throw new RequiresLoginException();
-        }
     }
 
     @SuppressWarnings("deprecation")

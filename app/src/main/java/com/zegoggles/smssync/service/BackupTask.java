@@ -14,6 +14,7 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.OAuth2Client;
 import com.zegoggles.smssync.auth.TokenRefreshException;
+import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.auth.TokenRefresher;
 import com.zegoggles.smssync.calendar.CalendarAccessor;
 import com.zegoggles.smssync.contacts.ContactAccessor;
@@ -31,6 +32,8 @@ import com.zegoggles.smssync.service.state.SmsSyncState;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.HashMap;
+
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -52,7 +55,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final SmsBackupService service;
     private final BackupItemsFetcher fetcher;
     private final MessageConverter converter;
-    private final CalendarSyncer calendarSyncer;
+    private final HashMap<Integer, CalendarSyncer> calendarSyncerList = new HashMap<Integer, CalendarSyncer>();
     private final AuthPreferences authPreferences;
     private final Preferences preferences;
     private final ContactAccessor contactAccessor;
@@ -73,16 +76,15 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         this.contactAccessor = new ContactAccessor();
         this.converter = new MessageConverter(context, service.getPreferences(), authPreferences.getUserEmail(), personLookup, contactAccessor);
 
-        if (preferences.isCallLogCalendarSyncEnabled()) {
-            calendarSyncer = new CalendarSyncer(
-                CalendarAccessor.Get.instance(service.getContentResolver()),
-                preferences.getCallLogCalendarId(),
-                personLookup,
-                new CallFormatter(context.getResources())
-            );
-
-        } else {
-            calendarSyncer = null;
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            if (preferences.isCallLogCalendarSyncEnabled(settingsId)) {
+                calendarSyncerList.put(settingsId, new CalendarSyncer(
+                    CalendarAccessor.Get.instance(service.getContentResolver()),
+                    preferences.getCallLogCalendarId(settingsId),
+                    personLookup,
+                    new CallFormatter(context.getResources())
+                ));
+            }
         }
         this.tokenRefresher = new TokenRefresher(service, new OAuth2Client(authPreferences.getOAuth2ClientId()), authPreferences);
     }
@@ -98,7 +100,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         this.service = service;
         this.fetcher = fetcher;
         this.converter = messageConverter;
-        this.calendarSyncer = syncer;
+        this.calendarSyncerList.put(0, syncer);
         this.authPreferences = authPreferences;
         this.preferences = preferences;
         this.contactAccessor = accessor;
@@ -139,48 +141,80 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     }
 
     private BackupState fetchAndBackupItems(BackupConfig config) {
-        BackupCursors cursors = null;
+        HashMap<Integer, BackupCursors> cursorList = new HashMap<Integer, BackupCursors>();
+        Exception lastException = null;
         try {
             final ContactGroupIds groupIds = contactAccessor.getGroupContactIds(service.getContentResolver(), config.groupToBackup);
+            final Context context = service.getApplicationContext();
 
-            cursors = new BulkFetcher(fetcher).fetch(config.typesToBackup, groupIds, config.maxItemsPerSync);
-            final int itemsToSync = cursors.count();
+            int itemsToSync = 0;
+            for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+                if (!(new AuthPreferences(context, settingsId).isLoginInformationSet())) {
+                    lastException = new RequiresLoginException();
+                    continue;
+                }
+
+                BackupCursors cursors = new BulkFetcher(fetcher).fetch(config.typesToBackup, groupIds, settingsId, config.maxItemsPerSync);
+                itemsToSync += cursors.count();
+                if (cursors.count() > 0) {
+                    appLog(R.string.app_log_backup_messages, cursors.count(SMS), cursors.count(MMS), cursors.count(CALLLOG), App.SimCards[settingsId]);
+                    if (config.debug) {
+                        appLog(R.string.app_log_backup_messages_with_config, config);
+                    }
+                    cursorList.put(settingsId, cursors);
+                }
+            }
+
+            int[] result = new int[2];
+            result[0] = itemsToSync;
+            result[1] = 0;
+            for (int settingsId : cursorList.keySet()) {
+                BackupCursors cursors = cursorList.get(settingsId);
+                try {
+                    if (cursors.count() > 0) {
+                        result = backupCursors(settingsId, cursors, config.imapStores.get(settingsId), config.backupType, result[0], result[1]);
+                    } else {
+                        appLog(R.string.app_log_skip_backup_no_items);
+
+                        if (preferences.isFirstBackup(settingsId)) {
+                            // If this is the first backup we need to write something to MAX_SYNCED_DATE
+                            // such that we know that we've performed a backup before.
+                            preferences.getDataTypePreferences().setMaxSyncedDate(SMS, MAX_SYNCED_DATE, settingsId);
+                            preferences.getDataTypePreferences().setMaxSyncedDate(MMS, MAX_SYNCED_DATE, settingsId);
+                        }
+                    }
+                } catch (XOAuth2AuthenticationFailedException e) {
+                    try {
+                        return handleAuthError(config, e);
+                    } catch (XOAuth2AuthenticationFailedException eInner) {
+                        lastException = eInner;
+                    }
+                } catch (AuthenticationFailedException e) {
+                    lastException = e;
+                } catch (MessagingException e) {
+                    lastException = e;
+                } catch (SecurityException e) {
+                    lastException = e;
+                }
+            }
+            if (lastException != null) return transition(ERROR, lastException);
 
             if (itemsToSync > 0) {
-                appLog(R.string.app_log_backup_messages, cursors.count(SMS), cursors.count(MMS), cursors.count(CALLLOG));
-                if (config.debug) {
-                    appLog(R.string.app_log_backup_messages_with_config, config);
-                }
-
-                return backupCursors(cursors, config.imapStore, config.backupType, itemsToSync);
+                return new BackupState(FINISHED_BACKUP, result[1], result[0], config.backupType, null, null);
             } else {
-                appLog(R.string.app_log_skip_backup_no_items);
-
-                if (preferences.isFirstBackup()) {
-                    // If this is the first backup we need to write something to MAX_SYNCED_DATE
-                    // such that we know that we've performed a backup before.
-                    preferences.getDataTypePreferences().setMaxSyncedDate(SMS, MAX_SYNCED_DATE);
-                    preferences.getDataTypePreferences().setMaxSyncedDate(MMS, MAX_SYNCED_DATE);
-                }
                 Log.i(TAG, "Nothing to do.");
                 return transition(FINISHED_BACKUP, null);
             }
-        } catch (XOAuth2AuthenticationFailedException e) {
-            return handleAuthError(config, e);
-        } catch (AuthenticationFailedException e) {
-            return transition(ERROR, e);
-        } catch (MessagingException e) {
-            return transition(ERROR, e);
-        } catch (SecurityException e) {
-            return transition(ERROR, e);
         } finally {
-            if (cursors != null) {
-                cursors.close();
+            if (cursorList != null) {
+                for (BackupCursors cursors : cursorList.values()) {
+                    cursors.close();
+                }
             }
         }
     }
 
-    private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) {
+    private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) throws XOAuth2AuthenticationFailedException {
         if (e.getStatus() == 400) {
             appLogDebug("need to perform xoauth2 token refresh");
             if (config.currentTry < 1) {
@@ -189,7 +223,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                     // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
                     // since the auth params on it are immutable
                     appLogDebug("token refreshed, retrying");
-                    return fetchAndBackupItems(config.retryWithStore(service.getBackupImapStore()));
+                    return fetchAndBackupItems(config.retryWithStore(service.getBackupImapStores()));
                 } catch (MessagingException ignored) {
                     Log.w(TAG, ignored);
                 } catch (TokenRefreshException refreshException) {
@@ -201,14 +235,16 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         } else {
             appLogDebug("unexpected xoauth status code " + e.getStatus());
         }
-        return transition(ERROR, e);
+        throw e;
     }
 
     private BackupState skip(Iterable<DataType> types) {
         appLog(R.string.app_log_skip_backup_skip_messages);
         for (DataType type : types) {
             try {
-                preferences.getDataTypePreferences().setMaxSyncedDate(type, fetcher.getMostRecentTimestamp(type));
+                for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+                    preferences.getDataTypePreferences().setMaxSyncedDate(type, fetcher.getMostRecentTimestamp(type), settingsId);
+                }
             } catch (SecurityException e ) {
                 return new BackupState(ERROR, 0, 0, MANUAL, type, e);
             }
@@ -255,7 +291,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         App.post(state);
     }
 
-    private BackupState backupCursors(BackupCursors cursors, BackupImapStore store, BackupType backupType, int itemsToSync)
+    private int[] backupCursors(Integer settingsId, BackupCursors cursors, BackupImapStore store, BackupType backupType, int itemsToSync, int backedUpItems)
             throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
         publish(LOGIN);
@@ -263,12 +299,11 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
 
         try {
             publish(CALC);
-            int backedUpItems = 0;
             while (!isCancelled() && cursors.hasNext()) {
                 BackupCursors.CursorAndType cursor = cursors.next();
                 if (LOCAL_LOGV) Log.v(TAG, "backing up: " + cursor);
 
-                ConversionResult result = converter.convertMessages(cursor.cursor, cursor.type);
+                ConversionResult result = converter.convertMessages(cursor.cursor, cursor.type, settingsId);
                 if (!result.isEmpty()) {
                     List<Message> messages = result.getMessages();
 
@@ -277,12 +312,13 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                                 messages.size(), cursor.type));
                     }
 
-                    store.getFolder(cursor.type, preferences.getDataTypePreferences()).appendMessages(messages);
+                    store.getFolder(cursor.type, preferences.getDataTypePreferences(), settingsId).appendMessages(messages);
 
-                    if (cursor.type == CALLLOG && calendarSyncer != null) {
-                        calendarSyncer.syncCalendar(result);
+                    if (cursor.type == CALLLOG && calendarSyncerList.containsKey(settingsId)) {
+                        calendarSyncerList.get(settingsId).syncCalendar(result);
                     }
-                    preferences.getDataTypePreferences().setMaxSyncedDate(cursor.type, result.getMaxDate());
+
+                    preferences.getDataTypePreferences().setMaxSyncedDate(cursor.type, result.getMaxDate(), settingsId);
                     backedUpItems += messages.size();
                 } else {
                     Log.w(TAG, "no messages converted");
@@ -292,10 +328,11 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, backupType, cursor.type, null));
             }
 
-            return new BackupState(FINISHED_BACKUP,
-                    backedUpItems,
-                    itemsToSync,
-                    backupType, null, null);
+            int[] retVal = new int[2];
+
+            retVal[0] = itemsToSync;
+            retVal[1] = backedUpItems;
+            return retVal;
         } finally {
             store.closeFolders();
         }

@@ -17,7 +17,7 @@ public class AuthPreferencesTest {
 
     @Before public void before() {
         initMocks(this);
-        authPreferences = new AuthPreferences(RuntimeEnvironment.application);
+        authPreferences = new AuthPreferences(RuntimeEnvironment.application, 0);
     }
 
     @Test public void testStoreUri() throws Exception {

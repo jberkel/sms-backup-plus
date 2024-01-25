@@ -230,7 +230,8 @@ public class StatusPreference extends Preference implements View.OnClickListener
     private void onAuthFailed() {
         statusLabel.setText(R.string.status_auth_failure);
 
-        if (new AuthPreferences(getContext()).useXOAuth()) {
+        ////XOAuth2 is legacy and therefore not considered for multi-sim
+        if (new AuthPreferences(getContext(), 0).useXOAuth()) {
             syncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
         } else {
             syncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
@@ -276,7 +277,12 @@ public class StatusPreference extends Preference implements View.OnClickListener
     }
 
     private void idle() {
-        syncDetailsLabel.setText(getLastSyncText(preferences.getDataTypePreferences().getMostRecentSyncedDate()));
+        long mostRecentSyncedDate = 0;
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            long mostRecentSyncedDateForSettingsId = preferences.getDataTypePreferences().getMostRecentSyncedDate(settingsId);
+            if (mostRecentSyncedDateForSettingsId>mostRecentSyncedDate) mostRecentSyncedDate = mostRecentSyncedDateForSettingsId;
+        }
+        syncDetailsLabel.setText(getLastSyncText(mostRecentSyncedDate));
         statusLabel.setText(R.string.status_idle);
         statusLabel.setTextColor(idleColor);
         statusIcon.setImageDrawable(idle);

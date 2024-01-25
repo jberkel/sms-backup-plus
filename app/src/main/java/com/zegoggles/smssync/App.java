@@ -44,6 +44,8 @@ import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.BootReceiver;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
 import com.zegoggles.smssync.service.BackupJobs;
+import com.zegoggles.smssync.utils.SimCard;
+import com.zegoggles.smssync.utils.SimCardHelper;
 
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
@@ -60,6 +62,8 @@ public class App extends Application {
     /** Google Play Services present on this device? */
     public static boolean gcmAvailable;
 
+    public static SimCard[] SimCards;
+
     private Preferences preferences;
     private BackupJobs backupJobs;
 
@@ -68,6 +72,7 @@ public class App extends Application {
         super.onCreate();
         setupStrictMode();
         gcmAvailable = GooglePlayServices.isAvailable(this);
+        SimCards = SimCardHelper.getSimCards(getApplicationContext());
         preferences = new Preferences(this);
         preferences.migrate();
 

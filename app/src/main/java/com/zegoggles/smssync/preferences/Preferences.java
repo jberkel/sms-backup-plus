@@ -26,6 +26,7 @@ import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.contacts.ContactGroup;
 import com.zegoggles.smssync.mail.DataType;
+import com.zegoggles.smssync.utils.SimCardHelper;
 
 import java.util.Locale;
 
@@ -44,6 +45,7 @@ import static com.zegoggles.smssync.preferences.Preferences.Keys.INCOMING_TIMEOU
 import static com.zegoggles.smssync.preferences.Preferences.Keys.LAST_VERSION_CODE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAIL_SUBJECT_PREFIX;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ_ON_RESTORE;
+import static com.zegoggles.smssync.preferences.Preferences.Keys.USE_ICC_ID_FOR_RESTORE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MARK_AS_READ_TYPES;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_RESTORE;
 import static com.zegoggles.smssync.preferences.Preferences.Keys.MAX_ITEMS_PER_SYNC;
@@ -90,6 +92,7 @@ public class Preferences {
         RESTORE_STARRED_ONLY("restore_starred_only"),
         MARK_AS_READ_TYPES("mark_as_read_types"),
         MARK_AS_READ_ON_RESTORE("mark_as_read_on_restore"),
+        USE_ICC_ID_FOR_RESTORE("use_icc_id_for_restore"),
         THIRD_PARTY_INTEGRATION("third_party_integration"),
         APP_LOG("app_log"),
         APP_LOG_DEBUG("app_log_debug"),
@@ -128,8 +131,8 @@ public class Preferences {
         return new ContactGroup(getStringAsInt(BACKUP_CONTACT_GROUP, -1));
     }
 
-    public boolean isCallLogCalendarSyncEnabled() {
-        return getCallLogCalendarId() >= 0 &&
+    public boolean isCallLogCalendarSyncEnabled(Integer settingsId) {
+        return getCallLogCalendarId(settingsId) >= 0 &&
                     preferences.getBoolean(CALLLOG_SYNC_CALENDAR_ENABLED.key, false);
     }
 
@@ -137,8 +140,8 @@ public class Preferences {
         return preferences.getBoolean(CALLLOG_BACKUP_AFTER_CALL.key, false);
     }
 
-    public int getCallLogCalendarId() {
-        return getStringAsInt(CALLLOG_SYNC_CALENDAR, -1);
+    public int getCallLogCalendarId(Integer settingsId) {
+        return getStringAsInt(SimCardHelper.addSettingsId(CALLLOG_SYNC_CALENDAR.key, settingsId), -1);
     }
 
     public  CallLogTypes getCallLogType() {
@@ -214,13 +217,17 @@ public class Preferences {
         return preferences.getBoolean(MARK_AS_READ_ON_RESTORE.key, Defaults.MARK_AS_READ_ON_RESTORE);
     }
 
+    public boolean getUseIccIdForRestore() {
+        return preferences.getBoolean(USE_ICC_ID_FOR_RESTORE.key, Defaults.USE_ICC_ID_FOR_RESTORE);
+    }
+
     public AddressStyle getEmailAddressStyle() {
         return getDefaultType(preferences, Keys.EMAIL_ADDRESS_STYLE.key, AddressStyle.class, AddressStyle.NAME);
     }
 
-    public boolean isFirstBackup() {
+    public boolean isFirstBackup(Integer settingsId) {
         for (DataType type : DataType.values()) {
-            if (preferences.contains(type.maxSyncedPreference)) {
+            if (preferences.contains(SimCardHelper.addSettingsId(type.maxSyncedPreference, settingsId))) {
                 return false;
             }
         }
@@ -228,7 +235,7 @@ public class Preferences {
     }
 
     public boolean isFirstUse() {
-        if (isFirstBackup() && !preferences.contains(FIRST_USE.key)) {
+        if (isFirstBackup(0) && !preferences.contains(FIRST_USE.key)) {
             preferences.edit().putBoolean(FIRST_USE.key, false).commit();
             return true;
         } else {
@@ -292,7 +299,9 @@ public class Preferences {
     }
 
     public void migrate() {
-        new AuthPreferences(context).migrate();
+        for (Integer settingsId = 0; settingsId < App.SimCards.length; settingsId++) {
+            new AuthPreferences(context, settingsId).migrate();
+        }
     }
 
     static <T extends Enum<T>> T getDefaultType(SharedPreferences preferences, String pref, Class<T> tClazz, T defaultType) {

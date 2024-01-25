@@ -34,10 +34,10 @@ public class BulkFetcherTest {
 
 
     @Test public void shouldFetchAllItems() throws Exception {
-        when(fetcher.getItemsForDataType(SMS, null, 50)).thenReturn(cursor(3));
-        when(fetcher.getItemsForDataType(MMS, null, 47)).thenReturn(cursor(5));
+        when(fetcher.getItemsForDataType(SMS, null, 0, 50)).thenReturn(cursor(3));
+        when(fetcher.getItemsForDataType(MMS, null, 0, 47)).thenReturn(cursor(5));
 
-        BackupCursors cursors = bulkFetcher.fetch(EnumSet.of(SMS, MMS), null, 50);
+        BackupCursors cursors = bulkFetcher.fetch(EnumSet.of(SMS, MMS), null, 0, 50);
 
         assertThat(cursors.count()).isEqualTo(8);
         assertThat(cursors.count(SMS)).isEqualTo(3);
@@ -45,19 +45,19 @@ public class BulkFetcherTest {
     }
 
     @Test public void shouldFetchAllItemsRespectingMaxItems() throws Exception {
-        when(fetcher.getItemsForDataType(SMS, null, 5)).thenReturn(cursor(5));
+        when(fetcher.getItemsForDataType(SMS, null, 0, 5)).thenReturn(cursor(5));
 
-        BackupCursors cursors = bulkFetcher.fetch(EnumSet.of(SMS, MMS), null, 5);
+        BackupCursors cursors = bulkFetcher.fetch(EnumSet.of(SMS, MMS), null, 0, 5);
 
         assertThat(cursors.count()).isEqualTo(5);
         assertThat(cursors.count(SMS)).isEqualTo(5);
 
-        verify(fetcher, never()).getItemsForDataType(eq(DataType.MMS), any(ContactGroupIds.class), anyInt());
+        verify(fetcher, never()).getItemsForDataType(eq(DataType.MMS), any(ContactGroupIds.class), anyInt(), anyInt());
     }
 
 
     @Test public void shouldFetchAllItemsEmptyList() throws Exception {
-        BackupCursors cursors = bulkFetcher.fetch(EnumSet.noneOf(DataType.class), null, 50);
+        BackupCursors cursors = bulkFetcher.fetch(EnumSet.noneOf(DataType.class), null, 0, 50);
         assertThat(cursors.count()).isEqualTo(0);
     }
 
