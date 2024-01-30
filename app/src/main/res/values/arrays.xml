@@ -90,6 +90,8 @@
   </string-array>
 
   <string-array name="auto_backup_incoming_schedule_entries">
+    <item>@string/_5seconds</item>
+    <item>@string/_10seconds</item>
     <item>@string/_1min</item>
     <item>@string/_3mins</item>
     <item>@string/_30mins</item>
@@ -98,6 +100,8 @@
   </string-array>
 
   <string-array name="auto_backup_incoming_schedule_values">
+    <item>5</item>
+    <item>10</item>
     <item>60</item>
     <item>180</item>
     <item>1800</item>

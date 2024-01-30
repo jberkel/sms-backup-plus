@@ -234,6 +234,8 @@
   <string name="_24h">24 小时</string>
   <string name="never">禁用</string>
 
+  <string name="_5seconds">5 秒</string>
+  <string name="_10seconds">10 秒</string>
   <string name="_1min">1 分钟</string>
   <string name="_3mins">3 分钟</string>
   <string name="_30mins">30 分钟</string>
