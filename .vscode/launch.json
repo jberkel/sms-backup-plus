@@ -1,0 +1,46 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "android",
+            "request": "launch",
+            "name": "Debug App",
+            "appSrcRoot": "${workspaceRoot}/app/src/main",
+            "apkFile": "${workspaceRoot}/app/build/outputs/apk/debug/app-debug.apk",
+            "adbSocket": "localhost:5037",
+            "autoStartADB": true,
+            "staleBuild": "warn",
+            "targetDevice": "",
+            "manifestFile": "${workspaceRoot}/app/src/main/AndroidManifest.xml",
+            "pmInstallArgs": [
+                "-r"
+            ],
+            "amStartArgs": [
+                "-D",
+                "--activity-brought-to-front",
+                "-a android.intent.action.MAIN",
+                "-n com.zegoggles.smssync/com.zegoggles.smssync.activity.MainActivity"
+            ],
+            "postLaunchPause": 1000,
+            "trace": false
+        },
+        {
+            "type": "node-terminal",
+            "request": "launch",
+            "name": "Build App",
+            "command": "./gradlew assembleDebug && sleep 5 && exit"
+        },
+        {
+            "type": "node-terminal",
+            "request": "launch",
+            "name": "Kill adb",
+            "command": "adb kill-server && sleep 5 && exit"
+        },
+        {
+            "type": "node-terminal",
+            "request": "launch",
+            "name": "Connect adb",
+            "command": "adb connect ${mobiledev} && sleep 5 && exit"
+        }
+    ]
+}
