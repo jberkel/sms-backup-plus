@@ -9,4 +9,9 @@ public class MissingPermissionException extends Exception {
     public MissingPermissionException(Set<String> permissions) {
         this.permissions = permissions;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + permissions;      // Set<String>.toString produces "[a, b, c]"
+    }
 }
