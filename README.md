@@ -387,6 +387,8 @@ only keep a few hundred or so messages in the SMS label.
 Next time you restore it will only restore those messages and it will be a lot
 faster.
 
+One user reported ([868#issuecomment-379922903](https://github.com/jberkel/sms-backup-plus/issues/868#issuecomment-379922903)) that a restore of over 47000 messages worked only after unchecking the call log restore and swiping to keep the screen on.
+
 ### <a id="faq-authentication">Authentication questions</a>
 
 #### <a id="faq-authentication-revoke-access">How can I revoke the app's access to my Gmail account?</a>
