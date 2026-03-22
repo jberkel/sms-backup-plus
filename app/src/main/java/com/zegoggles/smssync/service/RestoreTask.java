@@ -1,21 +1,20 @@
 package com.zegoggles.smssync.service;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import androidx.annotation.NonNull;
 import android.provider.CallLog;
 import android.provider.Telephony;
-import androidx.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.FetchProfile;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.store.imap.XOAuth2AuthenticationFailedException;
-import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.Consts;
 import com.zegoggles.smssync.auth.TokenRefreshException;
@@ -26,6 +25,8 @@ import com.zegoggles.smssync.mail.MessageConverter;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.RestoreState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +34,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -45,18 +49,20 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.LOGIN;
 import static com.zegoggles.smssync.service.state.SmsSyncState.RESTORE;
 import static com.zegoggles.smssync.service.state.SmsSyncState.UPDATING_THREADS;
 
-class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
+class RestoreTask {
     private static final String ERROR = "error";
     private Set<String> smsIds = new HashSet<String>();
     private Set<String> callLogIds = new HashSet<String>();
     private Set<String> uids = new HashSet<String>();
 
-    @SuppressLint("StaticFieldLeak")
     private final SmsRestoreService service;
     private final ContentResolver resolver;
     private final MessageConverter converter;
     private final TokenRefresher tokenRefresher;
     private final Preferences preferences;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
     RestoreTask(SmsRestoreService service,
                 MessageConverter converter,
@@ -69,29 +75,43 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         this.preferences = service.getPreferences();
     }
 
-    @Override
-    protected void onPreExecute() {
+    void execute(final RestoreConfig config) {
         App.register(this);
-    }
-
-    @Subscribe public void canceled(CancelEvent canceled) {
-        cancel(canceled.mayInterruptIfRunning());
-    }
-
-    @NonNull protected RestoreState doInBackground(RestoreConfig... params) {
-        if (params == null || params.length == 0) throw new IllegalArgumentException("No config passed");
-        RestoreConfig config = params[0];
-
-        if (!config.restoreSms && !config.restoreCallLog) {
-            return new RestoreState(FINISHED_RESTORE, 0, 0, 0, 0, null, null);
-        } else {
-            try {
-                service.acquireLocks();
-                return restore(config);
-            } finally {
-                service.releaseLocks();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final RestoreState result;
+                if (!config.restoreSms && !config.restoreCallLog) {
+                    result = new RestoreState(FINISHED_RESTORE, 0, 0, 0, 0, null, null);
+                } else {
+                    try {
+                        service.acquireLocks();
+                        result = restore(config);
+                    } finally {
+                        service.releaseLocks();
+                    }
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result != null) {
+                            Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
+                            post(result);
+                        }
+                        App.unregister(RestoreTask.this);
+                    }
+                });
             }
-        }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void canceled(CancelEvent canceled) {
+        this.cancelled.set(canceled.mayInterruptIfRunning());
+    }
+
+    private boolean isCancelled() {
+        return cancelled.get();
     }
 
     private RestoreState restore(RestoreConfig config) {
@@ -181,36 +201,24 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         publishProgress(transition(smsSyncState, null));
     }
 
+    private void publishProgress(final RestoreState state) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!isCancelled()) {
+                    post(state);
+                }
+            }
+        });
+    }
+
     private RestoreState transition(SmsSyncState smsSyncState, Exception exception) {
         return service.getState().transition(smsSyncState, exception);
     }
 
-    @Override
-    protected void onPostExecute(RestoreState result) {
-        if (result != null) {
-            Log.d(TAG, "finished (" + result + "/" + uids.size() + ")");
-            post(result);
-        }
-        App.unregister(this);
-    }
-
-    @Override
-    protected void onCancelled() {
-        Log.d(TAG, "restore cancelled");
-        post(transition(CANCELED_RESTORE, null));
-        App.unregister(this);
-    }
-
-    @Override
-    protected void onProgressUpdate(RestoreState... progress) {
-        if (progress != null && progress.length > 0 && !isCancelled()) {
-            post(progress[0]);
-        }
-    }
-
     private void post(RestoreState changed) {
         if (changed == null) return;
-        App.post(changed);
+        App.postSticky(changed);
     }
 
     @SuppressWarnings("unchecked")

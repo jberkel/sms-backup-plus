@@ -8,8 +8,6 @@ import androidx.annotation.Nullable;
 import android.util.Log;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.internet.BinaryTempFileBody;
-import com.squareup.otto.Produce;
-import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.OAuth2Client;
@@ -20,11 +18,12 @@ import com.zegoggles.smssync.mail.PersonLookup;
 import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.service.exception.SmsProviderNotWritableException;
 import com.zegoggles.smssync.service.state.RestoreState;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FilenameFilter;
 
-import static com.zegoggles.smssync.App.CHANNEL_ID;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
 import static com.zegoggles.smssync.compat.SmsReceiver.isSmsBackupDefaultSmsApp;
@@ -64,8 +63,7 @@ public class SmsRestoreService extends ServiceBase {
      * write to the SMS Provider.
      */
     private boolean canWriteToSmsProvider() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ||
-               isSmsBackupDefaultSmsApp(this);
+        return isSmsBackupDefaultSmsApp(this);
     }
 
     @Override
@@ -108,7 +106,7 @@ public class SmsRestoreService extends ServiceBase {
     }
 
     private void postError(Exception exception) {
-        App.post(state.transition(ERROR, exception));
+        App.postSticky(state.transition(ERROR, exception));
     }
 
     private void asyncClearCache() {
@@ -135,7 +133,8 @@ public class SmsRestoreService extends ServiceBase {
         }
     }
 
-    @Subscribe public void restoreStateChanged(final RestoreState state) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void restoreStateChanged(final RestoreState state) {
         this.state = state;
         if (this.state.isInitialState()) return;
 
@@ -154,19 +153,11 @@ public class SmsRestoreService extends ServiceBase {
         }
     }
 
-    @Produce public RestoreState produceLastState() {
-        return state;
-    }
-
     @SuppressWarnings("deprecation")
     @Override protected int wakeLockType() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // hold a full wake lock when restoring on newer version of Android, since
-            // the user needs to switch  back the sms app afterwards
-            return PowerManager.FULL_WAKE_LOCK;
-        } else {
-            return super.wakeLockType();
-        }
+        // hold a full wake lock when restoring, since
+        // the user needs to switch back the sms app afterwards
+        return PowerManager.FULL_WAKE_LOCK;
     }
 
     public static boolean isServiceIdle() {

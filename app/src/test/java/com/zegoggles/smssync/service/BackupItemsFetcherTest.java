@@ -18,10 +18,10 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -45,7 +45,7 @@ public class BackupItemsFetcherTest {
     @Test public void shouldGetItemsForDataType() throws Exception {
         preferences.getDataTypePreferences().setBackupEnabled(true, SMS);
         assertThat(fetcher.getItemsForDataType(SMS, null, -1).getCount()).isEqualTo(0);
-        verifyZeroInteractions(resolver);
+        verifyNoInteractions(resolver);
     }
 
     @Test public void shouldCatchSQLiteExceptions() throws Exception {

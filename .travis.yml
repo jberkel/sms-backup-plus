@@ -2,10 +2,10 @@ language: android
 android:
  components:
     - tools
-    - build-tools-29.0.2
-    - android-29
+    - build-tools-34.0.0
+    - android-34
 
-jdk: oraclejdk8
+jdk: openjdk17
 
 script:
   - ./gradlew build

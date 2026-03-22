@@ -34,7 +34,8 @@ import androidx.fragment.app.FragmentManager;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import com.squareup.otto.Subscribe;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.AccountRemovedEvent;
@@ -259,7 +260,7 @@ public class Dialogs {
             App.unregister(this);
         }
 
-        @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
+        @Subscribe(threadMode = ThreadMode.MAIN) public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
             dismissAllowingStateLoss();
         }
     }

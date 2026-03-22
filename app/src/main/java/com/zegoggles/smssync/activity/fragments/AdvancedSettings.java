@@ -15,7 +15,8 @@ import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.TwoStatePreference;
 
-import com.squareup.otto.Subscribe;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.AccountAddedEvent;
@@ -107,15 +108,15 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
             });
         }
 
-        @Subscribe public void onAccountAdded(AccountAddedEvent event) {
+        @Subscribe(threadMode = ThreadMode.MAIN) public void onAccountAdded(AccountAddedEvent event) {
             updateConnected();
         }
 
-        @Subscribe public void onAccountRemoved(AccountRemovedEvent event) {
+        @Subscribe(threadMode = ThreadMode.MAIN) public void onAccountRemoved(AccountRemovedEvent event) {
             updateConnected();
         }
 
-        @Subscribe public void onSettingsReset(SettingsResetEvent event) {
+        @Subscribe(threadMode = ThreadMode.MAIN) public void onSettingsReset(SettingsResetEvent event) {
             updateConnected();
         }
 

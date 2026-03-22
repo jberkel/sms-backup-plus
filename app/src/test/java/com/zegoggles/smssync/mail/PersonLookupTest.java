@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 

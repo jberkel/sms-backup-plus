@@ -156,7 +156,7 @@ public class Preferences {
     public void setReferenceUid(String referenceUid) {
         preferences.edit()
                 .putString(REFERENCE_UID.key, referenceUid)
-                .commit();
+                .apply();
     }
 
     public boolean getMailSubjectPrefix() {
@@ -229,7 +229,7 @@ public class Preferences {
 
     public boolean isFirstUse() {
         if (isFirstBackup() && !preferences.contains(FIRST_USE.key)) {
-            preferences.edit().putBoolean(FIRST_USE.key, false).commit();
+            preferences.edit().putBoolean(FIRST_USE.key, false).apply();
             return true;
         } else {
             return false;
@@ -237,7 +237,7 @@ public class Preferences {
     }
 
     public void setSmsDefaultPackage(String smsPackage) {
-        preferences.edit().putString(SMS_DEFAULT_PACKAGE.key, smsPackage).commit();
+        preferences.edit().putString(SMS_DEFAULT_PACKAGE.key, smsPackage).apply();
     }
 
     public String getSmsDefaultPackage() {
@@ -249,14 +249,14 @@ public class Preferences {
     }
 
     public void setSeenSmsDefaultPackageChangeDialog() {
-        preferences.edit().putBoolean(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key, true).commit();
+        preferences.edit().putBoolean(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key, true).apply();
     }
 
     public void reset() {
         preferences.edit()
             .remove(SMS_DEFAULT_PACKAGE_CHANGE_SEEN.key)
             .remove(SMS_DEFAULT_PACKAGE.key)
-            .commit();
+            .apply();
     }
 
     public boolean isNotificationEnabled() {
@@ -271,7 +271,7 @@ public class Preferences {
         final int currentVersionCode = App.getVersionCode(context);
         final int lastSeenCode = preferences.getInt(LAST_VERSION_CODE.key, 0);
         if (lastSeenCode < currentVersionCode) {
-            preferences.edit().putInt(LAST_VERSION_CODE.key, currentVersionCode).commit();
+            preferences.edit().putInt(LAST_VERSION_CODE.key, currentVersionCode).apply();
             return true;
         } else {
             return false;
@@ -283,7 +283,7 @@ public class Preferences {
     }
 
     public void setUseOldScheduler(boolean enabled) {
-        preferences.edit().putBoolean(USE_OLD_SCHEDULER.key, enabled).commit();
+        preferences.edit().putBoolean(USE_OLD_SCHEDULER.key, enabled).apply();
     }
 
     public @StyleRes int getAppTheme() {

@@ -38,18 +38,18 @@ import static com.zegoggles.smssync.mail.DataType.CALLLOG;
 import static com.zegoggles.smssync.mail.DataType.MMS;
 import static com.zegoggles.smssync.mail.DataType.SMS;
 import static com.zegoggles.smssync.service.BackupItemsFetcher.emptyCursor;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.anyListOf;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -114,7 +114,7 @@ public class BackupTaskTest {
 
         BackupState finalState = task.doInBackground(config);
 
-        verify(folder).appendMessages(anyListOf(Message.class));
+        verify(folder).appendMessages(anyList());
 
         verify(service).transition(SmsSyncState.LOGIN, null);
         verify(service).transition(SmsSyncState.CALC, null);
@@ -137,7 +137,7 @@ public class BackupTaskTest {
 
         assertThat(finalState.currentSyncedItems).isEqualTo(3);
 
-        verify(folder, times(3)).appendMessages(anyListOf(Message.class));
+        verify(folder, times(3)).appendMessages(anyList());
     }
 
     @Test public void shouldCreateFoldersLazilyOnlyForNeededTypes() throws Exception {
@@ -166,7 +166,7 @@ public class BackupTaskTest {
     @Test public void shouldCreateNoFoldersIfNoItemsToBackup() throws Exception {
         mockFetch(SMS, 0);
         task.doInBackground(config);
-        verifyZeroInteractions(store);
+        verifyNoInteractions(store);
     }
 
     @Test public void shouldSkipItems() throws Exception {
@@ -177,7 +177,7 @@ public class BackupTaskTest {
             )
         );
         verify(dataTypePreferences).setMaxSyncedDate(DataType.SMS, -23);
-        verifyZeroInteractions(dataTypePreferences);
+        verifyNoInteractions(dataTypePreferences);
 
         assertThat(finalState).isNotNull();
         assertThat(finalState.isFinished()).isTrue();

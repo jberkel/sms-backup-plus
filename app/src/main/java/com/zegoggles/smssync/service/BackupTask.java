@@ -1,15 +1,14 @@
 package com.zegoggles.smssync.service;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.store.imap.XOAuth2AuthenticationFailedException;
-import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.auth.OAuth2Client;
@@ -28,9 +27,14 @@ import com.zegoggles.smssync.preferences.AuthPreferences;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -47,8 +51,7 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.ERROR;
 import static com.zegoggles.smssync.service.state.SmsSyncState.FINISHED_BACKUP;
 import static com.zegoggles.smssync.service.state.SmsSyncState.LOGIN;
 
-class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
-    @SuppressLint("StaticFieldLeak")
+class BackupTask {
     private final SmsBackupService service;
     private final BackupItemsFetcher fetcher;
     private final MessageConverter converter;
@@ -57,6 +60,9 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final Preferences preferences;
     private final ContactAccessor contactAccessor;
     private final TokenRefresher tokenRefresher;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
     BackupTask(@NonNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
@@ -105,28 +111,40 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         this.tokenRefresher = refresher;
     }
 
-    @Override
-    protected void onPreExecute() {
+    void execute(final BackupConfig config) {
         App.register(this);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final BackupState result;
+                if (config.backupType == SKIP) {
+                    result = skip(config.typesToBackup);
+                } else {
+                    result = acquireLocksAndBackup(config);
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result != null) {
+                            post(result);
+                        }
+                        App.unregister(BackupTask.this);
+                    }
+                });
+            }
+        });
     }
 
-    @Subscribe public void canceled(CancelEvent cancelEvent) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void canceled(CancelEvent cancelEvent) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "canceled("+cancelEvent+")");
         }
-        cancel(cancelEvent.mayInterruptIfRunning());
+        cancelled.set(true);
     }
 
-    @Override protected BackupState doInBackground(BackupConfig... params) {
-        if (params == null || params.length == 0) {
-            throw new IllegalArgumentException("No config passed");
-        }
-        final BackupConfig config = params[0];
-        if (config.backupType == SKIP) {
-            return skip(config.typesToBackup);
-        } else {
-            return acquireLocksAndBackup(config);
-        }
+    private boolean isCancelled() {
+        return cancelled.get();
     }
 
     private BackupState acquireLocksAndBackup(BackupConfig config) {
@@ -186,7 +204,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
             if (config.currentTry < 1) {
                 try {
                     tokenRefresher.refreshOAuth2Token();
-                    // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
+                    // we got a new token, let's retry one more time - we need to pass in a new store object
                     // since the auth params on it are immutable
                     appLogDebug("token refreshed, retrying");
                     return fetchAndBackupItems(config.retryWithStore(service.getBackupImapStore()));
@@ -229,40 +247,30 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         return service.transition(smsSyncState, exception);
     }
 
-    @Override
-    protected void onProgressUpdate(BackupState... progress) {
-        if (progress != null && progress.length > 0 && !isCancelled()) {
-            post(progress[0]);
-        }
-    }
-
-    @Override
-    protected void onPostExecute(BackupState result) {
-        if (result != null) {
-            post(result);
-        }
-        App.unregister(this);
-    }
-
-    @Override
-    protected void onCancelled() {
-        post(transition(CANCELED_BACKUP, null));
-        App.unregister(this);
+    private void publishProgress(final BackupState progress) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!isCancelled()) {
+                    post(progress);
+                }
+            }
+        });
     }
 
     private void post(BackupState state) {
         if (state == null) return;
-        App.post(state);
+        App.postSticky(state);
     }
 
     private BackupState backupCursors(BackupCursors cursors, BackupImapStore store, BackupType backupType, int itemsToSync)
             throws MessagingException {
         Log.i(TAG, String.format(Locale.ENGLISH, "Starting backup (%d messages)", itemsToSync));
-        publish(LOGIN);
+        publishProgress(transition(LOGIN, null));
         store.checkSettings();
 
         try {
-            publish(CALC);
+            publishProgress(transition(CALC, null));
             int backedUpItems = 0;
             while (!isCancelled() && cursors.hasNext()) {
                 BackupCursors.CursorAndType cursor = cursors.next();
@@ -292,6 +300,10 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 publishProgress(new BackupState(BACKUP, backedUpItems, itemsToSync, backupType, cursor.type, null));
             }
 
+            if (isCancelled()) {
+                return transition(CANCELED_BACKUP, null);
+            }
+
             return new BackupState(FINISHED_BACKUP,
                     backedUpItems,
                     itemsToSync,
@@ -299,9 +311,5 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         } finally {
             store.closeFolders();
         }
-    }
-
-    private void publish(SmsSyncState state) {
-        publishProgress(service.transition(state, null));
     }
 }

@@ -23,11 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
-import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.JobTrigger;
 import com.fsck.k9.mail.MessagingException;
-import com.squareup.otto.Produce;
-import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.MainActivity;
@@ -41,6 +37,8 @@ import com.zegoggles.smssync.service.exception.RequiresLoginException;
 import com.zegoggles.smssync.service.exception.RequiresWifiException;
 import com.zegoggles.smssync.service.state.BackupState;
 import com.zegoggles.smssync.service.state.SmsSyncState;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Date;
 import java.util.EnumSet;
@@ -61,7 +59,7 @@ import static com.zegoggles.smssync.service.state.SmsSyncState.INITIAL;
 
 public class SmsBackupService extends ServiceBase {
     private static final int BACKUP_ID = 1;
-    private static final int NOTIFICATION_ID_WARNING = 1;
+    private static final int NOTIFICATION_ID_WARNING = 2;
 
     @Nullable private static SmsBackupService service;
     @NonNull private BackupState state = new BackupState();
@@ -191,7 +189,7 @@ public class SmsBackupService extends ServiceBase {
 
     private void moveToState(BackupState state) {
         backupStateChanged(state);
-        App.post(state);
+        App.postSticky(state);
     }
 
     @Override
@@ -199,11 +197,8 @@ public class SmsBackupService extends ServiceBase {
         return state.backupType.isBackground();
     }
 
-    @Produce public BackupState produceLastState() {
-        return state;
-    }
-
-    @Subscribe public void backupStateChanged(BackupState state) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void backupStateChanged(BackupState state) {
         if (this.state == state) return;
 
         this.state = state;
@@ -274,10 +269,9 @@ public class SmsBackupService extends ServiceBase {
 
     private void scheduleNextBackup(BackupState state) {
         if (state.backupType == REGULAR && getPreferences().isUseOldScheduler()) {
-            final Job nextSync = getBackupJobs().scheduleRegular();
-            if (nextSync != null) {
-                JobTrigger.ExecutionWindowTrigger trigger = (JobTrigger.ExecutionWindowTrigger) nextSync.getTrigger();
-                Date date = new Date(System.currentTimeMillis() + (trigger.getWindowStart() * 1000));
+            final long nextSyncDelayMs = getBackupJobs().scheduleRegular();
+            if (nextSyncDelayMs > 0) {
+                Date date = new Date(System.currentTimeMillis() + nextSyncDelayMs);
                 appLog(R.string.app_log_scheduled_next_sync,
                         DateFormat.format("kk:mm", date));
             } else {
@@ -290,11 +284,9 @@ public class SmsBackupService extends ServiceBase {
         getNotifier().notify(notificationId, builder.build());
     }
 
-    @SuppressWarnings("deprecation")
     private NotificationCompat.Builder notificationBuilder(int icon, String title, String text) {
-        return new NotificationCompat.Builder(this)
+        return new NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(icon)
-            .setChannelId(CHANNEL_ID)
             .setWhen(System.currentTimeMillis())
             .setOnlyAlertOnce(true)
             .setAutoCancel(true)

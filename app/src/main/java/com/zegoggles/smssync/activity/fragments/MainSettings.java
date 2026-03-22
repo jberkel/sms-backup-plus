@@ -8,7 +8,8 @@ import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
-import com.squareup.otto.Subscribe;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.donation.DonationActivity;
@@ -71,22 +72,22 @@ public class MainSettings extends SMSBackupPreferenceFragment {
         addPreferenceListener(ENABLE_AUTO_BACKUP.key);
     }
 
-    @Subscribe public void onAccountAdded(AccountAddedEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void onAccountAdded(AccountAddedEvent event) {
         updateAutoBackupPreferences();
     }
 
-    @Subscribe public void onAccountRemoved(AccountRemovedEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void onAccountRemoved(AccountRemovedEvent event) {
         authPreferences.clearOauth2Data();
         preferences.getDataTypePreferences().clearLastSyncData();
         findAutoBackupPreference().setChecked(false);
         updateAutoBackupPreferences();
     }
 
-    @Subscribe public void onAutoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void onAutoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
         updateAutoBackupPreferences();
     }
 
-    @Subscribe public void onSettingsReset(SettingsResetEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void onSettingsReset(SettingsResetEvent event) {
         preferences.getDataTypePreferences().clearLastSyncData();
         preferences.reset();
     }

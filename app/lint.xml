@@ -10,11 +10,8 @@
     <issue id="UnusedQuantity" severity="ignore"/>
     <issue id="ContentDescription" severity="ignore"/>
 
-    <issue id="OldTargetApi" severity="ignore"/>
-
     <issue id="InlinedApi" severity="ignore"/>
     <issue id="PluralsCandidate" severity="ignore"/>
-    <issue id="ApplySharedPref" severity="ignore"/>
 
     <!-- for older android devices we need to store in /drawable -->
     <issue id="IconLauncherFormat" severity="ignore"/>

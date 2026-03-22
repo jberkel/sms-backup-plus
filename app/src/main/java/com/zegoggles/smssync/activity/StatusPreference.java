@@ -15,7 +15,8 @@ import android.widget.TextView;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
-import com.squareup.otto.Subscribe;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.events.MissingPermissionsEvent;
@@ -139,7 +140,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
         super.onRestoreInstanceState(state);
     }
 
-    @Subscribe public void restoreStateChanged(final RestoreState newState) {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN) public void restoreStateChanged(final RestoreState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "restoreStateChanged:" + newState);
 
         stateChanged(newState);
@@ -171,7 +172,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
         }
     }
 
-    @Subscribe public void backupStateChanged(final BackupState newState) {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN) public void backupStateChanged(final BackupState newState) {
         if (App.LOCAL_LOGV) Log.v(TAG, "backupStateChanged:"+newState);
         if (newState.backupType.isBackground()) return;
 
@@ -199,7 +200,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
         }
     }
 
-    @Subscribe public void onMissingPermissions(MissingPermissionsEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void onMissingPermissions(MissingPermissionsEvent event) {
         displayMissingPermissions(event.permissions);
     }
 

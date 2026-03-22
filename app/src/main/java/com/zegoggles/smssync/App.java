@@ -36,14 +36,14 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
 import com.fsck.k9.mail.K9MailLib;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import com.zegoggles.smssync.activity.events.AutoBackupSettingsChangedEvent;
-import com.zegoggles.smssync.compat.GooglePlayServices;
 import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.receiver.BootReceiver;
 import com.zegoggles.smssync.receiver.SmsBroadcastReceiver;
 import com.zegoggles.smssync.service.BackupJobs;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
@@ -56,10 +56,6 @@ public class App extends Application {
     public static final String LOG = "sms_backup_plus.log";
     public static final String CHANNEL_ID = "sms_backup_plus";
 
-    private static final Bus bus = new Bus();
-    /** Google Play Services present on this device? */
-    public static boolean gcmAvailable;
-
     private Preferences preferences;
     private BackupJobs backupJobs;
 
@@ -67,7 +63,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         setupStrictMode();
-        gcmAvailable = GooglePlayServices.isAvailable(this);
         preferences = new Preferences(this);
         preferences.migrate();
 
@@ -77,11 +72,10 @@ public class App extends Application {
 
         backupJobs = new BackupJobs(this);
 
-        if (gcmAvailable) {
+        // WorkManager handles scheduling on all devices; broadcast receivers
+        // are only needed when the user opts into the old scheduler mode
+        if (!preferences.isUseOldScheduler()) {
             setBroadcastReceiversEnabled(false);
-        } else {
-            Log.v(TAG, "Google Play Services not available, forcing use of old scheduler");
-            preferences.setUseOldScheduler(true);
         }
 
         K9MailLib.setDebugStatus(new K9MailLib.DebugStatus() {
@@ -96,7 +90,7 @@ public class App extends Application {
             }
         });
 
-        if (gcmAvailable && DEBUG) {
+        if (DEBUG) {
             getContentResolver().registerContentObserver(Consts.SMS_PROVIDER, true, new LoggingContentObserver());
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) {
                 getContentResolver().registerContentObserver(Consts.CALLLOG_PROVIDER, true, new LoggingContentObserver());
@@ -105,7 +99,8 @@ public class App extends Application {
         register(this);
     }
 
-    @Subscribe public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void autoBackupSettingsChanged(final AutoBackupSettingsChangedEvent event) {
         if (LOCAL_LOGV) {
             Log.v(TAG, "autoBackupSettingsChanged("+event+")");
         }
@@ -115,22 +110,26 @@ public class App extends Application {
 
     public static void register(Object listener) {
         try {
-            bus.register(listener);
-        } catch (IllegalArgumentException ignored) {
+            EventBus.getDefault().register(listener);
+        } catch (Exception ignored) {
             Log.w(TAG, ignored);
         }
      }
 
     public static void unregister(Object listener) {
         try {
-            bus.unregister(listener);
-        } catch (IllegalArgumentException ignored) {
+            EventBus.getDefault().unregister(listener);
+        } catch (Exception ignored) {
             Log.w(TAG, ignored);
         }
     }
 
     public static void post(Object event) {
-        bus.post(event);
+        EventBus.getDefault().post(event);
+    }
+
+    public static void postSticky(Object event) {
+        EventBus.getDefault().postSticky(event);
     }
 
     @Nullable

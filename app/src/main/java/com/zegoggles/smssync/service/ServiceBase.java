@@ -15,7 +15,6 @@
  */
 package com.zegoggles.smssync.service;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -24,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,8 +43,8 @@ import com.zegoggles.smssync.preferences.Preferences;
 import com.zegoggles.smssync.service.state.State;
 import com.zegoggles.smssync.utils.AppLog;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.net.ConnectivityManager.TYPE_WIFI;
 import static com.zegoggles.smssync.App.CHANNEL_ID;
 import static com.zegoggles.smssync.App.LOCAL_LOGV;
 import static com.zegoggles.smssync.App.TAG;
@@ -183,12 +183,10 @@ public abstract class ServiceBase extends Service {
         return (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
-    @SuppressWarnings("deprecation")
     @NonNull NotificationCompat.Builder createNotification(int resId) {
-        return new NotificationCompat.Builder(this)
+        return new NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setTicker(getString(resId))
-            .setChannelId(CHANNEL_ID)
             .setWhen(System.currentTimeMillis())
             .setOngoing(true);
     }
@@ -201,35 +199,26 @@ public abstract class ServiceBase extends Service {
          return PendingIntent.getActivity(getApplicationContext(),
                  0,
                  intent,
-                 FLAG_UPDATE_CURRENT);
+                 FLAG_UPDATE_CURRENT | FLAG_IMMUTABLE);
     }
 
     boolean isConnectedViaWifi() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return isConnectedViaWifi_SDK21();
+        ConnectivityManager cm = getConnectivityManager();
+        if (cm == null) return false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network activeNetwork = cm.getActiveNetwork();
+            if (activeNetwork == null) return false;
+            NetworkCapabilities caps = cm.getNetworkCapabilities(activeNetwork);
+            return caps != null && caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
         } else {
-            return isConnectedViaWifi_pre_SDK21();
+            return isConnectedViaWifi_legacy(cm);
         }
     }
 
     @SuppressWarnings("deprecation")
-    private boolean isConnectedViaWifi_pre_SDK21() {
-        WifiManager wifiManager = getWifiManager();
-        return (wifiManager != null &&
-                wifiManager.isWifiEnabled() &&
-                getConnectivityManager().getNetworkInfo(TYPE_WIFI) != null &&
-                getConnectivityManager().getNetworkInfo(TYPE_WIFI).isConnected());
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @SuppressWarnings("deprecation")
-    private boolean isConnectedViaWifi_SDK21() {
-        for (Network network : getConnectivityManager().getAllNetworks()) {
-            final android.net.NetworkInfo networkInfo = getConnectivityManager().getNetworkInfo(network);
-            if (networkInfo != null && networkInfo.getType() == TYPE_WIFI && networkInfo.isConnectedOrConnecting()) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isConnectedViaWifi_legacy(ConnectivityManager cm) {
+        android.net.NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return wifiInfo != null && wifiInfo.isConnected();
     }
 }

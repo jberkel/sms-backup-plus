@@ -41,7 +41,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
-import com.squareup.otto.Subscribe;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.R;
 import com.zegoggles.smssync.activity.Dialogs.WebConnect;
@@ -262,13 +263,13 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    @Subscribe public void restoreStateChanged(final RestoreState newState) {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN) public void restoreStateChanged(final RestoreState newState) {
         if (newState.isFinished() && isSmsBackupDefaultSmsApp(this)) {
              restoreDefaultSmsProvider(preferences.getSmsDefaultPackage());
         }
     }
 
-    @Subscribe public void backupStateChanged(final BackupState newState) {
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN) public void backupStateChanged(final BackupState newState) {
         if ((newState.backupType == MANUAL || newState.backupType == SKIP) && newState.isPermissionException()) {
             ActivityCompat.requestPermissions(this,
                 newState.getMissingPermissions(),
@@ -277,7 +278,7 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
         if (event.valid()) {
             authPreferences.setOauth2Token(event.token.userName, event.token.accessToken, event.token.refreshToken);
             App.post(new AccountAddedEvent());
@@ -286,7 +287,7 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    @Subscribe public void onConnect(AccountConnectionChangedEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void onConnect(AccountConnectionChangedEvent event) {
         if (event.connected) {
             startActivityForResult(new Intent(this,
                     AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
@@ -295,7 +296,7 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void handleFallbackAuth(FallbackAuthEvent event) {
         if (event.showDialog) {
             showDialog(WEB_CONNECT);
         } else {
@@ -303,7 +304,7 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    @Subscribe public void themeChangedEvent(ThemeChangedEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void themeChangedEvent(ThemeChangedEvent event) {
         recreate();
     }
 
@@ -328,7 +329,7 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    @Subscribe public void performAction(PerformAction action) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void performAction(PerformAction action) {
         if (authPreferences.isLoginInformationSet()) {
             if (action.confirm) {
                 showDialog(CONFIRM_ACTION, new BundleBuilder().putString(ACTION, action.action.name()).build());
@@ -342,7 +343,7 @@ public class MainActivity extends ThemeActivity implements
         }
     }
 
-    @Subscribe public void doPerform(Actions action) {
+    @Subscribe(threadMode = ThreadMode.MAIN) public void doPerform(Actions action) {
         switch (action) {
             case Backup:
             case BackupSkip:

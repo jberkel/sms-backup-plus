@@ -65,8 +65,8 @@ public class DataTypePreferences implements SharedPreferences.OnSharedPreference
         }
     }
 
-    public boolean setMaxSyncedDate(DataType dataType, long max) {
-        return sharedPreferences.edit().putLong(dataType.maxSyncedPreference, max).commit();
+    public void setMaxSyncedDate(DataType dataType, long max) {
+        sharedPreferences.edit().putLong(dataType.maxSyncedPreference, max).apply();
     }
 
     public long getMostRecentSyncedDate() {
@@ -81,7 +81,7 @@ public class DataTypePreferences implements SharedPreferences.OnSharedPreference
         for (DataType type : DataType.values()) {
             editor.remove(type.maxSyncedPreference);
         }
-        editor.commit();
+        editor.apply();
     }
 
     public void registerDataTypeListener(DataTypeListener listener) {

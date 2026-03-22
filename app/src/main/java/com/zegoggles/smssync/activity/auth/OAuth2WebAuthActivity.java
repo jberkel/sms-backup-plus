@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import com.squareup.otto.Subscribe;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import com.zegoggles.smssync.App;
 import com.zegoggles.smssync.activity.ThemeActivity;
 
@@ -28,7 +29,7 @@ public class OAuth2WebAuthActivity extends ThemeActivity {
         finish();
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onBrowserAuthResult(RedirectReceiverActivity.BrowserAuthResult event) {
         if (!TextUtils.isEmpty(event.code)) {
             setResult(RESULT_OK, new Intent().putExtra(EXTRA_CODE, event.code));

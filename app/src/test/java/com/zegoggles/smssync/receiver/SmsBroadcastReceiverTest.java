@@ -51,21 +51,21 @@ public class SmsBroadcastReceiverTest {
         mockScheduled();
         when(preferences.isAutoBackupEnabled()).thenReturn(false);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
-        verifyZeroInteractions(backupJobs);
+        verifyNoInteractions(backupJobs);
     }
 
     @Test public void shouldNotScheduleIfLoginInformationIsNotSet() throws Exception {
         mockScheduled();
         when(authPreferences.isLoginInformationSet()).thenReturn(false);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
-        verifyZeroInteractions(backupJobs);
+        verifyNoInteractions(backupJobs);
     }
 
     @Test public void shouldNotScheduleIfFirstBackupHasNotBeenRun() throws Exception {
         mockScheduled();
         when(preferences.isFirstBackup()).thenReturn(true);
         receiver.onReceive(context, new Intent().setAction("android.provider.Telephony.SMS_RECEIVED"));
-        verifyZeroInteractions(backupJobs);
+        verifyNoInteractions(backupJobs);
     }
 
     private void mockScheduled() {

@@ -85,14 +85,14 @@ public class AuthPreferences {
     public void setOauth2Token(String username, String accessToken, String refreshToken) {
         preferences.edit()
                 .putString(OAUTH2_USER, username)
-                .commit();
+                .apply();
 
         getCredentials().edit()
                 .putString(OAUTH2_TOKEN, accessToken)
-                .commit();
+                .apply();
         getCredentials().edit()
                 .putString(OAUTH2_REFRESH_TOKEN, refreshToken)
-                .commit();
+                .apply();
     }
 
    public void clearOauth2Data() {
@@ -100,12 +100,12 @@ public class AuthPreferences {
 
         preferences.edit()
                 .remove(OAUTH2_USER)
-                .commit();
+                .apply();
 
         getCredentials().edit()
                 .remove(OAUTH2_TOKEN)
                 .remove(OAUTH2_REFRESH_TOKEN)
-                .commit();
+                .apply();
 
         if (!TextUtils.isEmpty(oauth2token)) {
             new TokenRefresher(context, new OAuth2Client(getOAuth2ClientId()), this).invalidateToken(oauth2token);
@@ -117,11 +117,11 @@ public class AuthPreferences {
     }
 
     public void setImapPassword(String s) {
-        getCredentials().edit().putString(IMAP_PASSWORD, s).commit();
+        getCredentials().edit().putString(IMAP_PASSWORD, s).apply();
     }
 
     public void setImapUser(String s) {
-        preferences.edit().putString(IMAP_USER, s).commit();
+        preferences.edit().putString(IMAP_USER, s).apply();
     }
 
     @SuppressWarnings("deprecation")
@@ -283,7 +283,7 @@ public class AuthPreferences {
             preferences.edit()
                 .putBoolean(SERVER_TRUST_ALL_CERTIFICATES, true)
                 .putString(SERVER_PROTOCOL, getServerProtocol()+"+")
-                .commit();
+                .apply();
         }
     }
 }

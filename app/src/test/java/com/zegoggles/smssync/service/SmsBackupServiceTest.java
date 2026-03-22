@@ -38,9 +38,9 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.google.common.truth.Truth.assertThat;
 import static com.zegoggles.smssync.service.BackupType.MANUAL;
 import static com.zegoggles.smssync.service.BackupType.REGULAR;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.robolectric.Shadows.shadowOf;
@@ -102,7 +102,7 @@ public class SmsBackupServiceTest {
         shadowConnectivityManager.setActiveNetworkInfo(null);
         service.handleIntent(intent);
 
-        verifyZeroInteractions(backupTask);
+        verifyNoInteractions(backupTask);
         assertThat(service.getState().exception).isInstanceOf(NoConnectionException.class);
     }
 
@@ -122,7 +122,7 @@ public class SmsBackupServiceTest {
         shadowConnectivityManager.setBackgroundDataSetting(true);
         service.handleIntent(intent);
 
-        verifyZeroInteractions(backupTask);
+        verifyNoInteractions(backupTask);
         assertThat(service.getState().exception).isInstanceOf(RequiresWifiException.class);
     }
 
@@ -133,7 +133,7 @@ public class SmsBackupServiceTest {
         shadowConnectivityManager.setActiveNetworkInfo(connectedViaEdge());
         service.handleIntent(intent);
 
-        verifyZeroInteractions(backupTask);
+        verifyNoInteractions(backupTask);
         assertThat(service.getState().exception).isInstanceOf(RequiresWifiException.class);
     }
 
@@ -142,7 +142,7 @@ public class SmsBackupServiceTest {
         when(authPreferences.isLoginInformationSet()).thenReturn(false);
         shadowConnectivityManager.setBackgroundDataSetting(true);
         service.handleIntent(intent);
-        verifyZeroInteractions(backupTask);
+        verifyNoInteractions(backupTask);
         assertThat(service.getState().exception).isInstanceOf(RequiresLoginException.class);
     }
 
@@ -153,7 +153,7 @@ public class SmsBackupServiceTest {
         when(authPreferences.isLoginInformationSet()).thenReturn(true);
         shadowConnectivityManager.setBackgroundDataSetting(true);
         service.handleIntent(intent);
-        verifyZeroInteractions(backupTask);
+        verifyNoInteractions(backupTask);
         assertThat(service.getState().exception).isInstanceOf(BackupDisabledException.class);
         assertThat(service.getState().state).isEqualTo(SmsSyncState.FINISHED_BACKUP);
     }
@@ -190,7 +190,7 @@ public class SmsBackupServiceTest {
         Intent intent = new Intent(MANUAL.name());
 
         service.handleIntent(intent);
-        verifyZeroInteractions(backupTask);
+        verifyNoInteractions(backupTask);
         assertThat(service.getState().exception).isInstanceOf(MessagingException.class);
     }
 
@@ -199,7 +199,7 @@ public class SmsBackupServiceTest {
         Intent intent = new Intent(MANUAL.name());
 
         service.handleIntent(intent);
-        verifyZeroInteractions(backupTask);
+        verifyNoInteractions(backupTask);
 
         assertNotificationShown("SMSBackup+ error", "No valid IMAP URI: invalid");
 
