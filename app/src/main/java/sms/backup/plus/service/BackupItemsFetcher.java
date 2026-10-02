@@ -66,7 +66,8 @@ public class BackupItemsFetcher {
                     query.selectionArgs,
                     query.sortOrder
             );
-            return cursor == null ? emptyCursor() : cursor;
+            if (cursor == null) return emptyCursor();
+            return query.limit > 0 ? new LimitedCursor(cursor, query.limit) : cursor;
         } catch (SQLiteException e) {
             Log.w(TAG, "error querying DB", e);
             return emptyCursor();

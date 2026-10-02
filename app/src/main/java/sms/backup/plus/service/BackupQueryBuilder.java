@@ -22,7 +22,7 @@ import static sms.backup.plus.mail.DataType.MMS;
 import static sms.backup.plus.mail.DataType.SMS;
 
 class BackupQueryBuilder {
-    private static final String DESC_LIMIT_1 = " DESC LIMIT 1";
+    private static final String DESC = " DESC";
 
     // only query for needed fields
     // http://stackoverflow.com/questions/12033234/get-calls-provider-internal-structure
@@ -45,18 +45,20 @@ class BackupQueryBuilder {
         final String   selection;
         final String[] selectionArgs;
         final String   sortOrder;
+        /** max number of rows to return, enforced client-side; <= 0 means unlimited */
+        final int      limit;
 
-        Query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, int limit) {
             this.uri = uri;
             this.projection = projection;
             this.selection = selection;
             this.selectionArgs = selectionArgs;
             this.sortOrder = sortOrder;
+            this.limit = limit;
         }
 
         Query(Uri uri, String[] projection, String selection, String[] selectionArgs, int max) {
-            this(uri, projection, selection, selectionArgs,
-                    max > 0 ? Telephony.TextBasedSmsColumns.DATE + " LIMIT "+max : Telephony.TextBasedSmsColumns.DATE);
+            this(uri, projection, selection, selectionArgs, Telephony.TextBasedSmsColumns.DATE, max);
         }
     }
 
@@ -77,21 +79,24 @@ class BackupQueryBuilder {
                     new String[] {Telephony.BaseMmsColumns.DATE },
                     null,
                     null,
-                    Telephony.BaseMmsColumns.DATE + DESC_LIMIT_1);
+                    Telephony.BaseMmsColumns.DATE + DESC,
+                    1);
             case SMS:
                 return new Query(
                     Consts.SMS_PROVIDER,
                     new String[]{Telephony.TextBasedSmsColumns.DATE},
                     Telephony.TextBasedSmsColumns.TYPE + " <> ?",
                     new String[]{String.valueOf(Telephony.TextBasedSmsColumns.MESSAGE_TYPE_DRAFT)},
-                    Telephony.TextBasedSmsColumns.DATE + DESC_LIMIT_1);
+                    Telephony.TextBasedSmsColumns.DATE + DESC,
+                    1);
             case CALLLOG:
                 return new Query(
                     Consts.CALLLOG_PROVIDER,
                     new String[]{CallLog.Calls.DATE},
                     null,
                     null,
-                    CallLog.Calls.DATE + DESC_LIMIT_1);
+                    CallLog.Calls.DATE + DESC,
+                    1);
             default:
                 return null;
         }

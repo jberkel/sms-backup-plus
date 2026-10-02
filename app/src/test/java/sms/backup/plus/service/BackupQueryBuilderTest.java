@@ -37,7 +37,8 @@ public class BackupQueryBuilderTest {
         assertThat(query.projection).isNull();
         assertThat(query.selection).isEqualTo("date > ? AND type <> ?");
         assertThat(query.selectionArgs).asList().containsExactly("-1", "3");
-        assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
+        assertThat(query.sortOrder).isEqualTo("date");
+        assertThat(query.limit).isEqualTo(200);
     }
 
     @Test public void shouldBuildQueryForSMSIncludingContactGroup() throws Exception {
@@ -50,7 +51,8 @@ public class BackupQueryBuilderTest {
         assertThat(query.projection).isNull();
         assertThat(query.selection).isEqualTo("date > ? AND type <> ?  AND (type = 2 OR person IN (20))");
         assertThat(query.selectionArgs).asList().containsExactly("-1", "3");
-        assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
+        assertThat(query.sortOrder).isEqualTo("date");
+        assertThat(query.limit).isEqualTo(200);
     }
 
     @Test public void shouldBuildQueryForMMS() throws Exception {
@@ -60,7 +62,8 @@ public class BackupQueryBuilderTest {
         assertThat(query.projection).isNull();
         assertThat(query.selection).isEqualTo("date > ? AND m_type <> ?");
         assertThat(query.selectionArgs).asList().containsExactly("-1", "134");
-        assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
+        assertThat(query.sortOrder).isEqualTo("date");
+        assertThat(query.limit).isEqualTo(200);
     }
 
     @Test public void shouldBuildQueryForMMSWithSyncedDate() throws Exception {
@@ -73,7 +76,8 @@ public class BackupQueryBuilderTest {
         assertThat(query.projection).isNull();
         assertThat(query.selection).isEqualTo("date > ? AND m_type <> ?");
         assertThat(query.selectionArgs).asList().containsExactly(String.valueOf(nowInSecs / 1000L), "134");
-        assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
+        assertThat(query.sortOrder).isEqualTo("date");
+        assertThat(query.limit).isEqualTo(200);
     }
 
     @Test public void shouldBuildQueryForCallLog() throws Exception {
@@ -83,7 +87,8 @@ public class BackupQueryBuilderTest {
         assertThat(query.projection).asList().containsExactly("_id", "number", "duration", "date", "type");
         assertThat(query.selection).isEqualTo("date > ?");
         assertThat(query.selectionArgs).asList().containsExactly("-1");
-        assertThat(query.sortOrder).isEqualTo("date LIMIT 200");
+        assertThat(query.sortOrder).isEqualTo("date");
+        assertThat(query.limit).isEqualTo(200);
     }
 
     @Test public void shouldBuildMostRecentQueryForSMS() throws Exception {
@@ -92,7 +97,8 @@ public class BackupQueryBuilderTest {
         assertThat(query.projection).asList().containsExactly("date");
         assertThat(query.selection).isEqualTo("type <> ?");
         assertThat(query.selectionArgs).asList().containsExactly("3");
-        assertThat(query.sortOrder).isEqualTo("date DESC LIMIT 1");
+        assertThat(query.sortOrder).isEqualTo("date DESC");
+        assertThat(query.limit).isEqualTo(1);
     }
 
     @Test public void shouldBuildMostRecentQueryForMMS() throws Exception {
@@ -101,7 +107,8 @@ public class BackupQueryBuilderTest {
         assertThat(query.projection).asList().containsExactly("date");
         assertThat(query.selection).isNull();
         assertThat(query.selectionArgs).isNull();
-        assertThat(query.sortOrder).isEqualTo("date DESC LIMIT 1");
+        assertThat(query.sortOrder).isEqualTo("date DESC");
+        assertThat(query.limit).isEqualTo(1);
     }
 
     @Test public void shouldBuildMostRecentQueryForCallLog() throws Exception {
@@ -110,6 +117,7 @@ public class BackupQueryBuilderTest {
         assertThat(query.projection).asList().containsExactly("date");
         assertThat(query.selection).isNull();
         assertThat(query.selectionArgs).isNull();
-        assertThat(query.sortOrder).isEqualTo("date DESC LIMIT 1");
+        assertThat(query.sortOrder).isEqualTo("date DESC");
+        assertThat(query.limit).isEqualTo(1);
     }
 }
