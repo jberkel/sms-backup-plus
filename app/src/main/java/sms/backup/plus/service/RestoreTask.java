@@ -14,12 +14,9 @@ import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.FetchProfile;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.store.imap.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import sms.backup.plus.App;
 import sms.backup.plus.Consts;
-import sms.backup.plus.auth.TokenRefreshException;
-import sms.backup.plus.auth.TokenRefresher;
 import sms.backup.plus.mail.BackupImapStore;
 import sms.backup.plus.mail.DataType;
 import sms.backup.plus.mail.MessageConverter;
@@ -55,17 +52,14 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
     private final SmsRestoreService service;
     private final ContentResolver resolver;
     private final MessageConverter converter;
-    private final TokenRefresher tokenRefresher;
     private final Preferences preferences;
 
     RestoreTask(SmsRestoreService service,
                 MessageConverter converter,
-                ContentResolver resolver,
-                TokenRefresher tokenRefresher) {
+                ContentResolver resolver) {
         this.service = service;
         this.converter = converter;
         this.resolver = resolver;
-        this.tokenRefresher = tokenRefresher;
         this.preferences = service.getPreferences();
     }
 
@@ -138,9 +132,7 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
                     restoredCount,
                     Math.max(0, uids.size() - restoredCount),
                     null, null);
-        } catch (XOAuth2AuthenticationFailedException e) {
-            return handleAuthError(config, currentRestoredItem, e);
-        } catch (AuthenticationFailedException e) {
+} catch (AuthenticationFailedException e) {
             return transition(SmsSyncState.ERROR, e);
         } catch (MessagingException e) {
             Log.e(TAG, ERROR, e);
@@ -154,28 +146,6 @@ class RestoreTask extends AsyncTask<RestoreConfig, RestoreState, RestoreState> {
         }
     }
 
-    private RestoreState handleAuthError(RestoreConfig config, int currentRestoredItem, XOAuth2AuthenticationFailedException e) {
-        if (e.getStatus() == 400) {
-            Log.d(TAG, "need to perform xoauth2 token refresh");
-            if (config.tries < 1) {
-                try {
-                    tokenRefresher.refreshOAuth2Token();
-                    // we got a new token, let's retry one more time - we need to pass in a new store object
-                    // since the auth params on it are immutable
-                    return restore(config.retryWithStore(currentRestoredItem, service.getBackupImapStore()));
-                } catch (MessagingException ignored) {
-                    Log.w(TAG, ignored);
-                } catch (TokenRefreshException refreshException) {
-                    Log.w(TAG, refreshException);
-                }
-            } else {
-                Log.w(TAG, "no new token obtained, giving up");
-            }
-        } else {
-            Log.w(TAG, "unexpected xoauth status code " + e.getStatus());
-        }
-        return transition(SmsSyncState.ERROR, e);
-    }
 
     private void publishProgress(SmsSyncState smsSyncState) {
         publishProgress(transition(smsSyncState, null));

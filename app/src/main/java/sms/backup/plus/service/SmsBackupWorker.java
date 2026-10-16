@@ -53,6 +53,15 @@ public class SmsBackupWorker extends ListenableWorker {
         super(context, workerParameters);
     }
 
+    @NonNull
+    @Override
+    public ListenableFuture<androidx.work.ForegroundInfo> getForegroundInfoAsync() {
+        return CallbackToFutureAdapter.getFuture(completer -> {
+            completer.set(createForegroundInfo(backupType));
+            return "getForegroundInfoAsync";
+        });
+    }
+
     @NonNull @Override
     public ListenableFuture<Result> startWork() {
         backupType = getInputData().getString(DATA_BACKUP_TYPE);
@@ -70,6 +79,11 @@ public class SmsBackupWorker extends ListenableWorker {
                 complete(Result.success());
             } else if (shouldRun()) {
                 App.register(this);
+                try {
+                    setForegroundAsync(createForegroundInfo(backupType));
+                } catch (Exception e) {
+                    Log.w(TAG, "Failed to set foreground async", e);
+                }
                 startBackup(backupType);
             } else {
                 Log.d(TAG, "skipping run");
@@ -77,6 +91,22 @@ public class SmsBackupWorker extends ListenableWorker {
             }
             return "SmsBackupWorker:" + backupType;
         });
+    }
+
+    @NonNull
+    private androidx.work.ForegroundInfo createForegroundInfo(@Nullable String backupType) {
+        Context context = getApplicationContext();
+        String title = context.getString(sms.backup.plus.R.string.status_backup);
+        androidx.core.app.NotificationCompat.Builder builder = new androidx.core.app.NotificationCompat.Builder(context, App.CHANNEL_ID)
+                .setContentTitle(title)
+                .setTicker(title)
+                .setContentText(context.getString(sms.backup.plus.R.string.app_name))
+                .setSmallIcon(sms.backup.plus.R.drawable.ic_notification)
+                .setOngoing(true);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            return new androidx.work.ForegroundInfo(1, builder.build(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+        }
+        return new androidx.work.ForegroundInfo(1, builder.build());
     }
 
     /**

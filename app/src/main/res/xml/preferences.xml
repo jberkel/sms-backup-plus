@@ -37,7 +37,6 @@
         <EditTextPreference
                 android:key="login_password"
                 android:title="@string/ui_password_label"
-                android:summary="@string/ui_password_desc"
                 android:singleLine="true"
                 android:inputType="textPassword"
                 android:dialogMessage="@string/ui_password_dialog_msg"
@@ -293,23 +292,6 @@
                 android:defaultValue="off"
             />
 
-        <PreferenceCategory
-                android:title="@string/legacy_settings"
-                android:summary="@string/legacy_settings_summary"
-        >
-            <ListPreference
-                    android:key="server_authentication"
-                    android:title="@string/ui_authentication_label"
-                    app:useSimpleSummaryProvider="true"
-                    android:entries="@array/server_authentication_entries"
-                    android:entryValues="@array/server_authentication_values"
-                    android:defaultValue="@string/plain_value"/>
-
-            <androidx.preference.SwitchPreferenceCompat
-                android:key="connected"
-                android:title="@string/ui_connected_label"
-                android:defaultValue="off"/>
-        </PreferenceCategory>
     </PreferenceScreen>
 
     <Preference

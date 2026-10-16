@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.internet.MimeMessage;
-import com.fsck.k9.mail.store.imap.XOAuth2AuthenticationFailedException;
-import sms.backup.plus.auth.TokenRefreshException;
-import sms.backup.plus.auth.TokenRefresher;
 import sms.backup.plus.contacts.ContactAccessor;
 import sms.backup.plus.contacts.ContactGroup;
 import sms.backup.plus.contacts.ContactGroupIds;
@@ -69,8 +66,6 @@ public class BackupTaskTest {
     @Mock DataTypePreferences dataTypePreferences;
     @Mock Preferences preferences;
     @Mock ContactAccessor accessor;
-    @Mock TokenRefresher tokenRefresher;
-
     @Before public void before() {
         initMocks(this);
         config = getBackupConfig(EnumSet.of(SMS));
@@ -78,7 +73,7 @@ public class BackupTaskTest {
         when(service.getState()).thenReturn(state);
         when(preferences.getDataTypePreferences()).thenReturn(dataTypePreferences);
 
-        task = new BackupTask(service, fetcher, converter, syncer, authPreferences, preferences, accessor, tokenRefresher);
+        task = new BackupTask(service, fetcher, converter, syncer, authPreferences, preferences, accessor);
         context = RuntimeEnvironment.application;
     }
 
@@ -183,49 +178,7 @@ public class BackupTaskTest {
         assertThat(finalState.isFinished()).isTrue();
     }
 
-    @Test public void shouldHandleAuthErrorAndTokenCannotBeRefreshed() throws Exception {
-        mockFetch(SMS, 1);
-        when(converter.convertMessages(any(Cursor.class), notNull(DataType.class))).thenReturn(result(SMS, 1));
 
-        XOAuth2AuthenticationFailedException exception = mock(XOAuth2AuthenticationFailedException.class);
-        when(exception.getStatus()).thenReturn(400);
-
-        when(store.getFolder(notNull(DataType.class), same(dataTypePreferences))).thenThrow(exception);
-
-        doThrow(new TokenRefreshException("failed")).when(tokenRefresher).refreshOAuth2Token();
-
-        task.doInBackground(config);
-
-        verify(tokenRefresher, times(1)).refreshOAuth2Token();
-        verify(service).transition(SmsSyncState.ERROR, exception);
-
-        // make sure locks only get acquired+released once
-        verify(service).acquireLocks();
-        verify(service).releaseLocks();
-    }
-
-    @Test public void shouldHandleAuthErrorAndTokenCouldBeRefreshed() throws Exception {
-        mockFetch(SMS, 1);
-        when(converter.convertMessages(any(Cursor.class), notNull(DataType.class))).thenReturn(result(SMS, 1));
-
-        XOAuth2AuthenticationFailedException exception = mock(XOAuth2AuthenticationFailedException.class);
-        when(exception.getStatus()).thenReturn(400);
-
-        when(store.getFolder(notNull(DataType.class), same(dataTypePreferences))).thenThrow(exception);
-        when(service.getBackupImapStore()).thenReturn(store);
-
-        task.doInBackground(config);
-
-        verify(tokenRefresher).refreshOAuth2Token();
-
-        verify(service, times(2)).transition(SmsSyncState.LOGIN, null);
-        verify(service, times(2)).transition(SmsSyncState.CALC, null);
-        verify(service).transition(SmsSyncState.ERROR, exception);
-
-        // make sure locks only get acquired+released once
-        verify(service).acquireLocks();
-        verify(service).releaseLocks();
-    }
 
 
     private ConversionResult result(DataType type, int n) {

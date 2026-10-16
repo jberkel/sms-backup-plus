@@ -8,13 +8,9 @@ import android.util.Log;
 import com.fsck.k9.mail.AuthenticationFailedException;
 import com.fsck.k9.mail.Message;
 import com.fsck.k9.mail.MessagingException;
-import com.fsck.k9.mail.store.imap.XOAuth2AuthenticationFailedException;
 import com.squareup.otto.Subscribe;
 import sms.backup.plus.App;
 import sms.backup.plus.R;
-import sms.backup.plus.auth.OAuth2Client;
-import sms.backup.plus.auth.TokenRefreshException;
-import sms.backup.plus.auth.TokenRefresher;
 import sms.backup.plus.calendar.CalendarAccessor;
 import sms.backup.plus.contacts.ContactAccessor;
 import sms.backup.plus.contacts.ContactGroupIds;
@@ -56,7 +52,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
     private final AuthPreferences authPreferences;
     private final Preferences preferences;
     private final ContactAccessor contactAccessor;
-    private final TokenRefresher tokenRefresher;
 
     BackupTask(@NonNull SmsBackupService service) {
         final Context context = service.getApplicationContext();
@@ -84,7 +79,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         } else {
             calendarSyncer = null;
         }
-        this.tokenRefresher = new TokenRefresher(service, new OAuth2Client(authPreferences.getOAuth2ClientId()), authPreferences);
     }
 
     BackupTask(SmsBackupService service,
@@ -93,8 +87,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                CalendarSyncer syncer,
                AuthPreferences authPreferences,
                Preferences preferences,
-               ContactAccessor accessor,
-               TokenRefresher refresher) {
+               ContactAccessor accessor) {
         this.service = service;
         this.fetcher = fetcher;
         this.converter = messageConverter;
@@ -102,7 +95,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         this.authPreferences = authPreferences;
         this.preferences = preferences;
         this.contactAccessor = accessor;
-        this.tokenRefresher = refresher;
     }
 
     @Override
@@ -165,9 +157,7 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
                 Log.i(TAG, "Nothing to do.");
                 return transition(FINISHED_BACKUP, null);
             }
-        } catch (XOAuth2AuthenticationFailedException e) {
-            return handleAuthError(config, e);
-        } catch (AuthenticationFailedException e) {
+} catch (AuthenticationFailedException e) {
             return transition(ERROR, e);
         } catch (MessagingException e) {
             return transition(ERROR, e);
@@ -180,29 +170,6 @@ class BackupTask extends AsyncTask<BackupConfig, BackupState, BackupState> {
         }
     }
 
-    private BackupState handleAuthError(BackupConfig config, XOAuth2AuthenticationFailedException e) {
-        if (e.getStatus() == 400) {
-            appLogDebug("need to perform xoauth2 token refresh");
-            if (config.currentTry < 1) {
-                try {
-                    tokenRefresher.refreshOAuth2Token();
-                    // we got a new token, let's handleAuthError one more time - we need to pass in a new store object
-                    // since the auth params on it are immutable
-                    appLogDebug("token refreshed, retrying");
-                    return fetchAndBackupItems(config.retryWithStore(service.getBackupImapStore()));
-                } catch (MessagingException ignored) {
-                    Log.w(TAG, ignored);
-                } catch (TokenRefreshException refreshException) {
-                    appLogDebug("error refreshing token: "+refreshException+", cause="+refreshException.getCause());
-                }
-            } else {
-                appLogDebug("no new token obtained, giving up");
-            }
-        } else {
-            appLogDebug("unexpected xoauth status code " + e.getStatus());
-        }
-        return transition(ERROR, e);
-    }
 
     private BackupState skip(Iterable<DataType> types) {
         appLog(R.string.app_log_skip_backup_skip_messages);

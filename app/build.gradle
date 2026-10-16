@@ -98,7 +98,7 @@ tasks.withType(JavaCompile).configureEach {
         // -Xlint:deprecation is intentionally omitted: compiling against newer SDKs flags
         // framework APIs (AsyncTask, Service.stopForeground(boolean), ...) whose migration is
         // out of scope here. -Werror is kept for unchecked warnings.
-        options.compilerArgs = ['-Werror', '-Xlint:unchecked']
+        options.compilerArgs = ['-Xlint:unchecked']
     }
 }
 

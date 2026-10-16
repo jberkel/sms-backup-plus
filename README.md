@@ -1,9 +1,5 @@
 # SMS Backup+ <img src="https://raw.githubusercontent.com/Mibou/sms-backup-plus/refs/heads/master/metadata/play/assets/sms-backup.svg?sanitize=true" height="50px" alt="SMS Backup+ logo"/>
 
-[<img alt="Get it on Google Play" src="https://jberkel.github.io/sms-backup-plus/assets/img/google-play-badge.png" height="80pt"/>][Google Play Store]
-
----
-
 ## Reporting bugs
 
 Please read the [known issues](BUGS.md) before reporting any new issues; we already know about several significant issues, including Gmail login failures (for which there is a robust work-around), and problems with logging phone calls into calendars (which we are investigating).
@@ -11,6 +7,11 @@ Please read the [known issues](BUGS.md) before reporting any new issues; we alre
 ---
 
 ## Description
+
+### Recent Updates
+
+- **Android 10+ Background Execution**: Updated `SmsBackupWorker` to run as a foreground service using `FOREGROUND_SERVICE_TYPE_DATA_SYNC`, ensuring reliable backups on Android 10 and newer devices.
+- **XOAuth2 Removal**: Completely removed legacy XOAuth2 support. Google's API policy changes restricted this method. Authentication is now strictly handled via PLAIN authentication (using App Passwords).
 
 This is a fork of the now-defunct SMS Backup + tool
 [SMS Backup +](https://github.com/jberkel/sms-backup-plus/). It uses Gmail/IMAP to perform SMS, MMS and call log backups over
@@ -41,11 +42,8 @@ Main features/improvements:
 
 Tested with Android 4.x (Ice Cream Sandwich) - 10.x. (Q)
 
-SMS Backup+ is available for free in the [Google Play Store] and on [F-Droid],
+SMS Backup+ is available for free on [F-Droid],
 there will never be a pro / paid version.
-
-But if you find the app useful and want to support its development you can make a donation
-using the secure in-app Play Store payment mechanism.
 
 To get updates more frequently join the [beta programme](#beta) or download the latest beta manually
 from [Github releases].
@@ -406,24 +404,40 @@ displaying correctly. The authentication process won't work otherwise.
 
 ## <a id="beta">Beta testing</a>
 
-If you want to help beta testing, visit the [Play Store beta page]. You will be asked to opt in
-to the beta program (you can leave it anytime).
-
-Once opted in your device will automatically update to the latest beta which might have bug fixes
-and features not found in the currently released version.
-
-Alternatively you can download an APK from [Github releases][] and install it manually
+You can download an APK from [Github releases][] and install it manually
 (⚠️ you won't get automatic updates this way). You can also install via [F-Droid][]
-which often has more recent versions than what is available on the Play Store.
+
 
 ## <a id="contributing">Contributing</a>
 
-### Installation from source
+### Installation from source (Debian/Ubuntu)
 
-    $ git clone https://github.com/jberkel/sms-backup-plus.git
-    $ cd sms-backup-plus
-    $ ./gradlew assembleDebug
-    $ adb install app/build/outputs/apk/app-debug.apk
+On Debian or Ubuntu, you need to install the required dependencies (Java JDK, Android SDK) before building:
+
+```bash
+# 1. Install OpenJDK 17
+sudo apt update
+sudo apt install openjdk-17-jdk -y
+
+# 2. Download and install Android command line tools
+wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+unzip commandlinetools-linux-*_latest.zip -d cmdline-tools
+sudo mkdir -p /usr/lib/android-sdk/cmdline-tools/latest
+sudo mv cmdline-tools/* /usr/lib/android-sdk/cmdline-tools/latest/
+export ANDROID_HOME=/usr/lib/android-sdk
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+
+# 3. Accept SDK licenses and install build tools
+yes | sdkmanager --licenses
+sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+# 4. Clone and build the project
+git clone https://github.com/jberkel/sms-backup-plus.git
+cd sms-backup-plus
+./gradlew assembleDebug
+adb install app/build/outputs/apk/debug/app-debug.apk
+```
+
 
 ### <a id="translating">Translating the UI</a>
 
@@ -489,7 +503,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [GitHub Community Guidelines]: https://help.github.com/en/articles/github-community-guidelines
 [Android Police article]: https://www.androidpolice.com/2019/08/12/sms-backup-is-now-broken-due-to-gmails-api-changes-but-theres-a-workaround/
 [Sign in using App Passwords]: https://support.google.com/accounts/answer/185833?hl=en
-[Google Play Store]: https://play.google.com/store/apps/details?id=sms.backup.plus
 [Use IMAP to check Gmail on other email clients]: https://support.google.com/mail/answer/7126229?hl=en
 [converationviewoff]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/soundcloud.com-mail-settings-jan-soundcloud.com.jpg
 [imapenableshot]: https://raw.github.com/jberkel/sms-backup-plus/gh-pages/screenshots/enable_imap.png
@@ -498,7 +511,6 @@ This application is released under the terms of the [Apache License, Version 2.0
 [Tasker]: https://tasker.joaoapps.com/
 [Authorized Access to your Google Account]: https://security.google.com/settings/security/permissions
 [Google+ community]: https://plus.google.com/communities/113290889178902750997
-[Play Store beta page]: https://play.google.com/apps/testing/sms.backup.plus
 [Github releases]: https://github.com/jberkel/sms-backup-plus/releases
 [Github issues]: http://github.com/jberkel/sms-backup-plus/issues
 [About pull requests]: https://help.github.com/articles/about-pull-requests/

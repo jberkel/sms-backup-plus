@@ -230,11 +230,7 @@ public class StatusPreference extends Preference implements View.OnClickListener
     private void onAuthFailed() {
         statusLabel.setText(R.string.status_auth_failure);
 
-        if (new AuthPreferences(getContext()).useXOAuth()) {
-            syncDetailsLabel.setText(R.string.status_auth_failure_details_xoauth);
-        } else {
             syncDetailsLabel.setText(R.string.status_auth_failure_details_plain);
-        }
     }
 
     private void displayMissingPermissions(List<AppPermission> appPermissions) {

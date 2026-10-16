@@ -52,17 +52,13 @@ import com.squareup.otto.Subscribe;
 import sms.backup.plus.App;
 import sms.backup.plus.R;
 import sms.backup.plus.activity.Dialogs.WebConnect;
-import sms.backup.plus.activity.auth.AccountManagerAuthActivity;
-import sms.backup.plus.activity.auth.OAuth2WebAuthActivity;
 import sms.backup.plus.activity.events.AccountAddedEvent;
-import sms.backup.plus.activity.events.AccountConnectionChangedEvent;
 import sms.backup.plus.activity.events.FallbackAuthEvent;
 import sms.backup.plus.activity.events.MissingPermissionsEvent;
 import sms.backup.plus.activity.events.PerformAction;
 import sms.backup.plus.activity.events.PerformAction.Actions;
 import sms.backup.plus.activity.events.ThemeChangedEvent;
 import sms.backup.plus.activity.fragments.MainSettings;
-import sms.backup.plus.auth.OAuth2Client;
 import sms.backup.plus.compat.SmsReceiver;
 import sms.backup.plus.mail.DataType;
 import sms.backup.plus.preferences.AuthPreferences;
@@ -72,7 +68,6 @@ import sms.backup.plus.service.SmsBackupService;
 import sms.backup.plus.service.SmsRestoreService;
 import sms.backup.plus.service.state.BackupState;
 import sms.backup.plus.service.state.RestoreState;
-import sms.backup.plus.tasks.OAuth2CallbackTask;
 import sms.backup.plus.utils.BundleBuilder;
 
 import java.util.Arrays;
@@ -104,10 +99,6 @@ import static sms.backup.plus.activity.Dialogs.Type.RESET;
 import static sms.backup.plus.activity.Dialogs.Type.SMS_DEFAULT_PACKAGE_CHANGE;
 import static sms.backup.plus.activity.Dialogs.Type.VIEW_LOG;
 import static sms.backup.plus.activity.Dialogs.Type.WEB_CONNECT;
-import static sms.backup.plus.activity.auth.AccountManagerAuthActivity.ACTION_ADD_ACCOUNT;
-import static sms.backup.plus.activity.auth.AccountManagerAuthActivity.ACTION_FALLBACK_AUTH;
-import static sms.backup.plus.activity.auth.AccountManagerAuthActivity.EXTRA_ACCOUNT;
-import static sms.backup.plus.activity.auth.AccountManagerAuthActivity.EXTRA_TOKEN;
 import static sms.backup.plus.activity.events.PerformAction.Actions.Backup;
 import static sms.backup.plus.compat.SmsReceiver.isSmsBackupDefaultSmsApp;
 import static sms.backup.plus.service.BackupType.MANUAL;
@@ -134,8 +125,6 @@ public class MainActivity extends ThemeActivity implements
 
     private Preferences preferences;
     private AuthPreferences authPreferences;
-    private OAuth2Client oauth2Client;
-    private Intent fallbackAuthIntent;
     private PreferenceTitles preferenceTitles;
 
     @Override
@@ -148,8 +137,6 @@ public class MainActivity extends ThemeActivity implements
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
         authPreferences = new AuthPreferences(this);
-        oauth2Client = new OAuth2Client(authPreferences.getOAuth2ClientId());
-        fallbackAuthIntent = new Intent(this, OAuth2WebAuthActivity.class).setData(oauth2Client.requestUrl());
         preferenceTitles = new PreferenceTitles(getResources(), R.xml.preferences);
         preferences = new Preferences(this);
         if (bundle == null) {
@@ -239,22 +226,11 @@ public class MainActivity extends ThemeActivity implements
                     return;
                 }
 
-                final String code = data == null ? null : data.getStringExtra(OAuth2WebAuthActivity.EXTRA_CODE);
-                if (!TextUtils.isEmpty(code)) {
-                    showDialog(OAUTH2_ACCESS_TOKEN_PROGRESS);
-                    new OAuth2CallbackTask(oauth2Client).execute(code);
-                } else {
-                    showDialog(OAUTH2_ACCESS_TOKEN_ERROR);
-                }
                 break;
             }
             case REQUEST_PICK_ACCOUNT: {
                 if (resultCode == RESULT_OK && data != null) {
-                    if (ACTION_ADD_ACCOUNT.equals(data.getAction())) {
-                        handleAccountManagerAuth(data);
-                    } else if (ACTION_FALLBACK_AUTH.equals(data.getAction())) {
-                        handleFallbackAuth(new FallbackAuthEvent(true));
-                    }
+
                 } else if (LOCAL_LOGV) {
                     Log.v(TAG, "request canceled, result=" + resultCode);
                 }
@@ -304,32 +280,6 @@ public class MainActivity extends ThemeActivity implements
                 newState.getMissingPermissions(),
                 newState.backupType == SKIP ? REQUEST_PERMISSIONS_BACKUP_MANUAL_SKIP : REQUEST_PERMISSIONS_BACKUP_MANUAL
             );
-        }
-    }
-
-    @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
-        if (event.valid()) {
-            authPreferences.setOauth2Token(event.token.userName, event.token.accessToken, event.token.refreshToken);
-            App.post(new AccountAddedEvent());
-        } else {
-            showDialog(OAUTH2_ACCESS_TOKEN_ERROR);
-        }
-    }
-
-    @Subscribe public void onConnect(AccountConnectionChangedEvent event) {
-        if (event.connected) {
-            startActivityForResult(new Intent(this,
-                    AccountManagerAuthActivity.class), REQUEST_PICK_ACCOUNT);
-        } else {
-            showDialog(DISCONNECT);
-        }
-    }
-
-    @Subscribe public void handleFallbackAuth(FallbackAuthEvent event) {
-        if (event.showDialog) {
-            showDialog(WEB_CONNECT);
-        } else {
-            startActivityForResult(fallbackAuthIntent, REQUEST_WEB_AUTH);
         }
     }
 
@@ -435,7 +385,6 @@ public class MainActivity extends ThemeActivity implements
             case FIRST_SYNC:
                 arguments.putInt(MAX_ITEMS_PER_SYNC, preferences.getMaxItemsPerSync()); break;
             case WEB_CONNECT:
-                arguments.putParcelable(WebConnect.INTENT, fallbackAuthIntent); break;
             case MISSING_CREDENTIALS:
             case SMS_DEFAULT_PACKAGE_CHANGE:
                 break;
@@ -470,20 +419,6 @@ public class MainActivity extends ThemeActivity implements
         } else if (!TextUtils.isEmpty(smsPackage)) {
             final Intent intent = new Intent(ACTION_CHANGE_DEFAULT).putExtra(EXTRA_PACKAGE_NAME, smsPackage);
             startActivity(intent);
-        }
-    }
-
-    private void handleAccountManagerAuth(@NonNull Intent data) {
-        final String token = data.getStringExtra(EXTRA_TOKEN);
-        final String account = data.getStringExtra(EXTRA_ACCOUNT);
-        if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(account)) {
-            authPreferences.setOauth2Token(account, token, null);
-            App.post(new AccountAddedEvent());
-        } else {
-            String error = data.getStringExtra(AccountManagerAuthActivity.EXTRA_ERROR);
-            if (!TextUtils.isEmpty(error)) {
-                showDialog(ACCOUNT_MANAGER_TOKEN_ERROR);
-            }
         }
     }
 

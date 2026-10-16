@@ -232,7 +232,7 @@ public class SmsBackupService extends ServiceBase {
             if (shouldNotifyUser(state)) {
                 notifyUser(NOTIFICATION_ID_WARNING, notificationBuilder(stat_sys_warning,
                     getString(R.string.notification_auth_failure),
-                    getString(getAuthPreferences().useXOAuth() ? R.string.status_auth_failure_details_xoauth : R.string.status_auth_failure_details_plain)));
+                    getString(R.string.status_auth_failure_details_plain)));
             }
         } else if (state.isConnectivityError()) {
             appLog(R.string.app_log_backup_failed_connectivity, state.getDetailedErrorMessage(getResources()));

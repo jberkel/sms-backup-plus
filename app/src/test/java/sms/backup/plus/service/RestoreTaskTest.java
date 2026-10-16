@@ -8,7 +8,6 @@ import android.provider.Telephony;
 import com.fsck.k9.mail.MessagingException;
 import com.fsck.k9.mail.store.imap.ImapMessage;
 import sms.backup.plus.Consts;
-import sms.backup.plus.auth.TokenRefresher;
 import sms.backup.plus.mail.BackupImapStore;
 import sms.backup.plus.mail.DataType;
 import sms.backup.plus.mail.MessageConverter;
@@ -45,8 +44,6 @@ public class RestoreTaskTest {
     @Mock RestoreState state;
     @Mock MessageConverter converter;
     @Mock ContentResolver resolver;
-    @Mock TokenRefresher tokenRefresher;
-
     @Before
     public void before() throws MessagingException {
         initMocks(this);
@@ -57,7 +54,7 @@ public class RestoreTaskTest {
 
         when(store.getFolder(any(DataType.class), any(DataTypePreferences.class))).thenReturn(folder);
 
-        task = new RestoreTask(service, converter, resolver, tokenRefresher);
+        task = new RestoreTask(service, converter, resolver);
     }
 
     @Test public void shouldAcquireAndReleaseLocksDuringRestore() throws Exception {

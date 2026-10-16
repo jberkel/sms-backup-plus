@@ -12,8 +12,6 @@ import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 import sms.backup.plus.App;
 import sms.backup.plus.R;
-import sms.backup.plus.auth.OAuth2Client;
-import sms.backup.plus.auth.TokenRefresher;
 import sms.backup.plus.contacts.ContactAccessor;
 import sms.backup.plus.mail.MessageConverter;
 import sms.backup.plus.mail.PersonLookup;
@@ -99,8 +97,7 @@ public class SmsRestoreService extends ServiceBase {
             );
 
             final AuthPreferences authPreferences = new AuthPreferences(this);
-            new RestoreTask(this, converter, getContentResolver(),
-                    new TokenRefresher(service, new OAuth2Client(authPreferences.getOAuth2ClientId()), authPreferences)).execute(config);
+            new RestoreTask(this, converter, getContentResolver()).execute(config);
 
         } catch (MessagingException e) {
             postError(e);

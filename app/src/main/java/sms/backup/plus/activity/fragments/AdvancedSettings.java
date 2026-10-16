@@ -19,7 +19,6 @@ import com.squareup.otto.Subscribe;
 import sms.backup.plus.App;
 import sms.backup.plus.R;
 import sms.backup.plus.activity.events.AccountAddedEvent;
-import sms.backup.plus.activity.events.AccountConnectionChangedEvent;
 import sms.backup.plus.activity.events.AccountRemovedEvent;
 import sms.backup.plus.activity.events.AutoBackupSettingsChangedEvent;
 import sms.backup.plus.activity.events.SettingsResetEvent;
@@ -60,7 +59,6 @@ import static sms.backup.plus.utils.ListPreferenceHelper.initListPreference;
 public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
     public static class Main extends SMSBackupPreferenceFragment {
         private AuthPreferences authPreferences;
-        private TwoStatePreference connected;
 
         @Override
         public void onStart() {
@@ -77,7 +75,6 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
         @Override
         public void onResume() {
             super.onResume();
-            updateConnected();
             addPreferenceListener(new ThemeChangedEvent(), DARK_THEME.key);
         }
 
@@ -85,45 +82,18 @@ public abstract class AdvancedSettings extends SMSBackupPreferenceFragment {
         public void onCreatePreferences(Bundle bundle, String rootKey) {
             super.onCreatePreferences(bundle, rootKey);
             authPreferences = new AuthPreferences(getContext());
-            connected = findPreference(CONNECTED.key);
-            assert connected != null;
-            connected.setSummaryProvider(new Preference.SummaryProvider<TwoStatePreference>() {
-                @Override
-                public CharSequence provideSummary(TwoStatePreference preference) {
-                    final String username = authPreferences.getOauth2Username();
-                    if (preference.isEnabled()) {
-                        return preference.isChecked() && !TextUtils.isEmpty(username) ?
-                                getString(R.string.gmail_already_connected, username) :
-                                getString(R.string.gmail_needs_connecting);
-                    } else {
-                        return null;
-                    }
-                }
-            });
-            connected.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                public boolean onPreferenceChange(Preference preference, Object change) {
-                    App.post(new AccountConnectionChangedEvent((Boolean) change));
-                    return false; // will be set later
-                }
-            });
         }
 
         @Subscribe public void onAccountAdded(AccountAddedEvent event) {
-            updateConnected();
         }
 
         @Subscribe public void onAccountRemoved(AccountRemovedEvent event) {
-            updateConnected();
         }
 
         @Subscribe public void onSettingsReset(SettingsResetEvent event) {
-            updateConnected();
         }
 
-        private void updateConnected() {
-            connected.setChecked(authPreferences.hasOAuth2Tokens());
         }
-    }
 
     public static class Backup extends SMSBackupPreferenceFragment {
         private static final int REQUEST_CALL_LOG_PERMISSIONS = 0;

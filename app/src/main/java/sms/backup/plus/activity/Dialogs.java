@@ -42,7 +42,6 @@ import sms.backup.plus.activity.events.FallbackAuthEvent;
 import sms.backup.plus.activity.events.PerformAction;
 import sms.backup.plus.activity.events.PerformAction.Actions;
 import sms.backup.plus.activity.events.SettingsResetEvent;
-import sms.backup.plus.tasks.OAuth2CallbackTask;
 import sms.backup.plus.utils.AppLog;
 
 import static android.R.drawable.ic_dialog_alert;
@@ -259,9 +258,6 @@ public class Dialogs {
             App.unregister(this);
         }
 
-        @Subscribe public void onOAuth2Callback(OAuth2CallbackTask.OAuth2CallbackEvent event) {
-            dismissAllowingStateLoss();
-        }
     }
 
     public static class AccountManagerTokenError extends BaseFragment {
